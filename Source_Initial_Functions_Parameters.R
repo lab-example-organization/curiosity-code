@@ -152,6 +152,7 @@ initialize.curiosity <- function(P, cur.min, cur.max) {
       stop("maximum value needs to be bigger than minimum value. They need to be integers too - these are reference calls to zero_to_one_template- check out the values")
     }
   }
+  curiosity_level <- array(0, c(pop_size, num_pop))
   for(pop.num in 1:P$num_pop) {
     for(sexes in 1:2) {
       curiosity_level[((1 + ((sexes - 1) * (P$pop_size/2))):(sexes * P$pop_size/2)), pop.num] <- runif(P$pop_size / 2, P$zero_to_one_template[cur.min[P$curiosity_counter[sexes, pop.num]]], P$zero_to_one_template[cur.max[P$curiosity_counter[sexes, pop.num]]])
