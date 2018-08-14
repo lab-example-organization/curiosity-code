@@ -92,7 +92,10 @@ rm(list=objects())
 thing <- getwd()
 init_params <- paste0("source(\"", thing, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
-docname <- c("")
+docname <- c("001_final_test_maybe")
+
+
+
 P <- Define.Parameters(num_timesteps = 1000, nropsp = 1, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 24, 
                        num_one.pop_singers_sampled = c(10,10), 
@@ -138,11 +141,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
   }
   #thousand_timesteps <- 1
-  print(paste("storing data packet ", thousand_timesteps, sep=""))
+  print(paste0("storing data packet ", thousand_timesteps))
   FolderName <- store_timesteps(filename = thousand_timesteps, object_record = day.tuh)
   if((thousand_timesteps==(P$num_timesteps/1000))&&(single_timestep==1000)) {
     file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
-    sink(file = file_sink)
+    sink(file = "file_sink.txt")
     print(P)
     print(FolderName)
     sink()
@@ -151,11 +154,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
 }
 
 #setwd("/home/labuser/Documents/Parker scratch")
-data_visuals <- paste0("source(\"", "180807", ".", "1350", "_Source_Visualizing_Data.R\")")
+data_visuals <- paste0("source(\"", thing, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
-
+datez <- readRDS()
 converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-R <- create_plot_info("180808", "001_back_to_basics")
+R <- create_plot_info("180812", "001_back_to_basics")
 simple_plots(R = R, Q = converted_data, simplification_factor = 10)
 full_plots(R = R, Q = converted_data)
 

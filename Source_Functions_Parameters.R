@@ -14,7 +14,7 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
           }
         }
       } else { # Oblique Learning
-        source_of_ONEs <- which(!(P$learning.pool[1, , population, number_renewed] != 0) == (P$learning.pool[3, , population, number_renewed] != 0))
+        source_of_ONEs <- which(!(which(P$learning.pool[1, , population, number_renewed] == 1) %in% which(P$learning.pool[3, , population, number_renewed] == 1)))
       }
       
       teacher.mean <- mean(source_of_ONEs)
@@ -22,12 +22,16 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
       
       for (sex in 1:context) {
         for (sylls_to_learn in 1:length(source_of_ONEs)) {
-          if((probs[sylls_to_learn]) <= (P$learnprob[context])) {
+          if((probs[sylls_to_learn]) <= (P$learnprob[context]-P$randlearnprob[context])) {
             P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population, number_renewed] <- 1 # nropsp!!! come on! still have to figure that one out i guess
-          } else if(probs[sylls_to_learn] <= ((P$randlearnprob[context] * ((P$learnprob[context]) / P$randlearnprob[context])) + ((1 - P$learnprob[context]) * P$randlearnprob[context]))) {
-            r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
-            if(r_norm > P$sylnum) {r_norm <- P$sylnum} else if(r_norm < 1) {r_norm <- 1}
-            P$learning.pool[(sex + 2), floor(r_norm), population, number_renewed] <- 1
+          } else if(probs[sylls_to_learn] <= P$learnprob[context]) {
+              r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
+              if(r_norm > P$sylnum) {
+                r_norm <- P$sylnum
+              } else if(r_norm < 1) {
+                  r_norm <- 1
+                }
+              P$learning.pool[(sex + 2), floor(r_norm), population, number_renewed] <- 1
           }
         }
       }
