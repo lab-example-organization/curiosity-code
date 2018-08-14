@@ -92,7 +92,7 @@ rm(list=objects())
 thing <- getwd()
 init_params <- paste0("source(\"", thing, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
-
+docname <- c("")
 P <- Define.Parameters(num_timesteps = 1000, nropsp = 1, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 24, 
                        num_one.pop_singers_sampled = c(10,10), 
@@ -104,7 +104,7 @@ sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
                                         c(1,1,1,1), 
-                                        c(26,26,26,26))
+                                        c(3,3,3,3))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
@@ -116,11 +116,9 @@ rm(init_params, funx_n_params)
 for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
     
-    P <- sing.selection(P = P, context = 2, num_select_chances = c(10, 100), verbose_output = TRUE)
+    P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 2, num_select_chances = c(10, 100), verbose_output = TRUE)
     
     P <- make.offspring.calls(P, no.parent.turnover = FALSE)
-    
-    day.tuh <- variable.archive(P = P, timestep = single_timestep, context = 2)
     
     # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
@@ -128,22 +126,22 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
     P <- syll_learn(P = P, context = 2) # context decides whether the learning is vertical (2) or oblique (1)
     
-    P <- sing.selection(P = P, context = 1, num_select_chances = c(10, 100), verbose_output = TRUE)
+    P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(10, 100), verbose_output = TRUE)
     
     P <- syll_learn(P = P, context = 1) # context decides whether the learning is vertical (2) or oblique (1)
     
-    curiosity_level <- reintegrate.offspring.curiosity(P)
+    curiosity_level <- recuriosity.offspring(P)
     
-    sylreps <- reintegrate.offspring.sylreps(P)
+    sylreps <- resylreps.offspring(P)
     
-    day.tuh <- variable.archive(P = P, timestep = single_timestep, context = 1)
+    day.tuh <- variable.archive(P = P, timestep = single_timestep)
     
   }
   #thousand_timesteps <- 1
   print(paste("storing data packet ", thousand_timesteps, sep=""))
   FolderName <- store_timesteps(filename = thousand_timesteps, object_record = day.tuh)
   if((thousand_timesteps==(P$num_timesteps/1000))&&(single_timestep==1000)) {
-    file_sink = paste0("180809", "_", thousand_timesteps, ".txt")
+    file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
     sink(file = file_sink)
     print(P)
     print(FolderName)

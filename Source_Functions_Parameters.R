@@ -7,24 +7,24 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
       # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
       
       if(context == 2) { # clear the sylreps rows about to be filled in :D
-        source_of_ONEs <- ((which(P$learning.pool[1, 1 : P$sylnum, population, number_renewed] == 1)))
+        source_of_ONEs <- which(P$learning.pool[1, , population, number_renewed] == 1)
         for(sex in 1 : 2) {
           for(syllable in 1 : P$sylnum) {
             P$learning.pool[(sex + 2), syllable, population, number_renewed] <- 0
           }
         }
       } else { # Oblique Learning
-        source_of_ONEs <- which(!(P$learning.pool[1, , population, number_renewed] %in% P$learning.pool[3, , population, number_renewed]))
+        source_of_ONEs <- which(!(P$learning.pool[1, , population, number_renewed] != 0) == (P$learning.pool[3, , population, number_renewed] != 0))
       }
       
       teacher.mean <- mean(source_of_ONEs)
       probs <- runif(source_of_ONEs, 0, 1)
       
       for (sex in 1:context) {
-        for (sylls_to_learn in 1 : length(source_of_ONEs)) {
-          if(probs[sylls_to_learn] <= (P$learnprob[context])) {
+        for (sylls_to_learn in 1:length(source_of_ONEs)) {
+          if((probs[sylls_to_learn]) <= (P$learnprob[context])) {
             P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population, number_renewed] <- 1 # nropsp!!! come on! still have to figure that one out i guess
-          } else if((((probs[sylls_to_learn]) * 20) - 19) <= P$randlearnprob[context]) {
+          } else if(probs[sylls_to_learn] <= ((P$randlearnprob[context] * ((P$learnprob[context]) / P$randlearnprob[context])) + ((1 - P$learnprob[context]) * P$randlearnprob[context]))) {
             r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
             if(r_norm > P$sylnum) {r_norm <- P$sylnum} else if(r_norm < 1) {r_norm <- 1}
             P$learning.pool[(sex + 2), floor(r_norm), population, number_renewed] <- 1
@@ -36,9 +36,9 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
 return(P)
 }
 
-variable.archive <- function(P, timestep, context = 1) {
+variable.archive <- function(P, timestep) {
   #context_name <- c("parents&offspring","replacedindividuals")
-  if(context == 1) {
+  #if(context == 1) {
     for(number_renewed in 1:P$nropsp) {
       for(population in 1 : P$num_pop) {
         day.tuh[["curity_mean_t"]][3, (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[2, 3, population, number_renewed]
@@ -56,7 +56,7 @@ variable.archive <- function(P, timestep, context = 1) {
         }
       }
     }
-  }# else {
+ #}# else {
     #for(number_renewed in 1:P$nropsp) {
     #  for(population in 1 : P$num_pop) {
     #    for(sex in 1:2) {
@@ -88,7 +88,7 @@ make.offspring.calls <- function(P, no.parent.turnover = TRUE){
   return(P)
 }
 
-reintegrate.offspring.curiosity <- function(P) {
+recuriosity.offspring <- function(P) {
   for(number_renewed in 1:P$nropsp) {
     for(population in 1:P$num_pop) {
       for(sex in 1:2) {
@@ -100,21 +100,21 @@ reintegrate.offspring.curiosity <- function(P) {
   return(curiosity_level)
 }
 
-reintegrate.offspring.sylreps <- function(P) {
-  index <- rep(0, sylnum)
+resylreps.offspring <- function(P) {
+  index <- rep(0, P$sylnum)
   for(number_renewed in 1:P$nropsp) {
     for(population in 1:P$num_pop) {
       for(sex in 1:2) {
         index <- P$pairing.pool[(sex + 2), 1, population, number_renewed]
         index_sylrep <- P$learning.pool[(sex + 2), , population, number_renewed]
-        sylreps[index, population] <- index_sylrep
+        sylreps[index, , population] <- index_sylrep
       }
     }
   }
   return(sylreps)
 }
 
-sing.selection <- function(P, context, num_select_chances = c(42, 10), verbose_output = TRUE){ 
+sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), verbose_output = TRUE){ 
   # context could either be females choosing a mate, or young males choosing tutors. 1 == mate selection; not-1 == tutor selection
   # not important unless the output file "Female Select Chances (1) Per Timestep.tiff" is this number for long stretches - then something is WRONG. :P
   # Curiosity Variables 2: derivative variables (potential to eliminate)
