@@ -51,7 +51,7 @@ variable.archive <- function(P, timestep, context = 1) {
           day.tuh[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_level[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
           day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population, number_renewed]
           day.tuh[["curity_mean_t"]][(sex + 5), (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[1, 1, population, number_renewed]
-          day.tuh[["curity_mean_t"]][(sex + 7), (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[2, 1, population, number_renewed]
+          day.tuh[["curity_mean_t"]][11, (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[(sex + 2), 5, population, number_renewed]
         }
       }
     }
@@ -59,7 +59,7 @@ variable.archive <- function(P, timestep, context = 1) {
     for(number_renewed in 1:P$nropsp) {
       for(population in 1 : P$num_pop) {
         for(sex in 1:2) {
-          replaced_index <- pairing.pool[(sex + 2 ), 1, population, number_renewed]
+          replaced_index <- P$pairing.pool[(sex + 2 ), 1, population, number_renewed]
           day.tuh[["curity_mean_t"]][(sex + 7), (population + ((number_renewed-1) * P$num_pop)), timestep] <- curiosity_level[replaced_index, population]
         }
       }
@@ -200,10 +200,9 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
                            ((curlearnprob) * (P$pairing.pool[1, 1, population, number_renewed]))
           curinh_attempts <- curinh_attempts + 1
         }
-        P$pairing.pool[(sex + 2), 4, population, number_renewed] <- P$pairing.pool[sex, 2, population, number_renewed]
-        P$pairing.pool[(sex + 2), 5, population, number_renewed] <- P$pairing.pool[(sex + 2), 2, population, number_renewed]
+        P$pairing.pool[(sex + 2), 4, population, number_renewed] <- P$pairing.pool[(sex + 2), 2, population, number_renewed]
         P$pairing.pool[(sex + 2), 2, population, number_renewed] <- new.curiosity
-        P$pairing.pool[(sex + 2), 6, population, number_renewed] <- curinh_attempts
+        P$pairing.pool[(sex + 2), 5, population, number_renewed] <- curinh_attempts
       }
     }
   }

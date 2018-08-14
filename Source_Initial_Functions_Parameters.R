@@ -116,7 +116,7 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
 recordvariable.initialize <- function(P, timestep_fraction) {
   record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
                           sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-                          curity_mean_t=array(0, c(10, (P$num_pop * P$nropsp), (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+                          curity_mean_t=array(0, c(11, (P$num_pop * P$nropsp), (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
                           curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
                           )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
@@ -152,7 +152,7 @@ initialize.curiosity <- function(P, cur.min, cur.max) {
       stop("maximum value needs to be bigger than minimum value. They need to be integers too - these are reference calls to zero_to_one_template- check out the values")
     }
   }
-  curiosity_level <- array(0, c(pop_size, num_pop))
+  curiosity_level <- array(0, c(P$pop_size, P$num_pop))
   for(pop.num in 1:P$num_pop) {
     for(sexes in 1:2) {
       curiosity_level[((1 + ((sexes - 1) * (P$pop_size/2))):(sexes * P$pop_size/2)), pop.num] <- runif(P$pop_size / 2, P$zero_to_one_template[cur.min[P$curiosity_counter[sexes, pop.num]]], P$zero_to_one_template[cur.max[P$curiosity_counter[sexes, pop.num]]])

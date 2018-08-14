@@ -20,7 +20,8 @@ curmaxvector <- c(2,2,2,2,2,2,2,2,10,10,10,10,10,10,10,10)
 #"_low_diff_cur"
 docnames <- c(rep("loww_diff_cur", times = 8))
 
-for(bitchin in 1:8) {
+# old cycling for loop to run a few conditions at the same time... contained all the relevant working materials at the time
+for(cycler in 1:8) {
   setwd("/home/labuser/Documents/Parker scratch")
   getwd()
   
@@ -30,12 +31,12 @@ for(bitchin in 1:8) {
   # num_timesteps, nropsp, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev, curflux, new.cur.threshold, offspring_calls, 
   P <- Define.Parameters(num_timesteps = 1000, nropsp = 1, num_pop = 2, pop_size = 400, sylnum = 156, nsspl = 24, num_one.pop_singers_sampled = 10, curlearnprob = 0.95, learnprob = c(0.59, 0.1), randlearnprob = c(0.1, 0.01), stand.dev = 2, curflux = 0.5, new.cur.threshold = 10, offspring_calls = )
   
-  sylreps <- initialize.sylrep(P, c(initsylrepmatrix[,bitchin]), T, T)
+  sylreps <- initialize.sylrep(P, c(initsylrepmatrix[,cycler]), T, T)
   
   P$curiosity_level <- initialize.curiosity(P, 
                                             #popXmale,popXfemale,popYmale,popYfemale...
-                                            c(curminvector[bitchin],curminvector[bitchin],curminvector[8 + bitchin],curminvector[8 + bitchin]), 
-                                            c(curmaxvector[bitchin],curmaxvector[bitchin],curmaxvector[8 + bitchin],curmaxvector[8 + bitchin]))
+                                            c(curminvector[cycler],curminvector[cycler],curminvector[8 + cycler],curminvector[8 + cycler]), 
+                                            c(curmaxvector[cycler],curmaxvector[cycler],curmaxvector[8 + cycler],curmaxvector[8 + cycler]))
   
   day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
   
@@ -76,15 +77,15 @@ for(bitchin in 1:8) {
   source("180803.0055_Source_Visualizing_Data.R")
   
   converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  R <- create_plot_info("180803", paste0("00", bitchin, docnames[bitchin]))
+  R <- create_plot_info("180803", paste0("00", cycler, docnames[cycler]))
   simple_plots(R = R, Q = converted_data, simplification_factor = 10)
   full_plots(R = R, Q = converted_data)
 }
 
 
 
-setwd(getwd())
-setwd("/home/labuser/Documents/Parker Scratch Foler/Code/Curiosity Code")
+#setwd(getwd())
+setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 
 
 rm(list=objects())
