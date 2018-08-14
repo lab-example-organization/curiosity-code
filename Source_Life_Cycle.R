@@ -124,7 +124,7 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
     # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
-    P <- curiosity_learn(P, curiosity_level, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
+    P <- curiosity_learn(P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
     P <- syll_learn(P = P, context = 2) # context decides whether the learning is vertical (2) or oblique (1)
     

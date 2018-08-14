@@ -37,7 +37,7 @@ return(P)
 }
 
 variable.archive <- function(P, timestep, context = 1) {
-  context_name <- c("parents&offspring","replacedindividuals")
+  #context_name <- c("parents&offspring","replacedindividuals")
   if(context == 1) {
     for(number_renewed in 1:P$nropsp) {
       for(population in 1 : P$num_pop) {
@@ -52,19 +52,20 @@ variable.archive <- function(P, timestep, context = 1) {
           day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population, number_renewed]
           day.tuh[["curity_mean_t"]][(sex + 5), (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[1, 1, population, number_renewed]
           day.tuh[["curity_mean_t"]][11, (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[(sex + 2), 5, population, number_renewed]
+          day.tuh[["curity_mean_t"]][(sex + 7), (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[(sex + 2), 4, population, number_renewed]
         }
       }
     }
-  } else {
-    for(number_renewed in 1:P$nropsp) {
-      for(population in 1 : P$num_pop) {
-        for(sex in 1:2) {
-          replaced_index <- P$pairing.pool[(sex + 2 ), 1, population, number_renewed]
-          day.tuh[["curity_mean_t"]][(sex + 7), (population + ((number_renewed-1) * P$num_pop)), timestep] <- curiosity_level[replaced_index, population]
-        }
-      }
-    }
-  }
+  }# else {
+    #for(number_renewed in 1:P$nropsp) {
+    #  for(population in 1 : P$num_pop) {
+    #    for(sex in 1:2) {
+    #      replaced_index <- P$pairing.pool[(sex + 2 ), 1, population, number_renewed]
+    #      day.tuh[["curity_mean_t"]][(sex + 7), (population + ((number_renewed-1) * P$num_pop)), timestep] <- curiosity_level[replaced_index, population]
+    #    }
+    #  }
+    #}
+  #}
   return(day.tuh)
 }
 
