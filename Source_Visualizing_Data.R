@@ -1,5 +1,6 @@
 #Data Recording objects
 library(abind)
+library(stringr)
 setwd(FolderName)
 
 rm(list = objects())
@@ -14,7 +15,7 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps) {
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
   sylrepz <- array(0, c(2, P$num_pop, P$num_timesteps))
   sdstbxn <- array(0, c((2 * P$num_pop), P$sylnum, P$num_timesteps))
-  cursity <- array(0, c(3, P$num_pop, P$num_timesteps))
+  cursity <- array(0, c(11, P$num_pop, P$num_timesteps))
   curhist <- array(data = 0, dim = c((2*P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled), P$num_timesteps))
   for(data_subset in 1:4) {
     data1s <- paste0(names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = paste0(dir, \"/variable-store-\", ", 1:num_timechunks, ", \"-", names[data_subset], ".RData\"))")

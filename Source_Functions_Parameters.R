@@ -46,7 +46,7 @@ variable.archive <- function(P, timestep) {
     for(number_renewed in 1:P$nropsp) {
       for(population in 1 : P$num_pop) {
         day.tuh[["curity_mean_t"]][3, (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[2, 3, population, number_renewed]
-        day.tuh[["curity_mean_t"]][10, (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[2, 1, population, number_renewed]
+        day.tuh[["curity_mean_t"]][10, (population + ((number_renewed-1) * P$num_pop)), timestep] <- P$pairing.pool[3, 3, population, number_renewed]
         
         for(sex in 1:2) {
           day.tuh[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
@@ -167,6 +167,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         singer <- ((sort(similarity_golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
         #print(paste("singer =",singer,sep=" "))
         #BUT FIRST: Put in instructions to interrupt the process if her mate is from the other species
+        
         if(singer %in% ( (1 + ((population - 1) * P$num_one.pop_singers_sampled[context])) : (population * P$num_one.pop_singers_sampled[context]) ) == TRUE ) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
           singer.index <- selection.index[singer]
           indices <- c(singer.index, selector.index)
