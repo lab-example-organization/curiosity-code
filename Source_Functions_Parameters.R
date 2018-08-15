@@ -145,7 +145,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
             P$pairing.pool[sex, 1, population, number_renewed] <- auto.teachers[sex] + ((sex - 1) * P$pop_size/2)
             P$pairing.pool[sex, 2, population, number_renewed] <- curiosity_level[auto.teachers[sex], population]
           }
-          P$pairing.pool[2, 3, population, number_renewed] <- k
+          P$pairing.pool[(4-context), 3, population, number_renewed] <- k
           break
         }
         
@@ -168,7 +168,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         #print(paste("singer =",singer,sep=" "))
         #BUT FIRST: Put in instructions to interrupt the process if her mate is from the other species
         
-        if(singer %in% ( (1 + ((population - 1) * P$num_one.pop_singers_sampled[context])) : (population * P$num_one.pop_singers_sampled[context]) ) == TRUE ) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
+        if(singer %in% ( (1 + ((population - 1) * ((P$num_one.pop_singers_sampled[context])*(P$num_pop)^(2-context)))) : (population * ((P$num_one.pop_singers_sampled[context])*(P$num_pop)^(2-context))) ) == TRUE ) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
           singer.index <- selection.index[singer]
           indices <- c(singer.index, selector.index)
           

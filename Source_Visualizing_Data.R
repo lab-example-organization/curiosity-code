@@ -16,7 +16,7 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps) {
   sylrepz <- array(0, c(2, P$num_pop, P$num_timesteps))
   sdstbxn <- array(0, c((2 * P$num_pop), P$sylnum, P$num_timesteps))
   cursity <- array(0, c(11, P$num_pop, P$num_timesteps))
-  curhist <- array(data = 0, dim = c((2*P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled), P$num_timesteps))
+  curhist <- array(data = 0, dim = c((2*P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), P$num_timesteps))
   for(data_subset in 1:4) {
     data1s <- paste0(names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = paste0(dir, \"/variable-store-\", ", 1:num_timechunks, ", \"-", names[data_subset], ".RData\"))")
     eval(parse(text=data1s))
@@ -111,7 +111,13 @@ simple_plots <- function(R = R, Q = converted_data, simplification_factor = 10) 
   for(population in 1:P$num_pop) {
     
     objectz <- Q$cursity[3,population,seq.int(1, P$num_timesteps, simplification_factor)]
-    file_name <- paste0(R$datez, "_", R$run_name, "_selections_pop", population, ".tiff")
+    file_name <- paste0(R$datez, "_", R$run_name, "_mate_selections_pop", population, ".tiff")
+    tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+    plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
+    dev.off()
+    
+    objectz <- Q$cursity[10,population,seq.int(1, P$num_timesteps, simplification_factor)]
+    file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".tiff")
     tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
     plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
     dev.off()
@@ -120,6 +126,7 @@ simple_plots <- function(R = R, Q = converted_data, simplification_factor = 10) 
     #close_out_port <- paste0("dev.off()")
     #eval(parse(text = c(selection_tiff, selection_plot, close_out_port)))
     for(sex in 1:2) {
+      
       objectz <- Q$sylrepz[sex,population,seq.int(1, P$num_timesteps, simplification_factor)]
       file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")

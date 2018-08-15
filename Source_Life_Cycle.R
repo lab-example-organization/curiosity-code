@@ -160,14 +160,21 @@ data_visuals <- paste0("source(\"", thing, "/", "Source_Visualizing_Data.R\")")
 #data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
 
+
 parent_directory <- str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),"")
 setwd(parent_directory)
 info <- readRDS(file = "metadata.RData")
 setwd(FolderName)
 converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
 #R <- create_plot_info("180812", "001_back_to_basics")
-too_complicated <- paste0("R <- create_plot_info(\"", info[1], ", ", info[2], "\")")
+too_complicated <- paste0("R <- create_plot_info(\"", info[[1]], "\", \"", info[[2]], "\")")
 eval(parse(text=too_complicated))
+
+results_directory <- str_replace_all(str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),""), paste0("/", str_split(FolderName, "/")[[1]][7]),"")
+setwd(results_directory)
+dir.create(path = paste0(results_directory, "Results/", str_split(FolderName, "/")[[1]][8]))
+results_directory <- paste0(results_directory, "Results/", str_split(FolderName, "/")[[1]][8])
+setwd(results_directory)
 
 simple_plots(R = R, Q = converted_data, simplification_factor = 10)
 full_plots(R = R, Q = converted_data)
