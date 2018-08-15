@@ -93,7 +93,7 @@ thing <- getwd()
 init_params <- paste0("source(\"", thing, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
 stuff_to_save <- list(
-  docname <- c("001_final_test_maybe"),
+  docname <- c("002_final_test_maybe"),
   datez <- Sys.Date()
 )
 saveRDS(object = stuff_to_save, file = "metadata.RData")
@@ -121,7 +121,7 @@ rm(init_params, funx_n_params)
 for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
     
-    P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 2, num_select_chances = c(10, 100), verbose_output = TRUE)
+    P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 2, num_select_chances = c(100, 100), verbose_output = F)
     
     P <- make.offspring.calls(P, no.parent.turnover = FALSE)
     
@@ -131,7 +131,7 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
     P <- syll_learn(P = P, context = 2) # context decides whether the learning is vertical (2) or oblique (1)
     
-    P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(10, 100), verbose_output = TRUE)
+    P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(100, 100), verbose_output = F)
     
     P <- syll_learn(P = P, context = 1) # context decides whether the learning is vertical (2) or oblique (1)
     
@@ -178,5 +178,5 @@ setwd(results_directory)
 
 simple_plots(R = R, Q = converted_data, simplification_factor = 10)
 full_plots(R = R, Q = converted_data)
-
+rstudioapi::documentSave(rstudioapi::getActiveDocumentContext()$id)
 
