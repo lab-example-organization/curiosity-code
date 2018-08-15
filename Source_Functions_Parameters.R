@@ -167,8 +167,11 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         singer <- ((sort(similarity_golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
         #print(paste("singer =",singer,sep=" "))
         #BUT FIRST: Put in instructions to interrupt the process if her mate is from the other species
-        
-        if(singer %in% ( (1 + ((population - 1) * ((P$num_one.pop_singers_sampled[context])*(P$num_pop)^(2-context)))) : (population * ((P$num_one.pop_singers_sampled[context])*(P$num_pop)^(2-context))) ) == TRUE ) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
+        singer_eval <- list(
+          tutor <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop))),
+          mate <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
+        )
+        if(singer %in% (singer_eval[context]) == TRUE ) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
           singer.index <- selection.index[singer]
           indices <- c(singer.index, selector.index)
           

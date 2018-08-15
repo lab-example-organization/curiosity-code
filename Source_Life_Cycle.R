@@ -155,9 +155,7 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     }
 }
 
-#setwd("/home/labuser/Documents/Parker scratch")
 data_visuals <- paste0("source(\"", thing, "/", "Source_Visualizing_Data.R\")")
-#data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
 
 
@@ -166,7 +164,6 @@ setwd(parent_directory)
 info <- readRDS(file = "metadata.RData")
 setwd(FolderName)
 converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-#R <- create_plot_info("180812", "001_back_to_basics")
 too_complicated <- paste0("R <- create_plot_info(\"", info[[1]], "\", \"", info[[2]], "\")")
 eval(parse(text=too_complicated))
 
@@ -178,5 +175,6 @@ setwd(results_directory)
 
 simple_plots(R = R, Q = converted_data, simplification_factor = 10)
 full_plots(R = R, Q = converted_data)
+library(rstudioapi)
 rstudioapi::documentSave(rstudioapi::getActiveDocumentContext()$id)
 
