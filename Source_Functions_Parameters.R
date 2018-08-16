@@ -118,7 +118,34 @@ resylreps.offspring <- function(P) {
   return(sylreps)
 }
 
+example <- paste0(P$num_pop, " can be as bad as ", P$nropsp)
+cat(example)
+
+zap <- 1:10
+example1.5 <- paste(zap, "heck", collapse = " ")
+cat(example1.5)
+
+example_2 <- paste("sink(file = \"example_2.txt\", append = T)", "cat(example)", "sink()", sep = "\n")
+cat(example_2)
+eval(parse(text=example_2))
+
+output_checker <- function(printer) {
+  dir <- getwd()
+  if(!dir.exists(file.path(dir, "outputChecking"))) {dir.create("outputChecking")}
+  setwd(paste0(dir, "/outputChecking"))
+  #temp <- paste("sink(file = ", paste0(deparse(substitute(printer)), Sys.Date(), ".txt,"),"append = T)", "print(printer)", "sink()", sep = "\n")
+  temp <- paste("sink(file = ", paste0("\"", deparse(substitute(printer)), "_", Sys.Date(), ".txt\","), " append = T)", "print(printer)", "sink()", sep = "\n")
+  return(eval(parse(text=temp)))
+  setwd(dir)
+  #cat(temp)
+  #return(eval(parse(text=temp)))
+}
+
 sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), verbose_output = TRUE){ 
+  record <- paste("sink(file = \"sing_selection.txt\", append = T)", "print(paste(Sys.time(), \"Similarity Golf Score:\", similarity_golf.score, \"Selection Sylreps:\", selection_sylreps, \"Selection Index:\", selection.index, \"Context:\", context.name[context], sep = \"\\n\"))", "sink()", sep = "\n")
+  #cat(record)
+  #eval(parse(text=record))
+  
   # context could either be females choosing a mate, or young males choosing tutors. 1 == mate selection; not-1 == tutor selection
   # not important unless the output file "Female Select Chances (1) Per Timestep.tiff" is this number for long stretches - then something is WRONG. :P
   # Curiosity Variables 2: derivative variables (potential to eliminate)

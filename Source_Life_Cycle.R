@@ -175,6 +175,8 @@ setwd(results_directory)
 
 simple_plots(R = R, Q = converted_data, simplification_factor = 10)
 full_plots(R = R, Q = converted_data)
-library(rstudioapi)
-rstudioapi::documentSave(rstudioapi::getActiveDocumentContext()$id)
+
+sink(file = paste0(Parameters))
+#library(rstudioapi)
+#documentSave(getActiveDocumentContext()$id)
 
