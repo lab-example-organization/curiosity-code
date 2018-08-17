@@ -118,16 +118,16 @@ resylreps.offspring <- function(P) {
   return(sylreps)
 }
 
-example <- paste0(P$num_pop, " can be as bad as ", P$nropsp)
-cat(example)
+#example <- paste0(P$num_pop, " can be as bad as ", P$nropsp)
+#cat(example)
 
-zap <- 1:10
-example1.5 <- paste(zap, "heck", collapse = " ")
-cat(example1.5)
+#zap <- 1:10
+#example1.5 <- paste(zap, "heck", collapse = " ")
+#cat(example1.5)
 
-example_2 <- paste("sink(file = \"example_2.txt\", append = T)", "cat(example)", "sink()", sep = "\n")
-cat(example_2)
-eval(parse(text=example_2))
+#example_2 <- paste("sink(file = \"example_2.txt\", append = T)", "cat(example)", "sink()", sep = "\n")
+#cat(example_2)
+#eval(parse(text=example_2))
 
 output_checker <- function(printer) {
   dir <- getwd()
@@ -142,7 +142,7 @@ output_checker <- function(printer) {
 }
 
 sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), verbose_output = TRUE){ 
-  record <- paste("sink(file = \"sing_selection.txt\", append = T)", "print(paste(Sys.time(), \"Similarity Golf Score:\", similarity_golf.score, \"Selection Sylreps:\", selection_sylreps, \"Selection Index:\", selection.index, \"Context:\", context.name[context], sep = \"\\n\"))", "sink()", sep = "\n")
+  #record <- paste("sink(file = \"sing_selection.txt\", append = T)", "print(paste(Sys.time(), \"Similarity Golf Score:\", similarity_golf.score, \"Selection Sylreps:\", selection_sylreps, \"Selection Index:\", selection.index, \"Context:\", context.name[context], sep = \"\\n\"))", "sink()", sep = "\n")
   #cat(record)
   #eval(parse(text=record))
   
@@ -190,7 +190,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
           for(singer.pool in 1 : P$num_one.pop_singers_sampled[context]) {
             similarity_golf.score[singer.pool + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])] <- sum(abs(which((selection_sylreps[(singer.pool + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])), ] - selector.sylrep) != 0) - median(which(selector.sylrep == 1))))
           }
-        }
+        } # populate selection.index and selection_sylreps
         singer <- ((sort(similarity_golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
         #print(paste("singer =",singer,sep=" "))
         #BUT FIRST: Put in instructions to interrupt the process if her mate is from the other species

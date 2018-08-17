@@ -158,7 +158,6 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
 data_visuals <- paste0("source(\"", thing, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
 
-
 parent_directory <- str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),"")
 setwd(parent_directory)
 info <- readRDS(file = "metadata.RData")

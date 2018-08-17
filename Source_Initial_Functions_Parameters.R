@@ -128,6 +128,8 @@ recordvariable.initialize <- function(P, timestep_fraction) {
   return(record.variable)
 }
 
+#day.tuh <- recordvariable.initialize
+
 initialize.sylrep <- function(P, population.pattern, eqpop = TRUE, eqsex = TRUE) {
   
   if(length(population.pattern) != P$num_pop) {
