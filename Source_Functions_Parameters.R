@@ -15,16 +15,20 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
         }
       } else { # Oblique Learning
         source_of_ONEs <- which(!(which(P$learning.pool[1, , population, number_renewed] == 1) %in% which(P$learning.pool[3, , population, number_renewed] == 1)))
+        if(length(source_of_ONEs) == 0) {next}
       }
       
       teacher.mean <- mean(source_of_ONEs)
       probs <- runif(source_of_ONEs, 0, 1)
+      #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
+      #print(probs)
+      #sink()
       
       for (sex in 1:context) {
         for (sylls_to_learn in 1:length(source_of_ONEs)) {
-          if((probs[sylls_to_learn]) <= (P$learnprob[context]-P$randlearnprob[context])) {
+          if(probs[sylls_to_learn] <= (P$learnprob[context] - P$randlearnprob[context])) {
             P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population, number_renewed] <- 1 # nropsp!!! come on! still have to figure that one out i guess
-          } else if(probs[sylls_to_learn] <= P$learnprob[context]) {
+          } else if(probs[sylls_to_learn] > (1 - P$randlearnprob[context])) {
               r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
               if(r_norm > P$sylnum) {
                 r_norm <- P$sylnum
@@ -35,6 +39,7 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
           }
         }
       }
+      
     }
   }
 return(P)
@@ -192,9 +197,9 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
           }
         } 
         singer <- ((sort(similarity_golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
-        sink(file = "selection_output.txt", append = T)
-        print(paste("population", population, "selected singer ",singer, "for a", context.name[context], sep=" "))
-        sink()
+        #sink(file = "selection_output.txt", append = T)
+        #print(paste("population", population, "selected singer ",singer, "for a", context.name[context], sep=" "))
+        #sink()
         #BUT FIRST: Put in instructions to interrupt the process if her mate is from the other species
         if(context == 1) {
           singer_eval <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop)))
@@ -249,7 +254,6 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
         } else if(new.curiosity >= 1) {
           new.curiosity <- 1
         }
-        s
         P$pairing.pool[(sex + 2), 4, population, number_renewed] <- P$pairing.pool[(sex + 2), 2, population, number_renewed]
         P$pairing.pool[(sex + 2), 2, population, number_renewed] <- new.curiosity
         P$pairing.pool[(sex + 2), 5, population, number_renewed] <- curinh_attempts

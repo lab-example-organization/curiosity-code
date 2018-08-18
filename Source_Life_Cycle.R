@@ -118,7 +118,6 @@ rm(init_params, funx_n_params)
 
 for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
-    
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 2, num_select_chances = c(100, 100), verbose_output = F)
     
     P <- make.offspring.calls(P, no.parent.turnover = FALSE)
@@ -144,7 +143,7 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   print(paste0("storing data packet ", thousand_timesteps))
   FolderName <- store_timesteps(filename = thousand_timesteps, object_record = day.tuh)
   if((thousand_timesteps==(P$num_timesteps/1000))&&(single_timestep==1000)) {
-    file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
+    #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
     sink(file = paste0(thing, "/sim_data.txt"))
     print(P)
     print(FolderName)
