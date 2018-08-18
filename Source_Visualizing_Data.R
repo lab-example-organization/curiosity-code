@@ -8,6 +8,7 @@ rm(list = objects())
 FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
+#thousand_timesteps <- 2
 
 convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps) {
   dir <- getwd()
@@ -158,6 +159,12 @@ simple_plots <- function(R = R, Q = converted_data, simplification_factor = 10) 
     plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Woman AC"))
     dev.off()
     
+    objectz <- Q$cursity[11,population,seq.int(1, P$num_timesteps, simplification_factor)]
+    file_name <- paste0(R$datez, "_", R$run_name, "_cur_inh_attempts", population, ".tiff")
+    tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+    plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Cur Inh Attempts"))
+    dev.off()
+    
     
     #selection_tiff <- paste0("tiff(filename = ", file_name, ", width = 554, height = 467, units = \"px\", pointsize = 12, bg = \"white\", compression = \"none\")")
     #selection_plot <- paste0("plot(objectz[seq.int(1,", P$num_timesteps, " , ", simplification_factor, ")], xlab = \"Timesteps\", ylab = paste0(\"Pop \",", population, ", \"Select Chances\"))")
@@ -254,6 +261,12 @@ full_plots <- function(R = R, Q = converted_data) {
     plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Woman AC"))
     dev.off()
     
+    objectz <- Q$cursity[11,population,]
+    file_name <- paste0(R$datez, "_", R$run_name, "_cur_inh_attempts", population, ".tiff")
+    tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+    plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Cur Inh Attempts"))
+    dev.off()
+    
     
     #selection_tiff <- paste0("tiff(filename = ", file_name, ", width = 554, height = 467, units = \"px\", pointsize = 12, bg = \"white\", compression = \"none\")")
     #selection_plot <- paste0("plot(objectz[seq.int(1,", P$num_timesteps, " , ", simplification_factor, ")], xlab = \"Timesteps\", ylab = paste0(\"Pop \",", population, ", \"Select Chances\"))")
@@ -267,7 +280,7 @@ full_plots <- function(R = R, Q = converted_data) {
       dev.off()
       
       objectz <- Q$cursity[sex, population, ]
-      file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", Q$sexes[sex], "s_full.tiff")
+      file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", R$sexes[sex], "s_full.tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(objectz, xlab = paste0("Timestep"), ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"))
       dev.off()

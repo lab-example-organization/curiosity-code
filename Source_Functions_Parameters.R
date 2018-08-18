@@ -174,7 +174,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
           P$pairing.pool[(4-context), 3, population, number_renewed] <- k
           break
         }
-        stop = FALSE
+        stop <- FALSE
         selector_context <- list(
           tutor_selector = paste0("selector.index <- P$pairing.pool[3, 1, ", population, ", ", number_renewed, "]"),
           mate_selector = paste0("selector.index <- sample(P$pop_calls_matrix[2, ], 1)")
