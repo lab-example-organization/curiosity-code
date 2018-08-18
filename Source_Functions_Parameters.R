@@ -243,6 +243,13 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
                            ((curlearnprob) * (P$pairing.pool[1, 1, population, number_renewed]))
           curinh_attempts <- curinh_attempts + 1
         }
+        
+        if(new.curiosity <= 0) {
+          new.curiosity <- 0
+        } else if(new.curiosity >= 1) {
+          new.curiosity <- 1
+        }
+        s
         P$pairing.pool[(sex + 2), 4, population, number_renewed] <- P$pairing.pool[(sex + 2), 2, population, number_renewed]
         P$pairing.pool[(sex + 2), 2, population, number_renewed] <- new.curiosity
         P$pairing.pool[(sex + 2), 5, population, number_renewed] <- curinh_attempts

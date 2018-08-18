@@ -29,7 +29,7 @@ for(cycle_params in 1:1) {
     
     source("180807.1804_Source_Initial_Functions_Parameters.R")
     # num_timesteps, nropsp, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev, curflux, new.cur.threshold, offspring_calls, 
-    P <- Define.Parameters(num_timesteps = 1000, nropsp = 1, num_pop = 2, pop_size = 400, sylnum = 156, nsspl = 24, num_one.pop_singers_sampled = 10, curlearnprob = 0.95, learnprob = c(0.59, 0.1), randlearnprob = c(0.1, 0.01), stand.dev = 2, curflux = 0.5, new.cur.threshold = 10, offspring_calls = )
+    P <- Define.Parameters(num_timesteps = 1000, nropsp = 1, num_pop = 2, pop_size = 400, sylnum = 156, nsspl = 24, num_one.pop_singers_sampled = 10, curlearnprob = 0.95, learnprob = c(0.59, 0.1), randlearnprob = c(0.1, 0.01), stand.dev = 2, curflux = 0.05, new.cur.threshold = 10, offspring_calls = )
     
     sylreps <- initialize.sylrep(P, c(initsylrepmatrix[,cycler]), T, T)
     
