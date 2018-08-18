@@ -157,7 +157,6 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
   for(population in 1 : P$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
     for(number_renewed in 1:P$nropsp) {
-      stop = FALSE
       for(k in 1 : num_select_chances[context]) {
         if(k == num_select_chances[context]) {
           if(verbose_output == TRUE) {
@@ -175,7 +174,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
           P$pairing.pool[(4-context), 3, population, number_renewed] <- k
           break
         }
-        
+        stop = FALSE
         selector_context <- list(
           tutor_selector = paste0("selector.index <- P$pairing.pool[3, 1, ", population, ", ", number_renewed, "]"),
           mate_selector = paste0("selector.index <- sample(P$pop_calls_matrix[2, ], 1)")
@@ -183,6 +182,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         eval(parse(text=selector_context[[context]]))
         selector.sylrep <- sylreps[selector.index, , population]
         
+        # populate selection.index, selection_sylreps, and similarity_golf_score - sets the stage for the sorting-assignment of singer
         for(singerpop in 1 : P$num_pop) {
           selection.index[(1 + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])) : (singerpop * P$num_one.pop_singers_sampled[context])] <- sample(P$pop_calls_matrix[1, ], P$num_one.pop_singers_sampled[context], replace = FALSE)
           #####Include a check here to make sure that the sampled singers aren't going to include the father (for the tutor context)
@@ -190,15 +190,22 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
           for(singer.pool in 1 : P$num_one.pop_singers_sampled[context]) {
             similarity_golf.score[singer.pool + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])] <- sum(abs(which((selection_sylreps[(singer.pool + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])), ] - selector.sylrep) != 0) - median(which(selector.sylrep == 1))))
           }
-        } # populate selection.index and selection_sylreps
+        } 
         singer <- ((sort(similarity_golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
-        #print(paste("singer =",singer,sep=" "))
+        sink(file = "selection_output.txt", append = T)
+        print(paste("population", population, "selected singer ",singer, "for a", context.name[context], sep=" "))
+        sink()
         #BUT FIRST: Put in instructions to interrupt the process if her mate is from the other species
-        singer_eval <- list(
-          tutor <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop))),
-          mate <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
-        )
-        if(singer %in% (singer_eval[context]) == TRUE ) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
+        if(context == 1) {
+          singer_eval <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop)))
+        } else {
+          singer_eval <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
+        }
+        #singer_eval <- list(
+        #  tutor <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop))),
+        #  mate <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
+        #)
+        if(singer %in% singer_eval) {     # ((((population-1)*num_one.pop_singers_sampled)+1):(population*num_one.pop_singers_sampled))
           singer.index <- selection.index[singer]
           indices <- c(singer.index, selector.index)
           
@@ -208,11 +215,11 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
             P$pairing.pool[sex, 2, population, number_renewed] <- curiosity_level[indices[sex], population]
           }
           P$pairing.pool[2, 3, population, number_renewed] <- k
-          stop = TRUE
-          break
+          stop <- TRUE
         }
+        if(stop == TRUE) {break}
       }
-      if(stop) {next} 
+      if(number_renewed == P$nropsp) {break}
     }
   }
   return(P)
