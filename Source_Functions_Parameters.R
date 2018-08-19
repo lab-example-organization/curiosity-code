@@ -20,9 +20,9 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
       
       teacher.mean <- mean(source_of_ONEs)
       probs <- runif(source_of_ONEs, 0, 1)
-      #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
-      #print(probs)
-      #sink()
+      sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
+      print(probs)
+      sink()
       
       for (sex in 1:context) {
         for (sylls_to_learn in 1:length(source_of_ONEs)) {

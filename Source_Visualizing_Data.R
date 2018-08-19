@@ -214,7 +214,7 @@ full_plots <- function(R = R, Q = converted_data) {
   for(population in 1:P$num_pop) {
     
     objectz <- Q$cursity[3,population,]
-    file_name <- paste0(R$datez, "_", R$run_name, "_selections_pop", population, "_full.tiff")
+    file_name <- paste0(R$datez, "_", R$run_name, "_mate_selections_pop", population, "_full.tiff")
     tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
     plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
     dev.off()
