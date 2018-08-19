@@ -33,24 +33,26 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
     if(value_entered %in% c(1 : length(zero_to_one_template)) == FALSE) {stop("in order to work, value_entered must be contained within zero_to_one_template")}
     return(replicate(c(length = number_repeats / divisions_per_repeat), zero_to_one_template[value_entered]))
   }
+  if(num_pop == 2) {
+    syllprob_vector <- c(
+      c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25)),
+      c(rep.frac(nsspl,1,25),rep.frac(nsspl,1,23),rep.frac(nsspl,1,4),rep.frac(nsspl,1,2),rep.frac(sylnum-4*nsspl,1,1)),
+      c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1)),
+      c(rep.frac(nsspl,2,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,2,25)),
+      c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1)),
+      c(rep.frac(nsspl,4,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,4,25)),
+      c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1)),
+      c(rep.frac(nsspl,6,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,6,25)),
+      c(rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1)),
+      c(rep.frac(nsspl,8,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,8,25)),
+      c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(3/2),1)),
+      c(rep.frac(sylnum-4*nsspl,(3/2),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,3,1)),
+      c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(4/3),1)),
+      c(rep.frac(sylnum-4*nsspl,(4/3),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,4,1))
+      
+    )
+  } else if(num_pop)
   
-  syllprob_vector <- c(
-    c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25)),
-    c(rep.frac(nsspl,1,25),rep.frac(nsspl,1,23),rep.frac(nsspl,1,4),rep.frac(nsspl,1,2),rep.frac(sylnum-4*nsspl,1,1)),
-    c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1)),
-    c(rep.frac(nsspl,2,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,2,25)),
-    c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1)),
-    c(rep.frac(nsspl,4,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,4,25)),
-    c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1)),
-    c(rep.frac(nsspl,6,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,6,25)),
-    c(rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1)),
-    c(rep.frac(nsspl,8,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,8,25)),
-    c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(3/2),1)),
-    c(rep.frac(sylnum-4*nsspl,(3/2),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,3,1)),
-    c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(4/3),1)),
-    c(rep.frac(sylnum-4*nsspl,(4/3),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,4,1))
-    
-  )
   
   population_syll_probs <- matrix(data = syllprob_vector,
                                   nrow = length(syllprob_vector) / sylnum, #number of rows to complement the number of combinations I've come up with; so if I come up with more, fix it doofus.
@@ -143,7 +145,7 @@ initialize.sylrep <- function(P, population.pattern, eqpop = TRUE, eqsex = TRUE)
   return(sylreps)
 }
 
-initialize.curiosity <- function(P, cur.min, cur.max) {
+initialize.curiosity <- function(P, cur.min, cur.max, invasion = FALSE) {
   warning("These arguments must be ordered - highest level population, next sex- singers, then choosers")
   if(length(cur.min) != length(cur.max) || length(cur.min) != (P$num_pop * 2)) {
     print("Error Log #0003: each argument needs to be a vector that matches the number of populations AND the number of sexes - Make sure the number of elements matches the number of starting curiosity values.")
@@ -160,5 +162,12 @@ initialize.curiosity <- function(P, cur.min, cur.max) {
       curiosity_level[((1 + ((sexes - 1) * (P$pop_size/2))):(sexes * P$pop_size/2)), pop.num] <- runif(P$pop_size / 2, P$zero_to_one_template[cur.min[P$curiosity_counter[sexes, pop.num]]], P$zero_to_one_template[cur.max[P$curiosity_counter[sexes, pop.num]]])
     }
   }
+  if(invasion) {
+    invasion_function(curiosity_level)
+  }
   return(curiosity_level)
+}
+
+invasion_function <- function(sylreps, curiosity_level, population_s_affected) { # for now, population_s_affected will refer to subpopulations by their pop-sex number: if two pops, the numbers are 1) pop1 male, 2) pop1 female, 3) pop2 male, 4) pop2 female
+  
 }

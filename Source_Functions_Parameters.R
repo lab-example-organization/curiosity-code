@@ -8,6 +8,11 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
       
       if(context == 2) { # clear the sylreps rows about to be filled in :D
         source_of_ONEs <- which(P$learning.pool[1, , population, number_renewed] == 1)
+        if(length(source_of_ONEs) == 0) {
+          saveRDS(object = P, file = "parent with no sylls.txt")
+          print(P$learning.pool[1, , population, number_renewed])
+          stop("wot? parent has no syllables?!")
+          }
         for(sex in 1 : 2) {
           for(syllable in 1 : P$sylnum) {
             P$learning.pool[(sex + 2), syllable, population, number_renewed] <- 0
