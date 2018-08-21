@@ -33,7 +33,7 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
     if(value_entered %in% c(1 : length(zero_to_one_template)) == FALSE) {stop("in order to work, value_entered must be contained within zero_to_one_template")}
     return(replicate(c(length = number_repeats / divisions_per_repeat), zero_to_one_template[value_entered]))
   }
-  if(num_pop == 2) {
+  if(num_pop >= 2) {
     syllprob_vector <- c(
       c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25)),
       c(rep.frac(nsspl,1,25),rep.frac(nsspl,1,23),rep.frac(nsspl,1,4),rep.frac(nsspl,1,2),rep.frac(sylnum-4*nsspl,1,1)),
@@ -51,7 +51,11 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
       c(rep.frac(sylnum-4*nsspl,(4/3),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,4,1))
       
     )
-  } else if(num_pop)
+  } else if(num_pop == 1) {
+    syllprob_vector <- c(
+      c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25))
+    )
+  }
   
   
   population_syll_probs <- matrix(data = syllprob_vector,

@@ -25,15 +25,15 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
       
       teacher.mean <- mean(source_of_ONEs)
       probs <- runif(source_of_ONEs, 0, 1)
-      sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
-      print(probs)
-      sink()
+      #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
+      #print(probs)
+      #sink()
       
       for (sex in 1:context) {
         for (sylls_to_learn in 1:length(source_of_ONEs)) {
-          if(probs[sylls_to_learn] <= (P$learnprob[context] - P$randlearnprob[context])) {
+          if(probs[sylls_to_learn] <= (P$learnprob[context])) {
             P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population, number_renewed] <- 1 # nropsp!!! come on! still have to figure that one out i guess
-          } else if(probs[sylls_to_learn] > (1 - P$randlearnprob[context])) {
+          } else if(probs[sylls_to_learn] <= ((P$learnprob[context] * P$randlearnprob[context]) + P$learnprob[context])) {
               r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
               if(r_norm > P$sylnum) {
                 r_norm <- P$sylnum
@@ -159,9 +159,6 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
   # context could either be females choosing a mate, or young males choosing tutors. 1 == mate selection; not-1 == tutor selection
   # not important unless the output file "Female Select Chances (1) Per Timestep.tiff" is this number for long stretches - then something is WRONG. :P
   # Curiosity Variables 2: derivative variables (potential to eliminate)
-  similarity_golf.score <- rep(0, (P$num_one.pop_singers_sampled[context] * P$num_pop))
-  selection_sylreps <- array(0, c((P$num_one.pop_singers_sampled[context] * P$num_pop), P$sylnum))
-  selection.index <- array(0, P$num_pop * P$num_one.pop_singers_sampled[context])
   context.name <- c("Tutor", "Mate")
   
   for(population in 1 : P$num_pop) { #population <- 1 rm(population)
@@ -194,7 +191,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         
         # populate selection.index, selection_sylreps, and similarity_golf_score - sets the stage for the sorting-assignment of singer
         for(singerpop in 1 : P$num_pop) {
-          selection.index[(1 + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])) : (singerpop * P$num_one.pop_singers_sampled[context])] <- sample(P$pop_calls_matrix[1, ], P$num_one.pop_singers_sampled[context], replace = FALSE)
+          
           #####Include a check here to make sure that the sampled singers aren't going to include the father (for the tutor context)
           selection_sylreps[(1 + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])) : (singerpop * P$num_one.pop_singers_sampled[context]), ] <- sylreps[selection.index[(1 + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])):(singerpop * P$num_one.pop_singers_sampled[context])], , singerpop]
           for(singer.pool in 1 : P$num_one.pop_singers_sampled[context]) {
@@ -235,22 +232,55 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
   return(P)
 }
 
+build_suitors <- function(P, selector, sylreps, context) {
+  similarity_golf.score <- rep(0, (P$num_one.pop_singers_sampled[context] * P$num_pop))
+  selection_sylreps <- array(0, c((P$num_one.pop_singers_sampled[context] * P$num_pop), P$sylnum))
+  selection.index <- rep(0, P$num_pop * P$num_one.pop_singers_sampled[1])
+  
+  selection.index[(1 + ((singerpop - 1) * P$num_one.pop_singers_sampled[context])) : (singerpop * P$num_one.pop_singers_sampled[context])] <- sample(P$pop_calls_matrix[1, ], P$num_one.pop_singers_sampled[context], replace = FALSE)
+  
+}
+
+
+#input: a number, 1, 2, or 3...
+#output: 10 sampled numbers per positive integer value of input
+# sample_source = P
+# sample_retainer <- rep(0, input_value * sample_value)
+sampled_suitors <- function(sample_source, sample_retainer, input_value, sample_value) {
+  return(sample_retainer <- lapply(1:input_value, function(x) {sample(x = sample_source, size = sample_value, replace = FALSE)}))
+}
+
+selection.index <- sampled_suitors(sample_source = P$pop_calls_matrix[1,], sample_retainer = selection.index, input_value = P$num_pop, sample_value = P$num_one.pop_singers_sampled)
+
+
+#input: a list of strings of row calls, organized such that each item in the list corresponds to a different matrix from which it pulls values.
+#output: a list of values assigned to each row call in the input list.
+suitor_similarity_score <- function(sylreps, selector.index, sample_retainer, sample_value, selector_population) {
+  return(golf.score <- lapply(1:length(sample_retainer), function(x) {
+    lapply(1:sample_value, function(y) {
+      sum(abs(which((sylreps[sample_retainer[[x]][y], , x] - sylreps[selector.index, ,selector_population]) != 0) - median(which(sylreps[selector.index, ,selector_population] == 1))))
+    })
+  }))
+}
+
+similarity_golf_score <- suitor_similarity_score(sylreps = sylreps, selector.index = selector.index, sample_retainer = selection.index, sample_value = P$num_timesteps, selector_population = 1)
+
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
 curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1){
   curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
-  newcuriosity <- array(data = runif((P$nropsp * P$num_pop * 2), 1 - P$curflux, 1 + P$curflux), dim = c(2, P$num_pop, P$nropsp))
+  newcuriosity <- array(data = runif((P$nropsp * P$num_pop * 2), 0 - P$curflux, 0 + P$curflux), dim = c(2, P$num_pop, P$nropsp))
   for(number_renewed in 1 : P$nropsp) {
     for(population in 1 : (P$num_pop)) {
       if(P$pairing.pool[1, 2, population, number_renewed] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
       for(sex in 1:2) {
-        new.curiosity <- ((1 - curlearnprob) * (newcuriosity[sex, population, number_renewed])) +
-                         ((curlearnprob) * (P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population, number_renewed])) # Adding small proportion of noise 
+        new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population, number_renewed] + 
+                         ((1 - curlearnprob) * (newcuriosity[sex, population, number_renewed])) # Adding small proportion of noise 
         curinh_attempts <- 1
-        while((new.curiosity <= 0 | new.curiosity >= 1) && (curinh_attempts <= P$new.cur.threshold)) {
-          crap <- runif(1, 1 - P$curflux, 1 + P$curflux)
+        while((new.curiosity <= 0 | new.curiosity >= 1) && (curinh_attempts < P$new.cur.threshold)) {
+          crap <- runif(1, 0 - P$curflux, 0 + P$curflux)
           new.curiosity <- ((1 - curlearnprob) * crap) + 
-                           ((curlearnprob) * (P$pairing.pool[1, 1, population, number_renewed]))
+                           P$pairing.pool[1, 1, population, number_renewed]
           curinh_attempts <- curinh_attempts + 1
         }
         

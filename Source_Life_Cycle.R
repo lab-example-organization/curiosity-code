@@ -14,35 +14,48 @@
 setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 
 rm(list=objects())
-thing <- getwd()
-init_params <- paste0("source(\"", thing, "/", "Source_Initial_Functions_Parameters.R\")")
+parent_directory <- getwd()
+init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
-stuff_to_save <- list(
-  docnamez <- c("02_-_initial_tests"),
-  datez <- Sys.Date(),
-  deetz <- c("2 populations, 0 to 1 curiosity first and 0.49-0.51 for second, opposite ends of the sylrep spectrum")
-)
-saveRDS(object = stuff_to_save, file = "metadata.RData")
 
 P <- Define.Parameters(num_timesteps = 10000, nropsp = 1, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 24, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), randlearnprob = c(0.01, 0.1), 
-                       stand.dev = 2, curflux = 0.05, new.cur.threshold = 10)
+                       stand.dev = 2, curflux = 0.5, new.cur.threshold = 10)
 
-sylreps <- initialize.sylrep(P, c(1, 2), T, T)
+docnamez <- c("02_-_initial_tests")
+
+sylreps <- initialize.sylrep(P, c(1, 1), T, T)
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(1,1,12,12), 
-                                        c(26,26,14,14))
+                                        c(1,1,1,1), 
+                                        c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
-funx_n_params <- paste0("source(\"", thing, "/", "Source_Functions_Parameters.R\")")
+funx_n_params <- paste0("source(\"", parent_directory, "/", "Source_Functions_Parameters.R\")")
 eval(parse(text = funx_n_params))
 
-rm(init_params, funx_n_params)
+
+
+datez <- Sys.Date()
+deetz <- c(P$num_timesteps, P$nropsp, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, P$learnprob, P$randlearnprob, P$stand.dev, P$curflux, P$new.cur.threshold, dim(P$pop_calls_matrix), dim(P$pairing.pool), dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
+names(deetz) <- c("P$num_timesteps", "P$nropsp", "P$num_pop", "P$pop_size", "P$sylnum", 
+                      "P$nsspl", rep("P$num_one.pop_singers_sampled", 2), "P$curlearnprob", rep("P$learnprob", 2), 
+                      rep("P$randlearnprob", 2), "P$stand.dev", "P$curflux", "P$new.cur.threshold", 
+                      rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 4), 
+                      rep("dim(P$curiosity_counter)", 2), rep("dim(P$population_syll_probs)", 2), 
+                      "length(P$curiositybreaks)", "length(P$zero_to_one_template)", rep("dim(P$learning.pool)", 4))
+stuff_to_save <- list(
+  docnamez,
+  datez,
+  deetz
+)
+
+saveRDS(object = stuff_to_save, file = "metadata.RData")
+rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
 
 for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
@@ -68,12 +81,14 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
   }
   #thousand_timesteps <- 1
+  sink(file = "console_copy.txt", append = TRUE, split = TRUE)
   print(paste0("storing data packet ", thousand_timesteps, " at ", Sys.time()))
+  sink()
   FolderName <- store_timesteps(filename = thousand_timesteps, object_record = day.tuh)
   if((thousand_timesteps==(P$num_timesteps/1000))&&(single_timestep==1000)) {
     #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
     
-    sink(file = paste0(thing, "/sim_data.txt"))
+    sink(file = paste0(parent_directory, "/sim_data.txt"))
     print(P)
     print(FolderName)
     sink()
@@ -81,7 +96,9 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     }
 }
 
-data_visuals <- paste0("source(\"", thing, "/", "Source_Visualizing_Data.R\")")
+#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
+data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
+#data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
 
 parent_directory <- str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),"")
