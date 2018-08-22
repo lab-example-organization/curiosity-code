@@ -61,11 +61,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 2, num_select_chances = c(100, 100), verbose_output = F)
     
-    P <- make.offspring.calls(P, no.parent.turnover = FALSE)
+    P <- make.offspring.calls(P = P)
     
     # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
-    P <- curiosity_learn(P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
+    P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
     P <- syll_learn(P = P, context = 2) # context decides whether the learning is vertical (2) or oblique (1)
     
@@ -73,9 +73,9 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
     P <- syll_learn(P = P, context = 1) # context decides whether the learning is vertical (2) or oblique (1)
     
-    curiosity_level <- recuriosity.offspring(P)
+    curiosity_level <- recuriosity.offspring(P = P)
     
-    sylreps <- resylreps.offspring(P)
+    sylreps <- resylreps.offspring(P = P)
     
     day.tuh <- variable.archive(P = P, timestep = single_timestep)
     

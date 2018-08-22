@@ -1,6 +1,6 @@
 # # # Parameter-Making Function
 
-Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev, curflux, new.cur.threshold){
+Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev, curflux, new.cur.threshold){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
     stop("Check error log #_0002")}
@@ -15,10 +15,10 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
   if(num_timesteps %% 1000 != 0) {stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")}
   
   pop_calls_matrix <- matrix(data = c(1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
-  learning.pool <- array(0, c(4, sylnum, num_pop, nropsp))
-  pairing.pool <- array(0, c(4, 6, num_pop, nropsp))
+  learning.pool <- array(0, c(5, sylnum, num_pop))
+  pairing.pool <- array(0, c(5, 6, num_pop))
   
-  #new.curiosity <- array(0,c(2,nropsp,num_pop))
+  #new.curiosity <- array(0,c(2,num_pop))
   curiositybreaks <- (0 : (num_pop * num_one.pop_singers_sampled[1])) * (1 / (num_pop * num_one.pop_singers_sampled[1]))
   curiosity_counter <- matrix(data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = F)
   zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
@@ -72,7 +72,6 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
   
   
   Parameters <- list(num_timesteps = num_timesteps, 
-                     nropsp = nropsp, 
                      num_pop = num_pop, 
                      pop_size = pop_size, 
                      sylnum = sylnum, 
@@ -97,7 +96,6 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
 }
 #Results of Function:
   #Parameters <- list(      num_timesteps, 
-                                  #nropsp, 
                                  #num_pop, 
                                 #pop_size, 
                                   #sylnum, 
@@ -122,7 +120,7 @@ Define.Parameters <- function(num_timesteps, nropsp, num_pop, pop_size, sylnum, 
 recordvariable.initialize <- function(P, timestep_fraction) {
   record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
                           sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-                          curity_mean_t=array(0, c(11, (P$num_pop * P$nropsp), (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+                          curity_mean_t=array(0, c(11, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
                           curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
                           )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
@@ -172,6 +170,6 @@ initialize.curiosity <- function(P, cur.min, cur.max, invasion = FALSE) {
   return(curiosity_level)
 }
 
-invasion_function <- function(sylreps, curiosity_level, population_s_affected) { # for now, population_s_affected will refer to subpopulations by their pop-sex number: if two pops, the numbers are 1) pop1 male, 2) pop1 female, 3) pop2 male, 4) pop2 female
+#invasion_function <- function(sylreps, curiosity_level, population_s_affected) { # for now, population_s_affected will refer to subpopulations by their pop-sex number: if two pops, the numbers are 1) pop1 male, 2) pop1 female, 3) pop2 male, 4) pop2 female
   
-}
+#}
