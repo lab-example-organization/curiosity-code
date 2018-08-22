@@ -199,53 +199,20 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         singer_eval <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
         selector.index <- sample(P$pop_calls_matrix[2, ], 1)
       }
-      
-      
-      chance_for_selection = chance_for_selection + 1
-    }
-    for(chance_for_selection in 1 : num_select_chances[context]) {
-      if(chance_for_selection == num_select_chances[context]) {
-        auto.teachers <- c((sample(P$pop_calls_matrix[1, ], 1, replace = T)), (sample(P$pop_calls_matrix[2, ], 1, replace = T))) # this will be referenced later using the curiosity_level, which separates females and males by row, so their column reference index number is limited to 1:200; so the first row of the pop_calls_matrix is appropriate for both of them.
-        if(verbose_output == TRUE) {
-          warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[context], " Selection")))
-        }
-        for(sex in 1:context) {
-          P$learning.pool[((5^(2-context)) * sex), , population] <- sylreps[auto.teachers[sex], , population]
-          P$pairing.pool[((5^(2-context)) * sex), 1, population] <- auto.teachers[sex] + ((sex - 1) * P$pop_size/2)
-          P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[auto.teachers[sex], population]
-        } # this will fill pairing.pool with (Mate) male and female metadata, or (Tutor) male metadata
-        P$pairing.pool[(4-context), 3, population] <- num_select_chances
-        break
-      }
-      stop <- FALSE
-      if(context == 1) {
-        singer_eval <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop)))
-        selector.index <- P$pairing.pool[3, 1, population]
-      } else {
-        singer_eval <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
-        selector.index <- sample(P$pop_calls_matrix[2, ], 1)
-      }
-      
       selector.sylrep <- sylreps[selector.index, , population]
       median_s.r_sylrep <- median(which(selector.sylrep == 1))
       stdev_s.n_vs_s.r_sylrep <- function(vector_to_compare) {
-        return(sum(abs(which((vector_to_compare - selector.sylrep) != 0) - median_s.r_sylrep) ))
+        return(
+          sum(
+            abs(
+              which((vector_to_compare - selector.sylrep) != 0) - median_s.r_sylrep)
+          )
+        )
       }
-      selection.index <- sapply(1:P$num_pop, function(x) {sample(x = P$pop_calls_matrix[1,], size = P$num_one.pop_singers_sampled[context], replace = FALSE)})
-      golf_score <- sapply(1:ncol(selection.index), function(y) {
-                      sapply(1:nrow(selection.index), function(x) {
-                        sum(
-                          abs(
-                            which((sylreps[selection.index[x,y],,y] - selector.sylrep) != 0) - median_s.r_sylrep
-                            )
-                          )
-                      })
-                    })
-      
       selection.index <- c(sapply(1:P$num_pop, function(x) {sample(x = P$pop_calls_matrix[1,], size = P$num_one.pop_singers_sampled[context], replace = FALSE)}))
-      different_sylrep_calls <- sapply(1:(P$num_pop * P$num_one.pop_singers_sampled[context]), function(x) {which(sylreps[selection.index[x], , (ceiling(x/10))] - selector.sylrep) != 0})
-      apply(apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c), 1, stdev_s.n_vs_s.r_sylrep)
-      singer <- ((sort(golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
+      selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
+      golf_score <- apply(selection.sylreps, 1, stdev_s.n_vs_s.r_sylrep)
+      singer <- ((sort(golf_score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
       
       if(singer %in% singer_eval) {
         singer.index <- selection.index[singer]
@@ -256,12 +223,12 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
           P$pairing.pool[((5^(2-context)) * sex), 1, population] <- indices[sex]
           P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[indices[sex], population]
         }
-        stop <- TRUE
+        P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
+        break
       }
-      P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
-      if(stop == TRUE) {break}
+      
+      chance_for_selection = chance_for_selection + 1
     }
-  }
   return(P)
 }
 
