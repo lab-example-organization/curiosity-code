@@ -250,20 +250,32 @@ sampled_suitors <- function(sample_source, sample_retainer, input_value, sample_
   return(sample_retainer <- lapply(1:input_value, function(x) {sample(x = sample_source, size = sample_value, replace = FALSE)}))
 }
 
+#selection.index <- unlist(sampled_suitors(sample_source = P$pop_calls_matrix[1,], sample_retainer = selection.index, input_value = P$num_pop, sample_value = P$num_one.pop_singers_sampled))
 selection.index <- sampled_suitors(sample_source = P$pop_calls_matrix[1,], sample_retainer = selection.index, input_value = P$num_pop, sample_value = P$num_one.pop_singers_sampled)
 
-
-#input: a list of strings of row calls, organized such that each item in the list corresponds to a different matrix from which it pulls values.
-#output: a list of values assigned to each row call in the input list.
-suitor_similarity_score <- function(sylreps, selector.index, sample_retainer, sample_value, selector_population) {
-  return(golf.score <- lapply(1:length(sample_retainer), function(x) {
-    lapply(1:sample_value, function(y) {
-      sum(abs(which((sylreps[sample_retainer[[x]][y], , x] - sylreps[selector.index, ,selector_population]) != 0) - median(which(sylreps[selector.index, ,selector_population] == 1))))
-    })
-  }))
+score_golf <- function(a_vector, b_vector) {
+  return(sum(abs(which((a_vector - b_vector) != 0) - median(which(b_vector == 1)))))
 }
 
-similarity_golf_score <- suitor_similarity_score(sylreps = sylreps, selector.index = selector.index, sample_retainer = selection.index, sample_value = P$num_timesteps, selector_population = 1)
+golf_score <- score_golf(sylreps[selector.index,,1],sylreps[sample(P$pop_calls_matrix[1,],1),,1])
+
+#input: a list of vectors: row calls, organized such that each element in the list corresponds to a different subset of the array from which it pulls values.
+#output: a list of matrices with rows pulled using each row call in the input list- these matrices also separated by element in the list.
+suitor_sylreps <- function(P, selector.index, selection.index, sylreps, selector_population) {
+  return(sylrep_grp <- mapply(score_golf, sylreps[selection.index[[1:length(selection.index)]]], sylreps[selector.index,,selector_population]))
+}
+
+thing <- suitor_sylreps(P = P, selector.index = selector.index, selection.index = selection.index, sylreps = sylreps, selector_population = 1)
+
+suitor_similarity_score <- function(P, sylreps, selector.index, sample_retainer, sample_value, selector_population) {
+  return(golf.score <- lapply(selection.index, function(x) {
+    sapply(1:sample_value, function(y) {
+      sum(abs(which((sylreps[sample_retainer[[x]][y], , x] - sylreps[selector.index, ,selector_population]) != 0) - median(which(sylreps[selector.index, ,selector_population] == 1))))
+    })
+  })
+)}
+
+similarity_golf_score <- suitor_similarity_score(P = P, sylreps = sylreps, selector.index = selector.index, sample_retainer = selection.index, sample_value = P$num_one.pop_singers_sampled[1], selector_population = 1)
 
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
