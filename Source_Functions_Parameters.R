@@ -26,18 +26,18 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
     
     for (sex in 1:context) {
       for (sylls_to_learn in 1:length(source_of_ONEs)) {
-        P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1
-        if(probs[sylls_to_learn] >= (P$learnprob[context])) {
-          P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0 # nropsp!!! come on! still have to figure that one out i guess
-        } else if(probs[sylls_to_learn] <= (P$randlearnprob[context])) {
-          P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
-          r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
-          if(r_norm > P$sylnum) {
-            r_norm <- P$sylnum
-          } else if(r_norm < 1) {
-              r_norm <- 1
+        P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
+        if(probs[sylls_to_learn] <= (P$learnprob[context])) {
+          P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1 # nropsp!!! come on! still have to figure that one out i guess
+          if(probs[sylls_to_learn] > (1 - P$randlearnprob[context])) {
+            r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
+            if(r_norm > P$sylnum) {
+              r_norm <- P$sylnum
+            } else if(r_norm < 1) {
+                r_norm <- 1
+            }
+            P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
           }
-          P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
         }
       }
     }
@@ -73,7 +73,7 @@ make.offspring.calls <- function(P){
     for(population in 1:P$num_pop){
       for(sex in 1:2){
         new_index <- c(sample(P$pop_calls_matrix[sex, ], 1, replace=F))
-        P$pairing.pool[(sex + 2), 1, population, ] <-  new_index
+        P$pairing.pool[(sex + 2), 1, population] <-  new_index
       }
     }
   
@@ -262,24 +262,30 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
 curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1){
-  curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
-  newcuriosity <- array(data = runif((P$nropsp * P$num_pop * 2), 0 - P$curflux, 0 + P$curflux), dim = c(2, P$num_pop))
+  print("blah 1")
+  curinh_patterns <- array(data = c(1, 1, 2, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
+  print("blah 2")
+  newcuriosity <- array(data = runif((P$num_pop * 2), 0 - P$curflux, 0 + P$curflux), dim = c(2, P$num_pop))
+  print("blah 3")
   for(population in 1 : (P$num_pop)) {
-    if(P$pairing.pool[1, 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+    print(paste("blah 4 - population ", population))
+    if(P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
     for(sex in 1:2) {
-      new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + 
-                       ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise 
+      print(paste("blah 4 - population ", population, " and sex ", sex))
+      new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise 
+      print(paste(new.curiosity, " = new.curiosity"))
       curinh_attempts <- 1
-      while((new.curiosity <= 0 | new.curiosity >= 1) && (curinh_attempts < P$new.cur.threshold)) {
+      print(curinh_attempts)
+      while((new.curiosity < 0 | new.curiosity > 1) && (curinh_attempts < P$new.cur.threshold)) {
         crap <- runif(1, 0 - P$curflux, 0 + P$curflux)
         new.curiosity <- ((1 - curlearnprob) * crap) + 
                          P$pairing.pool[1, 1, population]
         curinh_attempts <- curinh_attempts + 1
       }
       
-      if(new.curiosity <= 0) {
+      if(new.curiosity < 0) {
         new.curiosity <- 0
-      } else if(new.curiosity >= 1) {
+      } else if(new.curiosity > 1) {
         new.curiosity <- 1
       }
       P$pairing.pool[(sex + 2), 4, population] <- P$pairing.pool[(sex + 2), 2, population]
