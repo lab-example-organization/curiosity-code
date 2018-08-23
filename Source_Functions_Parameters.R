@@ -185,7 +185,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
       singer <- ((sort(golf_score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
       
       # This 
-      if(singer %in% singer_eval) {
+      if((singer %in% singer_eval) && (sum(sylreps[selection.index[singer], , population]) != 0)) {
         singer.index <- selection.index[singer]
         indices <- c(singer.index, selector.index)
         

@@ -8,7 +8,7 @@ rm(list = objects())
 FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
-#thousand_timesteps <- 1
+#thousand_timesteps <- 5
 
 convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps) {
   dir <- getwd()
