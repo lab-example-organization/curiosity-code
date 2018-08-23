@@ -30,7 +30,7 @@ sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(1,1,1,1), 
+                                        c(13,13,13,13), 
                                         c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))

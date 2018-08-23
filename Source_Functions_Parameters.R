@@ -7,14 +7,14 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
       source_of_ONEs <- which(P$learning.pool[1, , population] == 1) # calls for sylls vertical tutor (father) has
       if(length(source_of_ONEs) == 0) {
         saveRDS(object = P, file = "parent with no sylls.txt")
-        print(P$learning.pool[1, , population, number_renewed])
+        print(P$learning.pool[1, , population])
         stop("wot? parent has no syllables?!")
         } #address syll loss by stopping script if parent has no sylls
       for(sex in 1 : 2) {
-          P$learning.pool[(sex + 2), , population, number_renewed] <- rep(0, P$sylnum)
+          P$learning.pool[(sex + 2), , population] <- rep(0, P$sylnum)
       } # Vertical Learning; clear the sylreps rows about to be filled in :D
     } else { 
-      source_of_ONEs <- which(!(which(P$learning.pool[5, , population, number_renewed] == 1) %in% which(P$learning.pool[3, , population, number_renewed] == 1)))
+      source_of_ONEs <- which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))
       if(length(source_of_ONEs) == 0) {next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step
     } # Oblique Learning
     teacher.mean <- mean(source_of_ONEs)
@@ -48,35 +48,31 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
 variable.archive <- function(P, timestep) {
   #context_name <- c("parents&offspring","replacedindividuals")
   #if(context == 1) {
-  for(number_renewed in 1:P$nropsp) {
-    for(population in 1 : P$num_pop) {
-      day.tuh[["curity_mean_t"]][3, population, timestep] <- P$pairing.pool[2, 3, population]
-      day.tuh[["curity_mean_t"]][10, population, timestep] <- P$pairing.pool[3, 3, population]
-      
-      for(sex in 1:2) {
-        day.tuh[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
-        day.tuh[["sylrep_dstbxn"]][(((population - 1) * 2) + sex), , timestep] <- colSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]) # day.tuh[sylnums filled in by population[sex]] <- colSums(sylnums called by population[sex])
-        day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
-        day.tuh[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_level[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
-        day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population]
-        day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- P$pairing.pool[1, 1, population]
-        day.tuh[["curity_mean_t"]][11, population, timestep] <- P$pairing.pool[(sex + 2), 5, population]
-        day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- P$pairing.pool[(sex + 2), 4, population]
-      }
+  for(population in 1 : P$num_pop) {
+    day.tuh[["curity_mean_t"]][3, population, timestep] <- P$pairing.pool[2, 3, population]
+    day.tuh[["curity_mean_t"]][10, population, timestep] <- P$pairing.pool[3, 3, population]
+    
+    for(sex in 1:2) {
+      day.tuh[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
+      day.tuh[["sylrep_dstbxn"]][(((population - 1) * 2) + sex), , timestep] <- colSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]) # day.tuh[sylnums filled in by population[sex]] <- colSums(sylnums called by population[sex])
+      day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
+      day.tuh[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_level[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
+      day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population]
+      day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- P$pairing.pool[1, 1, population]
+      day.tuh[["curity_mean_t"]][11, population, timestep] <- P$pairing.pool[(sex + 2), 5, population]
+      day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- P$pairing.pool[(sex + 2), 4, population]
     }
   }
   return(day.tuh)
 }
 
 make.offspring.calls <- function(P){
-  
     for(population in 1:P$num_pop){
       for(sex in 1:2){
         new_index <- c(sample(P$pop_calls_matrix[sex, ], 1, replace=F))
         P$pairing.pool[(sex + 2), 1, population] <-  new_index
       }
     }
-  
   return(P)
 }
 
@@ -120,57 +116,6 @@ output_checker <- function(printer) {
   temp <- paste("sink(file = ", paste0("\"", deparse(substitute(printer)), "_", Sys.Date(), ".txt\","), " append = T)", "print(printer)", "sink()", sep = "\n")
   return(eval(parse(text=temp)))
   setwd(dir)
-}
-
-sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), verbose_output = TRUE){ 
-  context.name <- c("Tutor", "Mate")
-  for(population in 1 : P$num_pop) { #population <- 1 rm(population)
-    #print(paste("this is population",population,sep=" "))
-    for(chance_for_selection in 1 : num_select_chances[context]) {
-      if(chance_for_selection == num_select_chances[context]) {
-        auto.teachers <- c((sample(P$pop_calls_matrix[1, ], 1, replace = T)), (sample(P$pop_calls_matrix[2, ], 1, replace = T))) # this will be referenced later using the curiosity_level, which separates females and males by row, so their column reference index number is limited to 1:200; so the first row of the pop_calls_matrix is appropriate for both of them.
-        if(verbose_output == TRUE) {
-          warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[context], " Selection")))
-        }
-        for(sex in 1:context) {
-          P$learning.pool[((5^(2-context)) * sex), , population] <- sylreps[auto.teachers[sex], , population]
-          P$pairing.pool[((5^(2-context)) * sex), 1, population] <- auto.teachers[sex] + ((sex - 1) * P$pop_size/2)
-          P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[auto.teachers[sex], population]
-        } # this will fill pairing.pool with (Mate) male and female metadata, or (Tutor) male metadata
-        P$pairing.pool[(4-context), 3, population] <- num_select_chances
-        break
-      }
-      stop <- FALSE
-      if(context == 1) {
-        singer_eval <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop)))
-        selector.index <- P$pairing.pool[3, 1, population]
-      } else {
-        singer_eval <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
-        selector.index <- sample(P$pop_calls_matrix[2, ], 1)
-      }
-      
-      selector.sylrep <- sylreps[selector.index, , population]
-      
-      selection.index <- sapply(1:P$num_pop, function(x) {sample(x = P$pop_calls_matrix[1,], size = P$num_one.pop_singers_sampled[context], replace = FALSE)})
-      golf_score <- sapply(1:ncol(selection.index), function(y) {sapply(1:nrow(selection.index), function(x) {sum(abs(which((sylreps[selection.index[x,y],,y] - sylreps[selector.index,,1]) != 0) - median(which(sylreps[selector.index,,1] == 1))))})})
-      singer <- ((sort(golf.score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, 1] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
-      
-      if(singer %in% singer_eval) {
-        singer.index <- selection.index[singer]
-        indices <- c(singer.index, selector.index)
-        
-        for(sex in 1:context) {
-          P$learning.pool[((5^(2-context)) * sex), , population] <- sylreps[indices[sex], , population]
-          P$pairing.pool[((5^(2-context)) * sex), 1, population] <- indices[sex]
-          P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[indices[sex], population]
-        }
-        stop <- TRUE
-      }
-      P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
-      if(stop == TRUE) {break}
-    }
-  }
-  return(P)
 }
 
 sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), verbose_output = TRUE){ 
@@ -255,27 +200,27 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
       
       chance_for_selection = chance_for_selection + 1
     }
-    return(P)
   }
+  return(P)
 }
 
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
 curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1){
-  print("blah 1")
-  curinh_patterns <- array(data = c(1, 1, 2, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
-  print("blah 2")
+  #print("blah 1")
+  curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
+  #print("blah 2")
   newcuriosity <- array(data = runif((P$num_pop * 2), 0 - P$curflux, 0 + P$curflux), dim = c(2, P$num_pop))
-  print("blah 3")
+  #print("blah 3")
   for(population in 1 : (P$num_pop)) {
-    print(paste("blah 4 - population ", population))
-    if(P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+    #print(paste("blah 4 - population ", population))
     for(sex in 1:2) {
-      print(paste("blah 4 - population ", population, " and sex ", sex))
+      if(P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+      #print(paste("blah 4 - population ", population, " and sex ", sex))
       new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise 
-      print(paste(new.curiosity, " = new.curiosity"))
+      #print(paste(new.curiosity, " = new.curiosity"))
       curinh_attempts <- 1
-      print(curinh_attempts)
+      #print(curinh_attempts)
       while((new.curiosity < 0 | new.curiosity > 1) && (curinh_attempts < P$new.cur.threshold)) {
         crap <- runif(1, 0 - P$curflux, 0 + P$curflux)
         new.curiosity <- ((1 - curlearnprob) * crap) + 
