@@ -192,6 +192,12 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         P$pairing.pool[(4-context), 3, population] <- chance_for_selection
         break
       }
+      
+      #This statement separates specific mating and tutoring selection qualities:
+        # singer_eval will inform the selection of a mate by restricting the successful mate 
+        # to those individuals from the same population as the selector. Similarly, 
+        # selector.index distinguishes between mating and tutoring, except here it uses
+        # a randomly-selected female for the mating context, and the offspring for tutoring.
       if(context == 1) {
         singer_eval <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop)))
         selector.index <- P$pairing.pool[3, 1, population]
@@ -199,8 +205,16 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         singer_eval <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
         selector.index <- sample(P$pop_calls_matrix[2, ], 1)
       }
+      
+      # Finds the syllable repertoire (sylrep) of the selector, by referencing the sylrep array.
       selector.sylrep <- sylreps[selector.index, , population]
+      
+      # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
       median_s.r_sylrep <- median(which(selector.sylrep == 1))
+      
+      # The basic sylrep comparison caluclation- finds the differences 
+      # between the suitor and selector sylreps, then weights them by 
+      # their distance from the selector's median.
       stdev_s.n_vs_s.r_sylrep <- function(vector_to_compare) {
         return(
           sum(
@@ -208,12 +222,24 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
               which((vector_to_compare - selector.sylrep) != 0) - median_s.r_sylrep)
           )
         )
-      }
+      } #Output: value of similarity/dissimilarity between sylrep of suitors and selector.
+      
+      # This creates sample calls for each population; each population has a sample size of
+      # P$num_one.pop_singers_sampled, which comes from the male half of the population.
       selection.index <- c(sapply(1:P$num_pop, function(x) {sample(x = P$pop_calls_matrix[1,], size = P$num_one.pop_singers_sampled[context], replace = FALSE)}))
+      
+      # create a matrix of all the sylreps of the sample males from selection.index
       selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
+      
+      # applies the standard deviation scoring to the males in selection.sylreps; 
+      # larger score means greater difference between male sylrep and selector's sylrep.
       golf_score <- apply(selection.sylreps, 1, stdev_s.n_vs_s.r_sylrep)
+      
+      # orders the scored list of suitors; subsets one suitor from the rest,
+      # according to the value of the selector's (auditory) curiosity.
       singer <- ((sort(golf_score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
       
+      # This 
       if(singer %in% singer_eval) {
         singer.index <- selection.index[singer]
         indices <- c(singer.index, selector.index)
@@ -229,7 +255,8 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
       
       chance_for_selection = chance_for_selection + 1
     }
-  return(P)
+    return(P)
+  }
 }
 
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
