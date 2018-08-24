@@ -22,7 +22,7 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
                        pop_size = 400, sylnum = 156, nsspl = 24, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), randlearnprob = c(0.01, 0.1), 
-                       stand.dev = 2, curflux = 1, new.cur.threshold = 10)
+                       stand.dev = 2, curflux = 1, new.cur.threshold = 100)
 
 docnamez <- c("02_-_initial_tests")
 
@@ -30,8 +30,8 @@ sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(13,13,13,13), 
-                                        c(26,26,26,26))
+                                        c(1,1,13,13), 
+                                        c(13,13,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
