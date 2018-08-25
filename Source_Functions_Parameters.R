@@ -1,6 +1,6 @@
 # REPEATED-USE FUNCTIONS ##################################
 library(R.utils)
-syll_learn <- function(P, context = 2){ # context decides whether the learning is vertical (2) or oblique (1)
+syll_learn <- function(P, context = 2, totally_new = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   for(population in 1 : P$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
     if(context == 2) {
@@ -36,7 +36,23 @@ syll_learn <- function(P, context = 2){ # context decides whether the learning i
             } else if(r_norm < 1) {
                 r_norm <- 1
             }
-            P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+            if(totally_new == TRUE) {
+              counter <- 1
+              while(P$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
+                r_norm_pool <- rnorm(100, mean = teacher.mean, sd = P$stand.dev)
+                r_norm <- r_norm_pool[counter]
+                if(r_norm > P$sylnum) {
+                  r_norm <- P$sylnum
+                } else if(r_norm < 1) {
+                  r_norm <- 1
+                }
+                counter = counter + 1
+              }
+              P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+              P$pairing.pool[sex, 5, population] <- counter
+            } else (
+              P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+            )
           }
         }
       }
@@ -55,12 +71,14 @@ variable.archive <- function(P, timestep) {
     for(sex in 1:2) {
       day.tuh[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
       day.tuh[["sylrep_dstbxn"]][(((population - 1) * 2) + sex), , timestep] <- colSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]) # day.tuh[sylnums filled in by population[sex]] <- colSums(sylnums called by population[sex])
-      day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
       day.tuh[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_level[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
+      
+      day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
       day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population]
       day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- P$pairing.pool[1, 1, population]
-      day.tuh[["curity_mean_t"]][11, population, timestep] <- P$pairing.pool[(sex + 2), 5, population]
       day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- P$pairing.pool[(sex + 2), 4, population]
+      day.tuh[["curity_mean_t"]][11, population, timestep] <- P$pairing.pool[(sex + 2), 5, population]
+      day.tuh[["curity_mean_t"]][12, population, timestep] <- P$pairing.pool[sex, 5, population]
     }
   }
   return(day.tuh)

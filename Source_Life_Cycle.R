@@ -24,9 +24,11 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), randlearnprob = c(0.01, 0.1), 
                        stand.dev = 2, curflux = 1, new.cur.threshold = 100)
 
+sylreps <- initialize.sylrep(P, c(1, 2), T, T)
+
+
 docnamez <- c("02_-_initial_tests")
 
-sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
@@ -41,8 +43,8 @@ eval(parse(text = funx_n_params))
 
 
 datez <- Sys.Date()
-deetz <- c(P$num_timesteps, P$nropsp, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, P$learnprob, P$randlearnprob, P$stand.dev, P$curflux, P$new.cur.threshold, dim(P$pop_calls_matrix), dim(P$pairing.pool), dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
-names(deetz) <- c("P$num_timesteps", "P$nropsp", "P$num_pop", "P$pop_size", "P$sylnum", 
+deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, P$learnprob, P$randlearnprob, P$stand.dev, P$curflux, P$new.cur.threshold, dim(P$pop_calls_matrix), dim(P$pairing.pool), dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
+names(deetz) <- c("P$num_timesteps", "P$num_pop", "P$pop_size", "P$sylnum", 
                       "P$nsspl", rep("P$num_one.pop_singers_sampled", 2), "P$curlearnprob", rep("P$learnprob", 2), 
                       rep("P$randlearnprob", 2), "P$stand.dev", "P$curflux", "P$new.cur.threshold", 
                       rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 4), 
@@ -67,11 +69,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
       # 1: father; 2: mother; 3: same; 4:opposite
     P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
-    P <- syll_learn(P = P, context = 2) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 2, totally_new = FALSE) # context decides whether the learning is vertical (2) or oblique (1)
     
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(100, 100), verbose_output = F)
     
-    P <- syll_learn(P = P, context = 1) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 1, totally_new = FALSE) # context decides whether the learning is vertical (2) or oblique (1)
     
     curiosity_level <- recuriosity.offspring(P = P)
     
@@ -119,6 +121,7 @@ simple_plots(R = R, Q = converted_data, simplification_factor = 10)
 full_plots(R = R, Q = converted_data)
 
 sink(file = paste0("Parameters and Info"))
+#print(paste0("Number of Timesteps: ", info[[3]][1], ",\n Number of Populations: ", info[[3]][2], ",\n Population Size: ", info[[3]][3], ",\n Number of Syllables: ", info[[3]][4], ",\n Number of Syllable Positions Assigned to Specific Probability Levels: ", info[[3]][5], ",\n Number of Singers Sampled from One Population for Mating: ", info[[3]][7], ",\n Number of Singers Sampled from One Population for Tutoring: ", info[[3]][6], "Probability of Inheriting Curiosity Accurately: ", info[[3]][8], ",\n Probability of Learning Syllables Accurately from Parent: ", info[[3]][10], ",\n Probability of Learning Syllables Accurately from Tutor", info[[3]][9], "\n, Probability of Picking up "))
 print(info[[3]])
 sink()
 #library(rstudioapi)

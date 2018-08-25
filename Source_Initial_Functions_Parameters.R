@@ -16,7 +16,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
   
   pop_calls_matrix <- matrix(data = c(1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
   learning.pool <- array(0, c(5, sylnum, num_pop))
-  pairing.pool <- array(0, c(5, 6, num_pop))
+  pairing.pool <- array(0, c(5, 5, num_pop))
   
   #new.curiosity <- array(0,c(2,num_pop))
   curiositybreaks <- (0 : (num_pop * num_one.pop_singers_sampled[1])) * (1 / (num_pop * num_one.pop_singers_sampled[1]))
@@ -120,7 +120,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
 recordvariable.initialize <- function(P, timestep_fraction) {
   record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
                           sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-                          curity_mean_t=array(0, c(11, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+                          curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
                           curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
                           )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
