@@ -272,8 +272,8 @@ store_timesteps <- function(filename = thousand_timesteps, object_record = day.t
   directory <- getwd()
   if(filename == 1) {
     FolderName <- format(Sys.time(), "%F-%H%M%S")
-    dir.create(file.path(directory, paste(FolderName, "-GMT-variable-store", sep="")))
-    FolderName <- paste(directory, "/", FolderName, "-GMT-variable-store/", sep = "")
+    dir.create(file.path(directory, paste0(FolderName, "-GMT-variable-store")))
+    FolderName <- paste0(directory, "/", FolderName, "-GMT-variable-store/")
   }
   setwd(FolderName)
   for(deyteh in 1:length(object_record)) {
