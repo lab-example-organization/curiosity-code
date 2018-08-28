@@ -12,14 +12,14 @@
                             #21, #22,#23, #24, #25,#26
 #setwd(getwd())
 setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
-
+#setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code")
 rm(list=objects())
 parent_directory <- getwd()
 init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
 
-P <- Define.Parameters(num_timesteps = 10000, num_pop = 2, 
-                       pop_size = 400, sylnum = 156, nsspl = 24, 
+P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
+                       pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), randlearnprob = c(0.01, 0.1), 
                        stand.dev = 2, curflux = 1, new.cur.threshold = 100)
@@ -27,13 +27,13 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("02_-_initial_tests")
+docnamez <- c("05_-_small_rep_big_test")
 
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(1,1,13,13), 
-                                        c(13,13,26,26))
+                                        c(1,1,1,1), 
+                                        c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
@@ -43,13 +43,15 @@ eval(parse(text = funx_n_params))
 
 
 datez <- Sys.Date()
-deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, P$learnprob, P$randlearnprob, P$stand.dev, P$curflux, P$new.cur.threshold, dim(P$pop_calls_matrix), dim(P$pairing.pool), dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
+deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, 
+           P$learnprob, P$randlearnprob, P$stand.dev, P$curflux, P$new.cur.threshold, dim(P$pop_calls_matrix), dim(P$pairing.pool), 
+           dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
 names(deetz) <- c("P$num_timesteps", "P$num_pop", "P$pop_size", "P$sylnum", 
                       "P$nsspl", rep("P$num_one.pop_singers_sampled", 2), "P$curlearnprob", rep("P$learnprob", 2), 
                       rep("P$randlearnprob", 2), "P$stand.dev", "P$curflux", "P$new.cur.threshold", 
-                      rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 4), 
+                      rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 3), 
                       rep("dim(P$curiosity_counter)", 2), rep("dim(P$population_syll_probs)", 2), 
-                      "length(P$curiositybreaks)", "length(P$zero_to_one_template)", rep("dim(P$learning.pool)", 4))
+                      "length(P$curiositybreaks)", "length(P$zero_to_one_template)", rep("dim(P$learning.pool)", 3))
 stuff_to_save <- list(
   docnamez,
   datez,
@@ -97,33 +99,3 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     stop("It's Done, Yo!")
     }
 }
-
-#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
-data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
-#data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
-eval(parse(text = data_visuals))
-
-parent_directory <- str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),"")
-setwd(parent_directory)
-info <- readRDS(file = "metadata.RData")
-setwd(FolderName)
-converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-too_complicated <- paste0("R <- create_plot_info(\"", info[[1]], "\", \"", info[[2]], "\")")
-eval(parse(text=too_complicated))
-
-results_directory <- str_replace_all(str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),""), paste0("/", str_split(FolderName, "/")[[1]][7]),"")
-setwd(results_directory)
-dir.create(path = paste0(results_directory, "Results/", str_split(FolderName, "/")[[1]][8]))
-results_directory <- paste0(results_directory, "Results/", str_split(FolderName, "/")[[1]][8])
-setwd(results_directory)
-
-simple_plots(R = R, Q = converted_data, simplification_factor = 10)
-full_plots(R = R, Q = converted_data)
-
-sink(file = paste0("Parameters and Info"))
-#print(paste0("Number of Timesteps: ", info[[3]][1], ",\n Number of Populations: ", info[[3]][2], ",\n Population Size: ", info[[3]][3], ",\n Number of Syllables: ", info[[3]][4], ",\n Number of Syllable Positions Assigned to Specific Probability Levels: ", info[[3]][5], ",\n Number of Singers Sampled from One Population for Mating: ", info[[3]][7], ",\n Number of Singers Sampled from One Population for Tutoring: ", info[[3]][6], "Probability of Inheriting Curiosity Accurately: ", info[[3]][8], ",\n Probability of Learning Syllables Accurately from Parent: ", info[[3]][10], ",\n Probability of Learning Syllables Accurately from Tutor", info[[3]][9], "\n, Probability of Picking up "))
-print(info[[3]])
-sink()
-#library(rstudioapi)
-#documentSave(getActiveDocumentContext()$id)
-
