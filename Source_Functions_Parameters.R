@@ -1,6 +1,7 @@
 # REPEATED-USE FUNCTIONS ##################################
 library(R.utils)
-syll_learn <- function(P, context = 2, totally_new = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
+syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 1){ # context decides whether the learning is vertical (2) or oblique (1)
+  randlearncontext_container <- c("teacher.mean", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : P$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
     if(context == 2) {
@@ -13,11 +14,13 @@ syll_learn <- function(P, context = 2, totally_new = FALSE){ # context decides w
       for(sex in 1 : 2) {
           P$learning.pool[(sex + 2), , population] <- rep(0, P$sylnum)
       } # Vertical Learning; clear the sylreps rows about to be filled in :D
-    } else { 
+    } else {
       source_of_ONEs <- which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))
-      if(length(source_of_ONEs) == 0) {next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step
+      if(length(source_of_ONEs) == 0) {
+        print(paste0("tutor has no syllables for population ", population))
+        next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step
     } # Oblique Learning
-    teacher.mean <- mean(source_of_ONEs)
+    if(randlearn_context == 1) {teacher.mean <- mean(source_of_ONEs)}
     probs <- runif(source_of_ONEs, 0, 1)
     
     #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
@@ -25,12 +28,13 @@ syll_learn <- function(P, context = 2, totally_new = FALSE){ # context decides w
     #sink()
     
     for (sex in 1:context) {
+      average_rate_randlearn_overlap <- c()
       for (sylls_to_learn in 1:length(source_of_ONEs)) {
         P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
         if(probs[sylls_to_learn] <= (P$learnprob[context])) {
           P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1 # nropsp!!! come on! still have to figure that one out i guess
           if(probs[sylls_to_learn] > (1 - P$randlearnprob[context])) {
-            r_norm <- rnorm(1, mean = teacher.mean, sd = P$stand.dev)
+            r_norm <- rnorm(1, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
             if(r_norm > P$sylnum) {
               r_norm <- P$sylnum
             } else if(r_norm < 1) {
@@ -39,7 +43,7 @@ syll_learn <- function(P, context = 2, totally_new = FALSE){ # context decides w
             if(totally_new == TRUE) {
               counter <- 1
               while(P$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
-                r_norm_pool <- rnorm(100, mean = teacher.mean, sd = P$stand.dev)
+                r_norm_pool <- rnorm(100, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
                 r_norm <- r_norm_pool[counter]
                 if(r_norm > P$sylnum) {
                   r_norm <- P$sylnum
@@ -49,13 +53,14 @@ syll_learn <- function(P, context = 2, totally_new = FALSE){ # context decides w
                 counter = counter + 1
               }
               P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
-              P$pairing.pool[sex, 5, population] <- counter
+              average_rate_randlearn_overlap <- append(average_rate_randlearn_overlap, counter)
             } else {
               P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
             }
           }
         }
       }
+    P$pairing.pool[sex, 5, population] <- mean(average_rate_randlearn_overlap)
     }
   }
   return(P)
@@ -142,10 +147,11 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
     #print(paste("this is population",population,sep=" "))
     chance_for_selection = 1
     while(chance_for_selection <= num_select_chances[context]) {
+      stop = FALSE
       if(chance_for_selection == num_select_chances[context]) {
         for(hope_not_necessary in 1:ohsit){
           auto.teachers <- c((sample(P$pop_calls_matrix[1, ], 1, replace = T)), (sample(P$pop_calls_matrix[2, ], 1, replace = T))) # this will be referenced later using the curiosity_level, which separates females and males by row, so their column reference index number is limited to 1:200; so the first row of the pop_calls_matrix is appropriate for both of them.
-          if((sum(sylreps[auto.teachers[1], , population] != 0)) && (sum(sylreps[auto.teachers[2], , population] != 0))) {
+          if((sum(sylreps[auto.teachers[1], , population]) != 0) && (sum(sylreps[auto.teachers[2], , population]) != 0)) {
             if(verbose_output == TRUE) {
               warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[context], " Selection")))
             }
@@ -155,9 +161,11 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
               P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[auto.teachers[sex], population]
             } # this will fill pairing.pool with (Mate) male and female metadata, or (Tutor) male metadata
             P$pairing.pool[(4-context), 3, population] <- chance_for_selection
+            stop = TRUE
             break
           } else {next}
         }
+        if(stop) {break}
       }
       
       #This statement separates specific mating and tutoring selection qualities:

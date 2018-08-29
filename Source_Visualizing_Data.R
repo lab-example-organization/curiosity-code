@@ -66,6 +66,17 @@ split_data <- function(data_conglomerate = converted_data, data_subset = 1) {
 #cursity <- split_data(data_subset = 3)
 #curhist <- split_data(data_subset = 4)
 
+paste_split_data_runs <- function(data_subset, num_runs = 10, also_mean = TRUE) {
+  if(also_mean == TRUE) {
+    num_runs <- num_runs + 1
+    pasted_runs <- array(0, c(dim(data_subset), num_runs))
+    thing <- paste0("pasted_runs[", 1 : (num_runs - 1), "] <- ", quote(data_subset), 1 : (num_runs - 1))
+    eval(parse(text=thing))
+    pasted_runs[num_runs] <- rowMeans(pasted_runs[, , , 1 : (num_runs - 1)], dims = 3)
+  }
+  return(pasted_runs)
+}
+
 create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   datez = datez
   run_name = run_name
@@ -108,7 +119,7 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
 
 
 
-simple_plots <- function(R = R, Q = converted_data, simplification_factor = 10, extra_lines = FALSE) {
+simple_plots <- function(simplification_factor = 10, extra_lines = FALSE) {
   if(extra_lines == FALSE) {
     for(population in 1:P$num_pop) {
     
@@ -213,12 +224,14 @@ simple_plots <- function(R = R, Q = converted_data, simplification_factor = 10, 
   } else {
     for(population in 1:P$num_pop) {
       
-      for()
-      objectz <- Q$cursity[3,population,seq.int(1, P$num_timesteps, simplification_factor)]
-      
-      file_name <- paste0(R$datez, "_", R$run_name, "_mate_selections_pop", population, ".tiff")
+      objectz <- apply(X = )
+      thing <- paste0("objectz", 1:mult_file_length, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,seq.int(1, P$num_timesteps, simplification_factor)])")
+      stuff <- paste0("points(objectz", 1:mult_file_length, "")
+      eval(parse(text=thing))
+      file_name <- paste0(R1$datez, "_", R1$run_name, "_mate_selections_pop", population, ".tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
+      eval(parse(text=stuff))
       dev.off()
       
       objectz <- Q$cursity[10,population,seq.int(1, P$num_timesteps, simplification_factor)]
