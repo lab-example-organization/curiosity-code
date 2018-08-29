@@ -92,7 +92,7 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   if((thousand_timesteps==(P$num_timesteps/1000))&&(single_timestep==1000)) {
     #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
     
-    sink(file = paste0(parent_directory, "/sim_data.txt"))
+    sink(file = paste0(parent_directory, "/sim_data.txt"), append = TRUE)
     print(P)
     print(FolderName)
     sink()
