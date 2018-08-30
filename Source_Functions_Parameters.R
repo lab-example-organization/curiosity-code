@@ -241,7 +241,7 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
   #print("blah 1")
   curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
   #print("blah 2")
-  newcuriosity <- array(data = runif((P$num_pop * 2), 0 - P$curflux, 0 + P$curflux), dim = c(2, P$num_pop))
+  newcuriosity <- array(data = runif((P$num_pop * 2), -1, 1), dim = c(2, P$num_pop))
   #print("blah 3")
   for(population in 1 : (P$num_pop)) {
     #print(paste("blah 4 - population ", population))
@@ -250,11 +250,11 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
       #print(paste("blah 4 - population ", population, " and sex ", sex))
       curinh_attempts <- 1
       while((P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) < 0) {
-        newcuriosity[sex, population] <- runif(1, 0, 0 + P$curflux)
+        newcuriosity[sex, population] <- runif(1, 0, 1)
         curinh_attempts <- curinh_attempts + 1
       }
       while((P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) > 1) {
-        newcuriosity[sex, population] <- runif(1, 0 - P$curflux, 0)
+        newcuriosity[sex, population] <- runif(1, -1, 0)
         curinh_attempts <- curinh_attempts + 1
       }
       

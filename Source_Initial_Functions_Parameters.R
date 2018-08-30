@@ -1,6 +1,6 @@
 # # # Parameter-Making Function
 
-Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev, curflux, new.cur.threshold){
+Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
     stop("Check error log #_0002")}
@@ -88,8 +88,6 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
                      learnprob = learnprob,
                      randlearnprob = randlearnprob,
                      stand.dev = stand.dev,
-                     curflux = curflux,
-                     new.cur.threshold = new.cur.threshold,
                      learning.pool = learning.pool)
   
   return(Parameters)

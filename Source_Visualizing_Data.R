@@ -10,8 +10,8 @@ P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
 #thousand_timesteps <- 5
 
-convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps) {
-  dir <- getwd()
+convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, dir = getwd()) {
+  #dir <- getwd()
   names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
   sylrepz <- array(0, c(2, P$num_pop, P$num_timesteps))

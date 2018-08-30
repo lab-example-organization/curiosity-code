@@ -21,8 +21,8 @@ eval(parse(text = init_params))
 P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
-                       curlearnprob = 0.95, learnprob = c(0.1, 0.95), randlearnprob = c(0.01, 0.1), 
-                       stand.dev = 2, curflux = 1, new.cur.threshold = 100)
+                       curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
+                       randlearnprob = c(0.01, 0.1), stand.dev = 2)
 
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
@@ -44,11 +44,11 @@ eval(parse(text = funx_n_params))
 
 datez <- Sys.Date()
 deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, 
-           P$learnprob, P$randlearnprob, P$stand.dev, P$curflux, P$new.cur.threshold, dim(P$pop_calls_matrix), dim(P$pairing.pool), 
+           P$learnprob, P$randlearnprob, P$stand.dev, dim(P$pop_calls_matrix), dim(P$pairing.pool), 
            dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
 names(deetz) <- c("P$num_timesteps", "P$num_pop", "P$pop_size", "P$sylnum", 
                       "P$nsspl", rep("P$num_one.pop_singers_sampled", 2), "P$curlearnprob", rep("P$learnprob", 2), 
-                      rep("P$randlearnprob", 2), "P$stand.dev", "P$curflux", "P$new.cur.threshold", 
+                      rep("P$randlearnprob", 2), "P$stand.dev", 
                       rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 3), 
                       rep("dim(P$curiosity_counter)", 2), rep("dim(P$population_syll_probs)", 2), 
                       "length(P$curiositybreaks)", "length(P$zero_to_one_template)", rep("dim(P$learning.pool)", 3))
@@ -57,6 +57,7 @@ stuff_to_save <- list(
   datez,
   deetz
 )
+#cat(paste0("Number of Timesteps: ", info[[3]][1], ",\n Number of Populations: ", info[[3]][2], ",\n Population Size: ", info[[3]][3], ",\n Number of Syllables: ", info[[3]][4], ",\n Number of Syllable Positions Assigned to Specific Probability Levels: ", info[[3]][5], ",\n Number of Singers Sampled from One Population for Mating: ", info[[3]][7], ",\n Number of Singers Sampled from One Population for Tutoring: ", info[[3]][6], "Probability of Inheriting Curiosity Accurately: ", info[[3]][8], ",\n Probability of Learning Syllables Accurately from Parent: ", info[[3]][10], ",\n Probability of Learning Syllables Accurately from Tutor: ", info[[3]][9], "\n, Probability of Picking up Random Extra Syllables from Parent: ", info[[3]][12], "\n, Probability of Picking up Random Extra Syllables from Tutor: ", info[[3]][11], ",\n Standard Deviation of Randomly-picked-up Sylls from Established Mean: ", info[[3]][13], ",\n Number of Rows in Population Calls Matrix: ", info[[3]][14], ",\n Number of Columns in Pop Calls Matrix: ", info[[3]][15], ",\n Pairing Pool Rows: ", info[[3]][16], ",\n Pairing Pool Columns: ", info[[3]][17], ",\n Pairing Pool Slices: ", info[[3]][18], ",\n Curiosity Counter Rows: ", info[[3]][19], ",\n Curiosity Counter Columns: ", info[[3]][20], ",\n Population Syllable Probability Rows: ", info[[3]][21], ",\n Population Probability Columns: ", info[[3]][22], ",\n Length of Curiosity Breaks Vector: ", info[[3]][23], ",\n Length of Zero to One Template: ", info[[3]][24], ",\n Learning Pool Rows: ", info[[3]][25], ",\n Learning Pool Columns: ", info[[3]][26], ",\n Learning Pool Slices: ", info[[3]][27]))
 
 saveRDS(object = stuff_to_save, file = "metadata.RData")
 rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
