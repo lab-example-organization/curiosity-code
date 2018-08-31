@@ -282,6 +282,10 @@ store_timesteps <- function(filename = thousand_timesteps, object_record = day.t
     FolderName <- format(Sys.time(), "%F-%H%M%S")
     dir.create(file.path(directory, paste0(FolderName, "-GMT-variable-store")))
     FolderName <- paste0(directory, "/", FolderName, "-GMT-variable-store/")
+    setwd(FolderName)
+    saveRDS(object = stuff_to_save, file = "metadata.RData")
+    rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
+    setwd(directory)
   }
   setwd(FolderName)
   for(deyteh in 1:length(object_record)) {
