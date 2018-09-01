@@ -41,19 +41,22 @@ for(multiple_files in 1:mult_file_length) {
   eval(parse(text=stuff))
 }
 
+split_data(data_conglomerate = , data_subset = )
+
+#sylrepz <- split_data(data_subset = 1)
+#sdstbxn <- split_data(data_subset = 2)
+#cursity <- split_data(data_subset = 3)
+#curhist <- split_data(data_subset = 4)
+
+paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
 
 
-FolderName <- list.files(pattern = reg_spresh)[offset + 1]
 
+#FolderName <- list.files(pattern = reg_spresh)[offset + 1]
+#setwd(results_directory)
 
-setwd(results_directory)
-
-
-
-simple_plots(R = R1, Q = converted_data, simplification_factor = 10, extra_lines = TRUE)
+simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
 #full_plots(R = R, Q = converted_data, extra_lines = TRUE)
-
 
 #library(rstudioapi)
 #documentSave(getActiveDocumentContext()$id)
-
