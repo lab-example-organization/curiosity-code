@@ -41,8 +41,17 @@ for(multiple_files in 1:mult_file_length) {
   eval(parse(text=stuff))
 }
 
-split_data(data_conglomerate = , data_subset = )
+sylrepblahz <- paste0("sylrepz", 1:mult_file_length, " <- split_data(converted_data", 1:mult_file_length, ", 1)")
+sdstbxblahn <- paste0("sdstbxn", 1:mult_file_length, " <- split_data(converted_data", 1:mult_file_length, ", 2)")
+cursitblahy <- paste0("cursity", 1:mult_file_length, " <- split_data(converted_data", 1:mult_file_length, ", 3)")
+curhisblaht <- paste0("curhist", 1:mult_file_length, " <- split_data(converted_data", 1:mult_file_length, ", 4)")
 
+eval(parse(text=sylrepblahz))
+eval(parse(text=sdstbxblahn))
+eval(parse(text=cursitblahy))
+eval(parse(text=curhisblaht))
+
+#split_data(data_conglomerate = , data_subset = )
 #sylrepz <- split_data(data_subset = 1)
 #sdstbxn <- split_data(data_subset = 2)
 #cursity <- split_data(data_subset = 3)
