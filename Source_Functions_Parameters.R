@@ -141,7 +141,7 @@ output_checker <- function(printer) {
   setwd(dir)
 }
 
-sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), ohsit = 10, verbose_output = TRUE){ 
+sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), ohsit = 10, verbose_output = TRUE, no_interbreed = TRUE){ 
   context.name <- c("Tutor", "Mate")
   for(population in 1 : P$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
@@ -215,8 +215,21 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
       # according to the value of the selector's (auditory) curiosity.
       singer <- ((sort(golf_score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
       
-      # This 
-      if((singer %in% singer_eval) && (sum(sylreps[selection.index[singer], , population]) != 0)) {
+      # This
+      if(no_interbreed == TRUE) {
+        if((singer %in% singer_eval) && (sum(sylreps[selection.index[singer], , population]) != 0)) {
+          singer.index <- selection.index[singer]
+          indices <- c(singer.index, selector.index)
+          
+          for(sex in 1:context) {
+            P$learning.pool[((5^(2-context)) * sex), , population] <- sylreps[indices[sex], , population]
+            P$pairing.pool[((5^(2-context)) * sex), 1, population] <- indices[sex]
+            P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[indices[sex], population]
+          }
+          P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
+          break
+        }
+      } else {
         singer.index <- selection.index[singer]
         indices <- c(singer.index, selector.index)
         
@@ -228,7 +241,6 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
         P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
         break
       }
-      
       chance_for_selection = chance_for_selection + 1
     }
   }
