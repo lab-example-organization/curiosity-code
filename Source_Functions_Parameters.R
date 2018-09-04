@@ -20,7 +20,11 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
         print(paste0("tutor has no syllables for population ", population))
         next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step
     } # Oblique Learning
-    if(randlearn_context == 1) {teacher.mean <- mean(source_of_ONEs)}
+    if(randlearn_context == 1) {
+      teacher.mean <- mean(source_of_ONEs)
+    } else {
+      
+    }
     probs <- runif(source_of_ONEs, 0, 1)
     
     #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
