@@ -145,7 +145,7 @@ output_checker <- function(printer) {
   setwd(dir)
 }
 
-sing.selection <- function(P, curiosity_level, context, num_select_chances = c(42, 10), ohsit = 10, verbose_output = TRUE, no_interbreed = TRUE){ 
+sing.selection <- function(P, curiosity_level, context, num_select_chances = c(10, 42), ohsit = 10, verbose_output = TRUE, interbreed = FALSE){ 
   context.name <- c("Tutor", "Mate")
   for(population in 1 : P$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
@@ -220,7 +220,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(4
       singer <- ((sort(golf_score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
       
       # This
-      if(no_interbreed == TRUE) {
+      if(interbreed == FALSE) {
         if((singer %in% singer_eval) && (sum(sylreps[selection.index[singer], , population]) != 0)) {
           singer.index <- selection.index[singer]
           indices <- c(singer.index, selector.index)
