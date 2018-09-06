@@ -64,7 +64,7 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
           }
         }
       }
-    P$pairing.pool[sex, 5, population] <- mean(average_rate_randlearn_overlap)
+    if(totally_new == TRUE) {P$pairing.pool[sex, 5, population] <- mean(average_rate_randlearn_overlap)}
     }
   }
   return(P)
@@ -206,7 +206,22 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(1
       # This creates sample calls for each population; each population has a sample size of
       # P$num_one.pop_singers_sampled, which comes from the male half of the population.
       # probability defined by the fraction of syllable repertoires of each member of each population divided by the maximum syllrep of the population.
-      selection.index <- c(sapply(1:P$num_pop, function(x) {sample(x = P$pop_calls_matrix[1,], size = P$num_one.pop_singers_sampled[context], replace = FALSE, prob = ((apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum))/max(apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum))))})) # probability = the number of times each individual's syllable repertoire has a 1 in it (sum(sylreps[P$pop_calls_matrix[1,]])), divided by the biggest repertoire's total.
+      selection.index <- c(
+        sapply(
+          1:P$num_pop, function(x) {
+            sample(
+              x = P$pop_calls_matrix[1,], 
+              size = P$num_one.pop_singers_sampled[context], 
+              replace = FALSE, prob = (
+                (apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum)
+                 )/max(
+                    apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum)
+                  )
+                )
+              )
+            }
+          )
+        ) # probability = the number of times each individual's syllable repertoire has a 1 in it (sum(sylreps[P$pop_calls_matrix[1,]])), divided by the biggest repertoire's total.
       
       # create a matrix of all the sylreps of the sample males from selection.index
       selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
