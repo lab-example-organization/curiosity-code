@@ -11,9 +11,9 @@
                            #0.8,0.85,0.9,0.95,0.99,1.0)
                             #21, #22,#23, #24, #25,#26
 #setwd(getwd())
-#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
+setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code")
-setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
+#setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
 rm(list=objects())
 parent_directory <- getwd()
 init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
