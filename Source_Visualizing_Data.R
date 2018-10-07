@@ -121,18 +121,56 @@ figure_maker <- function(P, Q, R, population, q_subset, subset_number, filename,
   if(simple == T) {
     if(sex_dependent == T) {
       for(sex in 1:2) {
+        
         thing <- paste0("objectz <- Q$", q_subset, "[", sex, ",population,seq.int(1, P$num_timesteps, simplification_factor)]")
         eval(parse(text=thing))
-        file_name <- paste0(R$datez, "_", R$run_name, filename, population, ".tiff")
+        file_name <- paste0(R$datez, "_", R$run_name, filename, population, "_", R$sexes[sex], ".tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-        plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+        if((q_subset == "sdstbxn") | (q_subset == "curhist")) {
+          if(q_subset == "sdstbxn") {
+            image(t(objectz), col = R$sylnum_palette(100), xlab = paste0("Timestep x ", simplification_factor), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+          } else{
+            image(t(objectz), col = R$sylsub_palette(100), xlab = paste0("Timestep x ", simplification_factor), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+          }
+        } else {
+          plot(objectz, xlab = paste0("Timestep x ", simplification_factor), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+        }
         points
         dev.off()
       }
     } else {
       thing <- paste0("objectz <- Q$", q_subset, "[", subset_number, ",population,seq.int(1, P$num_timesteps, simplification_factor)]")
       eval(parse(text=thing))
-      file_name <- paste0(R$datez, "_", R$run_name, filename, population, "_", R$sexes[sex], ".tiff")
+      file_name <- paste0(R$datez, "_", R$run_name, filename, population, ".tiff")
+      tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+      plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, ylab2))
+      points
+      dev.off()
+    }
+  } else {
+    if(sex_dependent == T) {
+      for(sex in 1:2) {
+        
+        thing <- paste0("objectz <- Q$", q_subset, "[", sex, ",population,seq.int(1, P$num_timesteps)]")
+        eval(parse(text=thing))
+        file_name <- paste0(R$datez, "_", R$run_name, filename, population, "_", R$sexes[sex], ".tiff")
+        tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        if((q_subset == "sdstbxn") | (q_subset == "curhist")) {
+          if(q_subset == "sdstbxn") {
+            image(t(objectz), col = R$sylnum_palette(100), xlab = paste0("Timestep"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+          } else{
+            image(t(objectz), col = R$sylsub_palette(100), xlab = paste0("Timestep"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+          }
+        } else {
+          plot(objectz, xlab = paste0("Timestep"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+        }
+        points
+        dev.off()
+      }
+    } else {
+      thing <- paste0("objectz <- Q$", q_subset, "[", subset_number, ",population,seq.int(1, P$num_timesteps)]")
+      eval(parse(text=thing))
+      file_name <- paste0(R$datez, "_", R$run_name, filename, population, ".tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, ylab2))
       points
@@ -151,7 +189,11 @@ figure_maker(P, Q, R, population, "cursity", "8", "_AC_replaced_m_pop", F, T, "P
 figure_maker(P, Q, R, population, "cursity", "9", "_AC_replaced_f_pop", F, T, "Pop", " Dead Woman AC")
 figure_maker(P, Q, R, population, "cursity", "11", "_cur_inh_attempts", F, T, "Pop", " Cur Inh Attempts")
 
-figure_maker(P, Q, R, population, "sylrepz", "11", "_mean_repertoire_size_-_pop_", T, T, "Pop", " Cur Inh Attempts")
+figure_maker(P, Q, R, population, "sylrepz", "11", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Repertoire Size")
+figure_maker(P, Q, R, population, "cursity", "11", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Curiosity")
+figure_maker(P, Q, R, population, "sdstbxn", "11", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s Sylnum")
+figure_maker(P, Q, R, population, "curhist", "11", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Repertoire Size")
+
 
 simple_plots <- function(simplification_factor = 10, extra_lines = FALSE) {
   if(extra_lines == FALSE) {
