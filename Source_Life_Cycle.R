@@ -28,7 +28,7 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181003_06_-_equal_opposite_big_spread")
+docnamez <- c("181008_06_-_equal_opposite_big_spread")
 
 
 curiosity_level <- initialize.curiosity(P, 
