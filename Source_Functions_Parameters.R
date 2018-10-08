@@ -15,7 +15,12 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
           P$learning.pool[(sex + 2), , population] <- rep(0, P$sylnum)
       } # Vertical Learning; clear the sylreps rows about to be filled in :D
     } else {
-      source_of_ONEs <- which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))
+      # double-check tutor isn't out of sylls before comparing repertoire to pupil.
+      source_of_ONEs <- which(P$learning.pool[5, , population] == 1)
+      if(length(source_of_ONEs) == 0) {
+        stop("wot? tutor has no syllables?!")
+      }
+      source_of_ONEs <- which(P$learning.pool[5, , population] == 1)[which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))]
       if(length(source_of_ONEs) == 0) {
         print(paste0("tutor has no syllables for population ", population))
         next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step

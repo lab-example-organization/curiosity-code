@@ -34,7 +34,7 @@ results_directory <- paste0(results_directory, "Results/", str_split(FolderName,
 setwd(results_directory)
 
 
-simple_plots(R = R, Q = converted_data, simplification_factor = 10, extra_lines = FALSE)
+simple_plots(Q = converted_data, simplification_factor = 10, extra_lines = FALSE)
 full_plots(R = R, Q = converted_data, extra_lines = FALSE)
 
 
