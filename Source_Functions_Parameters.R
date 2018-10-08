@@ -1,6 +1,6 @@
 # REPEATED-USE FUNCTIONS ##################################
 library(R.utils)
-syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 1){ # context decides whether the learning is vertical (2) or oblique (1)
+syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   randlearncontext_container <- c("teacher.mean", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : P$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
@@ -22,7 +22,9 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
       }
       source_of_ONEs <- which(P$learning.pool[5, , population] == 1)[which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))]
       if(length(source_of_ONEs) == 0) {
-        print(paste0("tutor has no syllables for population ", population))
+        if(verbose == TRUE) {
+          print(paste0("tutor has no syllables for population ", population))
+        }
         next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step
     } # Oblique Learning
     if(randlearn_context == 1) {
