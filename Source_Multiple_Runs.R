@@ -13,11 +13,15 @@ filename_document <- file(description = "~/Documents/Parker Scratch Folder/Code/
 fn_doc_lines <- read.table(filename_document, -1L)
 fn_doc_line <- as.vector(fn_doc_lines[[2]])
 
-first_line_last_run <- fn_doc_line[nrow(fn_doc_lines)-(length_of_single_run-1)]
-fn_doc_last_line <- fn_doc_line[length(fn_doc_line)]
-length_of_single_run <- as.integer(strsplit(fn_doc_last_line, " ")[[1]][4])
+first_line_last_run <- fn_doc_line[nrow(fn_doc_lines)-(length_of_single_run-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
+fn_doc_last_line <- fn_doc_line[length(fn_doc_line)] # [1] "storing data packet 100 at 2018-10-09 01:55:51"
+length_of_single_run <- as.integer(strsplit(fn_doc_last_line, " ")[[1]][4]) # [1] 100
 
+# Transform name of data packet to folder name
 
+# run loop that processes fn_doc_line from start of run to the end; 
+# stitches together the pieces of individual runs, and plots them
+# with an average line in black and the rest in various shades of grey.
 
 
 
