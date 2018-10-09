@@ -33,8 +33,8 @@ dir.create(path = paste0(results_directory, "Results/", str_split(FolderName, "/
 results_directory <- paste0(results_directory, "Results/", str_split(FolderName, "/")[[1]][8])
 setwd(results_directory)
 
-
-simple_plots(Q = converted_data, simplification_factor = 10, extra_lines = FALSE)
+simplification_factor = 100
+simple_plots(Q = converted_data, simplification_factor = 100, extra_lines = FALSE)
 full_plots(R = R, Q = converted_data, extra_lines = FALSE)
 
 
