@@ -15,13 +15,23 @@ close(con)
 fn_doc_line <- as.vector(fn_doc_lines[[2]])
 
 fn_doc_last_line <- fn_doc_line[length(fn_doc_line)] # [1] "storing data packet 100 at 2018-10-09 01:55:51"
-fn_doc_pieces <- strsplit(fn_doc_last_line, " ")[[1]]
-length_of_single_run <- as.integer(fn_doc_pieces[4]) # [1] 100
 
-first_line_last_run <- fn_doc_line[nrow(fn_doc_lines)-(length_of_single_run-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
 
-fn_doc_time <- paste0(as.integer(strsplit(fn_doc_pieces[7], ":")[[1]][1]),as.integer(strsplit(fn_doc_pieces[7], ":")[[1]][2]),as.integer(strsplit(fn_doc_pieces[7], ":")[[1]][3]))
-paste0(fn_doc_pieces[6], "-",fn_doc_time, "-GMT-variable-store")
+conv_outputToFolderName <- function(string, normal_output = TRUE, single = TRUE) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
+  if(normal_output == TRUE) {
+    string_pieces <- strsplit(string, " ")[[1]]
+    length_of_single_run <- as.integer(string_pieces[4]) # [1] 100
+    first_line_last_run <- string[nrow(fn_doc_lines)-(length_of_single_run-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
+    string_time <- paste0(as.integer(strsplit(string_pieces[7], ":")[[1]][1]),as.integer(strsplit(string_pieces[7], ":")[[1]][2]),as.integer(strsplit(string_pieces[7], ":")[[1]][3]))
+    
+    if(single == TRUE) {
+      output <- paste0(string_pieces[6], "-",string_time, "-GMT-variable-store")
+    } else {
+      
+    }
+  }
+  return(output)
+}
 # Transform name of data packet to folder name (example folder name: 2018-10-09-010315-GMT-variable-store)
 
 # run loop that processes fn_doc_line from start of run to the end; 
