@@ -28,7 +28,7 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181008_06_-_equal_opposite_big_spread")
+docnamez <- c("181011_06_-_first_multi_maybe_eobs")
 
 
 curiosity_level <- initialize.curiosity(P, 
@@ -97,6 +97,6 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     print(P)
     print(FolderName)
     sink()
-    stop("It's Done, Yo!")
+    #stop("It's Done, Yo!")
     }
 }
