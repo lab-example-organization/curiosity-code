@@ -1,16 +1,13 @@
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
-mult_file_length <- 12
-reg_spresh <- "2018"
-offset <- 1
-
-parent_directory <- getwd()
-FolderName <- list.files(pattern = reg_spresh)[1:mult_file_length + offset]
-
+for(run_visual in 1:number_of_runs) {
+  
+}
+setwd(multiRun_folderList[run_visual])
 data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
-
-#data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
+multiRun_folderList <- readRDS(file = "folderList.RData")
 parent_directory <- getwd()
+parent_directory <- strsplit(parent_directory, "20")[[1]][1]
 results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
 
 for(multiple_files in 1:mult_file_length) {

@@ -1,7 +1,6 @@
 #Data Recording objects
 library(abind)
 library(stringr)
-setwd(FolderName)
 
 rm(list = objects())
 
@@ -9,7 +8,6 @@ FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
 #thousand_timesteps <- 5
-
 convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, dir = getwd()) {
   #dir <- getwd()
   names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
@@ -35,7 +33,6 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, dir = 
 }
 
 #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-
 record_converted_data <- function(converted_data = converted_data) {
   converted_data[[sylrepz]] = saveRDS(file = "sylreps.RData")
   converted_data[[sdstbxn]] = saveRDS(file = "sylnums.RData")
@@ -44,7 +41,6 @@ record_converted_data <- function(converted_data = converted_data) {
 }
 
 #rm(converted_data)
-
 harvest_converted_data <- function() {
   sylrepz = readRDS(file = "sylreps.RData")
   sdstbxn = readRDS(file = "sylnums.RData")
@@ -55,7 +51,6 @@ harvest_converted_data <- function() {
 }
 
 #converted_data <- harvest_converted_data()
-
 split_data <- function(data_conglomerate = converted_data, data_subset = 1) {
   subset_of_the_data <- converted_data[[data_subset]]
   return(subset_of_the_data)

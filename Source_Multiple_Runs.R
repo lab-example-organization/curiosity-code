@@ -28,14 +28,16 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
     
     if(single == TRUE) {
       first_line_pieces <- strsplit(fn_doc_line[length(fn_doc_line)-(length_of_single_run-1)], " ")[[1]]
-      string_time <- paste0(as.integer(strsplit(first_line_pieces[7], ":")[[1]][1]),as.integer(strsplit(first_line_pieces[7], ":")[[1]][2]),as.integer(strsplit(first_line_pieces[7], ":")[[1]][3]))
+      string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces[7], ":")[[1]][x])}),width=2,format="d",flag="0")
+      string_time <- paste0(string_time[1], string_time[2], string_time[3])
       output <- paste0(first_line_pieces[6], "-",string_time, "-GMT-variable-store")
     } else {
       runNames <- vector(mode = "character", length = number_of_runs)
       for(runds in 1:number_of_runs) {
         runNames[runds] <- fn_doc_line[nrow(fn_doc_lines)-(length_of_single_run-1)-((number_of_runs-runds)*length_of_single_run)]
         first_line_pieces <- strsplit(runNames[runds][length(runNames[runds])-(length_of_single_run-1)], " ")[[1]]
-        string_time <- paste0(as.integer(strsplit(first_line_pieces[7], ":")[[1]][1]),as.integer(strsplit(first_line_pieces[7], ":")[[1]][2]),as.integer(strsplit(first_line_pieces[7], ":")[[1]][3]))
+        string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces[7], ":")[[1]][x])}),width=2,format="d",flag="0")
+        string_time <- paste0(string_time[1], string_time[2], string_time[3])
         runNames[runds] <- paste0(first_line_pieces[6], "-",string_time, "-GMT-variable-store")
       }
       output <- runNames
@@ -45,7 +47,21 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
   return(output)
 }
 
+
+
+
+
+
+
 multiRun_folderList <- conv_outputToFolderName(normal_output = T, single = F, number_of_runs = number_of_runs)
+
+saveRDS(object = multiRun_folderList, file = "folderList.RData")
+
+source("Source_Figure_Produxn_Multiple_Runs.R")
+
+#rm(list=objects())
+
+
 
 # Transform name of data packet to folder name (example folder name: 2018-10-09-010315-GMT-variable-store)
 
