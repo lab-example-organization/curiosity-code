@@ -1,5 +1,7 @@
 #setwd("That one directory that has all the curiosity code in it... )
+#setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
 setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
+#setwd(getwd())
 
 number_of_runs <- 10
 for(run_number in 1:number_of_runs) {
@@ -47,15 +49,7 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
   return(output)
 }
 
-
-
-
-
-
-
 multiRun_folderList <- conv_outputToFolderName(normal_output = T, single = F, number_of_runs = number_of_runs)
-
-saveRDS(object = multiRun_folderList, file = "folderList.RData")
 
 source("Source_Figure_Produxn_Multiple_Runs.R")
 

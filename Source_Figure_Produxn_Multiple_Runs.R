@@ -1,11 +1,19 @@
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
+parent_directory <- getwd()
 for(run_visual in 1:number_of_runs) {
+  if(run_visual == 1) {
+    FolderName <- format(Sys.time(), "%F-%H%M%S")
+    dir.create(file.path(parent_directory, paste0(FolderName, "-GMT-multirun-output")))
+    FolderName <- paste0(parent_directory, "/", FolderName, "-GMT-variable-store/")
+    saveRDS(object = multiRun_folderList, file = paste0(FolderName, "folderList.RData"))
+    
+  } # makes the folder for multirun results, saves the multiRun_folderList there.
   
 }
 setwd(multiRun_folderList[run_visual])
 data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")")
 eval(parse(text = data_visuals))
-multiRun_folderList <- readRDS(file = "folderList.RData")
+multiRun_folderList <- readRDS(file = paste0(, "folderList.RData"))
 parent_directory <- getwd()
 parent_directory <- strsplit(parent_directory, "20")[[1]][1]
 results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
