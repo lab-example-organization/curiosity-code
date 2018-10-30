@@ -17,11 +17,14 @@ for(run_visual in 1:number_of_runs) {
   setwd(strsplit(run_number_directory, "20")[[1]][1])
   multiRun_folderList <- readRDS(file = paste0(getwd(), "/", tail(list.files(pattern = "multirun"),1), "/folderList.RData"))
   parent_directory <- getwd()
-  results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
+  #results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
   setwd(run_number_directory)
   
   info <- readRDS(file = "metadata.RData")
-  converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
+  #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
+  data_converter <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)")
+  eval(parse(text=data_converter))
+  
   R <- create_plot_info(info[[2]], info[[1]])
   
   stuff <- paste(paste0("sink(file = \"", multiple_files, " - Parameters and Info\")"), 
@@ -29,7 +32,27 @@ for(run_visual in 1:number_of_runs) {
                  "sink()", sep = "\n")
   eval(parse(text=stuff))
   
-}
+
+  
+  sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data, 1)")
+  sdstbxblahn <- paste0("sdstbxn", run_visual, " <- split_data(converted_data, 2)")
+  cursitblahy <- paste0("cursity", run_visual, " <- split_data(converted_data, 3)")
+  curhisblaht <- paste0("curhist", run_visual, " <- split_data(converted_data, 4)")
+  
+  eval(parse(text=sylrepblahz))
+  eval(parse(text=sdstbxblahn))
+  eval(parse(text=cursitblahy))
+  eval(parse(text=curhisblaht))
+  
+  
+  paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
+  
+  
+  simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
+  
+  
+
+
 
 
 for(multiple_files in 1:mult_file_length) {
