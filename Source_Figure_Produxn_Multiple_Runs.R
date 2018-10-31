@@ -1,5 +1,6 @@
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 parent_directory <- getwd()
+number_of_runs <- 10
 for(run_visual in 1:number_of_runs) {
   if(run_visual == 1) {
     multiRunTime <- format(Sys.time(), "%F-%H%M%S")
