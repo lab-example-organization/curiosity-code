@@ -16,25 +16,37 @@ for(run_visual in 1:number_of_runs) {
   run_number_directory <- getwd()
   setwd(strsplit(run_number_directory, "20")[[1]][1])
   multiRun_folderList <- readRDS(file = paste0(getwd(), "/", tail(list.files(pattern = "multirun"),1), "/folderList.RData"))
+  
+  run_visual <- which(multiRun_folderList == (paste0("2018-", strsplit(run_number_directory, "2018-")[[1]][2])))
+  
   parent_directory <- getwd()
-  multirun_directory <- paste0(parent_directory, tail(list.files(pattern = "multirun"),1))
+  multirun_directory <- paste0(parent_directory, "/", tail(list.files(pattern = "multirun"),1))
   #results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
-  setwd(run_number_directory)
-  
-  info <- readRDS(file = "metadata.RData")
+  setwd(multirun_directory)
+  info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  data_converter <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)")
-  eval(parse(text=data_converter))
+  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = ", run_number_directory, ")")
+  #eval(parse(text=data_convert))
   
-  R <- create_plot_info(info[[2]], info[[1]])
+  #R <- create_plot_info(info[[2]], info[[1]])
+  fig_text_make <- paste0("R", run_visual," <- create_plot_info(info[[2]], info[[1]])")
+  #eval(parse(text=fig_text_make))
   
-  stuff <- paste(paste0("sink(file = \"", run_visual, " - Parameters and Info\")"), 
+  
+  info_make <- paste(paste0("sink(file = \"", run_visual, " - Parameters and Info\")"), 
                  "cat(paste0(\"Number of Timesteps: \", info[[3]][1], \"\nNumber of Populations: \", info[[3]][2], \"\nPopulation Size: \", info[[3]][3], \"\nNumber of Syllables: \", info[[3]][4], \"\nNumber of Syllable Positions Assigned to Specific Probability Levels: \", info[[3]][5], \"\nNumber of Singers Sampled from One Population for Mating: \", info[[3]][7], \"\nNumber of Singers Sampled from One Population for Tutoring: \", info[[3]][6], \"Probability of Inheriting Curiosity Accurately: \", info[[3]][8], \"\nProbability of Learning Syllables Accurately from Parent: \", info[[3]][10], \"\nProbability of Learning Syllables Accurately from Tutor: \", info[[3]][9], \"\nProbability of Picking up Random Extra Syllables from Parent: \", info[[3]][12], \"\nProbability of Picking up Random Extra Syllables from Tutor: \", info[[3]][11], \"\nStandard Deviation of Randomly-picked-up Sylls from Established Mean: \", info[[3]][13], \"\nNumber of Rows in Population Calls Matrix: \", info[[3]][14], \"\nNumber of Columns in Pop Calls Matrix: \", info[[3]][15], \"\nPairing Pool Rows: \", info[[3]][16], \"\nPairing Pool Columns: \", info[[3]][17], \"\nPairing Pool Slices: \", info[[3]][18], \"\nCuriosity Counter Rows: \", info[[3]][19], \"\nCuriosity Counter Columns: \", info[[3]][20], \"\nPopulation Syllable Probability Rows: \", info[[3]][21], \"\nPopulation Probability Columns: \", info[[3]][22], \"\nLength of Curiosity Breaks Vector: \", info[[3]][23], \"\nLength of Zero to One Template: \", info[[3]][24], \"\nLearning Pool Rows: \", info[[3]][25], \"\nLearning Pool Columns: \", info[[3]][26], \"\nLearning Pool Slices: \", info[[3]][27]))", 
                  "sink()", sep = "\n")
-  eval(parse(text=stuff))
+  #saveRDS(object = converted_data)
+  dataConveRDSt <- paste0("saveRDS(object = converted_data", run_visual, ", file = \"dataConvert", run_visual, ".RData\"")
+  eval(parse(text=c(data_convert, fig_text_make, info_make, dataConveRDSt)))
   
-  
+    
 }
+
+#thing_1 <- paste0("stuff1 <- getwd()")
+#thing_2 <- paste0("stuff2 <- getwd()")
+#eval(parse(text=c(thing_1, thing_2)))
+#rm(stuff1,stuff2,thing_1,thing_2)
 
   
   sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data, 1)")

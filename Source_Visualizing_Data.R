@@ -8,7 +8,7 @@ FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
 #thousand_timesteps <- 5
-convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, dir = getwd()) {
+convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_dir = getwd()) {
   #dir <- getwd()
   names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
@@ -17,7 +17,7 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, dir = 
   cursity <- array(0, c(12, P$num_pop, P$num_timesteps))
   curhist <- array(data = 0, dim = c((2*P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), P$num_timesteps))
   for(data_subset in 1:4) {
-    data1s <- paste0(names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = paste0(dir, \"/variable-store-\", ", 1:num_timechunks, ", \"-", names[data_subset], ".RData\"))")
+    data1s <- paste0(names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = paste0(data_dir, \"/variable-store-\", ", 1:num_timechunks, ", \"-", names[data_subset], ".RData\"))")
     eval(parse(text=data1s))
     
     for(i in 1:num_timechunks) {
