@@ -44,10 +44,7 @@ for(run_visual in 1:number_of_runs) {
     
 }
 
-#thing_1 <- paste0("stuff1 <- getwd()")
-#thing_2 <- paste0("stuff2 <- getwd()")
-#eval(parse(text=c(thing_1, thing_2)))
-#rm(stuff1,stuff2,thing_1,thing_2)
+
 
   
   sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data, 1)")
