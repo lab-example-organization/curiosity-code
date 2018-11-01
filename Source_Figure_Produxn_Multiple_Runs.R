@@ -26,8 +26,9 @@ for(run_visual in 1:number_of_runs) {
   setwd(multirun_directory)
   info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = ", run_number_directory, ")")
-  #eval(parse(text=data_convert))
+  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\")")
+  cat(data_convert, file = "data_convert.R", sep = "\n")
+  source("data_convert.R")
   
   #R <- create_plot_info(info[[2]], info[[1]])
   fig_text_make <- paste0("R", run_visual," <- create_plot_info(info[[2]], info[[1]])")
@@ -39,7 +40,7 @@ for(run_visual in 1:number_of_runs) {
                  "sink()", sep = "\n")
   #saveRDS(object = converted_data)
   dataConveRDSt <- paste0("saveRDS(object = converted_data", run_visual, ", file = \"dataConvert", run_visual, ".RData\"")
-  eval(parse(text=c(data_convert, fig_text_make, info_make, dataConveRDSt)))
+  eval(parse(text=c(fig_text_make, info_make, dataConveRDSt)))
   
     
 }
