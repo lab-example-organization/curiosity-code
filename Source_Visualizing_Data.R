@@ -28,8 +28,11 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_d
       #eval(parse(text=data3s))
       #rm(paste0(names[data_subset], "_", i))
     }
-    data3s <- paste0("rm(", old_names[data_subset], "_", 1:num_timechunks, ")")
-    eval(parse(text=data3s))
+    #data3s <- paste0("rm(", old_names[data_subset], "_", 1:num_timechunks, ")")
+    #eval(parse(text=data3s))
+    data3s <- paste0(old_names[data_subset], "_", 1:num_timechunks)
+    
+    sapply(X = 1:num_timechunks,FUN = rm(list = data3s))
   }
   converted_data <- list(sylrepz = sylrepz, sdstbxn = sdstbxn, cursity = cursity, curhist = curhist)
   return(converted_data)
