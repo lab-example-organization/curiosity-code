@@ -68,7 +68,7 @@ harvest_converted_data <- function() {
 
 #converted_data <- harvest_converted_data()
 split_data <- function(data_conglomerate = converted_data, data_subset = 1) {
-  subset_of_the_data <- converted_data[[data_subset]]
+  subset_of_the_data <- data_conglomerate[[data_subset]]
   return(subset_of_the_data)
 }
 
