@@ -2,6 +2,7 @@
 parent_directory <- getwd()
 number_of_runs <- 10
 for(run_visual in 1:number_of_runs) {
+  #run_visual=1
   if(run_visual == 1) {
     multiRunTime <- format(Sys.time(), "%F-%H%M%S")
     dir.create(file.path(parent_directory, paste0(multiRunTime, "-GMT-multirun-output")))
@@ -10,8 +11,17 @@ for(run_visual in 1:number_of_runs) {
     
   } # makes the folder for multirun results, saves the multiRun_folderList there.
   
+  if(isTRUE(nchar(list.files(pattern = as.character(as.numeric(
+    strsplit(multiRun_folderList[run_visual], "-")[[1]][4]))))>1)==T) {
+      setwd(multiRun_folderList[run_visual])
+  } else {
+      setwd(paste0(
+        strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][1], 
+        as.integer(strsplit(multiRun_folderList[run_visual], "-")[[1]][4]) + 1, 
+        strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][2]))
+  } # you might be saying, "what the effing fuck, Parker?" Well, sometimes file folders are made one second after I have them recorded as having been started. This addresses that bullshit by finding the appropriate folder in the directory to set as working directory.
   
-  setwd(multiRun_folderList[run_visual])
+  #setwd(multiRun_folderList[run_visual])
   data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
   eval(parse(text = data_visuals))
   run_number_directory <- getwd()
@@ -29,20 +39,27 @@ for(run_visual in 1:number_of_runs) {
   data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\")")
   cat(data_convert, file = "data_convert.R", sep = "\n")
   source("data_convert.R")
-  
+  old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
+  rm(list=ls(pattern=old_names[1]))
+  rm(list=ls(pattern=old_names[2]))
+  rm(list=ls(pattern=old_names[3]))
+  rm(list=ls(pattern=old_names[4]))
+  rm(old_names)
   #R <- create_plot_info(info[[2]], info[[1]])
-  fig_text_make <- paste0("R", run_visual," <- create_plot_info(info[[2]], info[[1]])")
+  #fig_text_make <- paste0("R <- create_plot_info(info[[2]], info[[1]])")
   #eval(parse(text=fig_text_make))
   
   
-  info_make <- paste(paste0("sink(file = \"", run_visual, " - Parameters and Info\")"), 
-                 "cat(paste0(\"Number of Timesteps: \", info[[3]][1], \"\nNumber of Populations: \", info[[3]][2], \"\nPopulation Size: \", info[[3]][3], \"\nNumber of Syllables: \", info[[3]][4], \"\nNumber of Syllable Positions Assigned to Specific Probability Levels: \", info[[3]][5], \"\nNumber of Singers Sampled from One Population for Mating: \", info[[3]][7], \"\nNumber of Singers Sampled from One Population for Tutoring: \", info[[3]][6], \"Probability of Inheriting Curiosity Accurately: \", info[[3]][8], \"\nProbability of Learning Syllables Accurately from Parent: \", info[[3]][10], \"\nProbability of Learning Syllables Accurately from Tutor: \", info[[3]][9], \"\nProbability of Picking up Random Extra Syllables from Parent: \", info[[3]][12], \"\nProbability of Picking up Random Extra Syllables from Tutor: \", info[[3]][11], \"\nStandard Deviation of Randomly-picked-up Sylls from Established Mean: \", info[[3]][13], \"\nNumber of Rows in Population Calls Matrix: \", info[[3]][14], \"\nNumber of Columns in Pop Calls Matrix: \", info[[3]][15], \"\nPairing Pool Rows: \", info[[3]][16], \"\nPairing Pool Columns: \", info[[3]][17], \"\nPairing Pool Slices: \", info[[3]][18], \"\nCuriosity Counter Rows: \", info[[3]][19], \"\nCuriosity Counter Columns: \", info[[3]][20], \"\nPopulation Syllable Probability Rows: \", info[[3]][21], \"\nPopulation Probability Columns: \", info[[3]][22], \"\nLength of Curiosity Breaks Vector: \", info[[3]][23], \"\nLength of Zero to One Template: \", info[[3]][24], \"\nLearning Pool Rows: \", info[[3]][25], \"\nLearning Pool Columns: \", info[[3]][26], \"\nLearning Pool Slices: \", info[[3]][27]))", 
-                 "sink()", sep = "\n")
+  #info_make <- paste(paste0("sink(file = \"", run_visual, " - Parameters and Info\")"), 
+  #              "cat(paste0(\"Number of Timesteps: \", info[[3]][1], \"\nNumber of Populations: \", info[[3]][2], \"\nPopulation Size: \", info[[3]][3], \"\nNumber of Syllables: \", info[[3]][4], \"\nNumber of Syllable Positions Assigned to Specific Probability Levels: \", info[[3]][5], \"\nNumber of Singers Sampled from One Population for Mating: \", info[[3]][7], \"\nNumber of Singers Sampled from One Population for Tutoring: \", info[[3]][6], \"Probability of Inheriting Curiosity Accurately: \", info[[3]][8], \"\nProbability of Learning Syllables Accurately from Parent: \", info[[3]][10], \"\nProbability of Learning Syllables Accurately from Tutor: \", info[[3]][9], \"\nProbability of Picking up Random Extra Syllables from Parent: \", info[[3]][12], \"\nProbability of Picking up Random Extra Syllables from Tutor: \", info[[3]][11], \"\nStandard Deviation of Randomly-picked-up Sylls from Established Mean: \", info[[3]][13], \"\nNumber of Rows in Population Calls Matrix: \", info[[3]][14], \"\nNumber of Columns in Pop Calls Matrix: \", info[[3]][15], \"\nPairing Pool Rows: \", info[[3]][16], \"\nPairing Pool Columns: \", info[[3]][17], \"\nPairing Pool Slices: \", info[[3]][18], \"\nCuriosity Counter Rows: \", info[[3]][19], \"\nCuriosity Counter Columns: \", info[[3]][20], \"\nPopulation Syllable Probability Rows: \", info[[3]][21], \"\nPopulation Probability Columns: \", info[[3]][22], \"\nLength of Curiosity Breaks Vector: \", info[[3]][23], \"\nLength of Zero to One Template: \", info[[3]][24], \"\nLearning Pool Rows: \", info[[3]][25], \"\nLearning Pool Columns: \", info[[3]][26], \"\nLearning Pool Slices: \", info[[3]][27]))", 
+  #             "sink()", sep = "\n")
   #saveRDS(object = converted_data)
-  dataConveRDSt <- paste0("saveRDS(object = converted_data", run_visual, ", file = \"dataConvert", run_visual, ".RData\"")
-  eval(parse(text=c(fig_text_make, info_make, dataConveRDSt)))
+  dataConveRtDS <- paste0("saveRDS(object = converted_data", run_visual, ", file = \"dataConvert", run_visual, ".RData\")")
+  #eval(parse(text=c(fig_text_make, info_make, dataConveRDSt)))
+  eval(parse(text=dataConveRtDS))
   
-    
+  setwd(parent_directory)
+  
 }
 
 

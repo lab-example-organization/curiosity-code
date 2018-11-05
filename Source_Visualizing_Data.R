@@ -30,12 +30,22 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_d
     }
     #data3s <- paste0("rm(", old_names[data_subset], "_", 1:num_timechunks, ")")
     #eval(parse(text=data3s))
-    data3s <- paste0(old_names[data_subset], "_", 1:num_timechunks)
-    
-    sapply(X = 1:num_timechunks,FUN = rm(list = data3s))
+    if(data_subset==4) {
+      data3s <- paste0(old_names[data_subset], "_", 1:num_timechunks)
+      #sapply(1:num_timechunks, function(x) {rm(paste0(data3s[x]))})
+      sapply(1:4, function(x) {rm(list=ls(pattern=old_names[x]), envir = .GlobalEnv)})
+      
+      #rm(list=ls(pattern=c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")))
+      
+    }
   }
   converted_data <- list(sylrepz = sylrepz, sdstbxn = sdstbxn, cursity = cursity, curhist = curhist)
+  
   return(converted_data)
+  #rm(list=ls(pattern=old_names[1]),envir = .GlobalEnv)
+  #rm(list=ls(pattern=old_names[2]),envir = .GlobalEnv)
+  #rm(list=ls(pattern=old_names[3]),envir = .GlobalEnv)
+  #rm(list=ls(pattern=old_names[4]),envir = .GlobalEnv)
 }
 
 #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
