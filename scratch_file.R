@@ -28,3 +28,6 @@ for(i in 1:4) {
   thing <- paste0("rm(", old_names[i], "_", 1:num_timechunks, ")")
   eval(parse(text=thing))
 }
+
+
+

@@ -86,10 +86,10 @@ info_make <- paste(paste0("sink(file = \"", run_visual, " - Parameters and Info\
 eval(parse(text=info_make))
 
 
-  paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
+paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
   
   
-  simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
+simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
   
   
 
