@@ -67,16 +67,21 @@ for(run_visual in 1:number_of_runs) {
   eval(parse(text=c(sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht)))
   
   sylrepzConveRtDS <- paste0("saveRDS(object = sylrepz", run_visual, ", file = \"SylReps", run_visual, ".RData\")")
-  sdstbxnConveRtDS <- paste0("saveRDS(object = sdstbxn", run_visual, ", file = \"StdDist", run_visual, ".RData\")")
-  cursityConveRtDS <- paste0("saveRDS(object = sylrepz", run_visual, ", file = \"Cursity", run_visual, ".RData\")")
-  curhistConveRtDS <- paste0("saveRDS(object = sylrepz", run_visual, ", file = \"CurHist", run_visual, ".RData\")")
+  sdstbxnConveRtDS <- paste0("saveRDS(object = sdstbxn", run_visual, ", file = \"SylDist", run_visual, ".RData\")")
+  cursityConveRtDS <- paste0("saveRDS(object = cursity", run_visual, ", file = \"Cursity", run_visual, ".RData\")")
+  curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"CurHist", run_visual, ".RData\")")
   eval(parse(text=c(sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS)))
   
   
   setwd(parent_directory)
   
-}
-
+} # outputs pieces of different runs 
+last_stats <- paste0("rm(c(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
+                     ", cursity", number_of_runs, ", curhist", number_of_runs,
+                     ", sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht",
+                     ", sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS",
+                     ", last_stats", "))")
+eval(parse(text=last_stats))
 
 info <- readRDS("metadata.RData")
 R <- create_plot_info(info[[2]], info[[1]])
@@ -86,7 +91,7 @@ info_make <- paste(paste0("sink(file = \"", run_visual, " - Parameters and Info\
 eval(parse(text=info_make))
 
 
-paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
+#paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
   
   
 simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
