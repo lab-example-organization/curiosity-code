@@ -208,7 +208,13 @@ summary_statistics <- function(P, Q, R, population) {
 
 
 #Simple Stuff
-
+meanz <- cursitylist[[11]][3,population,seq.int(1, P$num_timesteps, simplification_factor)]
+stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][3,1,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
+file_name <- paste0(R1$datez, "_", R1$run_name, "_mate_selections_pop", population, ".tiff")
+tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"),cex=0.1)
+eval(parse(text=stuff))
+dev.off()
 
 #Full Plot Stuff
 
@@ -236,27 +242,50 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
   } else {
     for(population in 1:P$num_pop) {
       # make an object for the mean value
-      objectz <- apply(X = )
-      thing <- paste0("objectz", 1:mult_file_length, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,seq.int(1, P$num_timesteps, simplification_factor)])")
-      stuff <- paste0("points(objectz", 1:mult_file_length, "")
-      eval(parse(text=thing))
+      meanz <- cursitylist[[11]][3,population,seq.int(1, P$num_timesteps, simplification_factor)]
+      #thing <- paste0("objectz", 1:number_of_runs, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,seq.int(1, P$num_timesteps, simplification_factor)])")
+      #thing <- paste0("objectz", 1:number_of_runs, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,seq.int(1, P$num_timesteps, simplification_factor)])")
+      stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][3,1,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
+      #eval(parse(text=thing))
       file_name <- paste0(R1$datez, "_", R1$run_name, "_mate_selections_pop", population, ".tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-      plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
+      
+      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.1)
+      
       eval(parse(text=stuff))
       dev.off()
       
-      objectz <- Q$cursity[10,population,seq.int(1, P$num_timesteps, simplification_factor)]
-      file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".tiff")
+      #objectz <- Q$cursity[10,population,seq.int(1, P$num_timesteps, simplification_factor)]
+      #file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".tiff")
+      #tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+      #plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
+      #dev.off()
+      
+      
+      meanz <- cursitylist[[11]][10,population,seq.int(1, P$num_timesteps, simplification_factor)]
+      stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,1,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
+      file_name <- paste0(R1$datez, "_", R1$run_name, "_tutor_selections_pop", population, ".tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-      plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"))
+      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.1)
+      eval(parse(text=stuff))
       dev.off()
       
-      objectz <- Q$cursity[4,population,seq.int(1, P$num_timesteps, simplification_factor)]
-      file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_m_pop", population, ".tiff")
+      
+      #objectz <- Q$cursity[4,population,seq.int(1, P$num_timesteps, simplification_factor)]
+      #file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_m_pop", population, ".tiff")
+      #tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+      #plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Father AC"))
+      #dev.off()
+      
+      
+      meanz <- cursitylist[[11]][10,population,seq.int(1, P$num_timesteps, simplification_factor)]
+      stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,1,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
+      file_name <- paste0(R1$datez, "_", R1$run_name, "_tutor_selections_pop", population, ".tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-      plot(objectz, xlab = "Timestep", ylab = paste0("Pop ", population, " Father AC"))
+      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.1)
+      eval(parse(text=stuff))
       dev.off()
+      
       
       objectz <- Q$cursity[5,population,seq.int(1, P$num_timesteps, simplification_factor)]
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_f_pop", population, ".tiff")
