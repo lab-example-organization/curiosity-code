@@ -235,7 +235,7 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
     }
   } else {
     for(population in 1:P$num_pop) {
-      
+      # make an object for the mean value
       objectz <- apply(X = )
       thing <- paste0("objectz", 1:mult_file_length, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,seq.int(1, P$num_timesteps, simplification_factor)])")
       stuff <- paste0("points(objectz", 1:mult_file_length, "")
