@@ -76,12 +76,19 @@ for(run_visual in 1:number_of_runs) {
   setwd(parent_directory)
   
 } # outputs pieces of different runs 
-last_stats <- paste0("rm(c(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
+last_stats <- paste0("rm(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
                      ", cursity", number_of_runs, ", curhist", number_of_runs,
                      ", sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht",
                      ", sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS",
-                     ", last_stats", "))")
+                     ", last_stats, data_convert)")
 eval(parse(text=last_stats))
+
+
+curhistlist <- list()
+for(i in 1:number_of_runs) {
+  thing <- paste0("curhistlist[[i]] <- readRDS(\"", histlist[i], "\")")
+  eval(parse(text=thing))
+}
 
 info <- readRDS("metadata.RData")
 R <- create_plot_info(info[[2]], info[[1]])
