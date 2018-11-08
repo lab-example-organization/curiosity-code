@@ -347,6 +347,8 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         eval(parse(text=stuff))
         dev.off()
         
+        #image(t(objectz), col = R$sylnum_palette(100), xlab = paste0("Timestep x ", simplification_factor), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+        
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
