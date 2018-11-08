@@ -349,6 +349,12 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         
         #image(t(objectz), col = R$sylnum_palette(100), xlab = paste0("Timestep (x ", simplification_factor, ")"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
         
+        #meansyldist <- (sdstbxnlist[[11]] * 1000) + sdstbxnlist[[10]]
+        #cat(rep("\"#3498db\"",10),sep=", ")
+        # #sylsub_palette <- colorRampPalette(c("darkgreen","lawngreen","grey90","orchid1","orchid4"))
+        #sylsub_palette <- colorRampPalette(c("#5b2c6f", "#abebc6"))
+        #plot(rep(1,100),col=sylnum_palette(100),pch=19,cex=3)
+        
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
