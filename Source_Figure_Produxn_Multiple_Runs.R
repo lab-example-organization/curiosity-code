@@ -130,7 +130,7 @@ last_stats <- paste0("rm(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
                      ", sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS",
                      ", last_stats, data_convert, histthing, sitything, sdstthing, repzthing",
                      ", histlist, sitylist, sdstlist, repzlist, listlister, listmaker, listnames",
-                     ", objectnames, datanames, data_convert)")
+                     ", objectnames, datanames)")
 eval(parse(text=last_stats))
 
 
@@ -141,7 +141,7 @@ info_make <- paste(paste0("sink(file = \"Multirun - Parameters and Info\")"),
              "sink()", sep = "\n")
 eval(parse(text=info_make))
 
-simple_plots(Q = converted_data, simplification_factor = 100, extra_lines = FALSE)
+simple_plots(Q = "converted_data", simplification_factor = 100, extra_lines = TRUE)
 #paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
   
   
