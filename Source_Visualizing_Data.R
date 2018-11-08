@@ -347,7 +347,7 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         eval(parse(text=stuff))
         dev.off()
         
-        #image(t(objectz), col = R$sylnum_palette(100), xlab = paste0("Timestep x ", simplification_factor), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+        #image(t(objectz), col = R$sylnum_palette(100), xlab = paste0("Timestep (x ", simplification_factor, ")"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
         
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
@@ -356,6 +356,8 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"),cex=0.1)
         eval(parse(text=stuff))
         dev.off()
+        
+        #image(t(objectz), col = R$sylsub_palette(100), xlab = paste0("Timestep (x ", simplification_factor")"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
         
         meanz <- curhistlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")

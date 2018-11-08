@@ -106,22 +106,26 @@ for(i in 1:number_of_runs) {
 }
 
 
-sylrepzlist[[11]] <- sylrepzlist[[10]]
-sdstbxnlist[[11]] <- sdstbxnlist[[10]]
-cursitylist[[11]] <- cursitylist[[10]]
-curhistlist[[11]] <- curhistlist[[10]]
+sylrepzlist[[number_of_runs + 1]] <- sylrepzlist[[number_of_runs]]
+sdstbxnlist[[number_of_runs + 1]] <- sdstbxnlist[[number_of_runs]]
+cursitylist[[number_of_runs + 1]] <- cursitylist[[number_of_runs]]
+curhistlist[[number_of_runs + 1]] <- curhistlist[[number_of_runs]]
 
 for(i in 1:length(curhistlist[[1]])) {
-  curhistlist[[11]][i] <- mean(c(curhistlist[[1]][i],curhistlist[[2]][i],curhistlist[[3]][i],curhistlist[[4]][i],curhistlist[[5]][i],curhistlist[[6]][i],curhistlist[[7]][i],curhistlist[[8]][i],curhistlist[[9]][i],curhistlist[[10]][i]))
+  curhistlist[[number_of_runs + 1]][i] <- mean(c(curhistlist[[1]][i],curhistlist[[2]][i],curhistlist[[3]][i],curhistlist[[4]][i],curhistlist[[5]][i],curhistlist[[6]][i],curhistlist[[7]][i],curhistlist[[8]][i],curhistlist[[9]][i],curhistlist[[10]][i]))
 }
+
+#mean(cat(paste0("curhistlist[[", 1:number_of_runs, "]][i]"), sep = ", "))
+#thing <- paste0("curhistlist[[", 1:number_of_runs, "]][i]")
+
 for(i in 1:length(cursitylist[[1]])) {
-  cursitylist[[11]][i] <- mean(c(cursitylist[[1]][i],cursitylist[[2]][i],cursitylist[[3]][i],cursitylist[[4]][i],cursitylist[[5]][i],cursitylist[[6]][i],cursitylist[[7]][i],cursitylist[[8]][i],cursitylist[[9]][i],cursitylist[[10]][i]))
+  cursitylist[[number_of_runs + 1]][i] <- mean(c(cursitylist[[1]][i],cursitylist[[2]][i],cursitylist[[3]][i],cursitylist[[4]][i],cursitylist[[5]][i],cursitylist[[6]][i],cursitylist[[7]][i],cursitylist[[8]][i],cursitylist[[9]][i],cursitylist[[10]][i]))
 }
 for(i in 1:length(sdstbxnlist[[1]])) {
-  sdstbxnlist[[11]][i] <- mean(c(sdstbxnlist[[1]][i],sdstbxnlist[[2]][i],sdstbxnlist[[3]][i],sdstbxnlist[[4]][i],sdstbxnlist[[5]][i],sdstbxnlist[[6]][i],sdstbxnlist[[7]][i],sdstbxnlist[[8]][i],sdstbxnlist[[9]][i],sdstbxnlist[[10]][i]))
+  sdstbxnlist[[number_of_runs + 1]][i] <- mean(c(sdstbxnlist[[1]][i],sdstbxnlist[[2]][i],sdstbxnlist[[3]][i],sdstbxnlist[[4]][i],sdstbxnlist[[5]][i],sdstbxnlist[[6]][i],sdstbxnlist[[7]][i],sdstbxnlist[[8]][i],sdstbxnlist[[9]][i],sdstbxnlist[[10]][i]))
 }
 for(i in 1:length(sylrepzlist[[1]])) {
-  sylrepzlist[[11]][i] <- mean(c(sylrepzlist[[1]][i],sylrepzlist[[2]][i],sylrepzlist[[3]][i],sylrepzlist[[4]][i],sylrepzlist[[5]][i],sylrepzlist[[6]][i],sylrepzlist[[7]][i],sylrepzlist[[8]][i],sylrepzlist[[9]][i],sylrepzlist[[10]][i]))
+  sylrepzlist[[number_of_runs + 1]][i] <- mean(c(sylrepzlist[[1]][i],sylrepzlist[[2]][i],sylrepzlist[[3]][i],sylrepzlist[[4]][i],sylrepzlist[[5]][i],sylrepzlist[[6]][i],sylrepzlist[[7]][i],sylrepzlist[[8]][i],sylrepzlist[[9]][i],sylrepzlist[[10]][i]))
 }
 
 last_stats <- paste0("rm(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
