@@ -29,5 +29,9 @@ for(i in 1:4) {
   eval(parse(text=thing))
 }
 
-
+# Create the base plotting window
+# type = "n" does not plot the points
+# Set the background color to "yellow"
+par(bg = "yellow")
+plot(1:10, type = "n")
 

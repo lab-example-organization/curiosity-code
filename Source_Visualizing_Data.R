@@ -94,7 +94,7 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   #sylnum_palette <- colorRampPalette(c("darkblue","royalblue","skyblue","turquoise1","springgreen","gold","orangered","firebrick4"))
   sylnum_palette <- colorRampPalette(c("#641e16", "#943126", "#cb4335", "#f5b7b1", "#aed6f1", "#3498db"))
   #sylsub_palette <- colorRampPalette(c("darkgreen","lawngreen","grey90","orchid1","orchid4"))
-  sylsub_palette <- colorRampPalette(c("#5b2c6f", "#abebc6"))
+  sylsub_palette <- colorRampPalette(c("#5b2c6f00", "#abebc6"))
   
   sexes <- c("male", "female")
   Sexes <- c("Male", "Female")
@@ -354,6 +354,7 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         # #sylsub_palette <- colorRampPalette(c("darkgreen","lawngreen","grey90","orchid1","orchid4"))
         #sylsub_palette <- colorRampPalette(c("#5b2c6f", "#abebc6"))
         #plot(rep(1,100),col=sylnum_palette(100),pch=19,cex=3)
+        #cat(rep("\"#3498db\"",10),sep=", ")
         
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
