@@ -356,6 +356,16 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         #plot(rep(1,100),col=sylnum_palette(100),pch=19,cex=3)
         #cat(rep("\"#3498db\"",10),sep=", ")
         
+        #### Define each vector before interlacing them; 200 positions between red and yellow, 200 positions between black and white. Latter based around the local dominant color? 
+        
+        #mean_spectrum <- colorRampPalette(c("red","yellow"))
+        #mean_spectrum <- mean_spectrum(200)
+        #individual_spectrum <- array(0,c(200,200))
+        #for(i in 1:200) {
+          #individual_spectrum[i,] <- colorRampPalette(c("dark grey", mean_spectrum[i]))(200)
+        #}
+        #combo_palette <- as.vector(individual_spectrum)
+        
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
