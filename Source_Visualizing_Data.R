@@ -361,10 +361,39 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         #mean_spectrum <- colorRampPalette(c("red","yellow"))
         #mean_spectrum <- mean_spectrum(200)
         #individual_spectrum <- array(0,c(200,200))
+        #individual_spectrum <- vector()
         #for(i in 1:200) {
           #individual_spectrum[i,] <- colorRampPalette(c("dark grey", mean_spectrum[i]))(200)
         #}
         #combo_palette <- as.vector(individual_spectrum)
+        
+        
+        #> whatever <- colorRamp(c("grey","red"),bias = 10000)
+        #> whatever(seq.int(0,1,0.5))
+        #[,1] [,2] [,3]
+        #[1,] 190.0  190  190
+        #[2,] 222.5   95   95
+        #[3,] 255.0    0    0
+        
+        #> whatever(seq.int(0,1,0.5))[2,]
+        #[1] 222.5  95.0  95.0
+        #> as.hexmode(round(whatever(seq.int(0,1,0.5))[2,]))
+        #[1] "de" "5f" "5f"
+        
+        #hexholder <- c(0,0,0)
+        #hexholder[1] <- as.hexmode(round(whatever(seq.int(0,1,0.5))[2,]))[1]
+        #hexholder[2] <- as.hexmode(round(whatever(seq.int(0,1,0.5))[2,]))[2]
+        #hexholder[3] <- as.hexmode(round(whatever(seq.int(0,1,0.5))[2,]))[3]
+        
+        #> paste0("#",as.hexmode(hexholder)[1],as.hexmode(hexholder)[2],as.hexmode(hexholder)[3])
+        #[1] "#de5f5f"
+        ### Proof that it worked:
+        #> whatever <- colorRamp(c("#de5f5f","red"),bias = 10000)
+        #> whatever(seq.int(0,1,0.5))
+        #[,1] [,2] [,3]
+        #[1,] 222.0 95.0 95.0
+        #[2,] 238.5 47.5 47.5
+        #[3,] 255.0  0.0  0.0
         
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
