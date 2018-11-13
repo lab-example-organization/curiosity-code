@@ -1,6 +1,6 @@
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 parent_directory <- getwd()
-number_of_runs <- 10
+#number_of_runs <- 10
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 for(run_visual in 1:number_of_runs) {
   #run_visual=1
@@ -149,14 +149,14 @@ simple_plots(Q = "converted_data", simplification_factor = 100, extra_lines = TR
 #paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
   
   
-simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
+#simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
 
 
 
 #FolderName <- list.files(pattern = reg_spresh)[offset + 1]
 #setwd(results_directory)
 
-simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
+#simple_multiplots(R = R1, Q = converted_data, simplification_factor = 100, extra_lines = TRUE)
 #full_plots(R = R, Q = converted_data, extra_lines = TRUE)
 
 #library(rstudioapi)

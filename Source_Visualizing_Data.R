@@ -399,17 +399,19 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
         stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-        plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"),cex=0.1)
+        #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"),cex=0.1)
+        image(t(meanz), col = R$sylnum_palette(100), xlab = paste0("Timestep (x ", simplification_factor, ")"), ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"))
         eval(parse(text=stuff))
         dev.off()
         
-        #image(t(objectz), col = R$sylsub_palette(100), xlab = paste0("Timestep (x ", simplification_factor")"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
+        #image(t(meanz), col = R$sylsub_palette(100), xlab = paste0("Timestep (x ", simplification_factor")"), ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
         
         meanz <- curhistlist[[11]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)]
         stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
         file_name <- paste0(R$datez, "_", R$run_name, "_curiosity_bins_pop_", population, "_", R$sexes[sex], "s.tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-        plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"),cex=0.1)
+        #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"),cex=0.1)
+        image(t(meanz), col = R$sylsub_palette(100), xlab = paste0("Timestep (x ", simplification_factor, ")"), ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"))
         eval(parse(text=stuff))
         dev.off()
         
