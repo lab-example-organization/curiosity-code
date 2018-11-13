@@ -5,6 +5,7 @@ setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-cod
 #setwd(getwd())
 
 number_of_runs <- 10
+cat(number_of_runs, file = "number_of_runs.txt", append = F)
 for(run_number in 1:number_of_runs) {
   saveRDS(object = run_number, file = "holdover_line.RData")
   source("Source_Life_Cycle.R")

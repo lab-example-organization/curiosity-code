@@ -40,7 +40,7 @@ multiRun_folderList <- conv_outputToFolderName(normal_output = T, single = F, nu
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 parent_directory <- getwd()
 #number_of_runs <- 10
-cat(number_of_runs, file = "number_of_runs.txt", append = F)
+number_of_runs <- source("number_of_runs.txt")$value
 for(run_visual in 1:number_of_runs) {
   #run_visual=1
   if(run_visual == 1) {
