@@ -11,9 +11,10 @@
                            #0.8,0.85,0.9,0.95,0.99,1.0)
                             #21, #22,#23, #24, #25,#26
 #setwd(getwd())
-setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
-#setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code")
-#setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
+#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code") <- Lab Public Computer
+#setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code") <- Server
+#setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code") <- old server address
+#setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code") <- macbook air
 rm(list=objects())
 parent_directory <- getwd()
 init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
@@ -28,7 +29,7 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181011_06_-_first_multi_maybe_eobs")
+docnamez <- c("181113_07_-_equal_randoblearn_context_2")
 
 
 curiosity_level <- initialize.curiosity(P, 
@@ -72,11 +73,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
       # 1: father; 2: mother; 3: same; 4:opposite
     P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
-    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 2, verbose = FALSE) # context decides whether the learning is vertical (2) or oblique (1)
     
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(100, 100), verbose_output = F, interbreed = FALSE)
     
-    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 1, verbose = FALSE) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 2, verbose = FALSE) # context decides whether the learning is vertical (2) or oblique (1)
     
     curiosity_level <- recuriosity.offspring(P = P)
     
