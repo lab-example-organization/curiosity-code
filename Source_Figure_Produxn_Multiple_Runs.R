@@ -1,3 +1,4 @@
+number_of_runs <- source("number_of_runs.txt")$value
 conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_of_runs) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
   #scan(filename_document,what=list(NULL),sep='\n',blank.lines.skip = F)
   con <- file(description = "console_copy.txt", open = "rt")
@@ -40,7 +41,7 @@ multiRun_folderList <- conv_outputToFolderName(normal_output = T, single = F, nu
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 parent_directory <- getwd()
 #number_of_runs <- 10
-number_of_runs <- source("number_of_runs.txt")$value
+
 for(run_visual in 1:number_of_runs) {
   #run_visual=1
   if(run_visual == 1) {
