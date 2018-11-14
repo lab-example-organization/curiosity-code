@@ -6,6 +6,7 @@ setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-cod
 
 number_of_runs <- 10
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
+file.remove("console_copy.txt","sim_data.txt")
 for(run_number in 1:number_of_runs) {
   saveRDS(object = run_number, file = "holdover_line.RData")
   source("Source_Life_Cycle.R")
@@ -14,7 +15,8 @@ for(run_number in 1:number_of_runs) {
   number_of_runs <- 10
   print(paste0("Run Number: ", run_number, ", comes right before (YYYY-MM-DD-HHMMSS): ", format(Sys.time(), "%F-%H%M%S")))
 }
-
+file.copy(from = "console_copy.txt", to = paste0(format(Sys.time(), "%F"), "_console_copy.txt"))
+file.copy(from = "sim_data.txt", to = paste0(format(Sys.time(), "%F"), "_sim_data.txt"))
 source("Source_Figure_Produxn_Multiple_Runs.R")
 
 

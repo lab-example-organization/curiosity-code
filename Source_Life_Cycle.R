@@ -29,7 +29,7 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181113_07_-_equal_randoblearn_context_2_randoblearnprob_x5")
+docnamez <- c("181113_08_-_equal_randoblearn_context_2")
 
 
 curiosity_level <- initialize.curiosity(P, 
