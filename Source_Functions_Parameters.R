@@ -4,7 +4,10 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
   randlearncontext_container <- c("teacher.mean", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : P$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
-    if(context == 2) {
+    
+    #Vertical Learning;  params (set up source_of_ONEs), and considerations
+    if(context == 2) { #params and considerations for VERTICAL LEARNING
+      
       source_of_ONEs <- which(P$learning.pool[1, , population] == 1) # calls for sylls vertical tutor (father) has
       if(length(source_of_ONEs) == 0) {
         saveRDS(object = P, file = "parent with no sylls.txt")
@@ -13,20 +16,25 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
         } #address syll loss by stopping script if parent has no sylls
       for(sex in 1 : 2) {
           P$learning.pool[(sex + 2), , population] <- rep(0, P$sylnum)
-      } # Vertical Learning; clear the sylreps rows about to be filled in :D
-    } else {
+      } # clear the sylreps rows about to be filled in :D
+      
+      
+    } else { #Oblique Learning; source_of_ONEs setup, and considerations 
+      
       # double-check tutor isn't out of sylls before comparing repertoire to pupil.
       source_of_ONEs <- which(P$learning.pool[5, , population] == 1)
       if(length(source_of_ONEs) == 0) {
         stop("wot? tutor has no syllables?!")
       }
+      
+      # as often happens with super self-philes, the tutor may not have anything new to give the pupil. If this is the case, this skips to the next step in the for loop.
       source_of_ONEs <- which(P$learning.pool[5, , population] == 1)[which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))]
       if(length(source_of_ONEs) == 0) {
         if(verbose == TRUE) {
           print(paste0("tutor has no syllables for population ", population))
         }
         next} # if curiosity is so low that tutor can teach nothing, just skip this population's tutor learning step
-    } # Oblique Learning
+    } # Oblique Learning params and considerations
     if(randlearn_context == 1) {
       teacher.mean <- mean(source_of_ONEs)
     } else {
