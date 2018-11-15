@@ -7,11 +7,11 @@
   eval(parse(text = data_visuals))
   
   parent_directory <- str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),"")
-  setwd(parent_directory)
+  #setwd(parent_directory)
   info <- readRDS(file = "metadata.RData")
   setwd(FolderName)
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  
+  run_number_directory <- getwd()
   converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
   
   
@@ -25,7 +25,7 @@
 
 
 
-FolderName <- list.files(pattern = reg_spresh)[offset + 1]
+#FolderName <- list.files(pattern = reg_spresh)[offset + 1]
 
 results_directory <- str_replace_all(str_replace_all(FolderName, paste0("/", str_split(FolderName, "/")[[1]][8]),""), paste0("/", str_split(FolderName, "/")[[1]][7]),"")
 setwd(results_directory)
@@ -35,7 +35,7 @@ setwd(results_directory)
 
 simplification_factor = 100
 simple_plots(Q = converted_data, simplification_factor = 100, extra_lines = FALSE)
-full_plots(R = R, Q = converted_data, extra_lines = FALSE)
+#full_plots(R = R, Q = converted_data, extra_lines = FALSE)
 
 
 #library(rstudioapi)

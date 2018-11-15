@@ -16,8 +16,12 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_d
   sdstbxn <- array(0, c((2 * P$num_pop), P$sylnum, P$num_timesteps))
   cursity <- array(0, c(12, P$num_pop, P$num_timesteps))
   curhist <- array(data = 0, dim = c((2*P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), P$num_timesteps))
+  
   for(data_subset in 1:4) {
-    data1s <- paste0(old_names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = ", '"', run_number_directory, "/", strsplit(run_number_directory, "-GMT-")[[1]][2], "-", 1:num_timechunks, "-", old_names[data_subset], ".RData", '"', ")")
+    data1s <- paste0(
+      old_names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = ", '"',
+      run_number_directory, "/", strsplit(run_number_directory, "-GMT-")[[1]][2], "-",
+      1:num_timechunks, "-", old_names[data_subset], ".RData", '"', ")")
     cat(data1s, file = "data_subset.R", sep = "\n")
     source("data_subset.R")
     

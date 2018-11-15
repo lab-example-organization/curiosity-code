@@ -23,12 +23,14 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
       
       # double-check tutor isn't out of sylls before comparing repertoire to pupil.
       source_of_ONEs <- which(P$learning.pool[5, , population] == 1)
+      pupil_has_ONEs <- which(P$learning.pool[3, , population] == 1)
       if(length(source_of_ONEs) == 0) {
         stop("wot? tutor has no syllables?!")
       }
       
       # as often happens with super self-philes, the tutor may not have anything new to give the pupil. If this is the case, this skips to the next step in the for loop.
-      source_of_ONEs <- which(P$learning.pool[5, , population] == 1)[which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))]
+      #source_of_ONEs <- which(P$learning.pool[5, , population] == 1)[which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))]
+      source_of_ONEs <- setdiff(source_of_ONEs,pupil_has_ONEs)
       if(length(source_of_ONEs) == 0) {
         if(verbose == TRUE) {
           print(paste0("tutor has no syllables for population ", population))
@@ -37,10 +39,8 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
     } # Oblique Learning params and considerations
     if(randlearn_context == 1) {
       teacher.mean <- mean(source_of_ONEs)
-    } else {
-      
     }
-    probs <- runif(source_of_ONEs, 0, 1)
+    
     
     #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "), append = T)
     #print(probs)
@@ -48,10 +48,12 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
     
     for (sex in 1:context) {
       average_rate_randlearn_overlap <- c()
+      #print(source_of_ONEs)
+      probs <- runif(source_of_ONEs, 0, 1)
       for (sylls_to_learn in 1:length(source_of_ONEs)) {
-        P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
+        #P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
         if(probs[sylls_to_learn] <= (P$learnprob[context])) {
-          P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1 # nropsp!!! come on! still have to figure that one out i guess
+          P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1 
           if(probs[sylls_to_learn] > (1 - P$randlearnprob[context])) {
             r_norm <- rnorm(1, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
             if(r_norm > P$sylnum) {
@@ -59,10 +61,11 @@ syll_learn <- function(P, context = 2, totally_new = FALSE, randlearn_context = 
             } else if(r_norm < 1) {
                 r_norm <- 1
             }
+            #totally_new refers to the idea that if a pupil is learning a sound
             if(totally_new == TRUE) {
               counter <- 1
+              r_norm_pool <- rnorm(100, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
               while(P$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
-                r_norm_pool <- rnorm(100, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
                 r_norm <- r_norm_pool[counter]
                 if(r_norm > P$sylnum) {
                   r_norm <- P$sylnum
@@ -188,15 +191,15 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(1
       }
       
       #This statement separates specific mating and tutoring selection qualities:
-        # singer_eval will inform the selection of a mate by restricting the successful mate 
+        # singSuccessFilter will inform the selection of a mate by restricting the successful mate 
         # to those individuals from the same population as the selector. Similarly, 
         # selector.index distinguishes between mating and tutoring, except here it uses
         # a randomly-selected female for the mating context, and the offspring for tutoring.
       if(context == 1) {
-        singer_eval <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop)))
+        singSuccessFilter <- (1 : ((P$num_one.pop_singers_sampled[context]) * (P$num_pop))) # "1-20"
         selector.index <- P$pairing.pool[3, 1, population]
       } else {
-        singer_eval <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context]))
+        singSuccessFilter <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[context]))) : (population * P$num_one.pop_singers_sampled[context])) # "1-10," or "11-20"
         selector.index <- sample(P$pop_calls_matrix[2, ], 1)
       }
       
@@ -221,7 +224,7 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(1
       # This creates sample calls for each population; each population has a sample size of
       # P$num_one.pop_singers_sampled, which comes from the male half of the population.
       # probability defined by the fraction of syllable repertoires of each member of each population divided by the maximum syllrep of the population.
-      selection.index <- c(
+      selection.index <- (
         sapply(
           1:P$num_pop, function(x) {
             sample(
@@ -239,7 +242,13 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(1
         ) # probability = the number of times each individual's syllable repertoire has a 1 in it (sum(sylreps[P$pop_calls_matrix[1,]])), divided by the biggest repertoire's total.
       
       # create a matrix of all the sylreps of the sample males from selection.index
-      selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
+      #selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
+      
+      #selection.sylreps <- sapply(1:P$num_one.pop_singers_sampled[1], function(x) {
+      #  sylreps[selection.index[x,1],,1]
+      #})
+      
+      selection.sylreps <- t(cbind(sapply(1:P$num_one.pop_singers_sampled[1], function(x) {sylreps[selection.index[x,1],,1]}),sapply(1:P$num_one.pop_singers_sampled[1], function(x) {sylreps[selection.index[x,2],,2]})))
       
       # applies the standard deviation scoring to the males in selection.sylreps; 
       # larger score means greater difference between male sylrep and selector's sylrep.
@@ -247,11 +256,11 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(1
       
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
-      singer <- ((sort(golf_score, index.return = TRUE))$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
+      singer <- (sort(golf_score, index.return = TRUE)$ix)[round(curiosity_level[selector.index, population] * (P$num_one.pop_singers_sampled[context] * P$num_pop) + 0.5)]
       
       # This
       if(interbreed == FALSE) {
-        if((singer %in% singer_eval) && (sum(sylreps[selection.index[singer], , population]) != 0)) {
+        if((singer %in% singSuccessFilter) && (sum(sylreps[selection.index[singer], , population]) != 0)) {
           singer.index <- selection.index[singer]
           indices <- c(singer.index, selector.index)
           
