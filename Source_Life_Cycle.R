@@ -20,16 +20,16 @@ parent_directory <- getwd()
 init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
 
-P <- Define.Parameters(num_timesteps = 10000, num_pop = 2, 
+P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
-                       randlearnprob = c(0.05, 0.1), stand.dev = 2)
+                       randlearnprob = c(0.01, 0.1), stand.dev = 2)
 
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181114_08_-_equal_randoblearn_context_2")
+docnamez <- c("181115_09_-_equal_old_settings_protracted")
 
 
 curiosity_level <- initialize.curiosity(P, 
@@ -73,11 +73,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
       # 1: father; 2: mother; 3: same; 4:opposite
     P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
-    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 1, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(100, 100), verbose_output = F, interbreed = FALSE)
     
-    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 1, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     curiosity_level <- recuriosity.offspring(P = P)
     
