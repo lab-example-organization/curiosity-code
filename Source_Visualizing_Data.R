@@ -214,7 +214,7 @@ summary_statistics <- function(P, Q, R, population) {
 #Simple Stuff
 
 
-#Template for extra_lines
+##########Template for extra_lines
 #meanz <- cursitylist[[11]][3,population,seq.int(1, P$num_timesteps, simplification_factor)]
 #stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][3,1,seq.int(1, P$num_timesteps, simplification_factor)],col=\"grey\", cex=0.1)")
 #file_name <- paste0(R1$datez, "_", R1$run_name, "_mate_selections_pop", population, ".tiff")
@@ -222,6 +222,40 @@ summary_statistics <- function(P, Q, R, population) {
 #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Selection Chances"),cex=0.1)
 #eval(parse(text=stuff))
 #dev.off()
+
+##########Template for plot function:
+#plot(x, y, main="title", sub="subtitle",
+# xlab="X-axis label", ylab="y-axix label",
+# xlim=c(xmin, xmax), ylim=c(ymin, ymax))
+
+#title(main="main title", sub="sub-title", 
+# xlab="x-axis label", ylab="y-axis label")
+
+## EXAMPLE: Add a red title and a blue subtitle. Make x and y 
+## labels 25% smaller than the default and green. 
+#title(main="My Title", col.main="red", 
+#      sub="My Sub-title", col.sub="blue", 
+#      xlab="My X label", ylab="My Y label",
+#      col.lab="green", cex.lab=0.75)
+
+#text(location, "text to place", pos, ...)
+#mtext("text to place", side, line=n, ...)
+
+#Common options are described below.
+
+#location:	location can be an x,y coordinate. 
+#   Alternatively, the text can be placed interactively 
+#   via mouse by specifying location as locator(1).
+#pos:	position relative to location. 1=below, 2=left, 
+#   3=above, 4=right. If you specify pos, you can specify 
+#   offset= in percent of character width.
+#side:	which margin to place text. 1=bottom, 2=left, 3=top, 
+#   4=right. you can specify line= to indicate the line in the 
+#   margin starting with 0 and moving out. you can also specify 
+#   adj=0 for left/bottom alignment or adj=1 for top/right alignment.
+#Other common options are cex, col, and font 
+#   (for size, color, and font style respectively).
+
 
 
 #Full Plot Stuff
@@ -258,7 +292,21 @@ simple_plots <- function(Q = converted_data, simplification_factor = 10, extra_l
       file_name <- paste0(R$datez, "_", R$run_name, "_mate_selections_pop", population, ".tiff")
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       
-      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.1)
+      #plotline <- function(df1,df2) {
+      #  minY = min(df1$y, df2$y)
+      #  maxY = max(df1$y, df2$y)
+      #  plot (df1, xlim=c(minX, maxX), ylim=c(minY, maxY))
+      #  lines(df2)
+      #}
+      
+      #  tmpretnr <- c("minY","maxY")
+      #  sapply(1:2, function(x) {eval(parse(text=paste0(tmpretnr[x], " -> c()")))})
+      #  minY = min(df1$y, df2$y)
+      #  paste0("minY = min(cursitylist[[", 1:number_of_runs, "]][3,1,seq.int(1, P$num_timesteps, simplification_factor)], df2$y)
+      #  maxY = max(df1$y, df2$y)
+      
+      
+      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.1, ylim=c(minY, maxY))
       
       eval(parse(text=stuff))
       dev.off()
