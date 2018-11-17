@@ -29,7 +29,7 @@ P <- Define.Parameters(num_timesteps = 100000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181115_09_-_equal_old_settings_protracted")
+docnamez <- c("181118_11_-_equal_old_settings_protracted")
 
 
 curiosity_level <- initialize.curiosity(P, 
