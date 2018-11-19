@@ -24,12 +24,12 @@ P <- Define.Parameters(num_timesteps = 100000, num_pop = 2,
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
-                       randlearnprob = c(0.05, 0.1), stand.dev = 2)
+                       randlearnprob = c(0.01, 0.1), stand.dev = 2)
 
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181115_10_-_equal_old_obrandlprob_5x_protracted")
+docnamez <- c("181118_11_-_equal_old_settings_protracted")
 
 
 curiosity_level <- initialize.curiosity(P, 
