@@ -12,7 +12,7 @@
   setwd(FolderName)
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
   run_number_directory <- getwd()
-  converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
+  converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, simplification_factor = P$num_timesteps/(P$num_timesteps/100))
   
   
   too_complicated <- paste0("R <- create_plot_info(\"", info[[1]], "\", \"", info[[2]], "\")")
