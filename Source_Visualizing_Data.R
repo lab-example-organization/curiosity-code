@@ -266,7 +266,7 @@ summary_statistics <- function(P, Q, R, population) {
 
 #Full Plot Stuff
 
-min_n_max <- function(thing = "cursity", subset = 3, sexDpnt = F) {
+min_n_max <- function() {
   mins_n_maxes <- array(0,c(7,4,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
   mn_mx_container <- c("min", "max")
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
