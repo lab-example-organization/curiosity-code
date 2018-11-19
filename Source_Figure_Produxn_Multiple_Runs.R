@@ -1,16 +1,23 @@
 number_of_runs <- source("number_of_runs.txt")$value
 conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_of_runs) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
   #scan(filename_document,what=list(NULL),sep='\n',blank.lines.skip = F)
-  con <- file(description = "console_copy.txt", open = "rt")
-  consoleOutput <- as.vector(read.table(con, -1L)[[2]])
-  close(con)
+  #connection <- file(description = "console_copy.txt", open = "rt")
+  #consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
+  #close(connection)
   
+  connection <- file(description = "test.txt", open = "rt")
+  consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
+  close(connection)
   
   if(normal_output == TRUE) {
-    splitLastLine <- strsplit(consoleOutput[length(consoleOutput)], " ")[[1]]
-    singleRunLength <- as.integer(splitLastLine[4]) # [1] 100
-    #first_line_last_run <- consoleOutput[nrow(consoleOutputs)-(singleRunLength-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
+    run_length <- function(output_text = consoleOutput) {
+      splitLastLine <- strsplit(output_text[length(output_text)], " ")[[1]]
+      singleRunLength <- as.integer(splitLastLine[4]) # [1] 100
+      return(singleRunLength)
+    }
+    singleRunLength <- run_length(consoleOutput)
     
+    #first_line_last_run <- consoleOutput[nrow(consoleOutputs)-(singleRunLength-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
     
     if(single == TRUE) {
       first_line_pieces <- strsplit(consoleOutput[1], " ")[[1]]
@@ -21,11 +28,12 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
       runNames <- vector(mode = "character", length = number_of_runs)
       for(runds in 1:number_of_runs) {
         #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
-        runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
-        first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
-        string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
-        string_time <- paste0(string_time[1], string_time[2], string_time[3])
-        runNames[runds] <- paste0(strsplit(runNames[runds], " ")[[1]][6], "-",string_time, "-GMT-variable-store")
+        #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
+        runNames[runds] <- strsplit(consoleOutput, "/")[[runds]][9]
+        #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
+        #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
+        #string_time <- paste0(string_time[1], string_time[2], string_time[3])
+        #runNames[runds] <- paste0(strsplit(runNames[runds], " ")[[1]][6], "-",string_time, "-GMT-variable-store")
       }
       output <- runNames
       #output <- paste0()
