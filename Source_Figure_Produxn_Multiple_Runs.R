@@ -4,23 +4,26 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
   #connection <- file(description = "console_copy.txt", open = "rt")
   #consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
   #close(connection)
+  connection <- file(description = "sim_data.txt", open = "rt")
+  folderNames <- as.vector(read.table(connection, -1L)[[2]])
+  close(connection)
   
-  connection <- file(description = "test.txt", open = "rt")
-  consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
+  connection <- file(description = "console_copy.txt", open = "rt")
+  console_split <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
   
   if(normal_output == TRUE) {
-    run_length <- function(output_text = consoleOutput) {
+    run_length <- function(output_text = console_split) {
       splitLastLine <- strsplit(output_text[length(output_text)], " ")[[1]]
       singleRunLength <- as.integer(splitLastLine[4]) # [1] 100
       return(singleRunLength)
     }
-    singleRunLength <- run_length(consoleOutput)
+    singleRunLength <- run_length(console_split)
     
     #first_line_last_run <- consoleOutput[nrow(consoleOutputs)-(singleRunLength-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
     
     if(single == TRUE) {
-      first_line_pieces <- strsplit(consoleOutput[1], " ")[[1]]
+      first_line_pieces <- strsplit(folderNames[1], " ")[[1]]
       string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces[7], ":")[[1]][x])}),width=2,format="d",flag="0")
       string_time <- paste0(string_time[1], string_time[2], string_time[3])
       output <- paste0(first_line_pieces[6], "-",string_time, "-GMT-variable-store")
@@ -29,7 +32,7 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
       for(runds in 1:number_of_runs) {
         #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
         #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
-        runNames[runds] <- strsplit(consoleOutput, "/")[[runds]][9]
+        runNames[runds] <- strsplit(folderNames, "/")[[runds]][8]
         #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
         #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
         #string_time <- paste0(string_time[1], string_time[2], string_time[3])
@@ -54,22 +57,22 @@ for(run_visual in 1:number_of_runs) {
   if(run_visual == 1) {
     multiRunTime <- format(Sys.time(), "%F-%H%M%S")
     dir.create(file.path(parent_directory, paste0(multiRunTime, "-GMT-multirun-output")))
-    FolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
-    saveRDS(object = multiRun_folderList, file = paste0(FolderName, "/folderList.RData"))
+    multiFolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
+    saveRDS(object = multiRun_folderList, file = paste0(multiFolderName, "/folderList.RData"))
     metadata_path <- paste0(parent_directory, "/", tail(list.files(pattern = "variable-store"),1), "/metadata.RData")
     metadata <- readRDS(file = metadata_path)
-    saveRDS(object = metadata, file = paste0(FolderName, "/metadata.RData"))
+    saveRDS(object = metadata, file = paste0(multiFolderName, "/metadata.RData"))
   } # makes the folder for multirun results, saves the multiRun_folderList there.
   
-  if(isTRUE(nchar(list.files(pattern = multiRun_folderList[run_visual]))>1)==T) {
+  #if(isTRUE(nchar(list.files(pattern = multiRun_folderList[run_visual]))>1)==T) {
       setwd(multiRun_folderList[run_visual])
-  } else {
-    multiRun_folderList[run_visual] <- paste0(
-      strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][1], 
-      as.integer(strsplit(multiRun_folderList[run_visual], "-")[[1]][4]) + 1, 
-      strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][2])
-      setwd(multiRun_folderList[run_visual])
-  } # you might be saying, "what's with this silliness, Parker?" Well, sometimes file folders are made one second after I have them recorded as having been started. This addresses that bullshit by finding the appropriate folder in the directory to set as working directory.
+  #} else {
+  #  multiRun_folderList[run_visual] <- paste0(
+  #    strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][1], 
+  #    as.integer(strsplit(multiRun_folderList[run_visual], "-")[[1]][4]) + 1, 
+  #    strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][2])
+  #    setwd(multiRun_folderList[run_visual])
+  #} # you might be saying, "what's with this silliness, Parker?" Well, sometimes file folders are made one second after I have them recorded as having been started. This addresses that bullshit by finding the appropriate folder in the directory to set as working directory.
   
   #setwd(multiRun_folderList[run_visual])
   data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
@@ -86,7 +89,8 @@ for(run_visual in 1:number_of_runs) {
   setwd(multirun_directory)
   info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps/100))")
+  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps))")
+  ##### PUT THIS BACK INTO THE PARENTHESIS IN THE DENOMINATOR AT THE END OF THE PREVIOUS LINE: "/100"
   cat(data_convert, file = "data_convert.R", sep = "\n")
   source("data_convert.R")
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
