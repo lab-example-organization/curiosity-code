@@ -43,7 +43,7 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_d
       
     }
   }
-  converted_data <- list(sylrepz = sylrepz, sdstbxn = sdstbxn, cursity = cursity, curhist = curhist)
+  converted_data <- list(sylrepz = sylrepz[,,seq.int(1,P$num_timesteps,simplification_factor)], sdstbxn = sdstbxn[,,seq.int(1,P$num_timesteps,simplification_factor)], cursity = cursity[,,seq.int(1,P$num_timesteps,simplification_factor)], curhist = curhist[,,seq.int(1,P$num_timesteps,simplification_factor)])
   #shortened_convert <- list()
   #for(i in 1:4) {
   #  
@@ -266,6 +266,30 @@ summary_statistics <- function(P, Q, R, population) {
 
 #Full Plot Stuff
 
+min_n_max <- function(thing = "cursity", subset = 3, sexDpnt = F) {
+  mins_n_maxes <- array(0,c(7,4,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
+  mn_mx_container <- c("min", "max")
+  objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
+  figureSubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2)
+  objectSubset <- c(1,1,1,1,1,1,1,1,1,1,4,4,1,1)
+  for(j in 1:P$num_pop) {
+    container <- vector("numeric", number_of_runs)
+    if(sexDpnt==F) {
+      for(i in 1:number_of_runs) {
+        container[i] <- min(eval(parse(text=paste0(thing, "list[[", i, "]][", subset, ", ", j, ",]"))))
+      }
+    } else {
+      for(k in 1:2) {
+        for(i in 1:number_of_runs) {
+          container[i] <- min(eval(parse(text=paste0(thing, "list[[", i, "]][", k, ", ", j, ",]"))))
+        }
+      }
+    }
+    #mins_n_maxes[,1,] <- min(container)
+    thing_to_evalparse <- paste0("mins_n_maxes[," ,1, ",] <- min(container)")
+  }
+  return(mins_n_maxes)
+}
 
 simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
   if(extra_lines == FALSE) {
@@ -279,7 +303,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       figure_maker(P, Q, R, population, "cursity", "8", "_AC_replaced_m_pop", F, T, "Pop", " Dead Man AC")
       figure_maker(P, Q, R, population, "cursity", "9", "_AC_replaced_f_pop", F, T, "Pop", " Dead Woman AC")
       figure_maker(P, Q, R, population, "cursity", "11", "_cur_inh_attempts", F, T, "Pop", " Cur Inh Attempts")
-      
+      figure_maker(P, Q, R, population, "cursity", "12", "_newsyll_attempts", F, T, "Pop", " New Syll Attempts")
       figure_maker(P, Q, R, population, "sylrepz", "sex_dependent == TRUE", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Repertoire Size")
       figure_maker(P, Q, R, population, "cursity", "sex_dependent == TRUE", "_mean_curiosity_-_pop_", T, T, "Pop", "s - Mean Curiosity")
       figure_maker(P, Q, R, population, "sdstbxn", "sex_dependent == TRUE", "_sylnum_pop_", T, T, "Pop", "s Sylnum")
