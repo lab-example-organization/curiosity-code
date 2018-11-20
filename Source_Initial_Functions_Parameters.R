@@ -93,21 +93,13 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
   return(Parameters)
 }
 #Results of Function:
-  #Parameters <- list(      num_timesteps, 
-                                 #num_pop, 
-                                #pop_size, 
-                                  #sylnum, 
-                                   #nsspl, 
-             #num_one.pop_singers_sampled, 
-                         #curiosity_level, 
-                        #pop_calls_matrix, 
-                            #pairing.pool, 
-                           #new.curiosity, 
-                         #curiositybreaks, 
-                       #curiosity_counter,
-                    #zero_to_one_template, 
-                   #population_syll_probs)
-  #return(Parameters)
+#Parameters <- list(      
+  # 1 - num_timesteps,   # 6 - num_one.pop_singers_sampled,   # 11- curiositybreaks, 
+  # 2 - num_pop,         # 7 - curiosity_level,               # 12- curiosity_counter,
+  # 3 - pop_size,        # 8 - pop_calls_matrix,              # 13- zero_to_one_template, 
+  # 4 - sylnum,          # 9 - pairing.pool,                  # 14- population_syll_probs)
+  # 5 - nsspl,           # 10- new.curiosity, 
+#return(Parameters)
 
 #P <- Define.Parameters(1000,1,2,400,156,24,10)
 #rm(list=objects())

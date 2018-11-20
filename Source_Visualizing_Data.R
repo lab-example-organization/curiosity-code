@@ -266,30 +266,31 @@ summary_statistics <- function(P, Q, R, population) {
 
 #Full Plot Stuff
 
-min_n_max <- function() {
-  mins_n_maxes <- array(0,c(7,4,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
-  mn_mx_container <- c("min", "max")
-  objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
-  figureSubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2)
-  objectSubset <- c(1,1,1,1,1,1,1,1,1,1,4,4,1,1)
+min_n_max <- function(number_of_runs = number_of_runs) {
+  mins_n_maxes <- array(0,c(14,2,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
+  mn_mx_container <- c("min", "max") # 3rd-dim-dependent --- 
+  objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectSubset[k]])
+  figureSubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2) # row-dependent --- k
+  objectSubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2) # row-dependent --- k
   for(j in 1:P$num_pop) {
-    container <- vector("numeric", number_of_runs)
-    if(sexDpnt==F) {
-      for(i in 1:number_of_runs) {
-        container[i] <- min(eval(parse(text=paste0(thing, "list[[", i, "]][", subset, ", ", j, ",]"))))
-      }
-    } else {
-      for(k in 1:2) {
+    for(k in 1:nrow(mins_n_maxes)) {
+      for(L in 1:2) {
+        # This is for min (1) and max (2)
+        container <- vector("numeric", number_of_runs)
+        
         for(i in 1:number_of_runs) {
-          container[i] <- min(eval(parse(text=paste0(thing, "list[[", i, "]][", k, ", ", j, ",]"))))
+          #container[i] <- min(eval(parse(text=paste0(objectnames, "list[[", i, "]][", subset, ", ", j, ",]"))))
+          eval(parse(text=paste0("container[i] <- ", mn_mx_container[L], "(", paste0(objectnames[objectSubset[k]], "list[[", i, "]][", figureSubset[k], ", ", j, ",])"))))
         }
+        eval(parse(text=paste0("mins_n_maxes[k,j,L] <- ", mn_mx_container[L], "(container)")))
       }
     }
-    #mins_n_maxes[,1,] <- min(container)
-    thing_to_evalparse <- paste0("mins_n_maxes[," ,1, ",] <- min(container)")
+    #thing_to_evalparse <- paste0("mins_n_maxes[," ,j, ",] <- min(container)")
   }
   return(mins_n_maxes)
 }
+
+mins_n_maxes <- min_n_max(number_of_runs = number_of_runs)
 
 simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
   if(extra_lines == FALSE) {
@@ -320,18 +321,21 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][3,population,],col=\"grey\", cex=0.2)")
       #eval(parse(text=thing))
       file_name <- paste0(R$datez, "_", R$run_name, "_mate_selections_pop", population, ".tiff")
-      # minY <- min(cursitylist[[", 1:number_of_runs, "]][3,1,])
-      sink(file = "min_retainer.R", append = F, split = TRUE)
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][3,population,]"), sep=", "), cat(")"))
-      sink()
-      source("min_retainer.R")
       
       
-      # maxY <- max(cursitylist[[", 1:number_of_runs, "]][3,1,])
-      sink(file = "max_retainer.R", append = F, split = TRUE)
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][3,population,]"), sep=", "), cat(")"))
-      sink()
-      source("max_retainer.R")
+      ## minY <- min(cursitylist[[", 1:number_of_runs, "]][3,1,])
+      #sink(file = "min_retainer.R", append = F, split = TRUE)
+      #thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][3,population,]"), sep=", "), cat(")"))
+      #sink()
+      #source("min_retainer.R")
+      
+      ## maxY <- max(cursitylist[[", 1:number_of_runs, "]][3,1,])
+      #sink(file = "max_retainer.R", append = F, split = TRUE)
+      #thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][3,population,]"), sep=", "), cat(")"))
+      #sink()
+      #source("max_retainer.R")
+      minY <- mins_n_maxes[1,population,1]
+      maxY <- mins_n_maxes[1,population,2]
       
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.2, ylim=c(minY, maxY))
@@ -341,14 +345,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][10,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][10,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][10,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[2,population,1]
+      maxY <- mins_n_maxes[2,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -357,14 +355,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][4,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][4,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_m_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][4,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][4,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[3,population,1]
+      maxY <- mins_n_maxes[3,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Father AC"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -373,14 +365,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][5,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][5,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_f_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][5,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][5,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[4,population,1]
+      maxY <- mins_n_maxes[4,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mother AC"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -389,14 +375,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][6,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][6,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_offspring_m_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][6,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][6,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[5,population,1]
+      maxY <- mins_n_maxes[5,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Son AC"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -405,14 +385,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][7,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][7,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_offspring_f_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][7,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][7,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[6,population,1]
+      maxY <- mins_n_maxes[6,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Daughter AC"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -421,14 +395,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][8,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][8,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_replaced_m_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][8,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][8,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[7,population,1]
+      maxY <- mins_n_maxes[7,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Man AC"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -437,14 +405,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][9,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][9,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_replaced_f_pop", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][9,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][9,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[8,population,1]
+      maxY <- mins_n_maxes[8,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Woman AC"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -453,14 +415,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       meanz <- cursitylist[[11]][11,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][11,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_cur_inh_attempts", population, ".tiff")
-      sink(file = "min_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][11,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("min_retainer.R")
-      sink(file = "max_retainer.R", append = F, split = TRUE)       
-      thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][11,population,]"), sep=", "), cat(")"))       
-      sink()
-      source("max_retainer.R")
+      minY <- mins_n_maxes[9,population,1]
+      maxY <- mins_n_maxes[9,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Cur Inh Attempts"),cex=0.2, ylim=c(minY, maxY))
       eval(parse(text=stuff))
@@ -477,14 +433,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         meanz <- sylrepzlist[[11]][sex,population,]
         stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.tiff")
-        sink(file = "min_retainer.R", append = F, split = TRUE)       
-        thing <- paste(cat("minY = min("), cat(paste0("sylrepzlist[[", 1:number_of_runs, "]][sex,population,]"), sep=", "), cat(")"))       
-        sink()
-        source("min_retainer.R")
-        sink(file = "max_retainer.R", append = F, split = TRUE)       
-        thing <- paste(cat("maxY = max("), cat(paste0("sylrepzlist[[", 1:number_of_runs, "]][sex,population,]"), sep=", "), cat(")"))       
-        sink()
-        source("max_retainer.R")
+        minY <- mins_n_maxes[(sex + 10),population,1]
+        maxY <- mins_n_maxes[(sex + 10),population,2]
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY))
         eval(parse(text=stuff))
@@ -493,14 +443,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         meanz <- cursitylist[[11]][sex,population,]
         stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", R$sexes[sex], "s.tiff")
-        sink(file = "min_retainer.R", append = F, split = TRUE)       
-        thing <- paste(cat("minY = min("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][sex,population,]"), sep=", "), cat(")"))       
-        sink()
-        source("min_retainer.R")
-        sink(file = "max_retainer.R", append = F, split = TRUE)       
-        thing <- paste(cat("maxY = max("), cat(paste0("cursitylist[[", 1:number_of_runs, "]][sex,population,]"), sep=", "), cat(")"))       
-        sink()
-        source("max_retainer.R")
+        minY <- mins_n_maxes[(sex + 12),population,1]
+        maxY <- mins_n_maxes[(sex + 12),population,2]
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(minY, maxY))
         eval(parse(text=stuff))

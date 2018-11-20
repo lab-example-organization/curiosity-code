@@ -102,7 +102,7 @@ variable.archive <- function(P, timestep) {
       
       day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
       day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population]
-      day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- P$pairing.pool[1, 1, population]
+      day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- P$pairing.pool[(sex + 2), 2, population]
       day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- P$pairing.pool[(sex + 2), 4, population]
       day.tuh[["curity_mean_t"]][11, population, timestep] <- P$pairing.pool[(sex + 2), 5, population]
       day.tuh[["curity_mean_t"]][12, population, timestep] <- P$pairing.pool[sex, 5, population]
@@ -273,16 +273,18 @@ sing.selection <- function(P, curiosity_level, context, num_select_chances = c(1
           break
         }
       } else {
-        singer.index <- selection.index[singer]
-        indices <- c(singer.index, selector.index)
-        
-        for(sex in 1:context) {
-          P$learning.pool[((5^(2-context)) * sex), , population] <- sylreps[indices[sex], , population]
-          P$pairing.pool[((5^(2-context)) * sex), 1, population] <- indices[sex]
-          P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[indices[sex], population]
+        if((sum(sylreps[selection.index[singer], , population]) != 0)) {
+          singer.index <- selection.index[singer]
+          indices <- c(singer.index, selector.index)
+          
+          for(sex in 1:context) {
+            P$learning.pool[((5^(2-context)) * sex), , population] <- sylreps[indices[sex], , population]
+            P$pairing.pool[((5^(2-context)) * sex), 1, population] <- indices[sex]
+            P$pairing.pool[((5^(2-context)) * sex), 2, population] <- curiosity_level[indices[sex], population]
+          }
+          P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
+          break
         }
-        P$pairing.pool[(4 - context), 3, population] <- chance_for_selection
-        break
       }
       chance_for_selection = chance_for_selection + 1
     }
@@ -344,9 +346,9 @@ store_timesteps <- function(filename = thousand_timesteps, object_record = day.t
   }
   setwd(FolderName)
   for(deyteh in 1:length(object_record)) {
-    zfilename <- file.create(paste("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData", sep = ""))
+    zfilename <- file.create(paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData"))
     objekshun <- object_record[[deyteh]]
-    saveRDS(object = objekshun, file = paste(FolderName, paste("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData", sep = ""), sep = ""))
+    saveRDS(object = objekshun, file = paste0(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
   }
   
   saveRDS(object = FolderName, file = "harvest_info.RData")
