@@ -20,16 +20,16 @@ parent_directory <- getwd()
 init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
 
-P <- Define.Parameters(num_timesteps = 10000, num_pop = 2, 
+P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
-                       randlearnprob = c(0.01, 0.1), stand.dev = 2)
+                       randlearnprob = c(0.05, 0.1), stand.dev = 2)
 
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181121_13_-_10k_newsyll_mean")
+docnamez <- c("181121_15_-_100k_nsLrn_5x_obRndLrn")
 
 
 curiosity_level <- initialize.curiosity(P, 
