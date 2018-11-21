@@ -1,7 +1,7 @@
 #setwd("That one directory that has all the curiosity code in it... )
 #setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
-#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
-setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code")
+#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code") ### Lab communal computer version
+setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code") ### SERVER VERSION
 #setwd(getwd())
 
 number_of_runs <- 10

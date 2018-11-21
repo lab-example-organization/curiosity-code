@@ -93,8 +93,7 @@ for(run_visual in 1:number_of_runs) {
   setwd(multirun_directory)
   info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps))")
-  ##### PUT THIS BACK INTO THE PARENTHESIS IN THE DENOMINATOR AT THE END OF THE PREVIOUS LINE: "/100"
+  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps/100))")
   cat(data_convert, file = "data_convert.R", sep = "\n")
   source("data_convert.R")
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
