@@ -1,9 +1,9 @@
 #Data Recording objects
 library(abind)
 library(stringr)
-
+library(Hmisc)
 rm(list = objects())
-
+number_of_runs <- source(paste0(strsplit(getwd(),"20")[[1]][1],"number_of_runs.txt"))$value
 FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
@@ -290,7 +290,7 @@ min_n_max <- function(number_of_runs = number_of_runs) {
   return(mins_n_maxes)
 }
 
-mins_n_maxes <- min_n_max(number_of_runs = number_of_runs)
+
 
 simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
   if(extra_lines == FALSE) {
@@ -338,7 +338,8 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[1,population,2]
       
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.2, ylim=c(minY, maxY))
+      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -349,6 +350,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[2,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -359,6 +361,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[3,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Father AC"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -369,6 +372,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[4,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mother AC"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -379,6 +383,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[5,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Son AC"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -389,6 +394,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[6,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Daughter AC"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -399,6 +405,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[7,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Man AC"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -409,6 +416,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[8,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Woman AC"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -419,6 +427,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       maxY <- mins_n_maxes[9,population,2]
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Cur Inh Attempts"),cex=0.2, ylim=c(minY, maxY))
+      axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
       eval(parse(text=stuff))
       dev.off()
       
@@ -437,6 +446,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         maxY <- mins_n_maxes[(sex + 10),population,2]
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY))
+        axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
         eval(parse(text=stuff))
         dev.off()
         
@@ -446,7 +456,10 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         minY <- mins_n_maxes[(sex + 12),population,1]
         maxY <- mins_n_maxes[(sex + 12),population,2]
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-        plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(minY, maxY))
+        plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(minY, maxY), axes=F)
+        axis(side = 1, at = c(which((1:P$num_timesteps)%%100==0)), labels = which((1:P$num_timesteps)%%100==0))
+        axis(2, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*20), col.axis="black", las=1.5)
+        minor.tick(nx=4, ny=3, tick.ratio=1, x.args = list(), y.args = list())
         eval(parse(text=stuff))
         dev.off()
         
@@ -499,23 +512,29 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         #[3,] 255.0  0.0  0.0
         
         meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,]
-        stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
+        #stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"),cex=0.1)
-        image(t(meanz), col = R$sylnum_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"))
-        eval(parse(text=stuff))
+        image(t(meanz), col = R$sylnum_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"), axes=F)
+        axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*P$num_timesteps), col.axis="black", las=2)
+        axis(2, tck=-0.05, at=c(seq.int(0,1,(1/12))),labels=c(seq.int(0,1,(1/12))*156), col.axis="black", las=2)
+        minor.tick(nx=4, ny=4.8, tick.ratio=1, x.args = list(), y.args = list())
+        #eval(parse(text=stuff))
         dev.off()
         
         #image(t(meanz), col = R$sylsub_palette(100), xlab = "Timestep", ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
         
         meanz <- curhistlist[[11]][(sex + ((population - 1) * 2)), ,]
-        stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
+        #stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_curiosity_bins_pop_", population, "_", R$sexes[sex], "s.tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"),cex=0.1)
-        image(t(meanz), col = R$sylsub_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"))
-        eval(parse(text=stuff))
+        image(t(meanz), col = R$sylsub_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"), axes=F)
+        axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*P$num_timesteps), col.axis="black", las=2)
+        axis(2, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*20), col.axis="black", las=1.5)
+        minor.tick(nx=4, ny=4, tick.ratio=1, x.args = list(), y.args = list())
+        #eval(parse(text=stuff))
         dev.off()
         
         

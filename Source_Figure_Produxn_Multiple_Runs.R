@@ -1,3 +1,6 @@
+#data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
+#eval(parse(text = data_visuals))
+
 number_of_runs <- source("number_of_runs.txt")$value
 conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_of_runs) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
   #scan(filename_document,what=list(NULL),sep='\n',blank.lines.skip = F)
@@ -196,6 +199,7 @@ info_make <- paste(paste0("sink(file = \"Multirun - Parameters and Info\")"),
              "sink()", sep = "\n")
 eval(parse(text=info_make))
 
+mins_n_maxes <- min_n_max(number_of_runs = number_of_runs)
 simple_plots(Q = "converted_data", extra_lines = TRUE)
 #paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
   
