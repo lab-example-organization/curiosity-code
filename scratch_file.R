@@ -46,9 +46,14 @@ x <- c(1:10); y <- x; z <- 10/x
 par(mar=c(5, 4, 4, 8) + 0.1)
 
 # plot x vs. y 
-plot(x, y,type="b", pch=21, col="red", 
-     yaxt="n", lty=3, xlab="", ylab="")
-
+low <- min(cursitylist[[1]][1,1,])
+high <- max(cursitylist[[1]][1,1,])
+ticks <- c(seq.int(low,high,((high-low)/10)))
+plot(x = 1:P$num_timesteps, y = cursitylist[[1]][1,1,],type="b", cex=0.1, pch=19, col="red", axes=F, lty=3, xlab="", ylab="")
+axis(2, tck=-0.05, at=c(low, ticks, high),labels=c(round(low, 2),round(ticks, 2),round(high, 2)), col.axis="red", las=2)
+#axis(1, tck=-0.05, at=c(round((1:P$num_timesteps)/5)),labels=c(round((1:P$num_timesteps)/5)), col.axis="red", las=2)
+axis(1, tck=-0.05, at=c(0,which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)),labels=c(0,which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), col.axis="red", las=2)
+which((1:P$num_timesteps)%%100==0)
 # add x vs. 1/x 
 lines(x, z, type="b", pch=22, col="blue", lty=2)
 
