@@ -71,11 +71,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
       # 1: father; 2: mother; 3: same; 4:opposite
     P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
-    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 1, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(100, 100), verbose_output = F, interbreed = FALSE)
     
-    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 1, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     curiosity_level <- recuriosity.offspring(P = P)
     
