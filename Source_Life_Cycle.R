@@ -26,10 +26,10 @@ P <- Define.Parameters(num_timesteps = 100000, num_pop = 2,
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
                        randlearnprob = c(0.05, 0.1), stand.dev = 2)
 
-sylreps <- initialize.sylrep(P, c(1, 2), T, T)
+sylreps <- initialize.sylrep(P, c(3, 3), T, T)
 
 
-docnamez <- c("181121_15_-_100k_nsLrn_5x_obRndLrn")
+docnamez <- c("181124_18_-_100k_nsL_5x_oRL_eq_sylrng") # equal syllable range
 
 
 curiosity_level <- initialize.curiosity(P, 
