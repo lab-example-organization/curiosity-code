@@ -23,13 +23,13 @@ eval(parse(text = init_params))
 P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
-                       curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
-                       randlearnprob = c(0.05, 0.1), stand.dev = 2)
+                       curlearnprob = 0.95, learnprob = c(0.2, 0.95), 
+                       randlearnprob = c(0.1, 0.15), stand.dev = 2)
 
-sylreps <- initialize.sylrep(P, c(1, 2), T, T)
+sylreps <- initialize.sylrep(P, c(3, 3), T, T)
 
 
-docnamez <- c("181127_26_-_100k_nsM_1_1_V_5_1_O") # equal syllable range
+docnamez <- c("181127_26_-_100k_nsM_nsL_2_1_V_10_1.5_O_eq_sylrng") # equal syllable range
 
 
 curiosity_level <- initialize.curiosity(P, 
