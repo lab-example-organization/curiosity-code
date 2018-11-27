@@ -23,19 +23,19 @@ eval(parse(text = init_params))
 P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
-                       curlearnprob = 0.95, learnprob = c(0.25, 0.85), 
+                       curlearnprob = 0.95, learnprob = c(0.2, 0.81), 
                        randlearnprob = c(0.1, 0.2), stand.dev = 2)
 
 sylreps <- initialize.sylrep(P, c(3, 3), T, T)
 
 
-docnamez <- c("181126_23_-_100k_nsL_2.5_0.894_V_10_2_O_eq_sylrng_1L2H_c") # equal syllable range
+docnamez <- c("181127_25_-_100k_nsL_2_0.85_V_10_2_O_eq_sylrng_1H2H_c") # equal syllable range
 
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(1,1,11,11), 
-                                        c(14,14,26,26))
+                                        c(12,12,12,12), 
+                                        c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
