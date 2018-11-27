@@ -23,18 +23,18 @@ eval(parse(text = init_params))
 P <- Define.Parameters(num_timesteps = 100000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
-                       curlearnprob = 0.95, learnprob = c(0.2, 0.81), 
-                       randlearnprob = c(0.1, 0.2), stand.dev = 2)
+                       curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
+                       randlearnprob = c(0.05, 0.1), stand.dev = 2)
 
-sylreps <- initialize.sylrep(P, c(3, 3), T, T)
+sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("181127_25_-_100k_nsL_2_0.85_V_10_2_O_eq_sylrng_1H2H_c") # equal syllable range
+docnamez <- c("181127_26_-_100k_nsM_1_1_V_5_1_O") # equal syllable range
 
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(12,12,12,12), 
+                                        c(1,1,1,1), 
                                         c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
@@ -71,11 +71,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
       # 1: father; 2: mother; 3: same; 4:opposite
     P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
-    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 2, totally_new = FALSE, randlearn_context = 1, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     P <- sing.selection(P = P, curiosity_level = curiosity_level, context = 1, num_select_chances = c(100, 100), verbose_output = F, interbreed = FALSE)
     
-    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, context = 1, totally_new = FALSE, randlearn_context = 1, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     curiosity_level <- recuriosity.offspring(P = P)
     
