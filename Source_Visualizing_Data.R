@@ -43,7 +43,7 @@ convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_d
       
     }
   }
-  converted_data <- list(sylrepz = sylrepz[,,seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1)))], sdstbxn = sdstbxn[,,seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1)))], cursity = cursity[,,seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1)))], curhist = curhist[,,seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1)))])
+  converted_data <- list(sylrepz = sylrepz[,,round(seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1))))], sdstbxn = sdstbxn[,,round(seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1))))], cursity = cursity[,,round(seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1))))], curhist = curhist[,,round(seq.int(1,P$num_timesteps,((P$num_timesteps-1)/(simplification_factor-1))))])
   #shortened_convert <- list()
   #for(i in 1:4) {
   #  
@@ -292,7 +292,7 @@ min_n_max <- function(number_of_runs = number_of_runs) {
 
 
 
-simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
+simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=number_of_runs) {
   if(extra_lines == FALSE) {
     for(population in 1:P$num_pop) {
       figure_maker(P, Q, R, population, "cursity", "3", "_mate_selections_pop", F, T, "Pop", " Selection Chances")
@@ -315,7 +315,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
   } else {
     for(population in 1:P$num_pop) {
       # make an object for the mean value
-      meanz <- cursitylist[[11]][3,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][3,population,]
       #thing <- paste0("objectz", 1:number_of_runs, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,])")
       #thing <- paste0("objectz", 1:number_of_runs, " <- mean(converted_data", 1:mult_file_length, "$cursity[3, ,])")
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][3,population,],col=\"grey\", cex=0.2)")
@@ -340,12 +340,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mate Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][3,population,]),((length(cursitylist[[11]][3,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][3,population,]),((length(cursitylist[[number_of_runs + 1]][3,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][3,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][3,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][10,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][10,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".tiff")
       minY <- mins_n_maxes[2,population,1]
@@ -353,12 +353,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][10,population,]),((length(cursitylist[[11]][10,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][10,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][4,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][4,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][4,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_m_pop", population, ".tiff")
       minY <- mins_n_maxes[3,population,1]
@@ -366,12 +366,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Father AC"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][4,population,]),((length(cursitylist[[11]][4,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][4,population,]),((length(cursitylist[[number_of_runs + 1]][4,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][4,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][4,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][5,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][5,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][5,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_parent_f_pop", population, ".tiff")
       minY <- mins_n_maxes[4,population,1]
@@ -379,12 +379,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Mother AC"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][5,population,]),((length(cursitylist[[11]][5,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][5,population,]),((length(cursitylist[[number_of_runs + 1]][5,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][5,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][5,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][6,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][6,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][6,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_offspring_m_pop", population, ".tiff")
       minY <- mins_n_maxes[5,population,1]
@@ -392,12 +392,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Son AC"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][6,population,]),((length(cursitylist[[11]][6,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][6,population,]),((length(cursitylist[[number_of_runs + 1]][6,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][6,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][6,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][7,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][7,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][7,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_offspring_f_pop", population, ".tiff")
       minY <- mins_n_maxes[6,population,1]
@@ -405,12 +405,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Daughter AC"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][7,population,]),((length(cursitylist[[11]][7,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][7,population,]),((length(cursitylist[[number_of_runs + 1]][7,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][7,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][7,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][8,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][8,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][8,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_replaced_m_pop", population, ".tiff")
       minY <- mins_n_maxes[7,population,1]
@@ -418,12 +418,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Man AC"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][8,population,]),((length(cursitylist[[11]][8,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][8,population,]),((length(cursitylist[[number_of_runs + 1]][8,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][8,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][8,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][9,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][9,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][9,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_AC_replaced_f_pop", population, ".tiff")
       minY <- mins_n_maxes[8,population,1]
@@ -431,12 +431,12 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Dead Woman AC"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][9,population,]),((length(cursitylist[[11]][9,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][9,population,]),((length(cursitylist[[number_of_runs + 1]][9,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][9,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][9,population,],col="black", cex=0.2)
       dev.off()
       
-      meanz <- cursitylist[[11]][11,population,]
+      meanz <- cursitylist[[number_of_runs + 1]][11,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][11,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0(R$datez, "_", R$run_name, "_cur_inh_attempts", population, ".tiff")
       minY <- mins_n_maxes[9,population,1]
@@ -444,9 +444,9 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Cur Inh Attempts"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-      axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][11,population,]),((length(cursitylist[[11]][11,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+      axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][11,population,]),((length(cursitylist[[number_of_runs + 1]][11,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[11]][11,population,],col="black", cex=0.2)
+      points(cursitylist[[number_of_runs + 1]][11,population,],col="black", cex=0.2)
       dev.off()
       
       
@@ -457,7 +457,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
       #eval(parse(text = c(selection_tiff, selection_plot, close_out_port)))
       for(sex in 1:2) {
         
-        meanz <- sylrepzlist[[11]][sex,population,]
+        meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
         stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.tiff")
         minY <- mins_n_maxes[(sex + 10),population,1]
@@ -465,23 +465,23 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
         #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-        axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][sex,population,]),((length(cursitylist[[11]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+        axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
         eval(parse(text=stuff))
-        points(cursitylist[[11]][sex,population,],col="black", cex=0.2)
+        points(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off()
         
-        meanz <- cursitylist[[11]][sex,population,]
+        meanz <- cursitylist[[number_of_runs + 1]][sex,population,]
         stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", R$sexes[sex], "s.tiff")
         minY <- mins_n_maxes[(sex + 12),population,1]
         maxY <- mins_n_maxes[(sex + 12),population,2]
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
-        axis(side = 1, at = c(seq.int(0,length(cursitylist[[11]][sex,population,]),((length(cursitylist[[11]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
+        axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
         #axis(2, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*20), col.axis="black", las=1.5)
         #minor.tick(nx=4, ny=3, tick.ratio=1, x.args = list(), y.args = list())
         eval(parse(text=stuff))
-        points(cursitylist[[11]][sex,population,],col="black", cex=0.2)
+        points(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off()
         
         #image(t(objectz), col = R$sylnum_palette(100), xlab = "Timestep", ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
@@ -532,7 +532,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         #[2,] 238.5 47.5 47.5
         #[3,] 255.0  0.0  0.0
         
-        meanz <- sdstbxnlist[[11]][(sex + ((population - 1) * 2)), ,]
+        meanz <- sdstbxnlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
         #stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
@@ -546,7 +546,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         
         #image(t(meanz), col = R$sylsub_palette(100), xlab = "Timestep", ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))
         
-        meanz <- curhistlist[[11]][(sex + ((population - 1) * 2)), ,]
+        meanz <- curhistlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
         #stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_curiosity_bins_pop_", population, "_", R$sexes[sex], "s.tiff")
         tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
@@ -560,13 +560,13 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE) {
         
         sink(file = paste0(R$datez, R$run_name, "_Summary_Statistics"), append = TRUE)
         print(paste0("pop ", population, " ", R$Sexes[sex], " rep size - avg over last 1% of timesteps"))
-        print(mean(sylrepzlist[[11]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 1):P$num_timesteps/(P$num_timesteps/100))]))
+        print(mean(sylrepzlist[[number_of_runs + 1]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 1):P$num_timesteps/(P$num_timesteps/100))]))
         print(paste0("pop ", population, " ", R$Sexes[sex], " rep size - avg over last 5% of timesteps"))
-        print(mean(sylrepzlist[[11]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 5):P$num_timesteps/(P$num_timesteps/100))]))
+        print(mean(sylrepzlist[[number_of_runs + 1]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 5):P$num_timesteps/(P$num_timesteps/100))]))
         print(paste0("pop ", population, " ", R$Sexes[sex], " curiosity - avg over last 1% of timesteps"))
-        print(mean(cursitylist[[11]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 1):P$num_timesteps/(P$num_timesteps/100))]))
+        print(mean(cursitylist[[number_of_runs + 1]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 1):P$num_timesteps/(P$num_timesteps/100))]))
         print(paste0("pop ", population, " ", R$Sexes[sex], " curiosity - avg over last 5% of timesteps"))
-        print(mean(cursitylist[[11]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 5):P$num_timesteps/(P$num_timesteps/100))]))
+        print(mean(cursitylist[[number_of_runs + 1]][sex, population, ((P$num_timesteps/(P$num_timesteps/100) - 5):P$num_timesteps/(P$num_timesteps/100))]))
         sink()
         
       }
