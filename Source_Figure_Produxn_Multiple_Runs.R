@@ -35,8 +35,8 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
       for(runds in 1:number_of_runs) {
         #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
         #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
-        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### Lab communal computer version
-        runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
+        runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### Lab communal computer version
+        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
         #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
         #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
         #string_time <- paste0(string_time[1], string_time[2], string_time[3])
@@ -140,7 +140,7 @@ number_of_runs <- source("number_of_runs.txt")$value
 
 for(i in 1:4) {
   listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_runs)")
-  listmaker <- paste0(listnames[i], "list[", 1:10, "] <- \"", datanames[i], 1:10, ".RData\"")
+  listmaker <- paste0(listnames[i], "list[", 1:number_of_runs, "] <- \"", datanames[i], 1:number_of_runs, ".RData\"")
   eval(parse(text=c(listlister, listmaker)))
 }
 
@@ -166,20 +166,22 @@ cursitylist[[number_of_runs + 1]] <- cursitylist[[number_of_runs]]
 curhistlist[[number_of_runs + 1]] <- curhistlist[[number_of_runs]]
 
 for(i in 1:length(curhistlist[[1]])) {
-  curhistlist[[number_of_runs + 1]][i] <- mean(c(curhistlist[[1]][i],curhistlist[[2]][i],curhistlist[[3]][i],curhistlist[[4]][i],curhistlist[[5]][i],curhistlist[[6]][i],curhistlist[[7]][i],curhistlist[[8]][i],curhistlist[[9]][i],curhistlist[[10]][i]))
+  #curhistlist[[number_of_runs + 1]][i] <- mean(c(curhistlist[[1]][i],curhistlist[[2]][i],curhistlist[[3]][i],curhistlist[[4]][i],curhistlist[[5]][i],curhistlist[[6]][i],curhistlist[[7]][i],curhistlist[[8]][i],curhistlist[[9]][i],curhistlist[[10]][i]))
+  eval(parse(text=paste0("curhistlist[[number_of_runs + 1]][i] <- mean(c(curhistlist[[", paste0(1:(number_of_runs-1),"]][i],curhistlist[[", collapse=''), number_of_runs, "]][i]))")))
 }
-
 #mean(cat(paste0("curhistlist[[", 1:number_of_runs, "]][i]"), sep = ", "))
 #thing <- paste0("curhistlist[[", 1:number_of_runs, "]][i]")
-
 for(i in 1:length(cursitylist[[1]])) {
-  cursitylist[[number_of_runs + 1]][i] <- mean(c(cursitylist[[1]][i],cursitylist[[2]][i],cursitylist[[3]][i],cursitylist[[4]][i],cursitylist[[5]][i],cursitylist[[6]][i],cursitylist[[7]][i],cursitylist[[8]][i],cursitylist[[9]][i],cursitylist[[10]][i]))
+  #cursitylist[[number_of_runs + 1]][i] <- mean(c(cursitylist[[1]][i],cursitylist[[2]][i],cursitylist[[3]][i],cursitylist[[4]][i],cursitylist[[5]][i],cursitylist[[6]][i],cursitylist[[7]][i],cursitylist[[8]][i],cursitylist[[9]][i],cursitylist[[10]][i]))
+  eval(parse(text=paste0("cursitylist[[number_of_runs + 1]][i] <- mean(c(cursitylist[[", paste0(1:(number_of_runs-1),"]][i],cursitylist[[", collapse=''), number_of_runs, "]][i]))")))
 }
 for(i in 1:length(sdstbxnlist[[1]])) {
-  sdstbxnlist[[number_of_runs + 1]][i] <- mean(c(sdstbxnlist[[1]][i],sdstbxnlist[[2]][i],sdstbxnlist[[3]][i],sdstbxnlist[[4]][i],sdstbxnlist[[5]][i],sdstbxnlist[[6]][i],sdstbxnlist[[7]][i],sdstbxnlist[[8]][i],sdstbxnlist[[9]][i],sdstbxnlist[[10]][i]))
+  #sdstbxnlist[[number_of_runs + 1]][i] <- mean(c(sdstbxnlist[[1]][i],sdstbxnlist[[2]][i],sdstbxnlist[[3]][i],sdstbxnlist[[4]][i],sdstbxnlist[[5]][i],sdstbxnlist[[6]][i],sdstbxnlist[[7]][i],sdstbxnlist[[8]][i],sdstbxnlist[[9]][i],sdstbxnlist[[10]][i]))
+  eval(parse(text=paste0("sdstbxnlist[[number_of_runs + 1]][i] <- mean(c(sdstbxnlist[[", paste0(1:(number_of_runs-1),"]][i],sdstbxnlist[[", collapse=''), number_of_runs, "]][i]))")))
 }
 for(i in 1:length(sylrepzlist[[1]])) {
-  sylrepzlist[[number_of_runs + 1]][i] <- mean(c(sylrepzlist[[1]][i],sylrepzlist[[2]][i],sylrepzlist[[3]][i],sylrepzlist[[4]][i],sylrepzlist[[5]][i],sylrepzlist[[6]][i],sylrepzlist[[7]][i],sylrepzlist[[8]][i],sylrepzlist[[9]][i],sylrepzlist[[10]][i]))
+  #sylrepzlist[[number_of_runs + 1]][i] <- mean(c(sylrepzlist[[1]][i],sylrepzlist[[2]][i],sylrepzlist[[3]][i],sylrepzlist[[4]][i],sylrepzlist[[5]][i],sylrepzlist[[6]][i],sylrepzlist[[7]][i],sylrepzlist[[8]][i],sylrepzlist[[9]][i],sylrepzlist[[10]][i]))
+  eval(parse(text=paste0("sylrepzlist[[number_of_runs + 1]][i] <- mean(c(sylrepzlist[[", paste0(1:(number_of_runs-1),"]][i],sylrepzlist[[", collapse=''), number_of_runs, "]][i]))")))
 }
 
 last_stats <- paste0("rm(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
@@ -200,7 +202,7 @@ info_make <- paste(paste0("sink(file = \"Multirun - Parameters and Info\")"),
 eval(parse(text=info_make))
 
 mins_n_maxes <- min_n_max(number_of_runs = number_of_runs)
-simple_plots(Q = "converted_data", extra_lines = TRUE)
+simple_plots(Q = "converted_data", extra_lines = TRUE, number_of_runs)
 #paste_split_data_runs(data_subset, num_runs = 10, also_mean = TRUE)
   
   
