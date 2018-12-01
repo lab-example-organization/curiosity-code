@@ -35,8 +35,8 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
       for(runds in 1:number_of_runs) {
         #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
         #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
-        runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### Lab communal computer version
-        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
+        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### Lab communal computer version
+        runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
         #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
         #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
         #string_time <- paste0(string_time[1], string_time[2], string_time[3])
