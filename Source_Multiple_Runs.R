@@ -1,12 +1,12 @@
 #setwd("That one directory that has all the curiosity code in it... )
 #setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
-#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code") ### Lab communal computer version
+setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code") ### Lab communal computer version
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code") ### SERVER VERSION
 #setwd("/home/rundstpj/projects/curiosity_model/Code/betaCurCode/curiosity-code") ### SERVER VERSION BETA
-setwd("/home/rundstpj/projects/curiosity_model/Code/gammaCurCode/curiosity-code") ### SERVER VERSION GAMMA
+#setwd("/home/rundstpj/projects/curiosity_model/Code/gammaCurCode/curiosity-code") ### SERVER VERSION GAMMA
 #setwd(getwd())
 
-number_of_runs <- 10
+number_of_runs <- 50
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
 
@@ -23,7 +23,7 @@ for(run_number in 1:number_of_runs) {
   source("Source_Life_Cycle.R")
   #rm(list=objects())
   run_number <- readRDS(file = "holdover_line.RData")
-  number_of_runs <- 10
+  #number_of_runs <- 10
   print(paste0("Run Number: ", run_number, ", comes right before (YYYY-MM-DD-HHMMSS): ", format(Sys.time(), "%F-%H%M%S")))
 }
 

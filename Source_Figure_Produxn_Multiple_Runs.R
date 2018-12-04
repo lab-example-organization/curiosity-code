@@ -8,21 +8,22 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
   #consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
   #close(connection)
   connection <- file(description = "sim_data.txt", open = "rt")
-  folderNames <- as.vector(read.table(connection, -1L)[[2]])
+  folderNames <- as.vector(read.table(connection, -1L))
+  #folderNames <- as.vector(read.table(connection, -1L)[[2]]) ### normal lab communal computer
   close(connection)
   
-  connection <- file(description = "console_copy.txt", open = "rt")
-  console_split <- as.vector(read.table(connection, -1L)[[2]])
-  close(connection)
+  #connection <- file(description = "console_copy.txt", open = "rt")
+  #console_split <- as.vector(read.table(connection, -1L)[[2]])
+  #close(connection)
   
   if(normal_output == TRUE) {
-    run_length <- function(output_text = console_split) {
-      splitLastLine <- strsplit(output_text[length(output_text)], " ")[[1]]
-      singleRunLength <- as.integer(splitLastLine[4]) # [1] 100
-      return(singleRunLength)
-    }
-    singleRunLength <- run_length(console_split)
-    
+  #  run_length <- function(output_text = console_split) {
+  #    splitLastLine <- strsplit(output_text[length(output_text)], " ")[[1]]
+  #    singleRunLength <- as.integer(splitLastLine[4]) # [1] 100
+  #    return(singleRunLength)
+  #  }
+  #  singleRunLength <- run_length(console_split)
+  singleRunLength <- 35  
     #first_line_last_run <- consoleOutput[nrow(consoleOutputs)-(singleRunLength-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
     
     if(single == TRUE) {
@@ -35,15 +36,16 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
       for(runds in 1:number_of_runs) {
         #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
         #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
-        runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### Lab communal computer version
+        runNames[runds] <- strsplit(as.character(folderNames[runds,]), "/")[[1]][9] ### Lab communal computer version
+        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### normal lab communal computer
         #runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
         #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
         #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
         #string_time <- paste0(string_time[1], string_time[2], string_time[3])
         #runNames[runds] <- paste0(strsplit(runNames[runds], " ")[[1]][6], "-",string_time, "-GMT-variable-store")
       }
-      output <- runNames
-      #output <- paste0()
+      #output <- runNames ### normal lab communal computer
+      output <- paste0(getwd(), "/", runNames)
     }
   }
   return(output)
@@ -52,8 +54,10 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
 multiRun_folderList <- conv_outputToFolderName(normal_output = T, single = F, number_of_runs = number_of_runs)
 
 
+multirunParentDirectory <- "/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code/StartingCuriosityValues/19-21"
 ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 parent_directory <- getwd()
+#parent_directory <- ("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
 #number_of_runs <- 10
 
 for(run_visual in 1:number_of_runs) {
@@ -79,13 +83,13 @@ for(run_visual in 1:number_of_runs) {
   #} # you might be saying, "what's with this silliness, Parker?" Well, sometimes file folders are made one second after I have them recorded as having been started. This addresses that bullshit by finding the appropriate folder in the directory to set as working directory.
   
   #setwd(multiRun_folderList[run_visual])
-  data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
+  data_visuals <- paste0("source(\"", "/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code", "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
   eval(parse(text = data_visuals))
   run_number_directory <- getwd()
-  setwd(strsplit(run_number_directory, "20")[[1]][1])
+  setwd(strsplit(run_number_directory, "201")[[1]][1])
   multiRun_folderList <- readRDS(file = paste0(getwd(), "/", tail(list.files(pattern = "multirun"),1), "/folderList.RData"))
-  
-  run_visual <- which(multiRun_folderList == (paste0("2018-", strsplit(run_number_directory, "2018-")[[1]][2])))
+  parent_directory <- getwd()
+  run_visual <- which(multiRun_folderList == (paste0(parent_directory, "/2018-", strsplit(run_number_directory, "2018-")[[1]][2])))
   
   parent_directory <- getwd()
   multirun_directory <- paste0(parent_directory, "/", tail(list.files(pattern = "multirun"),1))
