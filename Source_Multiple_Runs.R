@@ -4,7 +4,8 @@
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code") ### SERVER VERSION
 #setwd("/home/rundstpj/projects/curiosity_model/Code/betaCurCode/curiosity-code") ### SERVER VERSION BETA
 #setwd("/home/rundstpj/projects/curiosity_model/Code/gammaCurCode/curiosity-code") ### SERVER VERSION GAMMA
-#setwd(getwd())
+#setwd("/home/rundstpj/projects/curiosity_model/Code/epsilonCurCode/curiosity-code") ### EPSILON
+#setwd(getwd()) ### what a dumb line of code.
 
 number_of_runs <- 1
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
