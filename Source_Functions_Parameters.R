@@ -203,13 +203,6 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
         singSuccessFilter <- (1 : ((P$num_one.pop_singers_sampled[tutor1_or_mate2]) * (P$num_pop))) # "1-20"
         selector.index <- P$pairing.pool[3, 1, population]
       } else {
-        #if((chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.5)))) && (chance_for_selection < (round(num_select_chances[tutor1_or_mate2]*(0.75))))) {
-        #  
-        #} else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.75)))) {
-        #  
-        #} else {
-        #  singSuccessFilter <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[tutor1_or_mate2]))) : (population * P$num_one.pop_singers_sampled[tutor1_or_mate2])) # "1-10," or "11-20"
-        #}
         singSuccessFilter <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[tutor1_or_mate2]))) : (population * P$num_one.pop_singers_sampled[tutor1_or_mate2])) # "1-10," or "11-20"
         selector.index <- sample(P$pop_calls_matrix[2, ], 1)
       }
@@ -291,7 +284,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -303,7 +296,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -315,7 +308,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -327,7 +320,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -339,7 +332,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -351,7 +344,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -363,7 +356,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
@@ -376,7 +369,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
           curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
           for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[sex]
+            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
             P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
           }
