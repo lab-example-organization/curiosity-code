@@ -7,7 +7,7 @@
 #setwd("/home/rundstpj/projects/curiosity_model/Code/epsilonCurCode/curiosity-code") ### EPSILON
 #setwd(getwd()) ### what a dumb line of code.
 
-number_of_runs <- 1
+number_of_runs <- 50
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
 

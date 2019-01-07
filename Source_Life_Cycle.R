@@ -20,7 +20,7 @@ parent_directory <- getwd()
 init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
 eval(parse(text = init_params))
 
-P <- Define.Parameters(num_timesteps = 1000, num_pop = 2, 
+P <- Define.Parameters(num_timesteps = 10000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        num_one.pop_singers_sampled = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
@@ -29,13 +29,13 @@ P <- Define.Parameters(num_timesteps = 1000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("190104_28_-_1k_nsL_1_1_V_1_1_O_oppsyl_11-15_c") # equal syllable range
+docnamez <- c("190107_28_-_1k_nsL_1_1_V_1_1_O_oppsyl_1-26_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(11,11,11,11), 
-                                        c(15,15,15,15))
+                                        c(1,1,1,1), 
+                                        c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
