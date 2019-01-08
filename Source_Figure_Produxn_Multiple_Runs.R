@@ -83,7 +83,7 @@ for(run_visual in 1:number_of_runs) {
   #} # you might be saying, "what's with this silliness, Parker?" Well, sometimes file folders are made one second after I have them recorded as having been started. This addresses that bullshit by finding the appropriate folder in the directory to set as working directory.
   
   #setwd(multiRun_folderList[run_visual])
-  data_visuals <- paste0("source(\"", "/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code", "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
+  data_visuals <- paste0("source(\"", "../", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
   eval(parse(text = data_visuals))
   run_number_directory <- getwd()
   setwd(strsplit(run_number_directory, "20")[[1]][1])
