@@ -167,6 +167,33 @@ output_checker <- function(printer) {
 # or a pupil in tutor phase) to choose a singer according to 
 # the selector's auditory curiosity value.
 sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chances = c(10, 42), ohsit = 10, verbose_output = TRUE, interbreed = FALSE){ 
+  assign_temp_selexn_data <- function() {
+    indices <- c(selection.index[singer], selector.index)
+    sylrep_pairs <- array(c(selection.sylreps[singer,],selector.sylrep),c(P$sylnum,2))
+    curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
+    for(sex in 1:tutor1_or_mate2) {
+      P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
+      P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
+      P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
+    }
+    P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
+  }
+  
+  should_pick_neighbor <- function(index,lower,upper=Inf) {
+    lower_bound <- round(num_select_chances[tutor1_or_mate2] * lower)
+    upper_bound <- round(num_select_chances[tutor1_or_mate2] * upper)
+    is_desperate <- between(chance_for_selection, lower_bound, upper_bound)
+    is_neighbor_better <- golf_score[singer+index] %in% singSuccessFilter
+    return(is_desperate && is_neighbor_better)
+  }
+  
+  #somequickfunction <- function(percen,index) {
+  #  return(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(percen))) && (golf_score[singer+index] %in% singSuccessFilter))
+  #}
+  #otherquickfunction <- function(lower,upper,index) {
+  #  return(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(lower))) && (chance_for_selection < (round(num_select_chances[tutor1_or_mate2]*(upper)))) && (golf_score[singer+index] %in% singSuccessFilter))
+  #}
+  
   
   context.name <- c("Tutor", "Mate")
   for(population in 1 : P$num_pop) { #population <- 1 rm(population)
@@ -277,103 +304,43 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
         chance_for_selection = chance_for_selection + 1
         next}
       
-      # This
-      if(interbreed == FALSE) {
+      #should_pick_neighbor <- function(index,lower,upper=Inf) {
+      
+      if(!interbreed) {
+        should_continue <- TRUE
         if(singer %in% singSuccessFilter) {
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
+          assign_temp_selexn_data()
+          should_continue <- FALSE
+        }
+        
+        if(should_continue) {
+          for(neighbor in c(1, -1)) {
+            if(should_pick_neighbor(neighbor,lower=0.5,upper=0.75)) {
+              singer <- golf_score[singer+neighbor]
+              assign_temp_selexn_data()
+              should_continue <- FALSE
+              break
+            }
           }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-          break
-        } else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.5))) && (chance_for_selection < (round(num_select_chances[tutor1_or_mate2]*(0.75)))) && (golf_score[(which(golf_score==singer))+1] %in% singSuccessFilter)) {
-          singer <- golf_score[(which(golf_score==singer))+1]
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
+        }
+          
+        if(should_continue) {
+          for(neighbor in c(1, -1, 2, -2)) {
+            if(should_pick_neighbor(neighbor,lower=0.75)) {
+              singer <- golf_score[singer+neighbor]
+              assign_temp_selexn_data()
+              should_continue <- FALSE
+              break
+            }
           }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-          break
-        } else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.5))) && (chance_for_selection < (round(num_select_chances[tutor1_or_mate2]*(0.75)))) && (golf_score[(which(golf_score==singer))-1] %in% singSuccessFilter)) {
-          singer <- golf_score[(which(golf_score==singer))-1]
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
-          }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-          break
-        } else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.75))) && (golf_score[(which(golf_score==singer))+1] %in% singSuccessFilter)) {
-          singer <- golf_score[(which(golf_score==singer))+1]
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
-          }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-          break
-        } else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.75))) && (golf_score[(which(golf_score==singer))-1] %in% singSuccessFilter)) {
-          singer <- golf_score[(which(golf_score==singer))-1]
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
-          }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-          break
-        } else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.75))) && (golf_score[(which(golf_score==singer))+2] %in% singSuccessFilter)) {
-          singer <- golf_score[(which(golf_score==singer))+2]
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
-          }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-          break
-        } else if(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(0.75))) && (golf_score[(which(golf_score==singer))-2] %in% singSuccessFilter)) {
-          singer <- golf_score[(which(golf_score==singer))-2]
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
-          }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
+        }
+        
+        if(!should_continue) {
           break
         }
       } else {
-        if((sum(sylreps[selection.index[singer], , population]) != 0)) {
-          indices <- c(selection.index[singer], selector.index)
-          sylrep_pairs <- array(c(selection.sylreps[singer],selector.sylrep),c(P$sylnum,2))
-          curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-          for(sex in 1:tutor1_or_mate2) {
-            P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-            P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex]
-          }
-          P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
+        if(sum(sylreps[selection.index[singer], , population]) != 0) {
+          assign_temp_selexn_data()
           break
         }
       }
