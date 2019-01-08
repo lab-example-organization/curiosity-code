@@ -1,5 +1,5 @@
 # REPEATED-USE FUNCTIONS ##################################
-library(R.utils)
+library(R.utils,dplyr)
 syll_learn <- function(P, tutor1_or_mate2 = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   randlearncontext_container <- c("mean(source_of_ONEs)", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : P$num_pop) {
@@ -195,7 +195,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
   #}
   
   
-  context.name <- c("Tutor", "Mate")
+  
   for(population in 1 : P$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
     chance_for_selection = 1
@@ -206,6 +206,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           auto.teachers <- c((sample(P$pop_calls_matrix[1, ], 1, replace = T)), (sample(P$pop_calls_matrix[2, ], 1, replace = T))) # this will be referenced later using the curiosity_level, which separates females and males by row, so their column reference index number is limited to 1:200; so the first row of the pop_calls_matrix is appropriate for both of them.
           if((sum(sylreps[auto.teachers[1], , population]) != 0) && (sum(sylreps[auto.teachers[2], , population]) != 0)) {
             if(verbose_output == TRUE) {
+              context.name <- c("Tutor", "Mate")
               warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[tutor1_or_mate2], " Selection")))
             }
             for(sex in 1:tutor1_or_mate2) {
