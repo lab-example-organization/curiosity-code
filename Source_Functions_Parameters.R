@@ -164,29 +164,48 @@ output_checker <- function(printer) {
   setwd(dir)
 }
 
+update_selexn_data <- function(universal_parameters, suitor_choices, preferred_bird, selector_bird, # I need some joy in life.
+                                    curiosity_value, selector_population, selection_context, 
+                                    sylreps_s_choices, sylrep_selector, time_to_success) {
+  singer_population <- ceiling(preferred_bird/universal_parameters$num_one.pop_singers_sampled)
+  selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
+                     selector_bird)          # Bird doing the selecting
+  sylrep_pairs <- rbind(sylreps_s_choices[preferred_bird,],
+                        sylrep_selector)
+  curiosities <- c(curiosity_value[selected_pair[1],singer_population],
+                   curiosity_value[selected_pair[2],selector_population])
+  
+  for(bird in 1:selection_context) {
+    pool.row <- (5^(2-selection_context)) * bird
+    universal_parameters$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
+    universal_parameters$pairing.pool[pool.row, 1, selector_population] <- selected_pair[bird]
+    universal_parameters$pairing.pool[pool.row, 2, selector_population] <- curiosities[bird]
+  }
+  universal_parameters$pairing.pool[(4 - selection_context), 3, selector_population] <- time_to_success
+  return(universal_parameters)
+}
+
+#P = update_selexn_data(universal_parameters = P, suitor_choices = selection.index, preferred_bird = singer, selector_bird = selector.index, 
+#                   curiosity_value = curiosity_level, selector_population = population, selection_context = tutor1_or_mate2,
+#                   sylreps_s_choices = selection.sylreps, sylrep_selector = selector.sylrep, time_to_success = chance_for_selection)
+
+### goddammit, fix P so that: the truly universal stuff is its own object, (num_timesteps, num_pop, pop_size, sylnum, num_one.pop_singers_sampled, pop_calls_matrix, etc.)
+                            # the temporary data is in a separate object, (learning.pool and pairing.pool)
+                            # the initializing stuff is in a separate object. (zero_to_one_template, population_syll_probs, nsspl, etc.)
+
+should_pick_neighbor <- function(index,lower,upper=Inf) {
+  lower_bound <- round(num_select_chances[tutor1_or_mate2] * lower)
+  upper_bound <- round(num_select_chances[tutor1_or_mate2] * upper)
+  is_desperate <- between(chance_for_selection, lower_bound, upper_bound)
+  is_neighbor_better <- golf_score[singer+index] %in% singSuccessFilter
+  return(is_desperate && is_neighbor_better)
+}
+
 # This function allows a Selector (either a female in mating phase, 
 # or a pupil in tutor phase) to choose a singer according to 
 # the selector's auditory curiosity value.
 sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chances = c(10, 42), ohsit = 10, verbose_output = TRUE, interbreed = FALSE){ 
-  assign_temp_selexn_data <- function() {
-    indices <- c(selection.index[singer], selector.index)
-    sylrep_pairs <- array(c(selection.sylreps[singer,],selector.sylrep),c(P$sylnum,2))
-    curiosities <- array(c(curiosity_level[selection.index[singer], round(singer/10+0.49)],curiosity_level[selector.index,population]),c(2,1))
-    for(sex in 1:tutor1_or_mate2) {
-      P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylrep_pairs[,sex]
-      P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- indices[sex]
-      P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosities[sex,]
-    }
-    P$pairing.pool[(4 - tutor1_or_mate2), 3, population] <- chance_for_selection
-  }
   
-  should_pick_neighbor <- function(index,lower,upper=Inf) {
-    lower_bound <- round(num_select_chances[tutor1_or_mate2] * lower)
-    upper_bound <- round(num_select_chances[tutor1_or_mate2] * upper)
-    is_desperate <- between(chance_for_selection, lower_bound, upper_bound)
-    is_neighbor_better <- golf_score[singer+index] %in% singSuccessFilter
-    return(is_desperate && is_neighbor_better)
-  }
   
   #somequickfunction <- function(percen,index) {
   #  return(chance_for_selection >= (round(num_select_chances[tutor1_or_mate2]*(percen))) && (golf_score[singer+index] %in% singSuccessFilter))
