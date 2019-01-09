@@ -1,5 +1,6 @@
 # REPEATED-USE FUNCTIONS ##################################
-library(R.utils,dplyr)
+library(R.utils)
+library(dplyr)
 syll_learn <- function(P, tutor1_or_mate2 = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   randlearncontext_container <- c("mean(source_of_ONEs)", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : P$num_pop) {
