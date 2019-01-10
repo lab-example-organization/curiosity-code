@@ -193,11 +193,11 @@ update_selexn_data <- function(universal_parameters, suitor_choices, preferred_b
                             # the temporary data is in a separate object, (learning.pool and pairing.pool)
                             # the initializing stuff is in a separate object. (zero_to_one_template, population_syll_probs, nsspl, etc.)
 
-should_pick_neighbor <- function(index,total_chances,selection_context,current_chance,lower=0,upper=Inf) {
+should_pick_neighbor <- function(index,total_chances,selection_context,current_chance,sorted_selections,selection_filter,lower=0,upper=Inf) {
   lower_bound <- round(total_chances[selection_context] * lower)
   upper_bound <- round(total_chances[selection_context] * upper)
   is_desperate <- between(current_chance, lower_bound, upper_bound)
-  is_neighbor_better <- golf_score[singer+index] %in% singSuccessFilter
+  is_neighbor_better <- sorted_selections[singer+index] %in% selection_filter
   return(is_desperate && is_neighbor_better)
 }
 
@@ -244,62 +244,63 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
       
       
         
-      if(tutor1_or_mate2 == 1) { #This statement separates specific mating and tutoring selection qualities:
+      if(tutor1_or_mate2 == 1) {
+        #This statement separates specific mating and tutoring selection qualities:
         # singSuccessFilter will inform the selection of a mate by restricting the successful mate 
         # to those individuals from the same population as the selector. Similarly, 
         # selector.index distinguishes between mating and tutoring, except here it uses
         # a randomly-selected female for the mating context, and the offspring for tutoring.
-        singSuccessFilter <- (1 : ((P$num_one.pop_singers_sampled[tutor1_or_mate2]) * (P$num_pop))) # "1-20"
+
+        singSuccessFilter <- 1 : ((P$num_one.pop_singers_sampled[tutor1_or_mate2]) * (P$num_pop)) # "1-20"
         selector.index <- P$pairing.pool[3, 1, population]
       } else {
-        singSuccessFilter <- ((1 + ((population - 1) * (P$num_one.pop_singers_sampled[tutor1_or_mate2]))) : (population * P$num_one.pop_singers_sampled[tutor1_or_mate2])) # "1-10," or "11-20"
+        singSuccessFilter <- (1 + ((population - 1) * (P$num_one.pop_singers_sampled[tutor1_or_mate2]))) : (population * P$num_one.pop_singers_sampled[tutor1_or_mate2]) # "1-10," or "11-20"
         selector.index <- sample(P$pop_calls_matrix[2, ], 1)
       }
       
-      # Finds the syllable repertoire (sylrep) of the selector, by referencing the sylrep array.
       selector.sylrep <- sylreps[selector.index, , population]
       
       
-      
-      # Standard Deviation Scoring:
-      # The basic sylrep comparison caluclation that finds the differences 
-      # between the suitor and selector sylreps, then assigns a weighted 
-      # value based on suitor syllable distance from median of selector's sylrep.
       score_similarity <- function(suitor_vector, selector_vector) {
-
+        # Standard Deviation Scoring:
+        # The basic sylrep comparison caluclation that finds the differences 
+        # between the suitor and selector sylreps, then assigns a weighted 
+        # value based on suitor syllable distance from median of selector's sylrep.
       
-      selector_median <- median(which(
-        selector_vector == 1
-        )
-      ) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
+        selector_median <- median(which(
+          selector_vector == 1
+          )
+        ) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
 
         return(
           sum(
             abs(
               which((suitor_vector - selector_vector) != 0) - selector_median)
           )
-        )
-      } #Output: value of similarity/dissimilarity between sylrep of suitors and selector.
+        ) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
+      } 
       
-      # This creates sample calls for each population; each population has a sample size of
-      # P$num_one.pop_singers_sampled, which comes from the male half of the population.
-      # probability defined by the fraction of syllable repertoires of each member of each population divided by the maximum syllrep of the population.
+      
       selection.index <- (
+        # This creates sample calls for each population; each population has a sample size of
+        # P$num_one.pop_singers_sampled, which comes from the male half of the population.
+        # probability defined by the fraction of syllable repertoires of each member of 
+        # each population divided by the maximum syllrep of the population.
         sapply(
           1:P$num_pop, function(x) {
             sample(
               x = P$pop_calls_matrix[1,], 
               size = P$num_one.pop_singers_sampled[tutor1_or_mate2], 
-              replace = FALSE, prob = (
-                (apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum)
-                 )/max(
-                    apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum)
-                  )
+              replace = FALSE, prob = ((
+                  apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum)
+                )/max(
+                  apply(sylreps[P$pop_calls_matrix[1,],,x],1,sum)
                 )
               )
-            }
-          )
+            )
+          }
         ) # probability = the number of times each individual's syllable repertoire has a 1 in it (sum(sylreps[P$pop_calls_matrix[1,]])), divided by the biggest repertoire's total.
+      )
       
       # create a matrix of all the sylreps of the sample males from selection.index
       #selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
@@ -313,17 +314,17 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           sapply(
             1:P$num_one.pop_singers_sampled[tutor1_or_mate2], 
             function(x) {sylreps[selection.index[x,1],,1]}
-            ),
+          ),
           sapply(
             1:P$num_one.pop_singers_sampled[tutor1_or_mate2], 
             function(x) {sylreps[selection.index[x,2],,2]}
-            )
-          )
-        )
+           )
+         )
+      )
       
       # applies the standard deviation scoring to the males in selection.sylreps; 
       # larger score means greater difference between male sylrep and selector's sylrep.
-      golf_score <- sort(apply(selection.sylreps, 1, score_similarity),index.return = T)$ix
+      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1, FUN = score_similarity, selector_vector = selector.sylrep),index.return = T)$ix
       
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
@@ -338,23 +339,21 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
         should_continue <- TRUE
         if(singer %in% singSuccessFilter) {
           
-          P = update_selexn_data(P, selection.index, singer, selector.index, 
-                             curiosity_level, population, tutor1_or_mate2,
-                             selection.sylreps, selector.sylrep, chance_for_selection)
-          
+          P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+                             population, tutor1_or_mate2, selection.sylreps, selector.sylrep, 
+                             chance_for_selection)
           
           should_continue <- FALSE
         }
         
         if(should_continue) {
           for(neighbor in c(1, -1)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,tutor1_or_mate2,chance_for_selection,lower=0.5,upper=0.75)) {
+            if(should_pick_neighbor(neighbor,num_select_chances,tutor1_or_mate2,chance_for_selection,golf_score,singSuccessFilter,lower=0.5,upper=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              P = update_selexn_data(P, selection.index, singer, selector.index, 
-                                     curiosity_level, population, tutor1_or_mate2,
-                                     selection.sylreps, selector.sylrep, chance_for_selection)
-              
+              P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+                             population, tutor1_or_mate2, selection.sylreps, selector.sylrep, 
+                             chance_for_selection)
               
               should_continue <- FALSE
               break
@@ -364,13 +363,12 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
           
         if(should_continue) {
           for(neighbor in c(1, -1, 2, -2)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,tutor1_or_mate2,chance_for_selection,lower=0.75)) {
+            if(should_pick_neighbor(neighbor,num_select_chances,tutor1_or_mate2,chance_for_selection,golf_score,singSuccessFilter,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
 
-              P = update_selexn_data(P, selection.index, singer, selector.index, 
-                                     curiosity_level, population, tutor1_or_mate2,
-                                     selection.sylreps, selector.sylrep, chance_for_selection)
-              
+              P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+                             population, tutor1_or_mate2, selection.sylreps, selector.sylrep, 
+                             chance_for_selection)
               
               should_continue <- FALSE
               break
@@ -384,10 +382,9 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
       } else {
         if(sum(sylreps[selection.index[singer], , population]) != 0) {
 
-          P = update_selexn_data(P, selection.index, singer, selector.index, 
-                                     curiosity_level, population, tutor1_or_mate2,
-                                     selection.sylreps, selector.sylrep, chance_for_selection)
-              
+          P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+                             population, tutor1_or_mate2, selection.sylreps, selector.sylrep, 
+                             chance_for_selection)
           
           break
         }
@@ -421,13 +418,7 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
         curinh_attempts <- curinh_attempts + 1
       }
       
-      new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))
-      
-      #new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise 
-      #print(paste(new.curiosity, " = new.curiosity"))
-      
-      #print(curinh_attempts)
-      
+      new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
       
       P$pairing.pool[(sex + 2), 4, population] <- P$pairing.pool[(sex + 2), 2, population]
       P$pairing.pool[(sex + 2), 2, population] <- new.curiosity
