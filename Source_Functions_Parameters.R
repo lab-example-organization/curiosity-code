@@ -164,7 +164,7 @@ output_checker <- function(printer) {
   setwd(dir)
 }
 
-update_selexn_data <- function(universal_parameters, suitor_choices, preferred_bird, selector_bird, # I need some joy in life.
+update_selexn_data <- function(universal_parameters, suitor_choices, preferred_bird, selector_bird,
                                     curiosity_value, selector_population, selection_context, 
                                     sylreps_s_choices, sylrep_selector, time_to_success) {
   singer_population <- ceiling(preferred_bird/universal_parameters$num_one.pop_singers_sampled)
