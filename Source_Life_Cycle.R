@@ -34,8 +34,8 @@ docnamez <- c("190109_30_-_10k_nsL_2_0.81_V_10_2_O_oppsyl_11-15_c") # equal syll
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(11,11,11,11), 
-                                        c(15,15,15,15))
+                                        c(14,14,14,14), 
+                                        c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
