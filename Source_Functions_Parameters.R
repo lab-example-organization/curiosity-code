@@ -164,10 +164,13 @@ output_checker <- function(printer) {
   setwd(dir)
 }
 
-jank_data_generator <- function(universal_parameters) {
+jank_data_generator <- function(universal_parameters, curiosity_level) {
   reference_materials <- list(
     sylnum <- universal_parameters$sylnum,
     num_pop <- universal_parameters$num_pop
+  )
+  population_data <- list(
+    pop_curiosity_values <- array(sample(c(0:1),(universal_parameters$pop_size * universal_parameters$num_pop)),c())
   )
   pool_objects <- list(
     learning.pool = array(sample(c(0,1),5*sylnum*num_pop),c(5,sylnum,num_pop)),
@@ -183,7 +186,7 @@ jank_data_generator <- function(universal_parameters) {
 update_selexn_data <- function(universal_parameters, suitor_choices, preferred_bird, selector_bird,
                                     curiosity_value, selector_population, selection_context, 
                                     sylreps_choices, sylrep_selector, selection_count) {
-  singer_population <- ceiling(preferred_bird/universal_parameters$num_one.pop_singers_sampled)
+  singer_population <- ceiling(preferred_bird/universal_parameters$num_one.pop_singers_sampled[selection_context])
   selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
                      selector_bird)          # Bird doing the selecting
   sylrep_pairs <- rbind(sylreps_choices[preferred_bird,],
