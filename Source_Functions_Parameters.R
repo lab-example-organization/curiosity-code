@@ -196,13 +196,34 @@ update_selexn_data <- function(universal_parameters, suitor_choices, preferred_b
   
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
-    universal_parameters$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
     universal_parameters$pairing.pool[pool.row, 1, selector_population] <- selected_pair[bird]
+    universal_parameters$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
     universal_parameters$pairing.pool[pool.row, 2, selector_population] <- curiosities[bird]
   }
   universal_parameters$pairing.pool[(4 - selection_context), 3, selector_population] <- selection_count
   return(universal_parameters)
 }
+
+# auto.teachers <- c((sample(P$pop_calls_matrix[1, ], 1)), (sample(P$pop_calls_matrix[2, ], 1)))
+# if((sum(sylreps[auto.teachers[1], , population]) != 0) && (sum(sylreps[auto.teachers[2], , population]) != 0)) {
+#   if(verbose_output == TRUE) {
+#     context.name <- c("Tutor", "Mate")
+#     warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[tutor1_or_mate2], " Selection")))
+#   }
+#   for(sex in 1:tutor1_or_mate2) {
+#     P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylreps[auto.teachers[sex], , population]
+#     P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- auto.teachers[sex] + ((sex - 1) * P$pop_size/2)
+#     P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosity_level[auto.teachers[sex], population]
+#   } # this will fill pairing.pool with (Mate) male and female metadata, or (Tutor) male metadata
+#   P$pairing.pool[(4-tutor1_or_mate2), 3, population] <- chance_for_selection
+#   # should probably fill in some spots in P$pairing.pool with hope_not_necessary, provided the value exceeds 1.
+#   stop = TRUE
+#   break
+# }
+
+#### P = update_selexn_data(P, auto.teachers, 1, auto.teachers[2], 
+####                   curiosity_level, population, tutor1_or_mate2,
+####                   selection.sylreps, selector.sylrep, chance_for_selection)
 
 # P = update_selexn_data(P, selection.index, singer, selector.index, 
 #                   curiosity_level, population, tutor1_or_mate2,
