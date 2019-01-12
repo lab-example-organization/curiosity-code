@@ -204,27 +204,6 @@ update_selexn_data <- function(universal_parameters, suitor_choices, preferred_b
   return(universal_parameters)
 }
 
-# auto.teachers <- c((sample(P$pop_calls_matrix[1, ], 1)), (sample(P$pop_calls_matrix[2, ], 1)))
-# if((sum(sylreps[auto.teachers[1], , population]) != 0) && (sum(sylreps[auto.teachers[2], , population]) != 0)) {
-#   if(verbose_output == TRUE) {
-#     context.name <- c("Tutor", "Mate")
-#     warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[tutor1_or_mate2], " Selection")))
-#   }
-#   for(sex in 1:tutor1_or_mate2) {
-#     P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylreps[auto.teachers[sex], , population]
-#     P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- auto.teachers[sex] + ((sex - 1) * P$pop_size/2)
-#     P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosity_level[auto.teachers[sex], population]
-#   } # this will fill pairing.pool with (Mate) male and female metadata, or (Tutor) male metadata
-#   P$pairing.pool[(4-tutor1_or_mate2), 3, population] <- chance_for_selection
-#   # should probably fill in some spots in P$pairing.pool with hope_not_necessary, provided the value exceeds 1.
-#   stop = TRUE
-#   break
-# }
-
-#### P = update_selexn_data(P, auto.teachers, 1, auto.teachers[2], 
-####                   curiosity_level, population, tutor1_or_mate2,
-####                   selection.sylreps, selector.sylrep, chance_for_selection)
-
 # P = update_selexn_data(P, selection.index, singer, selector.index, 
 #                   curiosity_level, population, tutor1_or_mate2,
 #                   selection.sylreps, selector.sylrep, chance_for_selection)
@@ -240,6 +219,25 @@ should_pick_neighbor <- function(index,total_chances,selection_context,current_c
   is_neighbor_better <- sorted_selections[preferred_bird+index] %in% selection_filter
   return(is_desperate && is_neighbor_better)
 }
+
+score_similarity <- function(suitor_vector, selector_vector) {
+        # Standard Deviation Scoring:
+        # The basic sylrep comparison caluclation that finds the differences 
+        # between the suitor and selector sylreps, then assigns a weighted 
+        # value based on suitor syllable distance from median of selector's sylrep.
+      
+        selector_median <- median(which(
+          selector_vector == 1
+          )
+        ) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
+
+        return(
+          sum(
+            abs(
+              which((suitor_vector - selector_vector) != 0) - selector_median)
+          )
+        ) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
+      }
 
 # This function allows a Selector (either a female in mating phase, 
 # or a pupil in tutor phase) to choose a singer according to 
@@ -259,12 +257,10 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
               context.name <- c("Tutor", "Mate")
               warning(print(paste0("Automatic Teacher(s) = ", auto.teachers, " for Population ", population, " ", context.name[tutor1_or_mate2], " Selection")))
             }
-            for(sex in 1:tutor1_or_mate2) {
-              P$learning.pool[((5^(2-tutor1_or_mate2)) * sex), , population] <- sylreps[auto.teachers[sex], , population]
-              P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 1, population] <- auto.teachers[sex] + ((sex - 1) * P$pop_size/2)
-              P$pairing.pool[((5^(2-tutor1_or_mate2)) * sex), 2, population] <- curiosity_level[auto.teachers[sex], population]
-            } # this will fill pairing.pool with (Mate) male and female metadata, or (Tutor) male metadata
-            P$pairing.pool[(4-tutor1_or_mate2), 3, population] <- chance_for_selection
+            P = update_selexn_data(P, auto.teachers, 1, auto.teachers[2], 
+                curiosity_level, population, tutor1_or_mate2,
+                sylreps[auto.teachers[1]:200,,population], sylreps[auto.teachers[2],,population], chance_for_selection)
+
             # should probably fill in some spots in P$pairing.pool with hope_not_necessary, provided the value exceeds 1.
             stop = TRUE
             break
@@ -272,8 +268,6 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
         }
         if(stop) {break}
       } 
-      
-      
         
       if(tutor1_or_mate2 == 1) {
         #This statement separates specific mating and tutoring selection qualities:
@@ -290,28 +284,7 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
       }
       
       selector.sylrep <- sylreps[selector.index, , population]
-      
-      
-      score_similarity <- function(suitor_vector, selector_vector) {
-        # Standard Deviation Scoring:
-        # The basic sylrep comparison caluclation that finds the differences 
-        # between the suitor and selector sylreps, then assigns a weighted 
-        # value based on suitor syllable distance from median of selector's sylrep.
-      
-        selector_median <- median(which(
-          selector_vector == 1
-          )
-        ) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
-
-        return(
-          sum(
-            abs(
-              which((suitor_vector - selector_vector) != 0) - selector_median)
-          )
-        ) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
-      } 
-      
-      
+            
       selection.index <- (
         # This creates sample calls for each population; each population has a sample size of
         # P$num_one.pop_singers_sampled, which comes from the male half of the population.
@@ -330,16 +303,12 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
               )
             )
           }
-        ) # probability = the number of times each individual's syllable repertoire has a 1 in it (sum(sylreps[P$pop_calls_matrix[1,]])), divided by the biggest repertoire's total.
+        ) # probability = the number of times each individual's syllable 
+          # repertoire has a 1 in it (sum(sylreps[P$pop_calls_matrix[1,]])), 
+          # divided by the biggest repertoire's total.
       )
       
       # create a matrix of all the sylreps of the sample males from selection.index
-      #selection.sylreps <- apply(sylreps[selection.index[1:(P$num_pop * P$num_one.pop_singers_sampled[1])],,1],2,c)
-      
-      #selection.sylreps <- sapply(1:P$num_one.pop_singers_sampled[1], function(x) {
-      #  sylreps[selection.index[x,1],,1]
-      #})
-      
       selection.sylreps <- t(
         cbind(
           sapply(
