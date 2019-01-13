@@ -29,13 +29,13 @@ P <- Define.Parameters(num_timesteps = 10000, num_pop = 2,
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("190113_31_-_10k_nsL_2_0.81_V_10_2_O_oppsyl_11-15_c") # equal syllable range
+docnamez <- c("190113_32_-_10k_nsL_2_0.81_V_10_2_O_oppsyl_1-7_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(P, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(11,11,11,11), 
-                                        c(15,15,15,15))
+                                        c(1,1,1,1), 
+                                        c(7,7,7,7))
 
 day.tuh <- recordvariable.initialize(P, timestep_fraction = (P$num_timesteps/1000))
 
