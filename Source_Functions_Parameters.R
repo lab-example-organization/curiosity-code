@@ -225,18 +225,11 @@ score_similarity <- function(suitor_vector, selector_vector) {
         # The basic sylrep comparison caluclation that finds the differences 
         # between the suitor and selector sylreps, then assigns a weighted 
         # value based on suitor syllable distance from median of selector's sylrep.
-      
-        selector_median <- median(which(
-          selector_vector == 1
-          )
-        ) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
-
-        return(
-          sum(
-            abs(
-              which((suitor_vector - selector_vector) != 0) - selector_median)
-          )
-        ) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
+        selector_median <- median(which(selector_vector == 1)) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
+        vector_diff <- which(suitor_vector-selector_vector != 0)
+        AbsVal_diffs <- abs(vector_diff - selector_median)
+        
+        return(sum(AbsVal_diffs)) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
       }
 
 # This function allows a Selector (either a female in mating phase, 
@@ -262,12 +255,15 @@ sing.selection <- function(P, curiosity_level, tutor1_or_mate2, num_select_chanc
                 sylreps[auto.teachers[1]:200,,population], sylreps[auto.teachers[2],,population], chance_for_selection)
 
             # should probably fill in some spots in P$pairing.pool with hope_not_necessary, provided the value exceeds 1.
+            if(hope_not_necessary < 1) {
+              
+            }
             stop = TRUE
             break
-          } else {next}
+          } else {hope_not_necessary = hope_not_necessary + 1}
         }
         if(stop) {break}
-      } 
+      }
         
       if(tutor1_or_mate2 == 1) {
         #This statement separates specific mating and tutoring selection qualities:
@@ -432,23 +428,29 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
 
 store_timesteps <- function(filename = thousand_timesteps, object_record = day.tuh){
   directory <- getwd()
+  results_directory <- paste0(strsplit(directory, "Code")[[1]][1],"Code/Results")
   if(filename == 1) {
     FolderName <- format(Sys.time(), "%F-%H%M%S")
-    dir.create(file.path(directory, paste0(FolderName, "-GMT-variable-store")))
-    FolderName <- paste0(directory, "/", FolderName, "-GMT-variable-store/")
+    dir.create(file.path(results_directory, stuff_to_save$docnamez))
+    dir.create(file.path(results_directory, stuff_to_save$docnamez, paste0(FolderName, "-GMT-variable-store/")))
+    FolderName <- paste0(results_directory, "/", stuff_to_save$docnamez, "/", FolderName, "-GMT-variable-store/")
     setwd(FolderName)
     saveRDS(object = stuff_to_save, file = "metadata.RData")
     #rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
     setwd(directory)
   }
-  setwd(FolderName)
+  setwd(paste0(results_directory, "/", stuff_to_save$docnamez, "/"))
+  FolderName <- paste0(getwd(), "/", list.files()[length(list.files())])
+  setwd(list.files()[length(list.files())])
+  FolderName <- getwd()
+  
   for(deyteh in 1:length(object_record)) {
     zfilename <- file.create(paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData"))
     objekshun <- object_record[[deyteh]]
     saveRDS(object = objekshun, file = paste0(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
   }
   
-  saveRDS(object = FolderName, file = "harvest_info.RData")
+  #saveRDS(object = FolderName, file = "harvest_info.RData")
   saveRDS(object = P, file = "parameters.RData")
   saveRDS(object = thousand_timesteps, file = "timestep_grps.RData")
   

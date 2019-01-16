@@ -2,7 +2,7 @@
 #eval(parse(text = data_visuals))
 
 number_of_runs <- source("number_of_runs.txt")$value
-conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_of_runs) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
+conv_outputToFolderName <- function(normal_output = TRUE, number_of_runs) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
   #scan(filename_document,what=list(NULL),sep='\n',blank.lines.skip = F)
   #connection <- file(description = "console_copy.txt", open = "rt")
   #consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
@@ -26,32 +26,27 @@ conv_outputToFolderName <- function(normal_output = TRUE, single = TRUE, number_
   #singleRunLength <- 35  
     #first_line_last_run <- consoleOutput[nrow(consoleOutputs)-(singleRunLength-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
     
-    if(single == TRUE) {
-      first_line_pieces <- strsplit(folderNames[1], " ")[[1]]
-      string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces[7], ":")[[1]][x])}),width=2,format="d",flag="0")
-      string_time <- paste0(string_time[1], string_time[2], string_time[3])
-      output <- paste0(first_line_pieces[6], "-",string_time, "-GMT-variable-store")
-    } else {
+    
       runNames <- vector(mode = "character", length = number_of_runs)
       for(runds in 1:number_of_runs) {
         #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
         #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
         #runNames[runds] <- strsplit(as.character(folderNames[runds,]), "/")[[1]][9] ### Lab communal computer version
-        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][8] ### normal lab communal computer
-        runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
+        runNames[runds] <- strsplit(folderNames, "Results/")[[runds]][2] ### normal lab communal computer
+        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
         #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
         #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
         #string_time <- paste0(string_time[1], string_time[2], string_time[3])
         #runNames[runds] <- paste0(strsplit(runNames[runds], " ")[[1]][6], "-",string_time, "-GMT-variable-store")
       }
       #output <- runNames ### normal lab communal computer
-      output <- paste0(getwd(), "/", runNames)
-    }
+      output <- paste0(strsplit(getwd(),"Code")[[1]][1], "Results/", runNames)
+    
   }
   return(output)
 }
 
-multiRun_folderList <- conv_outputToFolderName(normal_output = T, single = F, number_of_runs = number_of_runs)
+multiRun_folderList <- conv_outputToFolderName(normal_output = T, number_of_runs = number_of_runs)
 
 
 #multirunParentDirectory <- "/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code/StartingCuriosityValues/15-18"

@@ -7,7 +7,7 @@
 #setwd("/home/rundstpj/projects/curiosity_model/Code/epsilonCurCode/curiosity-code") ### EPSILON
 #setwd(getwd()) ### what a dumb line of code.
 
-number_of_runs <- 50
+number_of_runs <- 1
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
 
@@ -28,9 +28,9 @@ for(run_number in 1:number_of_runs) {
   print(paste0("Run Number: ", run_number, ", comes right before (YYYY-MM-DD-HHMMSS): ", format(Sys.time(), "%F-%H%M%S")))
 }
 
-file.copy(from = "console_copy.txt", to = paste0(format(Sys.time(), "%F-%H%M%S"), "_console_copy.txt"))
+file.copy(from = "console_copy.txt", to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), "_console_copy.txt"))
 
-file.copy(from = "sim_data.txt", to = paste0(format(Sys.time(), "%F-%H%M%S"), "_sim_data.txt"))
+file.copy(from = "sim_data.txt", to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), "_sim_data.txt"))
 
 source("Source_Figure_Produxn_Multiple_Runs.R")
 
