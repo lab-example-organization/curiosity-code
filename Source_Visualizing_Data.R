@@ -4,7 +4,7 @@ library(stringr)
 library(Hmisc)
 rm(list = objects())
 number_of_runs <- source(paste0(strsplit(getwd(),"201")[[1]][1],"number_of_runs.txt"))$value
-FolderName = readRDS(file = "harvest_info.RData")
+#FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
 #thousand_timesteps <- 5

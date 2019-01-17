@@ -430,24 +430,24 @@ store_timesteps <- function(filename = thousand_timesteps, object_record = day.t
   directory <- getwd()
   results_directory <- paste0(strsplit(directory, "Code")[[1]][1],"Code/Results")
   if(filename == 1) {
-    FolderName <- format(Sys.time(), "%F-%H%M%S")
+    run_timedate <- format(Sys.time(), "%F-%H%M%S")
     dir.create(file.path(results_directory, stuff_to_save$docnamez))
-    dir.create(file.path(results_directory, stuff_to_save$docnamez, paste0(FolderName, "-GMT-variable-store/")))
-    FolderName <- paste0(results_directory, "/", stuff_to_save$docnamez, "/", FolderName, "-GMT-variable-store/")
+    dir.create(file.path(results_directory, stuff_to_save$docnamez, paste0(run_timedate, "-GMT-variable-store/")))
+    FolderName <- paste0(results_directory, "/", stuff_to_save$docnamez, "/", run_timedate, "-GMT-variable-store/")
     setwd(FolderName)
     saveRDS(object = stuff_to_save, file = "metadata.RData")
     #rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
     setwd(directory)
   }
   setwd(paste0(results_directory, "/", stuff_to_save$docnamez, "/"))
-  FolderName <- paste0(getwd(), "/", list.files()[length(list.files())])
+  #FolderName <- paste0(getwd(), "/", list.files()[length(list.files())])
   setwd(list.files()[length(list.files())])
   FolderName <- getwd()
   
   for(deyteh in 1:length(object_record)) {
     zfilename <- file.create(paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData"))
     objekshun <- object_record[[deyteh]]
-    saveRDS(object = objekshun, file = paste0(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
+    saveRDS(object = objekshun, file = paste0(getwd(), paste0("/variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
   }
   
   #saveRDS(object = FolderName, file = "harvest_info.RData")

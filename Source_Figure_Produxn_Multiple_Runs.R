@@ -40,7 +40,7 @@ conv_outputToFolderName <- function(normal_output = TRUE, number_of_runs) { # ta
         #runNames[runds] <- paste0(strsplit(runNames[runds], " ")[[1]][6], "-",string_time, "-GMT-variable-store")
       }
       #output <- runNames ### normal lab communal computer
-      output <- paste0(strsplit(getwd(),"Code")[[1]][1], "Results/", runNames)
+      output <- paste0(strsplit(getwd(),"Code")[[1]][1], "Code/Results/", runNames)
     
   }
   return(output)
