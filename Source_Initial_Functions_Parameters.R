@@ -1,6 +1,6 @@
 # # # Parameter-Making Function
 
-Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, num_one.pop_singers_sampled, curlearnprob, learnprob, randlearnprob, stand.dev){
+Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, curlearnprob, learnprob, randlearnprob, stand.dev){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
     stop("Check error log #_0002")}
@@ -19,7 +19,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
   pairing.pool <- array(0, c(5, 5, num_pop))
   
   #new.curiosity <- array(0,c(2,num_pop))
-  curiositybreaks <- (0 : (num_pop * num_one.pop_singers_sampled[1])) * (1 / (num_pop * num_one.pop_singers_sampled[1]))
+  curiositybreaks <- (0 : (num_pop * one_pop_singers[1])) * (1 / (num_pop * one_pop_singers[1]))
   curiosity_counter <- matrix(data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = F)
   zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
   #                           #1,  #2,  #3, #4,  #5, #6,  #7, #8,  #9,#10,
@@ -76,7 +76,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
                      pop_size = pop_size, 
                      sylnum = sylnum, 
                      nsspl = nsspl, 
-                     num_one.pop_singers_sampled = num_one.pop_singers_sampled,  
+                     one_pop_singers = one_pop_singers,  
                      pop_calls_matrix = pop_calls_matrix, 
                      pairing.pool = pairing.pool, 
                      #new.curiosity = new.curiosity, 
@@ -94,7 +94,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, n
 }
 #Results of Function:
 #Parameters <- list(      
-  # 1 - num_timesteps,   # 6 - num_one.pop_singers_sampled,   # 11- curiositybreaks, 
+  # 1 - num_timesteps,   # 6 - one_pop_singers,               # 11- curiositybreaks, 
   # 2 - num_pop,         # 7 - curiosity_level,               # 12- curiosity_counter,
   # 3 - pop_size,        # 8 - pop_calls_matrix,              # 13- zero_to_one_template, 
   # 4 - sylnum,          # 9 - pairing.pool,                  # 14- population_syll_probs)
@@ -111,7 +111,7 @@ recordvariable.initialize <- function(P, timestep_fraction) {
   record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
                           sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
                           curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
-                          curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$num_one.pop_singers_sampled[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
+                          curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
                           )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
     # Row 3 covers the number of selections made by females from each population, per timestep.

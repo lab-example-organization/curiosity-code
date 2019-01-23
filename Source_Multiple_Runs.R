@@ -1,13 +1,6 @@
-#setwd("That one directory that has all the curiosity code in it... )
-#setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code")
-#setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code") ### Lab communal computer version
-#setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code") ### SERVER VERSION
-#setwd("/home/rundstpj/projects/curiosity_model/Code/betaCurCode/curiosity-code") ### SERVER VERSION BETA
-#setwd("/home/rundstpj/projects/curiosity_model/Code/gammaCurCode/curiosity-code") ### SERVER VERSION GAMMA
-#setwd("/home/rundstpj/projects/curiosity_model/Code/epsilonCurCode/curiosity-code") ### EPSILON
-#setwd(getwd()) ### what a dumb line of code.
+#
 
-number_of_runs <- 1
+number_of_runs <- 2
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
 

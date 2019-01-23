@@ -22,7 +22,7 @@ eval(parse(text = init_params))
 
 P <- Define.Parameters(num_timesteps = 10000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
-                       num_one.pop_singers_sampled = c(10,10), 
+                       one_pop_singers = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
                        randlearnprob = c(0.01, 0.1), stand.dev = 2)
 
@@ -45,11 +45,11 @@ eval(parse(text = funx_n_params))
 
 
 datez <- Sys.Date()
-deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$num_one.pop_singers_sampled, P$curlearnprob, 
+deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$one_pop_singers, P$curlearnprob, 
            P$learnprob, P$randlearnprob, P$stand.dev, dim(P$pop_calls_matrix), dim(P$pairing.pool), 
            dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
 names(deetz) <- c("P$num_timesteps", "P$num_pop", "P$pop_size", "P$sylnum", 
-                      "P$nsspl", rep("P$num_one.pop_singers_sampled", 2), "P$curlearnprob", rep("P$learnprob", 2), 
+                      "P$nsspl", rep("P$one_pop_singers", 2), "P$curlearnprob", rep("P$learnprob", 2), 
                       rep("P$randlearnprob", 2), "P$stand.dev", 
                       rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 3), 
                       rep("dim(P$curiosity_counter)", 2), rep("dim(P$population_syll_probs)", 2), 
@@ -63,7 +63,7 @@ stuff_to_save <- list(
 
 for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
-    P <- sing.selection(P = P, curiosity_level = curiosity_level, tutor1_or_mate2 = 2, num_select_chances = c(100, 100), verbose_output = F, interbreed = FALSE)
+    P <- sing.selection(P = P, curiosity_level = curiosity_level, select_type = 2, sylreps = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
     
     P <- make.offspring.calls(P = P)
     
@@ -71,11 +71,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
       # 1: father; 2: mother; 3: same; 4:opposite
     P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
-    P <- syll_learn(P = P, tutor1_or_mate2 = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, select_type = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
-    P <- sing.selection(P = P, curiosity_level = curiosity_level, tutor1_or_mate2 = 1, num_select_chances = c(100, 100), verbose_output = F, interbreed = FALSE)
+    P <- sing.selection(P = P, curiosity_level = curiosity_level, select_type = 1, sylreps = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
     
-    P <- syll_learn(P = P, tutor1_or_mate2 = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    P <- syll_learn(P = P, select_type = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
     curiosity_level <- recuriosity.offspring(P = P)
     
