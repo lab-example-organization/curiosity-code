@@ -1,9 +1,22 @@
 # # # Parameter-Making Function
 
-Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, curlearnprob, learnprob, randlearnprob, stand.dev){
+rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
+  zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
+                            0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
+                             0.8,0.85,0.9,0.95,0.99,1.0)
+  if(number_repeats %% divisions_per_repeat != 0) {
+    stop("first element must be divisible by the second element")}
+  if(!(value_entered %in% c(1 : length(zero_to_one_template)))) {
+    stop("in order to work, value_entered must be contained within zero_to_one_template")}
+  return(replicate(
+    c(length = number_repeats / divisions_per_repeat), zero_to_one_template[value_entered]))
+}
+
+Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, 
+                              curlearnprob, learnprob, randlearnprob, stand.dev){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
-    stop("Check error log #_0002")}
+    stop("(num_pop, pop_size, nsspl) need to be integers")}
   if((num_pop == 3 || num_pop == 4) && ((sylnum - 4 * nsspl) %% 2 != 0 || (nsspl) %% 2 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
   if((num_pop == 5 || num_pop == 6) && ((sylnum - 4 * nsspl) %% 6 != 0 || (nsspl) %% 4 != 0)) {
@@ -15,8 +28,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   if(num_timesteps %% 1000 != 0) {stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")}
   
   pop_calls_matrix <- matrix(data = c(1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
-  learning.pool <- array(0, c(5, sylnum, num_pop))
-  pairing.pool <- array(0, c(5, 5, num_pop))
+  
   
   #new.curiosity <- array(0,c(2,num_pop))
   curiositybreaks <- (0 : (num_pop * one_pop_singers[1])) * (1 / (num_pop * one_pop_singers[1]))
@@ -28,17 +40,16 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
                              0.8,0.85,0.9,0.95,0.99,1.0)
   #                          #21, #22,#23, #24, #25,#26
   # Syllable probability distribution stuff; ends with reference matrix where each row defines a different pattern of syllable probability distributions
-  rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
-    if(number_repeats %% divisions_per_repeat != 0) {stop("first element must be divisible by the second element")}
-    if(value_entered %in% c(1 : length(zero_to_one_template)) == FALSE) {stop("in order to work, value_entered must be contained within zero_to_one_template")}
-    return(replicate(c(length = number_repeats / divisions_per_repeat), zero_to_one_template[value_entered]))
-  }
-  if(num_pop >= 2) {
+  if(num_pop == 1) {
+    syllprob_vector <- c(
+      c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1))
+    )
+  } else if(num_pop > 1) {
     syllprob_vector <- c(
       c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25)),
-      c(rep.frac(nsspl,1,25),rep.frac(nsspl,1,23),rep.frac(nsspl,1,4),rep.frac(nsspl,1,2),rep.frac(sylnum-4*nsspl,1,1)),
-      c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1)),
-      c(rep.frac(nsspl,2,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,2,25))
+      c(rep.frac(nsspl,1,25),rep.frac(nsspl,1,23),rep.frac(nsspl,1,4),rep.frac(nsspl,1,2),rep.frac(sylnum-4*nsspl,1,1))
+      #c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1)),
+      #c(rep.frac(nsspl,2,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,2,25))
       #c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1)),
       #c(rep.frac(nsspl,4,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,4,25)),
       #c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1)),
@@ -49,27 +60,50 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
       #c(rep.frac(sylnum-4*nsspl,(3/2),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,3,1)),
       #c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(4/3),1)),
       #c(rep.frac(sylnum-4*nsspl,(4/3),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,4,1))
-      
     )
-  } else if(num_pop == 1) {
-    syllprob_vector <- c(
-      c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25))
-    )
+    if(num_pop > 2) {
+      syllprob_vector <- append(syllprob_vector, c(
+        c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1)),
+        c(rep.frac(nsspl,2,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,2,25))
+      ))
+      if(num_pop > 4) {
+        syllprob_vector <- append(syllprob_vector, c(
+          c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1)),
+          c(rep.frac(nsspl,4,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,4,25))
+        ))
+        if(num_pop > 6) {
+          syllprob_vector <- append(syllprob_vector, c(
+            c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1)),
+            c(rep.frac(nsspl,6,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,6,25))
+          ))
+          if(num_pop > 8) {
+            syllprob_vector <- append(syllprob_vector, c(
+              c(rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1)),
+              c(rep.frac(nsspl,8,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,8,25))
+            ))
+            if(num_pop > 10) {
+              syllprob_vector <- append(syllprob_vector, c(
+                c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(3/2),1)),
+                c(rep.frac(sylnum-4*nsspl,(3/2),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,3,1))
+              ))
+              if(num_pop > 12) {
+                syllprob_vector <- append(syllprob_vector, c(
+                  c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(4/3),1)),
+                  c(rep.frac(sylnum-4*nsspl,(4/3),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,4,1))
+                ))
+              }
+            }
+          }
+        }
+      }
+    }
   }
-  
-  
+   
   population_syll_probs <- matrix(data = syllprob_vector,
                                   nrow = length(syllprob_vector) / sylnum, #number of rows to complement the number of combinations I've come up with; so if I come up with more, fix it doofus.
                                   ncol = sylnum,
                                   byrow = TRUE
   )
-  
-  zero_range <- function(x, tol = .Machine$double.eps ^ 0.5) {
-    if (length(x) == 1) return(TRUE)
-    x <- range(x) / mean(x)
-    isTRUE(all.equal(x[1], x[2], tolerance = tol))
-  } # Thnx Hadley Wickham... https://stackoverflow.com/questions/4752275/test-for-equality-among-all-elements-of-a-single-vector
-  
   
   Parameters <- list(num_timesteps = num_timesteps, 
                      num_pop = num_pop, 
@@ -77,9 +111,7 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
                      sylnum = sylnum, 
                      nsspl = nsspl, 
                      one_pop_singers = one_pop_singers,  
-                     pop_calls_matrix = pop_calls_matrix, 
-                     pairing.pool = pairing.pool, 
-                     #new.curiosity = new.curiosity, 
+                     pop_calls_matrix = pop_calls_matrix,
                      curiositybreaks = curiositybreaks, 
                      curiosity_counter = curiosity_counter, 
                      zero_to_one_template = zero_to_one_template, 
@@ -87,22 +119,39 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
                      curlearnprob = curlearnprob,
                      learnprob = learnprob,
                      randlearnprob = randlearnprob,
-                     stand.dev = stand.dev,
-                     learning.pool = learning.pool)
+                     stand.dev = stand.dev)
   
   return(Parameters)
 }
 #Results of Function:
 #Parameters <- list(      
-  # 1 - num_timesteps,   # 6 - one_pop_singers,               # 11- curiositybreaks, 
-  # 2 - num_pop,         # 7 - curiosity_level,               # 12- curiosity_counter,
-  # 3 - pop_size,        # 8 - pop_calls_matrix,              # 13- zero_to_one_template, 
-  # 4 - sylnum,          # 9 - pairing.pool,                  # 14- population_syll_probs)
-  # 5 - nsspl,           # 10- new.curiosity, 
+  # 1 - num_timesteps,   # 8 - ,         # 15- randlearnprob,
+  # 2 - num_pop,         # 9 - curiositybreaks,      # 16- stand.dev,
+  # 3 - pop_size,        # 10- curiosity_counter,    # 17- ,
+  # 4 - sylnum,          # 11- zero_to_one_template, # 18- ,
+  # 5 - nsspl,           # 12- population_syll_probs,# 19- 
+  # 6 - one_pop_singers, # 13- curlearnprob,
+  # 7 - pop_calls_matrix,# 14- learnprob,
 #return(Parameters)
+define_temp_data <- function(universal_parameters) {
+  learning.pool <- array(0, c(5, universal_parameters$sylnum, universal_parameters$num_pop))
+  pairing.pool <- array(0, c(5, 5, universal_parameters$num_pop))
+  temp_data <- list(
+    learning.pool = learning.pool,
+    pairing.pool = pairing.pool
+  )
+  return(temp_data)
+}
+
 
 #P <- Define.Parameters(1000,1,2,400,156,24,10)
 #rm(list=objects())
+
+zero_range <- function(x, tol = .Machine$double.eps ^ 0.5) {
+    if (length(x) == 1) return(TRUE)
+    x <- range(x) / mean(x)
+    isTRUE(all.equal(x[1], x[2], tolerance = tol))
+  } # Thnx Hadley Wickham... https://stackoverflow.com/questions/4752275/test-for-equality-among-all-elements-of-a-single-vector
 
 
 # INITIALIZING FUNCTIONS ##################################

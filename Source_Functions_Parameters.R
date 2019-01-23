@@ -1,7 +1,7 @@
 # REPEATED-USE FUNCTIONS ##################################
 library(R.utils)
 library(dplyr)
-syll_learn <- function(P, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
+syll_learn <- function(P, moran, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   randlearncontext_container <- c("mean(source_of_ONEs)", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : P$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
@@ -9,28 +9,28 @@ syll_learn <- function(P, select_type = 2, totally_new = FALSE, randlearn_contex
     #Vertical Learning;  params (set up source_of_ONEs), and considerations
     if(select_type == 2) { #params and considerations for VERTICAL LEARNING
       
-      source_of_ONEs <- which(P$learning.pool[1, , population] == 1) # calls for sylls vertical tutor (father) has
+      source_of_ONEs <- which(moran$learning.pool[1, , population] == 1) # calls for sylls vertical tutor (father) has
       if(length(source_of_ONEs) == 0) {
         saveRDS(object = P, file = "parent with no sylls.txt")
-        print(P$learning.pool[1, , population])
+        print(moran$learning.pool[1, , population])
         stop("wot? parent has no syllables?!")
         } #address syll loss by stopping script if parent has no sylls
       for(sex in 1 : 2) {
-          P$learning.pool[(sex + 2), , population] <- rep(0, P$sylnum)
+          moran$learning.pool[(sex + 2), , population] <- rep(0, P$sylnum)
       } # clear the sylreps rows about to be filled in :D
       
       
     } else { #Oblique Learning; source_of_ONEs setup, and considerations 
       
       # double-check tutor isn't out of sylls before comparing repertoire to pupil.
-      source_of_ONEs <- which(P$learning.pool[5, , population] == 1)
-      pupil_has_ONEs <- which(P$learning.pool[3, , population] == 1)
+      source_of_ONEs <- which(moran$learning.pool[5, , population] == 1)
+      pupil_has_ONEs <- which(moran$learning.pool[3, , population] == 1)
       if(length(source_of_ONEs) == 0) {
         stop("wot? tutor has no syllables?!")
       }
       
       # as often happens with super self-philes, the tutor may not have anything new to give the pupil. If this is the case, this skips to the next step in the for loop.
-      #source_of_ONEs <- which(P$learning.pool[5, , population] == 1)[which(!(which(P$learning.pool[5, , population] == 1) %in% which(P$learning.pool[3, , population] == 1)))]
+      #source_of_ONEs <- which(moran$learning.pool[5, , population] == 1)[which(!(which(moran$learning.pool[5, , population] == 1) %in% which(moran$learning.pool[3, , population] == 1)))]
       source_of_ONEs <- setdiff(source_of_ONEs,pupil_has_ONEs)
       if(length(source_of_ONEs) == 0) {
         if(verbose == TRUE) {
@@ -52,9 +52,9 @@ syll_learn <- function(P, select_type = 2, totally_new = FALSE, randlearn_contex
       #print(source_of_ONEs)
       probs <- runif(source_of_ONEs, 0, 1)
       for (sylls_to_learn in 1:length(source_of_ONEs)) {
-        #P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
+        #moran$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
         if(probs[sylls_to_learn] <= (P$learnprob[select_type])) {
-          P$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1
+          moran$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1
         }
         if(probs[sylls_to_learn] > (1 - P$randlearnprob[select_type])) {
           r_norm <- rnorm(1, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
@@ -67,7 +67,7 @@ syll_learn <- function(P, select_type = 2, totally_new = FALSE, randlearn_contex
           if(totally_new == TRUE) {
             counter <- 1
             r_norm_pool <- rnorm(100, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = P$stand.dev)
-            while(P$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
+            while(moran$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
               r_norm <- r_norm_pool[counter]
               if(r_norm > P$sylnum) {
                 r_norm <- P$sylnum
@@ -76,25 +76,25 @@ syll_learn <- function(P, select_type = 2, totally_new = FALSE, randlearn_contex
               }
               counter = counter + 1
             }
-            P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+            moran$learning.pool[(sex + 2), floor(r_norm), population] <- 1
             average_rate_randlearn_overlap <- append(average_rate_randlearn_overlap, counter)
           } else {
-            P$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+            moran$learning.pool[(sex + 2), floor(r_norm), population] <- 1
           }
         }
       }
-    if(totally_new == TRUE) {P$pairing.pool[sex, 5, population] <- mean(average_rate_randlearn_overlap)}
+    if(totally_new == TRUE) {moran$pairing.pool[sex, 5, population] <- mean(average_rate_randlearn_overlap)}
     }
   }
   return(P)
 }
 
-variable.archive <- function(P, timestep) {
+variable.archive <- function(P, moran, timestep) {
   #context_name <- c("parents&offspring","replacedindividuals")
   #if(context == 1) {
   for(population in 1 : P$num_pop) {
-    day.tuh[["curity_mean_t"]][3, population, timestep] <- P$pairing.pool[2, 3, population]
-    day.tuh[["curity_mean_t"]][10, population, timestep] <- P$pairing.pool[3, 3, population]
+    day.tuh[["curity_mean_t"]][3, population, timestep] <- moran$pairing.pool[2, 3, population]
+    day.tuh[["curity_mean_t"]][10, population, timestep] <- moran$pairing.pool[3, 3, population]
     
     for(sex in 1:2) {
       day.tuh[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
@@ -102,21 +102,21 @@ variable.archive <- function(P, timestep) {
       day.tuh[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_level[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
       
       day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
-      day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- P$pairing.pool[sex, 2, population]
-      day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- P$pairing.pool[(sex + 2), 2, population]
-      day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- P$pairing.pool[(sex + 2), 4, population]
-      day.tuh[["curity_mean_t"]][11, population, timestep] <- P$pairing.pool[(sex + 2), 5, population]
-      day.tuh[["curity_mean_t"]][12, population, timestep] <- P$pairing.pool[sex, 5, population]
+      day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
+      day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
+      day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
+      day.tuh[["curity_mean_t"]][11, population, timestep] <- moran$pairing.pool[(sex + 2), 5, population]
+      day.tuh[["curity_mean_t"]][12, population, timestep] <- moran$pairing.pool[sex, 5, population]
     }
   }
   return(day.tuh)
 }
 
-make.offspring.calls <- function(P){
+make.offspring.calls <- function(P, moran){
     for(population in 1:P$num_pop){
       for(sex in 1:2){
         new_index <- c(sample(P$pop_calls_matrix[sex, ], 1, replace=F))
-        P$pairing.pool[(sex + 2), 1, population] <-  new_index
+        moran$pairing.pool[(sex + 2), 1, population] <-  new_index
       }
     }
   return(P)
@@ -127,29 +127,29 @@ make.offspring.calls <- function(P){
 #  for(population in 1:P$num_pop){
 #    for(sex in 1:2){
 #      new_index <- c(sample(P$pop_calls_matrix[sex, ], 1, replace=F))
-#      P$pairing.pool[(sex + 2), 1, population, ] <-  new_index
+#      moran$pairing.pool[(sex + 2), 1, population, ] <-  new_index
 #    }
 #  }
 #  
 #  return(P)
 #}
 
-recuriosity.offspring <- function(P) {
+recuriosity.offspring <- function(P, moran) {
   for(population in 1:P$num_pop) {
     for(sex in 1:2) {
-      #index <- P$pairing.pool[(sex + 2), 1, population]
-      curiosity_level[P$pairing.pool[(sex + 2), 1, population], population] <- P$pairing.pool[(sex + 2), 2, population]
+      #index <- moran$pairing.pool[(sex + 2), 1, population]
+      curiosity_level[moran$pairing.pool[(sex + 2), 1, population], population] <- moran$pairing.pool[(sex + 2), 2, population]
     }
   }
   return(curiosity_level)
 }
 
-resylreps.offspring <- function(P) {
+resylreps.offspring <- function(P, moran) {
   for(population in 1:P$num_pop) {
     for(sex in 1:2) {
-      #index <- P$pairing.pool[(sex + 2), 1, population]
-      #index_sylrep <- P$learning.pool[(sex + 2), , population]
-      sylreps[P$pairing.pool[(sex + 2), 1, population], , population] <- P$learning.pool[(sex + 2), , population]
+      #index <- moran$pairing.pool[(sex + 2), 1, population]
+      #index_sylrep <- moran$learning.pool[(sex + 2), , population]
+      sylreps[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
     }
   }
   return(sylreps)
@@ -183,7 +183,7 @@ jank_data_generator <- function(universal_parameters, curiosity_level) {
   return(jank)
 }
 
-update_selexn_data <- function(universal_parameters, suitor_choices, preferred_bird, selector_bird,
+update_selexn_data <- function(universal_parameters, moran, suitor_choices, preferred_bird, selector_bird,
                                     curiosity_value, selector_population, selection_context, 
                                     sylreps_choices, sylrep_selector, selection_count) {
   singer_population <- ceiling(preferred_bird/universal_parameters$one_pop_singers[selection_context])
@@ -196,12 +196,12 @@ update_selexn_data <- function(universal_parameters, suitor_choices, preferred_b
   
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
-    universal_parameters$pairing.pool[pool.row, 1, selector_population] <- selected_pair[bird]
-    universal_parameters$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
-    universal_parameters$pairing.pool[pool.row, 2, selector_population] <- curiosities[bird]
+    moran$pairing.pool[pool.row, 1, selector_population] <- selected_pair[bird]
+    moran$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
+    moran$pairing.pool[pool.row, 2, selector_population] <- curiosities[bird]
   }
-  universal_parameters$pairing.pool[(4 - selection_context), 3, selector_population] <- selection_count
-  return(universal_parameters)
+  moran$pairing.pool[(4 - selection_context), 3, selector_population] <- selection_count
+  return(moran)
 }
 
 # P = update_selexn_data(P, selection.index, singer, selector.index, 
@@ -239,17 +239,17 @@ score_similarity <- function(suitor_vector, selector_vector) {
 # This function allows a type of Selector (either a female in mating phase, 
 # or a pupil in tutor phase) to choose a singer according to 
 # the selector's auditory curiosity value.
-sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
+sing.selection <- function(universal_parameters, moran, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
   
-  for(population in 1 : P$num_pop) { #population <- 1 rm(population)
+  for(population in 1 : universal_parameters$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
     chance_for_selection = 1
     while(chance_for_selection <= num_select_chances[select_type]) {
       stop = FALSE
       if(chance_for_selection == num_select_chances[select_type]) {
-        auto.teachers <- matrix(c(sample(P$pop_calls_matrix[1, ], sylrep_fill_chances),sample(P$pop_calls_matrix[2, ], sylrep_fill_chances)),2,sylrep_fill_chances,T)
+        auto.teachers <- matrix(c(sample(universal_parameters$pop_calls_matrix[1, ], sylrep_fill_chances),sample(universal_parameters$pop_calls_matrix[2, ], sylrep_fill_chances)),2,sylrep_fill_chances,T)
         for(MTsylrep_filter in 1:sylrep_fill_chances){
-          #c((sample(P$pop_calls_matrix[1, ], 1)), (sample(P$pop_calls_matrix[2, ], 1)))
+          #c((sample(universal_parameters$pop_calls_matrix[1, ], 1)), (sample(universal_parameters$pop_calls_matrix[2, ], 1)))
           if((
             sum(sylrep_object[auto.teachers[1,MTsylrep_filter], , population]) != 0) && (
             sum(sylrep_object[auto.teachers[2,MTsylrep_filter], , population]) != 0)) {
@@ -257,11 +257,11 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
               context.name <- c("Tutor", "Mate")
               warning(print(paste0("Automatic Teacher(s) = ", auto.teachers[,MTsylrep_filter], " for Population ", population, " ", context.name[select_type], " Selection")))
             }
-            P = update_selexn_data(P, auto.teachers, 1, auto.teachers[2], 
+            moran = update_selexn_data(universal_parameters, moran, auto.teachers, 1, auto.teachers[2], 
                 curiosity_level, population, select_type,
                 sylrep_object[auto.teachers[1]:200,,population], sylrep_object[auto.teachers[2],,population], chance_for_selection)
 
-            # should probably fill in some spots in P$pairing.pool with MTsylrep_filter, provided the value exceeds 1.
+            # should probably fill in some spots in universal_parameters$pairing.pool with MTsylrep_filter, provided the value exceeds 1.
             #if(MTsylrep_filter >= 1) {}
             stop = TRUE
             break
@@ -277,35 +277,35 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
         # selector.index distinguishes between mating and tutoring, except here it uses
         # a randomly-selected female for the mating context, and the offspring for tutoring.
 
-        singSuccessFilter <- 1 : ((P$one_pop_singers[select_type]) * (P$num_pop)) # "1-20"
-        selector.index <- P$pairing.pool[3, 1, population]
+        singSuccessFilter <- 1 : ((universal_parameters$one_pop_singers[select_type]) * (universal_parameters$num_pop)) # "1-20"
+        selector.index <- moran$pairing.pool[3, 1, population]
       } else {
-        singSuccessFilter <- (1 + ((population - 1) * (P$one_pop_singers[select_type]))) : (population * P$one_pop_singers[select_type]) # "1-10," or "11-20"
-        selector.index <- sample(P$pop_calls_matrix[2, ], 1)
+        singSuccessFilter <- (1 + ((population - 1) * (universal_parameters$one_pop_singers[select_type]))) : (population * universal_parameters$one_pop_singers[select_type]) # "1-10," or "11-20"
+        selector.index <- sample(universal_parameters$pop_calls_matrix[2, ], 1)
       }
       
       selector.sylrep <- sylrep_object[selector.index, , population]
             
       selection.index <- (
         # This creates sample calls for each population; each population has a sample size of
-        # P$one_pop_singers, which comes from the male half of the population.
+        # universal_parameters$one_pop_singers, which comes from the male half of the population.
         # probability defined by the fraction of syllable repertoires of each member of 
         # each population divided by the maximum syllrep of the population.
         sapply(
-          1:P$num_pop, function(x) {
+          1:universal_parameters$num_pop, function(x) {
             sample(
-              x = P$pop_calls_matrix[1,], 
-              size = P$one_pop_singers[select_type], 
+              x = universal_parameters$pop_calls_matrix[1,], 
+              size = universal_parameters$one_pop_singers[select_type], 
               replace = FALSE, prob = ((
-                  apply(sylrep_object[P$pop_calls_matrix[1,],,x],1,sum)
+                  apply(sylrep_object[universal_parameters$pop_calls_matrix[1,],,x],1,sum)
                 )/max(
-                  apply(sylrep_object[P$pop_calls_matrix[1,],,x],1,sum)
+                  apply(sylrep_object[universal_parameters$pop_calls_matrix[1,],,x],1,sum)
                 )
               )
             )
           }
         ) # probability = the number of times each individual's syllable 
-          # repertoire has a 1 in it (sum(sylrep_object[P$pop_calls_matrix[1,]])), 
+          # repertoire has a 1 in it (sum(sylrep_object[universal_parameters$pop_calls_matrix[1,]])), 
           # divided by the biggest repertoire's total.
       )
       
@@ -313,11 +313,11 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
       selection.sylreps <- t(
         cbind(
           sapply(
-            1:P$one_pop_singers[select_type], 
+            1:universal_parameters$one_pop_singers[select_type], 
             function(x) {sylrep_object[selection.index[x,1],,1]}
           ),
           sapply(
-            1:P$one_pop_singers[select_type], 
+            1:universal_parameters$one_pop_singers[select_type], 
             function(x) {sylrep_object[selection.index[x,2],,2]}
            )
          )
@@ -329,7 +329,7 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
       
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
-      singer <- golf_score[round(curiosity_level[selector.index, population] * (P$one_pop_singers[select_type] * P$num_pop) + 0.5)]
+      singer <- golf_score[round(curiosity_level[selector.index, population] * (universal_parameters$one_pop_singers[select_type] * universal_parameters$num_pop) + 0.5)]
       if(sum(selection.sylreps[singer,])==0) {
         chance_for_selection = chance_for_selection + 1
         next}
@@ -340,7 +340,7 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
         should_continue <- TRUE
         if(singer %in% singSuccessFilter) {
           
-          P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+          moran = update_selexn_data(universal_parameters, moran, selection.index, singer, selector.index, curiosity_level, 
                              population, select_type, selection.sylreps, selector.sylrep, 
                              chance_for_selection)
           
@@ -352,7 +352,7 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.5,upper=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+              moran = update_selexn_data(universal_parameters, moran, selection.index, singer, selector.index, curiosity_level, 
                              population, select_type, selection.sylreps, selector.sylrep, 
                              chance_for_selection)
               
@@ -367,7 +367,7 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
 
-              P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+              moran = update_selexn_data(universal_parameters, moran, selection.index, singer, selector.index, curiosity_level, 
                              population, select_type, selection.sylreps, selector.sylrep, 
                              chance_for_selection)
               
@@ -383,7 +383,7 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
       } else {
         if(sum(sylrep_object[selection.index[singer], , population]) != 0) {
 
-          P = update_selexn_data(P, selection.index, singer, selector.index, curiosity_level, 
+          moran = update_selexn_data(universal_parameters, moran, selection.index, singer, selector.index, curiosity_level, 
                              population, select_type, selection.sylreps, selector.sylrep, 
                              chance_for_selection)
           
@@ -393,12 +393,12 @@ sing.selection <- function(P, curiosity_level, select_type, sylrep_object, num_s
       chance_for_selection = chance_for_selection + 1
     }
   }
-  return(P)
+  return(moran)
 }
 
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
-curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1){
+curiosity_learn <- function(P, moran, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1){
   #print("blah 1")
   curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
   #print("blah 2")
@@ -407,23 +407,23 @@ curiosity_learn <- function(P, curlearnprob = 0.95, timestep = single_timestep, 
   for(population in 1 : (P$num_pop)) {
     #print(paste("blah 4 - population ", population))
     for(sex in 1:2) {
-      if(P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+      if(moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
       #print(paste("blah 4 - population ", population, " and sex ", sex))
       curinh_attempts <- 1
-      while((P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) < 0) {
+      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) < 0) {
         newcuriosity[sex, population] <- runif(1, 0, 1)
         curinh_attempts <- curinh_attempts + 1
       }
-      while((P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) > 1) {
+      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) > 1) {
         newcuriosity[sex, population] <- runif(1, -1, 0)
         curinh_attempts <- curinh_attempts + 1
       }
       
-      new.curiosity <- P$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
+      new.curiosity <- moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
       
-      P$pairing.pool[(sex + 2), 4, population] <- P$pairing.pool[(sex + 2), 2, population]
-      P$pairing.pool[(sex + 2), 2, population] <- new.curiosity
-      P$pairing.pool[(sex + 2), 5, population] <- curinh_attempts
+      moran$pairing.pool[(sex + 2), 4, population] <- moran$pairing.pool[(sex + 2), 2, population]
+      moran$pairing.pool[(sex + 2), 2, population] <- new.curiosity
+      moran$pairing.pool[(sex + 2), 5, population] <- curinh_attempts
     }
   }
   return(P)

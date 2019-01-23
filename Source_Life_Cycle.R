@@ -17,19 +17,20 @@
 #setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code") <- macbook air
 rm(list=objects())
 parent_directory <- getwd()
-init_params <- paste0("source(\"", parent_directory, "/", "Source_Initial_Functions_Parameters.R\")")
-eval(parse(text = init_params))
+source("Source_Initial_Functions_Parameters.R")
 
-P <- Define.Parameters(num_timesteps = 10000, num_pop = 2, 
+P <- Define.Parameters(num_timesteps = 2000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        one_pop_singers = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
                        randlearnprob = c(0.01, 0.1), stand.dev = 2)
 
+moranObjects <- define_temp_data(P)
+
 sylreps <- initialize.sylrep(P, c(1, 2), T, T)
 
 
-docnamez <- c("190113_36_-_10k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
+docnamez <- c("190123_36_-_2k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(P, 
@@ -46,14 +47,14 @@ eval(parse(text = funx_n_params))
 
 datez <- Sys.Date()
 deetz <- c(P$num_timesteps, P$num_pop, P$pop_size, P$sylnum, P$nsspl, P$one_pop_singers, P$curlearnprob, 
-           P$learnprob, P$randlearnprob, P$stand.dev, dim(P$pop_calls_matrix), dim(P$pairing.pool), 
-           dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(P$learning.pool))
+           P$learnprob, P$randlearnprob, P$stand.dev, dim(P$pop_calls_matrix), dim(moranObjects$pairing.pool), 
+           dim(P$curiosity_counter), dim(P$population_syll_probs), length(P$curiositybreaks), length(P$zero_to_one_template), dim(moranObjects$learning.pool))
 names(deetz) <- c("P$num_timesteps", "P$num_pop", "P$pop_size", "P$sylnum", 
                       "P$nsspl", rep("P$one_pop_singers", 2), "P$curlearnprob", rep("P$learnprob", 2), 
                       rep("P$randlearnprob", 2), "P$stand.dev", 
-                      rep("dim(P$pop_calls_matrix)", 2), rep("dim(P$pairing.pool)", 3), 
+                      rep("dim(P$pop_calls_matrix)", 2), rep("dim(moranObjects$pairing.pool)", 3), 
                       rep("dim(P$curiosity_counter)", 2), rep("dim(P$population_syll_probs)", 2), 
-                      "length(P$curiositybreaks)", "length(P$zero_to_one_template)", rep("dim(P$learning.pool)", 3))
+                      "length(P$curiositybreaks)", "length(P$zero_to_one_template)", rep("dim(moranObjects$learning.pool)", 3))
 stuff_to_save <- list(
   docnamez=docnamez,
   datez=datez,
@@ -63,17 +64,17 @@ stuff_to_save <- list(
 
 for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
-    P <- sing.selection(P = P, curiosity_level = curiosity_level, select_type = 2, sylreps = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
+    moranObjects <- sing.selection(universal_parameters = P, moran = moranObjects, curiosity_level = curiosity_level, select_type = 2, sylreps = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
     
     P <- make.offspring.calls(P = P)
     
     # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
-    P <- curiosity_learn(P = P, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
+    P <- curiosity_learn(P = P, moran = moranObjects, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
     
     P <- syll_learn(P = P, select_type = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
-    P <- sing.selection(P = P, curiosity_level = curiosity_level, select_type = 1, sylreps = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
+    moranObjects <- sing.selection(universal_parameters = P, moran = moranObjects, curiosity_level = curiosity_level, select_type = 1, sylreps = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
     
     P <- syll_learn(P = P, select_type = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
