@@ -171,10 +171,13 @@ jank_data_generator <- function(universal_parameters, curiosity_level) {
   return(jank)
 }
 
-update_selexn_data <- function(universal_parameters, moran, suitor_choices, preferred_bird, selector_bird,
+update_selexn_data <- function(main_parameters, moran, suitor_choices, preferred_bird, selector_bird,
                                     curiosity_value, selector_population, selection_context, 
-                                    sylreps_choices, sylrep_selector, selection_count) {
-  singer_population <- ceiling(preferred_bird/universal_parameters$one_pop_singers[selection_context])
+                                    sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
+  if(!(giving_up)) {
+    singer_population <- ceiling(preferred_bird/main_parameters$one_pop_singers[selection_context])
+  } else {
+    singer_population <- selection_context}
   selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
                      selector_bird)          # Bird doing the selecting
   sylrep_pairs <- rbind(sylreps_choices[preferred_bird,],
@@ -196,9 +199,9 @@ update_selexn_data <- function(universal_parameters, moran, suitor_choices, pref
 #                   curiosity_level, population, select_type,
 #                   selection.sylreps, selector.sylrep, chance_for_selection)
 
-#P = update_selexn_data(P, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
+#P = update_selexn_data(P, moranObjects, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
 #                curiosity_level, population, select_type,
-#                sylrep_object[auto.teachers[1]:200,,population], sylrep_object[auto.teachers[2,MTsylrep_filter],,population], num_select_chances[select_type])
+#                sylrep_object[auto.teachers[1]:200,,population], sylrep_object[auto.teachers[2,MTsylrep_filter],,population], num_select_chances[select_type], T)
 
 ### goddammit, fix P so that: the truly universal stuff is its own object, (num_timesteps, num_pop, pop_size, sylnum, one_pop_singers, pop_calls_matrix, etc.)
                             # the temporary data is in a separate object, (learning.pool and pairing.pool)
@@ -247,7 +250,7 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
             }
             moran = update_selexn_data(universal_parameters, moran, auto.teachers, 1, auto.teachers[2], 
                 curiosity_level, population, select_type,
-                sylrep_object[auto.teachers[1]:200,,population], sylrep_object[auto.teachers[2],,population], chance_for_selection)
+                sylrep_object[auto.teachers[1]:200,,population], sylrep_object[auto.teachers[2],,population], chance_for_selection, T)
 
             # should probably fill in some spots in moran$pairing.pool with MTsylrep_filter, provided the value exceeds 1.
             #if(MTsylrep_filter >= 1) {}
