@@ -1,4 +1,4 @@
-# # # Parameter-Making Function
+
 
 rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
   zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
@@ -12,7 +12,7 @@ rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
     c(length = number_repeats / divisions_per_repeat), zero_to_one_template[value_entered]))
 }
 
-Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, 
+define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, 
                               curlearnprob, learnprob, randlearnprob, stand.dev){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
@@ -125,13 +125,13 @@ Define.Parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
 }
 #Results of Function:
 #Parameters <- list(      
-  # 1 - num_timesteps,   # 8 - ,         # 15- randlearnprob,
-  # 2 - num_pop,         # 9 - curiositybreaks,      # 16- stand.dev,
-  # 3 - pop_size,        # 10- curiosity_counter,    # 17- ,
-  # 4 - sylnum,          # 11- zero_to_one_template, # 18- ,
-  # 5 - nsspl,           # 12- population_syll_probs,# 19- 
-  # 6 - one_pop_singers, # 13- curlearnprob,
-  # 7 - pop_calls_matrix,# 14- learnprob,
+  # 1 - num_timesteps,   # 8 - curiositybreaks,         # 15- stand.dev,
+  # 2 - num_pop,         # 9 - curiosity_counter,      # 16- ,
+  # 3 - pop_size,        # 10- zero_to_one_template,    # 17- ,
+  # 4 - sylnum,          # 11- population_syll_probs, # 18- ,
+  # 5 - nsspl,           # 12- curlearnprob,# 19- 
+  # 6 - one_pop_singers, # 13- learnprob,
+  # 7 - pop_calls_matrix,# 14- randlearnprob,
 #return(Parameters)
 define_temp_data <- function(universal_parameters) {
   learning.pool <- array(0, c(5, universal_parameters$sylnum, universal_parameters$num_pop))

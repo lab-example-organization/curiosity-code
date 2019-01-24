@@ -89,27 +89,27 @@ syll_learn <- function(P, moran, select_type = 2, totally_new = FALSE, randlearn
   return(P)
 }
 
-variable.archive <- function(P, moran, timestep) {
+variable.archive <- function(P, moran, syllable_object, curiosity_object, data_container, timestep) {
   #context_name <- c("parents&offspring","replacedindividuals")
   #if(context == 1) {
   for(population in 1 : P$num_pop) {
-    day.tuh[["curity_mean_t"]][3, population, timestep] <- moran$pairing.pool[2, 3, population]
-    day.tuh[["curity_mean_t"]][10, population, timestep] <- moran$pairing.pool[3, 3, population]
+    data_container[["curity_mean_t"]][3, population, timestep] <- moran$pairing.pool[2, 3, population]
+    data_container[["curity_mean_t"]][10, population, timestep] <- moran$pairing.pool[3, 3, population]
     
     for(sex in 1:2) {
-      day.tuh[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
-      day.tuh[["sylrep_dstbxn"]][(((population - 1) * 2) + sex), , timestep] <- colSums(sylreps[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]) # day.tuh[sylnums filled in by population[sex]] <- colSums(sylnums called by population[sex])
-      day.tuh[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_level[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
+      data_container[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(syllable_object[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]))
+      data_container[["sylrep_dstbxn"]][(((population - 1) * 2) + sex), , timestep] <- colSums(syllable_object[((1 + ((sex - 1) * (P$pop_size / 2))) : (sex * (P$pop_size / 2))), , population]) # data_container[sylnums filled in by population[sex]] <- colSums(sylnums called by population[sex])
+      data_container[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_object[((1 + ((sex-1) * P$pop_size / 2)):(sex * P$pop_size / 2)), population], breaks = P$curiositybreaks, plot = FALSE)$counts
       
-      day.tuh[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_level[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
-      day.tuh[["curity_mean_t"]][(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
-      day.tuh[["curity_mean_t"]][(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
-      day.tuh[["curity_mean_t"]][(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
-      day.tuh[["curity_mean_t"]][11, population, timestep] <- moran$pairing.pool[(sex + 2), 5, population]
-      day.tuh[["curity_mean_t"]][12, population, timestep] <- moran$pairing.pool[sex, 5, population]
+      data_container[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_object[((1 + ((sex-1) * P$pop_size/2)):(sex * P$pop_size/2)), population])
+      data_container[["curity_mean_t"]][(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
+      data_container[["curity_mean_t"]][(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
+      data_container[["curity_mean_t"]][(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
+      data_container[["curity_mean_t"]][11, population, timestep] <- moran$pairing.pool[(sex + 2), 5, population]
+      data_container[["curity_mean_t"]][12, population, timestep] <- moran$pairing.pool[sex, 5, population]
     }
   }
-  return(day.tuh)
+  return(data_container)
 }
 
 make.offspring.calls <- function(P, moran){
@@ -122,26 +122,14 @@ make.offspring.calls <- function(P, moran){
   return(P)
 }
 
-#make.offspring.calls <- function(P){
-#  
-#  for(population in 1:P$num_pop){
-#    for(sex in 1:2){
-#      new_index <- c(sample(P$pop_calls_matrix[sex, ], 1, replace=F))
-#      moran$pairing.pool[(sex + 2), 1, population, ] <-  new_index
-#    }
-#  }
-#  
-#  return(P)
-#}
-
-recuriosity.offspring <- function(P, moran) {
+recuriosity.offspring <- function(P, moran, curiosity_object) {
   for(population in 1:P$num_pop) {
     for(sex in 1:2) {
       #index <- moran$pairing.pool[(sex + 2), 1, population]
-      curiosity_level[moran$pairing.pool[(sex + 2), 1, population], population] <- moran$pairing.pool[(sex + 2), 2, population]
+      curiosity_object[moran$pairing.pool[(sex + 2), 1, population], population] <- moran$pairing.pool[(sex + 2), 2, population]
     }
   }
-  return(curiosity_level)
+  return(curiosity_object)
 }
 
 resylreps.offspring <- function(P, moran) {
@@ -261,7 +249,7 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
                 curiosity_level, population, select_type,
                 sylrep_object[auto.teachers[1]:200,,population], sylrep_object[auto.teachers[2],,population], chance_for_selection)
 
-            # should probably fill in some spots in universal_parameters$pairing.pool with MTsylrep_filter, provided the value exceeds 1.
+            # should probably fill in some spots in moran$pairing.pool with MTsylrep_filter, provided the value exceeds 1.
             #if(MTsylrep_filter >= 1) {}
             stop = TRUE
             break
@@ -398,35 +386,37 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
 
 # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
-curiosity_learn <- function(P, moran, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1){
-  #print("blah 1")
-  curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
-  #print("blah 2")
+curiosity_learn <- function(P, moran, timestep = single_timestep, curinh.row = 1){
+  
+  curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2))
+  # For posterity: curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), 
+    # dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
+  
   newcuriosity <- array(data = runif((P$num_pop * 2), -1, 1), dim = c(2, P$num_pop))
-  #print("blah 3")
+  
   for(population in 1 : (P$num_pop)) {
-    #print(paste("blah 4 - population ", population))
+    
     for(sex in 1:2) {
       if(moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
-      #print(paste("blah 4 - population ", population, " and sex ", sex))
+      
       curinh_attempts <- 1
-      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) < 0) {
+      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population]))) < 0) {
         newcuriosity[sex, population] <- runif(1, 0, 1)
         curinh_attempts <- curinh_attempts + 1
       }
-      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population]))) > 1) {
+      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population]))) > 1) {
         newcuriosity[sex, population] <- runif(1, -1, 0)
         curinh_attempts <- curinh_attempts + 1
       }
       
-      new.curiosity <- moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
+      new.curiosity <- moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
       
       moran$pairing.pool[(sex + 2), 4, population] <- moran$pairing.pool[(sex + 2), 2, population]
       moran$pairing.pool[(sex + 2), 2, population] <- new.curiosity
       moran$pairing.pool[(sex + 2), 5, population] <- curinh_attempts
     }
   }
-  return(P)
+  return(moran)
 }
   
 

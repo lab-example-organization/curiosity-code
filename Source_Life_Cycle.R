@@ -19,7 +19,7 @@ rm(list=objects())
 parent_directory <- getwd()
 source("Source_Initial_Functions_Parameters.R")
 
-P <- Define.Parameters(num_timesteps = 2000, num_pop = 2, 
+P <- define_parameters(num_timesteps = 2000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        one_pop_singers = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
@@ -70,7 +70,7 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
     # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
-    P <- curiosity_learn(P = P, moran = moranObjects, curlearnprob = 0.95, timestep = single_timestep, curinh.row = 1) 
+    moranObjects <- curiosity_learn(P = P, moran = moranObjects, timestep = single_timestep, curinh.row = 1) 
     
     P <- syll_learn(P = P, select_type = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
@@ -78,11 +78,11 @@ for(thousand_timesteps in 1:(P$num_timesteps/1000)) {
     
     P <- syll_learn(P = P, select_type = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
-    curiosity_level <- recuriosity.offspring(P = P)
+    curiosity_level <- recuriosity.offspring(P = P, moran = moranObjects, curiosity_object = curiosity_level)
     
     sylreps <- resylreps.offspring(P = P)
     
-    day.tuh <- variable.archive(P = P, timestep = single_timestep)
+    day.tuh <- variable.archive(P = P, moran = moranObjects, syllable_object = sylreps, curiosity_object = curiosity_level, data_container = day.tuh, timestep = single_timestep)
     
   }
   #thousand_timesteps <- 1
