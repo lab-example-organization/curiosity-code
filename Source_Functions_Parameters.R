@@ -384,9 +384,9 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
   return(moran)
 }
 
-# curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
+# inheritance_pattern - calling either the row number or name of row for different curiosity inheritance patterns - 1: father; 2: mother; 3: same; 4:opposite
 
-curiosity_learn <- function(P, moran, timestep = single_timestep, curinh.row = 1){
+curiosity_learn <- function(P, moran, timestep = single_timestep, inheritance_pattern = 1){
   
   curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2))
   # For posterity: curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), 
@@ -397,19 +397,19 @@ curiosity_learn <- function(P, moran, timestep = single_timestep, curinh.row = 1
   for(population in 1 : (P$num_pop)) {
     
     for(sex in 1:2) {
-      if(moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+      if(moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
       
       curinh_attempts <- 1
-      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population]))) < 0) {
+      while((moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population]))) < 0) {
         newcuriosity[sex, population] <- runif(1, 0, 1)
         curinh_attempts <- curinh_attempts + 1
       }
-      while((moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population]))) > 1) {
+      while((moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population]))) > 1) {
         newcuriosity[sex, population] <- runif(1, -1, 0)
         curinh_attempts <- curinh_attempts + 1
       }
       
-      new.curiosity <- moran$pairing.pool[curinh_patterns[curinh.row,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
+      new.curiosity <- moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] + ((1 - P$curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
       
       moran$pairing.pool[(sex + 2), 4, population] <- moran$pairing.pool[(sex + 2), 2, population]
       moran$pairing.pool[(sex + 2), 2, population] <- new.curiosity
