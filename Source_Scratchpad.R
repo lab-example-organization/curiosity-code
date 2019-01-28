@@ -28,7 +28,7 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
         }
         if(stop) {break}
       }
-        
+      
       if(select_type == 1) {
         #This statement separates specific mating and tutoring selection qualities:
         # singSuccessFilter will inform the selection of a mate by restricting the successful mate 
@@ -181,3 +181,5 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
     }
     print("This text prints after 'oh yeah!' as long as the break works")
   }
+
+  

@@ -1,11 +1,12 @@
 #
-
+print("it's starting!")
 number_of_runs <- 2
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
 
 
-file.remove("console_copy.txt","sim_data.txt")
+if(file.exists("console_copy.txt")) {file.remove("console_copy.txt")}
+if(file.exists("sim_data.txt")) {file.remove("sim_data.txt")}
 for(run_number in 1:number_of_runs) {
   saveRDS(object = run_number, file = "holdover_line.RData")
   if(run_number == 1) {

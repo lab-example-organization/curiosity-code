@@ -1,4 +1,4 @@
-
+print("Sourced Initial Functions")
 
 rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
   zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
