@@ -31,7 +31,7 @@ moranObjects <- define_temp_data(simParams)
 sylreps <- initialize.sylrep(simParams, c(1, 2), T, T)
 
 
-docnamez <- c("190128_36_-_2k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
+docnamez <- c("190129_36_-_2k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
@@ -62,25 +62,61 @@ stuff_to_save <- list(
 
 for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
   for(single_timestep in 1:1000) {
-    moranObjects <- sing.selection(uniparmaters = simParams, moran = moranObjects, curiosity_level = curiosity_level, select_type = 2, sylrep_object = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
+    moranObjects <- sing.selection(uniparmaters = simParams, 
+                                   moran = moranObjects, 
+                                   curiosity_level = curiosity_level, 
+                                   select_type = 2, 
+                                   sylrep_object = sylreps, 
+                                   num_select_chances = c(100, 100), 
+                                   verbose_output = F, 
+                                   interbreed = F)
     
-    moranObjects <- make.offspring.calls(parmters = simParams, moran = moranObjects)
+    moranObjects <- make.offspring.calls(parmters = simParams, 
+                                         moran = moranObjects)
     
     # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
-    moranObjects <- curiosity_learn(patamerers = simParams, moran = moranObjects, timestep = single_timestep, inheritance_pattern = 1) 
+    moranObjects <- curiosity_learn(patamerers = simParams, 
+                                    moran = moranObjects, 
+                                    timestep = single_timestep, 
+                                    inheritance_pattern = 1) 
     
-    simParams <- syll_learn(params = simParams, moran = moranObjects, select_type = 2, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    moranObjects <- syll_learn(params = simParams, 
+                            moran = moranObjects, 
+                            select_type = 2, 
+                            totally_new = FALSE, 
+                            randlearn_context = 2, 
+                            verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
-    moranObjects <- sing.selection(uniparmaters = simParams, moran = moranObjects, curiosity_level = curiosity_level, select_type = 1, sylrep_object = sylreps, num_select_chances = c(100, 100), verbose_output = F, interbreed = F)
+    moranObjects <- sing.selection(uniparmaters = simParams, 
+                                   moran = moranObjects, 
+                                   curiosity_level = curiosity_level, 
+                                   select_type = 1, 
+                                   sylrep_object = sylreps, 
+                                   num_select_chances = c(100, 100), 
+                                   verbose_output = F, 
+                                   interbreed = F)
     
-    simParams <- syll_learn(params = simParams, moran = moranObjects, select_type = 1, totally_new = FALSE, randlearn_context = 2, verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+    moranObjects <- syll_learn(params = simParams, 
+                            moran = moranObjects, 
+                            select_type = 1, 
+                            totally_new = FALSE, 
+                            randlearn_context = 2, 
+                            verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
     
-    curiosity_level <- recuriosity.offspring(parmaters = simParams, moran = moranObjects, curiosity_object = curiosity_level)
+    curiosity_level <- recuriosity.offspring(parmaters = simParams, 
+                                             moran = moranObjects, 
+                                             curiosity_object = curiosity_level)
     
-    sylreps <- resylreps.offspring(paraterms = simParams, moran = moranObjects)
+    sylreps <- resylreps.offspring(paraterms = simParams, 
+                                   moran = moranObjects)
     
-    day.tuh <- variable.archive(parameters = simParams, moran = moranObjects, syllable_object = sylreps, curiosity_object = curiosity_level, data_container = day.tuh, timestep = single_timestep)
+    day.tuh <- variable.archive(parameters = simParams, 
+                                moran = moranObjects, 
+                                syllable_object = sylreps, 
+                                curiosity_object = curiosity_level, 
+                                data_container = day.tuh, 
+                                timestep = single_timestep)
     
   }
   #thousand_timesteps <- 1
