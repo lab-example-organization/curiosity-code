@@ -1,52 +1,14 @@
-#data_visuals <- paste0("source(\"", parent_directory, "/", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
-#eval(parse(text = data_visuals))
 
 number_of_runs <- source("number_of_runs.txt")$value
-conv_outputToFolderName <- function(normal_output = TRUE, number_of_runs) { # takes strings of the form "storing data packet 100 at 2018-10-09 01:55:51" from console output, and outputs a folder name "2018-10-09-010315-GMT-variable-store"
-  #scan(filename_document,what=list(NULL),sep='\n',blank.lines.skip = F)
-  #connection <- file(description = "console_copy.txt", open = "rt")
-  #consoleOutput <- as.vector(read.table(connection, -1L)[[2]])
-  #close(connection)
+
+make_vstore_folder_list <- function() {
   connection <- file(description = "sim_data.txt", open = "rt")
-  #folderNames <- as.vector(read.table(connection, -1L))
-  folderNames <- as.vector(read.table(connection, -1L)[[2]]) ### normal lab communal computer
+  folderNames <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
-  
-  #connection <- file(description = "console_copy.txt", open = "rt")
-  #console_split <- as.vector(read.table(connection, -1L)[[2]])
-  #close(connection)
-  
-  if(normal_output == TRUE) {
-    #run_length <- function(output_text = console_split) {
-    #  splitLastLine <- strsplit(output_text[length(output_text)], " ")[[1]]
-    #  singleRunLength <- as.integer(splitLastLine[4]) # [1] 100
-    #  return(singleRunLength)
-    #}
-    #singleRunLength <- run_length(console_split)
-  #singleRunLength <- 35  
-    #first_line_last_run <- consoleOutput[nrow(consoleOutputs)-(singleRunLength-1)] # [1] "storing data packet 1 at 2018-10-09 01:03:15"
-    
-    
-      runNames <- vector(mode = "character", length = number_of_runs)
-      for(runds in 1:number_of_runs) {
-        #runNames[runds] <- consoleOutput[length(consoleOutput)-(singleRunLength-1)-((number_of_runs-runds)*singleRunLength)]
-        #runNames[runds] <- consoleOutput[1 + ((runds-1)*singleRunLength)]
-        #runNames[runds] <- strsplit(as.character(folderNames[runds,]), "/")[[1]][9] ### Lab communal computer version
-        runNames[runds] <- strsplit(folderNames, "Results/")[[runds]][2] ### normal lab communal computer
-        #runNames[runds] <- strsplit(folderNames, "/")[[runds]][9] ### SERVER VERSION. (Beta site too)
-        #first_line_pieces <- strsplit(runNames[runds], " ")[[1]][7]
-        #string_time <- formatC(sapply(1:3, function(x) {as.integer(strsplit(first_line_pieces, ":")[[1]][x])}),width=2,format="d",flag="0")
-        #string_time <- paste0(string_time[1], string_time[2], string_time[3])
-        #runNames[runds] <- paste0(strsplit(runNames[runds], " ")[[1]][6], "-",string_time, "-GMT-variable-store")
-      }
-      #output <- runNames ### normal lab communal computer
-      output <- paste0(strsplit(getwd(),"Code")[[1]][1], "Code/Results/", runNames)
-    
-  }
-  return(output)
+  return(folderNames)
 }
 
-multiRun_folderList <- conv_outputToFolderName(normal_output = T, number_of_runs = number_of_runs)
+multiRun_folderList <- make_vstore_folder_list()
 
 
 #multirunParentDirectory <- "/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code/StartingCuriosityValues/15-18"
@@ -59,29 +21,22 @@ for(run_visual in 1:number_of_runs) {
   #run_visual=1
   if(run_visual == 1) {
     multiRunTime <- format(Sys.time(), "%F-%H%M%S")
-    dir.create(file.path(parent_directory, paste0(multiRunTime, "-GMT-multirun-output")))
+    setwd(paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/", tail(list.files(path = paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/"), pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)))
+    dir.create("multirun_output")
+    dir.create(file.path("multirun_output", paste0(multiRunTime, "-GMT-multirun-output")))
     multiFolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
     saveRDS(object = multiRun_folderList, file = paste0(multiFolderName, "/folderList.RData"))
-    metadata_path <- paste0(parent_directory, "/", tail(list.files(pattern = "variable-store"),1), "/metadata.RData")
-    metadata <- readRDS(file = metadata_path)
+    metadata <- readRDS(file = paste0(multiRun_folderList[run_visual], "/metadata.RData"))
     saveRDS(object = metadata, file = paste0(multiFolderName, "/metadata.RData"))
-  } # makes the folder for multirun results, saves the multiRun_folderList there.
+  } # makes the folder for multirun results, saves multiRun_folderList and metadata there.
   
-  #if(isTRUE(nchar(list.files(pattern = multiRun_folderList[run_visual]))>1)==T) {
-      setwd(multiRun_folderList[run_visual])
-  #} else {
-  #  multiRun_folderList[run_visual] <- paste0(
-  #    strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][1], 
-  #    as.integer(strsplit(multiRun_folderList[run_visual], "-")[[1]][4]) + 1, 
-  #    strsplit(multiRun_folderList[run_visual], strsplit(multiRun_folderList[run_visual], "-")[[1]][4])[[1]][2])
-  #    setwd(multiRun_folderList[run_visual])
-  #} # you might be saying, "what's with this silliness, Parker?" Well, sometimes file folders are made one second after I have them recorded as having been started. This addresses that bullshit by finding the appropriate folder in the directory to set as working directory.
-  
-  #setwd(multiRun_folderList[run_visual])
-  data_visuals <- paste0("source(\"", "../", "Source_Visualizing_Data.R\")") ####### rm(list=objects())!!!!!!
-  eval(parse(text = data_visuals))
+# tail(list.files(pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)
+
+  setwd(multiRun_folderList[run_visual])
+      
+  source("../../../curiosity-code/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
   run_number_directory <- getwd()
-  setwd(strsplit(run_number_directory, "20")[[1]][1])
+  setwd(paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/"))
   multiRun_folderList <- readRDS(file = paste0(getwd(), "/", tail(list.files(pattern = "multirun"),1), "/folderList.RData"))
   parent_directory <- getwd()
   run_visual <- which(multiRun_folderList == (paste0(parent_directory, "/2019-", strsplit(run_number_directory, "2019-")[[1]][2])))
@@ -92,7 +47,8 @@ for(run_visual in 1:number_of_runs) {
   setwd(multirun_directory)
   info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
   #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps/100))")
+  data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", 
+                         run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps/100))")
   cat(data_convert, file = "data_convert.R", sep = "\n")
   source("data_convert.R")
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")

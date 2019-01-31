@@ -240,7 +240,7 @@ score_similarity <- function(suitor_vector, selector_vector) {
 # or a pupil in tutor phase) to choose a singer according to 
 # the selector's auditory curiosity value.
 sing.selection <- function(uniparmaters, moran, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
-  
+  #print("sing.selection beginning")
   for(population in 1 : uniparmaters$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
     chance_for_selection = 1
@@ -286,7 +286,7 @@ sing.selection <- function(uniparmaters, moran, curiosity_level, select_type, sy
       }
       
       selector.sylrep <- sylrep_object[selector.index, , population]
-            
+      #print("sapply")
       selection.index <- (
         # This creates sample calls for each population; each population has a sample size of
         # uniparmaters$one_pop_singers, which comes from the male half of the population.
@@ -439,21 +439,27 @@ store_timesteps <- function(prameters, filename = thousand_timesteps, object_rec
   results_directory <- paste0(strsplit(directory, "Code")[[1]][1],"Code/Results")
   if(filename == 1) {
     run_timedate <- format(Sys.time(), "%F-%H%M%S")
-    dir.create(file.path(results_directory, stuff_to_save$docnamez))
-    dir.create(file.path(results_directory, stuff_to_save$docnamez, paste0(run_timedate, "-GMT-variable-store/")))
-    FolderName <- paste0(results_directory, "/", stuff_to_save$docnamez, "/", run_timedate, "-GMT-variable-store/")
+    if(!(dir.exists(file.path(results_directory, stuff_to_save$docnamez)))) {
+         dir.create(file.path(results_directory, stuff_to_save$docnamez))
+         dir.create(file.path(results_directory, stuff_to_save$docnamez, "variable_store"))
+    }
+    dir.create(file.path(results_directory, stuff_to_save$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
+    FolderName <- paste0(results_directory, "/", stuff_to_save$docnamez, "/variable_store/", run_timedate, "-GMT-variable-store/")
     setwd(FolderName)
     saveRDS(object = stuff_to_save, file = "metadata.RData")
     #rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
     setwd(directory)
-  }
-  setwd(paste0(results_directory, "/", stuff_to_save$docnamez, "/"))
+  } # sets up the master folder for the greater simulation, creates and begins to fill the variable store folder for this run and puts 
+  setwd(paste0(results_directory, "/", stuff_to_save$docnamez, "/", "variable_store/", list.files(
+  path = paste0(results_directory, "/", stuff_to_save$docnamez, "/", "variable_store/"))[length(list.files(
+  path = paste0(results_directory, "/", stuff_to_save$docnamez, "/", "variable_store/")
+  ))]))
   #FolderName <- paste0(getwd(), "/", list.files()[length(list.files())])
-  setwd(list.files()[length(list.files())])
+  #setwd(list.files()[length(list.files())])
   FolderName <- getwd()
   
   for(deyteh in 1:length(object_record)) {
-    zfilename <- file.create(paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData"))
+    file.create(paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData"))
     objekshun <- object_record[[deyteh]]
     saveRDS(object = objekshun, file = paste0(getwd(), paste0("/variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
   }
@@ -464,4 +470,4 @@ store_timesteps <- function(prameters, filename = thousand_timesteps, object_rec
   
   setwd(directory)
   return(FolderName)
-}
+} # 

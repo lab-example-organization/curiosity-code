@@ -3,7 +3,7 @@ library(abind)
 library(stringr)
 library(Hmisc)
 rm(list = objects())
-number_of_runs <- source(paste0(strsplit(getwd(),"201")[[1]][1],"number_of_runs.txt"))$value
+number_of_runs <- source(paste0(strsplit(getwd(),"Code")[[1]][1],"Code/curiosity-code/number_of_runs.txt"))$value
 #FolderName = readRDS(file = "harvest_info.RData")
 P = readRDS(file = "parameters.RData")
 thousand_timesteps = readRDS(file = "timestep_grps.RData")
@@ -141,7 +141,7 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
 ### figure_maker(P=P, Q=Q, R=R, population=population, q_subset="cursity", subset_number="3", filename="_mate_selections_pop", 
 ### sex_dependent=F, simple=T, ylab1="Pop", ylab2=" Selection Chances")
 
-figure_maker <- function(P, Q, R, population, q_subset, subset_number, filename, sex_dependent, simple, ylab1, ylab2) {
+figure_maker <- function(P, Q, R, population, q_subset, subset_number, filename, sex_dependent, simple, ylab1, ylab2) { # needs number_of_runs passed to it if simple ever == FALSE
   if(simple == T) {
     if(sex_dependent == T) {
       for(sex in 1:2) {
