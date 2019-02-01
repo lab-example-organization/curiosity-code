@@ -15,7 +15,7 @@
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code/curiosity-code") <- Server
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code") <- old server address
 #setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code") <- macbook air
-print("Life Cycle Start")
+#print("Life Cycle Start")
 rm(list=objects())
 parent_directory <- getwd()
 source("Source_Initial_Functions_Parameters.R")
@@ -129,7 +129,6 @@ for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     sink(file = paste0(parent_directory, "/sim_data.txt"), append = TRUE)
     print(FolderName)
     sink()
-    saveRDS(simParams,paste0(format(Sys.time(), "%F-%H%M%S"), "_Final_Params.RData"))
     #stop("It's Done, Yo!")
     }
 }

@@ -1,4 +1,4 @@
-print("Sourced Regular Functions")
+#print("Sourced Regular Functions")
 
 # REPEATED-USE FUNCTIONS ##################################
 library(R.utils)
