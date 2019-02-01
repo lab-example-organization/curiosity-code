@@ -20,7 +20,7 @@ rm(list=objects())
 parent_directory <- getwd()
 source("Source_Initial_Functions_Parameters.R")
 
-simParams <- define_parameters(num_timesteps = 2000, num_pop = 2, 
+simParams <- define_parameters(num_timesteps = 10000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        one_pop_singers = c(10,10), 
                        curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
@@ -31,13 +31,13 @@ moranObjects <- define_temp_data(simParams)
 sylreps <- initialize.sylrep(simParams, c(1, 2), T, T)
 
 
-docnamez <- c("190201_36_-_2k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
+docnamez <- c("190201_37_-_10k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
                                         c(1,1,1,1), 
-                                        c(7,7,7,7))
+                                        c(26,26,26,26))
 
 day.tuh <- recordvariable.initialize(simParams, timestep_fraction = (simParams$num_timesteps/1000))
 
