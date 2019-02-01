@@ -35,9 +35,8 @@ for(run_visual in 1:number_of_runs) {
       
   source("../../../../curiosity-code/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
   run_number_directory <- getwd()
-  setwd(paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/"))
-  multiRun_folderList <- readRDS(file = paste0(getwd(), "/", tail(list.files(pattern = "multirun"),1), "/folderList.RData"))
-  parent_directory <- getwd()
+  parent_directory <- paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/")
+  multiRun_folderList <- readRDS(file = paste0(getwd(), "/", "folderList.RData"))
   run_visual <- which(multiRun_folderList == (paste0(parent_directory, "/2019-", strsplit(run_number_directory, "2019-")[[1]][2])))
   
   parent_directory <- getwd()
