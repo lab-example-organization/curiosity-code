@@ -22,7 +22,7 @@ for(run_visual in 1:number_of_runs) {
   if(run_visual == 1) {
     multiRunTime <- format(Sys.time(), "%F-%H%M%S")
     setwd(paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/", tail(list.files(path = paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/"), pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)))
-    if(!(dir.exists("multirun_output")) {dir.create("multirun_output")}
+    if(!(dir.exists("multirun_output"))) {dir.create("multirun_output")}
     dir.create(file.path("multirun_output", paste0(multiRunTime, "-GMT-multirun-output")))
     #multiFolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
     #saveRDS(object = multiRun_folderList, file = paste0(multiFolderName, "/folderList.RData"))
