@@ -22,11 +22,12 @@ for(run_visual in 1:number_of_runs) {
   if(run_visual == 1) {
     multiRunTime <- format(Sys.time(), "%F-%H%M%S")
     setwd(paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/", tail(list.files(path = paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/"), pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)))
-    #dir.create("multirun_output")
+    if(!(dir.exists("multirun_output") {dir.create("multirun_output")}
     dir.create(file.path("multirun_output", paste0(multiRunTime, "-GMT-multirun-output")))
-    multiFolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
+    #multiFolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
     #saveRDS(object = multiRun_folderList, file = paste0(multiFolderName, "/folderList.RData"))
-    if(!(file.exists("folderList.RData"))) {saveRDS(object = multiRun_folderList, file = "folderList.RData")}    metadata <- readRDS(file = paste0(multiRun_folderList[run_visual], "/metadata.RData"))
+    if(!(file.exists("folderList.RData"))) {saveRDS(object = multiRun_folderList, file = "folderList.RData")}    
+    # metadata <- readRDS(file = paste0(multiRun_folderList[run_visual], "/metadata.RData"))
   } # makes the folder for multirun results, saves multiRun_folderList there.
   
 # tail(list.files(pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)
@@ -36,11 +37,12 @@ for(run_visual in 1:number_of_runs) {
   source("../../../../curiosity-code/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
   run_number_directory <- getwd()
   parent_directory <- paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/")
-  multiRun_folderList <- readRDS(file = paste0(getwd(), "/", "folderList.RData"))
-  run_visual <- which(multiRun_folderList == (paste0(parent_directory, "/2019-", strsplit(run_number_directory, "2019-")[[1]][2])))
+  multiRun_folderList <- readRDS(file = paste0(strsplit(getwd(), "variable")[[1]][1], "/", "folderList.RData"))
+  run_visual <- which(multiRun_folderList == run_number_directory)
   
-  parent_directory <- getwd()
-  multirun_directory <- paste0(parent_directory, "/", tail(list.files(pattern = "multirun"),1))
+  # parent_directory <- getwd()
+  #multirun_directory <- paste0(parent_directory, "/", tail(list.files(pattern = "multirun"),1))
+  multirun_directory <- paste0(strsplit(getwd(), "variable")[[1]][1], "multirun_output/", list.files(path = paste0(strsplit(getwd(), "variable")[[1]][1], "multirun_output/"), pattern = "multirun"))
   #results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
   setwd(multirun_directory)
   info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))

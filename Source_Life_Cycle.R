@@ -31,7 +31,7 @@ moranObjects <- define_temp_data(simParams)
 sylreps <- initialize.sylrep(simParams, c(1, 2), T, T)
 
 
-docnamez <- c("190129_36_-_2k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
+docnamez <- c("190201_36_-_2k_nsL_1_1_V_1_1_O_oppsyl_1-7_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
