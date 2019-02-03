@@ -1,6 +1,6 @@
 #
 #print("it's starting!")
-number_of_runs <- 2
+number_of_runs <- 50
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
 
