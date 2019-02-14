@@ -23,21 +23,21 @@ source("Source_Initial_Functions_Parameters.R")
 simParams <- define_parameters(num_timesteps = 10000, num_pop = 2, 
                        pop_size = 400, sylnum = 156, nsspl = 12, 
                        one_pop_singers = c(10,10), 
-                       curlearnprob = 0.95, learnprob = c(0.2, 0.8), 
-                       randlearnprob = c(0.1, 0.2), stand.dev = 2)
+                       curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
+                       randlearnprob = c(0.01, 0.1), stand.dev = 2)
 
 moranObjects <- define_temp_data(simParams)
 
 sylreps <- initialize.sylrep(simParams, c(1, 2), T, T)
 
 
-docnamez <- c("190202_45_-_10k_nsL_2_0.84_V_10_2_O_oppsyl_1-7_c") # equal syllable range
+docnamez <- c("190211_142_-_10k_nsL_normVO_oppsyl_1-26f_7-13mp1_11-26mp2_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(1,1,1,1), 
-                                        c(7,7,7,7))
+                                        c(7,1,11,1), 
+                                        c(13,26,26,26))
 
 day.tuh <- recordvariable.initialize(simParams, timestep_fraction = (simParams$num_timesteps/1000))
 
