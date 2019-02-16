@@ -31,13 +31,13 @@ moranObjects <- define_temp_data(simParams)
 sylreps <- initialize.sylrep(simParams, c(1, 2), T, T)
 
 
-docnamez <- c("190211_142_-_10k_nsL_normVO_oppsyl_1-26f_7-13mp1_11-26mp2_c") # equal syllable range
+docnamez <- c("190215_143_-_2k_nsL_normVO_oppsyl_1-26f_7-13mp1_11-20mp2_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
                                         c(7,1,11,1), 
-                                        c(13,26,26,26))
+                                        c(13,26,20,26))
 
 day.tuh <- recordvariable.initialize(simParams, timestep_fraction = (simParams$num_timesteps/1000))
 

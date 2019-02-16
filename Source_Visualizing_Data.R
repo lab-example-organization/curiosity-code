@@ -188,7 +188,7 @@ figure_maker <- function(P, Q, R, population, q_subset, subset_number, filename,
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
@@ -201,7 +201,7 @@ figure_maker <- function(P, Q, R, population, q_subset, subset_number, filename,
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
       dev.off()
 
       # # make an object for the mean value
@@ -232,7 +232,7 @@ figure_maker <- function(P, Q, R, population, q_subset, subset_number, filename,
       # #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       # axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][3,population,]),((length(cursitylist[[number_of_runs + 1]][3,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       # eval(parse(text=stuff))
-      # points(cursitylist[[number_of_runs + 1]][3,population,],col="black", cex=0.2)
+      # lines(cursitylist[[number_of_runs + 1]][3,population,],col="black", cex=0.2)
       # dev.off()
 
     # if(sex_dependent == T) {
@@ -406,7 +406,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][3,population,]),((length(cursitylist[[number_of_runs + 1]][3,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][3,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][3,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][10,population,]
@@ -419,7 +419,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][4,population,]
@@ -432,7 +432,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][4,population,]),((length(cursitylist[[number_of_runs + 1]][4,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][4,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][4,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][5,population,]
@@ -445,7 +445,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][5,population,]),((length(cursitylist[[number_of_runs + 1]][5,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][5,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][5,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][6,population,]
@@ -458,7 +458,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][6,population,]),((length(cursitylist[[number_of_runs + 1]][6,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][6,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][6,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][7,population,]
@@ -471,7 +471,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][7,population,]),((length(cursitylist[[number_of_runs + 1]][7,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][7,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][7,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][8,population,]
@@ -484,7 +484,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][8,population,]),((length(cursitylist[[number_of_runs + 1]][8,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][8,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][8,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][9,population,]
@@ -497,7 +497,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][9,population,]),((length(cursitylist[[number_of_runs + 1]][9,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][9,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][9,population,],col="black", cex=0.2)
       dev.off()
       
       meanz <- cursitylist[[number_of_runs + 1]][11,population,]
@@ -510,7 +510,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][11,population,]),((length(cursitylist[[number_of_runs + 1]][11,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
       eval(parse(text=stuff))
-      points(cursitylist[[number_of_runs + 1]][11,population,],col="black", cex=0.2)
+      lines(cursitylist[[number_of_runs + 1]][11,population,],col="black", cex=0.2)
       dev.off()
       
       
@@ -531,7 +531,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
         #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
         axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
         eval(parse(text=stuff))
-        points(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
+        lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off()
         
         meanz <- cursitylist[[number_of_runs + 1]][sex,population,]
@@ -545,7 +545,7 @@ simple_plots <- function(Q = converted_data, extra_lines = FALSE,number_of_runs=
         #axis(2, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*20), col.axis="black", las=1.5)
         #minor.tick(nx=4, ny=3, tick.ratio=1, x.args = list(), y.args = list())
         eval(parse(text=stuff))
-        points(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
+        lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off()
         
         #image(t(objectz), col = R$sylnum_palette(100), xlab = "Timestep", ylab = paste0(ylab1, population, " ", R$Sexes[sex], ylab2))

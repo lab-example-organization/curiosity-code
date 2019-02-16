@@ -404,7 +404,7 @@ curiosity_learn <- function(patamerers, moran, timestep = single_timestep, inher
   curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2))
   # For posterity: curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), 
     # dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", "female birb")))
-  
+      # MAKE BLENDED INHERITANCE OPTION - MAYBE USE ZERO_TO_ONE_TEMPLATE
   newcuriosity <- array(data = runif((patamerers$num_pop * 2), -1, 1), dim = c(2, patamerers$num_pop))
   
   for(population in 1 : (patamerers$num_pop)) {
