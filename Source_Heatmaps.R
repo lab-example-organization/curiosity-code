@@ -1,12 +1,35 @@
+library(stringr)
 setwd("~/Documents/projects/Code/Results/")
+#setwd("~/Downloads/Lab_Notebook/GitHub/Code/Results")
 if(!(dir.exists("Heatmaps"))) {dir.create("Heatmaps")}
 setwd("Heatmaps")
 heatmapLand <- getwd()
 setwd("../../../../../../../../../../media/parker/A443-E926/simulation runs/shifting_curstart_for_heatmap/")
+#setwd("/Volumes/NO NAME/simulation runs/shifting_curstart_for_heatmap/")
 heatmap_runs <- list.files()
-diffMale_start <- heatmap_runs[grep("[0-9]mp[0-9]", heatmap_runs)]
-sameMale_start <- heatmap_runs[grep("[0-9]m_", heatmap_runs)]
-allSame_start <- heatmap_runs[grep("[0-9]f", heatmap_runs, invert = T)]
+
+diffMale_start <- heatmap_runs[grep("[0-9]mp[0-9]", heatmap_runs)][c(1,2,3,4,5,6,7,31,46,8,9,10,11,12,47,13,14,15,48,16,17,18,19,49,20,21,22,23,24,25,26,27,28,29,32,33,34,35,36,37,30,50,38,39,40,41,42,43,44,45)]
+sameMale_start <- heatmap_runs[grep("[0-9]m_", heatmap_runs)][c(18,1,2,16,3,5,4,6,14,19,15,20,10,11,13,12,7,9,17,8)]
+allSame_start <- heatmap_runs[grep("[0-9]f", heatmap_runs, invert = T)][c(2,4,3,1,5)]
+
+dir_lines <- length(list.files())
+runs_ordered_for_heatmap <- vector("character", dir_lines)
+
+diffMale_vector <- c(2,3,4,5,7,8,9,11,12,14,17,18,19,20,22,23,24,26,27,29,32,33,34,35,37,38,39,41,42,44,47,48,49,50,52,53,54,56,57,59,62,63,64,65,67,68,69,71,72,74)
+sameMale_vector <- c(6,10,13,15,16,25,28,30,31,36,43,45,46,51,55,60,61,66,70,73)
+allSame_vector <- c(1,21,40,58,75)
+
+for(z in 1:50) {
+  runs_ordered_for_heatmap[diffMale_vector[z]] <- diffMale_start[z]
+}
+for(y in 1:20) {
+  runs_ordered_for_heatmap[sameMale_vector[y]] <- sameMale_start[y]
+}
+for(x in 1:5) {
+  runs_ordered_for_heatmap[allSame_vector[x]] <- allSame_start[x]
+}
+
+#print(runs_ordered_for_heatmap)
 
 ending_curiosity_mp1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
   # sumStats[8]
@@ -25,30 +48,188 @@ ending_reperSize_f1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1"
 ending_reperSize_f2 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
   # sumStats[28]
 
+heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
 
-range_mp1 <- c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1")
-range_mp2 <- c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2")
-range_fem <- c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")
+reference_array <- array(c( 1, 2, 3, 4, 5, 2, 6, 7, 8, 9, 3, 7,10,11,12, 4, 8,11,13,14, 5, 9,12,14,15,
+                           16,17,18,19,20,17,21,22,23,24,18,22,25,26,27,19,23,26,28,29,20,24,27,29,30,
+                           31,32,33,34,35,32,36,37,38,39,33,37,40,41,42,34,38,41,43,44,35,39,42,44,45,
+                           46,47,48,49,50,47,51,52,53,54,48,52,55,56,57,49,53,56,58,59,50,54,57,59,60,
+                           61,62,63,64,65,62,66,67,68,69,63,67,70,71,72,64,68,71,73,74,65,69,72,74,75), c(5,5,5))
 
-union()
-
-for(x in 1:5) {
-  for(y in 1:5) {
-    for(z in 1:5) {
-      setwd(paste0("/multirun_output/*/"))
+for(femalez in 1:5) {
+  for(malez1 in 1:5) {
+    for(malez2 in 1:5) {
+      setwd(paste0(runs_ordered_for_heatmap[reference_array[malez2,malez1,femalez]],"/multirun_output/"))
+      setwd(list.files())
       #ending_curiosity_fem[x,y,z] <- 
       sumStats <- readLines(list.files()[grep("Summary_Statistics", list.files())])
+      eight_numbers <- c(sumStats[8],sumStats[24],sumStats[16],sumStats[32],sumStats[4],sumStats[20],sumStats[12],sumStats[28])
+      for(i in 1:8) {
+        eight_numbers[i] <- str_sub(eight_numbers[i],5)
+      }
+      heatmap_array[malez2,malez1,femalez,] <- eight_numbers
+      setwd("../../../")
     }
   }
 }
 
+saveRDS(heatmap_array, "heatmap_output.RData")
+
+heatmap(x = t(matrix(data = as.numeric(heatmap_array[1,,,1]),nrow = 5,ncol = 5)),Rowv = NA,Colv = "Rowv",ColSideColors = T,RowSideColors = T,xlab = ,ylab = )
+heatmap(x = matrix(1:25,5,5,F),Rowv = NA,Colv = "Rowv")
 
 
+##' Prepare dendrograms for gplots' heatmap.2.
+##' 
+##' This function will prepare dendrograms for the heatmap.2 function (gplots).
+##' The type of scaling can be adjusted and is performed before dendrogram
+##' calculations (as opposed to native heatmap.2), reordering can be turned
+##' on/off and distance and clustering functions can be customized.
+##' 
+##' 
+##' @param x Numeric matrix of the values to be plotted.
+##' @param scaledim character indicating if the values should be centered and
+##' scaled in either the row direction or the column direction, or none.
+##' @param zlim Reassign the extremes within the scaled data: zlim=c(-3,3).
+##' @param zlim_select Select when to apply zlim. For the dendrogram
+##' calculations and/or for the output data.
+##' @param reorder Switch on/off dendrogram reordering for row and column.
+##' @param scalefun Function to do the data scaling.
+##' @param distfun Function used to compute the distance (dissimilarity)
+##' between both rows and columns.
+##' @param hclustfun Function used to compute the hierarchical clustering when
+##' Rowv or Colv are not dendrograms.
+##' @return A list with the scaled data ($data), row ($Rowv) and column ($Colv)
+##' dendrograms.
+##' @author Original function by Thomas W. Leja. Extended by Jan Stanstrup,
+##' \email{stanstrup@@gmail.com}.
+##' @references
+##' http://stackoverflow.com/questions/17924828/differences-in-heatmap-clustering-defaults-in-r-heatplot-versus-heatmap-2
+##' @export
+##' @examples
+##' 
+##' library(massageR)
+##' library(gplots)
+##' library(RColorBrewer)
+##' 
+##' #scalefun <- BioMark:::scalefun("auto")
+##' scalefun <- scale
+##' 
+##' distfun <- function(x) as.dist(1-cor(t(x)))
+##' #distfun <- function(x) dist(x,method="canberra")
+##' 
+##' hclustfun <- function(x) hclust(x, method="complete")
+##' 
+##' 
+##' x <- as.matrix(mtcars)
+##' z <- heat.clust(x,
+##'                 scaledim = "column",
+##'                 zlim = c(-3,3),
+##'                 zlim_select = c("dend","outdata"),
+##'                 reorder  = c("column","row"),
+##'                 distfun  = distfun, 
+##'                 hclustfun= hclustfun,
+##'                 scalefun = scalefun)
+##' 
+##' 
+##' heatmap.2(z$data,
+##'           Rowv=z$Rowv, 
+##'           Colv=z$Colv,
+##'           trace="none",
+##'           scale="none",
+##'           symbreaks = TRUE,
+##'           col=rev(colorRampPalette(brewer.pal(10, "RdBu"))(256))
+##'           )
+##'           
+##' @importFrom stats as.dendrogram as.dist cor hclust
+##'
 
-multRunParamsInfo <- readLines("Multirun - Parameters and Info",25)
+heat.clust <- function(x, 
+                       scaledim = "column", 
+                       zlim=c(-3,3), 
+                       zlim_select = c("dend","outdata"), 
+                       reorder=c("column","row"),
+                       scalefun = scale,
+                       distfun = function(x) as.dist(1-cor(t(x))),
+                       hclustfun = function(x) hclust(x, method="complete")
+) {
+  
+  z <- x
+  
+  # scaling
+  if ("row" %in% scaledim)    z <- t(scalefun(t(z)))
+  if ("column" %in% scaledim) z <- scalefun(z)
+  
+  
+  # dendrogram
+  z_dend <- z
+  
+  if ("dend" %in% zlim_select) {
+    z_dend <- pmin(pmax(z_dend, zlim[1]), zlim[2])
+  }
+  
+  hcl_row <- as.dendrogram(hclustfun(distfun(z_dend)))
+  hcl_col <- as.dendrogram(hclustfun(distfun(t(z_dend))))
+  
+  
+  if (("row" %in% reorder)    | isTRUE(reorder)){
+    ro      <-  rowMeans(z_dend, na.rm = T)
+    hcl_row <-  reorder(hcl_row,ro)
+  }
+  
+  if (("column" %in% reorder) | isTRUE(reorder)){
+    co      <-  colMeans(z_dend, na.rm = T)
+    hcl_col <-  reorder(hcl_col,co)
+  }
+  
+  
+  
+  # zlim outdata
+  if ("outdata" %in% zlim_select) {
+    z <- pmin(pmax(z, zlim[1]), zlim[2])
+  }
+  
+  
+  
+  out <- list(
+    data=z, 
+    Rowv=hcl_row, 
+    Colv=hcl_col
+  )
+  
+  return(out)
+}
 
-#"Multirun - Parameters and Info"
+
+library(gplots)
+library(RColorBrewer)
+library(BioMark)
+
+scalefun <- BioMark:::scalefun("auto")
+scalefun <- scale
+
+#distfun <- function(x) as.dist(1-cor(t(x)))
+#distfun <- function(x) dist(x,method="canberra")
+ 
+#hclustfun <- function(x) hclust(x, method="complete")
+thing <- heatmap_array[1,,,1]
+x <- as.matrix(thing)
+z <- heat.clust(x,
+                scaledim="column",
+                zlim=c(-3,3),
+                zlim_select = c("dend","outdata"),
+                reorder=c("column","row"),
+                distfun  = function(x) as.dist(1-cor(t(x))), 
+                hclustfun= function(x) hclust(x, method="complete"),
+                scalefun = scale)
 
 
-
-ending_curiosity_mp1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7Fem", "7-13Fem", "11-26Fem", "1-26Fem", "11-15Fem")))
+heatmap.2(z$data,
+          Rowv=z$Rowv, 
+          Colv=z$Colv,
+          trace="none",
+          scale="none",
+          symbreaks = TRUE,
+          col=rev(colorRampPalette(brewer.pal(10, "RdBu"))(256)),
+          margins=c(4,7)
+)

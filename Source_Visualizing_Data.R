@@ -105,11 +105,49 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   sylnum_palette <- colorRampPalette(c("#641e16", "#943126", "#cb4335", "#f5b7b1", "#aed6f1", "#3498db"))
   #sylsub_palette <- colorRampPalette(c("darkgreen","lawngreen","grey90","orchid1","orchid4"))
   sylsub_palette <- colorRampPalette(c("#5b2c6f00", "#abebc6"))
+  best_colorBrewPal <- colorRampPalette(c("#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f")) # 4-class OrRd
+  
+  
+  
+  ### SEQUENTIAL, MULTI-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
+  
+  colorSeqMultPalette <- matrix(data = c(c("#e5f5f9", "#99d8c9", "#2ca25f"), # 3-class BuGn
+                                         c("#e0ecf4", "#9ebcda", "#8856a7"), # 3-class BuPu
+                                         c("#e0f3db", "#a8ddb5", "#43a2ca"), # 3-class GnBu
+                                         c("#fee8c8", "#fdbb84", "#e34a33"), # 3-class OrRd
+                                         c("#ece7f2", "#a6bddb", "#2b8cbe"), # 3-class PuBu
+                                         c("#ece2f0", "#a6bddb", "#1c9099"), # 3-class PuBuGn
+                                         c("#e7e1ef", "#c994c7", "#dd1c77"), # 3-class PuRd
+                                         c("#fde0dd", "#fa9fb5", "#c51b8a"), # 3-class RdPu
+                                         c("#f7fcb9", "#addd8e", "#31a354"), # 3-class YlGn
+                                         c("#edf8b1", "#7fcdbb", "#2c7fb8"), # 3-class YlGnBu
+                                         c("#fff7bc", "#fec44f", "#d95f0e"), # 3-class YlOrBr
+                                         c("#ffeda0", "#feb24c", "#f03b20")), # 3-class YlOrRd
+                                nrow = 12, ncol = 3,byrow = T,dimnames = list(
+                                  c("BuGn", "BuPu", "GnBu", "OrRd", "PuBu", "PuBuGn", "PuRd",
+                                    "RdPu", "YlGn", "YlGnBu", "YlOrBr", "YlOrRd"), 
+                                  c("Light first color", "Middle color", "Dark final color")))
+  
+  ### SEQUENTIAL, SINGLE-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
+  
+  colorSeqSingPalette <- matrix(data = c(c("#deebf7", "#9ecae1", "#3182bd"), # 3-class blues
+                                         c("#e5f5e0", "#a1d99b", "#31a354"), # 3-class greens
+                                         c("#f0f0f0", "#bdbdbd", "#636363"), # 3-class greys
+                                         c("#fee6ce", "#fdae6b", "#e6550d"), # 3-class oranges
+                                         c("#efedf5", "#bcbddc", "#756bb1"), # 3-class purples
+                                         c("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds
+                                nrow = 6, ncol = 3,byrow = T,dimnames = list(
+                                  c("blue", "green", "grey", "orange", "purple", "red"), 
+                                  c("Light first color", "Middle color", "Dark final color")))
+
   
   sexes <- c("male", "female")
   Sexes <- c("Male", "Female")
   popgroup <- c("Pop_1_male","Pop_1_female","Pop_2_male","Pop_2_female") #, "Pop_3_male", "Pop_3_female", "Pop_4_male", "Pop_4_female"
-  plot_info <- list(sylnum_palette = sylnum_palette, sylsub_palette = sylsub_palette, datez = datez, run_name = run_name, sexes = sexes, Sexes = Sexes, popgroup = popgroup)
+  plot_info <- list(sylnum_palette = sylnum_palette, sylsub_palette = sylsub_palette, 
+                    datez = datez, run_name = run_name, sexes = sexes, Sexes = Sexes, 
+                    popgroup = popgroup, colorSeqMultPalette = colorSeqMultPalette, 
+                    colorSeqSingPalette = colorSeqSingPalette, best_colorBrewPal = best_colorBrewPal)
   
   return(plot_info)
 }
