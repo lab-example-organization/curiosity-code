@@ -31,23 +31,6 @@ for(x in 1:5) {
 
 #print(runs_ordered_for_heatmap)
 
-ending_curiosity_mp1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[8]
-ending_curiosity_mp2 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[24]
-ending_curiosity_f1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[16]
-ending_curiosity_f2 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[32]
-ending_reperSize_mp1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[4]
-ending_reperSize_mp2 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[20]
-ending_reperSize_f1 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[12]
-ending_reperSize_f2 <- array(0, c(5,5,5), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f")))
-  # sumStats[28]
-
 heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
 
 reference_array <- array(c( 1, 2, 3, 4, 5, 2, 6, 7, 8, 9, 3, 7,10,11,12, 4, 8,11,13,14, 5, 9,12,14,15,
@@ -63,7 +46,12 @@ for(femalez in 1:5) {
       setwd(list.files())
       #ending_curiosity_fem[x,y,z] <- 
       sumStats <- readLines(list.files()[grep("Summary_Statistics", list.files())])
-      eight_numbers <- c(sumStats[8],sumStats[24],sumStats[16],sumStats[32],sumStats[4],sumStats[20],sumStats[12],sumStats[28])
+      if(malez2>=malez1) {
+        eight_numbers <- c(sumStats[24],sumStats[8],sumStats[32],sumStats[16],sumStats[20],sumStats[4],sumStats[28],sumStats[12])
+      } else {
+        eight_numbers <- c(sumStats[8],sumStats[24],sumStats[16],sumStats[32],sumStats[4],sumStats[20],sumStats[12],sumStats[28])
+      }
+      
       for(i in 1:8) {
         eight_numbers[i] <- str_sub(eight_numbers[i],5)
       }
@@ -73,7 +61,28 @@ for(femalez in 1:5) {
   }
 }
 
-saveRDS(heatmap_array, "heatmap_output.RData")
+#image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "")
+
+if(!(file.exists("heatmap_output.RData"))) {saveRDS(heatmap_array, "../heatmap_output.RData")}
+heatmap_array <- readRDS("../../../../../../media/parker/A443-E926/simulation runs/heatmap_output.RData")
+colorSeqMultPalette <- list(BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+                            BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+                            GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+                            OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+                            PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+                            PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+                            PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+                            RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+                            YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+                            YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+                            YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+                            YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
+
+image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100))
+
+source("/home/Documents/projects/Code/curiosity-code/Source_Visualizing_Data.R")
+plot(rep(1,100),col=colorSeqMultPalette$PuBuGn(100),pch=19,cex=3)
+
 
 heatmap(x = t(matrix(data = as.numeric(heatmap_array[1,,,1]),nrow = 5,ncol = 5)),Rowv = NA,Colv = "Rowv",ColSideColors = T,RowSideColors = T,xlab = ,ylab = )
 heatmap(x = matrix(1:25,5,5,F),Rowv = NA,Colv = "Rowv")

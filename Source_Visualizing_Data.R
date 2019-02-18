@@ -106,7 +106,7 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   #sylsub_palette <- colorRampPalette(c("darkgreen","lawngreen","grey90","orchid1","orchid4"))
   sylsub_palette <- colorRampPalette(c("#5b2c6f00", "#abebc6"))
   best_colorBrewPal <- colorRampPalette(c("#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f")) # 4-class OrRd
-  
+  diverge_colBruPlt <- colorRampPalette(c("#f1a340", "#f7f7f7", "#998ec3"))
   
   
   ### SEQUENTIAL, MULTI-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
@@ -127,6 +127,21 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
                                   c("BuGn", "BuPu", "GnBu", "OrRd", "PuBu", "PuBuGn", "PuRd",
                                     "RdPu", "YlGn", "YlGnBu", "YlOrBr", "YlOrRd"), 
                                   c("Light first color", "Middle color", "Dark final color")))
+  
+  
+  colorSeqMultPalette <- list(BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+                              BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+                              GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+                              OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+                              PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+                              PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+                              PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+                              RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+                              YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+                              YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+                              YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+                              YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
+  
   
   ### SEQUENTIAL, SINGLE-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
   
