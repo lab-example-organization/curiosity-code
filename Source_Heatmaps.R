@@ -84,15 +84,24 @@ for(SxRpPop in 1:8) {
   curRepPopRanges <- paste0(
     paste0('heatmap_categories <- c("cat(\"[,,1,', SxRpPop, ']\")","cat(\"[,1,', SxRpPop, ']\")","cat(\"[1,,', SxRpPop, ']\")")')
   )
+  
 }
 title_names <- c("Ending Curiosity Values - Pop 1 Males","Ending Curiosity Values - Pop 2 Males",
                  "Ending Curiosity Values - Pop 1 Females","Ending Curiosity Values - Pop 2 Females",
                  "Ending Syll Rept Values - Pop 1 Males","Ending Syll Rept Values - Pop 2 Males",
                  "Ending Syll Rept Values - Pop 1 Females","Ending Syll Rept Values - Pop 2 Females")
-heatmap_categories <- c("cat(\"[,,1,1]\")","cat(\"[,1,1]\")","cat(\"[1,,1]\")")
+heatmap_categories <- c("cat(\"[,,1,1]\")","cat(\"[,1,,1]\")","cat(\"[1,,,1]\")")
+
+heatmap_axes <- list(
+  mp2Vfem = c("Female Starting Curiosity", "Pop 2 Male Starting Curiosity"),
+  mp1Vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),
+  mp1Vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity")
+)
+
+for(triple_iterator in 1:3)
 layout(matrix(c(rep(1,49),rep(c(0,2,2,2,2,2,0),2),rep(0,7)),7,10,F,))
 #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100))
-image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = "Pop 1 Male Curstart", ylab = "Pop 2 Male Curstart")
+image(x = matrix(as.numeric(heatmap_array[1,,,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = heatmap_axes[[triple_iterate]][1], ylab = heatmap_axes[[triple_iterate]][2])
 #axis(1,c(0,0.25,0.5,0.75,1),c("0-0.25", "0.25-0.5", "0.45-1", "0-1", "0.45-0.55"),T,1,NA,F)
 #axis(1,c(-0.12,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-0.25","", "0.25-0.5","", "0.45-1","", "0-1","", "0.45-0.55",""),T,1,NA,F)
 axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),T,0,NA,F,cex.axis=1, tck = 0)
@@ -118,14 +127,14 @@ par(mfrow=c(1,1))
 heatmap(x = t(matrix(data = as.numeric(heatmap_array[1,,,1]),nrow = 5,ncol = 5)),Rowv = NA,Colv = "Rowv",ColSideColors = T,RowSideColors = T,xlab = ,ylab = )
 heatmap(x = matrix(1:25,5,5,F),Rowv = NA,Colv = "Rowv")
 
-x <- c( rnorm(50,10,2), rnorm(30,20,2) )
-y <- 2+3*x + rnorm(80)
-d.x <- density(x)
-d.y <- density(y)
-layout( matrix( c(0,2,2,1,3,3,1,3,3),ncol=3) )
-plot(d.x$x, d.x$y, xlim=range(x), type='l')
-plot(d.y$y, d.y$x, ylim=range(y), xlim=rev(range(d.y$y)), type='l')
-plot(x,y, xlim=range(x), ylim=range(y) )
+#x <- c( rnorm(50,10,2), rnorm(30,20,2) )
+#y <- 2+3*x + rnorm(80)
+#d.x <- density(x)
+#d.y <- density(y)
+#layout( matrix( c(0,2,2,1,3,3,1,3,3),ncol=3) )
+#plot(d.x$x, d.x$y, xlim=range(x), type='l')
+#plot(d.y$y, d.y$x, ylim=range(y), xlim=rev(range(d.y$y)), type='l')
+#plot(x,y, xlim=range(x), ylim=range(y) )
 
 
 #length(c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1))
