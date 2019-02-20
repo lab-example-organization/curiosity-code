@@ -78,14 +78,71 @@ colorSeqMultPalette <- list(BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2c
                             YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
                             YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
 
-image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100))
+#image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "Pop 1 Male Curstart", ylab = "Pop 2 Male Curstart")
+for(SxRpPop in 1:8) {
+  SRP_names <- c("P1M_c","P2M_c","P1F_c","P2F_c","P1M_r","P2M_r","P1F_r","P2F_r")
+  curRepPopRanges <- paste0(
+    paste0('heatmap_categories <- c("cat(\"[,,1,', SxRpPop, ']\")","cat(\"[,1,', SxRpPop, ']\")","cat(\"[1,,', SxRpPop, ']\")")')
+  )
+}
+title_names <- c("Ending Curiosity Values - Pop 1 Males","Ending Curiosity Values - Pop 2 Males",
+                 "Ending Curiosity Values - Pop 1 Females","Ending Curiosity Values - Pop 2 Females",
+                 "Ending Syll Rept Values - Pop 1 Males","Ending Syll Rept Values - Pop 2 Males",
+                 "Ending Syll Rept Values - Pop 1 Females","Ending Syll Rept Values - Pop 2 Females")
+heatmap_categories <- c("cat(\"[,,1,1]\")","cat(\"[,1,1]\")","cat(\"[1,,1]\")")
+layout(matrix(c(rep(1,49),rep(c(0,2,2,2,2,2,0),2),rep(0,7)),7,10,F,))
+#image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100))
+image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = "Pop 1 Male Curstart", ylab = "Pop 2 Male Curstart")
+#axis(1,c(0,0.25,0.5,0.75,1),c("0-0.25", "0.25-0.5", "0.45-1", "0-1", "0.45-0.55"),T,1,NA,F)
+#axis(1,c(-0.12,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-0.25","", "0.25-0.5","", "0.45-1","", "0-1","", "0.45-0.55",""),T,1,NA,F)
+axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),T,0,NA,F,cex.axis=1, tck = 0)
+axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),c("","","","","",""),T,-0.03,NA,F,cex.axis=1, tck = -0.03)
 
-source("/home/Documents/projects/Code/curiosity-code/Source_Visualizing_Data.R")
-plot(rep(1,100),col=colorSeqMultPalette$PuBuGn(100),pch=19,cex=3)
-
+axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),T,0,NA,F,cex.axis=1, tck = 0)
+axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),c("","","","","",""),T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+mtext(title_names[SxRpPop],3,1,cex = 1.5)
+#for(perchance in 1:19) {
+#  plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=perchance,cex=3, xlab = NA, ylab = NA, axes = F)
+#}
+plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+a <- -2; b <- 103.5; c <- (b-a)/10
+axis(2, seq(a,b,c),c("","","","","","","","","","",""))
+axis(2, c(15,85),c("Less Curiosity","More Curiosity"), las=0,tck = 0)
+mtext(c(paste0("Auditory Curiosity","     ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
+mtext("Seeks Novel Songs",3,1,cex = 0.8)
+mtext("Seeks Similar Song",1,0.7,cex = 0.8)
+box("outer", "solid")
+par(mfrow=c(1,1))
+#source("/home/Documents/projects/Code/curiosity-code/Source_Visualizing_Data.R")
 
 heatmap(x = t(matrix(data = as.numeric(heatmap_array[1,,,1]),nrow = 5,ncol = 5)),Rowv = NA,Colv = "Rowv",ColSideColors = T,RowSideColors = T,xlab = ,ylab = )
 heatmap(x = matrix(1:25,5,5,F),Rowv = NA,Colv = "Rowv")
+
+x <- c( rnorm(50,10,2), rnorm(30,20,2) )
+y <- 2+3*x + rnorm(80)
+d.x <- density(x)
+d.y <- density(y)
+layout( matrix( c(0,2,2,1,3,3,1,3,3),ncol=3) )
+plot(d.x$x, d.x$y, xlim=range(x), type='l')
+plot(d.y$y, d.y$x, ylim=range(y), xlim=rev(range(d.y$y)), type='l')
+plot(x,y, xlim=range(x), ylim=range(y) )
+
+
+#length(c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1))
+
+#plot(rep(1,100),col=sylnum_palette(100),pch=19,cex=3)
+
+
+#nsamples <- 20
+#mat <- rnorm(nsamples, .5, .15)
+#dim(mat) <- c(4, 5)
+#colMap <- colorRampPalette(c("red","white","blue" ))(nsamples)
+#image(1:4, 1:5, mat, col = colMap, ylab="", xlab="")
+#legend(grconvertX(0.5, "device"), grconvertY(1, "device"),
+#       c("0",".5","1"), fill = colMap[c(1, 10, 20)], xpd = NA)
+
+
+
 
 
 ##' Prepare dendrograms for gplots' heatmap.2.
