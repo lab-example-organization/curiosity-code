@@ -16,7 +16,23 @@
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code") <- old server address
 #setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code") <- macbook air
 #print("Life Cycle Start")
-rm(list=objects())
+life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, ) {
+if(!(vertOblearn == "normVO")) {}
+if(scMin[1] == scMin[2] && scMin[2] == scMin[3] && scMin[3] == scMin[4] && scMax[1] == scMax[2] && scMax[2] == scMax[3] && scMax[3] == scMax[4]) {allrange = paste0(scMin[1], "-", scMax[1])
+} else {
+femrange = paste0(scMin[2], "-", scMax[2], "f")
+if(scMin[1] == scMin[3] && scMax[1] == scMax[3] && scMax[2] != scMax[3] ||  scMin[2] != scMin[3]) {
+malerange = paste0(scMin[1], "-", scMax[1], "m")
+} else if(scMin[1] != scMin[3] || scMax[1] != scMax[3]) {
+male1range = paste0(scMin[1], "-", scMax[1], "mp1")
+male2range = paste0(scMin[1], "-", scMax[1], "mp2")
+} else (scMin[1] == scMin[2] && scMax[1] == scMax[2] && scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
+pop1range = paste0(scMin[1], "-", scMax[1], "p1")
+pop2range = paste0(scMin[3], "-", scMax[3], "p2")
+}
+curstart_ranges <- if(allrange) {allrange} else if(malerange) {paste0(femrange, "-", malerange)} else if(male1range) {pasteo(femrange, "-", male1range, "_", male2range)} else if(pop1range) {paste0(pop1range, "_", pop2range)}
+}
+#rm(list=objects())
 parent_directory <- getwd()
 source("Source_Initial_Functions_Parameters.R")
 
@@ -28,16 +44,16 @@ simParams <- define_parameters(num_timesteps = 10000, num_pop = 2,
 
 moranObjects <- define_temp_data(simParams)
 
-sylreps <- initialize.sylrep(simParams, c(1, 2), T, T)
+sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
 
 
-docnamez <- c("190215_143_-_2k_nsL_normVO_oppsyl_1-26f_7-13mp1_11-20mp2_c") # equal syllable range
+docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_", SylLearnStyle, "_", vertObLearn, "_", sylDist, "_", curstart_ranges,"_c") # equal syllable range
 #100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
                                           #popXmale,popXfemale,popYmale,popYfemale...
-                                        c(7,1,11,1), 
-                                        c(13,26,20,26))
+                                        scMin, 
+                                        scMax)
 
 day.tuh <- recordvariable.initialize(simParams, timestep_fraction = (simParams$num_timesteps/1000))
 
@@ -131,4 +147,5 @@ for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     sink()
     #stop("It's Done, Yo!")
     }
+}
 }
