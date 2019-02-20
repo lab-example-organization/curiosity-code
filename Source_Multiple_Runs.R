@@ -1,5 +1,9 @@
 #
 #print("it's starting!")
+library(yaml)
+for(shifting_curstart in 1:250) {
+params <- yaml.load_file("params.yaml")
+source("Source_Life_Cycle.R")
 number_of_runs <- 50
 cat(number_of_runs, file = "number_of_runs.txt", append = F)
 
@@ -15,7 +19,7 @@ for(run_number in 1:number_of_runs) {
     print("/please/ignore/this/line/like/you/always/do")
     sink()
   }
-  source("Source_Life_Cycle.R")
+  life_cycle(scMin = params[[shifting_curstart]]$scMin, scMax = params[[shifting_curstart]]$scMax, simStartDate = 
   #rm(list=objects())
   run_number <- readRDS(file = "holdover_line.RData")
   #number_of_runs <- 10
@@ -27,7 +31,7 @@ file.copy(from = "console_copy.txt", to = paste0("../Results/",format(Sys.time()
 file.copy(from = "sim_data.txt", to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), "_sim_data.txt"))
 
 source("Source_Figure_Produxn_Multiple_Runs.R")
-
+}
 #rm(list=objects())
 # Transform name of data packet to folder name (example folder name: 2018-10-09-010315-GMT-variable-store)
 # run loop that processes fn_doc_line from start of run to the end; 
