@@ -104,7 +104,13 @@ for(SxRpPop in 1:8) {
     heatmap_max <- round(max(as.numeric(heatmap_array[mat[triple_iterator,1,1]:mat[triple_iterator,1,2],mat[triple_iterator,2,1]:mat[triple_iterator,2,2],mat[triple_iterator,3,1]:mat[triple_iterator,3,2],SxRpPop])), 3)
     file_name <- paste0(title_names[SxRpPop], ".tiff")
     tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-    
+    byTheCol <- c(rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),
+                  rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),
+                  rep(1,8),rep(3,8),
+                  0,rep(2,6),0,0,rep(6,6),0,0,rep(2,6),0,0,rep(6,6),0,rep(0,16),
+                  rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),
+                  0,rep(4,6),0,0,rep(8,6),0,0,rep(4,6),0,0,rep(8,6),0,rep(0,16))
+    next_thing <- matrix(data=byTheCol,16,20)
     image(x = matrix(as.numeric(heatmap_array[mat[triple_iterator,1,1]:mat[triple_iterator,1,2],mat[triple_iterator,2,1]:mat[triple_iterator,2,2],mat[triple_iterator,3,1]:mat[triple_iterator,3,2],SxRpPop]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = heatmap_axes[[triple_iterator]][1], ylab = heatmap_axes[[triple_iterator]][2])
     #axis(1,c(0,0.25,0.5,0.75,1),c("0-0.25", "0.25-0.5", "0.45-1", "0-1", "0.45-0.55"),T,1,NA,F)
     #axis(1,c(-0.12,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-0.25","", "0.25-0.5","", "0.45-1","", "0-1","", "0.45-0.55",""),T,1,NA,F)
