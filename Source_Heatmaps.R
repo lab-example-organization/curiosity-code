@@ -93,25 +93,26 @@ heatmap_axes <- list(
 )
 
 range_list <- array(data = c("Less Curiosity", "More Curiosity", "Seeks Similar Songs", "Seeks Novel Songs", "Low SylRep", "High Sylrep", "Limited Song Variety", "Varied Song"), c(2,2,2))
-
+byTheCol <- c(rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),
+              rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),
+              rep(1,8),rep(3,8),rep(2,8),rep(0,8),rep(2,8),rep(4,7),0,rep(2,8),
+              rep(4,7),0,rep(2,8),rep(5,8),rep(2,8),rep(5,8),rep(2,8),rep(5,8),
+              rep(2,8),rep(5,8),rep(2,8),rep(5,8))
 for(SxRpPop in 1:8) {
-  SRP_names <- c("P1M_c","P2M_c","P1F_c","P2F_c","P1M_r","P2M_r","P1F_r","P2F_r")
-  for(triple_iterator in 1:3) {
+  # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
+  file_name <- paste0(title_names[SxRpPop], ".tiff")
+  # dimensions? dunno; not too worried though
+  tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+  
+  for(tresFigs in 1:3) {
     
-    layout(matrix(c(rep(1,56),rep(c(0,2,2,2,2,2,2,0),2),rep(0,8)),8,10,F,))
+    layout(matrix(byTheCol),16,16,F)
     #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100))
-    heatmap_min <- round(min(as.numeric(heatmap_array[mat[triple_iterator,1,1]:mat[triple_iterator,1,2],mat[triple_iterator,2,1]:mat[triple_iterator,2,2],mat[triple_iterator,3,1]:mat[triple_iterator,3,2],SxRpPop])), 3)
-    heatmap_max <- round(max(as.numeric(heatmap_array[mat[triple_iterator,1,1]:mat[triple_iterator,1,2],mat[triple_iterator,2,1]:mat[triple_iterator,2,2],mat[triple_iterator,3,1]:mat[triple_iterator,3,2],SxRpPop])), 3)
-    file_name <- paste0(title_names[SxRpPop], ".tiff")
-    tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-    byTheCol <- c(rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),
-                  rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),
-                  rep(1,8),rep(3,8),
-                  0,rep(2,6),0,0,rep(6,6),0,0,rep(2,6),0,0,rep(6,6),0,rep(0,16),
-                  rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),rep(3,8),rep(7,8),
-                  0,rep(4,6),0,0,rep(8,6),0,0,rep(4,6),0,0,rep(8,6),0,rep(0,16))
+    heatmap_min <- round(min(as.numeric(heatmap_array[mat[tresFigs,1,1]:mat[tresFigs,1,2],mat[tresFigs,2,1]:mat[tresFigs,2,2],mat[tresFigs,3,1]:mat[tresFigs,3,2],SxRpPop])), 3)
+    heatmap_max <- round(max(as.numeric(heatmap_array[mat[tresFigs,1,1]:mat[tresFigs,1,2],mat[tresFigs,2,1]:mat[tresFigs,2,2],mat[tresFigs,3,1]:mat[tresFigs,3,2],SxRpPop])), 3)
+    
     next_thing <- matrix(data=byTheCol,16,20)
-    image(x = matrix(as.numeric(heatmap_array[mat[triple_iterator,1,1]:mat[triple_iterator,1,2],mat[triple_iterator,2,1]:mat[triple_iterator,2,2],mat[triple_iterator,3,1]:mat[triple_iterator,3,2],SxRpPop]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = heatmap_axes[[triple_iterator]][1], ylab = heatmap_axes[[triple_iterator]][2])
+    image(x = matrix(as.numeric(heatmap_array[mat[tresFigs,1,1]:mat[tresFigs,1,2],mat[tresFigs,2,1]:mat[tresFigs,2,2],mat[tresFigs,3,1]:mat[tresFigs,3,2],SxRpPop]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = heatmap_axes[[tresFigs]][1], ylab = heatmap_axes[[tresFigs]][2])
     #axis(1,c(0,0.25,0.5,0.75,1),c("0-0.25", "0.25-0.5", "0.45-1", "0-1", "0.45-0.55"),T,1,NA,F)
     #axis(1,c(-0.12,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-0.25","", "0.25-0.5","", "0.45-1","", "0-1","", "0.45-0.55",""),T,1,NA,F)
     axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),T,0,NA,F,cex.axis=1, tck = 0)
@@ -123,19 +124,19 @@ for(SxRpPop in 1:8) {
     #for(perchance in 1:19) {
     #  plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=perchance,cex=3, xlab = NA, ylab = NA, axes = F)
     #}
-    plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
-    a <- -2; b <- 103.5; c <- (b-a)/10
-    axis(2, seq(a,b,c),c("","","","","","","","","","",""))
-    axis(2, c(15,85),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0)
-    axis(4, c(5,50,95),c(heatmap_min,round((heatmap_min+heatmap_max)/2,3),heatmap_max), las=1,tck = 0, lwd=0)
-    mtext(c(paste0("Auditory Curiosity","     ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
-    mtext("Seeks Novel Songs",3,1,cex = 0.8)
-    mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
-    box("outer", "solid")
-    dev.off()
-    par(mfrow=c(1,1))
+    
   }
-  
+  plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+  a <- -2; b <- 103.5; c <- (b-a)/10
+  axis(2, seq(a,b,c),c("","","","","","","","","","",""))
+  axis(2, c(15,85),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0)
+  axis(4, c(5,50,95),c(heatmap_min,round((heatmap_min+heatmap_max)/2,3),heatmap_max), las=1,tck = 0, lwd=0)
+  mtext(c(paste0("Auditory Curiosity","     ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
+  mtext("Seeks Novel Songs",3,1,cex = 0.8)
+  mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
+  box("outer", "solid")
+  dev.off()
+  par(mfrow=c(1,1))
 }
 
 
