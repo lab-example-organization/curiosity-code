@@ -48,7 +48,7 @@ sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
 
 
 docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_", SylLearnStyle, "_", vertObLearn, "_", sylDist, "_", curstart_ranges,"_c") # equal syllable range
-#100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
+#190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
 
 curiosity_level <- initialize.curiosity(simParams, 
                                           #popXmale,popXfemale,popYmale,popYfemale...

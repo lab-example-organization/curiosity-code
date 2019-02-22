@@ -19,7 +19,18 @@ for(run_number in 1:number_of_runs) {
     print("/please/ignore/this/line/like/you/always/do")
     sink()
   }
-  life_cycle(scMin = params[[shifting_curstart]]$scMin, scMax = params[[shifting_curstart]]$scMax, simStartDate = 
+  life_cycle(scMin = c(
+      params[[1]]$curstarts[[shifting_curstart]]$scMin[1],
+      params[[1]]$curstarts[[shifting_curstart]]$scMin[2],
+      params[[1]]$curstarts[[shifting_curstart]]$scMin[3],
+      params[[1]]$curstarts[[shifting_curstart]]$scMin[4]),
+    scMax = c(
+      params[[1]]$curstarts[[shifting_curstart]]$scMax[1],
+      params[[1]]$curstarts[[shifting_curstart]]$scMax[2],
+      params[[1]]$curstarts[[shifting_curstart]]$scMax[3],
+      params[[1]]$curstarts[[shifting_curstart]]$scMax[4]),
+    simStartDate = params[[2]]$simStartDate,
+    
   #rm(list=objects())
   run_number <- readRDS(file = "holdover_line.RData")
   #number_of_runs <- 10
