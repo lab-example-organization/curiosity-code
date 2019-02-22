@@ -255,4 +255,10 @@
 - SylLearnStyle: 'nsL'
 - vertObLearn: 'normVO'
 - sylDist: 'oppsyl'
-  
+- learnStyle:
+  - vertical:
+    - learn: [0.95]
+    - invent: [0.1]
+  - oblique:
+    - learn: [0.1]
+    - invent: [0.01]
