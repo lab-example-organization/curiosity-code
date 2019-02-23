@@ -265,4 +265,5 @@
 - num_pop: [2]
 - pop_size: [400]
 - sylnum: [156]
+- num_sylls_per_prob_lvl: [12]
 - 
