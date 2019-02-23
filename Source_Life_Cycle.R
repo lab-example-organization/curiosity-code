@@ -18,22 +18,15 @@
 #print("Life Cycle Start")
 life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, ) {
   
-  syll_learn_retainer <- matrix(c(0.1,0.95,0.01,0.1),2,2,F,list(c("inventChance","learnChance"),c("vertical","oblique")))
-  
-  if(vertOblearn == "normVO") {
-    VOtext = "normVO"
-    syll_learn_retainer[1,1] <- 0.1
-    syll_learn_retainer[1,2] <- 0.01
-    syll_learn_retainer[2,1] <- 0.95
-    syll_learn_retainer[2,2] <- 0.1
-  
-  } else {
-    VOtext = paste0()
-    syll_learn_retainer[1,1] <- 0.1
-    syll_learn_retainer[1,2] <- 0.01
-    syll_learn_retainer[2,1] <- 0.95
-    syll_learn_retainer[2,2] <- 0.1
-  }
+  VOtext = paste0(if(round(vertOblLearn[2]/0.1)==1) {
+                    round(vertOblLearn[2]/0.1,1)} else {round(vertOblLearn[2]/0.1,2)},"_",
+                  if(round(vertOblLearn[1]/0.95)==1) {
+                    round(vertOblLearn[1]/0.95,1)} else {round(vertOblLearn[1]/0.95,2)},"_V_", #  round(vertOblLearn[1]/0.95
+                  if(round(vertOblLearn[4]/0.01)==1) {
+                    round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_", #  round(vertOblLearn[4]/0.01,1)
+                  if(round(vertOblLearn[3]/0.1)==1) {
+                    round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") #   round(vertOblLearn[3]/0.1,1)
+    
   if(scMin[1] == scMin[2] && scMin[2] == scMin[3] && scMin[3] == scMin[4] &&
      scMax[1] == scMax[2] && scMax[2] == scMax[3] && scMax[3] == scMax[4]) {
     
@@ -82,8 +75,10 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLear
   sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
   
   
-  docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_", SylLearnStyle, "_", VOtext, "_", sylDist, "_", curstart_ranges,"_c") # equal syllable range
-  #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng
+  docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
+                     SylLearnStyle, "_", VOtext, "_", sylDist, "_",
+                     curstart_ranges,"_c," curinh_output) # equal syllable range
+  #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng_c
   
   curiosity_level <- initialize.curiosity(simParams, 
                                             #popXmale,popXfemale,popYmale,popYfemale...

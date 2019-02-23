@@ -33,7 +33,10 @@ for(run_number in 1:number_of_runs) {
     simNumber = params[[3]]$simNumber,
     runLength = params[[4]]$runLength,
     SylLearnStyle = params[[5]]$SylLearnStyle,
-    vertOblLearn = params[[6]]$vertObLearn,
+    vertOblLearn = c(params[[6]]$vertObLearn[[1]]$vertical[[1]]$learn,
+                     params[[6]]$vertObLearn[[1]]$vertical[[2]]$invent,
+                     params[[6]]$vertObLearn[[2]]$oblique[[1]]$learn,
+                     params[[6]]$vertObLearn[[2]]$oblique[[2]]$invent),
     sylDist = params[[7]]$sylDist, 
   )
   #rm(list=objects())
