@@ -20,13 +20,19 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLear
   
   syll_learn_retainer <- matrix(c(0.1,0.95,0.01,0.1),2,2,F,list(c("inventChance","learnChance"),c("vertical","oblique")))
   
-  if(!(vertOblearn == "normVO")) {
-  VOtext = "normVO"
-  syll_learn_retainer[1,1]
-  syll_learn_retainer[1,2]
-  syll_learn_retainer[2,1]
-  syll_learn_retainer[2,2]
+  if(vertOblearn == "normVO") {
+    VOtext = "normVO"
+    syll_learn_retainer[1,1] <- 0.1
+    syll_learn_retainer[1,2] <- 0.01
+    syll_learn_retainer[2,1] <- 0.95
+    syll_learn_retainer[2,2] <- 0.1
   
+  } else {
+    VOtext = paste0()
+    syll_learn_retainer[1,1] <- 0.1
+    syll_learn_retainer[1,2] <- 0.01
+    syll_learn_retainer[2,1] <- 0.95
+    syll_learn_retainer[2,2] <- 0.1
   }
   if(scMin[1] == scMin[2] && scMin[2] == scMin[3] && scMin[3] == scMin[4] &&
      scMax[1] == scMax[2] && scMax[2] == scMax[3] && scMax[3] == scMax[4]) {

@@ -30,7 +30,12 @@ for(run_number in 1:number_of_runs) {
       params[[1]]$curstarts[[shifting_curstart]]$scMax[3],
       params[[1]]$curstarts[[shifting_curstart]]$scMax[4]),
     simStartDate = params[[2]]$simStartDate,
-    
+    simNumber = params[[3]]$simNumber,
+    runLength = params[[4]]$runLength,
+    SylLearnStyle = params[[5]]$SylLearnStyle,
+    vertOblLearn = params[[6]]$vertObLearn,
+    sylDist = params[[7]]$sylDist, 
+  )
   #rm(list=objects())
   run_number <- readRDS(file = "holdover_line.RData")
   #number_of_runs <- 10
