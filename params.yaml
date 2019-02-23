@@ -262,4 +262,7 @@
     - invent: [0.01]
 - sylDist: 'oppsyl'
 - curinh_value: [0.95]
--  
+- num_pop: [2]
+- pop_size: [400]
+- sylnum: [156]
+- 
