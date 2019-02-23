@@ -253,12 +253,13 @@
 - simNumber: '170'
 - runLength: '10k'
 - SylLearnStyle: 'nsL'
-- vertObLearn: 'normVO'
-- sylDist: 'oppsyl'
-- learnStyle:
+- vertObLearn:
   - vertical:
     - learn: [0.95]
     - invent: [0.1]
   - oblique:
     - learn: [0.1]
     - invent: [0.01]
+- sylDist: 'oppsyl'
+- curinh_value: [0.79]
+- 
