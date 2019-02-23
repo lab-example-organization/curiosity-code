@@ -16,21 +16,25 @@
 #setwd("/home/rundstpj/projects/curiosity_model/Code/Curiosity_Code") <- old server address
 #setwd("/Users/bryangitschlag/Downloads/Lab_Notebook/GitHub/curiosity-code") <- macbook air
 #print("Life Cycle Start")
-life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, ) {
+life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, 
+                       SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
+                       number_populations, population_size, syllable_number,
+                       number_of_syllables_per_probability_level) {
   
-  VOtext = paste0(if(round(vertOblLearn[2]/0.1)==1) {
-                    round(vertOblLearn[2]/0.1,1)} else {round(vertOblLearn[2]/0.1,2)},"_",
-                  if(round(vertOblLearn[1]/0.95)==1) {
-                    round(vertOblLearn[1]/0.95,1)} else {round(vertOblLearn[1]/0.95,2)},"_V_", #  round(vertOblLearn[1]/0.95
-                  if(round(vertOblLearn[4]/0.01)==1) {
-                    round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_", #  round(vertOblLearn[4]/0.01,1)
-                  if(round(vertOblLearn[3]/0.1)==1) {
-                    round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") #   round(vertOblLearn[3]/0.1,1)
+  VOtext = paste0(
+    if(round(vertOblLearn[2]/0.1)==1) {
+      round(vertOblLearn[2]/0.1,1)} else {round(vertOblLearn[2]/0.1,2)},"_",
+    if(round(vertOblLearn[1]/0.95)==1) {
+      round(vertOblLearn[1]/0.95,1)} else {round(vertOblLearn[1]/0.95,2)},"_V_",
+    if(round(vertOblLearn[4]/0.01)==1) {
+      round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_",
+    if(round(vertOblLearn[3]/0.1)==1) {
+      round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") # this is the text insert for the docnamez VO subsection
     
   if(scMin[1] == scMin[2] && scMin[2] == scMin[3] && scMin[3] == scMin[4] &&
      scMax[1] == scMax[2] && scMax[2] == scMax[3] && scMax[3] == scMax[4]) {
     
-    allrange = paste0(scMin[1], "-", scMax[1])
+    curstart_ranges = paste0(scMin[1], "-", scMax[1])
   
   } else {
     
@@ -45,7 +49,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLear
       male1range = paste0(scMin[1], "-", scMax[1], "mp1")
       male2range = paste0(scMin[1], "-", scMax[1], "mp2")
     
-    } else (scMin[1] == scMin[2] && scMax[1] == scMax[2] && scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
+    } else if(scMin[1] == scMin[2] && scMax[1] == scMax[2] && scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
       
       pop1range = paste0(scMin[1], "-", scMax[1], "p1")
       pop2range = paste0(scMin[3], "-", scMax[3], "p2")
@@ -59,16 +63,19 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLear
     } else if(pop1range) {
       paste0(pop1range, "_", pop2range)
     }
-  }
+  } # this is the text insert for the docnamez curstart ranges subsection
+  
+  if(curinh_value != 0.95) {curinh_output <- paste0(round(curinh_value/0.95,2), "_curinh")} else {curinh_output = ""}
+  
   #rm(list=objects())
   parent_directory <- getwd()
   source("Source_Initial_Functions_Parameters.R")
   
-  simParams <- define_parameters(num_timesteps = 10000, num_pop = 2, 
-                         pop_size = 400, sylnum = 156, nsspl = 12, 
+  simParams <- define_parameters(num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, num_pop = number_populations, 
+                         pop_size = population_size, sylnum = syllable_number, nsspl = number_of_syllables_per_probability_level, 
                          one_pop_singers = c(10,10), 
-                         curlearnprob = 0.95, learnprob = c(0.1, 0.95), 
-                         randlearnprob = c(0.01, 0.1), stand.dev = 2)
+                         curlearnprob = curinh_value, learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
+                         randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), stand.dev = 2)
   
   moranObjects <- define_temp_data(simParams)
   
@@ -77,7 +84,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, SylLear
   
   docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
                      SylLearnStyle, "_", VOtext, "_", sylDist, "_",
-                     curstart_ranges,"_c," curinh_output) # equal syllable range
+                     curstart_ranges,"_c", curinh_output) # equal syllable range
   #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng_c
   
   curiosity_level <- initialize.curiosity(simParams, 

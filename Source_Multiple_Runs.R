@@ -38,6 +38,11 @@ for(run_number in 1:number_of_runs) {
                      params[[6]]$vertObLearn[[2]]$oblique[[1]]$learn,
                      params[[6]]$vertObLearn[[2]]$oblique[[2]]$invent),
     sylDist = params[[7]]$sylDist, 
+    curinh_value = params[[8]]$curinh_value,
+    number_populations = params[[9]]$num_pop,
+    population_size = params[[10]]$pop_size,
+    syllable_number = params[[11]]$sylnum,
+    number_of_syllables_per_probability_level = params[[12]]$num_sylls_per_prob_lvl
   )
   #rm(list=objects())
   run_number <- readRDS(file = "holdover_line.RData")
