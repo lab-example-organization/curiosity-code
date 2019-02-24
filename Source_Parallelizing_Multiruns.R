@@ -9,5 +9,5 @@ n_cores
 source("Source_Multiple_Runs.R")
 
 # the time difference between using n_cores and not using it
-shifting_curstarts <- 1:250
+shifting_curstarts <- 1
 mclapply(shifting_curstarts, multi_runs, mc.cores = n_cores)
