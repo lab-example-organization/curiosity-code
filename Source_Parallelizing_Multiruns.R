@@ -1,7 +1,7 @@
 library(doParallel)
 
 # we specify the number of cores/workers we want to use
-n_cores <- detectCores() - 4
+n_cores <- detectCores() - 3
 n_cores
 ## [1] 7
 # generate a toy function that

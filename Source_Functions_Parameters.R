@@ -140,7 +140,7 @@ resylreps.offspring <- function(paraterms, moran, sylrep_object) {
       sylrep_object[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
     }
   }
-  return(sylreps)
+  return(sylrep_object)
 }
 
 output_checker <- function(printer) {
