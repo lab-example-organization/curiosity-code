@@ -132,12 +132,12 @@ recuriosity.offspring <- function(parmaters, moran, curiosity_object) {
   return(curiosity_object)
 }
 
-resylreps.offspring <- function(paraterms, moran) {
+resylreps.offspring <- function(paraterms, moran, sylrep_object) {
   for(population in 1:paraterms$num_pop) {
     for(sex in 1:2) {
       #index <- moran$pairing.pool[(sex + 2), 1, population]
       #index_sylrep <- moran$learning.pool[(sex + 2), , population]
-      sylreps[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
+      sylrep_object[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
     }
   }
   return(sylreps)

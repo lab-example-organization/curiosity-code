@@ -133,7 +133,8 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
                                                curiosity_object = curiosity_level)
       
       sylreps <- resylreps.offspring(paraterms = simParams, 
-                                     moran = moranObjects)
+                                     moran = moranObjects,
+                                     sylrep_object = sylreps)
       
       day.tuh <- variable.archive(parameters = simParams, 
                                   moran = moranObjects, 
@@ -178,11 +179,12 @@ multi_runs <- function(shifting_curstart) {
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
-    life_cycle(scMin = c(
-      params[[1]]$curstarts[[shifting_curstart]]$scMin[1],
-      params[[1]]$curstarts[[shifting_curstart]]$scMin[2],
-      params[[1]]$curstarts[[shifting_curstart]]$scMin[3],
-      params[[1]]$curstarts[[shifting_curstart]]$scMin[4]),
+    life_cycle(
+      scMin = c(
+        params[[1]]$curstarts[[shifting_curstart]]$scMin[1],
+        params[[1]]$curstarts[[shifting_curstart]]$scMin[2],
+        params[[1]]$curstarts[[shifting_curstart]]$scMin[3],
+        params[[1]]$curstarts[[shifting_curstart]]$scMin[4]),
       scMax = c(
         params[[1]]$curstarts[[shifting_curstart]]$scMax[1],
         params[[1]]$curstarts[[shifting_curstart]]$scMax[2],
