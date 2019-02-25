@@ -434,25 +434,25 @@ curiosity_learn <- function(patamerers, moran, timestep = single_timestep, inher
   
 
 
-store_timesteps <- function(prameters, filename = thousand_timesteps, object_record = day.tuh){
+store_timesteps <- function(prameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff){
   directory <- getwd()
   results_directory <- paste0(strsplit(directory, "Code")[[1]][1],"Code/Results")
   if(filename == 1) {
     run_timedate <- format(Sys.time(), "%F-%H%M%S")
-    if(!(dir.exists(file.path(results_directory, stuff_to_save$docnamez)))) {
-         dir.create(file.path(results_directory, stuff_to_save$docnamez))
-         dir.create(file.path(results_directory, stuff_to_save$docnamez, "variable_store"))
+    if(!(dir.exists(file.path(results_directory, saved_stuff$docnamez)))) {
+         dir.create(file.path(results_directory, saved_stuff$docnamez))
+         dir.create(file.path(results_directory, saved_stuff$docnamez, "variable_store"))
     }
-    dir.create(file.path(results_directory, stuff_to_save$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
-    FolderName <- paste0(results_directory, "/", stuff_to_save$docnamez, "/variable_store/", run_timedate, "-GMT-variable-store/")
+    dir.create(file.path(results_directory, saved_stuff$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
+    FolderName <- paste0(results_directory, "/", saved_stuff$docnamez, "/variable_store/", run_timedate, "-GMT-variable-store/")
     setwd(FolderName)
-    saveRDS(object = stuff_to_save, file = "metadata.RData")
-    #rm(init_params, funx_n_params, datez, deetz, docnamez, stuff_to_save)
+    saveRDS(object = saved_stuff, file = "metadata.RData")
+    #rm(init_params, funx_n_params, datez, deetz, docnamez, saved_stuff)
     setwd(directory)
   } # sets up the master folder for the greater simulation, creates and begins to fill the variable store folder for this run and puts 
-  setwd(paste0(results_directory, "/", stuff_to_save$docnamez, "/", "variable_store/", list.files(
-  path = paste0(results_directory, "/", stuff_to_save$docnamez, "/", "variable_store/"))[length(list.files(
-  path = paste0(results_directory, "/", stuff_to_save$docnamez, "/", "variable_store/")
+  setwd(paste0(results_directory, "/", saved_stuff$docnamez, "/", "variable_store/", list.files(
+  path = paste0(results_directory, "/", saved_stuff$docnamez, "/", "variable_store/"))[length(list.files(
+  path = paste0(results_directory, "/", saved_stuff$docnamez, "/", "variable_store/")
   ))]))
   #FolderName <- paste0(getwd(), "/", list.files()[length(list.files())])
   #setwd(list.files()[length(list.files())])
@@ -466,7 +466,7 @@ store_timesteps <- function(prameters, filename = thousand_timesteps, object_rec
   
   #saveRDS(object = FolderName, file = "harvest_info.RData")
   saveRDS(object = prameters, file = "parameters.RData")
-  saveRDS(object = thousand_timesteps, file = "timestep_grps.RData")
+  saveRDS(object = filename, file = "timestep_grps.RData")
   
   setwd(directory)
   return(FolderName)

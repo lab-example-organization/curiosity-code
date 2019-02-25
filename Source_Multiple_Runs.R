@@ -148,7 +148,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
     sink(file = "console_copy.txt", append = TRUE, split = TRUE)
     print(paste0("storing data packet ", thousand_timesteps, " at ", Sys.time()))
     sink()
-    FolderName <- store_timesteps(prameters = simParams, filename = thousand_timesteps, object_record = day.tuh)
+    FolderName <- store_timesteps(prameters = simParams, filename = thousand_timesteps, object_record = day.tuh, saved_stuff = stuff_to_save)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
       #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
       sink(file = paste0(parent_directory, "/sim_data.txt"), append = TRUE)
