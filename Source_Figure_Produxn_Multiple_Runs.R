@@ -158,7 +158,7 @@ figProdMultRun <- function(shifting_curstart) {
   
   mins_n_maxes <- min_n_max(number_of_runs = number_of_runs)
   simple_plots(Q = "converted_data", extra_lines = TRUE, number_of_runs)
-  cat(number_of_runs, file = "number_of_runs.txt", append = F)
+  cat(number_of_runs, file = paste0(shifting_curstart, "number_of_runs.txt"), append = F)
   src.dir = "../../../../curiosity-code/"
   file.names = dir(src.dir)[grep("Source", dir(src.dir))]
   sapply(file.names, function(x) { 
