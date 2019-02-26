@@ -1,7 +1,7 @@
-library(doParallel)
-
+rm(list=objects())
+source("Source_Reference_Section.R")
 # we specify the number of cores/workers we want to use
-n_cores <- detectCores() - 4
+n_cores <- detectCores() - 2
 n_cores
 ## [1] 7
 # generate a toy function that
@@ -9,5 +9,5 @@ n_cores
 source("Source_Multiple_Runs.R")
 
 # the time difference between using n_cores and not using it
-shifting_curstarts <- 1
-mclapply(shifting_curstarts, multi_runs, mc.cores = n_cores)
+shifting_curstart <- 1:4
+mclapply(shifting_curstart, multi_runs, mc.cores = n_cores)
