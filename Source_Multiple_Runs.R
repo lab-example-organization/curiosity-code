@@ -148,7 +148,10 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
     sink(file = "console_copy.txt", append = TRUE, split = TRUE)
     print(paste0("storing data packet ", thousand_timesteps, " at ", Sys.time()))
     sink()
-    FolderName <- store_timesteps(prameters = simParams, filename = thousand_timesteps, object_record = day.tuh, saved_stuff = stuff_to_save)
+    FolderName <- store_timesteps(prameters = simParams,
+                                  filename = thousand_timesteps, 
+                                  object_record = day.tuh, 
+                                  saved_stuff = stuff_to_save)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
       #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
       sink(file = paste0(parent_directory, "/sim_data.txt"), append = TRUE)
@@ -160,12 +163,12 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
 }
 #print("it's starting!")
 multi_runs <- function(shifting_curstart) {
-  library(yaml)
+  
   #for(shifting_curstart in 1:250) 
   params <- yaml.load_file("params.yaml")
   #source("Source_Life_Cycle.R")
   number_of_runs <- 50
-  cat(number_of_runs, file = "number_of_runs.txt", append = F)
+  cat(number_of_runs, file = paste0(shifting_curstarts,"_number_of_runs.txt"), append = F)
   
   
   
