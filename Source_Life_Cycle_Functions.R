@@ -117,27 +117,6 @@ make.offspring.calls <- function(parmters, moran){
   return(moran)
 }
 
-recuriosity.offspring <- function(parmaters, moran, curiosity_object) {
-  for(population in 1:parmaters$num_pop) {
-    for(sex in 1:2) {
-      #index <- moran$pairing.pool[(sex + 2), 1, population]
-      curiosity_object[moran$pairing.pool[(sex + 2), 1, population], population] <- moran$pairing.pool[(sex + 2), 2, population]
-    }
-  }
-  return(curiosity_object)
-}
-
-resylreps.offspring <- function(paraterms, moran, sylrep_object) {
-  for(population in 1:paraterms$num_pop) {
-    for(sex in 1:2) {
-      #index <- moran$pairing.pool[(sex + 2), 1, population]
-      #index_sylrep <- moran$learning.pool[(sex + 2), , population]
-      sylrep_object[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
-    }
-  }
-  return(sylrep_object)
-}
-
 update_selexn_data <- function(main_parameters, moran, suitor_choices, preferred_bird, selector_bird,
                                curiosity_value, selector_population, selection_context, 
                                sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
@@ -381,7 +360,28 @@ curiosity_learn <- function(patamerers, moran, timestep = single_timestep, inher
   return(moran)
 }
 
-store_timesteps <- function(prameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff){
+recuriosity.offspring <- function(parmaters, moran, curiosity_object) {
+  for(population in 1:parmaters$num_pop) {
+    for(sex in 1:2) {
+      #index <- moran$pairing.pool[(sex + 2), 1, population]
+      curiosity_object[moran$pairing.pool[(sex + 2), 1, population], population] <- moran$pairing.pool[(sex + 2), 2, population]
+    }
+  }
+  return(curiosity_object)
+}
+
+resylreps.offspring <- function(paraterms, moran, sylrep_object) {
+  for(population in 1:paraterms$num_pop) {
+    for(sex in 1:2) {
+      #index <- moran$pairing.pool[(sex + 2), 1, population]
+      #index_sylrep <- moran$learning.pool[(sex + 2), , population]
+      sylrep_object[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
+    }
+  }
+  return(sylrep_object)
+}
+
+store_timesteps <- function(prameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff, syll_container, cur_container){
   directory <- getwd()
   results_directory <- paste0(strsplit(directory, "Code")[[1]][1],"Code/Results")
   if(filename == 1) {
@@ -413,6 +413,10 @@ store_timesteps <- function(prameters, filename = thousand_timesteps, object_rec
   
   #saveRDS(object = FolderName, file = "harvest_info.RData")
   saveRDS(object = prameters, file = "parameters.RData")
+  saveRDS(object = syll_container, file = "end_sylbls.RData")
+  saveRDS(object = cur_container, file = "end_cursty.RData")
+  #save(prameters, file = "parameters.RData")
+  #save(prameters, syll_container, cur_container, file = "parameters.RData")
   saveRDS(object = filename, file = "timestep_grps.RData")
   
   setwd(directory)

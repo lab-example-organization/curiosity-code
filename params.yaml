@@ -249,7 +249,7 @@
     scMax: [15,15,26,15]
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
-- simStartDate: '190224'
+- simStartDate: '190228'
 - simNumber:
   - [170]
   - [171]
@@ -501,7 +501,7 @@
   - [418]
   - [419]
   - [420]
-- runLength: '10k'
+- runLength: '2k'
 - SylLearnStyle: 'nsL'
 - vertObLearn:
   - vertical:
@@ -511,9 +511,10 @@
     - learn: [0.1]
     - invent: [0.01]
 - sylDist: 'oppsyl'
-- curinh_value: [0.75]
+- curinh_value: [0.95]
 - num_pop: [2]
 - pop_size: [400]
 - sylnum: [156]
 - num_sylls_per_prob_lvl: [12]
-- number_of_runs: [50]
+- number_of_runs: [2]
+- standard_deviation: [2]

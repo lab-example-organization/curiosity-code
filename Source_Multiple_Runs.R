@@ -1,7 +1,7 @@
 life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, 
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,
-                       number_of_syllables_per_probability_level, shifting_curstart) {
+                       number_of_syllables_per_probability_level,standDev, shifting_curstart) {
   
   VOtext = paste0(
     if(round(vertOblLearn[2]/0.1)==1) {
@@ -42,11 +42,16 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   parent_directory <- getwd()
   source("Source_Initial_Functions_Parameters.R")
   
-  simParams <- define_parameters(num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, num_pop = number_populations, 
-                                 pop_size = population_size, sylnum = syllable_number, nsspl = number_of_syllables_per_probability_level, 
+  simParams <- define_parameters(num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
+				 num_pop = number_populations, 
+                                 pop_size = population_size, 
+				 sylnum = syllable_number, 
+				 nsspl = number_of_syllables_per_probability_level, 
                                  one_pop_singers = c(10,10), 
-                                 curlearnprob = curinh_value, learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
-                                 randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), stand.dev = 2)
+                                 curlearnprob = curinh_value, 
+				 learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
+                                 randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 
+				 stand.dev = standDev)
   
   moranObjects <- define_temp_data(simParams)
   
@@ -151,7 +156,9 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
     FolderName <- store_timesteps(prameters = simParams,
                                   filename = thousand_timesteps, 
                                   object_record = day.tuh, 
-                                  saved_stuff = stuff_to_save)
+                                  saved_stuff = stuff_to_save,
+                                  syll_container = sylreps,
+                                  cur_container = curiosity_level)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
       #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
       sink(file = paste0(parent_directory, "/", shifting_curstart, "sim_data.txt"), append = TRUE)
@@ -170,7 +177,7 @@ multi_runs <- function(shifting_curstart) {
   number_of_runs <- as.numeric(params[[13]]$number_of_runs)
   cat(number_of_runs, file = paste0(shifting_curstart,"_number_of_runs.txt"), append = F)
   
-  
+  print("number_of_runs is started")
   
   if(file.exists(paste0(shifting_curstart,"console_copy.txt"))) {file.remove(paste0(shifting_curstart,"console_copy.txt"))}
   if(file.exists(paste0(shifting_curstart,"sim_data.txt"))) {file.remove(paste0(shifting_curstart,"sim_data.txt"))}
@@ -208,6 +215,7 @@ multi_runs <- function(shifting_curstart) {
       population_size = params[[10]]$pop_size,
       syllable_number = params[[11]]$sylnum,
       number_of_syllables_per_probability_level = params[[12]]$num_sylls_per_prob_lvl,
+      standDev = as.numeric(params[[14]]$standard_deviation),
       shifting_curstart = shifting_curstart
     )
     #rm(list=objects())
@@ -215,13 +223,13 @@ multi_runs <- function(shifting_curstart) {
     #number_of_runs <- 10
     print(paste0("Run Number: ", run_number, ", comes right before (YYYY-MM-DD-HHMMSS): ", format(Sys.time(), "%F-%H%M%S")))
   }
-  
+  print("about to archive console copy")
   file.copy(from = paste0(shifting_curstart, "console_copy.txt"), to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_console_copy.txt"))
-  
-  file.copy(from = pasate0(shifting_curstart, "sim_data.txt"), to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_sim_data.txt"))
+  print("about to archive sim data")
+  file.copy(from = paste0(shifting_curstart, "sim_data.txt"), to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_sim_data.txt"))
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
-  figProdMultRun()
+  figProdMultRun(shifting_curstart)
 }
 
 #rm(list=objects())

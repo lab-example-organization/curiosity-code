@@ -1,3 +1,4 @@
+print("SFPMR start")
 figProdMultRun <- function(shifting_curstart) {
   number_of_runs <- source(paste0(shifting_curstart,"number_of_runs.txt"))$value
   
