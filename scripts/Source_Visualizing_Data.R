@@ -159,8 +159,8 @@ visualizing_data <- function(local_curstart_value) {
     if(simple == T) {
       if(sex_dependent == T) {
         for(sex in 1:2) {
-          file_name <- paste0(R$datez, "_", R$run_name, filename, population, "_", R$sexes[sex], ".tiff")
-          tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+          file_name <- paste0(R$datez, "_", R$run_name, filename, population, "_", R$sexes[sex], ".png")
+          png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
           if((q_subset == "sdstbxn") | (q_subset == "curhist")) {
             thing <- paste0("objectz <- Q$", q_subset, "[", sex + ((population - 1) * 2), ",,]")
             eval(parse(text=thing))
@@ -179,8 +179,8 @@ visualizing_data <- function(local_curstart_value) {
       } else {
         thing <- paste0("objectz <- Q$", q_subset, "[", subset_number, ",population,]")
         eval(parse(text=thing))
-        file_name <- paste0(R$datez, "_", R$run_name, filename, population, ".tiff")
-        tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        file_name <- paste0(R$datez, "_", R$run_name, filename, population, ".png")
+        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
         plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, ylab2))
         dev.off()
       }
@@ -194,10 +194,10 @@ visualizing_data <- function(local_curstart_value) {
       }
       meanz <- cursitylist[[number_of_runs + 1]][10,population,]
       stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
-      file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".tiff")
+      file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".png")
       minY <- mins_n_maxes[2,population,1]
       maxY <- mins_n_maxes[2,population,2]
-      tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+      png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
@@ -207,10 +207,10 @@ visualizing_data <- function(local_curstart_value) {
       
       meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
       stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
-      file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.tiff")
+      file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.png")
       minY <- mins_n_maxes[(sex + 10),population,1]
       maxY <- mins_n_maxes[(sex + 10),population,2]
-      tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+      png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
       plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
       #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
@@ -296,10 +296,10 @@ visualizing_data <- function(local_curstart_value) {
             
             meanz <- cursitylist[[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
             stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
-            file_name <- paste0(R$datez, "_", R$run_name, filename_retainer[individual_figures], population, ".tiff")
+            file_name <- paste0(R$datez, "_", R$run_name, filename_retainer[individual_figures], population, ".png")
             minY <- mins_n_maxes[individual_figures,population,1]
             maxY <- mins_n_maxes[individual_figures,population,2]
-            tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+            png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
             plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(minY, maxY), xaxt="n")
             axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][filename_retainer[individual_figures],population,]),
                                           ((length(cursitylist[[number_of_runs + 1]][filename_retainer[individual_figures],population,]))/10))),
@@ -311,7 +311,7 @@ visualizing_data <- function(local_curstart_value) {
           }  
         }
         
-        #selection_tiff <- paste0("tiff(filename = ", file_name, ", width = 554, height = 467, units = \"px\", pointsize = 12, bg = \"white\", compression = \"none\")")
+        #selection_tiff <- paste0("png(filename = ", file_name, ", width = 554, height = 467, units = \"px\", pointsize = 12, bg = \"white\", compression = \"none\")")
         #selection_plot <- paste0("plot(objectz[], xlab = \"Timesteps\", ylab = paste0(\"Pop \",", population, ", \"Select Chances\"))")
         #close_out_port <- paste0("dev.off()")
         #eval(parse(text = c(selection_tiff, selection_plot, close_out_port)))
@@ -319,10 +319,10 @@ visualizing_data <- function(local_curstart_value) {
           
           meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
           stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
-          file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.tiff")
+          file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.png")
           minY <- mins_n_maxes[(sex + 10),population,1]
           maxY <- mins_n_maxes[(sex + 10),population,2]
-          tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+          png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
           plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
           #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
           axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
@@ -332,10 +332,10 @@ visualizing_data <- function(local_curstart_value) {
           
           meanz <- cursitylist[[number_of_runs + 1]][sex,population,]
           stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
-          file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", R$sexes[sex], "s.tiff")
+          file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", R$sexes[sex], "s.png")
           minY <- mins_n_maxes[(sex + 12),population,1]
           maxY <- mins_n_maxes[(sex + 12),population,2]
-          tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+          png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
           plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
           axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), labels = c(seq.int(0,P$num_timesteps,(P$num_timesteps/10))))
           #axis(2, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*20), col.axis="black", las=1.5)
@@ -347,8 +347,8 @@ visualizing_data <- function(local_curstart_value) {
           
           meanz <- sdstbxnlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
           #stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
-          file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.tiff")
-          tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+          file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.png")
+          png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
           #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"),cex=0.1)
           image(t(meanz), col = R$sylnum_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"), axes=F)
           axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*P$num_timesteps), col.axis="black", las=2)
@@ -361,8 +361,8 @@ visualizing_data <- function(local_curstart_value) {
           
           meanz <- curhistlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
           #stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
-          file_name <- paste0(R$datez, "_", R$run_name, "_curiosity_bins_pop_", population, "_", R$sexes[sex], "s.tiff")
-          tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+          file_name <- paste0(R$datez, "_", R$run_name, "_curiosity_bins_pop_", population, "_", R$sexes[sex], "s.png")
+          png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
           #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"),cex=0.1)
           image(t(meanz), col = R$sylsub_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"), axes=F)
           axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*P$num_timesteps), col.axis="black", las=0)

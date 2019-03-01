@@ -231,7 +231,7 @@ multi_runs <- function(shifting_curstart) {
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
   print("thing10")
-  #figProdMultRun(shifting_curstart)
+  figProdMultRun(shifting_curstart)
 }
 
 #rm(list=objects())

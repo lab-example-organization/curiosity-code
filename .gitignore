@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+*_number_of_runs.txt
+*sim_data.txt
+Results
+AccessoryFiles
