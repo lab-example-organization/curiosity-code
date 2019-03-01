@@ -173,19 +173,23 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
 multi_runs <- function(shifting_curstart) {
   
   #for(shifting_curstart in 1:250) 
-  params <- yaml.load_file("params.yaml")
+  params <- yaml.load_file(paste0("parameters/", "params.yaml"))
   #source("Source_Life_Cycle.R")
   number_of_runs <- as.numeric(params[[13]]$number_of_runs)
-  cat(number_of_runs, file = paste0(shifting_curstart,"_number_of_runs.txt"), append = F)
+  #cat(number_of_runs, file = paste0("AccessoryFiles/temp/", shifting_curstart, "_number_of_runs.txt"), append = F)
   
   print("number_of_runs is started")
   
-  if(file.exists(paste0(shifting_curstart,"console_copy.txt"))) {file.remove(paste0(shifting_curstart,"console_copy.txt"))}
-  if(file.exists(paste0(shifting_curstart,"sim_data.txt"))) {file.remove(paste0(shifting_curstart,"sim_data.txt"))}
+  if(
+    file.exists(paste0("source/", shifting_curstart,"console_copy.txt"))) {
+      file.remove(paste0("source/", shifting_curstart,"console_copy.txt"))}
+  if(
+    file.exists(paste0("source/", shifting_curstart,"sim_data.txt"))) {
+      file.remove(paste0("source/", shifting_curstart,"sim_data.txt"))}
   for(run_number in 1:number_of_runs) {
-    saveRDS(object = run_number, file = "holdover_line.RData")
+    #saveRDS(object = run_number, file = "holdover_line.RData")
     if(run_number == 1) {
-      sink(file = paste0(shifting_curstart,"sim_data.txt"), append = TRUE)
+      sink(file = paste0("source/", shifting_curstart,"sim_data.txt"), append = TRUE)
       #print(P)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
@@ -220,14 +224,16 @@ multi_runs <- function(shifting_curstart) {
       shifting_curstart = shifting_curstart
     )
     #rm(list=objects())
-    run_number <- readRDS(file = "holdover_line.RData")
+    #run_number <- readRDS(file = "holdover_line.RData")
     #number_of_runs <- 10
     print(paste0("Run Number: ", run_number, ", comes right before (YYYY-MM-DD-HHMMSS): ", format(Sys.time(), "%F-%H%M%S")))
   }
   print("about to archive console copy")
-  file.copy(from = paste0(shifting_curstart, "console_copy.txt"), to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_console_copy.txt"))
+  file.copy(from = paste0("AccessoryFiles/temp/", shifting_curstart, "console_copy.txt"), 
+              to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_console_copy.txt"))
   print("about to archive sim data")
-  file.copy(from = paste0(shifting_curstart, "sim_data.txt"), to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_sim_data.txt"))
+  file.copy(from = paste0("AccessoryFiles/temp/", shifting_curstart, "sim_data.txt"), 
+              to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_sim_data.txt"))
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
   print("thing10")
