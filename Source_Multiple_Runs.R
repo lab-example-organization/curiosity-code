@@ -230,7 +230,8 @@ multi_runs <- function(shifting_curstart) {
   file.copy(from = paste0(shifting_curstart, "sim_data.txt"), to = paste0("../Results/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_sim_data.txt"))
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
-  figProdMultRun(shifting_curstart)
+  print("thing10")
+  #figProdMultRun(shifting_curstart)
 }
 
 #rm(list=objects())

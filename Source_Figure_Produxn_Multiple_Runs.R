@@ -26,9 +26,10 @@ figProdMultRun <- function(shifting_curstart) {
     # tail(list.files(pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)
     
     setwd(multiRun_folderList[run_visual])
-    
+    print("thing1")
     source("../../../../curiosity-code/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
     run_number_directory <- getwd()
+    print("thing2")
     parent_directory <- paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/")
     multiRun_folderList <- readRDS(file = paste0(strsplit(getwd(), "variable")[[1]][1], "/", "folderList.RData"))
     run_visual <- which(multiRun_folderList == run_number_directory)
@@ -37,6 +38,7 @@ figProdMultRun <- function(shifting_curstart) {
     #multirun_directory <- paste0(parent_directory, "/", tail(list.files(pattern = "multirun"),1))
     multirun_directory <- paste0(strsplit(getwd(), "variable")[[1]][1], "multirun_output/", list.files(path = paste0(strsplit(getwd(), "variable")[[1]][1], "multirun_output/"), pattern = "multirun"))
     #results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
+    print("thing3")
     setwd(multirun_directory)
     info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
     #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
@@ -44,6 +46,7 @@ figProdMultRun <- function(shifting_curstart) {
                            run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps/100))")
     cat(data_convert, file = "data_convert.R", sep = "\n")
     source("data_convert.R")
+    print("thing4")
     old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
     rm(list=ls(pattern=old_names[1]))
     rm(list=ls(pattern=old_names[2]))
@@ -62,7 +65,7 @@ figProdMultRun <- function(shifting_curstart) {
     #dataConveRtDS <- paste0("saveRDS(object = converted_data", run_visual, ", file = \"dataConvert", run_visual, ".RData\")")
     #eval(parse(text=c(fig_text_make, info_make, dataConveRDSt)))
     #eval(parse(text=dataConveRtDS))
-    
+    print("thing5")
     sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data", run_visual, ", 1)")
     sdstbxblahn <- paste0("sdstbxn", run_visual, " <- split_data(converted_data", run_visual, ", 2)")
     cursitblahy <- paste0("cursity", run_visual, " <- split_data(converted_data", run_visual, ", 3)")
@@ -75,7 +78,7 @@ figProdMultRun <- function(shifting_curstart) {
     curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"CurHist", run_visual, ".RData\")")
     eval(parse(text=c(sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS)))
     
-    
+    print("thing6")
     setwd(parent_directory)
     
   } # outputs pieces of different runs 
@@ -85,7 +88,7 @@ figProdMultRun <- function(shifting_curstart) {
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
   listnames <- c("hist","sity","sdst","repz")
   number_of_runs <- source("number_of_runs.txt")$value
-  
+  print("thing7")
   for(i in 1:4) {
     listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_runs)")
     listmaker <- paste0(listnames[i], "list[", 1:number_of_runs, "] <- \"", datanames[i], 1:number_of_runs, ".RData\"")
@@ -96,7 +99,7 @@ figProdMultRun <- function(shifting_curstart) {
   sdstbxnlist <- list()
   cursitylist <- list()
   curhistlist <- list()
-  
+  print("thing8")
   setwd(multirun_directory)
   
   for(i in 1:number_of_runs) {
@@ -131,7 +134,7 @@ figProdMultRun <- function(shifting_curstart) {
     #sylrepzlist[[number_of_runs + 1]][i] <- mean(c(sylrepzlist[[1]][i],sylrepzlist[[2]][i],sylrepzlist[[3]][i],sylrepzlist[[4]][i],sylrepzlist[[5]][i],sylrepzlist[[6]][i],sylrepzlist[[7]][i],sylrepzlist[[8]][i],sylrepzlist[[9]][i],sylrepzlist[[10]][i]))
     eval(parse(text=paste0("sylrepzlist[[number_of_runs + 1]][i] <- mean(c(sylrepzlist[[", paste0(1:(number_of_runs-1),"]][i],sylrepzlist[[", collapse=''), number_of_runs, "]][i]))")))
   }
-  
+  print("thing9")
   last_stats <- paste0("rm(sylrepz", number_of_runs, ", sdstbxn", number_of_runs,
                        ", cursity", number_of_runs, ", curhist", number_of_runs,
                        ", sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht",
@@ -158,4 +161,6 @@ figProdMultRun <- function(shifting_curstart) {
     file.copy(from=paste0(src.dir, x), 
               to=paste0(getwd(), x), 
               overwrite = FALSE) })
+
+return(print("It's Done, Yo!"))              
 }
