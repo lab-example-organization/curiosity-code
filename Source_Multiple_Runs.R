@@ -1,3 +1,4 @@
+print("SMR")
 life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, 
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,

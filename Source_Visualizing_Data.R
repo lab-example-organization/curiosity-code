@@ -1,3 +1,4 @@
+print("SVD")
 #Data Recording objects
 #rm(list = objects())
 convert_stored_data <- function(P = P, num_timechunks=thousand_timesteps, data_dir = getwd(), simplification_factor=100) {

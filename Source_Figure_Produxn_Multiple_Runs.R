@@ -2,27 +2,19 @@ print("SFPMR start")
 figProdMultRun <- function(shifting_curstart) {
   number_of_runs <- source(paste0(shifting_curstart,"number_of_runs.txt"))$value
   
-  make_vstore_folder_list <- function() {
+  
     connection <- file(description = paste0(shifting_curstart, "sim_data.txt"), open = "rt")
-    folderNames <- as.vector(read.table(connection, -1L)[[2]])
+    multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
     close(connection)
-    return(folderNames)
-  }
+    
   
-  multiRun_folderList <- make_vstore_folder_list()
-  
-  
-  #multirunParentDirectory <- "/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code/StartingCuriosityValues/15-18"
-  ##### setwd("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
   parent_directory <- getwd()
-  #parent_directory <- ("/home/labuser/Documents/Parker Scratch Folder/Code/Curiosity Code")
-  #number_of_runs <- 10
   
   for(run_visual in 1:number_of_runs) {
     #run_visual=1
     if(run_visual == 1) {
       multiRunTime <- format(Sys.time(), "%F-%H%M%S")
-      setwd(paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/", tail(list.files(path = paste0(strsplit(parent_directory, "curiosity-code")[[1]][1], "Results/"), pattern = "[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9]"),1)))
+      setwd(strsplit(multiRun_folderList[run_visual], split = "variable_store", )[[1]][1])
       if(!(dir.exists("multirun_output"))) {dir.create("multirun_output")}
       dir.create(file.path("multirun_output", paste0(multiRunTime, "-GMT-multirun-output")))
       #multiFolderName <- paste0(parent_directory, "/", multiRunTime, "-GMT-multirun-output")
