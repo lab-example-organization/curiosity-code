@@ -2,7 +2,8 @@ print("SMR")
 life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, 
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,
-                       number_of_syllables_per_probability_level,standDev, shifting_curstart) {
+                       number_of_syllables_per_probability_level, standDev, 
+                       shifting_curstart) {
   
   VOtext = paste0(
     if(round(vertOblLearn[2]/0.1)==1) {
@@ -39,6 +40,8 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   
   if(curinh_value != 0.95) {curinh_output <- paste0(round(curinh_value/0.95,2), "_curinh")} else {curinh_output <- ""}
   
+  if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName = ""}
+
   #rm(list=objects())
   parent_directory <- getwd()
   source("Source_Initial_Functions_Parameters.R")
@@ -63,13 +66,10 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   
   docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
                      SylLearnStyle, "_", VOtext, "_", sylDist, "_",
-                     curstart_ranges,"_c", curinh_output) # equal syllable range
+                     curstart_ranges,"_c", curinh_output, stdDevDocName) 
   #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng_c
   
-  curiosity_level <- initialize.curiosity(simParams, 
-                                          #popXmale,popXfemale,popYmale,popYfemale...
-                                          scMin, 
-                                          scMax)
+  curiosity_level <- initialize.curiosity(simParams, scMin, scMax)
   
   day.tuh <- recordvariable.initialize(simParams, timestep_fraction = (simParams$num_timesteps/1000))
   
@@ -108,66 +108,73 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
       
       # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
       # 1: father; 2: mother; 3: same; 4:opposite
-      moranObjects <- curiosity_learn(parameters = simParams, 
-                                      moran = moranObjects, 
-                                      timestep = single_timestep, 
-                                      inheritance_pattern = 1) 
+      moranObjects <- curiosity_learn(
+                        parameters = simParams, 
+                        moran = moranObjects, 
+                        timestep = single_timestep, 
+                        inheritance_pattern = 1) 
       
-      moranObjects <- syll_learn(parameters = simParams, 
-                                 moran = moranObjects, 
-                                 select_type = 2, 
-                                 totally_new = FALSE, 
-                                 randlearn_context = 2, 
-                                 verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+      moranObjects <- syll_learn(
+                        parameters = simParams, 
+                        moran = moranObjects, 
+                        select_type = 2, 
+                        totally_new = FALSE, 
+                        randlearn_context = 2, 
+                        verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
       
-      moranObjects <- sing.selection(parameters = simParams, 
-                                     moran = moranObjects, 
-                                     curiosity_level = curiosity_level, 
-                                     select_type = 1, 
-                                     sylrep_object = sylreps, 
-                                     num_select_chances = c(100, 100), 
-                                     verbose_output = F, 
-                                     interbreed = F)
+      moranObjects <- sing.selection(
+                        parameters = simParams, 
+                        moran = moranObjects, 
+                        curiosity_level = curiosity_level, 
+                        select_type = 1, 
+                        sylrep_object = sylreps, 
+                        num_select_chances = c(100, 100), 
+                        verbose_output = F, 
+                        interbreed = F)
       
-      moranObjects <- syll_learn(parameters = simParams, 
-                                 moran = moranObjects, 
-                                 select_type = 1, 
-                                 totally_new = FALSE, 
-                                 randlearn_context = 2, 
-                                 verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
+      moranObjects <- syll_learn(
+                        parameters = simParams, 
+                        moran = moranObjects, 
+                        select_type = 1, 
+                        totally_new = FALSE, 
+                        randlearn_context = 2, 
+                        verbose = F) # context decides whether the learning is vertical (2) or oblique (1)
       
-      curiosity_level <- recuriosity.offspring(parameters = simParams, 
-                                               moran = moranObjects, 
-                                               curiosity_object = curiosity_level)
+      curiosity_level <- recuriosity.offspring(
+                          parameters = simParams, 
+                          moran = moranObjects, 
+                          curiosity_object = curiosity_level)
       
-      sylreps <- resylreps.offspring(parameters = simParams, 
-                                     moran = moranObjects,
-                                     sylrep_object = sylreps)
+      sylreps <- resylreps.offspring(
+                  parameters = simParams, 
+                  moran = moranObjects,
+                  sylrep_object = sylreps)
       
-      day.tuh <- variable.archive(parameters = simParams, 
-                                  moran = moranObjects, 
-                                  syllable_object = sylreps, 
-                                  curiosity_object = curiosity_level, 
-                                  data_container = day.tuh, 
-                                  timestep = single_timestep)
+      day.tuh <- variable.archive(
+                  parameters = simParams, 
+                  moran = moranObjects, 
+                  syllable_object = sylreps, 
+                  curiosity_object = curiosity_level, 
+                  data_container = day.tuh, 
+                  timestep = single_timestep)
       
     }
     #thousand_timesteps <- 1
-    sink(file = "console_copy.txt", append = TRUE, split = TRUE)
+    sink(file = paste0("../source/temp/", shifting_curstart, "_console_copy.txt"),
+     append = TRUE, split = TRUE)
     print(paste0("storing data packet ", thousand_timesteps, " at ", Sys.time()))
     sink()
-    FolderName <- store_timesteps(parameters = simParams,
-                                  filename = thousand_timesteps, 
-                                  object_record = day.tuh, 
-                                  saved_stuff = stuff_to_save,
-                                  syll_container = sylreps,
-                                  cur_container = curiosity_level)
+    FolderName <- store_timesteps(
+                    parameters = simParams,
+                    filename = thousand_timesteps, 
+                    object_record = day.tuh, 
+                    saved_stuff = stuff_to_save,
+                    syll_container = sylreps,
+                    cur_container = curiosity_level)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
-      #file_sink = paste0("180814", "_", thousand_timesteps, ".txt")
-      sink(file = paste0("../AccessoryFiles/temp/", shifting_curstart, "sim_data.txt"), append = TRUE)
+      sink(file = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), append = TRUE)
       print(FolderName)
       sink()
-      #stop("It's Done, Yo!")
     }
   }
 }
@@ -181,6 +188,26 @@ yamlDirLoad <- function(file, path = getwd()) {
   return(yaml_container)
 }
 
+smartRemove <- function(path){
+  if(file.exists(path)) {
+    file.remove(path)
+  }
+}
+
+extractParamsFile <- function(shifting_curstart) {
+  scriptsHome <- getwd()
+
+  connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
+  multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])[1]
+  close(connection)
+
+  setwd(multiRun_folderList[1])
+  parameters = readRDS("parameters.RData")
+  setwd(scriptsHome)
+
+  return(parameters)
+}
+
 multi_runs <- function(shifting_curstart) {
   
   #for(shifting_curstart in 1:250) 
@@ -192,16 +219,14 @@ multi_runs <- function(shifting_curstart) {
   
   print("number_of_runs is started")
   
-  if(
-    file.exists(paste0("../source/temp/", shifting_curstart,"console_copy.txt"))) {
-      file.remove(paste0("../source/temp/", shifting_curstart,"console_copy.txt"))}
-  if(
-    file.exists(paste0("../source/temp/", shifting_curstart,"sim_data.txt"))) {
-      file.remove(paste0("../source/temp/", shifting_curstart,"sim_data.txt"))}
+  smartRemove(paste0("../source/temp/", shifting_curstart,"_console_copy.txt"))
+  smartRemove(paste0("../source/temp/", shifting_curstart,"_sim_data.txt"))
+  #if(file.exists(paste0("../source/temp/", shifting_curstart,"console_copy.txt"))) {file.remove(paste0("../source/temp/", shifting_curstart,"console_copy.txt"))}
+  #if(file.exists(paste0("../source/temp/", shifting_curstart,"sim_data.txt"))) {file.remove(paste0("../source/temp/", shifting_curstart,"sim_data.txt"))}
   for(run_number in 1:number_of_runs) {
     #saveRDS(object = run_number, file = "holdover_line.RData")
     if(run_number == 1) {
-      sink(file = paste0("../source/temp/", shifting_curstart,"sim_data.txt"), append = TRUE)
+      sink(file = paste0("../source/temp/", shifting_curstart,"_sim_data.txt"), append = TRUE)
       #print(P)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
@@ -241,15 +266,17 @@ multi_runs <- function(shifting_curstart) {
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
   print("about to archive console copy")
-  file.copy(from = paste0("../source/temp/", shifting_curstart, "console_copy.txt"), 
-              to = paste0("../source/archive/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_console_copy.txt"))
+  file.copy(from = paste0("../source/temp/", shifting_curstart, "_console_copy.txt"), 
+              to = paste0("../source/archive/", shifting_curstart, "_console_copy.txt"), overwrite = T)
   print("about to archive sim data")
-  file.copy(from = paste0("../source/temp/", shifting_curstart, "sim_data.txt"), 
-              to = paste0("../source/archive/",format(Sys.time(), "%F-%H%M%S"), shifting_curstart, "_sim_data.txt"))
+  file.copy(from = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), 
+              to = paste0("../source/archive/", shifting_curstart, "_sim_data.txt"), overwrite = T)
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
   print("thing10")
-  figProdMultRun(shifting_curstart)
+  # # # # # parameters = readRDS()
+  parameters <- extractParamsFile(shifting_curstart = shifting_curstart)
+  figProdMultRun(shifting_curstart = shifting_curstart, number_of_runs = number_of_runs, parameters = parameters)
 }
 
 #rm(list=objects())

@@ -384,7 +384,7 @@ resylreps.offspring <- function(parameters, moran, sylrep_object) {
 
 store_timesteps <- function(parameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff, syll_container, cur_container){
   directory <- getwd()
-  results_directory <- paste0(directory, "Results")
+  results_directory <- paste0(strsplit(directory, "scripts")[[1]][1], "results")
   if(filename == 1) {
     run_timedate <- format(Sys.time(), "%F-%H%M%S")
     if(!(dir.exists(file.path(results_directory, saved_stuff$docnamez)))) {

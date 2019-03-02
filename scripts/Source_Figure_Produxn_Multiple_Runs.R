@@ -1,12 +1,9 @@
 print("SFPMR start")
-figProdMultRun <- function(shifting_curstart) {
-  number_of_runs <- source(paste0(shifting_curstart,"number_of_runs.txt"))$value
+figProdMultRun <- function(shifting_curstart, number_of_runs, parameters) {
   
-  
-    connection <- file(description = paste0(shifting_curstart, "sim_data.txt"), open = "rt")
-    multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
-    close(connection)
-    
+  connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
+  multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
+  close(connection)
   
   parent_directory <- getwd()
   
@@ -27,12 +24,13 @@ figProdMultRun <- function(shifting_curstart) {
     
     setwd(multiRun_folderList[run_visual])
     print("thing1")
-    source("../../../../curiosity-code/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
-    run_number_directory <- getwd()
+    source("../../../../scripts/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
+    visualizing_data(number_of_runs = number_of_runs)
+    #run_number_directory <- getwd()
     print("thing2")
-    parent_directory <- paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/")
-    multiRun_folderList <- readRDS(file = paste0(strsplit(getwd(), "variable")[[1]][1], "/", "folderList.RData"))
-    run_visual <- which(multiRun_folderList == run_number_directory)
+    #parent_directory <- paste0(strsplit(run_number_directory, "Code")[[1]][1], "Code/curiosity-code/")
+    #multiRun_folderList <- readRDS(file = paste0(strsplit(getwd(), "variable")[[1]][1], "/", "folderList.RData"))
+    #run_visual <- which(multiRun_folderList == run_number_directory)
     
     # parent_directory <- getwd()
     #multirun_directory <- paste0(parent_directory, "/", tail(list.files(pattern = "multirun"),1))
@@ -40,10 +38,10 @@ figProdMultRun <- function(shifting_curstart) {
     #results_directory <- paste0(str_split(parent_directory, "Curiosity")[[1]][1], "Results/")
     print("thing3")
     setwd(multirun_directory)
-    info <- readRDS(file = paste0(run_number_directory, "/metadata.RData"))
+    info <- readRDS(file = paste0(multiRun_folderList[run_visual], "/metadata.RData"))
     #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-    data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(P = P, num_timechunks = thousand_timesteps, data_dir = \"", 
-                           run_number_directory, "\", simplification_factor = P$num_timesteps/(P$num_timesteps/100))")
+    data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = parameters, num_timechunks = thousand_timesteps, data_dir = \"", 
+                           multiRun_folderList[run_visual], "\", simplification_factor = parameters$num_timesteps/(parameters$num_timesteps/100))")
     cat(data_convert, file = "data_convert.R", sep = "\n")
     source("data_convert.R")
     print("thing4")
@@ -87,7 +85,7 @@ figProdMultRun <- function(shifting_curstart) {
   datanames <- c("CurHist","Cursity","SylDist","SylReps")
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
   listnames <- c("hist","sity","sdst","repz")
-  number_of_runs <- source("number_of_runs.txt")$value
+  #number_of_runs <- source("number_of_runs.txt")$value
   print("thing7")
   for(i in 1:4) {
     listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_runs)")
@@ -152,10 +150,10 @@ figProdMultRun <- function(shifting_curstart) {
                      "sink()", sep = "\n")
   eval(parse(text=info_make))
   
-  mins_n_maxes <- min_n_max(number_of_runs = number_of_runs)
-  simple_plots(Q = "converted_data", extra_lines = TRUE, number_of_runs)
-  cat(number_of_runs, file = paste0(shifting_curstart, "number_of_runs.txt"), append = F)
-  src.dir = "../../../../curiosity-code/"
+  mins_n_maxes <- min_n_max(parameters = parameters, number_of_runs = number_of_runs)
+  simple_plots(parameters = parameters, Q = "converted_data", extra_lines = TRUE, number_of_runs)
+  #cat(number_of_runs, file = paste0(shifting_curstart, "number_of_runs.txt"), append = F)
+  src.dir = "../../../../scripts/"
   file.names = dir(src.dir)[grep("Source", dir(src.dir))]
   sapply(file.names, function(x) { 
     file.copy(from=paste0(src.dir, x), 
