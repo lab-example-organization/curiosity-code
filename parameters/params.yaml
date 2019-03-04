@@ -501,7 +501,7 @@
   - [418]
   - [419]
   - [420]
-- runLength: '2k'
+- runLength: '10k'
 - SylLearnStyle: 'nsL'
 - vertObLearn:
   - vertical:
@@ -516,5 +516,5 @@
 - pop_size: [400]
 - sylnum: [156]
 - num_sylls_per_prob_lvl: [12]
-- number_of_runs: [2]
+- number_of_runs: [50]
 - standard_deviation: [2]

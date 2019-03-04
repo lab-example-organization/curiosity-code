@@ -206,9 +206,9 @@ smartRemove <- function(path){
 
 multi_runs <- function(shifting_curstart) {
   project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
-  
-  params <- yamlDirLoad(file = "params.yaml", path = paste0(strsplit(getwd(), "scripts")[[1]][1], "parameters"))
-  
+  setwd(paste0(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code/parameters/"))
+  params <- yamlDirLoad(file = "params.yaml", path = getwd())
+  setwd(paste0(project_directory, "scripts/"))
   number_of_runs <- as.numeric(params[[13]]$number_of_runs)
   
   print("number_of_runs is started")

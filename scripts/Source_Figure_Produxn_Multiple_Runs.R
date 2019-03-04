@@ -14,7 +14,7 @@ print("SFPMR start")
 # }
 
 figProdMultRun <- function(shifting_curstart, number_of_runs) {
-  
+  #setwd(paste0(strsplit(getwd(), "Code")[[1]][1], "/Code/curiosity-code/scripts/"))
   connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
