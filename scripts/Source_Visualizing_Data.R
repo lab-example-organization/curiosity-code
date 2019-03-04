@@ -1,7 +1,7 @@
 print("SVD")
 #Data Recording objects
 #rm(list = objects())
-convert_stored_data <- function(parameters = simParams, num_timechunks=thousand_timesteps, data_dir = getwd(), simplification_factor=100) {
+convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simplification_factor=100) {
   #dir <- getwd()
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
@@ -9,7 +9,7 @@ convert_stored_data <- function(parameters = simParams, num_timechunks=thousand_
   sdstbxn <- array(0, c((2 * parameters$num_pop), parameters$sylnum, parameters$num_timesteps))
   cursity <- array(0, c(12, parameters$num_pop, parameters$num_timesteps))
   curhist <- array(data = 0, dim = c((2*parameters$num_pop), (parameters$num_pop * parameters$one_pop_singers[1]), parameters$num_timesteps))
-  
+  num_timechunks = as.numeric(parameters$num_timesteps)/1000
   for(data_subset in 1:4) {
     data1s <- paste0(
       old_names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = ", '"',

@@ -1,5 +1,5 @@
 print("SFPMR start")
-figProdMultRun <- function(shifting_curstart, number_of_runs, parameters, thousand_timesteps) {
+figProdMultRun <- function(shifting_curstart, number_of_runs, parameters) {
   
   connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
@@ -40,7 +40,7 @@ figProdMultRun <- function(shifting_curstart, number_of_runs, parameters, thousa
     setwd(multirun_directory)
     info <- readRDS(file = paste0(multiRun_folderList[run_visual], "/metadata.RData"))
     #converted_data <- convert_stored_data(P = P, num_timechunks = thousand_timesteps)
-    data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = parameters, num_timechunks = thousand_timesteps, data_dir = \"", 
+    data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = parameters, data_dir = \"", 
                            multiRun_folderList[run_visual], "\", simplification_factor = parameters$num_timesteps/(parameters$num_timesteps/100))")
     cat(data_convert, file = "data_convert.R", sep = "\n")
     source("data_convert.R")

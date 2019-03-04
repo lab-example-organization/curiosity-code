@@ -23,7 +23,7 @@ savinStuff <- function(Parameters, Output_Filename, timestepCharacteristics) {
 
 
 makeDocnamez <- function(scMin, scMax, simStartDate, simNumber, 
-                         runLength, SylLearnStyle, vertObLearn, 
+                         runLength, SylLearnStyle, vertOblLearn, 
                          sylDist, curinh_value, standDev) {
 
     VOtext = paste0(
@@ -85,7 +85,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   docnamez <- makeDocnamez(
             scMin = scMin, scMax = scMax, simStartDate = simStartDate, 
             simNumber = simNumber, runLength = runLength, 
-            SylLearnStyle = SylLearnStyle, vertObLearn = vertObLearn, 
+            SylLearnStyle = SylLearnStyle, vertOblLearn = vertOblLearn, 
             sylDist = sylDist, curinh_value = curinh_value, standDev = standDev)
 
   #parent_directory <- getwd()
@@ -305,7 +305,8 @@ multi_runs <- function(shifting_curstart) {
   print("thing10")
   # # # # # parameters = readRDS()
   parameters <- extractParamsFile(shifting_curstart = shifting_curstart)
-  figProdMultRun(shifting_curstart = shifting_curstart, number_of_runs = number_of_runs, 
-                 parameters = parameters, thousand_timesteps = thousand_timesteps)
+  figProdMultRun(shifting_curstart = shifting_curstart, 
+                 number_of_runs = number_of_runs, 
+                 parameters = parameters)
 
 }
