@@ -1,5 +1,5 @@
 print("SFPMR start")
-figProdMultRun <- function(shifting_curstart, number_of_runs, parameters) {
+figProdMultRun <- function(shifting_curstart, number_of_runs, parameters, thousand_timesteps) {
   
   connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])

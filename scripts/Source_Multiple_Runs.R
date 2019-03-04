@@ -20,51 +20,75 @@ savinStuff <- function(Parameters, Output_Filename, timestepCharacteristics) {
     )
     return(stuff_to_save)
 }
+
+
+makeDocnamez <- function(scMin, scMax, simStartDate, simNumber, 
+                         runLength, SylLearnStyle, vertObLearn, 
+                         sylDist, curinh_value, standDev) {
+
+    VOtext = paste0(
+      if(round(vertOblLearn[2]/0.1)==1) {
+        round(vertOblLearn[2]/0.1,1)} else {round(vertOblLearn[2]/0.1,2)},"_",
+      if(round(vertOblLearn[1]/0.95)==1) {
+        round(vertOblLearn[1]/0.95,1)} else {round(vertOblLearn[1]/0.95,2)},"_V_",
+      if(round(vertOblLearn[4]/0.01)==1) {
+        round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_",
+      if(round(vertOblLearn[3]/0.1)==1) {
+        round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") # this is the text insert for the Output_Filename VO subsection
+  
+    if(VOtext == "1_1_V_1_1_O") {VOtext = "normVO"}
+    
+    if(scMin[1] == scMin[2] && scMin[2] == scMin[3] && scMin[3] == scMin[4] &&
+      scMax[1] == scMax[2] && scMax[2] == scMax[3] && scMax[3] == scMax[4]) {
+      
+      curstart_ranges = paste0(scMin[1], "-", scMax[1])
+      
+    } else {
+      
+      #femrange = paste0(scMin[2], "-", scMax[2], "f")
+      
+      if(scMin[1] == scMin[3] && scMax[1] == scMax[3] && (scMax[2] != scMax[3] ||  scMin[2] != scMin[3])) {
+        
+        curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
+      } else if(scMin[1] != scMin[3] || scMax[1] != scMax[3]) {
+        
+        curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
+      } else if(scMin[1] == scMin[2] && scMax[1] == scMax[2] && scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
+        
+        curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
+      }
+    } # this is the text insert for the docnamez curstart ranges subsection
+    
+    if(curinh_value != 0.95) {curinh_output <- paste0(round(curinh_value/0.95,2), "_curinh")} else {curinh_output <- ""}
+    
+    if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName = ""}
+
+    docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
+                     SylLearnStyle, "_", VOtext, "_", sylDist, "_",
+                     curstart_ranges,"_c", curinh_output, stdDevDocName) 
+    #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng_c
+
+    return(docnamez)
+  }
+
+
 life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, 
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,
                        number_of_syllables_per_probability_level, standDev, 
                        shifting_curstart) {
   
-  VOtext = paste0(
-    if(round(vertOblLearn[2]/0.1)==1) {
-      round(vertOblLearn[2]/0.1,1)} else {round(vertOblLearn[2]/0.1,2)},"_",
-    if(round(vertOblLearn[1]/0.95)==1) {
-      round(vertOblLearn[1]/0.95,1)} else {round(vertOblLearn[1]/0.95,2)},"_V_",
-    if(round(vertOblLearn[4]/0.01)==1) {
-      round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_",
-    if(round(vertOblLearn[3]/0.1)==1) {
-      round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") # this is the text insert for the Output_Filename VO subsection
-  
-  if(VOtext == "1_1_V_1_1_O") {VOtext = "normVO"}
-  
-  if(scMin[1] == scMin[2] && scMin[2] == scMin[3] && scMin[3] == scMin[4] &&
-     scMax[1] == scMax[2] && scMax[2] == scMax[3] && scMax[3] == scMax[4]) {
-    
-    curstart_ranges = paste0(scMin[1], "-", scMax[1])
-    
-  } else {
-    
-    #femrange = paste0(scMin[2], "-", scMax[2], "f")
-    
-    if(scMin[1] == scMin[3] && scMax[1] == scMax[3] && (scMax[2] != scMax[3] ||  scMin[2] != scMin[3])) {
-      
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
-    } else if(scMin[1] != scMin[3] || scMax[1] != scMax[3]) {
-      
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
-    } else if(scMin[1] == scMin[2] && scMax[1] == scMax[2] && scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
-      
-      curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
-    }
-  } # this is the text insert for the docnamez curstart ranges subsection
-  
-  if(curinh_value != 0.95) {curinh_output <- paste0(round(curinh_value/0.95,2), "_curinh")} else {curinh_output <- ""}
-  
-  if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName = ""}
+  # argg <- c(as.list(environment()), list(...))
+  # cat(argg, file = "doctemp.R")
+  # simple_args_pipe <- source("doctemp.R")
 
-  #rm(list=objects())
-  parent_directory <- getwd()
+  docnamez <- makeDocnamez(
+            scMin = scMin, scMax = scMax, simStartDate = simStartDate, 
+            simNumber = simNumber, runLength = runLength, 
+            SylLearnStyle = SylLearnStyle, vertObLearn = vertObLearn, 
+            sylDist = sylDist, curinh_value = curinh_value, standDev = standDev)
+
+  #parent_directory <- getwd()
   source("Source_Initial_Functions_Parameters.R")
   
   simParams <- define_parameters(
@@ -83,12 +107,8 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   moranObjects <- define_temp_data(simParams)
   
   sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
-  
-  
-  docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
-                     SylLearnStyle, "_", VOtext, "_", sylDist, "_",
-                     curstart_ranges,"_c", curinh_output, stdDevDocName) 
-  #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng_c
+
+  #docnamez <- makeDocnamez(simple_args_pipe = simple_args_pipe)
   
   curiosity_level <- initialize.curiosity(simParams, scMin, scMax)
   
@@ -167,7 +187,8 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
       
     }
     #thousand_timesteps <- 1
-    sink(file = paste0("../source/temp/", shifting_curstart, "_console_copy.txt"),
+    project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
+    sink(file = paste0(project_directory, "source/temp/", shifting_curstart, "_console_copy.txt"),
      append = TRUE, split = TRUE)
     print(paste0("storing data packet ", thousand_timesteps, " at ", Sys.time()))
     sink()
@@ -179,7 +200,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
                     syll_container = sylreps,
                     cur_container = curiosity_level)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
-      sink(file = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), append = TRUE)
+      sink(file = paste0(project_directory, "source/temp/", shifting_curstart, "_sim_data.txt"), append = TRUE)
       print(FolderName)
       sink()
     }
@@ -198,25 +219,26 @@ yamlDirLoad <- function(file, path = getwd()) {
 smartRemove <- function(path){
   if(file.exists(path)) {
     file.remove(path)
+  } else{
+    print("coolsies")
   }
 }
 
 extractParamsFile <- function(shifting_curstart) {
-  scriptsHome <- getwd()
-
-  connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
+  startingHome <- getwd()
+  connection <- file(description = paste0(
+    strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/source/temp/", shifting_curstart, "_sim_data.txt"
+    ), open = "rt") # "/home/parker/Documents/projects/Code/curiosity-code"
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])[1]
   close(connection)
-
   setwd(multiRun_folderList[1])
   parameters = readRDS("parameters.RData")
-  setwd(scriptsHome)
-
+  setwd(startingHome)
   return(parameters)
 }
 
 multi_runs <- function(shifting_curstart) {
-  
+  project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
   #for(shifting_curstart in 1:250) 
   #params <- yaml.load_file(paste0("params.yaml"))
   params <- yamlDirLoad(file = "params.yaml", path = paste0(strsplit(getwd(), "scripts")[[1]][1], "parameters"))
@@ -226,14 +248,14 @@ multi_runs <- function(shifting_curstart) {
   
   print("number_of_runs is started")
   
-  smartRemove(paste0("../source/temp/", shifting_curstart,"_console_copy.txt"))
-  smartRemove(paste0("../source/temp/", shifting_curstart,"_sim_data.txt"))
-  #if(file.exists(paste0("../source/temp/", shifting_curstart,"console_copy.txt"))) {file.remove(paste0("../source/temp/", shifting_curstart,"console_copy.txt"))}
-  #if(file.exists(paste0("../source/temp/", shifting_curstart,"sim_data.txt"))) {file.remove(paste0("../source/temp/", shifting_curstart,"sim_data.txt"))}
+  smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_console_copy.txt"))
+  smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"))
+  #if(file.exists(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"console_copy.txt"))) {file.remove(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"console_copy.txt"))}
+  #if(file.exists(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"sim_data.txt"))) {file.remove(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"sim_data.txt"))}
   for(run_number in 1:number_of_runs) {
     #saveRDS(object = run_number, file = "holdover_line.RData")
     if(run_number == 1) {
-      sink(file = paste0("../source/temp/", shifting_curstart,"_sim_data.txt"), append = TRUE)
+      sink(file = paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"), append = TRUE)
       #print(P)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
@@ -273,25 +295,17 @@ multi_runs <- function(shifting_curstart) {
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
   print("about to archive console copy")
-  file.copy(from = paste0("../source/temp/", shifting_curstart, "_console_copy.txt"), 
-              to = paste0("../source/archive/", shifting_curstart, "_console_copy.txt"), overwrite = T)
+  file.copy(from = paste0(project_directory, "source/temp/", shifting_curstart, "_console_copy.txt"), 
+              to = paste0(project_directory, "source/archive/", shifting_curstart, "_console_copy.txt"), overwrite = T)
   print("about to archive sim data")
-  file.copy(from = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), 
-              to = paste0("../source/archive/", shifting_curstart, "_sim_data.txt"), overwrite = T)
+  file.copy(from = paste0(project_directory, "source/temp/", shifting_curstart, "_sim_data.txt"), 
+              to = paste0(project_directory, "source/archive/", shifting_curstart, "_sim_data.txt"), overwrite = T)
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
   print("thing10")
   # # # # # parameters = readRDS()
   parameters <- extractParamsFile(shifting_curstart = shifting_curstart)
-  figProdMultRun(shifting_curstart = shifting_curstart, number_of_runs = number_of_runs, parameters = parameters)
-}
+  figProdMultRun(shifting_curstart = shifting_curstart, number_of_runs = number_of_runs, 
+                 parameters = parameters, thousand_timesteps = thousand_timesteps)
 
-#rm(list=objects())
-# Transform name of data packet to folder name (example folder name: 2018-10-09-010315-GMT-variable-store)
-# run loop that processes fn_doc_line from start of run to the end; 
-# stitches together the pieces of individual runs, and plots them
-# with an average line in black and the rest in various shades of grey.
-###2018-10-09-010315-GMT-variable-store
-#"2018-10-09" <- 6
-#"01:55:51" <- 7
-#"-GMT-variable-store"
+}
