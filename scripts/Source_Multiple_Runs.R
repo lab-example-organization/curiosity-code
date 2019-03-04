@@ -121,27 +121,6 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
 
   stuff_to_save <- savinStuff(Parameters = simParams, Output_Filename = docnamez, timestepCharacteristics = moranObjects)
   
-
-
-  # cat(paste0("Number of Timesteps: ", info[[3]][1], ",\n Number of Populations: ", 
-  # info[[3]][2], ",\n Population Size: ", info[[3]][3], ",\n Number of Syllables: ", 
-  # info[[3]][4], ",\n Number of Syllable Positions Assigned to Specific Probability Levels: ", 
-  # info[[3]][5], ",\n Number of Singers Sampled from One Population for Mating: ", info[[3]][7], 
-  # ",\n Number of Singers Sampled from One Population for Tutoring: ", info[[3]][6], 
-  # "Probability of Inheriting Curiosity Accurately: ", info[[3]][8], 
-  # ",\n Probability of Learning Syllables Accurately from Parent: ", info[[3]][10], 
-  # ",\n Probability of Learning Syllables Accurately from Tutor: ", info[[3]][9], 
-  # "\n, Probability of Picking up Random Extra Syllables from Parent: ", info[[3]][12], 
-  # "\n, Probability of Picking up Random Extra Syllables from Tutor: ", info[[3]][11], 
-  # ",\n Standard Deviation of Randomly-picked-up Sylls from Established Mean: ", info[[3]][13], 
-  # ",\n Number of Rows in Population Calls Matrix: ", info[[3]][14], 
-  # ",\n Number of Columns in Pop Calls Matrix: ", info[[3]][15], ",\n Pairing Pool Rows: ", 
-  # info[[3]][16], ",\n Pairing Pool Columns: ", info[[3]][17], ",\n Pairing Pool Slices: ", 
-  # info[[3]][18], ",\n Curiosity Counter Rows: ", info[[3]][19], ",\n Curiosity Counter Columns: ", 
-  # info[[3]][20], ",\n Population Syllable Probability Rows: ", info[[3]][21], 
-  # ",\n Population Probability Columns: ", info[[3]][22], ",\n Length of Curiosity Breaks Vector: ", 
-  # info[[3]][23], ",\n Length of Zero to One Template: ", info[[3]][24], ",\n Learning Pool Rows: ", 
-  # info[[3]][25], ",\n Learning Pool Columns: ", info[[3]][26], ",\n Learning Pool Slices: ", info[[3]][27]))
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     for(single_timestep in 1:1000) {
@@ -205,6 +184,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
       sink()
     }
   }
+  return(simParams)
 }
 #print("it's starting!")
 
@@ -224,43 +204,24 @@ smartRemove <- function(path){
   }
 }
 
-extractParamsFile <- function(shifting_curstart) {
-  startingHome <- getwd()
-  connection <- file(description = paste0(
-    strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/source/temp/", shifting_curstart, "_sim_data.txt"
-    ), open = "rt") # "/home/parker/Documents/projects/Code/curiosity-code"
-  multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])[1]
-  close(connection)
-  setwd(multiRun_folderList[1])
-  parameters = readRDS("parameters.RData")
-  setwd(startingHome)
-  return(parameters)
-}
-
 multi_runs <- function(shifting_curstart) {
   project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
-  #for(shifting_curstart in 1:250) 
-  #params <- yaml.load_file(paste0("params.yaml"))
+  
   params <- yamlDirLoad(file = "params.yaml", path = paste0(strsplit(getwd(), "scripts")[[1]][1], "parameters"))
-  #source("Source_Life_Cycle.R")
+  
   number_of_runs <- as.numeric(params[[13]]$number_of_runs)
-  #cat(number_of_runs, file = paste0("AccessoryFiles/temp/", shifting_curstart, "_number_of_runs.txt"), append = F)
   
   print("number_of_runs is started")
   
   smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_console_copy.txt"))
   smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"))
-  #if(file.exists(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"console_copy.txt"))) {file.remove(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"console_copy.txt"))}
-  #if(file.exists(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"sim_data.txt"))) {file.remove(paste0("/home/parker/Documents/projects/Code/curiosity-code/temp/", shifting_curstart,"sim_data.txt"))}
   for(run_number in 1:number_of_runs) {
-    #saveRDS(object = run_number, file = "holdover_line.RData")
     if(run_number == 1) {
       sink(file = paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"), append = TRUE)
-      #print(P)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
-    life_cycle(
+    parameters <- life_cycle(
       scMin = c(
         params[[1]]$curstarts[[shifting_curstart]]$scMin[1],
         params[[1]]$curstarts[[shifting_curstart]]$scMin[2],
@@ -289,9 +250,6 @@ multi_runs <- function(shifting_curstart) {
       standDev = as.numeric(params[[14]]$standard_deviation),
       shifting_curstart = shifting_curstart
     )
-    #rm(list=objects())
-    #run_number <- readRDS(file = "holdover_line.RData")
-    #number_of_runs <- 10
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
   print("about to archive console copy")
@@ -303,10 +261,6 @@ multi_runs <- function(shifting_curstart) {
   
   source("Source_Figure_Produxn_Multiple_Runs.R")
   print("thing10")
-  # # # # # parameters = readRDS()
-  parameters <- extractParamsFile(shifting_curstart = shifting_curstart)
   figProdMultRun(shifting_curstart = shifting_curstart, 
-                 number_of_runs = number_of_runs, 
-                 parameters = parameters)
-
+                 number_of_runs = number_of_runs)
 }

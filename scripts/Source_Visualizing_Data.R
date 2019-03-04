@@ -13,7 +13,7 @@ convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simp
   for(data_subset in 1:4) {
     data1s <- paste0(
       old_names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = ", '"',
-      run_number_directory, "/", strsplit(run_number_directory, "-GMT-")[[1]][2], "-",
+      data_dir, "/", strsplit(data_dir, "-GMT-")[[1]][2], "-",
       1:num_timechunks, "-", old_names[data_subset], ".RData", '"', ")")
     cat(data1s, file = "data_subset.R", sep = "\n")
     source("data_subset.R")
@@ -164,7 +164,7 @@ figure_maker <- function(parameters, Q, R, population, q_subset, subset_number, 
     if(sex_dependent == T) {
       for(sex in 1:2) {
         file_name <- paste0(R$datez, "_", R$run_name, filename, population, "_", R$sexes[sex], ".png")
-        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         if((q_subset == "sdstbxn") | (q_subset == "curhist")) {
           thing <- paste0("objectz <- Q$", q_subset, "[", sex + ((population - 1) * 2), ",,]")
           eval(parse(text=thing))
@@ -184,7 +184,7 @@ figure_maker <- function(parameters, Q, R, population, q_subset, subset_number, 
       thing <- paste0("objectz <- Q$", q_subset, "[", subset_number, ",population,]")
       eval(parse(text=thing))
       file_name <- paste0(R$datez, "_", R$run_name, filename, population, ".png")
-      png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+      png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
       plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, ylab2))
       dev.off()
     }
@@ -201,7 +201,7 @@ figure_maker <- function(parameters, Q, R, population, q_subset, subset_number, 
     file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".png")
     minY <- mins_n_maxes[2,population,1]
     maxY <- mins_n_maxes[2,population,2]
-    png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+    png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
@@ -216,7 +216,7 @@ figure_maker <- function(parameters, Q, R, population, q_subset, subset_number, 
     file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.png")
     minY <- mins_n_maxes[(sex + 10),population,1]
     maxY <- mins_n_maxes[(sex + 10),population,2]
-    png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+    png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
@@ -253,7 +253,9 @@ summary_statistics <- function(parameters, Q, R, population, simplification_fact
 }
 
 
-min_n_max <- function(parameters, number_of_runs = number_of_runs) {
+min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist, 
+                         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, 
+                         sylrepzlist = sylrepzlist) {
   mins_n_maxes <- array(0,c(14,2,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
   mn_mx_container <- c("min", "max") # 3rd-dim-dependent --- 
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectSubset[k]])
@@ -278,8 +280,38 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs) {
 }
 
 
+curiosity_figures <- function(parameters, number_of_runs, population, cursitylist, R, mins_n_maxes) {
+  figure_retainer <- c(3,10,4,5,6,7,8,9,11)
+  filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop", 
+                          "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
+                          "_AC_replaced_f_pop", "_cur_inh_attempts")
+  plot_title_retainer <- c(" Mate Selection Chances", " Tutor Selection Chances", " Father AC", " Mother AC",
+                            " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts")
+  for(individual_figures in 1:9) {
 
-simple_plots <- function(parameters, Q = converted_data, extra_lines = FALSE,number_of_runs=number_of_runs) {
+    meanz <- cursitylist[[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
+    stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+    file_name <- paste0(R$datez, "_", R$run_name, filename_retainer[individual_figures], population, ".png")
+    minY <- mins_n_maxes[individual_figures,population,1]
+    maxY <- mins_n_maxes[individual_figures,population,2]
+    png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+    plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(minY, maxY), xaxt="n")
+    axis(side = 1, 
+          at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]),
+                                  ((length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]))/10))),
+          labels = c(seq.int(0,parameters$num_timesteps,(parameters$num_timesteps/10))))
+    eval(parse(text=stuff))
+    lines(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,],col="black", cex=0.2)
+    dev.off()
+
+  }  
+}
+
+
+simple_plots <- function(parameters, R = R, Q = converted_data, extra_lines = FALSE,
+                         number_of_runs=number_of_runs, cursitylist = cursitylist, 
+                         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, 
+                         sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes) {
   if(extra_lines == FALSE) {
     for(population in 1:parameters$num_pop) {
       figure_maker(parameters = parameters, Q, R, population, "cursity", "3", "_mate_selections_pop", F, T, "Pop", " Selection Chances", number_of_runs = number_of_runs)
@@ -301,36 +333,11 @@ simple_plots <- function(parameters, Q = converted_data, extra_lines = FALSE,num
     }
   } else {
     for(population in 1:parameters$num_pop) {
-      curiosity_figures <- function() {
-        figure_retainer <- c(3,10,4,5,6,7,8,9,11)
-        filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop", 
-                                "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
-                                "_AC_replaced_f_pop", "_cur_inh_attempts")
-        plot_title_retainer <- c(" Mate Selection Chances", " Tutor Selection Chances", " Father AC", " Mother AC",
-                                  " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts")
-        for(individual_figures in 1:9) {
-          
-          meanz <- cursitylist[[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
-          stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
-          file_name <- paste0(R$datez, "_", R$run_name, filename_retainer[individual_figures], population, ".png")
-          minY <- mins_n_maxes[individual_figures,population,1]
-          maxY <- mins_n_maxes[individual_figures,population,2]
-          png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-          plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(minY, maxY), xaxt="n")
-          axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][filename_retainer[individual_figures],population,]),
-                                        ((length(cursitylist[[number_of_runs + 1]][filename_retainer[individual_figures],population,]))/10))),
-                labels = c(seq.int(0,parameters$num_timesteps,(parameters$num_timesteps/10))))
-          eval(parse(text=stuff))
-          lines(cursitylist[[number_of_runs + 1]][filename_retainer[individual_figures],population,],col="black", cex=0.2)
-          dev.off()
-          
-        }  
-      }
       
-      #selection_tiff <- paste0("png(filename = ", file_name, ", width = 554, height = 467, units = \"px\", pointsize = 12, bg = \"white\", compression = \"none\")")
-      #selection_plot <- paste0("plot(objectz[], xlab = \"Timesteps\", ylab = paste0(\"Pop \",", population, ", \"Select Chances\"))")
-      #close_out_port <- paste0("dev.off()")
-      #eval(parse(text = c(selection_tiff, selection_plot, close_out_port)))
+      curiosity_figures(parameters = parameters, number_of_runs = number_of_runs, 
+                        population = population, cursitylist = cursitylist, R = R, 
+                        mins_n_maxes = mins_n_maxes)
+      
       for(sex in 1:2) {
         
         meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
@@ -338,7 +345,7 @@ simple_plots <- function(parameters, Q = converted_data, extra_lines = FALSE,num
         file_name <- paste0(R$datez, "_", R$run_name, "_mean_repertoire_size_-_pop_", population, "_", R$sexes[sex], "s.png")
         minY <- mins_n_maxes[(sex + 10),population,1]
         maxY <- mins_n_maxes[(sex + 10),population,2]
-        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
         #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
         axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
@@ -353,7 +360,7 @@ simple_plots <- function(parameters, Q = converted_data, extra_lines = FALSE,num
         file_name <- paste0(R$datez, "_", R$run_name, "_mean_curiosity_-_pop_", population, "_", R$sexes[sex], "s.png")
         minY <- mins_n_maxes[(sex + 12),population,1]
         maxY <- mins_n_maxes[(sex + 12),population,2]
-        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
         axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
                                       ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), 
@@ -368,7 +375,7 @@ simple_plots <- function(parameters, Q = converted_data, extra_lines = FALSE,num
         meanz <- sdstbxnlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
         #stuff <- paste0("points(sdstbxnlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_sylnum_pop_", population, "_", R$sexes[sex], "s.png")
-        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"),cex=0.1)
         image(t(meanz), col = R$sylnum_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Sylnum"), axes=F)
         axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*parameters$num_timesteps), col.axis="black", las=2)
@@ -382,7 +389,7 @@ simple_plots <- function(parameters, Q = converted_data, extra_lines = FALSE,num
         meanz <- curhistlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
         #stuff <- paste0("points(curhistlist[[", 1:number_of_runs, "]][(sex + ((population - 1) * 2)), ,],col=\"grey\", cex=0.2)")
         file_name <- paste0(R$datez, "_", R$run_name, "_curiosity_bins_pop_", population, "_", R$sexes[sex], "s.png")
-        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+        png(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         #plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"),cex=0.1)
         image(t(meanz), col = R$sylsub_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", R$Sexes[sex], "s Curiosity Bin"), axes=F)
         axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*parameters$num_timesteps), col.axis="black", las=0)
