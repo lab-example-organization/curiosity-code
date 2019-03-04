@@ -1,20 +1,20 @@
 print("SMR")
-savinStuff <- function(simParams) {
+savinStuff <- function(Parameters, Output_Filename, timestepCharacteristics) {
     datez <- Sys.Date()
-    deetz <- c(simParams$num_timesteps, simParams$num_pop, simParams$pop_size, simParams$sylnum, 
-               simParams$nsspl, simParams$one_pop_singers, simParams$curlearnprob, 
-               simParams$learnprob, simParams$randlearnprob, simParams$stand.dev, dim(simParams$pop_calls_matrix), 
-               dim(moranObjects$pairing.pool), dim(simParams$curiosity_counter), dim(simParams$population_syll_probs), 
-               length(simParams$curiositybreaks), length(simParams$zero_to_one_template), dim(moranObjects$learning.pool))
-    names(deetz) <- c("simParams$num_timesteps", "simParams$num_pop", "simParams$pop_size", "simParams$sylnum", 
-                      "simParams$nsspl", rep("simParams$one_pop_singers", 2), "simParams$curlearnprob", 
-                       rep("simParams$learnprob", 2), rep("simParams$randlearnprob", 2), 
-                      "simParams$stand.dev", rep("dim(simParams$pop_calls_matrix)", 2), 
-                       rep("dim(moranObjects$pairing.pool)", 3), rep("dim(simParams$curiosity_counter)", 2), 
-                       rep("dim(simParams$population_syll_probs)", 2), "length(simParams$curiositybreaks)", 
-                      "length(simParams$zero_to_one_template)", rep("dim(moranObjects$learning.pool)", 3))
+    deetz <- c(Parameters$num_timesteps, Parameters$num_pop, Parameters$pop_size, Parameters$sylnum, 
+               Parameters$nsspl, Parameters$one_pop_singers, Parameters$curlearnprob, 
+               Parameters$learnprob, Parameters$randlearnprob, Parameters$stand.dev, dim(Parameters$pop_calls_matrix), 
+               dim(timestepCharacteristics$pairing.pool), dim(Parameters$curiosity_counter), dim(Parameters$population_syll_probs), 
+               length(Parameters$curiositybreaks), length(Parameters$zero_to_one_template), dim(timestepCharacteristics$learning.pool))
+    names(deetz) <- c("Parameters$num_timesteps", "Parameters$num_pop", "Parameters$pop_size", "Parameters$sylnum", 
+                      "Parameters$nsspl", rep("Parameters$one_pop_singers", 2), "Parameters$curlearnprob", 
+                       rep("Parameters$learnprob", 2), rep("Parameters$randlearnprob", 2), 
+                      "Parameters$stand.dev", rep("dim(Parameters$pop_calls_matrix)", 2), 
+                       rep("dim(timestepCharacteristics$pairing.pool)", 3), rep("dim(Parameters$curiosity_counter)", 2), 
+                       rep("dim(Parameters$population_syll_probs)", 2), "length(Parameters$curiositybreaks)", 
+                      "length(Parameters$zero_to_one_template)", rep("dim(timestepCharacteristics$learning.pool)", 3))
     stuff_to_save <- list(
-      docnamez=docnamez,
+      docnamez=Output_Filename,
       datez=datez,
       deetz=deetz
     )
@@ -34,7 +34,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
     if(round(vertOblLearn[4]/0.01)==1) {
       round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_",
     if(round(vertOblLearn[3]/0.1)==1) {
-      round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") # this is the text insert for the docnamez VO subsection
+      round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") # this is the text insert for the Output_Filename VO subsection
   
   if(VOtext == "1_1_V_1_1_O") {VOtext = "normVO"}
   
@@ -99,7 +99,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   
   
 
-  stuff_to_save <- savinStuff(simParams = simParams)
+  stuff_to_save <- savinStuff(Parameters = simParams, Output_Filename = docnamez, timestepCharacteristics = moranObjects)
   
 
 
