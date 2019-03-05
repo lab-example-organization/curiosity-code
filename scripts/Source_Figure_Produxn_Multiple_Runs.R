@@ -1,21 +1,6 @@
-print("SFPMR start")
-
-# extractParamsFile <- function(shifting_curstart, ) {
-#   startingHome <- getwd()
-#   connection <- file(description = paste0(
-#     strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/source/results/", shifting_curstart, "_sim_data.txt"
-#     ), open = "rt") # "/home/parker/Documents/projects/Code/curiosity-code"
-#   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])[1]
-#   close(connection)
-#   setwd(multiRun_folderList[1])
-#   parameters = readRDS("parameters.RData")
-#   setwd(startingHome)
-#   return(parameters)
-# }
 
 figProdMultRun <- function(shifting_curstart, number_of_runs) {
-  #setwd(paste0(strsplit(getwd(), "Code")[[1]][1], "/Code/curiosity-code/scripts/"))
-  connection <- file(description = paste0("../source/temp/", shifting_curstart, "_sim_data.txt"), open = "rt")
+  connection <- file(description = file.path("..", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
   
