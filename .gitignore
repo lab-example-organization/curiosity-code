@@ -6,5 +6,7 @@ curiosity-code.Rproj
 *_number_of_runs.txt
 *sim_data.txt
 results
-source
+source/archive/*
+source/temp/*
+source/*.txt
 *.out

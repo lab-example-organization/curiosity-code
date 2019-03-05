@@ -1,9 +1,21 @@
 library(stringr)
-setwd("~/Documents/projects/Code/Results/")
-#setwd("~/Downloads/Lab_Notebook/GitHub/Code/Results")
-if(!(dir.exists("Heatmaps"))) {dir.create("Heatmaps")}
-setwd("Heatmaps")
-heatmapLand <- getwd()
+setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
+
+HtMpDir <- function() {
+if(!(dir.exists(file.path("results", "Heatmaps")))) {dir.create(file.path("results", "Heatmaps"))}
+heatmapLand <- file.path(getwd(), "results", "Heatmaps")
+return(heatmapLand)
+}
+
+extractEndData <- function() {
+
+  return()
+}
+
+
+
+
+
 setwd("../../../../../../../../../../media/parker/A443-E926/simulation runs/shifting_curstart_for_heatmap/")
 #setwd("/Volumes/NO NAME/simulation runs/shifting_curstart_for_heatmap/")
 heatmap_runs <- list.files()

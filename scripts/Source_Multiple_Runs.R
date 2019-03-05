@@ -22,7 +22,7 @@ savinStuff <- function(Parameters, Output_Filename, timestepCharacteristics) {
 }
 
 
-makeDocnamez <- function(scMin, scMax, simStartDate, simNumber, 
+makeDocnamez <- function(scMin, scMax, simNumber, 
                          runLength, SylLearnStyle, vertOblLearn, 
                          sylDist, curinh_value, standDev) {
 
@@ -63,33 +63,31 @@ makeDocnamez <- function(scMin, scMax, simStartDate, simNumber,
     
     if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName = ""}
 
-    docnamez <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
+    simStartDate <- gsub('-', '', substring(Sys.Date(), 3))
+
+    DocumentName <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
                      SylLearnStyle, "_", VOtext, "_", sylDist, "_",
                      curstart_ranges,"_c", curinh_output, stdDevDocName) 
     #190211_160_100k_nsL_7_0.316_V_10_1.5_O_eq_sylrng_c
 
-    return(docnamez)
+    return(DocumentName)
   }
 
 
-life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength, 
+life_cycle <- function(scMin, scMax, simNumber, runLength, 
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,
                        number_of_syllables_per_probability_level, standDev, 
                        shifting_curstart) {
   
-  # argg <- c(as.list(environment()), list(...))
-  # cat(argg, file = "doctemp.R")
-  # simple_args_pipe <- source("doctemp.R")
-
   docnamez <- makeDocnamez(
-            scMin = scMin, scMax = scMax, simStartDate = simStartDate, 
-            simNumber = simNumber, runLength = runLength, 
-            SylLearnStyle = SylLearnStyle, vertOblLearn = vertOblLearn, 
-            sylDist = sylDist, curinh_value = curinh_value, standDev = standDev)
+            scMin = scMin, scMax = scMax, simNumber = simNumber, 
+            runLength = runLength, SylLearnStyle = SylLearnStyle, 
+            vertOblLearn = vertOblLearn, sylDist = sylDist, 
+            curinh_value = curinh_value, standDev = standDev)
 
   #parent_directory <- getwd()
-  source("Source_Initial_Functions_Parameters.R")
+  source(file.path("scripts", "Source_Initial_Functions_Parameters.R"))
   
   simParams <- define_parameters(
     num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
@@ -115,7 +113,7 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
   day.tuh <- recordvariable.initialize(
     simParams, timestep_fraction = (simParams$num_timesteps/1000))
   
-  source("Source_Life_Cycle_Functions.R")
+  source(file.path("scripts", "Source_Life_Cycle_Functions.R"))
   
   
 
@@ -166,10 +164,10 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
       
     }
     #thousand_timesteps <- 1
-    project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
-    sink(file = paste0(project_directory, "source/temp/", shifting_curstart, "_console_copy.txt"),
-     append = TRUE, split = TRUE)
-    print(paste0("storing data packet ", thousand_timesteps, " at ", Sys.time()))
+    project_directory <- file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code")
+    sink(file = file.path(project_directory, "source", "temp", 
+      paste0(shifting_curstart, "_console_copy.txt")), append = TRUE, split = TRUE)
+    print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", thousand_timesteps, " at ", Sys.time()))
     sink()
     FolderName <- store_timesteps(
                     parameters = simParams,
@@ -179,36 +177,27 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
                     syll_container = sylreps,
                     cur_container = curiosity_level)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
-      sink(file = paste0(project_directory, "source/temp/", shifting_curstart, "_sim_data.txt"), append = TRUE)
+      sink(file = file.path(project_directory, "source", "temp", paste0(shifting_curstart, "_sim_data.txt")), append = TRUE)
       print(FolderName)
       sink()
     }
   }
 }
-#print("it's starting!")
 
-yamlDirLoad <- function(file, path = getwd()) {
-  start <- getwd()
-  setwd(path)
-  yaml_container <- yaml.load_file(file)
-  setwd(start)
-  return(yaml_container)
-}
 
 smartRemove <- function(path){
   if(file.exists(path)) {
     file.remove(path)
-  } else{
-    print("coolsies")
-  }
+    # print("")
+  } # else{print("")}
 }
 
-multi_runs <- function(shifting_curstart) {
-  project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
-  setwd(paste0(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code/parameters/"))
-  params <- yamlDirLoad(file = "params.yaml", path = getwd())
+multi_runs <- function(shifting_curstart, paramsSource) {
+  #project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
+  #setwd(paste0(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code/parameters/"))
+  params <- yaml.load_file(file.path("parameters", paramsSource))
   setwd(paste0(project_directory, "scripts/"))
-  number_of_runs <- as.numeric(params[[13]]$number_of_runs)
+  number_of_runs <- as.numeric(params$number_of_runs)
   
   print("number_of_runs is started")
   
@@ -224,31 +213,30 @@ multi_runs <- function(shifting_curstart) {
     }
     life_cycle(
       scMin = c(
-        params[[1]]$curstarts[[shifting_curstart]]$scMin[1],
-        params[[1]]$curstarts[[shifting_curstart]]$scMin[2],
-        params[[1]]$curstarts[[shifting_curstart]]$scMin[3],
-        params[[1]]$curstarts[[shifting_curstart]]$scMin[4]),
+        params$curstarts[[shifting_curstart]]$scMin[1],
+        params$curstarts[[shifting_curstart]]$scMin[2],
+        params$curstarts[[shifting_curstart]]$scMin[3],
+        params$curstarts[[shifting_curstart]]$scMin[4]),
       scMax = c(
-        params[[1]]$curstarts[[shifting_curstart]]$scMax[1],
-        params[[1]]$curstarts[[shifting_curstart]]$scMax[2],
-        params[[1]]$curstarts[[shifting_curstart]]$scMax[3],
-        params[[1]]$curstarts[[shifting_curstart]]$scMax[4]),
-      simStartDate = params[[2]]$simStartDate,
-      simNumber = params[[3]]$simNumber[[shifting_curstart]],
-      runLength = params[[4]]$runLength,
-      SylLearnStyle = params[[5]]$SylLearnStyle,
+        params$curstarts[[shifting_curstart]]$scMax[1],
+        params$curstarts[[shifting_curstart]]$scMax[2],
+        params$curstarts[[shifting_curstart]]$scMax[3],
+        params$curstarts[[shifting_curstart]]$scMax[4]),
+      simNumber = params$simNumber[[shifting_curstart]],
+      runLength = params$runLength,
+      SylLearnStyle = params$SylLearnStyle,
       vertOblLearn = c(
-        params[[6]]$vertObLearn[[1]]$vertical[[1]]$learn,
-        params[[6]]$vertObLearn[[1]]$vertical[[2]]$invent,
-        params[[6]]$vertObLearn[[2]]$oblique[[1]]$learn,
-        params[[6]]$vertObLearn[[2]]$oblique[[2]]$invent),
-      sylDist = params[[7]]$sylDist, 
-      curinh_value = params[[8]]$curinh_value,
-      number_populations = params[[9]]$num_pop,
-      population_size = params[[10]]$pop_size,
-      syllable_number = params[[11]]$sylnum,
-      number_of_syllables_per_probability_level = params[[12]]$num_sylls_per_prob_lvl,
-      standDev = as.numeric(params[[14]]$standard_deviation),
+        params$vertObLearn$vertical$learn,
+        params$vertObLearn$vertical$invent,
+        params$vertObLearn$oblique$learn,
+        params$vertObLearn$oblique$invent),
+      sylDist = params$sylDist,
+      curinh_value = params$curinh_value,
+      number_populations = params$num_pop,
+      population_size = params$pop_size,
+      syllable_number = params$sylnum,
+      number_of_syllables_per_probability_level = params$num_sylls_per_prob_lvl,
+      standDev = as.numeric(params$standard_deviation),
       shifting_curstart = shifting_curstart
     )
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
@@ -260,8 +248,7 @@ multi_runs <- function(shifting_curstart) {
   file.copy(from = paste0(project_directory, "source/temp/", shifting_curstart, "_sim_data.txt"), 
               to = paste0(project_directory, "source/archive/", shifting_curstart, "_sim_data.txt"), overwrite = T)
   
-  source("Source_Figure_Produxn_Multiple_Runs.R")
-  print("thing10")
+  source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(shifting_curstart = shifting_curstart, 
                  number_of_runs = number_of_runs)
 }

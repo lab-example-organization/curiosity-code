@@ -1,8 +1,4 @@
-print("SVD")
-#Data Recording objects
-#rm(list = objects())
 convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simplification_factor=100) {
-  #dir <- getwd()
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
   sylrepz <- array(0, c(2, parameters$num_pop, parameters$num_timesteps))
@@ -21,29 +17,22 @@ convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simp
     for(i in 1:num_timechunks) {
       data2s <- paste0(converted_names[data_subset], "[, , ((1 + ((", i, " - 1) * 1000)) : (", i, " * 1000))] <- ", old_names[data_subset], "_", i)
       eval(parse(text=data2s))
-      #data3s <- paste0("rm(", names[data_subset], "_", i, ")")
-      #eval(parse(text=data3s))
-      #rm(paste0(names[data_subset], "_", i))
     }
-    #data3s <- paste0("rm(", old_names[data_subset], "_", 1:num_timechunks, ")")
-    #eval(parse(text=data3s))
+    
     if(data_subset==4) {
-      data3s <- paste0(old_names[data_subset], "_", 1:num_timechunks)
-      #sapply(1:num_timechunks, function(x) {rm(paste0(data3s[x]))})
       sapply(1:4, function(x) {rm(list=ls(pattern=old_names[x]), envir = .GlobalEnv)})
-      
-      #rm(list=ls(pattern=c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")))
-      
     }
   }
-  converted_data <- list(sylrepz = sylrepz[,,round(seq.int(1,parameters$num_timesteps,(
-                          (parameters$num_timesteps-1)/(simplification_factor-1))))],
-                         sdstbxn = sdstbxn[,,round(seq.int(1,parameters$num_timesteps,(
-                           (parameters$num_timesteps-1)/(simplification_factor-1))))], 
-                         cursity = cursity[,,round(seq.int(1,parameters$num_timesteps,(
-                           (parameters$num_timesteps-1)/(simplification_factor-1))))], 
-                         curhist = curhist[,,round(seq.int(1,parameters$num_timesteps,(
-                           (parameters$num_timesteps-1)/(simplification_factor-1))))])
+
+  # within converted_data, converted files are simplified by the factor put in the simplification factor argument
+  converted_data <- list(sylrepz = sylrepz[,,round(seq.int(1,parameters$num_timesteps,
+                          (parameters$num_timesteps-1)/(simplification_factor-1)))],
+                         sdstbxn = sdstbxn[,,round(seq.int(1,parameters$num_timesteps,
+                           (parameters$num_timesteps-1)/(simplification_factor-1)))], 
+                         cursity = cursity[,,round(seq.int(1,parameters$num_timesteps,
+                           (parameters$num_timesteps-1)/(simplification_factor-1)))], 
+                         curhist = curhist[,,round(seq.int(1,parameters$num_timesteps,
+                           (parameters$num_timesteps-1)/(simplification_factor-1)))])
   
   return(converted_data)
 }
@@ -63,7 +52,6 @@ record_converted_data <- function(converted_data = converted_data) {
   converted_data[[curhist]] = saveRDS(file = "curhist.RData")
 }
 
-#rm(converted_data)
 harvest_converted_data <- function() {
   sylrepz = readRDS(file = "sylreps.RData")
   sdstbxn = readRDS(file = "sylnums.RData")
