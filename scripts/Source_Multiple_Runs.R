@@ -184,7 +184,6 @@ life_cycle <- function(scMin, scMax, simStartDate, simNumber, runLength,
       sink()
     }
   }
-  return(simParams)
 }
 #print("it's starting!")
 
@@ -217,11 +216,13 @@ multi_runs <- function(shifting_curstart) {
   smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"))
   for(run_number in 1:number_of_runs) {
     if(run_number == 1) {
-      sink(file = paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"), append = TRUE)
+      setwd(paste0(project_directory, "source/temp/"))
+      sink(file = paste0(shifting_curstart,"_sim_data.txt"), append = TRUE)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
+      setwd(paste0(project_directory, "scripts/"))
     }
-    parameters <- life_cycle(
+    life_cycle(
       scMin = c(
         params[[1]]$curstarts[[shifting_curstart]]$scMin[1],
         params[[1]]$curstarts[[shifting_curstart]]$scMin[2],
