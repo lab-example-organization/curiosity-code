@@ -1,14 +1,24 @@
 library(stringr)
 setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
 
+
+#################### # # FUNCTIONS # # ########################
 HtMpDir <- function() {
-if(!(dir.exists(file.path("results", "Heatmaps")))) {dir.create(file.path("results", "Heatmaps"))}
+if(!(dir.exists(file.path("results", "Heatmaps")))) {
+  dir.create(file.path("results", "Heatmaps"))
+}
 heatmapLand <- file.path(getwd(), "results", "Heatmaps")
 return(heatmapLand)
 }
+heatmapLand <- HtMpDir()
+
+all_the_runs <- list.files(heatmapLand, 
+  pattern = "_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_")
 
 extractEndData <- function() {
-
+  connection <- file(description = file.path("..", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
+  multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
+  close(connection)
   return()
 }
 
