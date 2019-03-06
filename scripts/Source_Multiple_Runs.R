@@ -198,8 +198,8 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   params <- yaml.load_file(file.path("parameters", paramsSource))
   number_of_runs <- as.numeric(params$number_of_runs)
   
-  smartRemove(file.path(project_directory, "source", "temp", paste0(shifting_curstart,"_console_copy.txt")))
-  smartRemove(file.path(project_directory, "source", "temp", paste0(shifting_curstart,"_sim_data.txt")))
+  smartRemove(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", paste0(shifting_curstart,"_console_copy.txt")))
+  smartRemove(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", paste0(shifting_curstart,"_sim_data.txt")))
   
   for(run_number in 1:number_of_runs) {
     if(run_number == 1) {
