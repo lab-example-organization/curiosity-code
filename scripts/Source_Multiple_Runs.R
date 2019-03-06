@@ -239,11 +239,11 @@ multi_runs <- function(shifting_curstart, paramsSource) {
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
   print("about to archive console copy")
-  file.copy(from = file.path(project_directory, "source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
-              to = file.path(project_directory, "source", "archive", paste0(shifting_curstart, "_console_copy.txt")), overwrite = T)
+  file.copy(from = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
+              to = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "archive", paste0(shifting_curstart, "_console_copy.txt")), overwrite = T)
   print("about to archive sim data")
-  file.copy(from = file.path(project_directory, "source", "temp", paste0(shifting_curstart, "_sim_data.txt")), 
-              to = file.path(project_directory, "source", "archive", paste0(shifting_curstart, "_sim_data.txt")), overwrite = T)
+  file.copy(from = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", paste0(shifting_curstart, "_sim_data.txt")), 
+              to = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "archive", paste0(shifting_curstart, "_sim_data.txt")), overwrite = T)
   
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(shifting_curstart = shifting_curstart, 
