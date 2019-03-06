@@ -78,7 +78,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,
                        number_of_syllables_per_probability_level, standDev, 
-                       shifting_curstart) {
+                       shifting_curstart, curinh_style) {
   
   docnamez <- makeDocnamez(
             scMin = scMin, scMax = scMax, simNumber = simNumber, 
@@ -135,7 +135,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       moranObjects <- curiosity_learn(parameters = simParams, moran = moranObjects, 
         # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
         # 1: father; 2: mother; 3: same; 4:opposite
-                        timestep = single_timestep, inheritance_pattern = 1) 
+                        timestep = single_timestep, inheritance_pattern = curinh_style) 
       
       moranObjects <- syll_learn(parameters = simParams, moran = moranObjects, 
         # context decides whether the learning is vertical (2) or oblique (1)
@@ -196,20 +196,16 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   #project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
   #setwd(paste0(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code/parameters/"))
   params <- yaml.load_file(file.path("parameters", paramsSource))
-  setwd(paste0(project_directory, "scripts/"))
   number_of_runs <- as.numeric(params$number_of_runs)
   
-  print("number_of_runs is started")
+  smartRemove(file.path(project_directory, "source", "temp", paste0(shifting_curstart,"_console_copy.txt")))
+  smartRemove(file.path(project_directory, "source", "temp", paste0(shifting_curstart,"_sim_data.txt")))
   
-  smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_console_copy.txt"))
-  smartRemove(paste0(project_directory, "source/temp/", shifting_curstart,"_sim_data.txt"))
   for(run_number in 1:number_of_runs) {
     if(run_number == 1) {
-      setwd(paste0(project_directory, "source/temp/"))
-      sink(file = paste0(shifting_curstart,"_sim_data.txt"), append = TRUE)
+      sink(file = file.path("source", "temp", paste0(shifting_curstart,"_sim_data.txt")), append = TRUE)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
-      setwd(paste0(project_directory, "scripts/"))
     }
     life_cycle(
       scMin = c(
@@ -237,16 +233,17 @@ multi_runs <- function(shifting_curstart, paramsSource) {
       syllable_number = params$sylnum,
       number_of_syllables_per_probability_level = params$num_sylls_per_prob_lvl,
       standDev = as.numeric(params$standard_deviation),
-      shifting_curstart = shifting_curstart
+      shifting_curstart = shifting_curstart,
+      curinh_style = params$curinh_pattern
     )
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
   print("about to archive console copy")
-  file.copy(from = paste0(project_directory, "source/temp/", shifting_curstart, "_console_copy.txt"), 
-              to = paste0(project_directory, "source/archive/", shifting_curstart, "_console_copy.txt"), overwrite = T)
+  file.copy(from = file.path(project_directory, "source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
+              to = file.path(project_directory, "source", "archive", paste0(shifting_curstart, "_console_copy.txt")), overwrite = T)
   print("about to archive sim data")
-  file.copy(from = paste0(project_directory, "source/temp/", shifting_curstart, "_sim_data.txt"), 
-              to = paste0(project_directory, "source/archive/", shifting_curstart, "_sim_data.txt"), overwrite = T)
+  file.copy(from = file.path(project_directory, "source", "temp", paste0(shifting_curstart, "_sim_data.txt")), 
+              to = file.path(project_directory, "source", "archive", paste0(shifting_curstart, "_sim_data.txt")), overwrite = T)
   
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(shifting_curstart = shifting_curstart, 
