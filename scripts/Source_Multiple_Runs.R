@@ -131,7 +131,6 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       moranObjects <- make.offspring.calls(parameters = simParams, 
                                            moran = moranObjects)
       
-      
       moranObjects <- curiosity_learn(parameters = simParams, moran = moranObjects, 
         # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
         # 1: father; 2: mother; 3: same; 4:opposite
@@ -182,6 +181,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       sink()
     }
   }
+  return(project_directory)
 }
 
 
@@ -207,7 +207,7 @@ multi_runs <- function(shifting_curstart, paramsSource) {
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
-    life_cycle(
+    project_directory <- life_cycle(
       scMin = c(
         params$curstarts[[shifting_curstart]]$scMin[1],
         params$curstarts[[shifting_curstart]]$scMin[2],
