@@ -434,6 +434,6 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, object_re
   saveRDS(object = cur_container, file = file.path(FolderName, "end_cursty.RData"))
   saveRDS(object = filename, file = file.path(FolderName, "timestep_grps.RData"))
   
-  setwd(directory)
+  #setwd(directory)
   return(FolderName)
 }
