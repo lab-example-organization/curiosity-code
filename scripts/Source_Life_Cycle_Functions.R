@@ -383,7 +383,7 @@ resylreps.offspring <- function(parameters, moran, sylrep_object) {
 
 store_timesteps <- function(parameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff, syll_container, cur_container){
    # # # #  #directory <- getwd()
-  results_directory <- file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "results")
+  results_directory <- file.path('results')
   if(filename == 1) {
     run_timedate <- format(Sys.time(), "%F-%H%M%S")
     if(!(dir.exists(file.path(results_directory, saved_stuff$docnamez)))) {
@@ -392,36 +392,13 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, object_re
     }
     dir.create(file.path(results_directory, saved_stuff$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
     FolderName <- file.path(results_directory, saved_stuff$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store"))
-     # # # #  # setwd(FolderName)
     saveRDS(object = saved_stuff, file = file.path(FolderName, "metadata.RData"))
-    #rm(init_params, funx_n_params, datez, deetz, docnamez, saved_stuff)
-     # # # #  # setwd(directory)
-     # # # #  # setwd(directory)
   } else {
-    connection <- file(description = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], 
-                                               "curiosity-code", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
+    connection <- file(description = file.path('~', 'Documents', 'projects', 'Code', 'curiosity-code', 'source','temp', paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
     multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
     close(connection)
     FolderName <- multiRun_folderList[length(multiRun_folderList)]
   }# sets up the master folder for the greater simulation, creates and begins to fill the variable store folder for this run and puts 
-  
-  # setwd(paste0(results_directory, "/", saved_stuff$docnamez, "/", "variable_store/", list.files(
-  #   path = paste0(results_directory, "/", saved_stuff$docnamez, "/", "variable_store/"))[length(list.files(
-  #     path = paste0(results_directory, "/", saved_stuff$docnamez, "/", "variable_store/")
-  #   ))]))
-
-  # file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", paste0(shifting_curstart, "_sim_data.txt"))
-
-  # connection <- file(description = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
-  #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
-  #   close(connection)
-  # FolderName <- multiRun_folderList[length(multiRun_folderList)]
-
-
-
-  #FolderName <- paste0(getwd(), "/", list.files()[length(list.files())])
-  #setwd(list.files()[length(list.files())])
-  #FolderName <- getwd()
   
   for(deyteh in 1:length(object_record)) {
     file.create(file.path(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
@@ -432,8 +409,7 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, object_re
   saveRDS(object = parameters, file = file.path(FolderName, "parameters.RData"))
   saveRDS(object = syll_container, file = file.path(FolderName, "end_sylbls.RData"))
   saveRDS(object = cur_container, file = file.path(FolderName, "end_cursty.RData"))
-  saveRDS(object = filename, file = file.path(FolderName, "timestep_grps.RData"))
+  #saveRDS(object = filename, file = file.path(FolderName, "timestep_grps.RData"))
   
-  #setwd(directory)
   return(FolderName)
 }

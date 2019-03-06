@@ -26,40 +26,42 @@ figProdMultRun <- function(shifting_curstart, number_of_runs) {
         "variable_store", )[[1]][1], paste0(shifting_curstart, "folderList.RData"))))) {
           saveRDS(object = multiRun_folderList, file = 
                        file.path(strsplit(multiRun_folderList[run_visual], 
-          "variable_store", )[[1]][1], paste0(shifting_curstart, "folderList.RData")}
+          "variable_store", )[[1]][1], paste0(shifting_curstart, "folderList.RData")))}
     } # makes the folder for multirun results, saves multiRun_folderList there.
     
     
-    setwd(multiRun_folderList[run_visual])
-    parameters = readRDS(paste0(getwd(), "/parameters.RData"))
-    source("../../../../scripts/Source_Visualizing_Data.R") ####### rm(list=objects())!!!!!!
-    visualizing_data(number_of_runs = number_of_runs)
-    multirun_directory <- paste0(strsplit(getwd(), "variable")[[1]][1], "multirun_output/", list.files(path = paste0(strsplit(getwd(), "variable")[[1]][1], "multirun_output/"), pattern = "multirun"))
-    setwd(multirun_directory)
-    info <- readRDS(file = paste0(multiRun_folderList[run_visual], "/metadata.RData"))
+    
+    parameters = readRDS(file.path(multiRun_folderList, "parameters.RData"))
+    source(file.path('scripts', 'Source_Visualizing_Data.R'))
+    
+    multirun_directory <- paste0(strsplit(multiRun_folderList[run_visual], "variable")[[1]][1], "multirun_output/", 
+                                  list.files(path = paste0(strsplit(multiRun_folderList[run_visual], 
+                                                  "variable")[[1]][1], "multirun_output/"), pattern = "multirun"))
+    
+    info <- readRDS(file = file.path(multiRun_folderList[run_visual], "metadata.RData"))
     data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = parameters, data_dir = \"", 
                            multiRun_folderList[run_visual], "\", simplification_factor = parameters$num_timesteps/(parameters$num_timesteps/100))")
     cat(data_convert, file = "data_convert.R", sep = "\n")
     source("data_convert.R", local=TRUE)
-    old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
-    rm(list=ls(pattern=old_names[1]))
-    rm(list=ls(pattern=old_names[2]))
-    rm(list=ls(pattern=old_names[3]))
-    rm(list=ls(pattern=old_names[4]))
-    rm(old_names)
+    # old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
+    # rm(list=ls(pattern=old_names[1]))
+    # rm(list=ls(pattern=old_names[2]))
+    # rm(list=ls(pattern=old_names[3]))
+    # rm(list=ls(pattern=old_names[4]))
+    # rm(old_names)
     sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data", run_visual, ", 1)")
     sdstbxblahn <- paste0("sdstbxn", run_visual, " <- split_data(converted_data", run_visual, ", 2)")
     cursitblahy <- paste0("cursity", run_visual, " <- split_data(converted_data", run_visual, ", 3)")
     curhisblaht <- paste0("curhist", run_visual, " <- split_data(converted_data", run_visual, ", 4)")
     eval(parse(text=c(sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht)))
     
-    sylrepzConveRtDS <- paste0("saveRDS(object = sylrepz", run_visual, ", file = \"SylReps", run_visual, ".RData\")")
-    sdstbxnConveRtDS <- paste0("saveRDS(object = sdstbxn", run_visual, ", file = \"SylDist", run_visual, ".RData\")")
-    cursityConveRtDS <- paste0("saveRDS(object = cursity", run_visual, ", file = \"Cursity", run_visual, ".RData\")")
-    curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"CurHist", run_visual, ".RData\")")
+    sylrepzConveRtDS <- paste0("saveRDS(object = sylrepz", run_visual, ", file = \"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), "SylReps", run_visual, ".RData\")")
+    sdstbxnConveRtDS <- paste0("saveRDS(object = sdstbxn", run_visual, ", file = \"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), "SylDist", run_visual, ".RData\")")
+    cursityConveRtDS <- paste0("saveRDS(object = cursity", run_visual, ", file = \"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), "Cursity", run_visual, ".RData\")")
+    curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), "CurHist", run_visual, ".RData\")")
     eval(parse(text=c(sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS)))
     
-    setwd(parent_directory)
+    #setwd(parent_directory)
     
   } # outputs pieces of different runs 
   
@@ -80,13 +82,14 @@ figProdMultRun <- function(shifting_curstart, number_of_runs) {
   setwd(multirun_directory)
   
   for(i in 1:number_of_runs) {
-    histthing <- paste0("curhistlist[[i]] <- readRDS(\"", histlist[i], "\")")
-    sitything <- paste0("cursitylist[[i]] <- readRDS(\"", sitylist[i], "\")")
-    sdstthing <- paste0("sdstbxnlist[[i]] <- readRDS(\"", sdstlist[i], "\")")
-    repzthing <- paste0("sylrepzlist[[i]] <- readRDS(\"", repzlist[i], "\")")
+    histthing <- paste0("curhistlist[[i]] <- readRDS(\"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), histlist[i], "\")")
+    sitything <- paste0("cursitylist[[i]] <- readRDS(\"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), sitylist[i], "\")")
+    sdstthing <- paste0("sdstbxnlist[[i]] <- readRDS(\"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), sdstlist[i], "\")")
+    repzthing <- paste0("sylrepzlist[[i]] <- readRDS(\"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), repzlist[i], "\")")
     eval(parse(text=c(histthing, sitything, sdstthing, repzthing)))
   }
   
+  #file = \"", multirun_directory, paste0(multiRunTime, "-GMT-multirun-output/"), "CurHist", run_visual, ".RData\")")
   
   sylrepzlist[[number_of_runs + 1]] <- sylrepzlist[[number_of_runs]]
   sdstbxnlist[[number_of_runs + 1]] <- sdstbxnlist[[number_of_runs]]
@@ -134,12 +137,12 @@ figProdMultRun <- function(shifting_curstart, number_of_runs) {
                number_of_runs = number_of_runs, cursitylist = cursitylist, 
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist, 
                mins_n_maxes = mins_n_maxes)
-  src.dir = "../../../../scripts/"
+  src.dir = file.path("scripts")
   file.names = dir(src.dir)[grep("Source", dir(src.dir))]
   sapply(file.names, function(x) { 
     file.copy(from=paste0(src.dir, x), 
-              to=paste0(getwd(), x), 
+              to=paste0(multirun_directory, multiRunTime, "-GMT-multirun-output/"), x), 
               overwrite = FALSE) })
-  setwd(parent_directory)
+  #setwd(parent_directory)
   return(print("It's Done, Yo!"))              
 }

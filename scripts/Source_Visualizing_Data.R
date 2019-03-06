@@ -8,8 +8,8 @@ convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simp
   num_timechunks = as.numeric(parameters$num_timesteps)/1000
   for(data_subset in 1:4) {
     data1s <- paste0(
-      old_names[data_subset], "_", 1:num_timechunks, " <- readRDS(file = ", '"',
-      data_dir, "/", strsplit(data_dir, "-GMT-")[[1]][2], "-",
+      old_names[data_subset], "_", 1:num_timechunks, 
+      " <- readRDS(file = ", '"', data_dir, "/variable-store-", 
       1:num_timechunks, "-", old_names[data_subset], ".RData", '"', ")")
     cat(data1s, file = "data_subset.R", sep = "\n")
     source("data_subset.R")
@@ -37,13 +37,13 @@ convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simp
   return(converted_data)
 }
 
-visualizing_data <- function(number_of_runs) {
-  #number_of_runs <- source(paste0(strsplit(getwd(),"Code")[[1]][1],"Code/curiosity-code/", local_curstart_value, "number_of_runs.txt"))$value
-  #FolderName = readRDS(file = "harvest_info.RData")
-  parameters = readRDS(file = "parameters.RData")
-  thousand_timesteps = readRDS(file = "timestep_grps.RData")
-  #thousand_timesteps <- 5
-}
+# visualizing_data <- function(number_of_runs) {
+#   #number_of_runs <- source(paste0(strsplit(getwd(),"Code")[[1]][1],"Code/curiosity-code/", local_curstart_value, "number_of_runs.txt"))$value
+#   #FolderName = readRDS(file = "harvest_info.RData")
+#   parameters = readRDS(file = file.path('~', 'Documents', 'projects', 'Code', 'curiosity-code', 'parameters.RData'))
+#   thousand_timesteps = readRDS(file = "timestep_grps.RData")
+#   #thousand_timesteps <- 5
+# }
 
 record_converted_data <- function(converted_data = converted_data) {
   converted_data[[sylrepz]] = saveRDS(file = "sylreps.RData")
