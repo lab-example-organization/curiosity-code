@@ -7,7 +7,7 @@ package_list <- c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", 
 load.installIfRequired <- function(package_list = package_list){
     
 
-    for( i in length(package_list) ){
+    for( i in 1:length(package_list) ){
         
         #  require returns TRUE invisibly if it was able to load package
         if( ! require( package_list[i] , character.only = TRUE ) ){
