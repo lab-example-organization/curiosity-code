@@ -394,7 +394,7 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, object_re
     FolderName <- file.path(results_directory, saved_stuff$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store"))
     saveRDS(object = saved_stuff, file = file.path(FolderName, "metadata.RData"))
   } else {
-    connection <- file(description = file.path('~', 'Documents', 'projects', 'Code', 'curiosity-code', 'source','temp', paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
+    connection <- file(description = file.path('source','temp', paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
     multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
     close(connection)
     FolderName <- multiRun_folderList[length(multiRun_folderList)]
