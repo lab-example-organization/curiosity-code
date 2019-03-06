@@ -163,8 +163,8 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       
     }
     #thousand_timesteps <- 1
-    project_directory <- file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code")
-    sink(file = file.path(project_directory, "source", "temp", 
+    # project_directory <- file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code")
+    sink(file = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", 
       paste0(shifting_curstart, "_console_copy.txt")), append = TRUE, split = TRUE)
     print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", thousand_timesteps, " at ", Sys.time()))
     sink()
@@ -176,12 +176,11 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                     syll_container = sylreps,
                     cur_container = curiosity_level)
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
-      sink(file = file.path(project_directory, "source", "temp", paste0(shifting_curstart, "_sim_data.txt")), append = TRUE)
+      sink(file = file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code", "source", "temp", paste0(shifting_curstart, "_sim_data.txt")), append = TRUE)
       print(FolderName)
       sink()
     }
   }
-  return(project_directory)
 }
 
 
@@ -207,7 +206,7 @@ multi_runs <- function(shifting_curstart, paramsSource) {
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
-    project_directory <- life_cycle(
+    life_cycle(
       scMin = c(
         params$curstarts[[shifting_curstart]]$scMin[1],
         params$curstarts[[shifting_curstart]]$scMin[2],
