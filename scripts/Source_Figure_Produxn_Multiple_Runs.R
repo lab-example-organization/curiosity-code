@@ -1,19 +1,32 @@
 
 figProdMultRun <- function(shifting_curstart, number_of_runs) {
-  connection <- file(description = file.path("..", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
+  connection <- file(description = file.path("source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
-  
-  parent_directory <- getwd()
   
   for(run_visual in 1:number_of_runs) {
     #run_visual=1
     if(run_visual == 1) {
       multiRunTime <- format(Sys.time(), "%F-%H%M%S")
-      setwd(strsplit(multiRun_folderList[run_visual], split = "variable_store", )[[1]][1])
-      if(!(dir.exists("multirun_output"))) {dir.create("multirun_output")}
-      dir.create(file.path("multirun_output", paste0(multiRunTime, "-GMT-multirun-output")))
-      if(!(file.exists("folderList.RData"))) {saveRDS(object = multiRun_folderList, file = "folderList.RData")}    
+      
+      #setwd(strsplit(multiRun_folderList[run_visual], "variable_store", )[[1]][1]) #########################
+      
+      if(!(dir.exists(file.path(strsplit(multiRun_folderList[run_visual], 
+        "variable_store", )[[1]][1], "multirun_output")))) {
+          
+          dir.create(file.path(strsplit(multiRun_folderList[run_visual], 
+          "variable_store", )[[1]][1], "multirun_output"))
+          
+          dir.create(file.path(strsplit(multiRun_folderList[run_visual], 
+          "variable_store", )[[1]][1], "multirun_output", 
+          paste0(multiRunTime, "-GMT-multirun-output")))
+          }
+      
+      if(!(file.exists(file.path(strsplit(multiRun_folderList[run_visual], 
+        "variable_store", )[[1]][1], paste0(shifting_curstart, "folderList.RData"))))) {
+          saveRDS(object = multiRun_folderList, file = 
+                       file.path(strsplit(multiRun_folderList[run_visual], 
+          "variable_store", )[[1]][1], paste0(shifting_curstart, "folderList.RData")}
     } # makes the folder for multirun results, saves multiRun_folderList there.
     
     
