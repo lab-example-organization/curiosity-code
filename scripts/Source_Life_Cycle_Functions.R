@@ -1,5 +1,4 @@
 syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
-  randlearncontext_container <- c("mean(source_of_ONEs)", "source_of_ONEs[sylls_to_learn]")
   for(population in 1 : parameters$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
     
@@ -13,7 +12,7 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
         stop("wot? parent has no syllables?!")
       } #address syll loss by stopping script if parent has no sylls
       for(sex in 1 : 2) {
-        moran$learning.pool[(sex + 2), , population] <- rep(0, parameters$sylnum)
+        moran$learning.pool[(sex + 2), , population] <- 0
       } # clear the sylreps rows about to be filled in :D
       
       
@@ -54,7 +53,10 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
           moran$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1
         }
         if(probs[sylls_to_learn] > (1 - parameters$randlearnprob[select_type])) {
-          r_norm <- rnorm(1, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = parameters$stand.dev)
+          r_norm <- rnorm(1, mean = ifelse(randlearn_context == 1,
+                                           mean(source_of_ONEs),
+                                           source_of_ONEs[sylls_to_learn]),
+                          sd = parameters$stand.dev)
           if(r_norm > parameters$sylnum) {
             r_norm <- parameters$sylnum
           } else if(r_norm < 1) {
@@ -63,7 +65,10 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
           #totally_new refers to the idea that if a pupil is learning a sound
           if(totally_new == TRUE) {
             counter <- 1
-            r_norm_pool <- rnorm(100, mean = eval(parse(text=randlearncontext_container[randlearn_context])), sd = parameters$stand.dev)
+            r_norm_pool <- rnorm(100, mean = ifelse(randlearn_context == 1,
+                                           mean(source_of_ONEs),
+                                           source_of_ONEs[sylls_to_learn]),
+                                 sd = parameters$stand.dev)
             while(moran$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
               r_norm <- r_norm_pool[counter]
               if(r_norm > parameters$sylnum) {
@@ -251,7 +256,11 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
       
       # applies the standard deviation scoring to the males in selection.sylrep_object; 
       # larger score means greater difference between male sylrep and selector's sylrep.
-      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1, FUN = score_similarity, selector_vector = selector.sylrep),index.return = T)$ix
+      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+                               FUN = score_similarity,
+                               selector_vector = selector.sylrep),
+                         index.return = T,
+                         method = 'radix')$ix
       
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
