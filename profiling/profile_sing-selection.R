@@ -13,8 +13,10 @@ simParams <- define_parameters(
   nsspl = params$num_sylls_per_prob_lvl, 
   one_pop_singers = c(10,10), 
   curlearnprob = params$curinh_value, 
-  learnprob = c(params$vertObLearn$vertical$invent, params$vertObLearn$vertical$learn), 
-  randlearnprob = c(params$vertObLearn$oblique$invent, params$vertObLearn$oblique$learn), 
+  learnprob = c(params$vertObLearn$vertical$invent, 
+    params$vertObLearn$vertical$learn), 
+  randlearnprob = c(params$vertObLearn$oblique$invent, 
+    params$vertObLearn$oblique$learn), 
   stand.dev = as.numeric(params$standard_deviation)
 )
 scMin <- c(params$curstarts[[1]]$scMin[1],

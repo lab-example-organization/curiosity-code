@@ -385,7 +385,7 @@ resylreps.offspring <- function(parameters, moran, sylrep_object) {
   return(sylrep_object)
 }
 
-store_timesteps <- function(parameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff, syll_container, cur_container){
+store_timesteps <- function(parameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff, syll_container, cur_container, FolderName = FolderName){
    # # # #  #directory <- getwd()
   results_directory <- file.path('results')
   if(filename == 1) {
@@ -397,12 +397,12 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, object_re
     dir.create(file.path(results_directory, saved_stuff$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
     FolderName <- file.path(results_directory, saved_stuff$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store"))
     saveRDS(object = saved_stuff, file = file.path(FolderName, "metadata.RData"))
-  } else {
-    connection <- file(description = file.path('source','temp', paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
-    multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
-    close(connection)
-    FolderName <- multiRun_folderList[length(multiRun_folderList)]
-  }# sets up the master folder for the greater simulation, creates and begins to fill the variable store folder for this run and puts 
+  }# else {
+    # connection <- file(description = file.path('source','temp', paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
+    # multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
+    # close(connection)
+    # FolderName <- multiRun_folderList[length(multiRun_folderList)]
+  # }# sets up the master folder for the greater simulation, creates and begins to fill the variable store folder for this run and puts 
   
   for(deyteh in 1:length(object_record)) {
     file.create(file.path(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))

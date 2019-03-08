@@ -34,7 +34,8 @@ makeDocnamez <- function(scMin, scMax, simNumber,
       if(round(vertOblLearn[4]/0.01)==1) {
         round(vertOblLearn[4]/0.01,1)} else {round(vertOblLearn[4]/0.01,2)},"_",
       if(round(vertOblLearn[3]/0.1)==1) {
-        round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") # this is the text insert for the Output_Filename VO subsection
+        round(vertOblLearn[3]/0.1,1)} else {round(vertOblLearn[3]/0.1,2)},"_O") 
+        # this is the text insert for the Output_Filename VO subsection
   
     if(VOtext == "1_1_V_1_1_O") {VOtext = "normVO"}
     
@@ -52,8 +53,10 @@ makeDocnamez <- function(scMin, scMax, simNumber,
         curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
       } else if(scMin[1] != scMin[3] || scMax[1] != scMax[3]) {
         
-        curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
-      } else if(scMin[1] == scMin[2] && scMax[1] == scMax[2] && scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
+        curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", 
+                            scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
+      } else if(scMin[1] == scMin[2] && scMax[1] == scMax[2] && 
+                scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
         
         curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
       }
@@ -61,7 +64,7 @@ makeDocnamez <- function(scMin, scMax, simNumber,
     
     if(curinh_value != 0.95) {curinh_output <- paste0(round(curinh_value/0.95,2), "_curinh")} else {curinh_output <- ""}
     
-    if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName = ""}
+    if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName <- ""}
 
     simStartDate <- gsub('-', '', substring(Sys.Date(), 3))
 
@@ -151,8 +154,15 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                         select_type = 1, totally_new = FALSE, 
                         randlearn_context = 2, verbose = F) 
       
-      curiosity_level <- recuriosity.offspring(parameters = simParams, moran = moranObjects, 
-                          curiosity_object = curiosity_level)
+      # curiosity_level <- recuriosity.offspring(parameters = simParams, moran = moranObjects, 
+      #                     curiosity_object = curiosity_level)
+      
+      for(population in 1:simParams$num_pop) {
+        for(sex in 1:2) {
+          #index <- moran$pairing.pool[(sex + 2), 1, population]
+          curiosity_level[moranObjects$pairing.pool[(sex + 2), 1, population], population] <- moranObjects$pairing.pool[(sex + 2), 2, population]
+        }
+      }
       
       sylreps <- resylreps.offspring(parameters = simParams, moran = moranObjects,
                   sylrep_object = sylreps)
@@ -162,19 +172,22 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                   data_container = day.tuh, timestep = single_timestep)
       
     }
-    #thousand_timesteps <- 1
-    # project_directory <- file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code")
-    sink(file = file.path("source", "temp", paste0(shifting_curstart, "_console_copy.txt")), append = TRUE, split = TRUE)
+    print("console_copy_sink")
+    sink(file = file.path("source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
+      append = TRUE, split = TRUE)
     print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", 
       thousand_timesteps, " at ", Sys.time()))
     sink()
+    print("FolderName_make")
     FolderName <- store_timesteps(
                     parameters = simParams,
                     filename = thousand_timesteps, 
                     object_record = day.tuh, 
                     saved_stuff = stuff_to_save,
                     syll_container = sylreps,
-                    cur_container = curiosity_level)
+                    cur_container = curiosity_level,
+                    FolderName = FolderName)
+    print("sim_data_sink")
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
       sink(file = file.path("source", "temp", paste0(shifting_curstart, "_sim_data.txt")), append = TRUE)
       print(FolderName)
@@ -184,25 +197,29 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
 }
 
 
-smartRemove <- function(path){
+archiveSimFiles <- function(path, filename, archive = FALSE){
   if(file.exists(path)) {
-    file.remove(path)
+    if(archive) {
+      archivePrefix <- Sys.time()
+      file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename))
+      file.rename(from=file.path("source", "archive", filename), to=file.path("source", "archive", paste0(archivePrefix, "_", filename)))
+    }
+    file.remove(file.path(path, filename))
     # print("")
   } # else{print("")}
 }
 
 multi_runs <- function(shifting_curstart, paramsSource) {
-  #project_directory <- paste0(strsplit(getwd(), "Code")[[1]][1], "Code/curiosity-code/")
-  #setwd(paste0(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code/parameters/"))
+  
   params <- yaml.load_file(file.path("parameters", paramsSource))
   number_of_runs <- as.numeric(params$number_of_runs)
   
-  smartRemove(file.path("source", "temp", paste0(shifting_curstart,"_console_copy.txt")))
-  smartRemove(file.path("source", "temp", paste0(shifting_curstart,"_sim_data.txt")))
+  archiveSimFiles(path=file.path("source", "temp"), filename=paste0(shifting_curstart,"_console_copy.txt"), archive=TRUE)
+  archiveSimFiles(path=file.path("source", "temp"), filename=paste0(shifting_curstart,"_sim_data.txt"), archive=TRUE)
   
   for(run_number in 1:number_of_runs) {
     if(run_number == 1) {
-      sink(file = file.path("source", "temp", paste0(shifting_curstart,"_sim_data.txt")), append = TRUE)
+      sink(file = file.path("source", "temp", paste0(shifting_curstart,"_sim_data.txt")), append = FALSE)
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
