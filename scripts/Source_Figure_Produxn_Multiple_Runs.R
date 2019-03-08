@@ -10,7 +10,7 @@ ReadLinesAsObject <- function(filename, path) {
 
 
 
-figProdMultRun <- function(shifting_curstart, number_of_runs) {
+figProdMultRun <- function(shifting_curstart, number_of_runs, paramsSource = paramsSource) {
   print("does this connection open? SFPMR btw")
   
   

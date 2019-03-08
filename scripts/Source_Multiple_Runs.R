@@ -263,5 +263,6 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(shifting_curstart = shifting_curstart, 
-                 number_of_runs = number_of_runs)
+                 number_of_runs = number_of_runs,
+                 paramsSource = paramsSource)
 }
