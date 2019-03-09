@@ -1,6 +1,41 @@
 library(stringr)
-setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
 
+
+# You Should be Here To: Run some Heatmaps to compar a wide range of inherited traits!
+#
+#   ___ ______________   _____________________      _____ __________  _________
+#  /   |   \_   _____/  /  _  \__    ___/     \    /  _  \\______   \/   _____/
+# /    ~    \    __)_  /  /_\  \|    | /  \ /  \  /  /_\  \|     ___/\_____  \ 
+# \    Y    /        \/    |    \    |/    Y    \/    |    \    |    /        \
+#  \___|_  /_______  /\____|__  /____|\____|__  /\____|__  /____|   /_______  /
+#        \/        \/         \/              \/         \/                 \/ 
+
+
+
+
+# This is an Example of what you should NEVER have in your code, presented here,
+
+# "So that I can use it when I'm being a bad person :P"
+
+######  setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
+
+#
+
+#
+
+#
+
+#
+
+#############
+
+#
+
+#
+
+#
+
+#
 
 #################### # # FUNCTIONS # # ########################
 HtMpDir <- function() {
@@ -10,10 +45,6 @@ if(!(dir.exists(file.path("results", "Heatmaps")))) {
 heatmapLand <- file.path(getwd(), "results", "Heatmaps")
 return(heatmapLand)
 }
-heatmapLand <- HtMpDir()
-
-all_the_runs <- list.files(heatmapLand, 
-  pattern = "_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_")
 
 extractEndData <- function() {
   connection <- file(description = file.path("..", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
@@ -23,7 +54,11 @@ extractEndData <- function() {
 }
 
 
+heatmapLand <- HtMpDir()
 
+all_the_runs <- list.files(heatmapLand, 
+# pattern = "_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
+  pattern = "1903[0-3][0-9]_1[7-9][0-9]|1903[0-3][0-9]_...|1903[0-3][0-9]_...|1903[0-3][0-9]_")
 
 
 setwd("../../../../../../../../../../media/parker/A443-E926/simulation runs/shifting_curstart_for_heatmap/")
