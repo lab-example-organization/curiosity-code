@@ -81,7 +81,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                        SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
                        number_populations, population_size, syllable_number,
                        number_of_syllables_per_probability_level, standDev, 
-                       shifting_curstart, curinh_style) {
+                       SimNumberLC, curinh_style, one_pop_singers = c(10,10)) {
   
   docnamez <- makeDocnamez(
             scMin = scMin, scMax = scMax, simNumber = simNumber, 
@@ -98,7 +98,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
     pop_size = population_size, 
     sylnum = syllable_number, 
     nsspl = number_of_syllables_per_probability_level, 
-    one_pop_singers = c(10,10), 
+    one_pop_singers = one_pop_singers, 
     curlearnprob = curinh_value, 
     learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
     randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 
@@ -173,7 +173,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       
     }
     print("console_copy_sink")
-    sink(file = file.path("source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
+    sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 
       append = TRUE, split = TRUE)
     print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", 
       thousand_timesteps, " at ", Sys.time()))
@@ -189,7 +189,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                     FolderName = FolderName)
     print("sim_data_sink")
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
-      sink(file = file.path("source", "temp", paste0(shifting_curstart, "_sim_data.txt")), append = TRUE)
+      sink(file = file.path("source", "temp", paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)
       print(FolderName)
       sink()
     }
@@ -249,8 +249,9 @@ multi_runs <- function(shifting_curstart, paramsSource) {
       syllable_number = params$sylnum,
       number_of_syllables_per_probability_level = params$num_sylls_per_prob_lvl,
       standDev = as.numeric(params$standard_deviation),
-      shifting_curstart = shifting_curstart,
-      curinh_style = params$curinh_pattern
+      SimNumberLC = shifting_curstart,
+      curinh_style = params$curinh_pattern,
+      one_pop_singers = params$one_pop_singers
     )
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
@@ -262,7 +263,7 @@ multi_runs <- function(shifting_curstart, paramsSource) {
               to = file.path("source", "archive", paste0(shifting_curstart, "_sim_data.txt")), overwrite = T)
   
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-  figProdMultRun(shifting_curstart = shifting_curstart, 
+  figProdMultRun(specificSimNumber = shifting_curstart, 
                  number_of_runs = number_of_runs,
                  paramsSource = paramsSource)
 }
