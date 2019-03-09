@@ -172,13 +172,13 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                   data_container = day.tuh, timestep = single_timestep)
       
     }
-    print("console_copy_sink")
+    # print("console_copy_sink")
     sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 
       append = TRUE, split = TRUE)
     print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", 
       thousand_timesteps, " at ", Sys.time()))
     sink()
-    print("FolderName_make")
+    # print("FolderName_make")
     FolderName <- store_timesteps(
                     parameters = simParams,
                     filename = thousand_timesteps, 
@@ -187,7 +187,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                     syll_container = sylreps,
                     cur_container = curiosity_level,
                     FolderName = FolderName)
-    print("sim_data_sink")
+    # print("sim_data_sink")
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
       sink(file = file.path("source", "temp", paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)
       print(FolderName)
@@ -255,10 +255,10 @@ multi_runs <- function(shifting_curstart, paramsSource) {
     )
     print(paste0("Run Number: ", run_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
-  print("about to archive console copy")
+  # print("about to archive console copy")
   file.copy(from = file.path("source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
               to = file.path("source", "archive", paste0(shifting_curstart, "_console_copy.txt")), overwrite = T)
-  print("about to archive sim data")
+  # print("about to archive sim data")
   file.copy(from = file.path("source", "temp", paste0(shifting_curstart, "_sim_data.txt")), 
               to = file.path("source", "archive", paste0(shifting_curstart, "_sim_data.txt")), overwrite = T)
   
