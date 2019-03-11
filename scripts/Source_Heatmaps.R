@@ -1,5 +1,5 @@
 library(stringr)
-
+library(yaml)
 
 # You Should be Here To: Run some Heatmaps to compar a wide range of inherited traits!
 #
@@ -38,27 +38,130 @@ library(stringr)
 #
 
 #################### # # FUNCTIONS # # ########################
+
+# Heatmap Directory Creation and Referencing
+
 HtMpDir <- function() {
-if(!(dir.exists(file.path("results", "Heatmaps")))) {
-  dir.create(file.path("results", "Heatmaps"))
-}
-heatmapLand <- file.path(getwd(), "results", "Heatmaps")
-return(heatmapLand)
+
+  heatmaps_dir <- c("results", "Heatmaps")
+
+  if(!(dir.exists(file.path(heatmaps_dir[1], heatmaps_dir[2])))) {
+      dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2]))
+  }
+
+  return(file.path(heatmaps_dir[1], heatmaps_dir[2]))
 }
 
-extractEndData <- function() {
-  connection <- file(description = file.path("..", "source","temp", paste0(shifting_curstart, "_sim_data.txt")), open = "rt")
-  multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
-  close(connection)
-  return()
+extractVarDirs <- function(home_path, fileNamePattern) {
+  # variableStore_folderList <- list.files(file.path(home_path))
+  return(list.files(file.path(home_path), pattern = fileNamePattern))
 }
 
+extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
+  number_of_runs <- length(allRunDirs)
+  number_of_reps <- length(list.files(file.path(dirHeatMap, allRunDirs[1], "variable_store")))
+  dim_source = yaml.load_file(file.path("parameters", source_of_params))
+  
+  RunMeans <- list()
+
+  for(individual_run in 1:number_of_runs) {
+    
+    multirun_directory <-
+      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output", 
+      list.files(path = file.path(dirHeatMap, 
+      allRunDirs[individual_run], "multirun_output"), pattern = "output$"))
+    
+    datanames <- c("CurHist","Cursity","SylDist","SylReps")
+    objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
+    listnames <- c("hist","sity","sdst","repz")
+    for(i in 1:4) {
+      listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_reps)")
+      listmaker <- paste0(listnames[i], "list[", 1:number_of_reps, "] <- \"", datanames[i], 1:number_of_reps, ".RData\"")
+      eval(parse(text=c(listlister, listmaker))) # fill up '[listnames]list' objects with calls to multirun RData files
+    }
+
+    sylrepzlist <- list()
+    sdstbxnlist <- list()
+    cursitylist <- list()
+    curhistlist <- list()
+
+    for(i in 1:number_of_reps) {
+
+      histthing <- paste0("curhistlist[[i]] <- readRDS(\"", multirun_directory, "/", histlist[i], "\")")
+      sitything <- paste0("cursitylist[[i]] <- readRDS(\"", multirun_directory, "/", sitylist[i], "\")")
+      sdstthing <- paste0("sdstbxnlist[[i]] <- readRDS(\"", multirun_directory, "/", sdstlist[i], "\")")
+      repzthing <- paste0("sylrepzlist[[i]] <- readRDS(\"", multirun_directory, "/", repzlist[i], "\")")
+      eval(parse(text=c(histthing, sitything, sdstthing, repzthing))) # use '[listnames]list' objects to fill '[objectnames]list' list objects with the multirun RData files - 1 file per list spot
+    }
+    num_timesteps = as.numeric(strsplit(dim_source$runLength, "k")[[1]][1])*1000
+    
+    sylRepMeans <- array(0, c(2, dim_source$num_pop, num_timesteps))
+    sylDbnMeans <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, num_timesteps))
+    curLvlMeans <- array(0, c(12, dim_source$num_pop, num_timesteps))
+    curHstMeans <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), num_timesteps))
+    
+    # 
+    for(i in 1:number_of_reps) {
+      eval(parse(text=paste0("curHstMeans[i] <- mean(c(curhistlist[[", 
+                              paste0(1:(number_of_reps),"]][i],curhistlist[[", collapse=''), 
+                              number_of_reps, "]][i]))")))
+    }
+    for(i in 1:number_of_reps) {
+      eval(parse(text=paste0("curLvlMeans[i] <- mean(c(cursitylist[[", 
+                              paste0(1:(number_of_reps),"]][i],cursitylist[[", collapse=''), 
+                              number_of_reps, "]][i]))")))
+    }
+    for(i in 1:number_of_reps) {
+      eval(parse(text=paste0("sylDbnMeans[i] <- mean(c(sdstbxnlist[[", 
+                              paste0(1:(number_of_reps),"]][i],sdstbxnlist[[", collapse=''), 
+                              number_of_reps, "]][i]))")))
+    }
+    for(i in 1:number_of_reps) {
+      eval(parse(text=paste0("sylRepMeans[i] <- mean(c(sylrepzlist[[", 
+                              paste0(1:(number_of_reps),"]][i],sylrepzlist[[", collapse=''), 
+                              number_of_reps, "]][i]))")))
+    }
+    RunMeans[[individual_run]] <- list(
+      sylRepMeans = sylRepMeans,
+      sylDbnMeans = sylDbnMeans,
+      curLvlMeans = curLvlMeans,
+      curHstMeans = curHstMeans
+    )
+
+  }
+  return(RunMeans)
+}
+
+############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
 heatmapLand <- HtMpDir()
 
-all_the_runs <- list.files(heatmapLand, 
-# pattern = "_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
-  pattern = "1903[0-3][0-9]_1[7-9][0-9]|1903[0-3][0-9]_...|1903[0-3][0-9]_...|1903[0-3][0-9]_")
+# all_the_runs <- list.files(heatmapLand, 
+all_the_runs <- extractVarDirs(heatmapLand, 
+  #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
+  #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
+
+  "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")
+#   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
+#   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
+#   close(connection)
+
+extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 setwd("../../../../../../../../../../media/parker/A443-E926/simulation runs/shifting_curstart_for_heatmap/")
