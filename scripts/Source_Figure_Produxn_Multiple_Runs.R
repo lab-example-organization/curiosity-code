@@ -23,7 +23,7 @@ figProdMultRun <- function(specificSimNumber, number_of_runs, paramsSource = par
           paste0(multiRunTime, "-GMT-multirun-output")))
           }
       if(!(file.exists(file.path(strsplit(multiRun_folderList[run_visual], 
-        "variable_store", )[[1]][1], paste0(specificSimNumber, "folderList.RData"))))) {
+        "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData"))))) {
           saveRDS(object = multiRun_folderList, file = 
                        file.path(strsplit(multiRun_folderList[run_visual], 
           "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData")))}
@@ -57,7 +57,6 @@ figProdMultRun <- function(specificSimNumber, number_of_runs, paramsSource = par
   } 
   
   datanames <- c("CurHist","Cursity","SylDist","SylReps")
-  objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
   listnames <- c("hist","sity","sdst","repz")
   for(i in 1:4) {
     listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_runs)")
@@ -118,7 +117,7 @@ figProdMultRun <- function(specificSimNumber, number_of_runs, paramsSource = par
                        ", sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS",
                        ", last_stats, data_convert, histthing, sitything, sdstthing, repzthing",
                        ", histlist, sitylist, sdstlist, repzlist, listlister, listmaker, listnames",
-                       ", objectnames, datanames)")
+                       ", datanames)")
   eval(parse(text=last_stats))
   
   R <- create_plot_info(info[[2]], info[[1]])
