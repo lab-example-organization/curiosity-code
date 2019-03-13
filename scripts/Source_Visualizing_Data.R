@@ -1,4 +1,4 @@
-convert_stored_data <- function(parameters = simParams, data_dir = getwd(), simplification_factor=100) {
+convert_stored_data <- function(parameters = params, data_dir = getwd(), simplification_factor=100) {
   num_timesteps = as.numeric(strsplit(parameters$runLength, "k")[[1]][1])*1000
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")

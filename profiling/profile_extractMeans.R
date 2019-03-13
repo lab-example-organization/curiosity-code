@@ -65,66 +65,27 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
       eval(parse(text=c(listlister, listmaker))) # fill up '[listnames]list' objects with calls to multirun RData files
     }
 
-    sylrepzlist <- list()
-    sdstbxnlist <- list()
-    cursitylist <- list()
-    curhistlist <- list()
+    timeSpanChunks <- 100
+
+    sylrepzlist <- array(0, c(2, dim_source$num_pop, timeSpanChunks, number_of_reps))
+    sdstbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timeSpanChunks, number_of_reps))
+    cursitylist <- array(0, c(12, dim_source$num_pop, timeSpanChunks, number_of_reps))
+    curhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks, number_of_reps))
 
     for(i in 1:number_of_reps) {
 
-      curhistlist[[i]] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
-      cursitylist[[i]] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
-      sdstbxnlist[[i]] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
-      sylrepzlist[[i]] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
+      curhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
+      cursitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
+      sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
+      sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
     }
     #num_timesteps = as.numeric(strsplit(dim_source$runLength, "k")[[1]][1])*1000
-    timeSpanChunks <- 100
-    sylRepMeans <- array(0, c(2, dim_source$num_pop, timeSpanChunks))
-    sylDbnMeans <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timeSpanChunks))
-    curLvlMeans <- array(0, c(12, dim_source$num_pop, timeSpanChunks))
-    curHstMeans <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks))
+        
+    curHstMeans <- colMeans(aperm(curhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    curLvlMeans <- colMeans(aperm(cursitylist, c(4, 1, 2, 3)), na.rm = TRUE)
+    sylDbnMeans <- colMeans(aperm(sdstbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    sylRepMeans <- colMeans(aperm(sylrepzlist, c(4, 1, 2, 3)), na.rm = TRUE)
     
-    for(i in 1:timeSpanChunks) {
-      eval(parse(text=paste0("X <- list(curhistlist[[", paste0(1:(number_of_reps-1), "]][,,i], curhistlist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      curHstMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-    }
-    for(i in 1:timeSpanChunks) {
-      # eval(parse(text=paste0("curLvlMeans[,,i] <- mean(c(cursitylist[[", 
-      #                         paste0(1:(number_of_reps-1),"]][,,i],cursitylist[[", collapse=''), 
-      #                         number_of_reps, "]][,,i]))")))
-
-      eval(parse(text=paste0("X <- list(cursitylist[[", paste0(1:(number_of_reps-1), "]][,,i], cursitylist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      curLvlMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-
-    }
-    for(i in 1:timeSpanChunks) {
-      # eval(parse(text=paste0("sylDbnMeans[,,i] <- mean(c(sdstbxnlist[[", 
-      #                         paste0(1:(number_of_reps-1),"]][,,i],sdstbxnlist[[", collapse=''), 
-      #                         number_of_reps, "]][,,i]))")))
-
-      eval(parse(text=paste0("X <- list(sdstbxnlist[[", paste0(1:(number_of_reps-1), "]][,,i], sdstbxnlist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      sylDbnMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-    }
-    for(i in 1:timeSpanChunks) {
-      # eval(parse(text=paste0("sylRepMeans[,,i] <- mean(c(sylrepzlist[[", 
-      #                         paste0(1:(number_of_reps-1),"]][,,i],sylrepzlist[[", collapse=''), 
-      #                         number_of_reps, "]][,,i]))")))
-
-      eval(parse(text=paste0("X <- list(sylrepzlist[[", paste0(1:(number_of_reps-1), "]][,,i], sylrepzlist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      sylRepMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-    }
     RunMeans[[individual_run]] <- list(
       sylRepMeans = sylRepMeans,
       sylDbnMeans = sylDbnMeans,
@@ -148,8 +109,8 @@ all_the_runs <- extractVarDirs(heatmapLand,
 #   close(connection)
 
 profvis({
-  for(iteration in 1:100) {
+#   for(iteration in 1:10) {
     extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
         dirHeatMap = heatmapLand, source_of_params = "params.yaml")
-  }
+#   }
 })

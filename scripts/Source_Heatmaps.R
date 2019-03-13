@@ -104,66 +104,27 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
       eval(parse(text=c(listlister, listmaker))) # fill up '[listnames]list' objects with calls to multirun RData files
     }
 
-    sylrepzlist <- list()
-    sdstbxnlist <- list()
-    cursitylist <- list()
-    curhistlist <- list()
+    timeSpanChunks <- 100
+
+    sylrepzlist <- array(0, c(2, dim_source$num_pop, timeSpanChunks, number_of_reps))
+    sdstbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timeSpanChunks, number_of_reps))
+    cursitylist <- array(0, c(12, dim_source$num_pop, timeSpanChunks, number_of_reps))
+    curhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks, number_of_reps))
 
     for(i in 1:number_of_reps) {
-
-      curhistlist[[i]] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
-      cursitylist[[i]] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
-      sdstbxnlist[[i]] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
-      sylrepzlist[[i]] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
+      curhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
+      cursitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
+      sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
+      sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
     }
-    #num_timesteps = as.numeric(strsplit(dim_source$runLength, "k")[[1]][1])*1000
-    timeSpanChunks <- 100
-    sylRepMeans <- array(0, c(2, dim_source$num_pop, timeSpanChunks))
-    sylDbnMeans <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timeSpanChunks))
-    curLvlMeans <- array(0, c(12, dim_source$num_pop, timeSpanChunks))
-    curHstMeans <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks))
     
-    for(i in 1:timeSpanChunks) {
-      eval(parse(text=paste0("X <- list(curhistlist[[", paste0(1:(number_of_reps-1), "]][,,i], curhistlist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
+    # These four lines calculate the mean value across all the replicates
 
-      curHstMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-    }
-    for(i in 1:timeSpanChunks) {
-      # eval(parse(text=paste0("curLvlMeans[,,i] <- mean(c(cursitylist[[", 
-      #                         paste0(1:(number_of_reps-1),"]][,,i],cursitylist[[", collapse=''), 
-      #                         number_of_reps, "]][,,i]))")))
-
-      eval(parse(text=paste0("X <- list(cursitylist[[", paste0(1:(number_of_reps-1), "]][,,i], cursitylist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      curLvlMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-
-    }
-    for(i in 1:timeSpanChunks) {
-      # eval(parse(text=paste0("sylDbnMeans[,,i] <- mean(c(sdstbxnlist[[", 
-      #                         paste0(1:(number_of_reps-1),"]][,,i],sdstbxnlist[[", collapse=''), 
-      #                         number_of_reps, "]][,,i]))")))
-
-      eval(parse(text=paste0("X <- list(sdstbxnlist[[", paste0(1:(number_of_reps-1), "]][,,i], sdstbxnlist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      sylDbnMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-    }
-    for(i in 1:timeSpanChunks) {
-      # eval(parse(text=paste0("sylRepMeans[,,i] <- mean(c(sylrepzlist[[", 
-      #                         paste0(1:(number_of_reps-1),"]][,,i],sylrepzlist[[", collapse=''), 
-      #                         number_of_reps, "]][,,i]))")))
-
-      eval(parse(text=paste0("X <- list(sylrepzlist[[", paste0(1:(number_of_reps-1), "]][,,i], sylrepzlist[[", collapse = ''), number_of_reps, "]][,,i])")))
-      Y <- do.call(cbind, X)
-      Y <- array(Y, dim=c(dim(X[[1]]), length(X)))
-
-      sylRepMeans[,,i] <- colMeans(aperm(Y, c(3, 1, 2)), na.rm = TRUE)
-    }
+    curHstMeans <- colMeans(aperm(curhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    curLvlMeans <- colMeans(aperm(cursitylist, c(4, 1, 2, 3)), na.rm = TRUE)
+    sylDbnMeans <- colMeans(aperm(sdstbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    sylRepMeans <- colMeans(aperm(sylrepzlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    
     RunMeans[[individual_run]] <- list(
       sylRepMeans = sylRepMeans,
       sylDbnMeans = sylDbnMeans,
@@ -197,50 +158,50 @@ names(extractedMeans) <- all_the_names
 # heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
 heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
 
-# reference_array <- array(c( 1, 2, 3, 4, 5, 2, 6, 7, 8, 9, 3, 7,10,11,12, 4, 8,11,13,14, 5, 9,12,14,15,
-#                            16,17,18,19,20,17,21,22,23,24,18,22,25,26,27,19,23,26,28,29,20,24,27,29,30,
-#                            31,32,33,34,35,32,36,37,38,39,33,37,40,41,42,34,38,41,43,44,35,39,42,44,45,
-#                            46,47,48,49,50,47,51,52,53,54,48,52,55,56,57,49,53,56,58,59,50,54,57,59,60,
-#                            61,62,63,64,65,62,66,67,68,69,63,67,70,71,72,64,68,71,73,74,65,69,72,74,75), c(5,5,5))
-
 for(femalez in 1:5) {
   for(malez1 in 1:5) {
     for(malez2 in 1:5) {
-      setwd(paste0(runs_ordered_for_heatmap[reference_array[malez2,malez1,femalez]],"/multirun_output/"))
-      setwd(list.files())
-      #ending_curiosity_fem[x,y,z] <- 
-      sumStats <- readLines(list.files()[grep("Summary_Statistics", list.files())])
-      if(malez2>=malez1) {
-        eight_numbers <- c(sumStats[24],sumStats[8],sumStats[32],sumStats[16],sumStats[20],sumStats[4],sumStats[28],sumStats[12])
-      } else {
-        eight_numbers <- c(sumStats[8],sumStats[24],sumStats[16],sumStats[32],sumStats[4],sumStats[20],sumStats[12],sumStats[28])
-      }
+
+      tally <- malez2 + 5*(malez1 - 1) + 25*(femalez - 1)
+
+      sumStats <- c(
+        extractedMeans[[tally]]$curLvlMeans[1,1,100],
+        extractedMeans[[tally]]$curLvlMeans[1,2,100],
+        extractedMeans[[tally]]$curLvlMeans[2,1,100],
+        extractedMeans[[tally]]$curLvlMeans[2,2,100],
+        extractedMeans[[tally]]$sylRepMeans[1,1,100],
+        extractedMeans[[tally]]$sylRepMeans[1,2,100],
+        extractedMeans[[tally]]$sylRepMeans[2,1,100],
+        extractedMeans[[tally]]$sylRepMeans[2,2,100]
+      )
+
+      heatmap_array[malez1,malez2,femalez,] <- sumStats
       
-      for(i in 1:8) {
-        eight_numbers[i] <- str_sub(eight_numbers[i],5)
-      }
-      heatmap_array[malez2,malez1,femalez,] <- eight_numbers
-      setwd("../../../")
     }
   }
 }
 
 #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "")
 
-if(!(file.exists("heatmap_output.RData"))) {saveRDS(heatmap_array, "../heatmap_output.RData")}
-heatmap_array <- readRDS("../../../../../../media/parker/A443-E926/simulation runs/heatmap_output.RData")
-colorSeqMultPalette <- list(BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
-                            BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
-                            GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
-                            OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
-                            PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
-                            PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
-                            PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
-                            RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
-                            YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
-                            YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
-                            YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
-                            YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
+if(!(file.exists(file.path(
+"results", "Heatmaps", "output_objects", "heatmap_output.RData"
+      )))) {saveRDS(heatmap_array, file.path(
+"results", "Heatmaps", "output_objects", "heatmap_output.RData"
+   ))}
+# heatmap_array <- readRDS("../../../../../../media/parker/A443-E926/simulation runs/heatmap_output.RData")
+colorSeqMultPalette <- list(
+  BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+  BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+  GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+  OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+  PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+  PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+  PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+  RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+  YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+  YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+  YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+  YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
 
 #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "Pop 1 Male Curstart", ylab = "Pop 2 Male Curstart")
 
@@ -268,12 +229,14 @@ byTheCol <- c(rep(0,16),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),re
 
 dat_array_doh <- array(c(rep(1,9),1,5,5,5,1,5,5,5,1),c(3,3,2))
 legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
+
+
 for(SxRpPop in 1:8) {
 
     # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
-  file_name <- paste0(title_names[SxRpPop], ".tiff")
+  file_name <- paste0(title_names[SxRpPop], ".png")
     # dimensions? dunno; not too worried though
-  tiff(filename = file_name, width = 554, height = 554, units = "px", pointsize = 12, bg = "white", compression = "none")
+  png(filename = file_name, width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
   
  
     
@@ -311,8 +274,14 @@ for(SxRpPop in 1:8) {
                                             SxRpPop]),5,5),
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
-        xlab = heatmap_axes[[1]][1], 
-        ylab = heatmap_axes[[1]][2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
+        xlab = heatmap_axes$mp2Vfem[1], 
+        ylab = heatmap_axes$mp2Vfem[2],cex.lab=1.4, zlim = c((min(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                                            SxRpPop]))-0.01,(max(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                                            SxRpPop]))+0.01))
   
   axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
@@ -334,8 +303,8 @@ for(SxRpPop in 1:8) {
                                             SxRpPop]),5,5),
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
-        xlab = heatmap_axes[[2]][1], 
-        ylab = heatmap_axes[[2]][2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
+        xlab = heatmap_axes$mp1Vfem[1], 
+        ylab = heatmap_axes$mp1Vfem[2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
   
   axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
@@ -357,8 +326,8 @@ for(SxRpPop in 1:8) {
                                             SxRpPop]),5,5),
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
-        xlab = heatmap_axes[[3]][1], 
-        ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
+        xlab = heatmap_axes$mp1Vmp2[1], 
+        ylab = heatmap_axes$mp1Vmp2[2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
   
   axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
