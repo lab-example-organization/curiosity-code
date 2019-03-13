@@ -227,14 +227,15 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
         # parameters$one_pop_singers, which comes from the male half of the population.
         # probability defined by the fraction of syllable repertoires of each member of 
         # each population divided by the maximum syllrep of the population.
-        sapply(1:parameters$num_pop,
+        vapply(1:parameters$num_pop,
                function(x) {
                  temp <- cpp_rowSums(sylrep_object[parameters$pop_calls_matrix[1,],,x])
                  sample(x = parameters$pop_calls_matrix[1,], 
                         size = parameters$one_pop_singers[select_type], 
                         replace = FALSE,
                         prob = temp / max(temp))
-                }
+                },
+               rep(0, parameters$one_pop_singers[select_type])
               )
         ) # probability = the number of times each individual's syllable 
         # repertoire has a 1 in it (sum(sylrep_object[parameters$pop_calls_matrix[1,]])), 
@@ -243,13 +244,15 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
       # create a matrix of all the sylrep_object of the sample males from selection.index
       selection.sylreps <- t(
         cbind(
-          sapply(
+          vapply(
             1:parameters$one_pop_singers[select_type], 
-            function(x) {sylrep_object[selection.index[x,1],,1]}
+            function(x) {sylrep_object[selection.index[x,1],,1]},
+            rep(0, dim(sylrep_object)[2])
           ),
-          sapply(
+          vapply(
             1:parameters$one_pop_singers[select_type], 
-            function(x) {sylrep_object[selection.index[x,2],,2]}
+            function(x) {sylrep_object[selection.index[x,2],,2]},
+            rep(0, dim(sylrep_object)[2])
           )
         )
       )
