@@ -1,5 +1,5 @@
 # A list of all the packages needed for this code to function:
-package_list <- c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr")
+package_list <- c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp")
 
 # A great lil function stolen off stackexchange (https://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them)
 # This function loads packages that the code depends on, BUT:
