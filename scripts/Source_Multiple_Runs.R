@@ -201,9 +201,9 @@ archiveSimFiles <- function(path, filename, archive = FALSE){
   if(file.exists(path)) {
     if(archive) {
       archivePrefix <- gsub('[-: ]', '', substring(Sys.time(), 3))
-      file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename))
+      file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename), showWarnings = FALSE)
       file.rename(from=file.path("source", "archive", filename), 
-        to=file.path("source", "archive", paste0(archivePrefix, "_", filename)))
+        to=file.path("source", "archive", paste0(archivePrefix, "_", filename)), showWarnings = FALSE)
     }
     file.remove(file.path(path, filename))
     # print("")
