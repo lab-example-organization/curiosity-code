@@ -263,7 +263,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
       temp <- apply(X = selection.sylreps, MARGIN = 1,
                     FUN = score_similarity,
                     selector_vector = selector.sylrep)
-      golf_score <- sort(temp)
+      golf_score <- sort(temp)$ix
       
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
