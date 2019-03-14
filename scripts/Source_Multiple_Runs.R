@@ -135,8 +135,6 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                                            moran = moranObjects)
       
       moranObjects <- curiosity_learn(parameters = simParams, moran = moranObjects, 
-        # curinh.row - calling either the row number or name of row for different curiosity inheritance patterns - 
-        # 1: father; 2: mother; 3: same; 4:opposite
                         timestep = single_timestep, inheritance_pattern = curinh_style) 
       
       moranObjects <- syll_learn(parameters = simParams, moran = moranObjects, 
@@ -160,7 +158,10 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       for(population in 1:simParams$num_pop) {
         for(sex in 1:2) {
           #index <- moran$pairing.pool[(sex + 2), 1, population]
-          curiosity_level[moranObjects$pairing.pool[(sex + 2), 1, population], population] <- moranObjects$pairing.pool[(sex + 2), 2, population]
+          curiosity_level[
+            moranObjects$pairing.pool[(sex + 2), 1, population], population
+
+          ] <- moranObjects$pairing.pool[(sex + 2), 2, population]
         }
       }
       
@@ -200,9 +201,10 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
 archiveSimFiles <- function(path, filename, archive = FALSE){
   if(file.exists(path)) {
     if(archive) {
-      archivePrefix <- Sys.time()
+      archivePrefix <- gsub('-', '', substring(Sys.Date(), 3))
       file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename))
-      file.rename(from=file.path("source", "archive", filename), to=file.path("source", "archive", paste0(archivePrefix, "_", filename)))
+      file.rename(from=file.path("source", "archive", filename), 
+        to=file.path("source", "archive", paste0(archivePrefix, "_", filename)))
     }
     file.remove(file.path(path, filename))
     # print("")
