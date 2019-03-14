@@ -201,9 +201,9 @@ archiveSimFiles <- function(path, filename, archive = FALSE){
   if(file.exists(path)) {
     if(archive) {
       archivePrefix <- gsub('[-: ]', '', substring(Sys.time(), 3))
-      file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename), showWarnings = FALSE)
+      file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename))
       file.rename(from=file.path("source", "archive", filename), 
-        to=file.path("source", "archive", paste0(archivePrefix, "_", filename)), showWarnings = FALSE)
+        to=file.path("source", "archive", paste0(archivePrefix, "_", filename)))
     }
     file.remove(file.path(path, filename))
     # print("")
@@ -211,11 +211,7 @@ archiveSimFiles <- function(path, filename, archive = FALSE){
 }
 
 multi_runs <- function(shifting_curstart, paramsSource) {
-  # Load the C++ functions
-  sourceCpp(file.path('cpp_source', 'median.cpp'))
-  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
-  sourceCpp(file.path('cpp_source', 'sort.cpp'))
-
+  
   params <- yaml.load_file(file.path("parameters", paramsSource))
   number_of_reps <- as.numeric(params$number_of_reps)
   
