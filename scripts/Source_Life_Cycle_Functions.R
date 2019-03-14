@@ -167,7 +167,7 @@ score_similarity <- function(suitor_vector, selector_vector) {
   # The basic sylrep comparison caluclation that finds the differences 
   # between the suitor and selector sylreps, then assigns a weighted 
   # value based on suitor syllable distance from median of selector's sylrep.
-  selector_median <- median(which(selector_vector == 1)) # Finds the median for the selector's sylrep - will be useful for establishing similarity of suitors.
+  selector_median <- cpp_med(which(selector_vector == 1))
   vector_diff <- which(suitor_vector-selector_vector != 0)
   AbsVal_diffs <- abs(vector_diff - selector_median)
   
@@ -227,14 +227,15 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
         # parameters$one_pop_singers, which comes from the male half of the population.
         # probability defined by the fraction of syllable repertoires of each member of 
         # each population divided by the maximum syllrep of the population.
-        sapply(1:parameters$num_pop,
+        vapply(1:parameters$num_pop,
                function(x) {
-                 temp <- rowSums(sylrep_object[parameters$pop_calls_matrix[1,],,x])
+                 temp <- cpp_rowSums(sylrep_object[parameters$pop_calls_matrix[1,],,x])
                  sample(x = parameters$pop_calls_matrix[1,], 
                         size = parameters$one_pop_singers[select_type], 
                         replace = FALSE,
                         prob = temp / max(temp))
-                }
+                },
+               rep(0, parameters$one_pop_singers[select_type])
               )
         ) # probability = the number of times each individual's syllable 
         # repertoire has a 1 in it (sum(sylrep_object[parameters$pop_calls_matrix[1,]])), 
@@ -243,24 +244,25 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
       # create a matrix of all the sylrep_object of the sample males from selection.index
       selection.sylreps <- t(
         cbind(
-          sapply(
+          vapply(
             1:parameters$one_pop_singers[select_type], 
-            function(x) {sylrep_object[selection.index[x,1],,1]}
+            function(x) {sylrep_object[selection.index[x,1],,1]},
+            rep(0, dim(sylrep_object)[2])
           ),
-          sapply(
+          vapply(
             1:parameters$one_pop_singers[select_type], 
-            function(x) {sylrep_object[selection.index[x,2],,2]}
+            function(x) {sylrep_object[selection.index[x,2],,2]},
+            rep(0, dim(sylrep_object)[2])
           )
         )
       )
       
       # applies the standard deviation scoring to the males in selection.sylrep_object; 
       # larger score means greater difference between male sylrep and selector's sylrep.
-      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
-                               FUN = score_similarity,
-                               selector_vector = selector.sylrep),
-                         index.return = T,
-                         method = 'radix')$ix
+      temp <- apply(X = selection.sylreps, MARGIN = 1,
+                    FUN = score_similarity,
+                    selector_vector = selector.sylrep)
+      golf_score <- cpp_sort_indices(temp)
       
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.

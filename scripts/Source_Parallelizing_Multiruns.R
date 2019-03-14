@@ -56,6 +56,17 @@ source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
 # the time difference between using n_cores and not using it
-shifting_curstart <- 1:4
+
+
+shifting_curstart <- 1:125
 paramsFile <- c("params.yaml")
 mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, mc.cores = n_cores)
+
+
+# shifting_curstart <- 1:4
+# paramsFile <- c("params.yaml")
+# profvis({
+#   shifting_curstart <- 1
+#   multi_runs(shifting_curstart = shifting_curstart, paramsSource = paramsFile)
+# })
+

@@ -1,6 +1,6 @@
 # A list of all the packages needed for this code to function:
-package_list <- c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr")
-
+package_list <- c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp", "tidyr")
+package_list_2 <- c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp", "tidyr", "profvis")
 # A great lil function stolen off stackexchange (https://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them)
 # This function loads packages that the code depends on, BUT:
 # if a package is not installed, it installs it first, then loads it.
@@ -23,7 +23,7 @@ load.installIfRequired <- function(package_list = package_list){
 }
 
 #  Then try/install packages...
-load.installIfRequired(package_list = package_list)
+load.installIfRequired(package_list = package_list_2)
 
 # # # This is how this file used to look:
 

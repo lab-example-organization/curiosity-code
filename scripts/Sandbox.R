@@ -25,3 +25,6 @@ profvis({
 })
 
 devtools::install_github("hadley/lineprof")
+
+
+
