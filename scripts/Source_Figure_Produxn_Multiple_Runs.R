@@ -34,7 +34,7 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     source(file.path('scripts', 'Source_Visualizing_Data.R'))
     multirun_directory <- paste0(strsplit(multiRun_folderList[run_visual], "variable")[[1]][1], "multirun_output/", 
                                   list.files(path = paste0(strsplit(multiRun_folderList[run_visual], 
-                                                  "variable")[[1]][1], "multirun_output/"), pattern = "multirun"))
+                                                  "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
     info <- readRDS(file = file.path(multiRun_folderList[run_visual], "metadata.RData"))
     data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = params, data_dir = \"", 
                            multiRun_folderList[run_visual], "\", simplification_factor = 100)")
@@ -96,16 +96,21 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     listmaker <- paste0(listnames[i], "list[", 1:number_of_repeats, "] <- \"", datanames[i], 1:number_of_repeats, ".RData\"")
     eval(parse(text=c(listlister, listmaker)))
   }
+  # timeSpanChunks <- 100
+  # sylrepzlist <- rep(list(array(0, c(2, params$num_pop, timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
+  # sdstbxnlist <- rep(list(array(0, c((2 * params$num_pop), params$sylnum, timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
+  # cursitylist <- rep(list(array(0, c(12, params$num_pop, timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
+  # curhistlist <- rep(list(array(0, c((2*params$num_pop), (params$num_pop * params$one_pop_singers[1]), timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
   
   sylrepzlist <- list()
   sdstbxnlist <- list()
   cursitylist <- list()
   curhistlist <- list()
-  
+
   multirun_directory <- paste0(strsplit(multiRun_folderList[1], "variable")[[1]][1], 
                                 "multirun_output/", 
                                  list.files(path = paste0(strsplit(multiRun_folderList[1], 
-                                   "variable")[[1]][1], "multirun_output/"), pattern = "multirun"))
+                                   "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
 
   for(i in 1:number_of_repeats) {
     curhistlist[[i]] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
@@ -146,9 +151,9 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
                        ", cursity", number_of_repeats, ", curhist", number_of_repeats,
                        ", sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht",
                        ", sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS",
-                       ", last_stats, data_convert, histthing, sitything, sdstthing, repzthing",
-                       ", histlist, sitylist, sdstlist, repzlist, listlister, listmaker, listnames",
-                       ", datanames)")
+                       ", last_stats, data_convert, histlist, sitylist, sdstlist, repzlist",
+                       ", listlister, listmaker, listnames, datanames)")
+                       
   eval(parse(text=last_stats))
   
   R <- create_plot_info(info[[2]], info[[1]])

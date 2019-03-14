@@ -228,6 +228,11 @@ byTheCol <- c(rep(0,16),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),re
               rep(2,8),rep(5,8),rep(2,8),rep(5,8),rep(0,16))
 
 dat_array_doh <- array(c(rep(1,9),1,5,5,5,1,5,5,5,1),c(3,3,2))
+# dat_array_doh <- array(c(2,1,1,1,2,1,1,1,2,2,5,5,5,2,5,5,5,2),c(3,3,2))
+# dat_array_doh <- array(c(3,1,1,1,3,1,1,1,3,3,5,5,5,3,5,5,5,3),c(3,3,2))
+# dat_array_doh <- array(c(4,1,1,1,4,1,1,1,4,4,5,5,5,4,5,5,5,4),c(3,3,2))
+# dat_array_doh <- array(c(5,1,1,1,5,1,1,1,5,rep(5,9)),c(3,3,2))
+
 legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
 
 
@@ -236,35 +241,39 @@ for(SxRpPop in 1:8) {
     # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
   file_name <- paste0(title_names[SxRpPop], ".png")
     # dimensions? dunno; not too worried though
-  png(filename = file_name, width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+  png(filename = file.path(heatmapLand, "output_objects", file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
   
  
     
-  heatmap_min <- round(min(as.numeric(c(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                                                    dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                                                    dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                                                    SxRpPop],
-                                        heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-                                                    dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-                                                    dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-                                                    SxRpPop],
-                                        heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-                                                    dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-                                                    dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-                                                    SxRpPop]))), 2)
+  heatmap_min <- c(
+    round(min(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                            SxRpPop]), 2),
+    round(min(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+                            dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+                            dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+                            SxRpPop]), 2),
+    round(min(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+                            dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+                            dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+                            SxRpPop]), 2)
+  )
   
-  heatmap_max <- round(max(as.numeric(c(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                                                    dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                                                    dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                                                    SxRpPop],
-                                        heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-                                                    dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-                                                    dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-                                                    SxRpPop],
-                                        heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-                                                    dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-                                                    dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-                                                    SxRpPop]))), 2)
+  heatmap_max <- c(
+    round(max(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                            SxRpPop]), 2),
+   round(max(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+                            dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+                            dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+                            SxRpPop]), 2),
+    round(max(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+                            dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+                            dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+                            SxRpPop]), 2)
+  )
   
   layout(matrix(byTheCol,16,18,F))
    
@@ -275,13 +284,7 @@ for(SxRpPop in 1:8) {
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
         xlab = heatmap_axes$mp2Vfem[1], 
-        ylab = heatmap_axes$mp2Vfem[2],cex.lab=1.4, zlim = c((min(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                                            SxRpPop]))-0.01,(max(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                                            SxRpPop]))+0.01))
+        ylab = heatmap_axes$mp2Vfem[2],cex.lab=1.4, zlim = c(heatmap_min[1]-0.01,heatmap_max[1]+0.01))
   
   axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
@@ -304,7 +307,7 @@ for(SxRpPop in 1:8) {
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
         xlab = heatmap_axes$mp1Vfem[1], 
-        ylab = heatmap_axes$mp1Vfem[2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
+        ylab = heatmap_axes$mp1Vfem[2],cex.lab=1.4, zlim = c(heatmap_min[2]-0.01,heatmap_max[2]+0.01))
   
   axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
@@ -327,7 +330,7 @@ for(SxRpPop in 1:8) {
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
         xlab = heatmap_axes$mp1Vmp2[1], 
-        ylab = heatmap_axes$mp1Vmp2[2],cex.lab=1.4, zlim = c(heatmap_min-1,heatmap_max+1))
+        ylab = heatmap_axes$mp1Vmp2[2],cex.lab=1.4, zlim = c(heatmap_min[3]-0.01,heatmap_max[3]+0.01))
   
   axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
@@ -355,7 +358,11 @@ for(SxRpPop in 1:8) {
   a <- 0.35; b <- 20.5; c <- (b-a)/10
   axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
   axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
-  axis(4, c(1,10,19),c(heatmap_min,round((heatmap_min+heatmap_max)/2,2),heatmap_max), las=1,tck = 0, lwd=0, line=0)
+  axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
+  axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
+  axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "M2F"), las=1,tck = 0, lwd=0, line=6)
+  axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "M1F"), las=1,tck = 0, lwd=0, line=9)
+  axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "1v2"), las=1,tck = 0, lwd=0, line=12)
   mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
   mtext("Seeks Novel Songs",3,1,cex = 0.8)
   mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
@@ -364,214 +371,3 @@ for(SxRpPop in 1:8) {
   par(mfrow=c(1,1))
   dev.off()
 }
-
-
-# layout(matrix(c(rep(1,49),rep(c(0,2,2,2,2,2,0),2),rep(0,7)),7,10,F,))
-# #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100))
-# image(x = matrix(as.numeric(heatmap_array[1,,,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), axes = F, xlab = heatmap_axes[[triple_iterate]][1], ylab = heatmap_axes[[triple_iterate]][2])
-# #axis(1,c(0,0.25,0.5,0.75,1),c("0-0.25", "0.25-0.5", "0.45-1", "0-1", "0.45-0.55"),T,1,NA,F)
-# #axis(1,c(-0.12,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-0.25","", "0.25-0.5","", "0.45-1","", "0-1","", "0.45-0.55",""),T,1,NA,F)
-# axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),T,0,NA,F,cex.axis=1, tck = 0)
-# axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),c("","","","","",""),T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-# 
-# axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),T,0,NA,F,cex.axis=1, tck = 0)
-# axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),c("","","","","",""),T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-# mtext(title_names[SxRpPop],3,1,cex = 1.5)
-# #for(perchance in 1:19) {
-# #  plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=perchance,cex=3, xlab = NA, ylab = NA, axes = F)
-# #}
-# plot(matrix(c(rep(1,100),1:100),100,2),col=colorSeqMultPalette$PuBuGn(100),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
-# a <- -2; b <- 103.5; c <- (b-a)/10
-# axis(2, seq(a,b,c),c("","","","","","","","","","",""))
-# axis(2, c(15,85),c("Less Curiosity","More Curiosity"), las=0,tck = 0)
-# mtext(c(paste0("Auditory Curiosity","     ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
-# mtext("Seeks Novel Songs",3,1,cex = 0.8)
-# mtext("Seeks Similar Song",1,0.7,cex = 0.8)
-# box("outer", "solid")
-# par(mfrow=c(1,1))
-#source("/home/Documents/projects/Code/curiosity-code/Source_Visualizing_Data.R")
-
-# heatmap(x = t(matrix(data = as.numeric(heatmap_array[1,,,1]),nrow = 5,ncol = 5)),Rowv = NA,Colv = "Rowv",ColSideColors = T,RowSideColors = T,xlab = ,ylab = )
-# heatmap(x = matrix(1:25,5,5,F),Rowv = NA,Colv = "Rowv")
-
-#x <- c( rnorm(50,10,2), rnorm(30,20,2) )
-#y <- 2+3*x + rnorm(80)
-#d.x <- density(x)
-#d.y <- density(y)
-#layout( matrix( c(0,2,2,1,3,3,1,3,3),ncol=3) )
-#plot(d.x$x, d.x$y, xlim=range(x), type='l')
-#plot(d.y$y, d.y$x, ylim=range(y), xlim=rev(range(d.y$y)), type='l')
-#plot(x,y, xlim=range(x), ylim=range(y) )
-
-
-#length(c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1))
-
-#plot(rep(1,100),col=sylnum_palette(100),pch=19,cex=3)
-
-
-#nsamples <- 20
-#mat <- rnorm(nsamples, .5, .15)
-#dim(mat) <- c(4, 5)
-#colMap <- colorRampPalette(c("red","white","blue" ))(nsamples)
-#image(1:4, 1:5, mat, col = colMap, ylab="", xlab="")
-#legend(grconvertX(0.5, "device"), grconvertY(1, "device"),
-#       c("0",".5","1"), fill = colMap[c(1, 10, 20)], xpd = NA)
-
-
-
-
-
-##' Prepare dendrograms for gplots' heatmap.2.
-##' 
-##' This function will prepare dendrograms for the heatmap.2 function (gplots).
-##' The type of scaling can be adjusted and is performed before dendrogram
-##' calculations (as opposed to native heatmap.2), reordering can be turned
-##' on/off and distance and clustering functions can be customized.
-##' 
-##' 
-##' @param x Numeric matrix of the values to be plotted.
-##' @param scaledim character indicating if the values should be centered and
-##' scaled in either the row direction or the column direction, or none.
-##' @param zlim Reassign the extremes within the scaled data: zlim=c(-3,3).
-##' @param zlim_select Select when to apply zlim. For the dendrogram
-##' calculations and/or for the output data.
-##' @param reorder Switch on/off dendrogram reordering for row and column.
-##' @param scalefun Function to do the data scaling.
-##' @param distfun Function used to compute the distance (dissimilarity)
-##' between both rows and columns.
-##' @param hclustfun Function used to compute the hierarchical clustering when
-##' Rowv or Colv are not dendrograms.
-##' @return A list with the scaled data ($data), row ($Rowv) and column ($Colv)
-##' dendrograms.
-##' @author Original function by Thomas W. Leja. Extended by Jan Stanstrup,
-##' \email{stanstrup@@gmail.com}.
-##' @references
-##' http://stackoverflow.com/questions/17924828/differences-in-heatmap-clustering-defaults-in-r-heatplot-versus-heatmap-2
-##' @export
-##' @examples
-##' 
-##' library(massageR)
-##' library(gplots)
-##' library(RColorBrewer)
-##' 
-##' #scalefun <- BioMark:::scalefun("auto")
-##' scalefun <- scale
-##' 
-##' distfun <- function(x) as.dist(1-cor(t(x)))
-##' #distfun <- function(x) dist(x,method="canberra")
-##' 
-##' hclustfun <- function(x) hclust(x, method="complete")
-##' 
-##' 
-##' x <- as.matrix(mtcars)
-##' z <- heat.clust(x,
-##'                 scaledim = "column",
-##'                 zlim = c(-3,3),
-##'                 zlim_select = c("dend","outdata"),
-##'                 reorder  = c("column","row"),
-##'                 distfun  = distfun, 
-##'                 hclustfun= hclustfun,
-##'                 scalefun = scalefun)
-##' 
-##' 
-##' heatmap.2(z$data,
-##'           Rowv=z$Rowv, 
-##'           Colv=z$Colv,
-##'           trace="none",
-##'           scale="none",
-##'           symbreaks = TRUE,
-##'           col=rev(colorRampPalette(brewer.pal(10, "RdBu"))(256))
-##'           )
-##'           
-##' @importFrom stats as.dendrogram as.dist cor hclust
-##'
-
-# heat.clust <- function(x, 
-#                        scaledim = "column", 
-#                        zlim=c(-3,3), 
-#                        zlim_select = c("dend","outdata"), 
-#                        reorder=c("column","row"),
-#                        scalefun = scale,
-#                        distfun = function(x) as.dist(1-cor(t(x))),
-#                        hclustfun = function(x) hclust(x, method="complete")
-# ) {
-#   
-#   z <- x
-#   
-#   # scaling
-#   if ("row" %in% scaledim)    z <- t(scalefun(t(z)))
-#   if ("column" %in% scaledim) z <- scalefun(z)
-#   
-#   
-#   # dendrogram
-#   z_dend <- z
-#   
-#   if ("dend" %in% zlim_select) {
-#     z_dend <- pmin(pmax(z_dend, zlim[1]), zlim[2])
-#   }
-#   
-#   hcl_row <- as.dendrogram(hclustfun(distfun(z_dend)))
-#   hcl_col <- as.dendrogram(hclustfun(distfun(t(z_dend))))
-#   
-#   
-#   if (("row" %in% reorder)    | isTRUE(reorder)){
-#     ro      <-  rowMeans(z_dend, na.rm = T)
-#     hcl_row <-  reorder(hcl_row,ro)
-#   }
-#   
-#   if (("column" %in% reorder) | isTRUE(reorder)){
-#     co      <-  colMeans(z_dend, na.rm = T)
-#     hcl_col <-  reorder(hcl_col,co)
-#   }
-#   
-#   
-#   
-#   # zlim outdata
-#   if ("outdata" %in% zlim_select) {
-#     z <- pmin(pmax(z, zlim[1]), zlim[2])
-#   }
-#   
-#   
-#   
-#   out <- list(
-#     data=z, 
-#     Rowv=hcl_row, 
-#     Colv=hcl_col
-#   )
-#   
-#   return(out)
-# }
-# 
-# 
-# library(gplots)
-# library(RColorBrewer)
-# library(BioMark)
-# 
-# scalefun <- BioMark:::scalefun("auto")
-# scalefun <- scale
-# 
-# #distfun <- function(x) as.dist(1-cor(t(x)))
-# #distfun <- function(x) dist(x,method="canberra")
-#  
-# #hclustfun <- function(x) hclust(x, method="complete")
-# thing <- heatmap_array[1,,,1]
-# x <- as.matrix(thing)
-# z <- heat.clust(x,
-#                 scaledim="column",
-#                 zlim=c(-3,3),
-#                 zlim_select = c("dend","outdata"),
-#                 reorder=c("column","row"),
-#                 distfun  = function(x) as.dist(1-cor(t(x))), 
-#                 hclustfun= function(x) hclust(x, method="complete"),
-#                 scalefun = scale)
-# 
-# 
-# heatmap.2(z$data,
-#           Rowv=z$Rowv, 
-#           Colv=z$Colv,
-#           trace="none",
-#           scale="none",
-#           symbreaks = TRUE,
-#           col=rev(colorRampPalette(brewer.pal(10, "RdBu"))(256)),
-#           margins=c(4,7)
-# )

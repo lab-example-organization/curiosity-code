@@ -244,6 +244,7 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist =
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectSubset[k]])
   figureSubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2) # row-dependent --- k
   objectSubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2) # row-dependent --- k
+  
   for(j in 1:parameters$num_pop) {
     for(k in 1:nrow(mins_n_maxes)) {
       for(L in 1:2) {
@@ -254,17 +255,20 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist =
           #container[i] <- min(eval(parse(text=paste0(objectnames, "list[[", i, "]][", subset, ", ", j, ",]"))))
           eval(parse(text=paste0("container[i] <- ", mn_mx_container[L], "(", paste0(objectnames[objectSubset[k]], "list[[", i, "]][", figureSubset[k], ", ", j, ",])"))))
         }
+        
         eval(parse(text=paste0("mins_n_maxes[k,j,L] <- ", mn_mx_container[L], "(container)")))
       }
     }
     #thing_to_evalparse <- paste0("mins_n_maxes[," ,j, ",] <- min(container)")
   }
+  
   return(mins_n_maxes)
 }
 
 
 curiosity_figures <- function(parameters, number_of_runs, population, cursitylist, R, mins_n_maxes, saving_dir = multirun_directory) {
   figure_retainer <- c(3,10,4,5,6,7,8,9,11)
+  
   filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop", 
                           "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
                           "_AC_replaced_f_pop", "_cur_inh_attempts")
@@ -278,12 +282,14 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
     file_name <- paste0(R$datez, "_", R$run_name, filename_retainer[individual_figures], population, ".png")
     minY <- mins_n_maxes[individual_figures,population,1]
     maxY <- mins_n_maxes[individual_figures,population,2]
+    
     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(minY, maxY), xaxt="n")
     axis(side = 1, 
           at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]),
                                   ((length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]))/10))),
           labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
+    
     eval(parse(text=stuff))
     lines(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,],col="black", cex=0.2)
     dev.off()
