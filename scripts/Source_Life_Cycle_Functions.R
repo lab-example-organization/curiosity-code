@@ -260,11 +260,18 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
       
       # applies the standard deviation scoring to the males in selection.sylrep_object; 
       # larger score means greater difference between male sylrep and selector's sylrep.
-      temp <- apply(X = selection.sylreps, MARGIN = 1,
-                    FUN = score_similarity,
-                    selector_vector = selector.sylrep)
-      golf_score <- sort(temp)$ix
+      # temp <- apply(X = selection.sylreps, MARGIN = 1,
+      #               FUN = score_similarity,
+      #               selector_vector = selector.sylrep)
+      # golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+      #               FUN = score_similarity,
+      #               selector_vector = selector.sylrep))$ix
       
+      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+                               FUN = score_similarity,
+                               selector_vector = selector.sylrep),
+                         index.return = T,
+                         method = 'radix')$ix
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
       singer <- golf_score[round(curiosity_level[selector.index, population] * (parameters$one_pop_singers[select_type] * parameters$num_pop) + 0.5)]
