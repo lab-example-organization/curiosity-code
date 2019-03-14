@@ -1,9 +1,3 @@
-# Load the C++ function
-sourceCpp(file.path('cpp_source', 'median.cpp'))
-sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
-sourceCpp(file.path('cpp_source', 'sort.cpp'))
-
-
 
 syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   for(population in 1 : parameters$num_pop) {

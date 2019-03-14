@@ -211,7 +211,11 @@ archiveSimFiles <- function(path, filename, archive = FALSE){
 }
 
 multi_runs <- function(shifting_curstart, paramsSource) {
-  
+  # Load the C++ functions
+  sourceCpp(file.path('cpp_source', 'median.cpp'))
+  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
+  sourceCpp(file.path('cpp_source', 'sort.cpp'))
+
   params <- yaml.load_file(file.path("parameters", paramsSource))
   number_of_reps <- as.numeric(params$number_of_reps)
   
