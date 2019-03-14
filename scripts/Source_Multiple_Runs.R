@@ -1,4 +1,3 @@
-print("SMR")
 savinStuff <- function(Parameters, Output_Filename, timestepCharacteristics) {
     datez <- Sys.Date()
     deetz <- c(Parameters$num_timesteps, Parameters$num_pop, Parameters$pop_size, Parameters$sylnum, 
