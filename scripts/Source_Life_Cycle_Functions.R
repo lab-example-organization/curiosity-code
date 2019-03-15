@@ -1,3 +1,5 @@
+# Load the C++ functions
+sourceCpp(file.path('cpp_source','should_pick_neighbor.cpp'))
 
 syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   for(population in 1 : parameters$num_pop) {
@@ -292,9 +294,17 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
           should_continue <- FALSE
         }
         
+        cpp_should_pick_neighbor(1, num_select_chances, select_type,
+                                    chance_for_selection, golf_score,
+                                    singSuccessFilter, singer, lower=0.5,
+                                    upper=0.75)
+
         if(should_continue) {
           for(neighbor in c(1, -1)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.5,upper=0.75)) {
+            if(cpp_should_pick_neighbor(neighbor, num_select_chances, select_type,
+                                    chance_for_selection, golf_score,
+                                    singSuccessFilter, singer, lower=0.5,
+                                    upper=0.75)) {
               singer <- golf_score[singer+neighbor]
               
               moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
@@ -309,7 +319,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
         
         if(should_continue) {
           for(neighbor in c(1, -1, 2, -2)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
+            if(cpp_should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
               
               moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 

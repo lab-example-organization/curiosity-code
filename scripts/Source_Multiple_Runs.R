@@ -239,7 +239,7 @@ multi_runs <- function(shifting_curstart, paramsSource) {
         params$curstarts[[shifting_curstart]]$scMax[2],
         params$curstarts[[shifting_curstart]]$scMax[3],
         params$curstarts[[shifting_curstart]]$scMax[4]),
-      simNumber = params$simNumber[[shifting_curstart]],
+      simNumber = params$simNumberStart + (shifting_curstart - 1),
       runLength = params$runLength,
       SylLearnStyle = params$SylLearnStyle,
       vertOblLearn = c(
