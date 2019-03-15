@@ -42,7 +42,8 @@ bool cpp_update_selexn_data(NumericVector one_pop_singers, List moran,
             }
             sylrep_pairs[i] = temp;
         }
-        curiosities
+        curiosities = {curiosity_value[selected_pair[0], singer_population],
+                       curiosity_value[selected_pair[1], selector_population]};
     }
     for(int i = 0; i < selection_context; i++) {
         
@@ -71,13 +72,15 @@ update_selexn_data <- function(main_parameters, moran, suitor_choices, preferred
                           sylrep_selector)
     curiosities <- c(curiosity_value[selected_pair[1],singer_population],
                      curiosity_value[selected_pair[2],selector_population])
-  } # This happens if giving_up == TRUE. Not ideal for tutor selection, but I guess that's the point of giving up... also, this should basically NEVER happen for tutor context anyway.
+  } 
+  
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
     moran$pairing.pool[pool.row, 1, selector_population] <- selected_pair[bird]
     moran$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
     moran$pairing.pool[pool.row, 2, selector_population] <- curiosities[bird]
   }
+
   moran$pairing.pool[(4 - selection_context), 3, selector_population] <- selection_count
   return(moran)
 }
