@@ -1,4 +1,4 @@
-convert_stored_data <- function(parameters = params, data_dir = getwd(), simplification_factor=100) {
+convert_stored_data <- function(parameters = params, data_dir = getwd(), simplification_factor=100, cyclingParams) {
   num_timesteps = as.numeric(strsplit(parameters$runLength, "k")[[1]][1])*1000
   old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
@@ -12,8 +12,8 @@ convert_stored_data <- function(parameters = params, data_dir = getwd(), simplif
       old_names[data_subset], "_", 1:num_timechunks, 
       " <- readRDS(file = ", '"', data_dir, "/variable-store-", 
       1:num_timechunks, "-", old_names[data_subset], ".RData", '"', ")")
-    cat(data1s, file = file.path("source", "data_subset.R"), sep = "\n")
-    source(file.path("source", "data_subset.R"))
+    cat(data1s, file = file.path("source", "RtempFiles", paste0(cyclingParams, "_data_subset.R")), sep = "\n")
+    source(file.path("source", "RtempFiles", paste0(cyclingParams, "_data_subset.R")))
     
     for(i in 1:num_timechunks) {
       data2s <- paste0(converted_names[data_subset], "[, , ((1 + ((", i, " - 1) * 1000)) : (", i, " * 1000))] <- ", old_names[data_subset], "_", i)

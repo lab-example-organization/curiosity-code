@@ -37,9 +37,9 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
                                                   "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
     info <- readRDS(file = file.path(multiRun_folderList[run_visual], "metadata.RData"))
     data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = params, data_dir = \"", 
-                           multiRun_folderList[run_visual], "\", simplification_factor = 100)")
-    cat(data_convert, file = file.path("source","data_convert.R"), sep = "\n")
-    source(file.path("source", "data_convert.R"), local=TRUE)
+                           multiRun_folderList[run_visual], "\", simplification_factor = 100, cyclingParams = specificSimNumber)")
+    cat(data_convert, file = file.path("source", "RtempFiles",paste0(specificSimNumber, "_data_convert.R")), sep = "\n")
+    source(file.path("source", "RtempFiles",paste0(specificSimNumber, "_data_convert.R")), local=TRUE)
     
     sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data", run_visual, ", 1)")
     sdstbxblahn <- paste0("sdstbxn", run_visual, " <- split_data(converted_data", run_visual, ", 2)")
@@ -52,8 +52,6 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     cursityConveRtDS <- paste0("saveRDS(object = cursity", run_visual, ", file = \"", multirun_directory, "/Cursity", run_visual, ".RData\")")
     curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"", multirun_directory, "/CurHist", run_visual, ".RData\")")
     eval(parse(text=c(sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS)))
-    
-    
   } 
   
       
@@ -180,6 +178,8 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     file.copy(from=file.path(src.dir, x), 
               to=file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_scripts", x), 
               overwrite = FALSE) })
+
+  
   
   return(print("Exit Status: 0"))
 }
