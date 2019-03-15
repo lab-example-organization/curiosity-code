@@ -40,6 +40,12 @@ if(!(dir.exists(file.path(strsplit(getwd(),
           dir.create(file.path(strsplit(getwd(), 
         "curiosity-code", )[[1]][1], "curiosity-code", "source", "temp"))}
 
+if(!(dir.exists(file.path(strsplit(getwd(), 
+        "curiosity-code", )[[1]][1], "curiosity-code", "source", "RtempFiles")))) {
+          
+          dir.create(file.path(strsplit(getwd(), 
+        "curiosity-code", )[[1]][1], "curiosity-code", "source", "RtempFiles"))}
+
 
 # This line will source packagaes, either:
     # by loading them from the computer, or 

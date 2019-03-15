@@ -37,9 +37,9 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
                                                   "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
     info <- readRDS(file = file.path(multiRun_folderList[run_visual], "metadata.RData"))
     data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = params, data_dir = \"", 
-                           multiRun_folderList[run_visual], "\", simplification_factor = 100)")
-    cat(data_convert, file = file.path("source","data_convert.R"), sep = "\n")
-    source(file.path("source", "data_convert.R"), local=TRUE)
+                           multiRun_folderList[run_visual], "\", simplification_factor = 100, cyclingParams = specificSimNumber)")
+    cat(data_convert, file = file.path("source", "RtempFiles",paste0(specificSimNumber, "_data_convert.R")), sep = "\n")
+    source(file.path("source", "RtempFiles",paste0(specificSimNumber, "_data_convert.R")), local=TRUE)
     
     sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data", run_visual, ", 1)")
     sdstbxblahn <- paste0("sdstbxn", run_visual, " <- split_data(converted_data", run_visual, ", 2)")
