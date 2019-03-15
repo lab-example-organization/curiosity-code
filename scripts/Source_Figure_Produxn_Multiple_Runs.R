@@ -52,8 +52,6 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     cursityConveRtDS <- paste0("saveRDS(object = cursity", run_visual, ", file = \"", multirun_directory, "/Cursity", run_visual, ".RData\")")
     curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"", multirun_directory, "/CurHist", run_visual, ".RData\")")
     eval(parse(text=c(sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS)))
-    
-    
   } 
   
       
@@ -180,6 +178,8 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     file.copy(from=file.path(src.dir, x), 
               to=file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_scripts", x), 
               overwrite = FALSE) })
+
+  
   
   return(print("Exit Status: 0"))
 }
