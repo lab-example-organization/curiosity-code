@@ -109,29 +109,36 @@ recordvariable.initialize <- function(P, timestep_fraction, variableID) {
   return(record.variable)
 }
 
-variable.archive <- function(parameters, moran, syllable_object, curiosity_object, data_container, timestep, specificVariable) {
+variable.archive <- function(parameters, moran, syllable_object = FALSE, curiosity_object = FALSE, data_container, timestep, specificVariable) {
   #context_name <- c("parents&offspring","replacedindividuals")
   #if(context == 1) {
-  
+  if (syllable_object) {
+
+  }
   if (specificVariable = 1) {
     for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {
+        #sylrep_rowcol
         data_container[sex, population, timestep] <- mean(rowSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population]))
       }
     }
   } else if (specificVariable = 2) {
     for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {
+        # sylrep_dstbxn
         data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population])
       }
     }
   } else if (specificVariable = 3) {
     for (population in 1:parameters$num_pop) {
+
       data_container[3, population, timestep] <- moran$pairing.pool[2, 3, population]
       data_container[10, population, timestep] <- moran$pairing.pool[3, 3, population]
 
       for (sex in 1:2) {
         data_container[sex, population, timestep] <- mean(curiosity_object[((1 + ((sex-1) * parameters$pop_size/2)):(sex * parameters$pop_size/2)), population])
+
+        # Individual Curiosity Values
         data_container[(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
         data_container[(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
         data_container[(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
@@ -149,15 +156,15 @@ variable.archive <- function(parameters, moran, syllable_object, curiosity_objec
   return(data_container)
 }
 
-make.offspring.calls <- function(parameters, moran){
+make.offspring.calls <- function(parameters, pairing){
   for(sex in 1:2){
     new_index <- c(sample(parameters$pop_calls_matrix[sex, ], 2, replace=T))
-    moran$pairing.pool[(sex + 2), 1, ] <-  new_index
+    pairing[(sex + 2), 1, ] <-  new_index
   }
-  return(moran)
+  return(pairing)
 }
 
-update_selexn_data <- function(main_parameters, moran, suitor_choices, preferred_bird, selector_bird,
+update_selexn_data <- function(main_parameters, pairing, learning, suitor_choices, preferred_bird, selector_bird,
                                curiosity_value, selector_population, selection_context, 
                                sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
   if(!(giving_up)) {
@@ -181,11 +188,11 @@ update_selexn_data <- function(main_parameters, moran, suitor_choices, preferred
   } # This happens if giving_up == TRUE. Not ideal for tutor selection, but I guess that's the point of giving up... also, this should basically NEVER happen for tutor context anyway.
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
-    moran$pairing.pool[pool.row, 1, selector_population] <- selected_pair[bird]
-    moran$learning.pool[pool.row, , selector_population] <- sylrep_pairs[bird,]
-    moran$pairing.pool[pool.row, 2, selector_population] <- curiosities[bird]
+    pairing[pool.row, main_parameters$sylnum + 1, selector_population] <- selected_pair[bird]
+    learning[pool.row, , selector_population] <- sylrep_pairs[bird,]
+    pairing[pool.row, 2, selector_population] <- curiosities[bird]
   }
-  moran$pairing.pool[(4 - selection_context), 3, selector_population] <- selection_count
+  pairing[(4 - selection_context), 3, selector_population] <- selection_count
   return(moran)
 }
 
@@ -209,7 +216,7 @@ score_similarity <- function(suitor_vector, selector_vector) {
   return(sum(AbsVal_diffs)) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
 }
 
-sing.selection <- function(parameters, moran, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
+sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
   #print("sing.selection beginning")
   for(population in 1 : parameters$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
@@ -227,7 +234,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
               context.name <- c("Tutor", "Mate")
               warning(print(paste0("Automatic Teacher(s) = ", auto.teachers[,MTsylrep_filter], " for Population ", population, " ", context.name[select_type], " Selection")))
             }
-            moran = update_selexn_data(parameters, moran, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
+            moran = update_selexn_data(parameters, pairPool, learnPool, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
                                        curiosity_level, population, select_type,
                                        sylrep_object[auto.teachers[1,],,], sylrep_object[auto.teachers[2,MTsylrep_filter],,population], 
                                        num_select_chances[select_type], T)
@@ -319,7 +326,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
         should_continue <- TRUE
         if(singer %in% singSuccessFilter) {
           
-          moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
+          moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
                                      population, select_type, selection.sylreps, selector.sylrep, 
                                      chance_for_selection, F)
           
@@ -331,7 +338,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.5,upper=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
+              moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
                                          population, select_type, selection.sylreps, selector.sylrep, 
                                          chance_for_selection, F)
               
@@ -346,7 +353,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
+              moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
                                          population, select_type, selection.sylreps, selector.sylrep, 
                                          chance_for_selection, F)
               
@@ -362,7 +369,7 @@ sing.selection <- function(parameters, moran, curiosity_level, select_type, sylr
       } else {
         if(sum(sylrep_object[selection.index[singer], , population]) != 0) {
           
-          moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
+          moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
                                      population, select_type, selection.sylreps, selector.sylrep, 
                                      chance_for_selection, F)
           

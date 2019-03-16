@@ -1,17 +1,17 @@
-savinStuff <- function(Parameters, Output_Filename, timestepCharacteristics) {
+savinStuff <- function(Parameters, Output_Filename, moran) {
     datez <- Sys.Date()
     deetz <- c(Parameters$num_timesteps, Parameters$num_pop, Parameters$pop_size, Parameters$sylnum, 
                Parameters$nsspl, Parameters$one_pop_singers, Parameters$curlearnprob, 
                Parameters$learnprob, Parameters$randlearnprob, Parameters$stand.dev, dim(Parameters$pop_calls_matrix), 
-               dim(timestepCharacteristics$pairing.pool), dim(Parameters$curiosity_counter), dim(Parameters$population_syll_probs), 
-               length(Parameters$curiositybreaks), length(Parameters$zero_to_one_template), dim(timestepCharacteristics$learning.pool))
+               dim(moran), dim(Parameters$curiosity_counter), dim(Parameters$population_syll_probs), 
+               length(Parameters$curiositybreaks), length(Parameters$zero_to_one_template), dim(moran))
     names(deetz) <- c("Parameters$num_timesteps", "Parameters$num_pop", "Parameters$pop_size", "Parameters$sylnum", 
                       "Parameters$nsspl", rep("Parameters$one_pop_singers", 2), "Parameters$curlearnprob", 
                        rep("Parameters$learnprob", 2), rep("Parameters$randlearnprob", 2), 
                       "Parameters$stand.dev", rep("dim(Parameters$pop_calls_matrix)", 2), 
-                       rep("dim(timestepCharacteristics$pairing.pool)", 3), rep("dim(Parameters$curiosity_counter)", 2), 
+                       rep("dim(moran)", 3), rep("dim(Parameters$curiosity_counter)", 2), 
                        rep("dim(Parameters$population_syll_probs)", 2), "length(Parameters$curiositybreaks)", 
-                      "length(Parameters$zero_to_one_template)", rep("dim(timestepCharacteristics$learning.pool)", 3))
+                      "length(Parameters$zero_to_one_template)", rep("dim(moran)", 3))
     stuff_to_save <- list(
       docnamez=Output_Filename,
       datez=datez,
@@ -105,7 +105,8 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
   )
   
   moranObjects <- define_temp_data(simParams)
-  
+  # pairing_pool <- define_temp_data(simParams, 2)
+    
   sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
 
   #docnamez <- makeDocnamez(simple_args_pipe = simple_args_pipe)
@@ -132,7 +133,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
   
   
 
-  stuff_to_save <- savinStuff(Parameters = simParams, Output_Filename = docnamez, timestepCharacteristics = moranObjects)
+  stuff_to_save <- savinStuff(Parameters = simParams, Output_Filename = docnamez, moran = moranObjects)
   
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
@@ -144,7 +145,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                                      verbose_output = F, interbreed = F)
       
       moranObjects <- make.offspring.calls(parameters = simParams, 
-                                           moran = moranObjects)
+                                           pairing = pairing_pool)
       
       moranObjects <- curiosity_learn(parameters = simParams, moran = moranObjects, 
                         timestep = single_timestep, inheritance_pattern = curinh_style) 

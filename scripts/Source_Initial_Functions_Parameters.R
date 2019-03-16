@@ -96,27 +96,29 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   # 6 - one_pop_singers, # 13- learnprob,
   # 7 - pop_calls_matrix,# 14- randlearnprob,
 #return(Parameters)
+
 define_temp_data <- function(universal_parameters) {
-  learning.pool <- array(0, c(5, universal_parameters$sylnum, universal_parameters$num_pop))
-  pairing.pool <- array(0, c(5, 5, universal_parameters$num_pop))
-  temp_data <- list(
-    learning.pool = learning.pool,
-    pairing.pool = pairing.pool
-  )
+  # tempCatgry = 1 (learning.pool); tempCatgry = 2 (pairing.pool)
+  # if (tempCatgry ==1) {
+    temp_data <- array(0, c(5, universal_parameters$sylnum + 5, universal_parameters$num_pop))
+    ######   The first params$sylnum columns are learning_pool; the last 5 are pairing_pool
+  # } else {
+    # temp_data <- array(0, c(5, 5, universal_parameters$num_pop))
+  # }
   return(temp_data)
 }
 
 # INITIALIZING FUNCTIONS ##################################
 
 recordvariable.initialize <- function(P, timestep_fraction, variableID) {
-  if (variableID = 1) {
-    record.variable <- sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID = 2) {
-    record.variable <- sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID = 3) {
-    record.variable <- curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID = 4) {
-    record.variable <- curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
+  if (variableID == 1) {
+    record.variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID == 2) {
+    record.variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID == 3) {
+    record.variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID == 4) {
+    record.variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
   }
   # record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
   #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
