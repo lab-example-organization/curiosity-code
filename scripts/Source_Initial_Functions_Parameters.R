@@ -108,12 +108,21 @@ define_temp_data <- function(universal_parameters) {
 
 # INITIALIZING FUNCTIONS ##################################
 
-recordvariable.initialize <- function(P, timestep_fraction) {
-  record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
-                          sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-                          curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
-                          curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
-                          )
+recordvariable.initialize <- function(P, timestep_fraction, variableID) {
+  if (variableID = 1) {
+    record.variable <- sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID = 2) {
+    record.variable <- sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID = 3) {
+    record.variable <- curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID = 4) {
+    record.variable <- curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
+  }
+  # record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
+  #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
+  #                         curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+  #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
+  #                         )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
     # Row 3 covers the number of selections made by females from each population, per timestep.
     # Rows 4-9 cover the individual curiosity values recorded, regarding the individuals that source the curiosity inheritance(father (row 4) and mother (row 5));

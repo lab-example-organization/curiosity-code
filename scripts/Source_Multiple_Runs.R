@@ -112,9 +112,22 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
   
   curiosity_level <- initialize.curiosity(simParams, scMin, scMax)
   
-  day.tuh <- recordvariable.initialize(
-    simParams, timestep_fraction = (simParams$num_timesteps/1000))
+  sylrep_rowcol <- recordvariable.initialize(
+      simParams, timestep_fraction = (
+      simParams$num_timesteps/1000), variableID = 1)
   
+  sylrep_dstbxn <- recordvariable.initialize(
+      simParams, timestep_fraction = (
+      simParams$num_timesteps/1000), variableID = 2)
+
+  curity_mean_t <- recordvariable.initialize(
+      simParams, timestep_fraction = (
+      simParams$num_timesteps/1000), variableID = 3)
+
+  curity_repert <- recordvariable.initialize(
+      simParams, timestep_fraction = (
+      simParams$num_timesteps/1000), variableID = 4)
+
   source(file.path("scripts", "Source_Life_Cycle_Functions.R"))
   
   
@@ -167,10 +180,29 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       sylreps <- resylreps.offspring(parameters = simParams, moran = moranObjects,
                   sylrep_object = sylreps)
       
-      day.tuh <- variable.archive(parameters = simParams, moran = moranObjects, 
-                  syllable_object = sylreps, curiosity_object = curiosity_level, 
-                  data_container = day.tuh, timestep = single_timestep)
-      
+      # recordvariable archiving
+
+      sylrep_rowcol <- variable.archive(parameters = simParams, 
+                       moran = moranObjects, syllable_object = sylreps, 
+                       curiosity_object = curiosity_level, 
+                       data_container = day.tuh, timestep = single_timestep, 
+                       specificVariable = 1)
+      sylrep_dstbxn <- variable.archive(parameters = simParams, 
+                       moran = moranObjects, syllable_object = sylreps, 
+                       curiosity_object = curiosity_level, 
+                       data_container = day.tuh, timestep = single_timestep, 
+                       specificVariable = 2)
+      curity_mean_t <- variable.archive(parameters = simParams, 
+                       moran = moranObjects, syllable_object = sylreps, 
+                       curiosity_object = curiosity_level, 
+                       data_container = day.tuh, timestep = single_timestep, 
+                       specificVariable = 3)
+      curity_repert <- variable.archive(parameters = simParams, 
+                       moran = moranObjects, syllable_object = sylreps, 
+                       curiosity_object = curiosity_level, 
+                       data_container = day.tuh, timestep = single_timestep, 
+                       specificVariable = 4)
+    
     }
     # print("console_copy_sink")
     sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 

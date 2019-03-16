@@ -92,24 +92,58 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
   return(moran)
 }
 
-variable.archive <- function(parameters, moran, syllable_object, curiosity_object, data_container, timestep) {
+
+
+
+
+recordvariable.initialize <- function(P, timestep_fraction, variableID) {
+  if (variableID = 1) {
+    record.variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID = 2) {
+    record.variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID = 3) {
+    record.variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID = 4) {
+    record.variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
+  }
+  return(record.variable)
+}
+
+variable.archive <- function(parameters, moran, syllable_object, curiosity_object, data_container, timestep, specificVariable) {
   #context_name <- c("parents&offspring","replacedindividuals")
   #if(context == 1) {
-  for(population in 1 : parameters$num_pop) {
-    data_container[["curity_mean_t"]][3, population, timestep] <- moran$pairing.pool[2, 3, population]
-    data_container[["curity_mean_t"]][10, population, timestep] <- moran$pairing.pool[3, 3, population]
-    
-    for(sex in 1:2) {
-      data_container[["sylrep_rowcol"]][sex, population, timestep] <- mean(rowSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population]))
-      data_container[["sylrep_dstbxn"]][(((population - 1) * 2) + sex), , timestep] <- colSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population]) # data_container[sylnums filled in by population[sex]] <- colSums(sylnums called by population[sex])
-      data_container[["curity_repert"]][(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_object[((1 + ((sex-1) * parameters$pop_size / 2)):(sex * parameters$pop_size / 2)), population], breaks = parameters$curiositybreaks, plot = FALSE)$counts
-      
-      data_container[["curity_mean_t"]][sex, population, timestep] <- mean(curiosity_object[((1 + ((sex-1) * parameters$pop_size/2)):(sex * parameters$pop_size/2)), population])
-      data_container[["curity_mean_t"]][(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
-      data_container[["curity_mean_t"]][(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
-      data_container[["curity_mean_t"]][(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
-      data_container[["curity_mean_t"]][11, population, timestep] <- moran$pairing.pool[(sex + 2), 5, population]
-      data_container[["curity_mean_t"]][12, population, timestep] <- moran$pairing.pool[sex, 5, population]
+  
+  if (specificVariable = 1) {
+    for (population in 1:parameters$num_pop) {
+      for (sex in 1:2) {
+        data_container[sex, population, timestep] <- mean(rowSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population]))
+      }
+    }
+  } else if (specificVariable = 2) {
+    for (population in 1:parameters$num_pop) {
+      for (sex in 1:2) {
+        data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population])
+      }
+    }
+  } else if (specificVariable = 3) {
+    for (population in 1:parameters$num_pop) {
+      data_container[3, population, timestep] <- moran$pairing.pool[2, 3, population]
+      data_container[10, population, timestep] <- moran$pairing.pool[3, 3, population]
+
+      for (sex in 1:2) {
+        data_container[sex, population, timestep] <- mean(curiosity_object[((1 + ((sex-1) * parameters$pop_size/2)):(sex * parameters$pop_size/2)), population])
+        data_container[(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
+        data_container[(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
+        data_container[(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
+        data_container[11, population, timestep] <- moran$pairing.pool[(sex + 2), 5, population]
+        data_container[12, population, timestep] <- moran$pairing.pool[sex, 5, population]
+      }
+    } 
+  } else if (specificVariable = 4) {
+    for (population in 1:parameters$num_pop) {
+      for (sex in 1:2) {
+        data_container[(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_object[((1 + ((sex-1) * parameters$pop_size / 2)):(sex * parameters$pop_size / 2)), population], breaks = parameters$curiositybreaks, plot = FALSE)$counts
+      }
     }
   }
   return(data_container)

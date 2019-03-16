@@ -56,38 +56,6 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     
   } 
   
-      
-
-      #     timeSpanChunks <- 100
-
-      #     sylrepzlist <- array(0, c(2, dim_source$num_pop, timeSpanChunks, number_of_reps))
-      #     sdstbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timeSpanChunks, number_of_reps))
-      #     cursitylist <- array(0, c(12, dim_source$num_pop, timeSpanChunks, number_of_reps))
-      #     curhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks, number_of_reps))
-
-      #     for(i in 1:number_of_reps) {
-
-      #       curhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
-      #       cursitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
-      #       sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
-      #       sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
-      #     }
-      #     #num_timesteps = as.numeric(strsplit(dim_source$runLength, "k")[[1]][1])*1000
-              
-      #     curHstMeans <- colMeans(aperm(curhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
-      #     curLvlMeans <- colMeans(aperm(cursitylist, c(4, 1, 2, 3)), na.rm = TRUE)
-      #     sylDbnMeans <- colMeans(aperm(sdstbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
-      #     sylRepMeans <- colMeans(aperm(sylrepzlist, c(4, 1, 2, 3)), na.rm = TRUE)
-          
-      #     RunMeans[[individual_run]] <- list(
-      #       sylRepMeans = sylRepMeans,
-      #       sylDbnMeans = sylDbnMeans,
-      #       curLvlMeans = curLvlMeans,
-      #       curHstMeans = curHstMeans
-      #     )
-      #   }
-      #   return(RunMeans)
-      # }
 
   datanames <- c("CurHist","Cursity","SylDist","SylReps")
   listnames <- c("hist","sity","sdst","repz")
@@ -96,11 +64,7 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     listmaker <- paste0(listnames[i], "list[", 1:number_of_repeats, "] <- \"", datanames[i], 1:number_of_repeats, ".RData\"")
     eval(parse(text=c(listlister, listmaker)))
   }
-  # timeSpanChunks <- 100
-  # sylrepzlist <- rep(list(array(0, c(2, params$num_pop, timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
-  # sdstbxnlist <- rep(list(array(0, c((2 * params$num_pop), params$sylnum, timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
-  # cursitylist <- rep(list(array(0, c(12, params$num_pop, timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
-  # curhistlist <- rep(list(array(0, c((2*params$num_pop), (params$num_pop * params$one_pop_singers[1]), timeSpanChunks, number_of_repeats))), number_of_repeats + 1)
+  
   
   sylrepzlist <- list()
   sdstbxnlist <- list()
