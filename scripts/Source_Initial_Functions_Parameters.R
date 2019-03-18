@@ -96,31 +96,42 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   # 6 - one_pop_singers, # 13- learnprob,
   # 7 - pop_calls_matrix,# 14- randlearnprob,
 #return(Parameters)
+
 define_temp_data <- function(universal_parameters) {
-  learning.pool <- array(0, c(5, universal_parameters$sylnum, universal_parameters$num_pop))
-  pairing.pool <- array(0, c(5, 5, universal_parameters$num_pop))
-  temp_data <- list(
-    learning.pool = learning.pool,
-    pairing.pool = pairing.pool
-  )
+  # tempCatgry = 1 (learning.pool); tempCatgry = 2 (pairing.pool)
+  # if (tempCatgry ==1) {
+    temp_data <- array(0, c(5, universal_parameters$sylnum + 5, universal_parameters$num_pop))
+    ######   The first params$sylnum columns are learning_pool; the last 5 are pairing_pool
+  # } else {
+    # temp_data <- array(0, c(5, 5, universal_parameters$num_pop))
+  # }
   return(temp_data)
 }
 
 # INITIALIZING FUNCTIONS ##################################
 
-recordvariable.initialize <- function(P, timestep_fraction) {
-  record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
-                          sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-                          curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
-                          curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
-                          )
+recordvariable.initialize <- function(P, timestep_fraction, variableID) {
+  if (variableID == 1) {
+    record_variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID == 2) {
+    record_variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID == 3) {
+    record_variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+  } else if (variableID == 4) {
+    record_variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
+  }
+  # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
+  #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
+  #                         curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+  #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
+  #                         )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
     # Row 3 covers the number of selections made by females from each population, per timestep.
     # Rows 4-9 cover the individual curiosity values recorded, regarding the individuals that source the curiosity inheritance(father (row 4) and mother (row 5));
     # The curiosity values inherited by the offspring (son (row 6) and daughter (row 7)); and the curiosity values of those killed off (dead male (row 8) and female (row 9)), 
     # per timestep.
     # Then the amount of times curiosity inheritance had to run (see while loop in curiosity_learn) is recorded here
-  return(record.variable)
+  return(record_variable)
 }
 
 #day.tuh <- recordvariable.initialize
