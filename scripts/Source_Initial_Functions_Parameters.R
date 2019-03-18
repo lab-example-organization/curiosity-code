@@ -112,15 +112,15 @@ define_temp_data <- function(universal_parameters) {
 
 recordvariable.initialize <- function(P, timestep_fraction, variableID) {
   if (variableID == 1) {
-    record.variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
   } else if (variableID == 2) {
-    record.variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
   } else if (variableID == 3) {
-    record.variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
   } else if (variableID == 4) {
-    record.variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
   }
-  # record.variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
+  # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
   #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
   #                         curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
   #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
@@ -131,7 +131,7 @@ recordvariable.initialize <- function(P, timestep_fraction, variableID) {
     # The curiosity values inherited by the offspring (son (row 6) and daughter (row 7)); and the curiosity values of those killed off (dead male (row 8) and female (row 9)), 
     # per timestep.
     # Then the amount of times curiosity inheritance had to run (see while loop in curiosity_learn) is recorded here
-  return(record.variable)
+  return(record_variable)
 }
 
 #day.tuh <- recordvariable.initialize

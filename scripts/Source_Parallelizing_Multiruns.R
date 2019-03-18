@@ -63,7 +63,6 @@ paramsFile <- c("params.yaml")
 mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, mc.cores = n_cores)
 
 
-# shifting_curstart <- 1:4
 # paramsFile <- c("params.yaml")
 # profvis({
 #   shifting_curstart <- 1

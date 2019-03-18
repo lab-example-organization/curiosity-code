@@ -1,27 +1,27 @@
 
-syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
+syll_learn <- function(parameters, moranData, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
   for(population in 1 : parameters$num_pop) {
     # Make the reference objects for the teacher - the indices for the syllables unique to the teacher's repertoire, and a set of probabilities for each syllable to be learned
     
     #Vertical Learning;  parameters (set up source_of_ONEs), and considerations
     if(select_type == 2) { #parameters and considerations for VERTICAL LEARNING
       
-      source_of_ONEs <- which(moran$learning.pool[1, , population] == 1) # calls for sylls vertical tutor (father) has
+      source_of_ONEs <- which(moranData[1, 1:parameters$sylnum, population] == 1) # calls for sylls vertical tutor (father) has
       if(length(source_of_ONEs) == 0) {
         saveRDS(object = parameters, file = "parent with no sylls.txt")
-        print(moran$learning.pool[1, , population])
+        print(moranData[1, 1:parameters$sylnum, population])
         stop("wot? parent has no syllables?!")
       } #address syll loss by stopping script if parent has no sylls
       for(sex in 1 : 2) {
-        moran$learning.pool[(sex + 2), , population] <- 0
+        moranData[(sex + 2), 1:parameters$sylnum, population] <- 0
       } # clear the sylreps rows about to be filled in :D
       
       
     } else { #Oblique Learning; source_of_ONEs setup, and considerations 
       
       # double-check tutor isn't out of sylls before comparing repertoire to pupil.
-      source_of_ONEs <- which(moran$learning.pool[5, , population] == 1)
-      pupil_has_ONEs <- which(moran$learning.pool[3, , population] == 1)
+      source_of_ONEs <- which(moranData[5, 1:parameters$sylnum, population] == 1)
+      pupil_has_ONEs <- which(moranData[3, 1:parameters$sylnum, population] == 1)
       if(length(source_of_ONEs) == 0) {
         stop("wot? tutor has no syllables?!")
       }
@@ -51,7 +51,7 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
       for (sylls_to_learn in 1:length(source_of_ONEs)) {
         #moran$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 0
         if(probs[sylls_to_learn] <= (parameters$learnprob[select_type])) {
-          moran$learning.pool[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1
+          moranData[(sex + 2), source_of_ONEs[sylls_to_learn], population] <- 1
         }
         if(probs[sylls_to_learn] > (1 - parameters$randlearnprob[select_type])) {
           r_norm <- rnorm(1, mean = ifelse(randlearn_context == 1,
@@ -70,7 +70,7 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
                                            mean(source_of_ONEs),
                                            source_of_ONEs[sylls_to_learn]),
                                  sd = parameters$stand.dev)
-            while(moran$learning.pool[(sex + 2), floor(r_norm), population] == 1) {
+            while(moranData[(sex + 2), floor(r_norm), population] == 1) {
               r_norm <- r_norm_pool[counter]
               if(r_norm > parameters$sylnum) {
                 r_norm <- parameters$sylnum
@@ -79,76 +79,76 @@ syll_learn <- function(parameters, moran, select_type = 2, totally_new = FALSE, 
               }
               counter = counter + 1
             }
-            moran$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+            moranData[(sex + 2), floor(r_norm), population] <- 1
             average_rate_randlearn_overlap <- append(average_rate_randlearn_overlap, counter)
           } else {
-            moran$learning.pool[(sex + 2), floor(r_norm), population] <- 1
+            moranData[(sex + 2), floor(r_norm), population] <- 1
           }
         }
       }
-      if(totally_new == TRUE) {moran$pairing.pool[sex, 5, population] <- mean(average_rate_randlearn_overlap)}
+      if(totally_new == TRUE) {moranData[sex, parameters$sylnum + 5, population] <- mean(average_rate_randlearn_overlap)}
     }
   }
-  return(moran)
+  return(moranData)
 }
 
-
-
-
-
 recordvariable.initialize <- function(P, timestep_fraction, variableID) {
-  if (variableID = 1) {
+  if (variableID == 1) {
     record.variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID = 2) {
+  } else if (variableID == 2) {
     record.variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID = 3) {
+  } else if (variableID == 3) {
     record.variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID = 4) {
+  } else if (variableID == 4) {
     record.variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
   }
   return(record.variable)
 }
 
-variable.archive <- function(parameters, moran, syllable_object = FALSE, curiosity_object = FALSE, data_container, timestep, specificVariable) {
+variable.archive <- function(parameters, tempData, syllable_object = FALSE, curiosity_object = FALSE, data_container, timestep, specificVariable) {
   #context_name <- c("parents&offspring","replacedindividuals")
   #if(context == 1) {
-  if (syllable_object) {
-
-  }
-  if (specificVariable = 1) {
+  # if (!(syllable_object) && (specificVariable == 1) || (specificVariable == 2)) {
+  #   stop("if specificVariable = 1 | 2, then syllable_object must exist")
+  # } else if ((specificVariable == 3) || (specificVariable == 4) && !(tempData) || !(curiosity_object)) {
+  #   stop("if specificVariable = 3 | 4, then tempData and curiosity_object must exist")
+  # }
+  if (specificVariable == 1) {
     for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {
         #sylrep_rowcol
         data_container[sex, population, timestep] <- mean(rowSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population]))
       }
     }
-  } else if (specificVariable = 2) {
+  
+  } else if (specificVariable == 2) {
     for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {
         # sylrep_dstbxn
         data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population])
       }
     }
-  } else if (specificVariable = 3) {
+  } else if (specificVariable == 3) {
     for (population in 1:parameters$num_pop) {
-
-      data_container[3, population, timestep] <- moran$pairing.pool[2, 3, population]
-      data_container[10, population, timestep] <- moran$pairing.pool[3, 3, population]
+      # curity_mean_t
+      data_container[3, population, timestep] <- tempData[2, parameters$sylnum + 3, population]
+      data_container[10, population, timestep] <- tempData[3, parameters$sylnum + 3, population]
 
       for (sex in 1:2) {
         data_container[sex, population, timestep] <- mean(curiosity_object[((1 + ((sex-1) * parameters$pop_size/2)):(sex * parameters$pop_size/2)), population])
 
         # Individual Curiosity Values
-        data_container[(sex + 3), population, timestep] <- moran$pairing.pool[sex, 2, population]
-        data_container[(sex + 5), population, timestep] <- moran$pairing.pool[(sex + 2), 2, population]
-        data_container[(sex + 7), population, timestep] <- moran$pairing.pool[(sex + 2), 4, population]
-        data_container[11, population, timestep] <- moran$pairing.pool[(sex + 2), 5, population]
-        data_container[12, population, timestep] <- moran$pairing.pool[sex, 5, population]
+        data_container[(sex + 3), population, timestep] <- tempData[sex, parameters$sylnum + 2, population]
+        data_container[(sex + 5), population, timestep] <- tempData[(sex + 2), parameters$sylnum + 2, population]
+        data_container[(sex + 7), population, timestep] <- tempData[(sex + 2), parameters$sylnum + 4, population]
+        data_container[11, population, timestep] <- tempData[(sex + 2), parameters$sylnum + 5, population]
+        data_container[12, population, timestep] <- tempData[sex, parameters$sylnum + 5, population]
       }
     } 
-  } else if (specificVariable = 4) {
+  } else if (specificVariable == 4) {
     for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {
+        # curity_repert
         data_container[(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_object[((1 + ((sex-1) * parameters$pop_size / 2)):(sex * parameters$pop_size / 2)), population], breaks = parameters$curiositybreaks, plot = FALSE)$counts
       }
     }
@@ -156,15 +156,15 @@ variable.archive <- function(parameters, moran, syllable_object = FALSE, curiosi
   return(data_container)
 }
 
-make.offspring.calls <- function(parameters, pairing){
+make.offspring.calls <- function(parameters, temporMan){
   for(sex in 1:2){
     new_index <- c(sample(parameters$pop_calls_matrix[sex, ], 2, replace=T))
-    pairing[(sex + 2), 1, ] <-  new_index
+    temporMan[(sex + 2), parameters$sylnum + 1, ] <-  new_index
   }
-  return(pairing)
+  return(temporMan)
 }
 
-update_selexn_data <- function(main_parameters, pairing, learning, suitor_choices, preferred_bird, selector_bird,
+update_selexn_data <- function(main_parameters, temping, suitor_choices, preferred_bird, selector_bird,
                                curiosity_value, selector_population, selection_context, 
                                sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
   if(!(giving_up)) {
@@ -188,12 +188,12 @@ update_selexn_data <- function(main_parameters, pairing, learning, suitor_choice
   } # This happens if giving_up == TRUE. Not ideal for tutor selection, but I guess that's the point of giving up... also, this should basically NEVER happen for tutor context anyway.
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
-    pairing[pool.row, main_parameters$sylnum + 1, selector_population] <- selected_pair[bird]
-    learning[pool.row, , selector_population] <- sylrep_pairs[bird,]
-    pairing[pool.row, 2, selector_population] <- curiosities[bird]
+    temping[pool.row, main_parameters$sylnum + 1, selector_population] <- selected_pair[bird]
+    temping[pool.row, 1:main_parameters$sylnum, selector_population] <- sylrep_pairs[bird,]
+    temping[pool.row, main_parameters$sylnum + 2, selector_population] <- curiosities[bird]
   }
-  pairing[(4 - selection_context), 3, selector_population] <- selection_count
-  return(moran)
+  temping[(4 - selection_context), 3, selector_population] <- selection_count
+  return(temping)
 }
 
 should_pick_neighbor <- function(index,total_chances,selection_context,current_chance,sorted_selections,selection_filter,preferred_bird,lower=0,upper=Inf) {
@@ -216,7 +216,7 @@ score_similarity <- function(suitor_vector, selector_vector) {
   return(sum(AbsVal_diffs)) # Output: value of similarity/dissimilarity between sylrep of suitors and selector.
 }
 
-sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
+sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
   #print("sing.selection beginning")
   for(population in 1 : parameters$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
@@ -234,7 +234,7 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
               context.name <- c("Tutor", "Mate")
               warning(print(paste0("Automatic Teacher(s) = ", auto.teachers[,MTsylrep_filter], " for Population ", population, " ", context.name[select_type], " Selection")))
             }
-            moran = update_selexn_data(parameters, pairPool, learnPool, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
+            tempMoran = update_selexn_data(parameters, tempMoran, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
                                        curiosity_level, population, select_type,
                                        sylrep_object[auto.teachers[1,],,], sylrep_object[auto.teachers[2,MTsylrep_filter],,population], 
                                        num_select_chances[select_type], T)
@@ -256,7 +256,7 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
         # a randomly-selected female for the mating context, and the offspring for tutoring.
         
         singSuccessFilter <- 1 : ((parameters$one_pop_singers[select_type]) * (parameters$num_pop)) # "1-20"
-        selector.index <- moran$pairing.pool[3, 1, population]
+        selector.index <- tempMoran[3, parameters$sylnum + 1, population]
       } else {
         singSuccessFilter <- (1 + ((population - 1) * (parameters$one_pop_singers[select_type]))) : (population * parameters$one_pop_singers[select_type]) # "1-10," or "11-20"
         selector.index <- sample(parameters$pop_calls_matrix[2, ], 1)
@@ -326,7 +326,7 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
         should_continue <- TRUE
         if(singer %in% singSuccessFilter) {
           
-          moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
+          tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
                                      population, select_type, selection.sylreps, selector.sylrep, 
                                      chance_for_selection, F)
           
@@ -338,7 +338,7 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.5,upper=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
+              tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
                                          population, select_type, selection.sylreps, selector.sylrep, 
                                          chance_for_selection, F)
               
@@ -353,7 +353,7 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
+              tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
                                          population, select_type, selection.sylreps, selector.sylrep, 
                                          chance_for_selection, F)
               
@@ -369,7 +369,7 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
       } else {
         if(sum(sylrep_object[selection.index[singer], , population]) != 0) {
           
-          moran = update_selexn_data(parameters, pairPool, learnPool, selection.index, singer, selector.index, curiosity_level, 
+          tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
                                      population, select_type, selection.sylreps, selector.sylrep, 
                                      chance_for_selection, F)
           
@@ -379,10 +379,10 @@ sing.selection <- function(parameters, pairPool, learnPool, curiosity_level, sel
       chance_for_selection = chance_for_selection + 1
     }
   }
-  return(moran)
+  return(tempMoran)
 }
 
-curiosity_learn <- function(parameters, moran, timestep = single_timestep, inheritance_pattern = 1){
+curiosity_learn <- function(parameters, tempObjects, timestep = single_timestep, inheritance_pattern = 1){
   
   curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2))
   # For posterity: curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), 
@@ -393,50 +393,50 @@ curiosity_learn <- function(parameters, moran, timestep = single_timestep, inher
   for(population in 1 : (parameters$num_pop)) {
     
     for(sex in 1:2) {
-      if(moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+      if(tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
       
       curinh_attempts <- 1
-      while((moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population]))) < 0) {
+      while((tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population]))) < 0) {
         newcuriosity[sex, population] <- runif(1, 0, 1)
         curinh_attempts <- curinh_attempts + 1
       }
-      while((moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population]))) > 1) {
+      while((tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population]))) > 1) {
         newcuriosity[sex, population] <- runif(1, -1, 0)
         curinh_attempts <- curinh_attempts + 1
       }
       
-      new.curiosity <- moran$pairing.pool[curinh_patterns[inheritance_pattern,sex], 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
+      new.curiosity <- tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
       
-      moran$pairing.pool[(sex + 2), 4, population] <- moran$pairing.pool[(sex + 2), 2, population]
-      moran$pairing.pool[(sex + 2), 2, population] <- new.curiosity
-      moran$pairing.pool[(sex + 2), 5, population] <- curinh_attempts
+      tempObjects[(sex + 2), parameters$sylnum + 4, population] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
+      tempObjects[(sex + 2), parameters$sylnum + 2, population] <- new.curiosity
+      tempObjects[(sex + 2), parameters$sylnum + 5, population] <- curinh_attempts
     }
   }
-  return(moran)
+  return(tempObjects)
 }
 
-recuriosity.offspring <- function(parameters, moran, curiosity_object) {
+recuriosity.offspring <- function(parameters, objectMoran, curiosity_object) {
   for(population in 1:parameters$num_pop) {
     for(sex in 1:2) {
       #index <- moran$pairing.pool[(sex + 2), 1, population]
-      curiosity_object[moran$pairing.pool[(sex + 2), 1, population], population] <- moran$pairing.pool[(sex + 2), 2, population]
+      curiosity_object[objectMoran[(sex + 2), parameters$sylnum + 1, population], population] <- objectMoran[(sex + 2), parameters$sylnum + 2, population]
     }
   }
   return(curiosity_object)
 }
 
-resylreps.offspring <- function(parameters, moran, sylrep_object) {
+resylreps.offspring <- function(parameters, moranObjectTemp, sylrep_object) {
   for(population in 1:parameters$num_pop) {
     for(sex in 1:2) {
       #index <- moran$pairing.pool[(sex + 2), 1, population]
       #index_sylrep <- moran$learning.pool[(sex + 2), , population]
-      sylrep_object[moran$pairing.pool[(sex + 2), 1, population], , population] <- moran$learning.pool[(sex + 2), , population]
+      sylrep_object[moranObjectTemp[(sex + 2), parameters$sylnum + 1, population], , population] <- moranObjectTemp[(sex + 2), 1:parameters$sylnum, population]
     }
   }
   return(sylrep_object)
 }
 
-store_timesteps <- function(parameters, filename = thousand_timesteps, object_record = day.tuh, saved_stuff, syll_container, cur_container, FolderName = FolderName){
+store_timesteps <- function(parameters, filename = thousand_timesteps, record_1, record_2, record_3, record_4, saved_stuff, syll_container, cur_container, FolderName = FolderName){
    # # # #  #directory <- getwd()
   results_directory <- file.path('results')
   if(filename == 1) {
@@ -455,10 +455,19 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, object_re
     # FolderName <- multiRun_folderList[length(multiRun_folderList)]
   # }# sets up the master folder for the greater simulation, creates and begins to fill the variable store folder for this run and puts 
   
-  for(deyteh in 1:length(object_record)) {
-    file.create(file.path(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
-    objekshun <- object_record[[deyteh]]
-    saveRDS(object = objekshun, file = file.path(FolderName, paste0("variable-store-", filename, "-", names(object_record)[[deyteh]], ".RData")))
+  for(deyteh in 1:4) {
+    thing <- c("sylrep_rowcol", "sylrep_dstbxn", "curity_mean_t", "curity_repert")
+    file.create(file.path(FolderName, paste0("variable-store-", filename, "-", thing[deyteh], ".RData")))
+    if (deyteh == 1) {
+      objekshun <- record_1
+    } else if (deyteh == 2) {
+      objekshun <- record_2
+    } else if (deyteh == 3) {
+      objekshun <- record_3
+    } else if (deyteh == 4) {
+      objekshun <- record_4
+    }
+    saveRDS(object = objekshun, file = file.path(FolderName, paste0("variable-store-", filename, "-", thing[deyteh], ".RData")))
   }
   
   saveRDS(object = parameters, file = file.path(FolderName, "parameters.RData"))
