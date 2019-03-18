@@ -296,15 +296,11 @@ multi_runs <- function(shifting_curstart, paramsSource) {
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
-  # print("about to archive console copy")
-  # file.copy(from = file.path("source", "temp", paste0(shifting_curstart, "_console_copy.txt")), 
-              # to = file.path("source", "archive", paste0(shifting_curstart, "_console_copy.txt")), overwrite = T)
-  # print("about to archive sim data")
-  # file.copy(from = file.path("source", "temp", paste0(shifting_curstart, "_sim_data.txt")), 
-              # to = file.path("source", "archive", paste0(shifting_curstart, "_sim_data.txt")), overwrite = T)
   
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(specificSimNumber = shifting_curstart, 
                  number_of_repeats = number_of_reps,
                  paramsSource = paramsSource)
+  archiveSimFiles(path = file.path("source", "RtempFiles"), filename = paste0(shifting_curstart, "_data_convert.R"), archive = FALSE)
+  archiveSimFiles(path = file.path("source", "RtempFiles"), filename = paste0(shifting_curstart, "_data_subset.R"), archive = FALSE)
 }
