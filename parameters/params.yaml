@@ -398,3 +398,4 @@ standard_deviation: [2]
 # 1: father; 2: mother; 3: same; 4:opposite
 curinh_pattern: [2]
 one_pop_singers: [10, 10]
+outputSimplify: [100] # This is the number of measurements to take from results when making figures

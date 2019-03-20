@@ -306,5 +306,6 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(specificSimNumber = shifting_curstart, 
                  number_of_repeats = number_of_reps,
-                 paramsSource = paramsSource)
+                 paramsSource = paramsSource,
+                 simplification_factor = params$outputSimplify)
 }
