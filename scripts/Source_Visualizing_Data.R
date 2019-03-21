@@ -71,12 +71,12 @@ harvest_converted_data <- function() {
 #converted_data <- harvest_converted_data()
 process_data <- function(data_conglomerate = converted_data, specificRepeat = run_visual, path = getwd()) {
   objectnames <- c("sylrepz", "sdstbxn", "cursity", "curhist")
-  datanames <- c("CurHist","Cursity","SylDist","SylReps")
+  datanames <- c("SylReps", "SylDist", "Cursity", "CurHist")
+  modified_data <- c()
   for (data_subset in 1:4) {
     modified_data <- data_conglomerate[[data_subset]]
     saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
   }
-  return(modified_data)
 }
 
 paste_split_data_runs <- function(data_subset, num_runs = 10, also_mean = TRUE) {
@@ -258,14 +258,15 @@ summary_statistics <- function(parameters, Q, R, population, simplification_fact
 min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist, 
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, 
                          sylrepzlist = sylrepzlist) {
-  mins_n_maxes <- array(0,c(14,2,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
+  nrowMinsMaxes <- 14
+  mins_n_maxes <- array(0,c(nrowMinsMaxes,parameters$num_pop,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
   mn_mx_container <- c("min", "max") # 3rd-dim-dependent --- 
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectSubset[k]])
   figureSubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2) # row-dependent --- k
   objectSubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2) # row-dependent --- k
   
   for(j in 1:parameters$num_pop) {
-    for(k in 1:nrow(mins_n_maxes)) {
+    for(k in 1:nrowMinsMaxes ) {
       for(L in 1:2) {
         # This is for min (1) and max (2)
         container <- vector("numeric", number_of_runs)

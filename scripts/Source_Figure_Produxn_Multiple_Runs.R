@@ -1,5 +1,5 @@
 
-figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = paramsSource, simplification_factor = 100) {
+figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSource = paramsSource, simplification_factor = 100) {
   print("figpromultrunStart")
   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
@@ -42,7 +42,7 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
     cat(data_convert, file = file.path("source", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), sep = "\n")
     source(file.path("source", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), local=TRUE)
     
-    movingOutput <- paste0("process_data(converted_data", run_visual, ", specificRepeat = run_visual, path = multiRun_folderList[run_visual])")
+    movingOutput <- paste0("process_data(converted_data", run_visual, ", specificRepeat = run_visual, path = multirun_directory)")
     eval(parse(text=movingOutput))
 # =======
 #     data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = params, data_dir = \"", 
@@ -100,25 +100,25 @@ figProdMultRun <- function(specificSimNumber, number_of_repeats, paramsSource = 
   print("histlist")
   for(i in 1:length(curhistlist[[1]])) {
     eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[", 
-                           paste0(1:(number_of_repeats),"]][i],curhistlist[[", collapse=''), 
+                           paste0(1:(number_of_repeats - 1),"]][i],curhistlist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
   print("sitylist")
   for(i in 1:length(cursitylist[[1]])) {
     eval(parse(text=paste0("cursitylist[[number_of_repeats + 1]][i] <- mean(c(cursitylist[[", 
-                           paste0(1:(number_of_repeats),"]][i],cursitylist[[", collapse=''), 
+                           paste0(1:(number_of_repeats - 1),"]][i],cursitylist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
   print("sdstlist")
   for(i in 1:length(sdstbxnlist[[1]])) {
     eval(parse(text=paste0("sdstbxnlist[[number_of_repeats + 1]][i] <- mean(c(sdstbxnlist[[", 
-                           paste0(1:(number_of_repeats),"]][i],sdstbxnlist[[", collapse=''), 
+                           paste0(1:(number_of_repeats - 1),"]][i],sdstbxnlist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
   print("repzlist")
   for(i in 1:length(sylrepzlist[[1]])) {
     eval(parse(text=paste0("sylrepzlist[[number_of_repeats + 1]][i] <- mean(c(sylrepzlist[[", 
-                           paste0(1:(number_of_repeats),"]][i],sylrepzlist[[", collapse=''), 
+                           paste0(1:(number_of_repeats - 1),"]][i],sylrepzlist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
   print("last_stats")
