@@ -1,19 +1,27 @@
 
 
-syll_learn <- function(parameters, moranData, select_type = 2, totally_new = FALSE, randlearn_context = 1, verbose = FALSE){ # context decides whether the learning is vertical (2) or oblique (1)
-  for(population in 1 : parameters$num_pop) {
+syll_learn <- function (parameters, moranData, select_type = 2, 
+                       totally_new = FALSE, randlearn_context = 1, 
+                       verbose = FALSE) { 
+  
+  # context decides whether the learning is vertical (2) or oblique (1)
+  
+  for (population in 1 : parameters$num_pop) {
     # Make the reference objects for the teacher - the indices for the 
     # syllables unique to the teacher's repertoire, and a set of 
     # probabilities for each syllable to be learned
     
     #Vertical Learning;  parameters (set up source_of_ONEs), and considerations
     
-    if(select_type == 2) { #parameters and considerations for VERTICAL LEARNING
+    if (select_type == 2) { 
       
-      source_of_ONEs <- which(moranData[1, 1:parameters$sylnum, population] == 1) # calls for sylls vertical tutor (father) has
+      #parameters and considerations for VERTICAL LEARNING
+      source_of_ONEs <- which(
+        moranData[1, 1:parameters$sylnum, population] == 1) 
+        # calls for sylls vertical tutor (father) has
 
       if(length(source_of_ONEs) == 0) {
-        saveRDS(object = parameters, file = "parent with no sylls.txt")
+        fwrite(parameters,"parent with no sylls.csv")
         print(moranData[1, 1:parameters$sylnum, population])
         stop("wot? parent has no syllables?!")
       } #address syll loss by stopping script if parent has no sylls
@@ -26,9 +34,12 @@ syll_learn <- function(parameters, moranData, select_type = 2, totally_new = FAL
     } else { #Oblique Learning; source_of_ONEs setup, and considerations 
       
 
-      # double-check tutor isn't out of sylls before comparing repertoire to pupil.
-      source_of_ONEs <- which(moranData[5, 1:parameters$sylnum, population] == 1)
-      pupil_has_ONEs <- which(moranData[3, 1:parameters$sylnum, population] == 1)
+      # double-check that the tutor isn't out 
+      # of sylls before comparing repertoire to pupil.
+      source_of_ONEs <- which(
+        moranData[5, 1:parameters$sylnum, population] == 1)
+      pupil_has_ONEs <- which(
+        moranData[3, 1:parameters$sylnum, population] == 1)
       
       if(length(source_of_ONEs) == 0) {
         stop("wot? tutor has no syllables?!")
@@ -187,28 +198,27 @@ update_selexn_data <- function(main_parameters, temping, suitor_choices, preferr
                                curiosity_value, selector_population, selection_context, 
                                sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
 
+  selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
+                       selector_bird)          # Bird doing the selecting
+
   if(!(giving_up)) {
     singer_population <- ceiling(
-      preferred_bird/main_parameters$one_pop_singers[selection_context])
+    preferred_bird/main_parameters$one_pop_singers[selection_context])
     
-    selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
-                       selector_bird)          # Bird doing the selecting
     sylrep_pairs <- rbind(sylreps_choices[preferred_bird,],
                           sylrep_selector)
-    curiosities <- c(curiosity_value[selected_pair[1],singer_population],
-                     curiosity_value[selected_pair[2],selector_population])
   } else {
     singer_population <- selector_population 
     
-    selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
-                       selector_bird)          # Bird doing the selecting
     sylrep_pairs <- rbind(sylreps_choices[preferred_bird,,singer_population],
                           sylrep_selector)
-    curiosities <- c(curiosity_value[selected_pair[1],singer_population],
-                     curiosity_value[selected_pair[2],selector_population])
   } # This happens if giving_up == TRUE. Not ideal for tutor selection, 
     # but I guess that's the point of giving up... also, this should 
     # basically NEVER happen for tutor context anyway.
+
+  curiosities <- c(curiosity_value[selected_pair[1],singer_population],
+                     curiosity_value[selected_pair[2],selector_population])
+
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
 
@@ -443,16 +453,36 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
 }
 
 
-curiosity_learn <- function(parameters, tempObjects, timestep = single_timestep, inheritance_pattern = 1){
+curiosity_learn <- function (parameters, 
+                             tempObjects, 
+                             timestep = single_timestep, 
+                             inheritance_pattern = 1) {
   
-  curinh_patterns <- array(data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2))
-  # For posterity: curinh_patterns <- array(
-  # data = c(1, 2, 1, 2, 1, 2, 2, 1), dim = c(4,2), 
-  # dimnames = list(c("father", "mother", "same", "opposite"), c("male birb", 
-  # "female birb"))) MAKE BLENDED INHERITANCE OPTION - MAYBE USE 
-  # ZERO_TO_ONE_TEMPLATE
-  newcuriosity <- array(data = runif((parameters$num_pop * 2), -1, 1), 
-    dim = c(2, parameters$num_pop))
+  curinh_patterns <- array (
+    data = c (
+      1, 2, 
+      1, 2, 
+      1, 2, 
+      2, 1
+    ), 
+    dim = c (
+      4,2
+    ),
+    dimnames = list (c ("father", "mother", "same", "opposite"), 
+                     c ("male birb", "female birb")
+                   )
+  )
+  # For posterity: 
+  #   curinh_patterns <- array(
+  #     data = c(1, 2, 1, 2, 1, 2, 2, 1), 
+  #     dim = c(4,2), 
+  #     dimnames = list(c("father", "mother", "same", "opposite"), 
+  #                     c("male birb", "female birb")
+  #                    )
+  #   ) MAKE BLENDED INHERITANCE OPTION - MAYBE USE ZERO_TO_ONE_TEMPLATE
+  newcuriosity <- array(
+          data = runif((parameters$num_pop * 2), -1, 1), 
+          dim = c(2, parameters$num_pop))
   
   for(population in 1 : (parameters$num_pop)) {
     
@@ -516,14 +546,20 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, record_1,
       "variable_store", paste0(run_timedate, "-GMT-variable-store")))
     FolderName <- file.path(results_directory, saved_stuff$docnamez, 
       "variable_store", paste0(run_timedate, "-GMT-variable-store"))
-    saveRDS(object = saved_stuff, file = file.path(FolderName, 
+    fwrite(saved_stuff, file.path(FolderName, 
       "metadata.RData"))
-  }
+  } else {
+    FolderName <- fread (file.path(
+        "source", "temp", paste0(
+          "Foldername_", parameters$simNumber, ".csv")
+  ))}
   
 
   for(deyteh in 1:4) {
-    thing <- c("sylrep_rowcol", "sylrep_dstbxn", "curity_mean_t", "curity_repert")
-    file.create(file.path(FolderName, paste0("variable-store-", filename, "-", thing[deyteh], ".RData")))
+    thing <- c("sylrep_rowcol", "sylrep_dstbxn", 
+      "curity_mean_t", "curity_repert")
+    file.create(file.path(FolderName, paste0(
+      "variable-store-", filename, "-", thing[deyteh], ".RData")))
     if (deyteh == 1) {
       objekshun <- record_1
     } else if (deyteh == 2) {
@@ -533,15 +569,19 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, record_1,
     } else if (deyteh == 4) {
       objekshun <- record_4
     }
-    saveRDS(object = objekshun, file = file.path(FolderName, paste0("variable-store-", filename, "-", thing[deyteh], ".RData")))
+    fwrite(objekshun, file.path(FolderName, paste0(
+      "variable-store-", filename, "-", thing[deyteh], ".csv")))
   }
   
-  saveRDS(object = parameters, file = file.path(
-    FolderName, "parameters.RData"))
-  saveRDS(object = syll_container, file = file.path(
-    FolderName, "end_sylbls.RData"))
-  saveRDS(object = cur_container, file = file.path(
-    FolderName, "end_cursty.RData"))
+  fwrite(FolderName, file.path(
+    "source", "temp", paste0(
+      "Foldername_", parameters$simNumber, ".csv")))
+  fwrite(parameters, file.path(
+    FolderName, "parameters.csv"))
+  fwrite(syll_container, file.path(
+    FolderName, "end_sylbls.csv"))
+  fwrite(cur_container, file.path(
+    FolderName, "end_cursty.csv"))
   
   return(FolderName)
 }

@@ -5,14 +5,15 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
   print("multiRunFolderList")
-  params = yaml.load_file(file.path("parameters", paramsSource))
-  print("params load")
-  for(run_visual in 1:number_of_repeats) {
+  params = yaml.load_file (file.path ("parameters", paramsSource))
+  print ("params load")
+  converted_data <- vector ("list", number_of_repeats)
+  for (run_visual in 1:number_of_repeats) {
     #run_visual=1
-    if(run_visual == 1) {
-      multiRunTime <- format(Sys.time(), "%F-%H%M%S")
-      print("run_visual == 1")
-      if(!(dir.exists(file.path(strsplit(multiRun_folderList[run_visual], 
+    if (run_visual == 1) {
+      multiRunTime <- format (Sys.time (), "%F-%H%M%S")
+      print ("run_visual == 1")
+      if (! (dir.exists (file.path (strsplit (multiRun_folderList[run_visual], 
         "/variable_store", )[[1]][1], "multirun_output")))) {
           
           dir.create(file.path(strsplit(multiRun_folderList[run_visual], 
@@ -22,8 +23,9 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
           "/variable_store", )[[1]][1], "multirun_output", 
           paste0(multiRunTime, "-GMT-multirun-output")))
           }
-      if(!(file.exists(file.path(strsplit(multiRun_folderList[run_visual], 
-        "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData"))))) {
+      if(!(file.exists(file.path(strsplit(
+        multiRun_folderList[run_visual], "variable_store", )[[1]][1], 
+        paste0("Group_", specificSimNumber, "_folderList.RData"))))) {
           saveRDS(object = multiRun_folderList, file = 
                        file.path(strsplit(multiRun_folderList[run_visual], 
           "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData")))}
@@ -36,32 +38,17 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
                                   list.files(path = paste0(strsplit(multiRun_folderList[run_visual], 
                                                   "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
     info <- readRDS(file = file.path(multiRun_folderList[run_visual], "metadata.RData"))
-# <<<<<<< HEAD
-    data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parms = params, data_dir = \"", 
-                           multiRun_folderList[run_visual], "\", simpleObjectSize = simplification_factor)")
-    cat(data_convert, file = file.path("source", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), sep = "\n")
-    source(file.path("source", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), local=TRUE)
     
-    movingOutput <- paste0("process_data(converted_data", run_visual, ", specificRepeat = run_visual, path = multirun_directory)")
-    eval(parse(text=movingOutput))
-# =======
-#     data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parameters = params, data_dir = \"", 
-#                            multiRun_folderList[run_visual], "\", simplification_factor = 100, cyclingParams = specificSimNumber)")
-#     cat(data_convert, file = file.path("source", "RtempFiles",paste0(specificSimNumber, "_data_convert.R")), sep = "\n")
-#     source(file.path("source", "RtempFiles",paste0(specificSimNumber, "_data_convert.R")), local=TRUE)
+    # data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parms = params, data_dir = \"", 
+    #                        multiRun_folderList[run_visual], "\", simpleObjectSize = simplification_factor)")
+    # cat(data_convert, file = file.path("source", "RtempFiles", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), sep = "\n")
+    # source(file.path("source", "RtempFiles", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), local=TRUE)
     
-#     sylrepblahz <- paste0("sylrepz", run_visual, " <- split_data(converted_data", run_visual, ", 1)")
-#     sdstbxblahn <- paste0("sdstbxn", run_visual, " <- split_data(converted_data", run_visual, ", 2)")
-#     cursitblahy <- paste0("cursity", run_visual, " <- split_data(converted_data", run_visual, ", 3)")
-#     curhisblaht <- paste0("curhist", run_visual, " <- split_data(converted_data", run_visual, ", 4)")
-#     eval(parse(text=c(sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht)))
-    
-#     sylrepzConveRtDS <- paste0("saveRDS(object = sylrepz", run_visual, ", file = \"", multirun_directory, "/SylReps", run_visual, ".RData\")")
-#     sdstbxnConveRtDS <- paste0("saveRDS(object = sdstbxn", run_visual, ", file = \"", multirun_directory, "/SylDist", run_visual, ".RData\")")
-#     cursityConveRtDS <- paste0("saveRDS(object = cursity", run_visual, ", file = \"", multirun_directory, "/Cursity", run_visual, ".RData\")")
-#     curhistConveRtDS <- paste0("saveRDS(object = curhist", run_visual, ", file = \"", multirun_directory, "/CurHist", run_visual, ".RData\")")
-#     eval(parse(text=c(sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS)))
-# >>>>>>> 640a70cf98c64f7d6432ecffbbe038e657f5ad54
+    converted_data[[run_visual]] <- convert_stored_data(parms = params, data_dir = multiRun_folderList[run_visual], simpleObjectSize = simplification_factor)
+    process_data(converted_data, specificRepeat = run_visual, path = multirun_directory)
+
+    # movingOutput <- paste0("process_data(converted_data", run_visual, ", specificRepeat = run_visual, path = multirun_directory)")
+    # eval(parse(text=movingOutput))
   } 
   
   print("makin' lists")
