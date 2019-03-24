@@ -1,8 +1,13 @@
 convert_stored_data <- function(parms = params, 
                                 data_dir = getwd(), 
-                                simpleObjectSize=100) {
-  
-  nTs = as.numeric(strsplit(parms$runLength, "k")[[1]][1])*1000
+                                reduceFactor=100) {
+  # This function takes
+
+
+  nTs = as.numeric(strsplit(parms$runLength, "k")[[1]][1])
+  KnTs = nTs*1000
+  CnTs = nTs*100
+  DnTs = nTs*10
   npp <- parms$num_pop
   ops <- parms$one_pop_singers
   snm <- parms$sylnum
@@ -19,58 +24,54 @@ convert_stored_data <- function(parms = params,
   # cursity <- array(0, c(12, npp, nTs))
   # curhist <- array(0, c((2*npp), (npp * ops[1]), nTs))
   
-  converted_data <- list(sylrepz = array(0, c(2, npp, nTs)),
-                         sdstbxn = array(0, c((2 * npp), snm, nTs)), 
-                         cursity = array(0, c(12, npp, nTs)), 
-                         curhist = array(0, c((2*npp), (npp * ops[1]), nTs)))
-  
-  numDataChunks <- nTs/1000
-  for(data_subset in 1:4) {
+  consolidated_data <- list(
+    sylrepz = array (0, c (2, npp, KnTs)),
+    sdstbxn = array (0, c ((2 * npp), snm, KnTs)), 
+    cursity = array (0, c (12, npp, KnTs)), 
+    curhist = array (0, c ((2*npp), (npp * ops[1]), KnTs)))
+
+  reducedIndices <- seq.int (reduceFactor, KnTs, reduceFactor)
+
+  converted_data <- list(
+    sylrepz = consolidated_data$sylrepz [,,seq.int (reduceFactor, KnTs, reduceFactor)],
+    sdstbxn = consolidated_data$sdstbxn [,,seq.int (reduceFactor, KnTs, reduceFactor)],
+    cursity = consolidated_data$cursity [,,seq.int (reduceFactor, KnTs, reduceFactor)],
+    curhist = consolidated_data$curhist [,,seq.int (reduceFactor, KnTs, reduceFactor)]
+  )
+  for(specificChunk in 1:nTs) {
     
-    # thing <- paste0(converted_names[data_subset], 
+    # thing <- paste0(consolidated_names[specificChunk], 
     #       "[, , ((1 + ((", 1:numDataChunks, " - 1) * 1000)) : (", 
     #       1:numDataChunks, " * 1000))] <- fread(", '"', 
     #       data_dir, "/variable-store-", 1:numDataChunks, "-", 
-    #       old_names[data_subset], ".csv", '"', ")")
+    #       old_names[specificChunk], ".csv", '"', ")")
     # eval(parse(text=thing))
-    
-    converted_data[[data_subset]] <- 
-
-    if(data_subset==4) {
-      sapply(1:4, function(x) {rm(list=ls(pattern=old_names[x]), envir = .GlobalEnv)})
+    for (data_subset in 1:4) {
+      SC <- (1 + ((specificChunk - 1)*1000)) # output_chunk_start
+      EC <- (specificChunk)*1000 # output_chunk_end
+      consolidated_data[[data_subset]][,,SC:EC] <- readRDS(
+        file.path(data_dir, paste0(
+          "variable-store-", specificChunk, "-",  
+          old_names[data_subset], ".RData")))
     }
   }
 
-  # within converted_data, converted files are simplified by the factor put in the simpleObjectSize argument
-  # converted_data <- list(sylrepz = sylrepz[,,tail(seq.int(1,nTstps,
-  #                         (nTstps)/(simpleObjectSize)), simpleObjectSize)],
-  #                        sdstbxn = sdstbxn[,,tail(seq.int(1,nTstps,
-  #                         (nTstps)/(simpleObjectSize)), simpleObjectSize)], 
-  #                        cursity = cursity[,,tail(seq.int(1,nTstps,
-  #                         (nTstps)/(simpleObjectSize)), simpleObjectSize)], 
-  #                        curhist = curhist[,,tail(seq.int(1,nTstps,
-  #                         (nTstps)/(simpleObjectSize)), simpleObjectSize)])
+  for (slice in 1:length(converted_data[[1]][1,1,])) {
+    for (data_subset in 1:4) {
+      converted_data[[data_subset]][,,slice] <- consolidated_data[[data_subset]][,,seq.int (reduceFactor, KnTs, reduceFactor) [slice]]
+    }
+  }
+
+  # converted_data <- list(
+  #   sylrepz <- do.call(abind, consolidated_data[[1]]),
+  #   sdstbxn <- do.call(abind, consolidated_data[[2]]),
+  #   cursity <- do.call(abind, consolidated_data[[3]]),
+  #   curhist <- do.call(abind, consolidated_data[[4]])
+  # )
   
   return(converted_data)
 }
 
-record_converted_data <- function(converted_data = converted_data) {
-  converted_data[[sylrepz]] = saveRDS(file = "sylreps.RData")
-  converted_data[[sdstbxn]] = saveRDS(file = "sylnums.RData")
-  converted_data[[cursity]] = saveRDS(file = "cursity.RData")
-  converted_data[[curhist]] = saveRDS(file = "curhist.RData")
-}
-
-harvest_converted_data <- function() {
-  sylrepz = readRDS(file = "sylreps.RData")
-  sdstbxn = readRDS(file = "sylnums.RData")
-  cursity = readRDS(file = "cursity.RData")
-  curhist = readRDS(file = "curhist.RData")
-  converted_data <- list(c(sylrepz = sylrepz, sdstbxn = sdstbxn, cursity = cursity, curhist = curhist))
-  return(converted_data)
-}
-
-#converted_data <- harvest_converted_data()
 process_data <- function (data_conglomerate = converted_data, specificRepeat = run_visual, path = getwd()) {
   objectnames <- c("sylrepz", "sdstbxn", "cursity", "curhist")
   datanames <- c("SylReps", "SylDist", "Cursity", "CurHist")
@@ -79,13 +80,17 @@ process_data <- function (data_conglomerate = converted_data, specificRepeat = r
     for (iteration in 1:specificRepeat) {
       for (data_subset in 1:4) {
         modified_data <- data_conglomerate[[iteration]][[data_subset]]
-        saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
+        # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
+
+        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
       }
     }
-  } else if (typeof (data_conglomerate[[1]]) == "character") {
+  } else {
     for (data_subset in 1:4) {
         modified_data <- data_conglomerate[[data_subset]]
-        saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
+        # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
+
+        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
     }
   }
 }

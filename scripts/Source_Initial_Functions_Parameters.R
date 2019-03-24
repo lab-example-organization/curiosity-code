@@ -16,15 +16,21 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
     stop("(num_pop, pop_size, nsspl) need to be integers")}
-  if((num_pop == 3 || num_pop == 4) && ((sylnum - 4 * nsspl) %% 2 != 0 || (nsspl) %% 2 != 0)) {
+  if((num_pop == 3 || num_pop == 4) && 
+      ((sylnum - 4 * nsspl) %% 2 != 0 || (nsspl) %% 2 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if((num_pop == 5 || num_pop == 6) && ((sylnum - 4 * nsspl) %% 6 != 0 || (nsspl) %% 4 != 0)) {
+  if((num_pop == 5 || num_pop == 6) && 
+      ((sylnum - 4 * nsspl) %% 6 != 0 || (nsspl) %% 4 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if((num_pop == 7 || num_pop == 8) && ((sylnum - 4 * nsspl) %% 12 != 0 || (nsspl) %% 12 != 0)) {
+  if((num_pop == 7 || num_pop == 8) && 
+      ((sylnum - 4 * nsspl) %% 12 != 0 || (nsspl) %% 12 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if((num_pop == 9 || num_pop == 10) && ((sylnum - 4 * nsspl) %% 60 != 0 || (nsspl) %% 24 != 0)) {
+  if((num_pop == 9 || num_pop == 10) && 
+      ((sylnum - 4 * nsspl) %% 60 != 0 || (nsspl) %% 24 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if(num_timesteps %% 1000 != 0) {stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")}
+  if(num_timesteps %% 1000 != 0) {
+    stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
+  }
   
   pop_calls_matrix <- matrix(data = c(1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
   

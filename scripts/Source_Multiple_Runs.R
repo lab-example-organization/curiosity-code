@@ -158,6 +158,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                               moran = moranObjects)
   
   
+  
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     for(single_timestep in 1:1000) {
 
@@ -251,6 +252,11 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
     print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", 
       thousand_timesteps, " at ", Sys.time()))
     sink()
+
+    if (thousand_timesteps == 1) {
+      run_timedate <- format(Sys.time(), "%F-%H%M%S")
+    }
+
     # print("FolderName_make")
     FolderName <- store_timesteps(
                     parameters = simParams,
@@ -262,7 +268,11 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
                     saved_stuff = stuff_to_save,
                     syll_container = sylreps,
                     cur_container = curiosity_level,
-                    FolderName = FolderName)
+                    run_timedate = run_timedate,
+                    FolderName = file.path("results", stuff_to_save$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
+
+      #     FolderName <- 
+
     # print("sim_data_sink")
     if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
       sink(file = file.path("source", "temp", paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)

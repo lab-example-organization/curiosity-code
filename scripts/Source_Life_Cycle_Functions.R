@@ -21,7 +21,7 @@ syll_learn <- function (parameters, moranData, select_type = 2,
         # calls for sylls vertical tutor (father) has
 
       if(length(source_of_ONEs) == 0) {
-        fwrite(parameters,"parent with no sylls.csv")
+        saveRDS(parameters,"parent with no sylls.RData")
         print(moranData[1, 1:parameters$sylnum, population])
         stop("wot? parent has no syllables?!")
       } #address syll loss by stopping script if parent has no sylls
@@ -532,11 +532,11 @@ resylreps.offspring <- function(parameters, moranObjectTemp, sylrep_object) {
 }
 
 
-store_timesteps <- function(parameters, filename = thousand_timesteps, record_1, record_2, record_3, record_4, saved_stuff, syll_container, cur_container, FolderName = FolderName){
+store_timesteps <- function(parameters, filename = thousand_timesteps, record_1, record_2, record_3, record_4, saved_stuff, syll_container, cur_container, run_timedate, FolderName = FolderName){
    # # # #  #directory <- getwd()
   results_directory <- file.path('results')
   if(filename == 1) {
-    run_timedate <- format(Sys.time(), "%F-%H%M%S")
+    # run_timedate <- format(Sys.time(), "%F-%H%M%S")
     if(!(dir.exists(file.path(results_directory, saved_stuff$docnamez)))) {
       dir.create(file.path(results_directory, saved_stuff$docnamez))
       dir.create(file.path(results_directory, saved_stuff$docnamez, 
@@ -544,15 +544,15 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, record_1,
     }
     dir.create(file.path(results_directory, saved_stuff$docnamez, 
       "variable_store", paste0(run_timedate, "-GMT-variable-store")))
-    FolderName <- file.path(results_directory, saved_stuff$docnamez, 
-      "variable_store", paste0(run_timedate, "-GMT-variable-store"))
-    fwrite(saved_stuff, file.path(FolderName, 
-      "metadata.RData"))
-  } else {
-    FolderName <- fread (file.path(
-        "source", "temp", paste0(
-          "Foldername_", parameters$simNumber, ".csv")
-  ))}
+    # FolderName <- file.path(results_directory, saved_stuff$docnamez, 
+    #   "variable_store", paste0(run_timedate, "-GMT-variable-store"))
+    saveRDS(saved_stuff, file.path(FolderName, "metadata.RData"))
+  } 
+  # else {
+  #   FolderName <- readRDS (file.path(
+  #       "source", "temp", paste0(
+  #         "Foldername_", parameters$simNumber, ".RData")
+  # ))}
   
 
   for(deyteh in 1:4) {
@@ -569,19 +569,21 @@ store_timesteps <- function(parameters, filename = thousand_timesteps, record_1,
     } else if (deyteh == 4) {
       objekshun <- record_4
     }
-    fwrite(objekshun, file.path(FolderName, paste0(
-      "variable-store-", filename, "-", thing[deyteh], ".csv")))
+    # print("tryna save")
+    saveRDS(objekshun, file.path(FolderName, paste0(
+      "variable-store-", filename, "-", thing[deyteh], ".RData")))
+    # print("saved")
   }
   
-  fwrite(FolderName, file.path(
+  saveRDS(FolderName, file.path(
     "source", "temp", paste0(
-      "Foldername_", parameters$simNumber, ".csv")))
-  fwrite(parameters, file.path(
-    FolderName, "parameters.csv"))
-  fwrite(syll_container, file.path(
-    FolderName, "end_sylbls.csv"))
-  fwrite(cur_container, file.path(
-    FolderName, "end_cursty.csv"))
+      "Foldername_", parameters$simNumber, ".RData")))
+  saveRDS(parameters, file.path(
+    FolderName, "parameters.RData"))
+  saveRDS(syll_container, file.path(
+    FolderName, "end_sylbls.RData"))
+  saveRDS(cur_container, file.path(
+    FolderName, "end_cursty.RData"))
   
   return(FolderName)
 }

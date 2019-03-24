@@ -1,7 +1,48 @@
 
 figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSource = paramsSource, simplification_factor = 100) {
+  print("thing init:")
+  thing <- c(1000,500,333,250,200,166,142,125,111,100,90,83,76,71,66,62,58,55,52,50,47,45,43,41,40,38,37,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)
+  print(thing)
+  print("simplification_factor:")
+  print(simplification_factor)
+  if (!(simplification_factor %in% thing)) {
+    
+    # print ("stuff")
+
+    simplification_factor <- thing[which(abs(thing - simplification_factor) == min(abs(thing - simplification_factor)))]
+    print("corrected to:")
+    print(simplification_factor)
+  }
+
+  # Correct inverse 'thing' numbers- example: 
+  #   Split 1000 500 ways, the increment is 2. 
+  #   Split 1000 2 ways, the increment is 500.
+  
+  #
+  #           aa <- thing[1:31]
+  #           bb <- thing[62:32]
+  #           cc <- rbind(aa, bb)
+
+  #           answers <- list()
+
+  #           for (dd in 1:31) {
+  #             answers[[dd]] <- 
+  #               length(seq.int(cc[1,dd],1000,cc[1,dd])) == cc[2,dd]
+  #           }
+
+  #           all.equal(answers[[1:31]])
+
+  # Well, there's the proof... output returned TRUE for each item in 'answers'
+
+  simplification_factor <- thing[63 - which(thing == simplification_factor)]
+  print("and finally:")
+  print(simplification_factor)
+
   print("figpromultrunStart")
-  connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
+
+  connection <- file(description = file.path(
+    "source","temp", paste0(
+      specificSimNumber, "_sim_data.txt")), open = "rt")
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
   print("multiRunFolderList")
@@ -26,25 +67,41 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
       if(!(file.exists(file.path(strsplit(
         multiRun_folderList[run_visual], "variable_store", )[[1]][1], 
         paste0("Group_", specificSimNumber, "_folderList.RData"))))) {
-          saveRDS(object = multiRun_folderList, file = 
-                       file.path(strsplit(multiRun_folderList[run_visual], 
-          "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData")))}
+          # saveRDS(object = multiRun_folderList, file = 
+          #              file.path(strsplit(multiRun_folderList[run_visual], 
+          # "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData")))}
+          saveRDS(multiRun_folderList, file.path(strsplit(
+              multiRun_folderList[run_visual], "variable_store", 
+            )[[1]][1], paste0(
+              "Group_", specificSimNumber, "_folderList.RData")))
+      }
     } # makes the folder for multirun results, saves multiRun_folderList there.
     
     
     print(paste0("source SVD - ", run_visual, " round"))
-    source(file.path('scripts', 'Source_Visualizing_Data.R'))
-    multirun_directory <- paste0(strsplit(multiRun_folderList[run_visual], "variable")[[1]][1], "multirun_output/", 
-                                  list.files(path = paste0(strsplit(multiRun_folderList[run_visual], 
-                                                  "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
+    source(file.path("scripts", "Source_Visualizing_Data.R"))
+    print("multirun_directory")
+    multirun_directory <- paste0(strsplit(multiRun_folderList[run_visual],
+                                  "variable")[[1]][1], "multirun_output/", 
+                                  list.files(
+                                    path = paste0(
+                                      strsplit(multiRun_folderList[run_visual],
+                                      "variable")[[1]][1], "multirun_output/"), 
+                                    pattern = "multirun_output$"))
+    print("sourcing info")
     info <- readRDS(file = file.path(multiRun_folderList[run_visual], "metadata.RData"))
-    
+
+    # info1 <- fread(file.path(multiRun_folderList[run_visual], "docnamez.csv"))
+    # info2 <- fread(file.path(multiRun_folderList[run_visual], "datez.csv"))
+    # info3 <- fread(file.path(multiRun_folderList[run_visual], "deetz.csv"))
+
     # data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parms = params, data_dir = \"", 
     #                        multiRun_folderList[run_visual], "\", simpleObjectSize = simplification_factor)")
     # cat(data_convert, file = file.path("source", "RtempFiles", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), sep = "\n")
     # source(file.path("source", "RtempFiles", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), local=TRUE)
-    
-    converted_data[[run_visual]] <- convert_stored_data(parms = params, data_dir = multiRun_folderList[run_visual], simpleObjectSize = simplification_factor)
+    print("converted_data time")
+    converted_data[[run_visual]] <- convert_stored_data(parms = params, data_dir = multiRun_folderList[run_visual], reduceFactor = simplification_factor)
+    print("process_data time")
     process_data(converted_data, specificRepeat = run_visual, path = multirun_directory)
 
     # movingOutput <- paste0("process_data(converted_data", run_visual, ", specificRepeat = run_visual, path = multirun_directory)")
@@ -76,6 +133,11 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
     cursitylist[[i]] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
     sdstbxnlist[[i]] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
     sylrepzlist[[i]] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
+
+    # curhistlist[[i]] <- fread(file.path(multirun_directory, histlist[i]))
+    # cursitylist[[i]] <- fread(file.path(multirun_directory, sitylist[i]))
+    # sdstbxnlist[[i]] <- fread(file.path(multirun_directory, sdstlist[i]))
+    # sylrepzlist[[i]] <- fread(file.path(multirun_directory, repzlist[i]))
   }
   
 
