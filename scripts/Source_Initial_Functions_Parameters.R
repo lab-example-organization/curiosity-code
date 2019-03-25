@@ -16,15 +16,21 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
     stop("(num_pop, pop_size, nsspl) need to be integers")}
-  if((num_pop == 3 || num_pop == 4) && ((sylnum - 4 * nsspl) %% 2 != 0 || (nsspl) %% 2 != 0)) {
+  if((num_pop == 3 || num_pop == 4) && 
+      ((sylnum - 4 * nsspl) %% 2 != 0 || (nsspl) %% 2 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if((num_pop == 5 || num_pop == 6) && ((sylnum - 4 * nsspl) %% 6 != 0 || (nsspl) %% 4 != 0)) {
+  if((num_pop == 5 || num_pop == 6) && 
+      ((sylnum - 4 * nsspl) %% 6 != 0 || (nsspl) %% 4 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if((num_pop == 7 || num_pop == 8) && ((sylnum - 4 * nsspl) %% 12 != 0 || (nsspl) %% 12 != 0)) {
+  if((num_pop == 7 || num_pop == 8) && 
+      ((sylnum - 4 * nsspl) %% 12 != 0 || (nsspl) %% 12 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if((num_pop == 9 || num_pop == 10) && ((sylnum - 4 * nsspl) %% 60 != 0 || (nsspl) %% 24 != 0)) {
+  if((num_pop == 9 || num_pop == 10) && 
+      ((sylnum - 4 * nsspl) %% 60 != 0 || (nsspl) %% 24 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
-  if(num_timesteps %% 1000 != 0) {stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")}
+  if(num_timesteps %% 1000 != 0) {
+    stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
+  }
   
   pop_calls_matrix <- matrix(data = c(1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
   
@@ -100,8 +106,11 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
 define_temp_data <- function(universal_parameters) {
   # tempCatgry = 1 (learning.pool); tempCatgry = 2 (pairing.pool)
   # if (tempCatgry ==1) {
-    temp_data <- array(0, c(5, universal_parameters$sylnum + 5, universal_parameters$num_pop))
-    ######   The first params$sylnum columns are learning_pool; the last 5 are pairing_pool
+    temp_data <- array(
+      0, c(
+        5, universal_parameters$sylnum + 5, universal_parameters$num_pop))
+    ######   The first params$sylnum columns are learning_pool; 
+    ######   the last 5 are pairing_pool
   # } else {
     # temp_data <- array(0, c(5, 5, universal_parameters$num_pop))
   # }
@@ -112,13 +121,19 @@ define_temp_data <- function(universal_parameters) {
 
 recordvariable.initialize <- function(P, timestep_fraction, variableID) {
   if (variableID == 1) {
-    record_variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(
+      0, c (2, P$num_pop, (P$num_timesteps/timestep_fraction)))
   } else if (variableID == 2) {
-    record_variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(
+      0, c ((2 * P$num_pop), P$sylnum, 
+        (P$num_timesteps/timestep_fraction)))
   } else if (variableID == 3) {
-    record_variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(
+      0, c (12, P$num_pop, (P$num_timesteps/timestep_fraction)))
   } else if (variableID == 4) {
-    record_variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
+    record_variable <- array(
+      0, c ((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), 
+        (P$num_timesteps/timestep_fraction)))
   }
   # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
   #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
@@ -150,20 +165,40 @@ initialize.sylrep <- function(P, population.pattern, eqpop = TRUE, eqsex = TRUE)
 }
 
 initialize.curiosity <- function(P, cur.min, cur.max, invasion = FALSE) {
-  warning("These arguments must be ordered - highest level population, next sex- singers, then choosers")
-  if(length(cur.min) != length(cur.max) || length(cur.min) != (P$num_pop * 2)) {
-    print("Error Log #0003: each argument needs to be a vector that matches the number of populations AND the number of sexes - Make sure the number of elements matches the number of starting curiosity values.")
+  warning("These arguments must be ordered - highest level 
+            population, next sex- singers, then choosers")
+  if(length(cur.min) != length(cur.max) || 
+     length(cur.min) != (P$num_pop * 2)) {
+    print("Error Log #0003: each argument needs to be a 
+           vector that matches the number of populations 
+           AND the number of sexes - Make sure the number 
+           of elements matches the number of starting 
+           curiosity values.")
     stop("cur.max and cur.min have to be the same length.")
   }
   for(i in 1:length(cur.min)) {
-    if(cur.max[i] <= cur.min[i] || cur.max[i] %% 1 != 0 || cur.min[i] %% 1 != 0) {
-      stop("maximum value needs to be bigger than minimum value. They need to be integers too - these are reference calls to zero_to_one_template- check out the values")
+    if(cur.max[i] <= cur.min[i] || 
+       cur.max[i] %% 1 != 0 || 
+       cur.min[i] %% 1 != 0) {
+      stop("maximum value needs to be bigger than minimum value. 
+            They need to be integers too - these are reference 
+            calls to zero_to_one_template- check out the values")
     }
   }
   curiosity_level <- array(0, c(P$pop_size, P$num_pop))
   for(pop.num in 1:P$num_pop) {
     for(sexes in 1:2) {
-      curiosity_level[((1 + ((sexes - 1) * (P$pop_size/2))):(sexes * P$pop_size/2)), pop.num] <- runif(P$pop_size / 2, P$zero_to_one_template[cur.min[P$curiosity_counter[sexes, pop.num]]], P$zero_to_one_template[cur.max[P$curiosity_counter[sexes, pop.num]]])
+      curiosity_level[((
+          1 + ((sexes - 1) * (P$pop_size/2))
+        ):(
+          sexes * P$pop_size/2
+        )), pop.num
+      ] <- runif (
+        P$pop_size / 2, P$zero_to_one_template[
+          cur.min[P$curiosity_counter[sexes, pop.num]]
+        ], P$zero_to_one_template[cur.max[P$curiosity_counter[
+          sexes, pop.num
+        ]]])
     }
   }
   if(invasion) {
@@ -172,6 +207,10 @@ initialize.curiosity <- function(P, cur.min, cur.max, invasion = FALSE) {
   return(curiosity_level)
 }
 
-#invasion_function <- function(sylreps, curiosity_level, population_s_affected) { # for now, population_s_affected will refer to subpopulations by their pop-sex number: if two pops, the numbers are 1) pop1 male, 2) pop1 female, 3) pop2 male, 4) pop2 female
+# invasion_function <- function(sylreps, curiosity_level, 
+# population_s_affected) { # for now, population_s_affected 
+# will refer to subpopulations by their pop-sex number: if 
+# two pops, the numbers are 1) pop1 male, 2) pop1 female, 
+# 3) pop2 male, 4) pop2 female
   
 #}
