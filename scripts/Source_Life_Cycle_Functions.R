@@ -51,7 +51,7 @@ syll_learn <- function (parameters, moranData, select_type = 2,
       #source_of_ONEs <- which(moran$learning.pool[5, , population] == 1)[
         #which(!(which(moran$learning.pool[5, , population] == 1) %in% which(
           #moran$learning.pool[3, , population] == 1)))]
-      source_of_ONEs <- setdiff(which(source_of_ONEs==1),which(pupil_has_ONEs == 1))
+      source_of_ONEs <- setdiff(source_of_ONEs, pupil_has_ONEs)
       if(length(source_of_ONEs) == 0) {
         if(verbose == TRUE) {
           print(paste0("tutor has no syllables for population ", population))
