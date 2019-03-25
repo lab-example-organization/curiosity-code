@@ -100,8 +100,8 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
     listnames <- c("hist","sity","sdst","repz")
     for(i in 1:4) {
       listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_reps)")
-      listmaker <- paste0(listnames[i], "list[", 1:number_of_reps, "] <- \"", datanames[i], 1:number_of_reps, ".RData\"")
-      eval(parse(text=c(listlister, listmaker))) # fill up '[listnames]list' objects with calls to multirun RData files
+      listmaker <- paste0(listnames[i], "list[", 1:number_of_reps, "] <- \"", datanames[i], 1:number_of_reps, ".csv\"")
+      eval(parse(text=c(listlister, listmaker))) # fill up '[listnames]list' objects with calls to multirun csv files
     }
 
     timeSpanChunks <- 100
@@ -112,10 +112,15 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
     curhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks, number_of_reps))
 
     for(i in 1:number_of_reps) {
-      curhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
-      cursitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
-      sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
-      sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
+      # curhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
+      # cursitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
+      # sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
+      # sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
+
+      curhistlist[,,,i] <- fread(file.path(multirun_directory, histlist[i]))
+      cursitylist[,,,i] <- fread(file.path(multirun_directory, sitylist[i]))
+      sdstbxnlist[,,,i] <- fread(file.path(multirun_directory, sdstlist[i]))
+      sylrepzlist[,,,i] <- fread(file.path(multirun_directory, repzlist[i]))
     }
     
     # These four lines calculate the mean value across all the replicates
