@@ -1,63 +1,98 @@
-convert_stored_data <- function(parameters = params, data_dir = getwd(), simplification_factor=100) {
-  num_timesteps = as.numeric(strsplit(parameters$runLength, "k")[[1]][1])*1000
-  old_names = c("sylrep_rowcol","sylrep_dstbxn","curity_mean_t","curity_repert")
+convert_stored_data <- function(parms = params, 
+                                data_dir = getwd(), 
+                                reduceFactor=100) {
+  # This function takes
+
+
+  nTs = as.numeric(strsplit(parms$runLength, "k")[[1]][1])
+  KnTs = nTs*1000
+  CnTs = nTs*100
+  DnTs = nTs*10
+  npp <- parms$num_pop
+  ops <- parms$one_pop_singers
+  snm <- parms$sylnum
+
+  old_names = c("sylrep_rowcol",
+                "sylrep_dstbxn",
+                "curity_mean_t",
+                "curity_repert")
+  
   converted_names = c("sylrepz","sdstbxn","cursity","curhist")
-  sylrepz <- array(0, c(2, parameters$num_pop, num_timesteps))
-  sdstbxn <- array(0, c((2 * parameters$num_pop), parameters$sylnum, num_timesteps))
-  cursity <- array(0, c(12, parameters$num_pop, num_timesteps))
-  curhist <- array(data = 0, dim = c((2*parameters$num_pop), (parameters$num_pop * parameters$one_pop_singers[1]), num_timesteps))
-  num_timechunks = as.numeric(num_timesteps)/1000
-  for(data_subset in 1:4) {
-    data1s <- paste0(
-      old_names[data_subset], "_", 1:num_timechunks, 
-      " <- readRDS(file = ", '"', data_dir, "/variable-store-", 
-      1:num_timechunks, "-", old_names[data_subset], ".RData", '"', ")")
-    cat(data1s, file = file.path("source", "data_subset.R"), sep = "\n")
-    source(file.path("source", "data_subset.R"))
+  
+  # sylrepz <- array(0, c(2, npp, nTs))
+  # sdstbxn <- array(0, c((2 * npp), snm, nTs))
+  # cursity <- array(0, c(12, npp, nTs))
+  # curhist <- array(0, c((2*npp), (npp * ops[1]), nTs))
+  
+  consolidated_data <- list(
+    sylrepz = array (0, c (2, npp, KnTs)),
+    sdstbxn = array (0, c ((2 * npp), snm, KnTs)), 
+    cursity = array (0, c (12, npp, KnTs)), 
+    curhist = array (0, c ((2*npp), (npp * ops[1]), KnTs)))
+
+  reducedIndices <- seq.int (reduceFactor, KnTs, reduceFactor)
+
+  converted_data <- list(
+    sylrepz = consolidated_data$sylrepz [,,seq.int (reduceFactor, KnTs, reduceFactor)],
+    sdstbxn = consolidated_data$sdstbxn [,,seq.int (reduceFactor, KnTs, reduceFactor)],
+    cursity = consolidated_data$cursity [,,seq.int (reduceFactor, KnTs, reduceFactor)],
+    curhist = consolidated_data$curhist [,,seq.int (reduceFactor, KnTs, reduceFactor)]
+  )
+  for(specificChunk in 1:nTs) {
     
-    for(i in 1:num_timechunks) {
-      data2s <- paste0(converted_names[data_subset], "[, , ((1 + ((", i, " - 1) * 1000)) : (", i, " * 1000))] <- ", old_names[data_subset], "_", i)
-      eval(parse(text=data2s))
-    }
-    
-    if(data_subset==4) {
-      sapply(1:4, function(x) {rm(list=ls(pattern=old_names[x]), envir = .GlobalEnv)})
+    # thing <- paste0(consolidated_names[specificChunk], 
+    #       "[, , ((1 + ((", 1:numDataChunks, " - 1) * 1000)) : (", 
+    #       1:numDataChunks, " * 1000))] <- fread(", '"', 
+    #       data_dir, "/variable-store-", 1:numDataChunks, "-", 
+    #       old_names[specificChunk], ".csv", '"', ")")
+    # eval(parse(text=thing))
+    for (data_subset in 1:4) {
+      SC <- (1 + ((specificChunk - 1)*1000)) # output_chunk_start
+      EC <- (specificChunk)*1000 # output_chunk_end
+      consolidated_data[[data_subset]][,,SC:EC] <- readRDS(
+        file.path(data_dir, paste0(
+          "variable-store-", specificChunk, "-",  
+          old_names[data_subset], ".RData")))
     }
   }
 
-  # within converted_data, converted files are simplified by the factor put in the simplification factor argument
-  converted_data <- list(sylrepz = sylrepz[,,round(seq.int(1,num_timesteps,
-                          (num_timesteps-1)/(simplification_factor-1)))],
-                         sdstbxn = sdstbxn[,,round(seq.int(1,num_timesteps,
-                           (num_timesteps-1)/(simplification_factor-1)))], 
-                         cursity = cursity[,,round(seq.int(1,num_timesteps,
-                           (num_timesteps-1)/(simplification_factor-1)))], 
-                         curhist = curhist[,,round(seq.int(1,num_timesteps,
-                           (num_timesteps-1)/(simplification_factor-1)))])
+  for (slice in 1:length(converted_data[[1]][1,1,])) {
+    for (data_subset in 1:4) {
+      converted_data[[data_subset]][,,slice] <- consolidated_data[[data_subset]][,,seq.int (reduceFactor, KnTs, reduceFactor) [slice]]
+    }
+  }
+
+  # converted_data <- list(
+  #   sylrepz <- do.call(abind, consolidated_data[[1]]),
+  #   sdstbxn <- do.call(abind, consolidated_data[[2]]),
+  #   cursity <- do.call(abind, consolidated_data[[3]]),
+  #   curhist <- do.call(abind, consolidated_data[[4]])
+  # )
   
   return(converted_data)
 }
 
-record_converted_data <- function(converted_data = converted_data) {
-  converted_data[[sylrepz]] = saveRDS(file = "sylreps.RData")
-  converted_data[[sdstbxn]] = saveRDS(file = "sylnums.RData")
-  converted_data[[cursity]] = saveRDS(file = "cursity.RData")
-  converted_data[[curhist]] = saveRDS(file = "curhist.RData")
-}
+process_data <- function (data_conglomerate = converted_data, specificRepeat = run_visual, path = getwd()) {
+  objectnames <- c("sylrepz", "sdstbxn", "cursity", "curhist")
+  datanames <- c("SylReps", "SylDist", "Cursity", "CurHist")
+  modified_data <- c()
+  if (typeof (data_conglomerate[[1]]) == "list") {
+    for (iteration in 1:specificRepeat) {
+      for (data_subset in 1:4) {
+        modified_data <- data_conglomerate[[iteration]][[data_subset]]
+        # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
 
-harvest_converted_data <- function() {
-  sylrepz = readRDS(file = "sylreps.RData")
-  sdstbxn = readRDS(file = "sylnums.RData")
-  cursity = readRDS(file = "cursity.RData")
-  curhist = readRDS(file = "curhist.RData")
-  converted_data <- list(c(sylrepz = sylrepz, sdstbxn = sdstbxn, cursity = cursity, curhist = curhist))
-  return(converted_data)
-}
+        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
+      }
+    }
+  } else {
+    for (data_subset in 1:4) {
+        modified_data <- data_conglomerate[[data_subset]]
+        # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
 
-#converted_data <- harvest_converted_data()
-split_data <- function(data_conglomerate = converted_data, data_subset = 1) {
-  subset_of_the_data <- data_conglomerate[[data_subset]]
-  return(subset_of_the_data)
+        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], specificRepeat, ".RData")))
+    }
+  }
 }
 
 paste_split_data_runs <- function(data_subset, num_runs = 10, also_mean = TRUE) {
@@ -239,14 +274,15 @@ summary_statistics <- function(parameters, Q, R, population, simplification_fact
 min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist, 
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, 
                          sylrepzlist = sylrepzlist) {
-  mins_n_maxes <- array(0,c(14,2,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
+  nrowMinsMaxes <- 14
+  mins_n_maxes <- array(0,c(nrowMinsMaxes,parameters$num_pop,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
   mn_mx_container <- c("min", "max") # 3rd-dim-dependent --- 
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectSubset[k]])
   figureSubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2) # row-dependent --- k
   objectSubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2) # row-dependent --- k
   
   for(j in 1:parameters$num_pop) {
-    for(k in 1:nrow(mins_n_maxes)) {
+    for(k in 1:nrowMinsMaxes ) {
       for(L in 1:2) {
         # This is for min (1) and max (2)
         container <- vector("numeric", number_of_runs)

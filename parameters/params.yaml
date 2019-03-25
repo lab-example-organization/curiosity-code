@@ -250,7 +250,7 @@ curstarts:
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
 simNumberStart: 296
-runLength: '2k'
+runLength: '3k'
 SylLearnStyle: 'nsL'
 vertObLearn:
   vertical:
@@ -265,7 +265,7 @@ num_pop: [2]
 pop_size: [400]
 sylnum: [156]
 num_sylls_per_prob_lvl: [12]
-number_of_reps: [2]
+number_of_reps: [10]
 standard_deviation: [2]
 
 # curinh.pattern - calling either the row number 
@@ -273,3 +273,4 @@ standard_deviation: [2]
 # 1: father; 2: mother; 3: same; 4:opposite
 curinh_pattern: [2]
 one_pop_singers: [10, 10]
+outputSimplify: [100] # This is the number of measurements to take from results, PER UNIT RUN LENGTH aka the total number of measurements is multiplied by run length), when making figures
