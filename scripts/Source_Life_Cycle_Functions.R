@@ -4,7 +4,7 @@ syll_learn <- function (parameters, moranData, select_type = 2,
                        totally_new = FALSE, randlearn_context = 1, 
                        verbose = FALSE) { 
   
-  # context decides whether the learning is vertical (2) or oblique (1)
+  # select_type decides whether the learning is vertical (2) or oblique (1)
   
   for (population in 1 : parameters$num_pop) {
     # Make the reference objects for the teacher - the indices for the 
@@ -51,7 +51,7 @@ syll_learn <- function (parameters, moranData, select_type = 2,
       #source_of_ONEs <- which(moran$learning.pool[5, , population] == 1)[
         #which(!(which(moran$learning.pool[5, , population] == 1) %in% which(
           #moran$learning.pool[3, , population] == 1)))]
-      source_of_ONEs <- setdiff(source_of_ONEs,pupil_has_ONEs)
+      source_of_ONEs <- setdiff(which(source_of_ONEs==1),which(pupil_has_ONEs == 1))
       if(length(source_of_ONEs) == 0) {
         if(verbose == TRUE) {
           print(paste0("tutor has no syllables for population ", population))
@@ -210,8 +210,7 @@ update_selexn_data <- function(main_parameters, temping, suitor_choices, preferr
   } else {
     singer_population <- selector_population 
     
-    sylrep_pairs <- rbind(sylreps_choices[preferred_bird,,singer_population],
-                          sylrep_selector)
+    sylrep_pairs <- rbind(sylreps_choices, sylrep_selector)
   } # This happens if giving_up == TRUE. Not ideal for tutor selection, 
     # but I guess that's the point of giving up... also, this should 
     # basically NEVER happen for tutor context anyway.
@@ -226,7 +225,7 @@ update_selexn_data <- function(main_parameters, temping, suitor_choices, preferr
     temping[pool.row, 1:main_parameters$sylnum, selector_population] <- sylrep_pairs[bird,]
     temping[pool.row, main_parameters$sylnum + 2, selector_population] <- curiosities[bird]
   }
-  temping[(4 - selection_context), 3, selector_population] <- selection_count
+  temping[(4 - selection_context), main_parameters$sylnum + 3, selector_population] <- selection_count
   return(temping)
 }
 
@@ -256,7 +255,13 @@ score_similarity <- function(suitor_vector, selector_vector) {
   # sylrep of suitors and selector.
 }
 
-sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
+sing.selection <- function(parameters, tempMoran, 
+                           curiosity_level, select_type, 
+                           sylrep_object, 
+                           num_select_chances = c(10, 42), 
+                           sylrep_fill_chances = 10, 
+                           verbose_output = TRUE, 
+                           interbreed = FALSE){
 
   #print("sing.selection beginning")
   for(population in 1 : parameters$num_pop) { #population <- 1 rm(population)
@@ -274,7 +279,7 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
           if((
             sum(sylrep_object[auto.teachers[1,MTsylrep_filter
                 ], , population]) != 0) && (
-              sum(sylrep_object[auto.teachers[2,MTsylrep_filter
+            sum(sylrep_object[auto.teachers[2,MTsylrep_filter
                 ], , population]) != 0)) {
             if(verbose_output == TRUE) {
               context.name <- c("Tutor", "Mate")
@@ -285,10 +290,12 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
                               " Selection")))
             }
 
-            tempMoran = update_selexn_data(parameters, tempMoran, auto.teachers[1,], MTsylrep_filter, auto.teachers[2,MTsylrep_filter], 
-                                       curiosity_level, population, select_type,
-                                       sylrep_object[auto.teachers[1,],,], sylrep_object[auto.teachers[2,MTsylrep_filter],,population], 
-                                       num_select_chances[select_type], T)
+            tempMoran = update_selexn_data(
+              parameters, tempMoran, auto.teachers[1,], MTsylrep_filter, 
+              auto.teachers[2,MTsylrep_filter], curiosity_level, population, 
+              select_type, sylrep_object[auto.teachers[1,],,], 
+              sylrep_object[auto.teachers[2,MTsylrep_filter],,population], 
+              num_select_chances[select_type], T)
             
             # if(MTsylrep_filter >= 1) {}
             stop = TRUE
@@ -307,8 +314,9 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
         # a randomly-selected female for the mating context, and the 
         # offspring for tutoring.
         
-
-        singSuccessFilter <- 1 : ((parameters$one_pop_singers[select_type]) * (parameters$num_pop)) # "1-20"
+        # "1-20"
+        singSuccessFilter <- 1 : (
+          (parameters$one_pop_singers[select_type]) * (parameters$num_pop)) 
         selector.index <- tempMoran[3, parameters$sylnum + 1, population]
 
       } else {
@@ -390,25 +398,27 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
         if(singer %in% singSuccessFilter) {
           
 
-          tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
-                                     population, select_type, selection.sylreps, selector.sylrep, 
-                                     chance_for_selection, F)
+          tempMoran = update_selexn_data(
+            parameters, tempMoran, selection.index, singer, selector.index, 
+            curiosity_level, population, select_type, selection.sylreps, 
+            selector.sylrep, chance_for_selection, F)
           
           should_continue <- FALSE
         }
         
-        if(should_continue) {
-          for(neighbor in c(1, -1)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,select_type,
-                                    chance_for_selection,golf_score,
-                                    singSuccessFilter,singer,lower=0.5,
-                                    upper=0.75)) {
+        if (should_continue) {
+          for (neighbor in c(1, -1)) {
+            if (should_pick_neighbor (
+                neighbor,num_select_chances,select_type,chance_for_selection,
+                golf_score,singSuccessFilter,singer,lower=0.5, upper=0.75)) {
+              
               singer <- golf_score[singer+neighbor]
               
-
-              tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
-                                         population, select_type, selection.sylreps, selector.sylrep,
-                                         chance_for_selection, F)
+              tempMoran = update_selexn_data(
+                parameters, tempMoran, selection.index, singer, 
+                selector.index, curiosity_level, population, 
+                select_type, selection.sylreps, selector.sylrep,
+                chance_for_selection, F)
               
               should_continue <- FALSE
               break
@@ -416,16 +426,18 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
           }
         }
         
-        if(should_continue) {
-          for(neighbor in c(1, -1, 2, -2)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,select_type,
-                chance_for_selection,golf_score,singSuccessFilter,singer,
-                lower=0.75)) {
-              singer <- golf_score[singer+neighbor]
+        if (should_continue) {
+          for (neighbor in c (1, -1, 2, -2)) {
+            if (should_pick_neighbor(
+              neighbor,num_select_chances,select_type, chance_for_selection,
+              golf_score,singSuccessFilter,singer, lower = 0.75)) {
+              singer <- golf_score [singer + neighbor]
 
-              tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
-                                         population, select_type, selection.sylreps, selector.sylrep, 
-                                         chance_for_selection, F)
+              tempMoran = update_selexn_data (
+                parameters, tempMoran, selection.index, singer, 
+                selector.index, curiosity_level, population, 
+                select_type, selection.sylreps, selector.sylrep, 
+                chance_for_selection, F)
               should_continue <- FALSE
               break
             }
@@ -439,9 +451,10 @@ sing.selection <- function(parameters, tempMoran, curiosity_level, select_type, 
         if(sum(sylrep_object[selection.index[singer], , population]) != 0) {
           
 
-          tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
-                                     population, select_type, selection.sylreps, selector.sylrep,
-                                     chance_for_selection, F)
+          tempMoran = update_selexn_data(
+            parameters, tempMoran, selection.index, singer, selector.index, 
+            curiosity_level, population, select_type, selection.sylreps, 
+            selector.sylrep, chance_for_selection, F)
           
           break
         }
@@ -487,23 +500,52 @@ curiosity_learn <- function (parameters,
   for(population in 1 : (parameters$num_pop)) {
     
     for(sex in 1:2) {
-      if(tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] == 0) {stop("probably not the best time to be learning curiosity from your parents right now...")}
+      if(tempObjects[
+        curinh_patterns[inheritance_pattern,sex], 
+        parameters$sylnum + 2, 
+        population
+      ] == 0) {stop(
+        "not the time for learning curiosity from parents right now...")}
       
       curinh_attempts <- 1
-      while((tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population]))) < 0) {
+
+      while((tempObjects[curinh_patterns[
+          inheritance_pattern,sex
+        ], parameters$sylnum + 2, population] + 
+        ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+        ]))) < 0) {
+
         newcuriosity[sex, population] <- runif(1, 0, 1)
         curinh_attempts <- curinh_attempts + 1
+      
       }
-      while((tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population]))) > 1) {
+
+      while((tempObjects[curinh_patterns[
+        inheritance_pattern,sex
+      ], parameters$sylnum + 2, population] + 
+      ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+      ]))) > 1) {
+
         newcuriosity[sex, population] <- runif(1, -1, 0)
         curinh_attempts <- curinh_attempts + 1
+      
       }
       
-      new.curiosity <- tempObjects[curinh_patterns[inheritance_pattern,sex], parameters$sylnum + 2, population] + ((1 - parameters$curlearnprob) * (newcuriosity[sex, population])) # Adding small proportion of noise
+      new.curiosity <- tempObjects[curinh_patterns[
+          inheritance_pattern,sex
+        ], parameters$sylnum + 2, population] + 
+        ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+        ])) # Adding small proportion of noise
       
-      tempObjects[(sex + 2), parameters$sylnum + 4, population] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
-      tempObjects[(sex + 2), parameters$sylnum + 2, population] <- new.curiosity
-      tempObjects[(sex + 2), parameters$sylnum + 5, population] <- curinh_attempts
+      tempObjects[
+        (sex + 2), parameters$sylnum + 4, population
+      ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
+      tempObjects[
+        (sex + 2), parameters$sylnum + 2, population
+      ] <- new.curiosity
+      tempObjects[
+        (sex + 2), parameters$sylnum + 5, population
+      ] <- curinh_attempts
     }
   }
   return(tempObjects)
@@ -514,7 +556,13 @@ recuriosity.offspring <- function(parameters, objectMoran, curiosity_object) {
     for(sex in 1:2) {
       #index <- moran$pairing.pool[(sex + 2), 1, population]
 
-      curiosity_object[objectMoran[(sex + 2), parameters$sylnum + 1, population], population] <- objectMoran[(sex + 2), parameters$sylnum + 2, population]
+      # curiosity_level <- array(0, c(P$pop_size, P$num_pop))
+
+      curiosity_object[
+        objectMoran[
+          (sex + 2), parameters$sylnum + 1, population
+        ], population] <- objectMoran[
+          (sex + 2), parameters$sylnum + 2, population]
     }
   }
   return(curiosity_object)
@@ -525,14 +573,23 @@ resylreps.offspring <- function(parameters, moranObjectTemp, sylrep_object) {
     for(sex in 1:2) {
       #index <- moran$pairing.pool[(sex + 2), 1, population]
       #index_sylrep <- moran$learning.pool[(sex + 2), , population]
-      sylrep_object[moranObjectTemp[(sex + 2), parameters$sylnum + 1, population], , population] <- moranObjectTemp[(sex + 2), 1:parameters$sylnum, population]
+
+      # sylreps <- array(0, c(P$pop_size, P$sylnum, P$num_pop))
+
+      sylrep_object[moranObjectTemp[
+        (sex + 2), parameters$sylnum + 1, population
+        ], , population] <- moranObjectTemp[
+          (sex + 2), 1:parameters$sylnum, population
+        ]
     }
   }
   return(sylrep_object)
 }
 
 
-store_timesteps <- function(parameters, filename = thousand_timesteps, record_1, record_2, record_3, record_4, saved_stuff, syll_container, cur_container, run_timedate, FolderName = FolderName){
+store_timesteps <- function(parameters, filename = thousand_timesteps, 
+  record_1, record_2, record_3, record_4, saved_stuff, syll_container, 
+  cur_container, run_timedate, FolderName = FolderName){
    # # # #  #directory <- getwd()
   results_directory <- file.path('results')
   if(filename == 1) {

@@ -1,17 +1,17 @@
 
 figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSource = paramsSource, simplification_factor = 100) {
-  print("thing init:")
+  # print("thing init:")
   thing <- c(1000,500,333,250,200,166,142,125,111,100,90,83,76,71,66,62,58,55,52,50,47,45,43,41,40,38,37,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)
-  print(thing)
-  print("simplification_factor:")
-  print(simplification_factor)
+  #print(thing)
+  # print("simplification_factor:")
+  # print(simplification_factor)
   if (!(simplification_factor %in% thing)) {
     
     # print ("stuff")
 
     simplification_factor <- thing[which(abs(thing - simplification_factor) == min(abs(thing - simplification_factor)))]
-    print("corrected to:")
-    print(simplification_factor)
+    # print("corrected to:")
+    # print(simplification_factor)
   }
 
   # Correct inverse 'thing' numbers- example: 
@@ -35,8 +35,8 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
   # Well, there's the proof... output returned TRUE for each item in 'answers'
 
   simplification_factor <- thing[63 - which(thing == simplification_factor)]
-  print("and finally:")
-  print(simplification_factor)
+  # print("and finally:")
+  # print(simplification_factor)
 
   print("figpromultrunStart")
 

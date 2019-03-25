@@ -314,6 +314,9 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   # sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
   # sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
+
+  # paramsFile <- c("params.yaml")
+  # paramsSource = paramsFile
   params <- yaml.load_file(file.path("parameters", paramsSource))
   number_of_reps <- as.numeric(params$number_of_reps)
   
