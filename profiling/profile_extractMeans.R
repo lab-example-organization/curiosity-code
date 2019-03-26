@@ -1,6 +1,6 @@
-library(profvis)
-library(stringr)
-library(yaml)
+
+source(file.path("scripts", "Source_Reference_Section.R"))
+referenceSection("pfvSrrYml")
 
 remakeString <- function(target, comp, out) {
   # tR stands for temporary retainer

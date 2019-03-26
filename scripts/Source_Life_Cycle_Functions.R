@@ -311,7 +311,7 @@ score_similarity <- function(suitor_vector, selector_vector) {
   # The basic sylrep comparison caluclation that finds the differences 
   # between the suitor and selector sylreps, then assigns a weighted 
   # value based on suitor syllable distance from median of selector's sylrep.
-  selector_median <- median(which(selector_vector == 1))
+  selector_median <- cpp_med(which(selector_vector == 1))
   vector_diff <- which(suitor_vector-selector_vector != 0)
   AbsVal_diffs <- abs(vector_diff - selector_median)
   
@@ -402,7 +402,7 @@ sing.selection <- function(parameters, tempMoran,
         # each population divided by the maximum syllrep of the population.
         vapply(1:parameters$num_pop,
                function(x) {
-                 temp <- rowSums(sylrep_object[
+                 temp <- cpp_rowSums(sylrep_object[
                    parameters$pop_calls_matrix[1,],,x])
                  sample(x = parameters$pop_calls_matrix[1,], 
                         size = parameters$one_pop_singers[select_type], 
@@ -443,7 +443,7 @@ sing.selection <- function(parameters, tempMoran,
       #               FUN = score_similarity,
       #               selector_vector = selector.sylrep))$ix
       
-      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+      golf_score <- cpp_sort_indices(apply(X = selection.sylreps, MARGIN = 1,
                                FUN = score_similarity,
                                selector_vector = selector.sylrep),
                          index.return = T,

@@ -1,5 +1,5 @@
-library(stringr)
-library(yaml)
+source(file.path("scripts", "Source_Reference_Section.R"))
+referenceSection("heatmaps")
 
 # You Should be Here To: Run some Heatmaps to compar a wide range of inherited traits!
 #

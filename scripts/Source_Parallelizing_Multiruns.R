@@ -54,17 +54,14 @@ if(!(dir.exists(file.path(strsplit(getwd(),
     # by loading them from the computer, or 
     # by downloading them from the internet.
 source(file.path("scripts", "Source_Reference_Section.R"))
+referenceSection("multirun")
 
-
-# we specify the number of cores/workers we want to use
-# n_cores <- detectCores() - 4
+# Specify the number of cores/workers we want to use
+#     n_cores <- detectCores() - 4 # built around a maximum allowance
 n_cores <- 3
 
 
 source(file.path("scripts", "Source_Multiple_Runs.R"))
-
-
-# the time difference between using n_cores and not using it
 
 
 shifting_curstart <- 1:125
