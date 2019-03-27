@@ -3,11 +3,13 @@ convert_stored_data <- function(parms = params,
                                 reduceFactor=100) {
   # This function takes
 
-
   nTs = as.numeric(strsplit(parms$runLength, "k")[[1]][1])
   KnTs = nTs*1000
   CnTs = nTs*100
   DnTs = nTs*10
+  
+  stored_size <- 1000/parms$RecordSimplifyFactor
+  
   npp <- parms$num_pop
   ops <- parms$one_pop_singers
   snm <- parms$sylnum
@@ -24,20 +26,20 @@ convert_stored_data <- function(parms = params,
   # cursity <- array(0, c(12, npp, nTs))
   # curhist <- array(0, c((2*npp), (npp * ops[1]), nTs))
   
-  consolidated_data <- list(
-    sylrepz = array (0, c (2, npp, KnTs)),
-    sdstbxn = array (0, c ((2 * npp), snm, KnTs)), 
-    cursity = array (0, c (12, npp, KnTs)), 
-    curhist = array (0, c ((2*npp), (npp * ops[1]), KnTs)))
-
-  reducedIndices <- seq.int (reduceFactor, KnTs, reduceFactor)
-
   converted_data <- list(
-    sylrepz = consolidated_data$sylrepz [,,seq.int (reduceFactor, KnTs, reduceFactor)],
-    sdstbxn = consolidated_data$sdstbxn [,,seq.int (reduceFactor, KnTs, reduceFactor)],
-    cursity = consolidated_data$cursity [,,seq.int (reduceFactor, KnTs, reduceFactor)],
-    curhist = consolidated_data$curhist [,,seq.int (reduceFactor, KnTs, reduceFactor)]
-  )
+    sylrepz = array (0, c (2, npp,  nTs*stored_size)),
+    sdstbxn = array (0, c ((2 * npp), snm,  nTs*stored_size)), 
+    cursity = array (0, c (12, npp,  nTs*stored_size)), 
+    curhist = array (0, c ((2*npp), (npp * ops[1]),  nTs*stored_size)))
+
+  # reducedIndices <- seq.int (reduceFactor, stored_size, reduceFactor)
+
+  # converted_data <- list(
+  #   sylrepz = consolidated_data$sylrepz [,,seq.int (reduceFactor, stored_size, reduceFactor)],
+  #   sdstbxn = consolidated_data$sdstbxn [,,seq.int (reduceFactor, stored_size, reduceFactor)],
+  #   cursity = consolidated_data$cursity [,,seq.int (reduceFactor, stored_size, reduceFactor)],
+  #   curhist = consolidated_data$curhist [,,seq.int (reduceFactor, stored_size, reduceFactor)]
+  # )
   for(specificChunk in 1:nTs) {
     
     # thing <- paste0(consolidated_names[specificChunk], 
@@ -47,8 +49,8 @@ convert_stored_data <- function(parms = params,
     #       old_names[specificChunk], ".csv", '"', ")")
     # eval(parse(text=thing))
     for (data_subset in 1:4) {
-      SC <- (1 + ((specificChunk - 1)*1000)) # output_chunk_start
-      EC <- (specificChunk)*1000 # output_chunk_end
+      SC <- (1 + ((specificChunk - 1)*stored_size)) # output_chunk_start
+      EC <- (specificChunk)*stored_size # output_chunk_end
       consolidated_data[[data_subset]][,,SC:EC] <- readRDS(
         file.path(data_dir, paste0(
           "variable-store-", specificChunk, "-",  
@@ -58,7 +60,7 @@ convert_stored_data <- function(parms = params,
 
   for (slice in 1:length(converted_data[[1]][1,1,])) {
     for (data_subset in 1:4) {
-      converted_data[[data_subset]][,,slice] <- consolidated_data[[data_subset]][,,seq.int (reduceFactor, KnTs, reduceFactor) [slice]]
+      converted_data [[data_subset]] [,,slice] <- consolidated_data [[data_subset]] [,,seq.int (reduceFactor, KnTs, reduceFactor) [slice]]
     }
   }
 

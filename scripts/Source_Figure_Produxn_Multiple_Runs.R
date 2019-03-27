@@ -1,26 +1,26 @@
 
 figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSource = paramsSource, simplification_factor = 100) {
-  # print("thing init:")
-  thing <- c(1000,500,333,250,200,166,142,125,111,100,90,83,76,71,66,62,58,55,52,50,47,45,43,41,40,38,37,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)
-  #print(thing)
+  print("simplificationLibrary init:")
+  simplificationLibrary <- c(1000,500,333,250,200,166,142,125,111,100,90,83,76,71,66,62,58,55,52,50,47,45,43,41,40,38,37,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)
+  #print(simplificationLibrary)
   # print("simplification_factor:")
   # print(simplification_factor)
-  if (!(simplification_factor %in% thing)) {
+  if (!(simplification_factor %in% simplificationLibrary)) {
     
     # print ("stuff")
 
-    simplification_factor <- thing[which(abs(thing - simplification_factor) == min(abs(thing - simplification_factor)))]
+    simplification_factor <- simplificationLibrary[which(abs(simplificationLibrary - simplification_factor) == min(abs(simplificationLibrary - simplification_factor)))]
     # print("corrected to:")
     # print(simplification_factor)
   }
 
-  # Correct inverse 'thing' numbers- example: 
+  # Correct inverse 'simplificationLibrary' numbers- example: 
   #   Split 1000 500 ways, the increment is 2. 
   #   Split 1000 2 ways, the increment is 500.
   
   #
-  #           aa <- thing[1:31]
-  #           bb <- thing[62:32]
+  #           aa <- simplificationLibrary[1:31]
+  #           bb <- simplificationLibrary[62:32]
   #           cc <- rbind(aa, bb)
 
   #           answers <- list()
@@ -34,7 +34,7 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
 
   # Well, there's the proof... output returned TRUE for each item in 'answers'
 
-  simplification_factor <- thing[63 - which(thing == simplification_factor)]
+  simplification_factor <- simplificationLibrary[63 - which(simplificationLibrary == simplification_factor)]
   # print("and finally:")
   # print(simplification_factor)
 
@@ -54,22 +54,20 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
     if (run_visual == 1) {
       multiRunTime <- format (Sys.time (), "%F-%H%M%S")
       print ("run_visual == 1")
-      if (! (dir.exists (file.path (strsplit (multiRun_folderList[run_visual], 
-        "/variable_store", )[[1]][1], "multirun_output")))) {
-          
-          dir.create(file.path(strsplit(multiRun_folderList[run_visual], 
-          "/variable_store", )[[1]][1], "multirun_output"))
-          
-          dir.create(file.path(strsplit(multiRun_folderList[run_visual], 
-          "/variable_store", )[[1]][1], "multirun_output", 
-          paste0(multiRunTime, "-GMT-multirun-output")))
-          }
+      if(!(dir.exists(file.path(strsplit(multiRun_folderList[run_visual], "/variable_store", )[[1]][1], "multirun_output")))) {
+        print ("makin multirun_output")
+        dir.create(file.path(strsplit(multiRun_folderList[run_visual], "/variable_store", )[[1]][1], "multirun_output"))
+        print ("makin specific multirun_output folder")
+        dir.create(file.path(strsplit(multiRun_folderList[run_visual], "/variable_store", )[[1]][1], "multirun_output", paste0(multiRunTime, "-GMT-multirun-output")))
+      }
+          print("Do we need to record the list of folders?")
       if(!(file.exists(file.path(strsplit(
         multiRun_folderList[run_visual], "variable_store", )[[1]][1], 
         paste0("Group_", specificSimNumber, "_folderList.RData"))))) {
           # saveRDS(object = multiRun_folderList, file = 
           #              file.path(strsplit(multiRun_folderList[run_visual], 
           # "variable_store", )[[1]][1], paste0("Group_", specificSimNumber, "_folderList.RData")))}
+          print ("yes we do.")
           saveRDS(multiRun_folderList, file.path(strsplit(
               multiRun_folderList[run_visual], "variable_store", 
             )[[1]][1], paste0(
@@ -173,9 +171,7 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
   print("last_stats")
   last_stats <- paste0("rm(sylrepz", number_of_repeats, ", sdstbxn", number_of_repeats,
                        ", cursity", number_of_repeats, ", curhist", number_of_repeats,
-                       ", sylrepblahz, sdstbxblahn, cursitblahy, curhisblaht",
-                       ", sylrepzConveRtDS, sdstbxnConveRtDS, cursityConveRtDS, curhistConveRtDS",
-                       ", last_stats, data_convert, histlist, sitylist, sdstlist, repzlist",
+                       ", last_stats, histlist, sitylist, sdstlist, repzlist",
                        ", listlister, listmaker, listnames, datanames)")
                        
   eval(parse(text=last_stats))

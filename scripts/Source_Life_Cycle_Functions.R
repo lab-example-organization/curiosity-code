@@ -445,9 +445,7 @@ sing.selection <- function(parameters, tempMoran,
       
       golf_score <- cpp_sort_indices(apply(X = selection.sylreps, MARGIN = 1,
                                FUN = score_similarity,
-                               selector_vector = selector.sylrep),
-                         index.return = T,
-                         method = 'radix')$ix
+                               selector_vector = selector.sylrep))
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
       singer <- golf_score[round(curiosity_level[selector.index, population] *(
