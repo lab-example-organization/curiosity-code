@@ -168,6 +168,7 @@ curiosity_object = FALSE, data_container, timestep, specificVariable) {
               ))
       }
     }
+    
   
   } else if (specificVariable == 2) {
     for (population in 1:parameters$num_pop) {
@@ -181,6 +182,8 @@ curiosity_object = FALSE, data_container, timestep, specificVariable) {
           )
       }
     }
+
+
   } else if (specificVariable == 3) {
     for (population in 1:parameters$num_pop) {
       # curity_mean_t
@@ -219,6 +222,8 @@ curiosity_object = FALSE, data_container, timestep, specificVariable) {
         ] <- tempData[sex, parameters$sylnum + 5, population]
       }
     } 
+
+
   } else if (specificVariable == 4) {
     for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {

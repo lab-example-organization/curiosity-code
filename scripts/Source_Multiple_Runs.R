@@ -280,13 +280,16 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       #     FolderName <- 
 
     # print("sim_data_sink")
-    if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
+    if((thousand_timesteps==(simParams$num_timesteps/1000))&&(simplify==1000/recordingSimpFact)&&(single_timestep==recordingSimpFact)) {
       sink(file = file.path("source", "temp", paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)
       print(FolderName)
       sink()
     }
   }
 }
+
+# for(simplify in 1:(1000/recordingSimpFact)) {
+#       for(single_timestep in 1:recordingSimpFact) {
 
 
 archiveSimFiles <- function(path, filename, archive = FALSE, new_dir = FALSE){

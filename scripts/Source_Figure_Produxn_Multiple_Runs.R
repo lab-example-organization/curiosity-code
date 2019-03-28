@@ -98,7 +98,7 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
     # cat(data_convert, file = file.path("source", "RtempFiles", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), sep = "\n")
     # source(file.path("source", "RtempFiles", paste0(specificSimNumber, "-", run_visual, "_data_convert.R")), local=TRUE)
     print("converted_data time")
-    converted_data[[run_visual]] <- convert_stored_data(parms = params, data_dir = multiRun_folderList[run_visual], reduceFactor = simplification_factor)
+    converted_data[[run_visual]] <- convert_stored_data(parms = params, data_dir = multiRun_folderList[run_visual])
     print("process_data time")
     process_data(converted_data, specificRepeat = run_visual, path = multirun_directory)
 
