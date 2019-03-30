@@ -143,20 +143,13 @@ recordvariable.initialize <- function(P, timestep_fraction, variableID) {
   return(record.variable)
 }
 
-variable.archive <- function(parameters, tempData, syllable_object = FALSE, 
-curiosity_object = FALSE, data_container, timestep, specificVariable) {
-  #context_name <- c("parents&offspring","replacedindividuals")
-  #if(context == 1) {
-  # if (!(syllable_object) && (specificVariable == 1) || 
-  #  (specificVariable == 2)) {
-  #   stop("if specificVariable = 1 | 2, then syllable_object must exist")
-  # } else if ((specificVariable == 3) || (specificVariable == 4) && 
-  #  !(tempData) || !(curiosity_object)) {
-  #   stop(
-  # "if specificVariable = 3|4, then tempData and curiosity_object must exist")
-  # }
-  if (specificVariable == 1) {
-    for (population in 1:parameters$num_pop) {
+rowcol.archive <- function (
+  parameters, 
+  syllable_object,
+  data_container, 
+  timestep) {
+
+  for (population in 1:parameters$num_pop) {
       for (sex in 1:2) {
         #sylrep_rowcol
         data_container[sex, population, timestep] <- mean(rowSums(
@@ -168,75 +161,77 @@ curiosity_object = FALSE, data_container, timestep, specificVariable) {
               ))
       }
     }
-    
-  
-  } else if (specificVariable == 2) {
-    for (population in 1:parameters$num_pop) {
-      for (sex in 1:2) {
-        # sylrep_dstbxn
-        data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(
-          syllable_object[((
-            1 + ((sex - 1) * (parameters$pop_size / 2))
-          ) : (
-            sex * (parameters$pop_size / 2))), , population]
-          )
-      }
+  return(data_container)
+}
+
+dstbxn.archive <- function (parameters, syllable_object, data_container, timestep) {
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      # sylrep_dstbxn
+      data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(
+        syllable_object[((
+          1 + ((sex - 1) * (parameters$pop_size / 2))
+        ) : (
+          sex * (parameters$pop_size / 2))), , population]
+        )
     }
+  }
+  return(data_container)
+}
 
+mean_t.archive <- function (parameters, tempData, curiosity_object, data_container, timestep) {
+  for (population in 1:parameters$num_pop) {
+    # curity_mean_t
+    data_container[3, population, timestep] <- tempData[
+      2, parameters$sylnum + 3, population]
+    data_container[10, population, timestep] <- tempData[
+      3, parameters$sylnum + 3, population]
 
-  } else if (specificVariable == 3) {
-    for (population in 1:parameters$num_pop) {
-      # curity_mean_t
-      data_container[3, population, timestep] <- tempData[
-        2, parameters$sylnum + 3, population]
-      data_container[10, population, timestep] <- tempData[
-        3, parameters$sylnum + 3, population]
-
-      for (sex in 1:2) {
-        data_container[sex, population, timestep] <- mean(
-          curiosity_object[((
-            1 + ((sex-1) * parameters$pop_size/2)
-          ):(
-            sex * parameters$pop_size/2)), population]
-          )
-
-        # Individual Curiosity Values
-        data_container[
-          (sex + 3), population, timestep
-        ] <- tempData[sex, parameters$sylnum + 2, population]
-
-        data_container[
-          (sex + 5), population, timestep
-        ] <- tempData[(sex + 2), parameters$sylnum + 2, population]
-
-        data_container[
-          (sex + 7), population, timestep
-        ] <- tempData[(sex + 2), parameters$sylnum + 4, population]
-
-        data_container[
-          11, population, timestep
-        ] <- tempData[(sex + 2), parameters$sylnum + 5, population]
-
-        data_container[
-          12, population, timestep
-        ] <- tempData[sex, parameters$sylnum + 5, population]
-      }
-    } 
-
-
-  } else if (specificVariable == 4) {
-    for (population in 1:parameters$num_pop) {
-      for (sex in 1:2) {
-        # curity_repert
-        data_container[
-          (sex + ((population - 1) * 2)), , timestep
-        ] <- hist(curiosity_object[((
-          1 + ((sex-1) * parameters$pop_size / 2)
+    for (sex in 1:2) {
+      data_container[sex, population, timestep] <- mean(
+        curiosity_object[((
+          1 + ((sex-1) * parameters$pop_size/2)
         ):(
-          sex * parameters$pop_size / 2
-        )), population], breaks = 
-        parameters$curiositybreaks, plot = FALSE)$counts
-      }
+          sex * parameters$pop_size/2)), population]
+        )
+
+      # Individual Curiosity Values
+      data_container[
+        (sex + 3), population, timestep
+      ] <- tempData[sex, parameters$sylnum + 2, population]
+
+      data_container[
+        (sex + 5), population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 2, population]
+
+      data_container[
+        (sex + 7), population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 4, population]
+
+      data_container[
+        11, population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 5, population]
+
+      data_container[
+        12, population, timestep
+      ] <- tempData[sex, parameters$sylnum + 5, population]
+    }
+  }
+  return(data_container)
+}
+
+repert.archive <- function (parameters, curiosity_object, data_container, timestep) {
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      # curity_repert
+      data_container[
+        (sex + ((population - 1) * 2)), , timestep
+      ] <- hist(curiosity_object[((
+        1 + ((sex-1) * parameters$pop_size / 2)
+      ):(
+        sex * parameters$pop_size / 2
+      )), population], breaks = 
+      parameters$curiositybreaks, plot = FALSE)$counts
     }
   }
   return(data_container)

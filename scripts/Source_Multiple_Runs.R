@@ -94,30 +94,25 @@ makeDocnamez <- function (scMin, scMax, simNumber,
 }
 
 
-life_cycle <- function(scMin, scMax, simNumber, runLength, 
-                       SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
-                       number_populations, population_size, syllable_number,
-                       number_sylls_probability_level, standDev, 
-                       SimNumberLC, curinh_style, recordingSimpFact,
-                       one_pop_singers = c(10,10)) {
+life_cycle <- function(
+  scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
+  curinh_value, number_populations, population_size, syllable_number,
+  number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
+  recordingSimpFact, one_pop_singers = c(10,10)) {
   
   docnamez <- makeDocnamez(
-            scMin = scMin, scMax = scMax, simNumber = simNumber, 
-            runLength = runLength, SylLearnStyle = SylLearnStyle, 
-            vertOblLearn = vertOblLearn, sylDist = sylDist, 
-            curinh_value = curinh_value, standDev = standDev)
+    scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
+    SylLearnStyle = SylLearnStyle, vertOblLearn = vertOblLearn, 
+    sylDist = sylDist, curinh_value = curinh_value, standDev = standDev)
 
   #parent_directory <- getwd()
   source(file.path("scripts", "Source_Initial_Functions_Parameters.R"))
   
   simParams <- define_parameters(
     num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
-    num_pop = number_populations, 
-    pop_size = population_size, 
-    sylnum = syllable_number, 
-    nsspl = number_sylls_probability_level, 
-    one_pop_singers = one_pop_singers, 
-    curlearnprob = curinh_value, 
+    num_pop = number_populations, pop_size = population_size, 
+    sylnum = syllable_number, nsspl = number_sylls_probability_level, 
+    one_pop_singers = one_pop_singers, curlearnprob = curinh_value, 
     learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
     randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 
     stand.dev = standDev
@@ -223,34 +218,27 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
         
       }
 
-      sylrep_rowcol <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = sylrep_rowcol, 
-                          timestep = simplify, 
-                          specificVariable = 1)
-      sylrep_dstbxn <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = sylrep_dstbxn, 
-                          timestep = simplify, 
-                          specificVariable = 2)
-      curity_mean_t <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = curity_mean_t, 
-                          timestep = simplify, 
-                          specificVariable = 3)
-      curity_repert <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = curity_repert, 
-                          timestep = simplify, 
-                          specificVariable = 4)
+      sylrep_rowcol <- rowcol.archive(
+        parameters = simParams, 
+        syllable_object = sylreps, 
+        data_container = sylrep_rowcol, 
+        timestep = simplify)
+      sylrep_dstbxn <- dstbxn.archive(
+        parameters = simParams, 
+        syllable_object = sylreps, 
+        data_container = sylrep_dstbxn, 
+        timestep = simplify)
+      curity_mean_t <- mean_t.archive(
+        parameters = simParams, 
+        tempData = moranObjects,  
+        curiosity_object = curiosity_level, 
+        data_container = curity_mean_t, 
+        timestep = simplify)
+      curity_repert <- repert.archive(
+        parameters = simParams, 
+        curiosity_object = curiosity_level, 
+        data_container = curity_repert, 
+        timestep = simplify)
     }
     # print("console_copy_sink")
     sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 
