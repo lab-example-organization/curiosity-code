@@ -60,14 +60,24 @@ makeDocnamez <- function (scMin, scMax, simNumber,
     
     if (scMin[1] == scMin[3] && 
        scMax[1] == scMax[3] && 
-       (scMax[2] != scMax[3] ||  scMin[2] != scMin[3])) {
+       (scMax[2] != scMax[3] ||  scMin[2] != scMin[3]) &&
+       scMin[2] == scMin[4] &&
+       scMax[2] == scMax[4]) {
       # 1-7_f_7-13m
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
     
-    } else if (scMin[1] != scMin[3] || scMax[1] != scMax[3]) {
+    } else if (scMin[2] == scMin[4] &&
+               scMax[2] == scMax[4] &&
+               (scMin[1] != scMin[3] || scMax[1] != scMax[3])) {
       # 1-7f_1-7mp1_7-13mp2
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", 
                           scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
+    
+    } else if (scMin[1] == scMin[3] &&
+               scMax[1] == scMax[3] &&
+               (scMin[2] != scMin[4] || scMax[2] != scMax[4])) {
+      # 1-7f_1-7mp1_7-13mp2
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", scMin[4], "-", scMax[4], "fp2", "_", scMin[1], "-", scMax[1], "m")
     
     } else if (scMin[1] == scMin[2] && scMax[1] == scMax[2] && 
               scMin[3] == scMin[4] && scMax[3] == scMax[4]) {

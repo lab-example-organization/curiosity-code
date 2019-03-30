@@ -58,7 +58,7 @@ source(file.path("scripts", "Source_Reference_Section.R"))
 
 # we specify the number of cores/workers we want to use
 # n_cores <- detectCores() - 4
-n_cores <- 3
+n_cores <- 16
 
 
 source(file.path("scripts", "Source_Multiple_Runs.R"))
@@ -67,8 +67,8 @@ source(file.path("scripts", "Source_Multiple_Runs.R"))
 # the time difference between using n_cores and not using it
 
 
-shifting_curstart <- 1:6
-paramsFile <- c("params.yaml")
+shifting_curstart <- 1:16
+paramsFile <- c("diffFemParams.yaml")
 mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, mc.cores = n_cores)
 
 

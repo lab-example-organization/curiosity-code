@@ -1,5 +1,6 @@
 # Load the C++ functions
-sourceCpp(file.path('cpp_source','should_pick_neighbor.cpp'))
+#SourceCpp(file.path('cpp_source','should_pick_neighbor.cpp'))
+
 
 
 syll_learn <- function (parameters, moranData, select_type = 2, 
@@ -409,14 +410,14 @@ sing.selection <- function(parameters, tempMoran,
         }
         
 
-        cpp_should_pick_neighbor(1, num_select_chances, select_type,
+        should_pick_neighbor(1, num_select_chances, select_type,
                                     chance_for_selection, golf_score,
                                     singSuccessFilter, singer, lower=0.5,
                                     upper=0.75)
 
         if(should_continue) {
           for(neighbor in c(1, -1)) {
-            if(cpp_should_pick_neighbor(neighbor, num_select_chances, select_type,
+            if(should_pick_neighbor(neighbor, num_select_chances, select_type,
                                     chance_for_selection, golf_score,
                                     singSuccessFilter, singer, lower=0.5,
                                     upper=0.75)) {
@@ -436,7 +437,7 @@ sing.selection <- function(parameters, tempMoran,
         
         if(should_continue) {
           for(neighbor in c(1, -1, 2, -2)) {
-            if(cpp_should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
+            if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
               
               moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
