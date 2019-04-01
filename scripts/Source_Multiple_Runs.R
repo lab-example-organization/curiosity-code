@@ -205,16 +205,6 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
         curiosity_level <- recuriosity.offspring(parameters = simParams, objectMoran = moranObjects, 
                             curiosity_object = curiosity_level)
         
-        # for(population in 1:simParams$num_pop) {
-        #   for(sex in 1:2) {
-        #     #index <- moran$pairing.pool[(sex + 2), 1, population]
-        #     curiosity_level[
-        #       moranObjects[(sex + 2), simParams$sylnum + 1, population], population
-
-        #     ] <- moranObjects[(sex + 2), simParams$sylnum + 2, population]
-        #   }
-        # }
-        
         sylreps <- resylreps.offspring(parameters = simParams, 
                                        moranObjectTemp = moranObjects,
                                        sylrep_object = sylreps)
@@ -223,35 +213,35 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
         
       }
 
-      sylrep_rowcol <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = sylrep_rowcol, 
-                          timestep = simplify, 
-                          specificVariable = 1)
-      sylrep_dstbxn <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = sylrep_dstbxn, 
-                          timestep = simplify, 
-                          specificVariable = 2)
-      curity_mean_t <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = curity_mean_t, 
-                          timestep = simplify, 
-                          specificVariable = 3)
-      curity_repert <- variable.archive(parameters = simParams, 
-                          tempData = moranObjects, 
-                          syllable_object = sylreps, 
-                          curiosity_object = curiosity_level, 
-                          data_container = curity_repert, 
-                          timestep = simplify, 
-                          specificVariable = 4)
+      sylrep_rowcol <- sylrep_rowcol.archive(
+        parameters = simParams, 
+        data_container = sylrep_rowcol, 
+        syllable_object = sylreps,
+        timestep = simplify)
+
+      sylrep_dstbxn <- sylrep_dstbxn.archive(
+        parameters = simParams, 
+        data_container = sylrep_dstbxn, 
+        syllable_object = sylreps,
+        timestep = simplify)
+
+      curity_mean_t <- curity_mean_t.archive(
+        parameters = simParams, 
+        tempData = moranObjects, 
+        data_container = curity_mean_t, 
+        curiosity_object = curiosity_level,
+        timestep = simplify)
+
+      curity_repert <- curity_repert.archive(
+        parameters = simParams,
+        data_container = curity_repert, 
+        curiosity_object = curiosity_level,
+        timestep = simplify)
+
     }
+
+
+
     # print("console_copy_sink")
     sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 
       append = TRUE, split = TRUE)
@@ -267,10 +257,10 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
     FolderName <- store_timesteps(
                     parameters = simParams,
                     filename = thousand_timesteps, 
-                    record_1 = sylrep_rowcol,
-                    record_2 = sylrep_dstbxn,
-                    record_3 = curity_mean_t,
-                    record_4 = curity_repert,
+                    rowcol = sylrep_rowcol,
+                    dstbxn = sylrep_dstbxn,
+                    mean_t = curity_mean_t,
+                    repert = curity_repert,
                     saved_stuff = stuff_to_save,
                     syll_container = sylreps,
                     cur_container = curiosity_level,

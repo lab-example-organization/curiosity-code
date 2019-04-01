@@ -264,11 +264,3 @@ scMin = c(
       one_pop_singers = params$one_pop_singers
 
 "/home/parker/Documents/projects/Code/curiosity-code/results/190327_296_-_2k_nsL_normVO_oppsyl_1-7_c/variable_store/2019-03-27-144523-GMT-variable-store/"
-
-
-
-
-
-
-
-

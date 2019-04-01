@@ -250,7 +250,7 @@ curstarts:
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
 simNumberStart: 296
-runLength: '2k'
+runLength: '10k'
 SylLearnStyle: 'nsL'
 vertObLearn:
   vertical:
