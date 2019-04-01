@@ -94,30 +94,25 @@ makeDocnamez <- function (scMin, scMax, simNumber,
 }
 
 
-life_cycle <- function(scMin, scMax, simNumber, runLength, 
-                       SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
-                       number_populations, population_size, syllable_number,
-                       number_sylls_probability_level, standDev, 
-                       SimNumberLC, curinh_style, recordingSimpFact,
-                       one_pop_singers = c(10,10)) {
+life_cycle <- function(
+  scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
+  curinh_value, number_populations, population_size, syllable_number,
+  number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
+  recordingSimpFact, one_pop_singers = c(10,10)) {
   
   docnamez <- makeDocnamez(
-            scMin = scMin, scMax = scMax, simNumber = simNumber, 
-            runLength = runLength, SylLearnStyle = SylLearnStyle, 
-            vertOblLearn = vertOblLearn, sylDist = sylDist, 
-            curinh_value = curinh_value, standDev = standDev)
+    scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
+    SylLearnStyle = SylLearnStyle, vertOblLearn = vertOblLearn, 
+    sylDist = sylDist, curinh_value = curinh_value, standDev = standDev)
 
   #parent_directory <- getwd()
   source(file.path("scripts", "Source_Initial_Functions_Parameters.R"))
   
   simParams <- define_parameters(
     num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
-    num_pop = number_populations, 
-    pop_size = population_size, 
-    sylnum = syllable_number, 
-    nsspl = number_sylls_probability_level, 
-    one_pop_singers = one_pop_singers, 
-    curlearnprob = curinh_value, 
+    num_pop = number_populations, pop_size = population_size, 
+    sylnum = syllable_number, nsspl = number_sylls_probability_level, 
+    one_pop_singers = one_pop_singers, curlearnprob = curinh_value, 
     learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
     randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 
     stand.dev = standDev
@@ -237,6 +232,7 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
         data_container = curity_repert, 
         curiosity_object = curiosity_level,
         timestep = simplify)
+
 
     }
 

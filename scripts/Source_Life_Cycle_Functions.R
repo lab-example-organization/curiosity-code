@@ -170,6 +170,7 @@ sylrep_dstbxn.archive <- function (parameters,
                                    data_container, 
                                    syllable_object,
                                    timestep) {
+
   for (population in 1:parameters$num_pop) {
     for (sex in 1:2) {
       # sylrep_dstbxn
@@ -232,10 +233,19 @@ curity_mean_t.archive <- function (parameters,
 }
 
 
+      data_container[
+        12, population, timestep
+      ] <- tempData[sex, parameters$sylnum + 5, population]
+    }
+  }
+  return(data_container)
+}
+
 curity_repert.archive <- function (parameters,
                                    data_container, 
                                    curiosity_object,
                                    timestep) {
+
   for (population in 1:parameters$num_pop) {
     for (sex in 1:2) {
       # curity_repert

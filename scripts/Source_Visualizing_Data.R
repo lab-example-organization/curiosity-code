@@ -58,9 +58,7 @@ convert_stored_data <- function(parms = params,
       # converted_data[[curity_mean_t]][,,SC:EC] <- readRDS(file.path(data_dir, paste0("variable-store-", specificChunk, "-",  old_names[data_subset], ".RData")))
       # converted_data[[curity_repert]][,,SC:EC] <- readRDS(file.path(data_dir, paste0("variable-store-", specificChunk, "-",  old_names[data_subset], ".RData")))
       print("sylrepz")
-      
-      thing <- readRDS(file.path(data_dir, paste0("variable-store-", specificChunk, "-sylrep_rowcol.RData")))
-      converted_data$sylrepz[,,SC:EC] <- thing
+      converted_data$sylrepz[,,SC:EC] <- readRDS(file.path(data_dir, paste0("variable-store-", specificChunk, "-sylrep_rowcol.RData")))
       print("sdstbxn")
       converted_data$sdstbxn[,,SC:EC] <- readRDS(file.path(data_dir, paste0("variable-store-", specificChunk, "-sylrep_dstbxn.RData")))
       print("cursity")
