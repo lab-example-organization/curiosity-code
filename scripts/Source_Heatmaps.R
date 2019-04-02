@@ -151,8 +151,9 @@ all_the_runs <- extractVarDirs(heatmapLand,
   #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
   #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
   #"*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")
-
-  "*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")
+  #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")
+  "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")
+  
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
@@ -164,13 +165,20 @@ names(extractedMeans) <- all_the_names
 
 
 # heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
-heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
+#heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
+heatmap_array <- array(
+  0, dim = c(5,5,5,8), list(
+    c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
+    c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
+    c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
+    c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+  ))
 
-for(femalez in 1:5) {
-  for(malez1 in 1:5) {
-    for(malez2 in 1:5) {
+for(malez in 1:5) {
+  for(femalez1 in 1:5) {
+    for(femalez2 in 1:5) {
 
-      tally <- malez2 + 5*(malez1 - 1) + 25*(femalez - 1)
+      tally <- femalez2 + 5*(femalez1 - 1) + 25*(malez - 1)
 
       sumStats <- c(
         extractedMeans[[tally]]$curLvlMeans[1,1,100],
@@ -183,7 +191,7 @@ for(femalez in 1:5) {
         extractedMeans[[tally]]$sylRepMeans[2,2,100]
       )
 
-      heatmap_array[malez1,malez2,femalez,] <- sumStats
+      heatmap_array[femalez1,femalez2,malez,] <- sumStats
       
     }
   }
@@ -229,7 +237,8 @@ heatmap_axes <- list(
 
 range_list <- array(data = c("Less Curiosity", "More Curiosity", "Seeks Similar Songs", "Seeks Novel Songs",
                              "Low SylRep", "High Sylrep", "Limited Song Variety", "Highly Varied Song"), c(2,2,2))
-byTheCol <- c(rep(0,16),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),
+byTheCol <- c(c(0,0,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,2,0,4,2,4,2,4,2,5,2,5,2,5,2,5,0,0)
+  rep(0,16),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),
               rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),
               rep(1,8),rep(3,8),rep(2,8),rep(0,8),rep(2,8),rep(4,8),rep(2,8),
               rep(4,8),rep(2,8),rep(4,8),rep(2,8),rep(5,8),rep(2,8),rep(5,8),

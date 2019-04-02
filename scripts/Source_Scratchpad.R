@@ -228,6 +228,11 @@ g = function(...) {
 }
 
 
+source(file.path("scripts", "Source_Reference_Section.R"))
+# referenceSection("multirun")
+referenceSection("profiler")
+
+
 shifting_curstart <- 1
 paramsFile <- c("params.yaml")
 paramsSource = paramsFile
