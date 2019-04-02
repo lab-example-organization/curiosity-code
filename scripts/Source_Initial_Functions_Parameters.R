@@ -121,7 +121,7 @@ define_temp_data <- function(universal_parameters) {
 
 recordvariable.initialize <- function(P, variableID, RecSimFct) {
 
-  timestepRecordLength <- P$num_timesteps / RecSimFct
+  timestepRecordLength <- 1000 / RecSimFct
 
   if (variableID == 1) {
     record_variable <- array(

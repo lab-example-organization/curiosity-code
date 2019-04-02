@@ -126,143 +126,6 @@ syll_learn <- function (parameters, moranData, select_type = 2,
 }
 
 
-recordvariable.initialize <- function(P, timestep_fraction, variableID) {
-  if (variableID == 1) {
-    record.variable <- array(0, c(
-      2, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID == 2) {
-    record.variable <- array(0, c(
-      (2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID == 3) {
-    record.variable <- array(0, c(
-      12, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID == 4) {
-    record.variable <- array(0, c(
-      (2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), 
-      (P$num_timesteps/timestep_fraction)))
-  }
-  return(record.variable)
-}
-
-
-sylrep_rowcol.archive <- function (parameters,
-                                   data_container, 
-                                   syllable_object,
-                                   timestep) {
-  for (population in 1:parameters$num_pop) {
-    for (sex in 1:2) {
-      #sylrep_rowcol
-      data_container[sex, population, timestep] <- mean(rowSums(
-       syllable_object[
-        ((
-           1 + ((sex - 1) * (parameters$pop_size / 2))
-         ) : (
-           sex * (parameters$pop_size / 2)
-        )), , population]
-      ))
-    }
-  }
-  return(data_container)
-}
-
-
-sylrep_dstbxn.archive <- function (parameters,
-                                   data_container, 
-                                   syllable_object,
-                                   timestep) {
-
-  for (population in 1:parameters$num_pop) {
-    for (sex in 1:2) {
-      # sylrep_dstbxn
-      data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(
-        syllable_object[((
-          1 + ((sex - 1) * (parameters$pop_size / 2))
-          ) : (
-          sex * (parameters$pop_size / 2)
-          )), , population]
-      )
-    }
-  }
-  return(data_container)
-}
-
-
-curity_mean_t.archive <- function (parameters, 
-                                   tempData, 
-                                   data_container,
-                                   curiosity_object,
-                                   timestep) {
-  for (population in 1:parameters$num_pop) {
-    # curity_mean_t
-    data_container[3, population, timestep] <- tempData[
-      2, parameters$sylnum + 3, population]
-    data_container[10, population, timestep] <- tempData[
-      3, parameters$sylnum + 3, population]
-
-    for (sex in 1:2) {
-      data_container[sex, population, timestep] <- mean(
-        curiosity_object[((
-          1 + ((sex-1) * parameters$pop_size/2)
-        ):(
-          sex * parameters$pop_size/2)), population]
-        )
-
-      # Individual Curiosity Values
-      data_container[
-        (sex + 3), population, timestep
-      ] <- tempData[sex, parameters$sylnum + 2, population]
-
-      data_container[
-        (sex + 5), population, timestep
-      ] <- tempData[(sex + 2), parameters$sylnum + 2, population]
-
-      data_container[
-        (sex + 7), population, timestep
-      ] <- tempData[(sex + 2), parameters$sylnum + 4, population]
-
-      data_container[
-        11, population, timestep
-      ] <- tempData[(sex + 2), parameters$sylnum + 5, population] # problems: this value degenerates two into one, by not leaving "sex" variable on left of equation
-
-      data_container[
-        12, population, timestep
-      ] <- tempData[sex, parameters$sylnum + 5, population] # same as above
-    }
-  } 
-  return(data_container)
-}
-
-
-      data_container[
-        12, population, timestep
-      ] <- tempData[sex, parameters$sylnum + 5, population]
-    }
-  }
-  return(data_container)
-}
-
-curity_repert.archive <- function (parameters,
-                                   data_container, 
-                                   curiosity_object,
-                                   timestep) {
-
-  for (population in 1:parameters$num_pop) {
-    for (sex in 1:2) {
-      # curity_repert
-      data_container[
-        (sex + ((population - 1) * 2)), , timestep
-      ] <- hist(curiosity_object[((
-        1 + ((sex-1) * parameters$pop_size / 2)
-      ):(
-        sex * parameters$pop_size / 2
-      )), population], breaks = 
-      parameters$curiositybreaks, plot = FALSE)$counts
-    }
-  }
-  return(data_container)
-}
-
-
 make.offspring.calls <- function(parameters, temporMan){
   for(sex in 1:2){
     new_index <- c(sample(parameters$pop_calls_matrix[sex, ], 2, replace=T))
@@ -557,7 +420,6 @@ sing.selection <- function(parameters, tempMoran,
 
 curiosity_learn <- function (parameters, 
                              tempObjects, 
-                             timestep = single_timestep, 
                              inheritance_pattern = 1) {
   
   curinh_patterns <- array (
@@ -673,6 +535,143 @@ resylreps.offspring <- function(parameters, moranObjectTemp, sylrep_object) {
     }
   }
   return(sylrep_object)
+}
+
+
+recordvariable.initialize <- function(P, timestep_fraction, variableID) {
+  if (variableID == 1) {
+    record.variable <- array(0, c(
+      2, P$num_pop, (1000/timestep_fraction)))
+  } else if (variableID == 2) {
+    record.variable <- array(0, c(
+      (2 * P$num_pop), P$sylnum, (1000/timestep_fraction)))
+  } else if (variableID == 3) {
+    record.variable <- array(0, c(
+      12, P$num_pop, (1000/timestep_fraction)))
+  } else if (variableID == 4) {
+    record.variable <- array(0, c(
+      (2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), 
+      (1000/timestep_fraction)))
+  }
+  return(record.variable)
+}
+
+
+sylrep_rowcol.archive <- function (parameters,
+                                   data_container, 
+                                   syllable_object,
+                                   timestep) {
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      #sylrep_rowcol
+      data_container[sex, population, timestep] <- mean(rowSums(
+       syllable_object[
+        ((
+           1 + ((sex - 1) * (parameters$pop_size / 2))
+         ) : (
+           sex * (parameters$pop_size / 2)
+        )), , population]
+      ))
+    }
+  }
+  return(data_container)
+}
+
+
+sylrep_dstbxn.archive <- function (parameters,
+                                   data_container, 
+                                   syllable_object,
+                                   timestep) {
+
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      # sylrep_dstbxn
+      data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(
+        syllable_object[((
+          1 + ((sex - 1) * (parameters$pop_size / 2))
+          ) : (
+          sex * (parameters$pop_size / 2)
+          )), , population]
+      )
+    }
+  }
+  return(data_container)
+}
+
+
+curity_mean_t.archive <- function (parameters, 
+                                   tempData, 
+                                   data_container,
+                                   curiosity_object,
+                                   timestep) {
+  for (population in 1:parameters$num_pop) {
+    # curity_mean_t
+    data_container[3, population, timestep] <- tempData[
+      2, parameters$sylnum + 3, population]
+    data_container[10, population, timestep] <- tempData[
+      3, parameters$sylnum + 3, population]
+
+    for (sex in 1:2) {
+      data_container[sex, population, timestep] <- mean(
+        curiosity_object[((
+          1 + ((sex-1) * parameters$pop_size/2)
+        ):(
+          sex * parameters$pop_size/2)), population]
+        )
+
+      # Individual Curiosity Values
+      data_container[
+        (sex + 3), population, timestep
+      ] <- tempData[sex, parameters$sylnum + 2, population]
+
+      data_container[
+        (sex + 5), population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 2, population]
+
+      data_container[
+        (sex + 7), population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 4, population]
+
+      data_container[
+        11, population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 5, population] # problems: this value degenerates two into one, by not leaving "sex" variable on left of equation
+
+      data_container[
+        12, population, timestep
+      ] <- tempData[sex, parameters$sylnum + 5, population] # same as above
+    }
+  } 
+  return(data_container)
+}
+
+
+#       data_container[
+#         12, population, timestep
+#       ] <- tempData[sex, parameters$sylnum + 5, population]
+#     }
+#   }
+#   return(data_container)
+# }
+
+curity_repert.archive <- function (parameters,
+                                   data_container, 
+                                   curiosity_object,
+                                   timestep) {
+
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      # curity_repert
+      data_container[
+        (sex + ((population - 1) * 2)), , timestep
+      ] <- hist(curiosity_object[((
+        1 + ((sex-1) * parameters$pop_size / 2)
+      ):(
+        sex * parameters$pop_size / 2
+      )), population], breaks = 
+      parameters$curiositybreaks, plot = FALSE)$counts
+    }
+  }
+  return(data_container)
 }
 
 

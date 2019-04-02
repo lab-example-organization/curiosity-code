@@ -40,7 +40,7 @@ convert_stored_data <- function(parms = params,
     )
 
   for(specificChunk in 1:nTs) {
-
+      # specificChunk <- 1
       SC <- (1 + ((specificChunk - 1)*numSlice)) # output_chunk_start
       EC <- specificChunk*numSlice # output_chunk_end
           
@@ -248,21 +248,17 @@ summary_statistics <- function(parameters, Q, R, population, simplification_fact
   for(sex in 1:2) {
     sink(file = paste0(R$datez, R$run_name, "_Summary_Statistics"), append = TRUE)
     print(paste0("pop ", population, " ", R$Sexes[sex], " rep size - avg over last 1% of timesteps"))
-    print(mean(Q$sylrepz[sex, population, 
-      ((num_timesteps/(num_timesteps/100) - 1):
-        num_timesteps/(num_timesteps/100))]))
+    print(mean(Q$sylrepz[sex, population,
+    (parameters$RecordSimplifyFactor-1):parameters$RecordSimplifyFactor]))
     print(paste0("pop ", population, " ", R$Sexes[sex], " rep size - avg over last 5% of timesteps"))
     print(mean(Q$sylrepz[sex, population, 
-      ((num_timesteps/(num_timesteps/100) - 5):
-        num_timesteps/(num_timesteps/100))]))
+    (parameters$RecordSimplifyFactor-5):parameters$RecordSimplifyFactor]))
     print(paste0("pop ", population, " ", R$Sexes[sex], " curiosity - avg over last 1% of timesteps"))
     print(mean(Q$cursity[sex, population, 
-      ((num_timesteps/(num_timesteps/100) - 1):
-        num_timesteps/(num_timesteps/100))]))
+    (parameters$RecordSimplifyFactor-1):parameters$RecordSimplifyFactor]))
     print(paste0("pop ", population, " ", R$Sexes[sex], " curiosity - avg over last 5% of timesteps"))
     print(mean(Q$cursity[sex, population, 
-      ((num_timesteps/(num_timesteps/100) - 5):
-        num_timesteps/(num_timesteps/100))]))
+    (parameters$RecordSimplifyFactor-5):parameters$RecordSimplifyFactor]))
     sink() 
   }
 }
@@ -415,20 +411,16 @@ simple_plots <- function(parameters, R = R, Q = converted_data, extra_lines = FA
         sink(file = paste0(saving_dir, R$datez, R$run_name, "_Summary_Statistics"), append = TRUE)
         print(paste0("pop ", population, " ", R$Sexes[sex], " rep size - avg over last 1% of timesteps"))
         print(mean(sylrepzlist[[number_of_runs + 1]][sex, population, 
-          ((num_timesteps/(num_timesteps/100) - 1):
-            num_timesteps/(num_timesteps/100))]))
+          ((parameters$RecordSimplifyFactor-1):(parameters$RecordSimplifyFactor))]))
         print(paste0("pop ", population, " ", R$Sexes[sex], " rep size - avg over last 5% of timesteps"))
-        print(mean(sylrepzlist[[number_of_runs + 1]][sex, population, 
-          ((num_timesteps/(num_timesteps/100) - 5):
-            num_timesteps/(num_timesteps/100))]))
+        print(mean(sylrepzlist[[number_of_runs + 1]][sex, population,
+          (parameters$RecordSimplifyFactor-5):parameters$RecordSimplifyFactor]))
         print(paste0("pop ", population, " ", R$Sexes[sex], " curiosity - avg over last 1% of timesteps"))
         print(mean(cursitylist[[number_of_runs + 1]][sex, population, 
-          ((num_timesteps/(num_timesteps/100) - 1):
-            num_timesteps/(num_timesteps/100))]))
+          (parameters$RecordSimplifyFactor-1):parameters$RecordSimplifyFactor]))
         print(paste0("pop ", population, " ", R$Sexes[sex], " curiosity - avg over last 5% of timesteps"))
         print(mean(cursitylist[[number_of_runs + 1]][sex, population, 
-          ((num_timesteps/(num_timesteps/100) - 5):
-            num_timesteps/(num_timesteps/100))]))
+          (parameters$RecordSimplifyFactor-5):parameters$RecordSimplifyFactor]))
         sink()
         
       }

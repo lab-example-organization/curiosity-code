@@ -128,16 +128,16 @@ life_cycle <- function(
   curiosity_level <- initialize.curiosity(simParams, scMin, scMax)
   
   sylrep_rowcol <- recordvariable.initialize(
-      simParams, variableID = 1, RecSimFct = recordingSimpFact)
+      simParams, recordingSimpFact, variableID = 1)
   
   sylrep_dstbxn <- recordvariable.initialize(
-      simParams, variableID = 2, RecSimFct = recordingSimpFact)
+      simParams, recordingSimpFact, variableID = 2)
 
   curity_mean_t <- recordvariable.initialize(
-      simParams, variableID = 3, RecSimFct = recordingSimpFact)
+      simParams, recordingSimpFact, variableID = 3)
 
   curity_repert <- recordvariable.initialize(
-      simParams, variableID = 4, RecSimFct = recordingSimpFact)
+      simParams, recordingSimpFact, variableID = 4)
 
   source(file.path("scripts", "Source_Life_Cycle_Functions.R"))
   
@@ -170,7 +170,6 @@ life_cycle <- function(
         # Add noise to inherited curiosity trait, store temporarily
         moranObjects <- curiosity_learn(parameters = simParams, 
                                         tempObjects = moranObjects, 
-                                        timestep = single_timestep, 
                                         inheritance_pattern = curinh_style) 
         
         # 
@@ -367,6 +366,5 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(specificSimNumber = shifting_curstart, 
                  number_of_repeats = number_of_reps,
-                 paramsSource = paramsSource,
-                 simplification_factor = params$outputSimplify)
+                 paramsSource = paramsSource)
 }
