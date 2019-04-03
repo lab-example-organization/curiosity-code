@@ -54,25 +54,25 @@ if(!(dir.exists(file.path(strsplit(getwd(),
     # by loading them from the computer, or 
     # by downloading them from the internet.
 source(file.path("scripts", "Source_Reference_Section.R"))
-# referenceSection("multirun")
-referenceSection("profiler")
+referenceSection("multirun")
+# referenceSection("profiler")
 
 # Specify the number of cores/workers we want to use
 #     n_cores <- detectCores() - 4 # built around a maximum allowance
-n_cores <- 3
+n_cores <- 2
 
 
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-# shifting_curstart <- 1:6
-# paramsFile <- c("params.yaml")
-# mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, mc.cores = n_cores)
-
-
+shifting_curstart <- 1:125
 paramsFile <- c("params.yaml")
-profvis({
-  shifting_curstart <- 1
-  multi_runs(shifting_curstart = shifting_curstart, paramsSource = paramsFile)
-})
+mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, mc.cores = n_cores)
+
+
+# paramsFile <- c("params.yaml")
+# profvis({
+#   shifting_curstart <- 1
+#   multi_runs(shifting_curstart = shifting_curstart, paramsSource = paramsFile)
+# })
 
