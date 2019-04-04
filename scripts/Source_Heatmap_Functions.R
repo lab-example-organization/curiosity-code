@@ -52,9 +52,9 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
     #individual_run <- 1
 
     multirun_directory <-
-      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output", 
-      list.files(path = file.path(dirHeatMap, 
-      allRunDirs[individual_run], "multirun_output"), pattern = "output$")
+      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output"#, 
+      #list.files(path = file.path(dirHeatMap, 
+      #allRunDirs[individual_run], "multirun_output"), pattern = "output$")
       )
     datanames <- c("CurHist","Cursity","SylDist","SylReps")
     objectnames <- c("curhist","cursity","sdstbxn","sylrepz")

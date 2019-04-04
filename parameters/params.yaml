@@ -250,7 +250,7 @@ curstarts:
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
 simNumberStart: 546
-runLength: '10k'
+runLength: '3k'
 SylLearnStyle: 'nsL'
 vertObLearn:
   vertical:
@@ -265,7 +265,7 @@ num_pop: [2]
 pop_size: [400]
 sylnum: [156]
 num_sylls_per_prob_lvl: [12]
-number_of_reps: [50]
+number_of_reps: [3]
 standard_deviation: [2]
 
 # curinh.pattern - calling either the row number 

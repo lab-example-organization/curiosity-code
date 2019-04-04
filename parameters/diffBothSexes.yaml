@@ -496,7 +496,7 @@ curstarts:
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
 
-simNumberStart: 546
+simNumberStart: 794
 runLength: '10k'
 SylLearnStyle: 'nsL'
 vertObLearn:
@@ -518,7 +518,7 @@ standard_deviation: [2]
 # curinh.pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
 # 1: father; 2: mother; 3: same; 4:opposite
-curinh_pattern: [3]
+curinh_pattern: [4]
 one_pop_singers: [10, 10]
 RecordSimplifyFactor: 100
 

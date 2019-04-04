@@ -227,6 +227,40 @@ g = function(...) {
   return(List)
 }
 
+# Then to execute:
+# Group the left hand side using the new function g() The right hand side should be a vector or a list Use the newly-created binary operator %=%
+
+# # Example Call;  Note the use of g()  AND  `%=%`
+# #     Right-hand side can be a list or vector
+# g(a, b, c)  %=%  list("hello", 123, list("apples, oranges"))
+
+# g(d, e, f) %=%  101:103
+
+# # Results: 
+# > a
+# [1] "hello"
+# > b
+# [1] 123
+# > c
+# [[1]]
+# [1] "apples, oranges"
+
+# > d
+# [1] 101
+# > e
+# [1] 102
+# > f
+# [1] 103
+
+# git checkout --track origin/daves_branch
+
+
+
+
+
+
+
+
 
 source(file.path("scripts", "Source_Reference_Section.R"))
 # referenceSection("multirun")
