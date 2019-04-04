@@ -19,128 +19,10 @@ referenceSection("heatmaps")
 
 ######  setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
 
-#
 
-#
+# Source the Functions
 
-#
-
-#
-
-#############
-
-#
-
-#
-
-#
-
-#
-
-#################### # # FUNCTIONS # # ########################
-
-# Heatmap Directory Creation and Referencing
-
-remakeString <- function(target, comp, out) {
-  # tR stands for temporary retainer
-  tR <- strsplit(target, comp)
-  
-  remadeStrings <- target
-  for(x in 1:125) {
-    if(is.na(tR[[x]][10])) {
-        remadeStrings[x] <- paste("sim", tR[[x]][8], tR[[x]][9], sep = out)
-    } else {
-      if(is.na(tR[[x]][11])) {
-        remadeStrings[x] <- paste("sim", tR[[x]][8], tR[[x]][9], tR[[x]][10], sep = out)
-      } else {
-        remadeStrings[x] <- paste("sim", tR[[x]][8], tR[[x]][9], tR[[x]][10], tR[[x]][11], sep = out)
-      }
-    }
-  }
-  
-  remadeStrings <- str_replace_all(remadeStrings, "[-]", ".")
-
-  return(remadeStrings)
-}
-
-HtMpDir <- function() {
-
-  heatmaps_dir <- c("results", "Heatmaps")
-
-  if(!(dir.exists(file.path(heatmaps_dir[1], heatmaps_dir[2])))) {
-      dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2]))
-  }
-
-  return(file.path(heatmaps_dir[1], heatmaps_dir[2]))
-}
-
-extractVarDirs <- function(home_path, fileNamePattern) {
-  variableStore_folderList <- list.files(file.path(home_path), pattern = fileNamePattern)
-  # list.files(file.path(home_path), pattern = fileNamePattern)
-  
-  return(variableStore_folderList)
-}
-
-extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
-  number_of_runs <- length(allRunDirs)
-  number_of_reps <- length(list.files(file.path(dirHeatMap, allRunDirs[1], "variable_store")))
-  dim_source = yaml.load_file(file.path("parameters", source_of_params))
-  
-  RunMeans <- list()
-
-  for(individual_run in 1:number_of_runs) {
-    
-    #individual_run <- 1
-
-    multirun_directory <-
-      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output"#, 
-      #list.files(path = file.path(dirHeatMap, 
-      #allRunDirs[individual_run], "multirun_output"), pattern = "output$"))
-      )
-    datanames <- c("CurHist","Cursity","SylDist","SylReps")
-    objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
-    listnames <- c("hist","sity","sdst","repz")
-    for(i in 1:4) {
-      listlister <- paste0(listnames[i], "list <- vector(mode = \"character\", length = number_of_reps)")
-      listmaker <- paste0(listnames[i], "list[", 1:number_of_reps, "] <- \"", datanames[i], 1:number_of_reps, ".RData\"")
-      eval(parse(text=c(listlister, listmaker))) # fill up '[listnames]list' objects with calls to multirun csv files
-    }
-
-    timeSpanChunks <- 1000
-
-    sylrepzlist <- array(0, c(2, dim_source$num_pop, timeSpanChunks, number_of_reps))
-    sdstbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timeSpanChunks, number_of_reps))
-    cursitylist <- array(0, c(12, dim_source$num_pop, timeSpanChunks, number_of_reps))
-    curhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timeSpanChunks, number_of_reps))
-
-    for(i in 1:number_of_reps) {
-      curhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
-      cursitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
-      sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
-      sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
-
-      # curhistlist[,,,i] <- fread(file.path(multirun_directory, histlist[i]))
-      # cursitylist[,,,i] <- fread(file.path(multirun_directory, sitylist[i]))
-      # sdstbxnlist[,,,i] <- fread(file.path(multirun_directory, sdstlist[i]))
-      # sylrepzlist[,,,i] <- fread(file.path(multirun_directory, repzlist[i]))
-    }
-    
-    # These four lines calculate the mean value across all the replicates
-
-    curHstMeans <- colMeans(aperm(curhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
-    curLvlMeans <- colMeans(aperm(cursitylist, c(4, 1, 2, 3)), na.rm = TRUE)
-    sylDbnMeans <- colMeans(aperm(sdstbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
-    sylRepMeans <- colMeans(aperm(sylrepzlist, c(4, 1, 2, 3)), na.rm = TRUE)
-    
-    RunMeans[[individual_run]] <- list(
-      sylRepMeans = sylRepMeans,
-      sylDbnMeans = sylDbnMeans,
-      curLvlMeans = curLvlMeans,
-      curHstMeans = curHstMeans
-    )
-  }
-  return(RunMeans)
-}
+source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
@@ -150,14 +32,39 @@ heatmapLand <- HtMpDir()
 all_the_runs <- extractVarDirs(heatmapLand, 
   #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
   #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
-  #"*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")
-  #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")
-  "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")
-  
+  "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
+  #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
+  #"*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
+  #"*_54[6-9]_|*_5[7-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # mothinh maleBias
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
 
+
+
+
+# stuff <- vector("character", length(all_the_runs))
+# for(thing in length(all_the_runs)) {
+# stuff[thing] <- str_sub(all_the_runs[thing], 8L, 10L)
+# }
+
+
+
+# norm1 <- all_the_runs[1:57]
+# norm2 <- all_the_runs[58:124]
+# all_the_runs <- c(norm1, all_the_runs[125], norm2)
+
+
+# norm1 <- all_the_runs[1:12]  #421-432
+# norm2 <- all_the_runs[13:37] #434-458
+# norm3 <- all_the_runs[38:52] #460-474
+# norm4 <- all_the_runs[53:67] #476-490
+# norm5<- all_the_runs[68:82] #492-506
+# norm6 <- all_the_runs[83:91] #508-516
+# norm7 <- all_the_runs[95:123]#517-545
+# 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+#all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
+# 
 extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
 all_the_names <- remakeString(all_the_runs, "_", ".")
 
@@ -166,19 +73,22 @@ names(extractedMeans) <- all_the_names
 
 # heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
 #heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
+
+# DIFFERING MALE CURSTARTS
+
 heatmap_array <- array(
   0, dim = c(5,5,5,8), list(
-    c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
-    c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
-    c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
+    c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), 
+    c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), 
+    c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), 
     c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
   ))
 
-for(malez in 1:5) {
-  for(femalez1 in 1:5) {
-    for(femalez2 in 1:5) {
+for(femalez in 1:5) {
+  for(malez1 in 1:5) {
+    for(malez2 in 1:5) {
 
-      tally <- femalez2 + 5*(femalez1 - 1) + 25*(malez - 1)
+      tally <- malez2 + 5*(malez1 - 1) + 25*(femalez - 1)
 
       sumStats <- c(
         extractedMeans[[tally]]$curLvlMeans[1,1,100],
@@ -191,11 +101,45 @@ for(malez in 1:5) {
         extractedMeans[[tally]]$sylRepMeans[2,2,100]
       )
 
-      heatmap_array[femalez1,femalez2,malez,] <- sumStats
+      heatmap_array[malez1,malez2,femalez,] <- sumStats
       
     }
   }
 }
+
+
+# DIFFERING FEMALE CURSTARTS
+
+# heatmap_array <- array(
+#   0, dim = c(5,5,5,8), list(
+#     c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
+#     c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
+#     c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
+#     c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+#   ))
+
+# for(malez in 1:5) {
+#   for(femalez1 in 1:5) {
+#     for(femalez2 in 1:5) {
+
+#       tally <- femalez2 + 5*(femalez1 - 1) + 25*(malez - 1)
+
+#       sumStats <- c(
+#         extractedMeans[[tally]]$curLvlMeans[1,1,100],
+#         extractedMeans[[tally]]$curLvlMeans[1,2,100],
+#         extractedMeans[[tally]]$curLvlMeans[2,1,100],
+#         extractedMeans[[tally]]$curLvlMeans[2,2,100],
+#         extractedMeans[[tally]]$sylRepMeans[1,1,100],
+#         extractedMeans[[tally]]$sylRepMeans[1,2,100],
+#         extractedMeans[[tally]]$sylRepMeans[2,1,100],
+#         extractedMeans[[tally]]$sylRepMeans[2,2,100]
+#       )
+
+#       heatmap_array[femalez1,femalez2,malez,] <- sumStats
+      
+#     }
+#   }
+# }
 
 #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "")
 
@@ -229,26 +173,42 @@ title_names <- c("Ending Curiosity Values - Pop 1 Males","Ending Curiosity Value
 
 
 
+# MALE PATTERN INHERITANCE (BIAS) (MORE DIFFERING FEMALE CURSTARTS)
+
 heatmap_axes <- list(
   mp2Vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),
   mp1Vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),
   mp1Vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity")
 )
 
+
+# FEMALE PATTERN INHERITANCE (BIAS) (MORE DIFFERING FEMALE CURSTARTS)
+
+# heatmap_axes <- list(
+#   mp2Vfem = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
+#   mp1Vfem = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
+#   mp1Vmp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Female Starting Curiosity")
+# )
+
 range_list <- array(data = c("Less Curiosity", "More Curiosity", "Seeks Similar Songs", "Seeks Novel Songs",
                              "Low SylRep", "High Sylrep", "Limited Song Variety", "Highly Varied Song"), c(2,2,2))
-byTheCol <- c(c(0,0,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,2,0,4,2,4,2,4,2,5,2,5,2,5,2,5,0,0)
-  rep(0,16),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),
-              rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),rep(1,8),rep(3,8),
-              rep(1,8),rep(3,8),rep(2,8),rep(0,8),rep(2,8),rep(4,8),rep(2,8),
-              rep(4,8),rep(2,8),rep(4,8),rep(2,8),rep(5,8),rep(2,8),rep(5,8),
-              rep(2,8),rep(5,8),rep(2,8),rep(5,8),rep(0,16))
 
-dat_array_doh <- array(c(rep(1,9),1,5,5,5,1,5,5,5,1),c(3,3,2))
+# making the layout matrix that will be populated by the figures. Named because they're arranged by column; one could conceivably arrange them by row as well.
+layoutDistribution <- c(0,0,1,3,1,3,1,3,1,
+                        3,1,3,1,3,1,3,1,3,
+                        2,0,2,4,2,4,2,4,2,
+                        5,2,5,2,5,2,5,0,0)
+layoutSize <- length(layoutDistribution)
+byTheCol <- vector("numeric", length = layoutSize*8)
+for(i in 1:layoutSize) {
+  byTheCol[(1 + (i - 1)*8):(i*8)] <- rep(layoutDistribution[i], 8)
+}
+
+# dat_array_doh <- array(c(rep(1,9),1,5,5,5,1,5,5,5,1),c(3,3,2))
 # dat_array_doh <- array(c(2,1,1,1,2,1,1,1,2,2,5,5,5,2,5,5,5,2),c(3,3,2))
 # dat_array_doh <- array(c(3,1,1,1,3,1,1,1,3,3,5,5,5,3,5,5,5,3),c(3,3,2))
 # dat_array_doh <- array(c(4,1,1,1,4,1,1,1,4,4,5,5,5,4,5,5,5,4),c(3,3,2))
-# dat_array_doh <- array(c(5,1,1,1,5,1,1,1,5,rep(5,9)),c(3,3,2))
+dat_array_doh <- array(c(5,1,1,1,5,1,1,1,5,rep(5,9)),c(3,3,2))
 
 legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
 

@@ -154,18 +154,23 @@ figProdMultRun <- function(specificSimNumber = 1, number_of_repeats, paramsSourc
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist, 
                mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory)
   print("simple_plots done")
-  src.dir = file.path("scripts")
-  file.names = dir(src.dir)[grep("Source", dir(src.dir))]
-  
-  dir.create(file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_scripts"))
 
+  srcDir = file.path("scripts")
+  file.names = dir(srcDir)[grep("Source", dir(srcDir))]
+  dir.create(file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_scripts"))
   sapply(file.names, function(x) { 
-    
-    file.copy(from=file.path(src.dir, x), 
+    file.copy(from=file.path(srcDir, x), 
               to=file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_scripts", x), 
               overwrite = FALSE) })
 
-  
+  parmDir = file.path("params")
+  file.names = dir(parmDir)[grep(".yaml", dir(parmDir))]
+  dir.create(file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_params"))
+  sapply(file.names, function(x) { 
+    file.copy(from=file.path(parmDir, x), 
+              to=file.path(strsplit(multiRun_folderList[1], "/variable_store", )[[1]][1], "copy_of_params", x), 
+              overwrite = FALSE) })
   
   return(print("Exit Status: 0"))
 }
+
