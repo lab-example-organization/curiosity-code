@@ -58,16 +58,18 @@ referenceSection("multirun")
 # referenceSection("profiler")
 
 # Specify the number of cores/workers we want to use
-    n_cores <- detectCores() - 4 # built around a maximum allowance
+    n_cores <- detectCores() - 3 # built around a maximum allowance
 # n_cores <- 3
 
 
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:248
-paramsFile <- c("diffBothSexes.yaml")
-mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, mc.cores = n_cores)
+shifting_curstart <- 1:125
+paramsFile <- c("params.yaml")
+simDate <- gsub('-', '', substring(Sys.Date(), 3))
+secretCode <- 58418
+mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = simDate, seedNumber = secretCode, mc.cores = n_cores)
 
 
 # paramsFile <- c("params.yaml")

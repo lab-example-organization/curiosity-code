@@ -34,7 +34,7 @@ savinStuff <- function (Parameters, Output_Filename, moran) {
 
 makeDocnamez <- function (scMin, scMax, simNumber, 
                          runLength, SylLearnStyle, vertOblLearn, 
-                         sylDist, curinh_value, standDev) {
+                         sylDist, curinh_value, standDev, simDate) {
 
   VOtext = paste0 (
     if (vertOblLearn[2]/0.1==1) {round (vertOblLearn[2]/0.1,1)
@@ -50,32 +50,54 @@ makeDocnamez <- function (scMin, scMax, simNumber,
   if (VOtext == "1_1_V_1_1_O") {VOtext = "normVO"}
   
   if (scMin[1] == scMin[2] && 
-     scMin[2] == scMin[3] && 
-     scMin[3] == scMin[4] &&
-     scMax[1] == scMax[2] && 
-     scMax[2] == scMax[3] && 
-     scMax[3] == scMax[4]) {
+      scMin[2] == scMin[3] && 
+      scMin[3] == scMin[4] &&
+      scMax[1] == scMax[2] && 
+      scMax[2] == scMax[3] && 
+      scMax[3] == scMax[4]) {
     curstart_ranges = paste0(scMin[1], "-", scMax[1])
   } else {
     
     if (scMin[1] == scMin[3] && 
-       scMax[1] == scMax[3] && 
-       (scMax[2] != scMax[3] ||  scMin[2] != scMin[3])) {
+        scMax[1] == scMax[3] && 
+       (scMax[2] != scMax[3] || 
+        scMin[2] != scMin[3]) &&
+        scMin[2] == scMin[4] &&
+        scMax[2] == scMax[4]) {
       # 1-7_f_7-13m
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
     
-    } else if (scMin[1] != scMin[3] || scMax[1] != scMax[3]) {
+    } else if (scMin[2] == scMin[4] &&
+               scMax[2] == scMax[4] &&
+              (scMin[1] != scMin[3] ||
+               scMax[1] != scMax[3])) {
       # 1-7f_1-7mp1_7-13mp2
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", 
                           scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
     
-    } else if (scMin[1] == scMin[2] && scMax[1] == scMax[2] && 
-              scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
+    } else if (scMin[1] == scMin[3] &&
+               scMax[1] == scMax[3] &&
+              (scMin[2] != scMin[4] || 
+               scMax[2] != scMax[4])) {
+      # 1-7f_1-7mp1_7-13mp2
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", scMin[4], "-", 
+                          scMax[4], "fp2", "_", scMin[3], "-", scMax[3], "m")
+    
+    } else if (scMin[1] == scMin[2] && 
+               scMax[1] == scMax[2] && 
+               scMin[1] != scMin[4] && 
+               scMax[1] != scMax[4] &&
+               scMin[3] == scMin[4] && 
+               scMax[3] == scMax[4] &&
+               scMin[3] != scMin[1] && 
+               scMax[3] != scMax[1] &&
+               scMin[2] != scMin[3] && 
+               scMax[2] != scMax[3] && 
+               scMin[2] != scMin[4] && 
+               scMax[2] != scMax[4]) {
       # 1-7p1_7-13p2
       curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
     
-    } else if (scMin[2] != scMin[4] || scMax[2] != scMax[4]) {
-
     }
   } # this is the text insert for the docnamez curstart ranges subsection
   
@@ -83,7 +105,7 @@ makeDocnamez <- function (scMin, scMax, simNumber,
   
   if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName <- ""}
 
-  simStartDate <- gsub('-', '', substring(Sys.Date(), 3))
+  simStartDate <- simDate
 
   DocumentName <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
                     SylLearnStyle, "_", VOtext, "_", sylDist, "_",
@@ -98,12 +120,13 @@ life_cycle <- function(
   scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
-  recordingSimpFact, one_pop_singers = c(10,10)) {
+  recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, directoryDate) {
   
   docnamez <- makeDocnamez(
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
     SylLearnStyle = SylLearnStyle, vertOblLearn = vertOblLearn, 
-    sylDist = sylDist, curinh_value = curinh_value, standDev = standDev)
+    sylDist = sylDist, curinh_value = curinh_value, standDev = standDev, 
+    simDate = directoryDate)
 
   #parent_directory <- getwd()
   source(file.path("scripts", "Source_Initial_Functions_Parameters.R"))
@@ -302,12 +325,14 @@ archiveSimFiles <- function(path, filename, archive = FALSE, new_dir = FALSE){
   } # else{print("")}
 }
 
-multi_runs <- function(shifting_curstart, paramsSource) {
+multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
   # # Load the C++ functions
   sourceCpp(file.path('cpp_source', 'median.cpp'))
   sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
   sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
+  # dirDate and seedNumber space
+  set.seed(seedNumber + shifting_curstart)
   # shifting_curstart <- 1
   # paramsFile <- c("params.yaml")
   # paramsSource = paramsFile
@@ -358,7 +383,9 @@ multi_runs <- function(shifting_curstart, paramsSource) {
       SimNumberLC = shifting_curstart,
       curinh_style = params$curinh_pattern,
       recordingSimpFact = params$RecordSimplifyFactor,
-      one_pop_singers = params$one_pop_singers
+      one_pop_singers = params$one_pop_singers,
+      curinhProportion = params$curinhDistribution,
+      directoryDate = dirDate
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }

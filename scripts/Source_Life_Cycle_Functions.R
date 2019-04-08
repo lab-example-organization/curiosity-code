@@ -422,81 +422,156 @@ curiosity_learn <- function (parameters,
                              tempObjects, 
                              inheritance_pattern = 1) {
   
-  curinh_patterns <- array (
-    data = c (
-      1, 2, 
-      1, 2, 
-      1, 2, 
-      2, 1
-    ), 
-    dim = c (
-      4,2
-    ),
-    dimnames = list (c ("father", "mother", "same", "opposite"), 
-                     c ("male birb", "female birb")
-                   )
-  )
-  # For posterity: 
-  #   curinh_patterns <- array(
-  #     data = c(1, 2, 1, 2, 1, 2, 2, 1), 
-  #     dim = c(4,2), 
-  #     dimnames = list(c("father", "mother", "same", "opposite"), 
-  #                     c("male birb", "female birb")
-  #                    )
-  #   ) MAKE BLENDED INHERITANCE OPTION - MAYBE USE ZERO_TO_ONE_TEMPLATE
-  newcuriosity <- array(
-          data = runif((parameters$num_pop * 2), -1, 1), 
-          dim = c(2, parameters$num_pop))
-  
-  for(population in 1 : (parameters$num_pop)) {
+  if(!(inheritance_pattern %in% c(1,2,3,4))) {
+
+    x <- parameters$curinhProportion
+
+    newcuriosity <- array(
+            data = runif((parameters$num_pop * 2), -1, 1), 
+            dim = c(2, parameters$num_pop))
+
+    for(population in 1 : (parameters$num_pop)) {
+      
+      for(sex in 1:2) {
+        if(
+            tempObjects[1, 
+              parameters$sylnum + 2, 
+              population
+            ]== 0 ||
+            tempObjects[2, 
+              parameters$sylnum + 2, 
+              population
+            ]== 0
+           ) {stop(
+          "not the time for learning curiosity from parents right now...")}
+        
+        curinh_attempts <- 1
+
+        while(((
+            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+
+            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+          ) + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ]))) < 0) {
+
+          newcuriosity[sex, population] <- runif(1, 0, 1)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+
+        while(((
+            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+
+          te(1-x) * mpObjects[2, parameters$sylnum + 2, population]
+        ) + 
+        ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+        ]))) > 1) {
+
+          newcuriosity[sex, population] <- runif(1, -1, 0)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+        
+        new.curiosity <- (
+            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+
+            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+          ) + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ])) # Adding small proportion of noise
+        
+        tempObjects[
+          (sex + 2), parameters$sylnum + 4, population
+        ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
+        tempObjects[
+          (sex + 2), parameters$sylnum + 2, population
+        ] <- new.curiosity
+        tempObjects[
+          (sex + 2), parameters$sylnum + 5, population
+        ] <- curinh_attempts
+      }
+    }
+
+  } else {
+
+    curinh_patterns <- array (
+      data = c (
+        1, 2, 
+        1, 2, 
+        1, 2, 
+        2, 1
+      ), 
+      dim = c (
+        4,2
+      ),
+      dimnames = list (c ("father", "mother", "same", "opposite"), 
+                      c ("male birb", "female birb")
+                    )
+    )
+    # For posterity: 
+    #   curinh_patterns <- array(
+    #     data = c(1, 2, 1, 2, 1, 2, 2, 1), 
+    #     dim = c(4,2), 
+    #     dimnames = list(c("father", "mother", "same", "opposite"), 
+    #                     c("male birb", "female birb")
+    #                    )
+    #   )
+
+    newcuriosity <- array(
+            data = runif((parameters$num_pop * 2), -1, 1), 
+            dim = c(2, parameters$num_pop))
     
-    for(sex in 1:2) {
-      if(tempObjects[
-        curinh_patterns[inheritance_pattern,sex], 
-        parameters$sylnum + 2, 
-        population
-      ] == 0) {stop(
-        "not the time for learning curiosity from parents right now...")}
+    for(population in 1 : (parameters$num_pop)) {
       
-      curinh_attempts <- 1
+      for(sex in 1:2) {
+        if(tempObjects[
+          curinh_patterns[inheritance_pattern,sex], 
+          parameters$sylnum + 2, 
+          population
+        ] == 0) {stop(
+          "not the time for learning curiosity from parents right now...")}
+        
+        curinh_attempts <- 1
 
-      while((tempObjects[curinh_patterns[
+        while((tempObjects[curinh_patterns[
+            inheritance_pattern,sex
+          ], parameters$sylnum + 2, population] + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ]))) < 0) {
+
+          newcuriosity[sex, population] <- runif(1, 0, 1)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+
+        while((tempObjects[curinh_patterns[
           inheritance_pattern,sex
         ], parameters$sylnum + 2, population] + 
         ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
-        ]))) < 0) {
+        ]))) > 1) {
 
-        newcuriosity[sex, population] <- runif(1, 0, 1)
-        curinh_attempts <- curinh_attempts + 1
-      
+          newcuriosity[sex, population] <- runif(1, -1, 0)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+        
+        new.curiosity <- tempObjects[curinh_patterns[
+            inheritance_pattern,sex
+          ], parameters$sylnum + 2, population] + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ])) # Adding small proportion of noise
+        
+        tempObjects[
+          (sex + 2), parameters$sylnum + 4, population
+        ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
+        tempObjects[
+          (sex + 2), parameters$sylnum + 2, population
+        ] <- new.curiosity
+        tempObjects[
+          (sex + 2), parameters$sylnum + 5, population
+        ] <- curinh_attempts
       }
-
-      while((tempObjects[curinh_patterns[
-        inheritance_pattern,sex
-      ], parameters$sylnum + 2, population] + 
-      ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
-      ]))) > 1) {
-
-        newcuriosity[sex, population] <- runif(1, -1, 0)
-        curinh_attempts <- curinh_attempts + 1
-      
-      }
-      
-      new.curiosity <- tempObjects[curinh_patterns[
-          inheritance_pattern,sex
-        ], parameters$sylnum + 2, population] + 
-        ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
-        ])) # Adding small proportion of noise
-      
-      tempObjects[
-        (sex + 2), parameters$sylnum + 4, population
-      ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
-      tempObjects[
-        (sex + 2), parameters$sylnum + 2, population
-      ] <- new.curiosity
-      tempObjects[
-        (sex + 2), parameters$sylnum + 5, population
-      ] <- curinh_attempts
     }
   }
   return(tempObjects)

@@ -35,7 +35,10 @@ all_the_runs <- extractVarDirs(heatmapLand,
   "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
   #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
   #"*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
-  #"*_54[6-9]_|*_5[7-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # mothinh maleBias
+  #"*_54[6-9]_|*_5[7-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh maleBias
+  #"*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[1-3]_"  # sameinh_femBias
+  # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_"   # oppinh maleBias
+  # "*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_"   # oppinh femBias
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
