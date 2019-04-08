@@ -119,26 +119,28 @@ define_temp_data <- function(universal_parameters) {
 
 # INITIALIZING FUNCTIONS ##################################
 
-recordvariable.initialize <- function(P, timestep_fraction, variableID) {
+recordvariable.initialize <- function(P, variableID, RecSimFct) {
+
+  timestepRecordLength <- 1000 / RecSimFct
+
   if (variableID == 1) {
     record_variable <- array(
-      0, c (2, P$num_pop, (P$num_timesteps/timestep_fraction)))
+      0, c (2, P$num_pop, timestepRecordLength))
   } else if (variableID == 2) {
     record_variable <- array(
-      0, c ((2 * P$num_pop), P$sylnum, 
-        (P$num_timesteps/timestep_fraction)))
+      0, c ((2 * P$num_pop), P$sylnum, timestepRecordLength))
   } else if (variableID == 3) {
     record_variable <- array(
-      0, c (12, P$num_pop, (P$num_timesteps/timestep_fraction)))
+      0, c (12, P$num_pop, timestepRecordLength))
   } else if (variableID == 4) {
     record_variable <- array(
       0, c ((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), 
-        (P$num_timesteps/timestep_fraction)))
+        timestepRecordLength))
   }
-  # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
-  #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-  #                         curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
-  #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
+  # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
+  #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/simplificationFactor))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
+  #                         curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+  #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/simplificationFactor))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
   #                         )
     # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
     # Row 3 covers the number of selections made by females from each population, per timestep.

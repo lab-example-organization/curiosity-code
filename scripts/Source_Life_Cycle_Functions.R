@@ -54,7 +54,7 @@ syll_learn <- function (parameters, moranData, select_type = 2,
       #source_of_ONEs <- which(moran$learning.pool[5, , population] == 1)[
         #which(!(which(moran$learning.pool[5, , population] == 1) %in% which(
           #moran$learning.pool[3, , population] == 1)))]
-      source_of_ONEs <- setdiff(which(source_of_ONEs==1),which(pupil_has_ONEs == 1))
+      source_of_ONEs <- setdiff(source_of_ONEs, pupil_has_ONEs)
       if(length(source_of_ONEs) == 0) {
         if(verbose == TRUE) {
           print(paste0("tutor has no syllables for population ", population))
@@ -112,81 +112,22 @@ syll_learn <- function (parameters, moranData, select_type = 2,
               counter = counter + 1
             }
             moranData[(sex + 2), floor(r_norm), population] <- 1
-            average_rate_randlearn_overlap <- append(average_rate_randlearn_overlap, counter)
+            average_rate_randlearn_overlap <- append(
+              average_rate_randlearn_overlap, counter)
           } else {
             moranData[(sex + 2), floor(r_norm), population] <- 1
           }
         }
       }
-      if(totally_new == TRUE) {moranData[sex, parameters$sylnum + 5, population] <- mean(average_rate_randlearn_overlap)}
+      if(totally_new == TRUE) {
+        moranData[
+          sex, parameters$sylnum + 5, population
+        ] <- mean(average_rate_randlearn_overlap)}
     }
   }
   return(moranData)
 }
 
-recordvariable.initialize <- function(P, timestep_fraction, variableID) {
-  if (variableID == 1) {
-    record.variable <- array(0, c(2, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID == 2) {
-    record.variable <- array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID == 3) {
-    record.variable <- array(0, c(12, P$num_pop, (P$num_timesteps/timestep_fraction)))
-  } else if (variableID == 4) {
-    record.variable <- array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/timestep_fraction)))
-  }
-  return(record.variable)
-}
-
-variable.archive <- function(parameters, tempData, syllable_object = FALSE, curiosity_object = FALSE, data_container, timestep, specificVariable) {
-  #context_name <- c("parents&offspring","replacedindividuals")
-  #if(context == 1) {
-  # if (!(syllable_object) && (specificVariable == 1) || (specificVariable == 2)) {
-  #   stop("if specificVariable = 1 | 2, then syllable_object must exist")
-  # } else if ((specificVariable == 3) || (specificVariable == 4) && !(tempData) || !(curiosity_object)) {
-  #   stop("if specificVariable = 3 | 4, then tempData and curiosity_object must exist")
-  # }
-  if (specificVariable == 1) {
-    for (population in 1:parameters$num_pop) {
-      for (sex in 1:2) {
-        #sylrep_rowcol
-        data_container[sex, population, timestep] <- mean(rowSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population]))
-      }
-    }
-  
-  } else if (specificVariable == 2) {
-    for (population in 1:parameters$num_pop) {
-      for (sex in 1:2) {
-        # sylrep_dstbxn
-        data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(syllable_object[((1 + ((sex - 1) * (parameters$pop_size / 2))) : (sex * (parameters$pop_size / 2))), , population])
-      }
-    }
-  } else if (specificVariable == 3) {
-    for (population in 1:parameters$num_pop) {
-      # curity_mean_t
-      data_container[3, population, timestep] <- tempData[2, parameters$sylnum + 3, population]
-      data_container[10, population, timestep] <- tempData[3, parameters$sylnum + 3, population]
-
-      for (sex in 1:2) {
-        data_container[sex, population, timestep] <- mean(curiosity_object[((1 + ((sex-1) * parameters$pop_size/2)):(sex * parameters$pop_size/2)), population])
-
-        # Individual Curiosity Values
-        data_container[(sex + 3), population, timestep] <- tempData[sex, parameters$sylnum + 2, population]
-        data_container[(sex + 5), population, timestep] <- tempData[(sex + 2), parameters$sylnum + 2, population]
-        data_container[(sex + 7), population, timestep] <- tempData[(sex + 2), parameters$sylnum + 4, population]
-        data_container[11, population, timestep] <- tempData[(sex + 2), parameters$sylnum + 5, population]
-        data_container[12, population, timestep] <- tempData[sex, parameters$sylnum + 5, population]
-      }
-    } 
-  } else if (specificVariable == 4) {
-    for (population in 1:parameters$num_pop) {
-      for (sex in 1:2) {
-        # curity_repert
-        data_container[(sex + ((population - 1) * 2)), , timestep] <- hist(curiosity_object[((1 + ((sex-1) * parameters$pop_size / 2)):(sex * parameters$pop_size / 2)), population], breaks = parameters$curiositybreaks, plot = FALSE)$counts
-      }
-    }
-  }
-  return(data_container)
-}
 
 make.offspring.calls <- function(parameters, temporMan){
   for(sex in 1:2){
@@ -197,9 +138,10 @@ make.offspring.calls <- function(parameters, temporMan){
 }
 
 
-update_selexn_data <- function(main_parameters, temping, suitor_choices, preferred_bird, selector_bird,
-                               curiosity_value, selector_population, selection_context, 
-                               sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
+update_selexn_data <- function(
+  main_parameters, temping, suitor_choices, preferred_bird, selector_bird,
+  curiosity_value, selector_population, selection_context, 
+  sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
 
   selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
                        selector_bird)          # Bird doing the selecting
@@ -224,11 +166,23 @@ update_selexn_data <- function(main_parameters, temping, suitor_choices, preferr
   for(bird in 1:selection_context) {
     pool.row <- (5^(2-selection_context)) * bird
 
-    temping[pool.row, main_parameters$sylnum + 1, selector_population] <- selected_pair[bird]
-    temping[pool.row, 1:main_parameters$sylnum, selector_population] <- sylrep_pairs[bird,]
-    temping[pool.row, main_parameters$sylnum + 2, selector_population] <- curiosities[bird]
+    temping[
+      pool.row, main_parameters$sylnum + 1, selector_population
+    ] <- selected_pair[bird]
+
+    temping[
+      pool.row, 1:main_parameters$sylnum, selector_population
+    ] <- sylrep_pairs[bird,]
+
+    temping[
+      pool.row, main_parameters$sylnum + 2, selector_population
+    ] <- curiosities[bird]
   }
-  temping[(4 - selection_context), main_parameters$sylnum + 3, selector_population] <- selection_count
+  
+  temping[
+    (4 - selection_context), main_parameters$sylnum + 3, selector_population
+  ] <- selection_count
+  
   return(temping)
 }
 
@@ -249,7 +203,7 @@ score_similarity <- function(suitor_vector, selector_vector) {
   # The basic sylrep comparison caluclation that finds the differences 
   # between the suitor and selector sylreps, then assigns a weighted 
   # value based on suitor syllable distance from median of selector's sylrep.
-  selector_median <- median(which(selector_vector == 1))
+  selector_median <- cpp_med(which(selector_vector == 1))
   vector_diff <- which(suitor_vector-selector_vector != 0)
   AbsVal_diffs <- abs(vector_diff - selector_median)
   
@@ -340,7 +294,7 @@ sing.selection <- function(parameters, tempMoran,
         # each population divided by the maximum syllrep of the population.
         vapply(1:parameters$num_pop,
                function(x) {
-                 temp <- rowSums(sylrep_object[
+                 temp <- cpp_rowSums(sylrep_object[
                    parameters$pop_calls_matrix[1,],,x])
                  sample(x = parameters$pop_calls_matrix[1,], 
                         size = parameters$one_pop_singers[select_type], 
@@ -381,11 +335,9 @@ sing.selection <- function(parameters, tempMoran,
       #               FUN = score_similarity,
       #               selector_vector = selector.sylrep))$ix
       
-      golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+      golf_score <- cpp_sort_indices(apply(X = selection.sylreps, MARGIN = 1,
                                FUN = score_similarity,
-                               selector_vector = selector.sylrep),
-                         index.return = T,
-                         method = 'radix')$ix
+                               selector_vector = selector.sylrep))
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
       singer <- golf_score[round(curiosity_level[selector.index, population] *(
@@ -473,84 +425,158 @@ sing.selection <- function(parameters, tempMoran,
 
 curiosity_learn <- function (parameters, 
                              tempObjects, 
-                             timestep = single_timestep, 
                              inheritance_pattern = 1) {
   
-  curinh_patterns <- array (
-    data = c (
-      1, 2, 
-      1, 2, 
-      1, 2, 
-      2, 1
-    ), 
-    dim = c (
-      4,2
-    ),
-    dimnames = list (c ("father", "mother", "same", "opposite"), 
-                     c ("male birb", "female birb")
-                   )
-  )
-  # For posterity: 
-  #   curinh_patterns <- array(
-  #     data = c(1, 2, 1, 2, 1, 2, 2, 1), 
-  #     dim = c(4,2), 
-  #     dimnames = list(c("father", "mother", "same", "opposite"), 
-  #                     c("male birb", "female birb")
-  #                    )
-  #   ) MAKE BLENDED INHERITANCE OPTION - MAYBE USE ZERO_TO_ONE_TEMPLATE
-  newcuriosity <- array(
-          data = runif((parameters$num_pop * 2), -1, 1), 
-          dim = c(2, parameters$num_pop))
-  
-  for(population in 1 : (parameters$num_pop)) {
+  if(!(inheritance_pattern %in% c(1,2,3,4))) {
+
+    x <- parameters$curinhProportion
+
+    newcuriosity <- array(
+            data = runif((parameters$num_pop * 2), -1, 1), 
+            dim = c(2, parameters$num_pop))
+
+    for(population in 1 : (parameters$num_pop)) {
+      
+      for(sex in 1:2) {
+        if(
+            tempObjects[1, 
+              parameters$sylnum + 2, 
+              population
+            ]== 0 ||
+            tempObjects[2, 
+              parameters$sylnum + 2, 
+              population
+            ]== 0
+           ) {stop(
+          "not the time for learning curiosity from parents right now...")}
+        
+        curinh_attempts <- 1
+
+        while(((
+            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+
+            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+          ) + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ]))) < 0) {
+
+          newcuriosity[sex, population] <- runif(1, 0, 1)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+
+        while(((
+            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+
+          te(1-x) * mpObjects[2, parameters$sylnum + 2, population]
+        ) + 
+        ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+        ]))) > 1) {
+
+          newcuriosity[sex, population] <- runif(1, -1, 0)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+        
+        new.curiosity <- (
+            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+
+            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+          ) + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ])) # Adding small proportion of noise
+        
+        tempObjects[
+          (sex + 2), parameters$sylnum + 4, population
+        ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
+        tempObjects[
+          (sex + 2), parameters$sylnum + 2, population
+        ] <- new.curiosity
+        tempObjects[
+          (sex + 2), parameters$sylnum + 5, population
+        ] <- curinh_attempts
+      }
+    }
+
+  } else {
+
+    curinh_patterns <- array (
+      data = c (
+        1, 2, 
+        1, 2, 
+        1, 2, 
+        2, 1
+      ), 
+      dim = c (
+        4,2
+      ),
+      dimnames = list (c ("father", "mother", "same", "opposite"), 
+                      c ("male birb", "female birb")
+                    )
+    )
+    # For posterity: 
+    #   curinh_patterns <- array(
+    #     data = c(1, 2, 1, 2, 1, 2, 2, 1), 
+    #     dim = c(4,2), 
+    #     dimnames = list(c("father", "mother", "same", "opposite"), 
+    #                     c("male birb", "female birb")
+    #                    )
+    #   )
+
+    newcuriosity <- array(
+            data = runif((parameters$num_pop * 2), -1, 1), 
+            dim = c(2, parameters$num_pop))
     
-    for(sex in 1:2) {
-      if(tempObjects[
-        curinh_patterns[inheritance_pattern,sex], 
-        parameters$sylnum + 2, 
-        population
-      ] == 0) {stop(
-        "not the time for learning curiosity from parents right now...")}
+    for(population in 1 : (parameters$num_pop)) {
       
-      curinh_attempts <- 1
+      for(sex in 1:2) {
+        if(tempObjects[
+          curinh_patterns[inheritance_pattern,sex], 
+          parameters$sylnum + 2, 
+          population
+        ] == 0) {stop(
+          "not the time for learning curiosity from parents right now...")}
+        
+        curinh_attempts <- 1
 
-      while((tempObjects[curinh_patterns[
+        while((tempObjects[curinh_patterns[
+            inheritance_pattern,sex
+          ], parameters$sylnum + 2, population] + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ]))) < 0) {
+
+          newcuriosity[sex, population] <- runif(1, 0, 1)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+
+        while((tempObjects[curinh_patterns[
           inheritance_pattern,sex
         ], parameters$sylnum + 2, population] + 
         ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
-        ]))) < 0) {
+        ]))) > 1) {
 
-        newcuriosity[sex, population] <- runif(1, 0, 1)
-        curinh_attempts <- curinh_attempts + 1
-      
+          newcuriosity[sex, population] <- runif(1, -1, 0)
+          curinh_attempts <- curinh_attempts + 1
+        
+        }
+        
+        new.curiosity <- tempObjects[curinh_patterns[
+            inheritance_pattern,sex
+          ], parameters$sylnum + 2, population] + 
+          ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
+          ])) # Adding small proportion of noise
+        
+        tempObjects[
+          (sex + 2), parameters$sylnum + 4, population
+        ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
+        tempObjects[
+          (sex + 2), parameters$sylnum + 2, population
+        ] <- new.curiosity
+        tempObjects[
+          (sex + 2), parameters$sylnum + 5, population
+        ] <- curinh_attempts
       }
-
-      while((tempObjects[curinh_patterns[
-        inheritance_pattern,sex
-      ], parameters$sylnum + 2, population] + 
-      ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
-      ]))) > 1) {
-
-        newcuriosity[sex, population] <- runif(1, -1, 0)
-        curinh_attempts <- curinh_attempts + 1
-      
-      }
-      
-      new.curiosity <- tempObjects[curinh_patterns[
-          inheritance_pattern,sex
-        ], parameters$sylnum + 2, population] + 
-        ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
-        ])) # Adding small proportion of noise
-      
-      tempObjects[
-        (sex + 2), parameters$sylnum + 4, population
-      ] <- tempObjects[(sex + 2), parameters$sylnum + 2, population]
-      tempObjects[
-        (sex + 2), parameters$sylnum + 2, population
-      ] <- new.curiosity
-      tempObjects[
-        (sex + 2), parameters$sylnum + 5, population
-      ] <- curinh_attempts
     }
   }
   return(tempObjects)
@@ -592,8 +618,145 @@ resylreps.offspring <- function(parameters, moranObjectTemp, sylrep_object) {
 }
 
 
+recordvariable.initialize <- function(P, timestep_fraction, variableID) {
+  if (variableID == 1) {
+    record.variable <- array(0, c(
+      2, P$num_pop, (1000/timestep_fraction)))
+  } else if (variableID == 2) {
+    record.variable <- array(0, c(
+      (2 * P$num_pop), P$sylnum, (1000/timestep_fraction)))
+  } else if (variableID == 3) {
+    record.variable <- array(0, c(
+      12, P$num_pop, (1000/timestep_fraction)))
+  } else if (variableID == 4) {
+    record.variable <- array(0, c(
+      (2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), 
+      (1000/timestep_fraction)))
+  }
+  return(record.variable)
+}
+
+
+sylrep_rowcol.archive <- function (parameters,
+                                   data_container, 
+                                   syllable_object,
+                                   timestep) {
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      #sylrep_rowcol
+      data_container[sex, population, timestep] <- mean(rowSums(
+       syllable_object[
+        ((
+           1 + ((sex - 1) * (parameters$pop_size / 2))
+         ) : (
+           sex * (parameters$pop_size / 2)
+        )), , population]
+      ))
+    }
+  }
+  return(data_container)
+}
+
+
+sylrep_dstbxn.archive <- function (parameters,
+                                   data_container, 
+                                   syllable_object,
+                                   timestep) {
+
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      # sylrep_dstbxn
+      data_container[(((population - 1) * 2) + sex), , timestep] <- colSums(
+        syllable_object[((
+          1 + ((sex - 1) * (parameters$pop_size / 2))
+          ) : (
+          sex * (parameters$pop_size / 2)
+          )), , population]
+      )
+    }
+  }
+  return(data_container)
+}
+
+
+curity_mean_t.archive <- function (parameters, 
+                                   tempData, 
+                                   data_container,
+                                   curiosity_object,
+                                   timestep) {
+  for (population in 1:parameters$num_pop) {
+    # curity_mean_t
+    data_container[3, population, timestep] <- tempData[
+      2, parameters$sylnum + 3, population]
+    data_container[10, population, timestep] <- tempData[
+      3, parameters$sylnum + 3, population]
+
+    for (sex in 1:2) {
+      data_container[sex, population, timestep] <- mean(
+        curiosity_object[((
+          1 + ((sex-1) * parameters$pop_size/2)
+        ):(
+          sex * parameters$pop_size/2)), population]
+        )
+
+      # Individual Curiosity Values
+      data_container[
+        (sex + 3), population, timestep
+      ] <- tempData[sex, parameters$sylnum + 2, population]
+
+      data_container[
+        (sex + 5), population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 2, population]
+
+      data_container[
+        (sex + 7), population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 4, population]
+
+      data_container[
+        11, population, timestep
+      ] <- tempData[(sex + 2), parameters$sylnum + 5, population] # problems: this value degenerates two into one, by not leaving "sex" variable on left of equation
+
+      data_container[
+        12, population, timestep
+      ] <- tempData[sex, parameters$sylnum + 5, population] # same as above
+    }
+  } 
+  return(data_container)
+}
+
+
+#       data_container[
+#         12, population, timestep
+#       ] <- tempData[sex, parameters$sylnum + 5, population]
+#     }
+#   }
+#   return(data_container)
+# }
+
+curity_repert.archive <- function (parameters,
+                                   data_container, 
+                                   curiosity_object,
+                                   timestep) {
+
+  for (population in 1:parameters$num_pop) {
+    for (sex in 1:2) {
+      # curity_repert
+      data_container[
+        (sex + ((population - 1) * 2)), , timestep
+      ] <- hist(curiosity_object[((
+        1 + ((sex-1) * parameters$pop_size / 2)
+      ):(
+        sex * parameters$pop_size / 2
+      )), population], breaks = 
+      parameters$curiositybreaks, plot = FALSE)$counts
+    }
+  }
+  return(data_container)
+}
+
+
 store_timesteps <- function(parameters, filename = thousand_timesteps, 
-  record_1, record_2, record_3, record_4, saved_stuff, syll_container, 
+  rowcol, dstbxn, mean_t, repert, saved_stuff, syll_container, 
   cur_container, run_timedate, FolderName = FolderName){
    # # # #  #directory <- getwd()
   results_directory <- file.path('results')
@@ -623,13 +786,13 @@ store_timesteps <- function(parameters, filename = thousand_timesteps,
     file.create(file.path(FolderName, paste0(
       "variable-store-", filename, "-", thing[deyteh], ".RData")))
     if (deyteh == 1) {
-      objekshun <- record_1
+      objekshun <- rowcol
     } else if (deyteh == 2) {
-      objekshun <- record_2
+      objekshun <- dstbxn
     } else if (deyteh == 3) {
-      objekshun <- record_3
+      objekshun <- mean_t
     } else if (deyteh == 4) {
-      objekshun <- record_4
+      objekshun <- repert
     }
     # print("tryna save")
     saveRDS(objekshun, file.path(FolderName, paste0(

@@ -34,7 +34,7 @@ savinStuff <- function (Parameters, Output_Filename, moran) {
 
 makeDocnamez <- function (scMin, scMax, simNumber, 
                          runLength, SylLearnStyle, vertOblLearn, 
-                         sylDist, curinh_value, standDev) {
+                         sylDist, curinh_value, standDev, simDate) {
 
   VOtext = paste0 (
     if (vertOblLearn[2]/0.1==1) {round (vertOblLearn[2]/0.1,1)
@@ -50,42 +50,54 @@ makeDocnamez <- function (scMin, scMax, simNumber,
   if (VOtext == "1_1_V_1_1_O") {VOtext = "normVO"}
   
   if (scMin[1] == scMin[2] && 
-     scMin[2] == scMin[3] && 
-     scMin[3] == scMin[4] &&
-     scMax[1] == scMax[2] && 
-     scMax[2] == scMax[3] && 
-     scMax[3] == scMax[4]) {
+      scMin[2] == scMin[3] && 
+      scMin[3] == scMin[4] &&
+      scMax[1] == scMax[2] && 
+      scMax[2] == scMax[3] && 
+      scMax[3] == scMax[4]) {
     curstart_ranges = paste0(scMin[1], "-", scMax[1])
   } else {
     
     if (scMin[1] == scMin[3] && 
-       scMax[1] == scMax[3] && 
-       (scMax[2] != scMax[3] ||  scMin[2] != scMin[3]) &&
-       scMin[2] == scMin[4] &&
-       scMax[2] == scMax[4]) {
+        scMax[1] == scMax[3] && 
+       (scMax[2] != scMax[3] || 
+        scMin[2] != scMin[3]) &&
+        scMin[2] == scMin[4] &&
+        scMax[2] == scMax[4]) {
       # 1-7_f_7-13m
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
     
     } else if (scMin[2] == scMin[4] &&
                scMax[2] == scMax[4] &&
-               (scMin[1] != scMin[3] || scMax[1] != scMax[3])) {
+              (scMin[1] != scMin[3] ||
+               scMax[1] != scMax[3])) {
       # 1-7f_1-7mp1_7-13mp2
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", 
                           scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
     
     } else if (scMin[1] == scMin[3] &&
                scMax[1] == scMax[3] &&
-               (scMin[2] != scMin[4] || scMax[2] != scMax[4])) {
+              (scMin[2] != scMin[4] || 
+               scMax[2] != scMax[4])) {
       # 1-7f_1-7mp1_7-13mp2
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", scMin[4], "-", scMax[4], "fp2", "_", scMin[1], "-", scMax[1], "m")
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", scMin[4], "-", 
+                          scMax[4], "fp2", "_", scMin[3], "-", scMax[3], "m")
     
-    } else if (scMin[1] == scMin[2] && scMax[1] == scMax[2] && 
-              scMin[3] == scMin[4] && scMax[3] == scMax[4]) {
+    } else if (scMin[1] == scMin[2] && 
+               scMax[1] == scMax[2] && 
+               scMin[1] != scMin[4] && 
+               scMax[1] != scMax[4] &&
+               scMin[3] == scMin[4] && 
+               scMax[3] == scMax[4] &&
+               scMin[3] != scMin[1] && 
+               scMax[3] != scMax[1] &&
+               scMin[2] != scMin[3] && 
+               scMax[2] != scMax[3] && 
+               scMin[2] != scMin[4] && 
+               scMax[2] != scMax[4]) {
       # 1-7p1_7-13p2
       curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
     
-    } else if (scMin[2] != scMin[4] || scMax[2] != scMax[4]) {
-
     }
   } # this is the text insert for the docnamez curstart ranges subsection
   
@@ -93,7 +105,7 @@ makeDocnamez <- function (scMin, scMax, simNumber,
   
   if(standDev != 2) {stdDevDocName = paste0("_sd_", round(standDev/2,2))} else {stdDevDocName <- ""}
 
-  simStartDate <- gsub('-', '', substring(Sys.Date(), 3))
+  simStartDate <- simDate
 
   DocumentName <- paste0(simStartDate,"_", simNumber, "_-_", runLength, "_",
                     SylLearnStyle, "_", VOtext, "_", sylDist, "_",
@@ -104,29 +116,26 @@ makeDocnamez <- function (scMin, scMax, simNumber,
 }
 
 
-life_cycle <- function(scMin, scMax, simNumber, runLength, 
-                       SylLearnStyle, vertOblLearn, sylDist, curinh_value, 
-                       number_populations, population_size, syllable_number,
-                       number_sylls_probability_level, standDev, 
-                       SimNumberLC, curinh_style, one_pop_singers = c(10,10)) {
+life_cycle <- function(
+  scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
+  curinh_value, number_populations, population_size, syllable_number,
+  number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
+  recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, directoryDate) {
   
   docnamez <- makeDocnamez(
-            scMin = scMin, scMax = scMax, simNumber = simNumber, 
-            runLength = runLength, SylLearnStyle = SylLearnStyle, 
-            vertOblLearn = vertOblLearn, sylDist = sylDist, 
-            curinh_value = curinh_value, standDev = standDev)
+    scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
+    SylLearnStyle = SylLearnStyle, vertOblLearn = vertOblLearn, 
+    sylDist = sylDist, curinh_value = curinh_value, standDev = standDev, 
+    simDate = directoryDate)
 
   #parent_directory <- getwd()
   source(file.path("scripts", "Source_Initial_Functions_Parameters.R"))
   
   simParams <- define_parameters(
     num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
-    num_pop = number_populations, 
-    pop_size = population_size, 
-    sylnum = syllable_number, 
-    nsspl = number_sylls_probability_level, 
-    one_pop_singers = one_pop_singers, 
-    curlearnprob = curinh_value, 
+    num_pop = number_populations, pop_size = population_size, 
+    sylnum = syllable_number, nsspl = number_sylls_probability_level, 
+    one_pop_singers = one_pop_singers, curlearnprob = curinh_value, 
     learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
     randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 
     stand.dev = standDev
@@ -138,26 +147,20 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
   # pairing_pool <- define_temp_data(simParams, 2)
     
   sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
-
-  #docnamez <- makeDocnamez(simple_args_pipe = simple_args_pipe)
   
   curiosity_level <- initialize.curiosity(simParams, scMin, scMax)
   
   sylrep_rowcol <- recordvariable.initialize(
-      simParams, timestep_fraction = (
-      simParams$num_timesteps/1000), variableID = 1)
+      simParams, recordingSimpFact, variableID = 1)
   
   sylrep_dstbxn <- recordvariable.initialize(
-      simParams, timestep_fraction = (
-      simParams$num_timesteps/1000), variableID = 2)
+      simParams, recordingSimpFact, variableID = 2)
 
   curity_mean_t <- recordvariable.initialize(
-      simParams, timestep_fraction = (
-      simParams$num_timesteps/1000), variableID = 3)
+      simParams, recordingSimpFact, variableID = 3)
 
   curity_repert <- recordvariable.initialize(
-      simParams, timestep_fraction = (
-      simParams$num_timesteps/1000), variableID = 4)
+      simParams, recordingSimpFact, variableID = 4)
 
   source(file.path("scripts", "Source_Life_Cycle_Functions.R"))
   
@@ -170,92 +173,93 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
   
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
-    for(single_timestep in 1:1000) {
+    for(simplify in 1:(1000/recordingSimpFact)) {
+      for(single_timestep in 1:recordingSimpFact) {
 
-      # Mate selection based on song characteristics
-      moranObjects <- sing.selection(parameters = simParams, 
-                                     tempMoran = moranObjects, 
-                                     curiosity_level = curiosity_level, 
-                                     select_type = 2, 
-                                     sylrep_object = sylreps, 
-                                     num_select_chances = c(100, 100), 
-                                     verbose_output = F, 
-                                     interbreed = F)
-      
-      # Locate new birb positions in population data, store in TDO
-      moranObjects <- make.offspring.calls(parameters = simParams, 
-                                           temporMan = moranObjects)
-      
-      # Add noise to inherited curiosity trait, store temporarily
-      moranObjects <- curiosity_learn(parameters = simParams, 
-                                      tempObjects = moranObjects, 
-                                      timestep = single_timestep, 
-                                      inheritance_pattern = curinh_style) 
-      
-      # 
-      moranObjects <- syll_learn(parameters = simParams, 
-                                 moranData = moranObjects, 
-                                 select_type = 2,
-                                 totally_new = FALSE, 
-                                 randlearn_context = 2, 
-                                 verbose = F) 
-      
-      moranObjects <- sing.selection(parameters = simParams, 
-                                     tempMoran = moranObjects, 
-                                     curiosity_level = curiosity_level, 
-                                     select_type = 1, 
-                                     sylrep_object = sylreps, 
-                                     num_select_chances = c(100, 100), 
-                                     verbose_output = F, 
-                                     interbreed = F)
-      
-      moranObjects <- syll_learn(parameters = simParams, 
-                                 moranData = moranObjects, 
-                                 select_type = 1, 
-                                 totally_new = FALSE, 
-                                 randlearn_context = 2, 
-                                 verbose = F) 
-      
-      curiosity_level <- recuriosity.offspring(parameters = simParams, objectMoran = moranObjects, 
-                          curiosity_object = curiosity_level)
-      
-      # for(population in 1:simParams$num_pop) {
-      #   for(sex in 1:2) {
-      #     #index <- moran$pairing.pool[(sex + 2), 1, population]
-      #     curiosity_level[
-      #       moranObjects[(sex + 2), simParams$sylnum + 1, population], population
+        # Mate selection based on song characteristics
+        moranObjects <- sing.selection(parameters = simParams, 
+                                      tempMoran = moranObjects, 
+                                      curiosity_level = curiosity_level, 
+                                      select_type = 2, 
+                                      sylrep_object = sylreps, 
+                                      num_select_chances = c(100, 100), 
+                                      verbose_output = F, 
+                                      interbreed = F)
+        
+        # Locate new birb positions in population data, store in TDO
+        moranObjects <- make.offspring.calls(parameters = simParams, 
+                                            temporMan = moranObjects)
+        
+        # Add noise to inherited curiosity trait, store temporarily
+        moranObjects <- curiosity_learn(parameters = simParams, 
+                                        tempObjects = moranObjects, 
+                                        inheritance_pattern = curinh_style) 
+        
+        # 
+        moranObjects <- syll_learn(parameters = simParams, 
+                                  moranData = moranObjects, 
+                                  select_type = 2,
+                                  totally_new = FALSE, 
+                                  randlearn_context = 2, 
+                                  verbose = F) 
+        
+        moranObjects <- sing.selection(parameters = simParams, 
+                                      tempMoran = moranObjects, 
+                                      curiosity_level = curiosity_level, 
+                                      select_type = 1, 
+                                      sylrep_object = sylreps, 
+                                      num_select_chances = c(100, 100), 
+                                      verbose_output = F, 
+                                      interbreed = F)
+        
+        moranObjects <- syll_learn(parameters = simParams, 
+                                  moranData = moranObjects, 
+                                  select_type = 1, 
+                                  totally_new = FALSE, 
+                                  randlearn_context = 2, 
+                                  verbose = F) 
+        
+        curiosity_level <- recuriosity.offspring(parameters = simParams, objectMoran = moranObjects, 
+                            curiosity_object = curiosity_level)
+        
+        sylreps <- resylreps.offspring(parameters = simParams, 
+                                       moranObjectTemp = moranObjects,
+                                       sylrep_object = sylreps)
+        
+        # recordvariable archiving
+        
+      }
 
-      #     ] <- moranObjects[(sex + 2), simParams$sylnum + 2, population]
-      #   }
-      # }
-      
-      sylreps <- resylreps.offspring(parameters = simParams, moranObjectTemp = moranObjects,
-                  sylrep_object = sylreps)
-      
-      # recordvariable archiving
+      sylrep_rowcol <- sylrep_rowcol.archive(
+        parameters = simParams, 
+        data_container = sylrep_rowcol, 
+        syllable_object = sylreps,
+        timestep = simplify)
 
-      sylrep_rowcol <- variable.archive(parameters = simParams, 
-                       tempData = moranObjects, syllable_object = sylreps, 
-                       curiosity_object = curiosity_level, 
-                       data_container = sylrep_rowcol, timestep = single_timestep, 
-                       specificVariable = 1)
-      sylrep_dstbxn <- variable.archive(parameters = simParams, 
-                       tempData = moranObjects, syllable_object = sylreps, 
-                       curiosity_object = curiosity_level, 
-                       data_container = sylrep_dstbxn, timestep = single_timestep, 
-                       specificVariable = 2)
-      curity_mean_t <- variable.archive(parameters = simParams, 
-                       tempData = moranObjects, syllable_object = sylreps, 
-                       curiosity_object = curiosity_level, 
-                       data_container = curity_mean_t, timestep = single_timestep, 
-                       specificVariable = 3)
-      curity_repert <- variable.archive(parameters = simParams, 
-                       tempData = moranObjects, syllable_object = sylreps, 
-                       curiosity_object = curiosity_level, 
-                       data_container = curity_repert, timestep = single_timestep, 
-                       specificVariable = 4)
-    
+      sylrep_dstbxn <- sylrep_dstbxn.archive(
+        parameters = simParams, 
+        data_container = sylrep_dstbxn, 
+        syllable_object = sylreps,
+        timestep = simplify)
+
+      curity_mean_t <- curity_mean_t.archive(
+        parameters = simParams, 
+        tempData = moranObjects, 
+        data_container = curity_mean_t, 
+        curiosity_object = curiosity_level,
+        timestep = simplify)
+
+      curity_repert <- curity_repert.archive(
+        parameters = simParams,
+        data_container = curity_repert, 
+        curiosity_object = curiosity_level,
+        timestep = simplify)
+
+
     }
+
+
+
     # print("console_copy_sink")
     sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 
       append = TRUE, split = TRUE)
@@ -271,10 +275,10 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
     FolderName <- store_timesteps(
                     parameters = simParams,
                     filename = thousand_timesteps, 
-                    record_1 = sylrep_rowcol,
-                    record_2 = sylrep_dstbxn,
-                    record_3 = curity_mean_t,
-                    record_4 = curity_repert,
+                    rowcol = sylrep_rowcol,
+                    dstbxn = sylrep_dstbxn,
+                    mean_t = curity_mean_t,
+                    repert = curity_repert,
                     saved_stuff = stuff_to_save,
                     syll_container = sylreps,
                     cur_container = curiosity_level,
@@ -284,13 +288,16 @@ life_cycle <- function(scMin, scMax, simNumber, runLength,
       #     FolderName <- 
 
     # print("sim_data_sink")
-    if((thousand_timesteps==(simParams$num_timesteps/1000))&&(single_timestep==1000)) {
+    if((thousand_timesteps==(simParams$num_timesteps/1000))&&(simplify==1000/recordingSimpFact)&&(single_timestep==recordingSimpFact)) {
       sink(file = file.path("source", "temp", paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)
       print(FolderName)
       sink()
     }
   }
 }
+
+# for(simplify in 1:(1000/recordingSimpFact)) {
+#       for(single_timestep in 1:recordingSimpFact) {
 
 
 archiveSimFiles <- function(path, filename, archive = FALSE, new_dir = FALSE){
@@ -318,13 +325,15 @@ archiveSimFiles <- function(path, filename, archive = FALSE, new_dir = FALSE){
   } # else{print("")}
 }
 
-multi_runs <- function(shifting_curstart, paramsSource) {
+multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
   # # Load the C++ functions
-  # sourceCpp(file.path('cpp_source', 'median.cpp'))
-  # sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
-  # sourceCpp(file.path('cpp_source', 'sort.cpp'))
+  sourceCpp(file.path('cpp_source', 'median.cpp'))
+  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
+  sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
-
+  # dirDate and seedNumber space
+  set.seed(seedNumber + shifting_curstart)
+  # shifting_curstart <- 1
   # paramsFile <- c("params.yaml")
   # paramsSource = paramsFile
   params <- yaml.load_file(file.path("parameters", paramsSource))
@@ -373,7 +382,10 @@ multi_runs <- function(shifting_curstart, paramsSource) {
       standDev = as.numeric(params$standard_deviation),
       SimNumberLC = shifting_curstart,
       curinh_style = params$curinh_pattern,
-      one_pop_singers = params$one_pop_singers
+      recordingSimpFact = params$RecordSimplifyFactor,
+      one_pop_singers = params$one_pop_singers,
+      curinhProportion = params$curinhDistribution,
+      directoryDate = dirDate
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
@@ -381,6 +393,5 @@ multi_runs <- function(shifting_curstart, paramsSource) {
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   figProdMultRun(specificSimNumber = shifting_curstart, 
                  number_of_repeats = number_of_reps,
-                 paramsSource = paramsSource,
-                 simplification_factor = params$outputSimplify)
+                 paramsSource = paramsSource)
 }

@@ -1,5 +1,6 @@
-library(profvis)
-library(yaml)
+
+source(file.path("scripts", "Source_Reference_Section.R"))
+referenceSection("profvyaml"
 
 source(file.path('scripts', 'Source_Reference_Section.R'))
 source(file.path('scripts', 'Source_Initial_Functions_Parameters.R'))

@@ -226,3 +226,92 @@ g = function(...) {
   class(List) = 'lbunch'
   return(List)
 }
+
+# Then to execute:
+# Group the left hand side using the new function g() The right hand side should be a vector or a list Use the newly-created binary operator %=%
+
+# # Example Call;  Note the use of g()  AND  `%=%`
+# #     Right-hand side can be a list or vector
+# g(a, b, c)  %=%  list("hello", 123, list("apples, oranges"))
+
+# g(d, e, f) %=%  101:103
+
+# # Results: 
+# > a
+# [1] "hello"
+# > b
+# [1] 123
+# > c
+# [[1]]
+# [1] "apples, oranges"
+
+# > d
+# [1] 101
+# > e
+# [1] 102
+# > f
+# [1] 103
+
+# git checkout --track origin/daves_branch
+
+
+
+
+
+
+
+
+
+source(file.path("scripts", "Source_Reference_Section.R"))
+# referenceSection("multirun")
+referenceSection("profiler")
+
+
+shifting_curstart <- 1
+paramsFile <- c("params.yaml")
+paramsSource = paramsFile
+params <- yaml.load_file(file.path("parameters", paramsSource))
+
+scMin = c(
+        params$curstarts[[shifting_curstart]]$scMin[1],
+        params$curstarts[[shifting_curstart]]$scMin[2],
+        params$curstarts[[shifting_curstart]]$scMin[3],
+        params$curstarts[[shifting_curstart]]$scMin[4])
+      scMax = c(
+        params$curstarts[[shifting_curstart]]$scMax[1],
+        params$curstarts[[shifting_curstart]]$scMax[2],
+        params$curstarts[[shifting_curstart]]$scMax[3],
+        params$curstarts[[shifting_curstart]]$scMax[4])
+      simNumber = params$simNumberStart + (shifting_curstart - 1)
+      runLength = params$runLength
+      SylLearnStyle = params$SylLearnStyle
+      vertOblLearn = c(
+        params$vertObLearn$vertical$learn,
+        params$vertObLearn$vertical$invent,
+        params$vertObLearn$oblique$learn,
+        params$vertObLearn$oblique$invent)
+      sylDist = params$sylDist
+      curinh_value = params$curinh_value
+      number_populations = params$num_pop
+      population_size = params$pop_size
+      syllable_number = params$sylnum
+      number_sylls_probability_level = params$num_sylls_per_prob_lvl
+      standDev = as.numeric(params$standard_deviation)
+      SimNumberLC = shifting_curstart
+      curinh_style = params$curinh_pattern
+      recordingSimpFact = params$RecordSimplifyFactor
+      one_pop_singers = params$one_pop_singers
+
+"/home/parker/Documents/projects/Code/curiosity-code/results/190327_296_-_2k_nsL_normVO_oppsyl_1-7_c/variable_store/2019-03-27-144523-GMT-variable-store/"
+
+
+specificSimNumber = 1
+
+  connection <- file(description = file.path(
+    "source","temp", paste0(
+      specificSimNumber, "_sim_data.txt")), open = "rt")
+  multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
+  close(connection)
+
+
+
