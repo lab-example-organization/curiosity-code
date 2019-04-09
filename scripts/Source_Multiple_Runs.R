@@ -138,7 +138,7 @@ life_cycle <- function(
     one_pop_singers = one_pop_singers, curlearnprob = curinh_value, 
     learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
     randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 
-    stand.dev = standDev
+    stand.dev = standDev, curinhProportion = curinhProportion
   )
   
   ##### Timestep Data Object (TDO)

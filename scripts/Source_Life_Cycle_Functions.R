@@ -427,7 +427,7 @@ curiosity_learn <- function (parameters,
                              tempObjects, 
                              inheritance_pattern = 1) {
   
-  if(!(inheritance_pattern %in% c(1,2,3,4))) {
+  if(inheritance_pattern == 5) {
 
     x <- parameters$curinhProportion
 
@@ -448,7 +448,9 @@ curiosity_learn <- function (parameters,
               population
             ]== 0
            ) {stop(
-          "not the time for learning curiosity from parents right now...")}
+          "not the time for learning curiosity from parents right now..."
+          )
+        }
         
         curinh_attempts <- 1
 
@@ -468,7 +470,7 @@ curiosity_learn <- function (parameters,
         while(((
             (x) * tempObjects[1, parameters$sylnum + 2, population] + 
 
-            (1-x) * mpObjects[2, parameters$sylnum + 2, population]
+            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
         ) + 
         ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
         ]))) > 1) {
