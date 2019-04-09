@@ -327,9 +327,9 @@ archiveSimFiles <- function(path, filename, archive = FALSE, new_dir = FALSE){
 
 multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
   # # Load the C++ functions
-  sourceCpp(file.path('cpp_source', 'median.cpp'))
-  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
-  sourceCpp(file.path('cpp_source', 'sort.cpp'))
+  #sourceCpp(file.path('cpp_source', 'median.cpp'))
+  #sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
+  #sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
   # dirDate and seedNumber space
   set.seed(seedNumber + shifting_curstart)
