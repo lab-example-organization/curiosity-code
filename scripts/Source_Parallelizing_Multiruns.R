@@ -61,6 +61,10 @@ referenceSection("multirun")
 # n_cores <- detectCores() - 4
 n_cores <- 16
 
+  sourceCpp(file.path('cpp_source', 'median.cpp'))
+  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
+  sourceCpp(file.path('cpp_source', 'sort.cpp'))
+
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
