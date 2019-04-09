@@ -463,7 +463,7 @@ curiosity_learn <- function (parameters,
         while(((
             (x) * tempObjects[1, parameters$sylnum + 2, population] + 
 
-          te(1-x) * mpObjects[2, parameters$sylnum + 2, population]
+            (1-x) * mpObjects[2, parameters$sylnum + 2, population]
         ) + 
         ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
         ]))) > 1) {
