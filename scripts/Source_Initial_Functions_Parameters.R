@@ -12,7 +12,7 @@ rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
 }
 
 define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, 
-                              curlearnprob, learnprob, randlearnprob, stand.dev){
+                              curlearnprob, learnprob, randlearnprob, stand.dev, curinhProportion){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
     stop("(num_pop, pop_size, nsspl) need to be integers")}
@@ -88,7 +88,9 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
                      curlearnprob = curlearnprob,
                      learnprob = learnprob,
                      randlearnprob = randlearnprob,
-                     stand.dev = stand.dev)
+                     stand.dev = stand.dev,
+                     curinhProportion = curinhProportion
+                     )
   
   return(Parameters)
 }

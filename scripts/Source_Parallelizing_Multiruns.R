@@ -61,11 +61,14 @@ referenceSection("multirun")
     n_cores <- detectCores() - 3 # built around a maximum allowance
 # n_cores <- 3
 
+  sourceCpp(file.path('cpp_source', 'median.cpp'))
+  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
+  sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:125
+shifting_curstart <- 1:16
 paramsFile <- c("params.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
