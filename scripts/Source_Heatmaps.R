@@ -180,9 +180,9 @@ title_names <- c("Ending Curiosity Values - Pop 1 Males","Ending Curiosity Value
 # MALE PATTERN INHERITANCE (BIAS) (MORE DIFFERING FEMALE CURSTARTS)
 
 heatmap_axes <- list(
-  mp2Vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),
-  mp1Vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),
-  mp1Vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity")
+  plotOne = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2Vfem
+  plotTwo = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1Vfem
+  plotTre = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity") # mp1Vmp2
 )
 
 
@@ -208,147 +208,182 @@ for(i in 1:layoutSize) {
   byTheCol[(1 + (i - 1)*8):(i*8)] <- rep(layoutDistribution[i], 8)
 }
 
+for (slice in 1:5) {
+  dat_array_doh <- array(c(rep(c(slice, 1, 1, 1), 2),slice, slice, rep(c(5, 5, 5, slice), 2)))
+
+  legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
+
+
+  for(SxRpPop in 1:8) {
+
+      # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
+    file_name <- paste0(title_names[SxRpPop], ".png")
+      # dimensions? dunno; not too worried though
+    png(filename = file.path(heatmapLand, "output_objects", file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+    
+  
+      
+    heatmap_min <- c(
+      round(min(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                              dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                              dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                              SxRpPop]), 2),
+      round(min(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+                              dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+                              dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+                              SxRpPop]), 2),
+      round(min(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+                              dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+                              dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+                              SxRpPop]), 2)
+    )
+    
+    heatmap_max <- c(
+      round(max(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                              dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                              dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                              SxRpPop]), 2),
+    round(max(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+                              dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+                              dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+                              SxRpPop]), 2),
+      round(max(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+                              dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+                              dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+                              SxRpPop]), 2)
+    )
+    
+    layout(matrix(byTheCol,16,18,F))
+    
+  # The Fake one!
+
+    # plotNames <- array(c("heatmap_axes$plotOne[1]", "heatmap_axes$plotTwo[1]", "heatmap_axes$plotTre[1]", "heatmap_axes$plotOne[2]", "heatmap_axes$plotTwo[2]", "heatmap_axes$plotTre[2]")
+
+    image(x = matrix(as.numeric(heatmap_array[dat_array_doh[balls,1,1]:dat_array_doh[balls,1,2],
+                                              dat_array_doh[balls,2,1]:dat_array_doh[balls,2,2],
+                                              dat_array_doh[balls,3,1]:dat_array_doh[balls,3,2],
+                                              SxRpPop]),5,5),
+          col = colorSeqMultPalette$YlOrBr(100),
+          axes = F, 
+          xlab = heatmap_axes$plotOne[1], 
+          ylab = heatmap_axes$plotOne[2],cex.lab=1.4, zlim = c(heatmap_min[1]-0.01,heatmap_max[1]+0.01))
+    
+    axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.8, tck = 0)
+    axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.6, tck = 0)
+    axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+  # the first real one!
+
+    image(x = matrix(as.numeric(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+                                              dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+                                              dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+                                              SxRpPop]),5,5),
+          col = colorSeqMultPalette$YlOrBr(100),
+          axes = F, 
+          xlab = heatmap_axes$plotOne[1], 
+          ylab = heatmap_axes$plotOne[2],cex.lab=1.4, zlim = c(heatmap_min[1]-0.01,heatmap_max[1]+0.01))
+    
+    axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.8, tck = 0)
+    axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.6, tck = 0)
+    axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    image(x = matrix(as.numeric(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+                                              dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+                                              dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+                                              SxRpPop]),5,5),
+          col = colorSeqMultPalette$YlOrBr(100),
+          axes = F, 
+          xlab = heatmap_axes$plotTwo[1], 
+          ylab = heatmap_axes$plotTwo[2],cex.lab=1.4, zlim = c(heatmap_min[2]-0.01,heatmap_max[2]+0.01))
+    
+    axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.8, tck = 0)
+    axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.6, tck = 0)
+    axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    image(x = matrix(as.numeric(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+                                              dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+                                              dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+                                              SxRpPop]),5,5),
+          col = colorSeqMultPalette$YlOrBr(100),
+          axes = F, 
+          xlab = heatmap_axes$plotTre[1], 
+          ylab = heatmap_axes$plotTre[2],cex.lab=1.4, zlim = c(heatmap_min[3]-0.01,heatmap_max[3]+0.01))
+    
+    axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.8, tck = 0)
+    axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+        c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+        T,0,NA,F,cex.axis=0.6, tck = 0)
+    axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+        c("","","","","",""),
+        T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+    
+    #file_name <- paste0(title_names[SxRpPop], ".tiff")
+    # dimensions? dunno; not too worried though
+    #tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
+    
+    #            layout(mat = matrix(practice,20,16))
+    #            practice <- c(rep(0,190),rep(1,10),rep(0,10),rep(1,10),rep(0,100))
+    
+    
+    plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+    a <- 0.35; b <- 20.5; c <- (b-a)/10
+    axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
+    axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
+    axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
+    axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
+    axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "M2F"), las=1,tck = 0, lwd=0, line=6)
+    axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "M1F"), las=1,tck = 0, lwd=0, line=9)
+    axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "1v2"), las=1,tck = 0, lwd=0, line=12)
+    mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
+    mtext("Seeks Novel Songs",3,1,cex = 0.8)
+    mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
+    box("outer", "solid")
+    mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
+    par(mfrow=c(1,1))
+    dev.off()
+  }
+}
+
 # dat_array_doh <- array(c(rep(1,9),1,5,5,5,1,5,5,5,1),c(3,3,2))
 # dat_array_doh <- array(c(2,1,1,1,2,1,1,1,2,2,5,5,5,2,5,5,5,2),c(3,3,2))
 # dat_array_doh <- array(c(3,1,1,1,3,1,1,1,3,3,5,5,5,3,5,5,5,3),c(3,3,2))
 # dat_array_doh <- array(c(4,1,1,1,4,1,1,1,4,4,5,5,5,4,5,5,5,4),c(3,3,2))
-dat_array_doh <- array(c(5,1,1,1,5,1,1,1,5,rep(5,9)),c(3,3,2))
-
-legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
+# dat_array_doh <- array(c(5,1,1,1,5,1,1,1,5,rep(5,9)),c(3,3,2))
 
 
-for(SxRpPop in 1:8) {
-
-    # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
-  file_name <- paste0(title_names[SxRpPop], ".png")
-    # dimensions? dunno; not too worried though
-  png(filename = file.path(heatmapLand, "output_objects", file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
-  
- 
-    
-  heatmap_min <- c(
-    round(min(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                            SxRpPop]), 2),
-    round(min(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-                            dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-                            dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-                            SxRpPop]), 2),
-    round(min(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-                            dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-                            dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-                            SxRpPop]), 2)
-  )
-  
-  heatmap_max <- c(
-    round(max(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                            SxRpPop]), 2),
-   round(max(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-                            dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-                            dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-                            SxRpPop]), 2),
-    round(max(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-                            dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-                            dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-                            SxRpPop]), 2)
-  )
-  
-  layout(matrix(byTheCol,16,18,F))
-   
-  image(x = matrix(as.numeric(heatmap_array[dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-                                            dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-                                            dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-                                            SxRpPop]),5,5),
-        col = colorSeqMultPalette$YlOrBr(100),
-        axes = F, 
-        xlab = heatmap_axes$mp2Vfem[1], 
-        ylab = heatmap_axes$mp2Vfem[2],cex.lab=1.4, zlim = c(heatmap_min[1]-0.01,heatmap_max[1]+0.01))
-  
-  axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-       c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-       T,0,NA,F,cex.axis=0.8, tck = 0)
-  axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-       c("","","","","",""),
-       T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-  
-  axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-       c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-       T,0,NA,F,cex.axis=0.6, tck = 0)
-  axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-       c("","","","","",""),
-       T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-  
-  image(x = matrix(as.numeric(heatmap_array[dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-                                            dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-                                            dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-                                            SxRpPop]),5,5),
-        col = colorSeqMultPalette$YlOrBr(100),
-        axes = F, 
-        xlab = heatmap_axes$mp1Vfem[1], 
-        ylab = heatmap_axes$mp1Vfem[2],cex.lab=1.4, zlim = c(heatmap_min[2]-0.01,heatmap_max[2]+0.01))
-  
-  axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-       c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-       T,0,NA,F,cex.axis=0.8, tck = 0)
-  axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-       c("","","","","",""),
-       T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-  
-  axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-       c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-       T,0,NA,F,cex.axis=0.6, tck = 0)
-  axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-       c("","","","","",""),
-       T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-  
-  image(x = matrix(as.numeric(heatmap_array[dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-                                            dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-                                            dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-                                            SxRpPop]),5,5),
-        col = colorSeqMultPalette$YlOrBr(100),
-        axes = F, 
-        xlab = heatmap_axes$mp1Vmp2[1], 
-        ylab = heatmap_axes$mp1Vmp2[2],cex.lab=1.4, zlim = c(heatmap_min[3]-0.01,heatmap_max[3]+0.01))
-  
-  axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-       c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-       T,0,NA,F,cex.axis=0.8, tck = 0)
-  axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-       c("","","","","",""),
-       T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-  
-  axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-       c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-       T,0,NA,F,cex.axis=0.6, tck = 0)
-  axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-       c("","","","","",""),
-       T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-  
-  #file_name <- paste0(title_names[SxRpPop], ".tiff")
-  # dimensions? dunno; not too worried though
-  #tiff(filename = file_name, width = 554, height = 467, units = "px", pointsize = 12, bg = "white", compression = "none")
-  
-  #            layout(mat = matrix(practice,20,16))
-  #            practice <- c(rep(0,190),rep(1,10),rep(0,10),rep(1,10),rep(0,100))
-  
-  
-  plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
-  a <- 0.35; b <- 20.5; c <- (b-a)/10
-  axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
-  axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
-  axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
-  axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
-  axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "M2F"), las=1,tck = 0, lwd=0, line=6)
-  axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "M1F"), las=1,tck = 0, lwd=0, line=9)
-  axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "1v2"), las=1,tck = 0, lwd=0, line=12)
-  mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
-  mtext("Seeks Novel Songs",3,1,cex = 0.8)
-  mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
-  box("outer", "solid")
-  mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
-  par(mfrow=c(1,1))
-  dev.off()
-}
