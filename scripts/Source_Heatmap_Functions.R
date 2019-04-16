@@ -22,14 +22,31 @@ remakeString <- function(target, comp, out) {
   return(remadeStrings)
 }
 
-HtMpDir <- function() {
+HtMpDir <- function(...) {
+  arguments <- list(...)
 
-  heatmaps_dir <- c("results", "Heatmaps")
+  # HelloWorld <- function(...) {
+  #   arguments <- list(...)
+  #   paste(arguments)
+  # }
 
-  if(!(dir.exists(file.path(heatmaps_dir[1], heatmaps_dir[2])))) {
-      dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2]))
+  argLength <- length(arguments)
+
+
+
+  if(extraDir) {
+    heatmaps_dir <- c("results", "Heatmaps", heatmaps_dir)
+
+    if(!(dir.exists(file.path(heatmaps_dir[1], heatmaps_dir[2], heatmaps_dir[3])))) {
+         dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2], heatmaps_dir[3]))
+    }
+  } else {
+    heatmaps_dir <- c("results", "Heatmaps")
+
+    if(!(dir.exists(file.path(heatmaps_dir[1], heatmaps_dir[2])))) {
+        dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2]))
+    }
   }
-
   return(file.path(heatmaps_dir[1], heatmaps_dir[2]))
 }
 

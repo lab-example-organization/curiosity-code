@@ -120,7 +120,7 @@ life_cycle <- function(
   scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
-  recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, directoryDate) {
+  recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, directoryDate, invasion) {
   
   docnamez <- makeDocnamez(
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
@@ -173,6 +173,17 @@ life_cycle <- function(
   
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
+    
+    # Invasion Setup
+
+    if (
+      invasion &&
+      thousand_timesteps == 2
+    ) {
+      pop_subset <- sample(simParams$pop_calls_matrix[1,],invasion)
+      
+    }
+
     for(simplify in 1:(1000/recordingSimpFact)) {
       for(single_timestep in 1:recordingSimpFact) {
 
@@ -385,7 +396,8 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       recordingSimpFact = params$RecordSimplifyFactor,
       one_pop_singers = params$one_pop_singers,
       curinhProportion = params$curinhDistribution,
-      directoryDate = dirDate
+      directoryDate = dirDate,
+      invasion = params$traitInvasionPopSize
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }

@@ -275,6 +275,6 @@ curinh_pattern: 3
 one_pop_singers: [10, 10]
 RecordSimplifyFactor: 100
 curinhDistribution: 0.75 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
-
+traitInvasionPopSize: 5
 
 
