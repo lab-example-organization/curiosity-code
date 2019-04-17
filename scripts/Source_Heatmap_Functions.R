@@ -30,12 +30,13 @@ HtMpDir <- function(...) {
   #   paste(arguments)
   # }
 
-  argLength <- length(arguments)
-
-
-
-  if(extraDir) {
-    heatmaps_dir <- c("results", "Heatmaps", heatmaps_dir)
+  length(arguments)
+  heatmaps_dir <- rep(0, argLength + 2)
+  if(argLength != 0) {
+    heatmaps_dir[1:2] <- c("results", "Heatmaps")
+    for (extraDirs in 1:argLength) {
+      heatmaps_dir[extraDirs + 2] <- arguments[[extraDirs]]
+    }
 
     if(!(dir.exists(file.path(heatmaps_dir[1], heatmaps_dir[2], heatmaps_dir[3])))) {
          dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2], heatmaps_dir[3]))
@@ -47,7 +48,12 @@ HtMpDir <- function(...) {
         dir.create(file.path(heatmaps_dir[1], heatmaps_dir[2]))
     }
   }
-  return(file.path(heatmaps_dir[1], heatmaps_dir[2]))
+
+  eval(parse(text= paste0("heatMapDirectory <- file.path(", paste0("heatmaps_dir[1", "], heatmaps_dir[", 2:(argLength + 2), "])"))))
+  
+  #return(file.path(heatmaps_dir[1], heatmaps_dir[2]))
+  return(heatMapDirectory)
+  
 }
 
 extractVarDirs <- function(home_path, fileNamePattern) {

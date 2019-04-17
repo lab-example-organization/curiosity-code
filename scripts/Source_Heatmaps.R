@@ -26,7 +26,7 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-heatmapLand <- HtMpDir()
+heatmapLand <- HtMpDir(c("sameInh"))
 
 # all_the_runs <- list.files(heatmapLand, 
 all_the_runs <- extractVarDirs(heatmapLand, 
