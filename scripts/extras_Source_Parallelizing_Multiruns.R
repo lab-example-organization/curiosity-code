@@ -59,7 +59,7 @@ referenceSection("multirun")
 
 # Specify the number of cores/workers we want to use
     # n_cores <- detectCores() - 3 # built around a maximum allowance
-n_cores <- 1
+n_cores <- 2
 
   sourceCpp(file.path('cpp_source', 'median.cpp'))
   sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
@@ -68,8 +68,8 @@ n_cores <- 1
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1
-paramsFile <- c("extras.yaml")
+shifting_curstart <- 1:6
+paramsFile <- c("samInhDiffMalParams.yaml")
 # paramsFile <- c("diffFemParamsFemaleInhSD5.yaml")
 # paramsFile <- c("diffZwischensSTf_extras.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")

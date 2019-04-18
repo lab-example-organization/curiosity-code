@@ -120,7 +120,8 @@ life_cycle <- function(
   scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
-  recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, directoryDate) {
+  recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, 
+  directoryDate, invasion, invPopSize, invStyle) {
   
   docnamez <- makeDocnamez(
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
@@ -173,6 +174,22 @@ life_cycle <- function(
   
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
+    
+    # Invasion Setup
+
+    # if (
+    #   invasion &&
+    #   thousand_timesteps == 2
+    # ) {
+    #   for (population in 1:simParams$num_pop) {
+    #     pop_subset <- sample(simParams$pop_calls_matrix[1,],invasion)
+    #     if (invStyle = "curiosity") {
+    #       curiosity_level
+    #     } else if (invStyle = "sylrep") {}
+    #   }
+      
+    # }
+
     for(simplify in 1:(1000/recordingSimpFact)) {
       for(single_timestep in 1:recordingSimpFact) {
 
@@ -365,7 +382,8 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
         params$curstarts[[shifting_curstart]]$scMax[2],
         params$curstarts[[shifting_curstart]]$scMax[3],
         params$curstarts[[shifting_curstart]]$scMax[4]),
-      simNumber = params$simNumberStart + (shifting_curstart - 1),
+      simNumber = params$simNumberStart[shifting_curstart],
+      # simNumber = params$simNumberStart + (shifting_curstart - 1),
       runLength = params$runLength,
       SylLearnStyle = params$SylLearnStyle,
       vertOblLearn = c(
@@ -385,7 +403,10 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       recordingSimpFact = params$RecordSimplifyFactor,
       one_pop_singers = params$one_pop_singers,
       curinhProportion = params$curinhDistribution,
-      directoryDate = dirDate
+      directoryDate = dirDate,
+      invasion = params$traitInvasion,
+      invPopSize = invasionPopSize,
+      invStyle = invasionStyle
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }

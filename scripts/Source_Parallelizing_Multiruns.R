@@ -57,9 +57,10 @@ source(file.path("scripts", "Source_Reference_Section.R"))
 referenceSection("multirun")
 # referenceSection("profiler")
 
-# we specify the number of cores/workers we want to use
-# n_cores <- detectCores() - 4
 n_cores <- 16
+# Specify the number of cores/workers we want to use
+    # n_cores <- detectCores() - 3 # built around a maximum allowance
+# n_cores <- 1
 
   sourceCpp(file.path('cpp_source', 'median.cpp'))
   sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
@@ -68,8 +69,9 @@ n_cores <- 16
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:16
-paramsFile <- c("params.yaml")
+shifting_curstart <- 1:125
+paramsFile <- c("diffFemParamsFemaleInhSD5.yaml")
+# paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
 mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = simDate, seedNumber = secretCode, mc.cores = n_cores)

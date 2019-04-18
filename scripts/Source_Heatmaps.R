@@ -26,7 +26,7 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-heatmapLand <- HtMpDir()
+heatmapLand <- HtMpDir(c("sameInh"))
 
 # all_the_runs <- list.files(heatmapLand, 
 all_the_runs <- extractVarDirs(heatmapLand, 
@@ -39,10 +39,13 @@ all_the_runs <- extractVarDirs(heatmapLand,
   #"*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[1-4]_")  # sameinh_maleBias
   # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_")   # oppinh maleBias
   # "*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
-  # "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
-  # "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") # 
-  # "*_141[5-9]_|*_14[2-9][0-9]_|*_"15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_")
-   # sSTfinh maleBias then femaleBias
+  ##### "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
+  ##### "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") # 
+  # "*_129[0-9]_|*_13[0-9][0-9]_|*_140[0-9]_|*_141[0-4]_") # mixedCurInh - sNTn (males 90%, females 10%)
+  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_") # mixedCurInh_-_sSTf (males 75%, females 25%) 
+  # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
+  # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
+  # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
