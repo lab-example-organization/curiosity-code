@@ -59,7 +59,7 @@ referenceSection("multirun")
 
 # Specify the number of cores/workers we want to use
     # n_cores <- detectCores() - 3 # built around a maximum allowance
-n_cores <- 1
+n_cores <- 16
 
   sourceCpp(file.path('cpp_source', 'median.cpp'))
   sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
@@ -68,8 +68,8 @@ n_cores <- 1
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:125
-paramsFile <- c("diffFemParamsFemaleInhSD5.yaml")
+shifting_curstart <- 1:248
+paramsFile <- c("diffZwischensTfS_extras.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
