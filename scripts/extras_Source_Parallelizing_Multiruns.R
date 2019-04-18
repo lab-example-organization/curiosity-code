@@ -68,8 +68,8 @@ n_cores <- 2
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:2
-paramsFile <- c("extras.yaml")
+shifting_curstart <- 1:6
+paramsFile <- c("samInhDiffMalParams.yaml")
 # paramsFile <- c("diffFemParamsFemaleInhSD5.yaml")
 # paramsFile <- c("diffZwischensSTf_extras.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")

@@ -279,3 +279,4 @@ traitInvasion: FALSE
 invasionPopSize: 5
 invasionStyle: # need: curiosity, sylrep, 
 
+screwedUp: FALSE
