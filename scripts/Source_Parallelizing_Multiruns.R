@@ -68,8 +68,8 @@ n_cores <- 1
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:125
-paramsFile <- c("diffFemParamsFemaleInhSD5.yaml")
+shifting_curstart <- 1:248
+paramsFile <- c("sFrSdiffZwischen.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418

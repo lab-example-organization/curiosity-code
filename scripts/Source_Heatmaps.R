@@ -26,7 +26,8 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-heatmapLand <- HtMpDir(c("sameInh"))
+# heatmapLand <- HtMpDir("sameInh")
+heatmapLand <- file.path("results", "Heatmaps", "sameInh")
 
 # all_the_runs <- list.files(heatmapLand, 
 all_the_runs <- extractVarDirs(heatmapLand, 
@@ -35,8 +36,8 @@ all_the_runs <- extractVarDirs(heatmapLand,
   # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
   #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
   #"*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
-  "*_54[6-9]_|*_5[7-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
-  #"*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[1-4]_")  # sameinh_maleBias
+  # "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
+  "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
   # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_")   # oppinh maleBias
   # "*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
   ##### "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
@@ -58,7 +59,16 @@ all_the_runs <- extractVarDirs(heatmapLand,
 # stuff[thing] <- str_sub(all_the_runs[thing], 8L, 10L)
 # }
 
+# norm1 <- all_the_runs[1:86]  #546-631
+# norm2 <- all_the_runs[87:101] #633-647
+# norm3 <- all_the_runs[102:111] #649-658
+# norm4 <- all_the_runs[112:115] #660-663
+# norm5<- all_the_runs[116:121] #665-670
+# all_the_runs <- c(norm1, all_the_runs[123], norm2, all_the_runs[125], norm3, all_the_runs[124], norm4, all_the_runs[122], norm5)
 
+# norm1 <- all_the_runs[1:117]  #671-792
+# norm2 <- all_the_runs[120:125] #633-647
+# all_the_runs <- c(norm1, norm2, all_the_runs[118:119])
 
 # norm1 <- all_the_runs[1:57]
 # norm2 <- all_the_runs[58:124]
