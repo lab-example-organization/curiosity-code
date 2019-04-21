@@ -33,7 +33,7 @@ HtMpDir <- function(extraDir = "extraDirectory") {
         dir.create(file.path(heatmapDirectory))
       }
     }
-  } 
+  }
 
   return(heatmapDirectory)
   
@@ -115,15 +115,6 @@ makeHeatmaps <- function (
   diffcurstartBias = 1
 ) {
 
-  # diffMale <- FALSE
-
-  # if (diffcurstartBias == 1) {diffMale = TRUE}
-
-  # heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
-  #heatmap_array <- array(0, dim = c(5,5,5,8), list(c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")))
-
-  # DIFFERING MALE CURSTARTS
-
   if (diffcurstartBias == 1) {
     heatmap_array <- array(
     0, dim = c(5,5,5,8), list(
@@ -142,13 +133,6 @@ makeHeatmaps <- function (
     ))
   }
 
-  # heatmap_array <- array(
-  #   0, dim = c(5,5,5,8), list(
-  #     c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), 
-  #     c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), 
-  #     c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), 
-  #     c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-  #   ))
 
   for(long in 1:5) { # femalez
     for(medium in 1:5) { # malez1
@@ -174,46 +158,10 @@ makeHeatmaps <- function (
   }
 
 
-  # DIFFERING FEMALE CURSTARTS
-
-  # heatmap_array <- array(
-  #   0, dim = c(5,5,5,8), list(
-  #     c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
-  #     c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
-  #     c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
-  #     c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-  #   ))
-
-  # for(malez in 1:5) {
-  #   for(femalez1 in 1:5) {
-  #     for(femalez2 in 1:5) {
-
-  #       tally <- femalez2 + 5*(femalez1 - 1) + 25*(malez - 1)
-
-  #       sumStats <- c(
-  #         extractedMeans[[tally]]$curLvlMeans[1,1,100],
-  #         extractedMeans[[tally]]$curLvlMeans[1,2,100],
-  #         extractedMeans[[tally]]$curLvlMeans[2,1,100],
-  #         extractedMeans[[tally]]$curLvlMeans[2,2,100],
-  #         extractedMeans[[tally]]$sylRepMeans[1,1,100],
-  #         extractedMeans[[tally]]$sylRepMeans[1,2,100],
-  #         extractedMeans[[tally]]$sylRepMeans[2,1,100],
-  #         extractedMeans[[tally]]$sylRepMeans[2,2,100]
-  #       )
-
-  #       heatmap_array[femalez1,femalez2,malez,] <- sumStats
-        
-  #     }
-  #   }
-  # }
 
   #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "")
 
-  if(!(file.exists(file.path(
-  "results", "Heatmaps", "output_objects", "heatmap_output.RData"
-        )))) {saveRDS(heatmap_array, file.path(
-  "results", "Heatmaps", "output_objects", "heatmap_output.RData"
-    ))}
+ 
   # heatmap_array <- readRDS("../../../../../../media/parker/A443-E926/simulation runs/heatmap_output.RData")
   colorSeqMultPalette <- list(
     BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
@@ -316,6 +264,11 @@ makeHeatmaps <- function (
 
   if(!(dir.exists(file.path("results", "Heatmaps", "output_objects", folderName)))) {
     dir.create(file.path("results", "Heatmaps", "output_objects", folderName))
+    if(!(file.exists(file.path(
+      "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
+            )))) {saveRDS(heatmap_array, file.path(
+      "results", "Heatmaps", "output_objects", paste0("heatmap_output_-_", folderName, ".RData")
+    ))}
     for (subset in 1:5) {
       dir.create(file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", subset)))
     }

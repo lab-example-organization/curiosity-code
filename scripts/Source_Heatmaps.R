@@ -26,8 +26,9 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-# heatmapLand <- HtMpDir("sameInh")
+# heatmapLand <- HtMpDir(extraDir = "sameInh")
 heatmapLand <- file.path("results", "Heatmaps", "sameInh")
+# heatmapLand <- file.path("results", "Heatmaps")
 
 # all_the_runs <- list.files(heatmapLand, 
 all_the_runs <- extractVarDirs(heatmapLand, 
@@ -36,10 +37,10 @@ all_the_runs <- extractVarDirs(heatmapLand,
   # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
   #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
   #"*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
-  # "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
-  "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
-  # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_")   # oppinh maleBias
-  # "*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
+  "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
+  # "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
+  # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_|*_1041_")   # oppinh maleBias
+  # "*_794_|*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
   ##### "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
   ##### "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") # 
   # "*_129[0-9]_|*_13[0-9][0-9]_|*_140[0-9]_|*_141[0-4]_") # mixedCurInh - sNTn (males 90%, females 10%)
@@ -58,6 +59,13 @@ all_the_runs <- extractVarDirs(heatmapLand,
 # for(thing in length(all_the_runs)) {
 # stuff[thing] <- str_sub(all_the_runs[thing], 8L, 10L)
 # }
+
+### Opposite Inheritance - Female Bias (differing curstarts between populations)
+# norm1 <- all_the_runs[1:5]  #794, 918-921
+# norm2 <- all_the_runs[6:35] #1000-1029
+# norm3 <- all_the_runs[36:113] #922-999
+# norm4 <- all_the_runs[114:125] #1030-1041
+# all_the_runs <- c(norm1, norm3, norm2, norm4)
 
 # norm1 <- all_the_runs[1:86]  #546-631
 # norm2 <- all_the_runs[87:101] #633-647
@@ -85,7 +93,21 @@ all_the_runs <- extractVarDirs(heatmapLand,
 # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
 #all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
 # 
+
+
+profvis({
+#   for(iteration in 1:10) {
+    extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
+        dirHeatMap = heatmapLand, source_of_params = "params.yaml")
+#   }
+})
+
+
+
+
+
 extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
+
 all_the_names <- remakeString(all_the_runs, "_", ".")
 
 names(extractedMeans) <- all_the_names
@@ -102,4 +124,4 @@ names(extractedMeans) <- all_the_names
 
 # whichBias <- c("male","female")
 
-makeHeatmaps(3, 1)
+makeHeatmaps(inheritance = 3, diffcurstartBias = 2)
