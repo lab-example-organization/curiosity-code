@@ -1,9 +1,7 @@
 curstarts:
-  - scMin: [ 1,11, 1, 7]
-    scMax: [26,26,26,13]
-  - scMin: [11,11,11, 1]
-    scMax: [15,26,15,26]
-simNumberStart: [632, 659]
+  - scMin: [11, 1,11,11]
+    scMax: [15, 7,15,26]
+simNumberStart: [648]
 runLength: '10k'
 SylLearnStyle: 'nsL'
 vertObLearn:

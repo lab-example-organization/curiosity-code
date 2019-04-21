@@ -389,7 +389,10 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
         params$curstarts[[shifting_curstart]]$scMax[3],
         params$curstarts[[shifting_curstart]]$scMax[4]),
       simNumber = subsetOrSequence,
+<<<<<<< HEAD
       # simNumber = params$simNumberStart + (shifting_curstart - 1),
+=======
+>>>>>>> 4f6b2cc0cebfc0fdb1a52e4ec8a41104ea8a6a4e
       runLength = params$runLength,
       SylLearnStyle = params$SylLearnStyle,
       vertOblLearn = c(
