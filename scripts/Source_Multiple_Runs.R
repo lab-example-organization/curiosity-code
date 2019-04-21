@@ -371,7 +371,13 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
-    life_cycle(
+  if (params$screwedUp) {
+   subsetOrSequence <- params$simNumberStart[shifting_curstart]
+  } else {
+    subsetOrSequence <- params$simNumberStart + (shifting_curstart - 1)
+  }
+
+   life_cycle(
       scMin = c(
         params$curstarts[[shifting_curstart]]$scMin[1],
         params$curstarts[[shifting_curstart]]$scMin[2],
@@ -382,7 +388,7 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
         params$curstarts[[shifting_curstart]]$scMax[2],
         params$curstarts[[shifting_curstart]]$scMax[3],
         params$curstarts[[shifting_curstart]]$scMax[4]),
-      simNumber = params$simNumberStart[shifting_curstart],
+      simNumber = subsetOrSequence,
       # simNumber = params$simNumberStart + (shifting_curstart - 1),
       runLength = params$runLength,
       SylLearnStyle = params$SylLearnStyle,
@@ -416,3 +422,9 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
                  number_of_repeats = number_of_reps,
                  paramsSource = paramsSource)
 }
+
+
+
+
+
+
