@@ -49,7 +49,7 @@ extractVarDirs <- function(home_path, fileNamePattern) {
   return(variableStore_folderList)
 }
 
-extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
+extractMeans <- function(allRunDirs, dirHeatMap, source_of_params, deeper = FALSE) {
   number_of_runs <- length(allRunDirs)
   number_of_reps <- length(list.files(file.path(dirHeatMap, allRunDirs[1], "variable_store")))
   dim_source = yaml.load_file(file.path("parameters", source_of_params))
@@ -59,12 +59,20 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
   for(individual_run in 1:number_of_runs) {
     
     #individual_run <- 1
-
-    multirun_directory <-
-      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output"#, 
-      #list.files(path = file.path(dirHeatMap, 
-      #allRunDirs[individual_run], "multirun_output"), pattern = "output$")
+    if (deeper) {
+      multirun_directory <-
+      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output", 
+      list.files(path = file.path(dirHeatMap, 
+      allRunDirs[individual_run], "multirun_output"), pattern = "output$")
       )
+    } else {
+      multirun_directory <-
+      file.path(dirHeatMap, allRunDirs[individual_run], "multirun_output"#, 
+      # list.files(path = file.path(dirHeatMap, 
+      # allRunDirs[individual_run], "multirun_output"), pattern = "output$")
+      )
+    }
+    
     datanames <- c("CurHist","Cursity","SylDist","SylReps")
     objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
     listnames <- c("hist","sity","sdst","repz")
@@ -112,7 +120,8 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
 
 makeHeatmaps <- function (
   inheritance = 1,
-  diffcurstartBias = 1
+  diffcurstartBias = 1,
+  absolute = FALSE
 ) {
 
   if (diffcurstartBias == 1) {
@@ -277,42 +286,10 @@ makeHeatmaps <- function (
   
   
 
-  for (slice in 1:5) {
-    dat_array_doh <- array(c(
-      rep(c(slice, 1, 1, 1), 2),
-      slice, 
-      slice, 
-      rep(c(5, 5, 5, slice), 2)
-    ), c(3,3,2))
-    
-    heatmapRangeDatasetOne <- heatmap_array[
-      dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-      dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-      dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-      SxRpPop]
-    heatmapRangeDatasetTwo <- heatmap_array[
-      dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-      dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-      dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-      SxRpPop]
-    heatmapRangeDatasetTre <- heatmap_array[
-      dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-      dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-      dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-      SxRpPop]
-    heatmap_min <- c(
-      round(min(heatmapRangeDatasetOne), 2),
-      round(min(heatmapRangeDatasetTwo), 2),
-      round(min(heatmapRangeDatasetTre), 2)
-    )
-    heatmap_max <- c(
-      round(max(heatmapRangeDatasetOne), 2),
-      round(max(heatmapRangeDatasetTwo), 2),
-      round(max(heatmapRangeDatasetTre), 2)
-    )
+  
 
-    for(SxRpPop in 1:8) {
-
+  for(SxRpPop in 1:8) {
+    for (slice in 1:5) {
         # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
       file_name <- paste0(title_names[SxRpPop], ".png")
         # dimensions? dunno; not too worried though
@@ -326,19 +303,62 @@ makeHeatmaps <- function (
       # plotNames <- array(c("heatmap_axes$plotOne[1]", "heatmap_axes$plotTwo[1]", "heatmap_axes$plotTre[1]", "heatmap_axes$plotOne[2]", "heatmap_axes$plotTwo[2]", "heatmap_axes$plotTre[2]")
       
       for (htmpCycle in 1:3) {
+        
+        dat_array_doh <- array(c(
+            rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(5, 5, 5, 1), 2),
+            rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(5, 5, 5, 2), 2),
+            rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(5, 5, 5, 3), 2),
+            rep(c(4, 1, 1, 1), 2), 4, 4, rep(c(5, 5, 5, 4), 2),
+            rep(c(5, 1, 1, 1), 2), 5, 5, rep(c(5, 5, 5, 5), 2)
+          ), c(3,3,2,5))
+        
+        if(absolute) {
+          heatmapRange <- c(0,1)
+        } else {
+          
+          
+        
+          heatmapRangeDatasetOne <- heatmap_array[
+            dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
+            dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
+            dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
+            SxRpPop]
+          heatmapRangeDatasetTwo <- heatmap_array[
+            dat_array_doh[2,1,1,slice]:dat_array_doh[2,1,2,slice],
+            dat_array_doh[2,2,1,slice]:dat_array_doh[2,2,2,slice],
+            dat_array_doh[2,3,1,slice]:dat_array_doh[2,3,2,slice],
+            SxRpPop]
+          heatmapRangeDatasetTre <- heatmap_array[
+            dat_array_doh[3,1,1,slice]:dat_array_doh[3,1,2,slice],
+            dat_array_doh[3,2,1,slice]:dat_array_doh[3,2,2,slice],
+            dat_array_doh[3,3,1,slice]:dat_array_doh[3,3,2,slice],
+            SxRpPop]
+          heatmap_min <- c(
+            round(min(heatmapRangeDatasetOne), 2),
+            round(min(heatmapRangeDatasetTwo), 2),
+            round(min(heatmapRangeDatasetTre), 2)
+          )
+          heatmap_max <- c(
+            round(max(heatmapRangeDatasetOne), 2),
+            round(max(heatmapRangeDatasetTwo), 2),
+            round(max(heatmapRangeDatasetTre), 2)
+          )
+          
+          heatmapRange <- c(heatmap_min[htmpCycle]-0.01,heatmap_max[htmpCycle]+0.01)
+        }
         findXLab <- heatmap_axes[[htmpCycle]][1]
         findYLab <- heatmap_axes[[htmpCycle]][2]
         image(x = matrix(as.numeric(
           heatmap_array[
-            dat_array_doh[htmpCycle,1,1]:dat_array_doh[htmpCycle,1,2],
-            dat_array_doh[htmpCycle,2,1]:dat_array_doh[htmpCycle,2,2],
-            dat_array_doh[htmpCycle,3,1]:dat_array_doh[htmpCycle,3,2],
+            dat_array_doh[htmpCycle,1,1,slice]:dat_array_doh[htmpCycle,1,2,slice],
+            dat_array_doh[htmpCycle,2,1,slice]:dat_array_doh[htmpCycle,2,2,slice],
+            dat_array_doh[htmpCycle,3,1,slice]:dat_array_doh[htmpCycle,3,2,slice],
             SxRpPop
           ]),5,5),
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
         xlab = findXLab, 
-        ylab = findYLab,cex.lab=1.4, zlim = c(heatmap_min[htmpCycle]-0.01,heatmap_max[htmpCycle]+0.01))
+        ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
       
         axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
             c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
@@ -361,9 +381,14 @@ makeHeatmaps <- function (
       axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
       axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
       axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
-      axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
-      axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
-      axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
+      if (absolute) {
+        axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
+      } else {
+        axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
+        axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
+        axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
+      }
+      
       mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
       mtext("Seeks Novel Songs",3,1,cex = 0.8)
       mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
@@ -375,5 +400,7 @@ makeHeatmaps <- function (
   }
   return(print("done, in the specified folder"))
 }
+  
+# }
 
 print("HtMpDir, extractVarDirs, remakeString, extractMeans and makeHeatmaps loaded")
