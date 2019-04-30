@@ -43,7 +43,7 @@ referenceSection <- function (referencing_script) {
 
     package_list <- list(
         multirun = c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp", "tidyr", "data.table"),
-        heatmaps = c("stringr", "yaml"),
+        heatmaps = c("stringr", "yaml", "magick"),
         profiler = c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp", "tidyr", "data.table", "profvis"),
         profvyaml = c("profvis", "yaml"),
         pfvSrrYml = c("profvis", "stringr", "yaml"),
@@ -66,5 +66,8 @@ referenceSection <- function (referencing_script) {
     # library(R.utils)
     # library(dplyr)
     return (print("See You Space Cowhand"))
+    return (sessionInfo(package = NULL))
+    
 }
 
+# sessionInfo(package = NULL)

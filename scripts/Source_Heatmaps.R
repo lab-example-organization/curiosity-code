@@ -130,7 +130,87 @@ makeHeatmaps(inheritance = 1, diffcurstartBias = 1, absolute = TRUE)
 
 
 
-library(magick)
+
+
+CombineFigures <- function (
+  heatmap_num = 1,
+  metrics_num = 1
+) {
+  library(magick)
+
+  heatmap_folderList <- c(
+    "190421_slices_-_sameinh_maleBias",
+    "190421_slices_-_sameinh_femaleBias",
+    "190419_slices_-_oppsinh_maleBias",
+    "190419_slices_-_oppsinh_femaleBias",
+    "190427_slices_-_maleinh_maleBias",
+    "190410_slices_-_maleinh_femBias",
+    "190404_slices_-_mothinh_maleBias",
+    "190403_slices_-_mothinh_femBias"
+  )
+
+  subpopMetrics_list <- c(
+    "Ending Curiosity Values - Pop 1 Females.png",
+    "Ending Curiosity Values - Pop 1 Males.png",
+    "Ending Curiosity Values - Pop 2 Females.png",
+    "Ending Curiosity Values - Pop 2 Males.png",
+    "Ending Sylrep Values - Pop 1 Females.png",
+    "Ending Sylrep Values - Pop 1 Males.png",
+    "Ending Sylrep Values - Pop 2 Females.png",
+    "Ending Sylrep Values - Pop 2 Males.png"
+  )
+
+  slice_names <- c(
+    "slice_1",
+    "slice_2",
+    "slice_3",
+    "slice_4",
+    "slice_5"
+  )
+
+  UpperDir <- file.path("results", "Heatmaps", "output_objects")
+  tempFigs <- rep(0,5)
+  for (
+    slice in 1:5
+  ) {
+    tempFigs[slice] <- image_read(file.path(
+      UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], subpopMetrics_list[metrics_num]
+      )
+    )
+  }
+  hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
+  image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
+  return(print("Done, in the specified folder"))
+}
+
+# source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
+
+#   UpperDir <- file.path("results", "Heatmaps", "output_objects")
+
+#   for (
+#     slice in 1:5
+#   ) {
+#     c("temp1", "temp2", "temp3", "temp4", "temp5") %=% c(
+#       image_read(file.path(UpperDir, heatmap_folderList[heatmap_num], ))
+#     )
+#   }
+
+# }
+
+
+
+# importMe <- file.path("home", "parker", "Downloads", "crowAndLorikeets1.jpg")
+# image_read(importMe)
+
+# importMe <- image_read(file.path("results", "Heatmaps", "output_objects", "190421_slices_-_sameinh_maleBias", "slice_1", "Ending Curiosity Values - Pop 1 Females.png"))
+
+# image_write(CrLk5, path = "CrowAndLorikeetsFinal.png", format = "png")
+
+
+
+
+
+
 
 
 

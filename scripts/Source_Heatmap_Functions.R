@@ -291,7 +291,7 @@ makeHeatmaps <- function (
   for(SxRpPop in 1:8) {
     for (slice in 1:5) {
         # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
-      file_name <- paste0(title_names[SxRpPop], ".png")
+      file_name <- paste0(title_names[SxRpPop], "_slice_", slice".png")
         # dimensions? dunno; not too worried though
       
       png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
@@ -313,7 +313,13 @@ makeHeatmaps <- function (
           ), c(3,3,2,5))
         
         if(absolute) {
-          heatmapRange <- c(0,1)
+          if (
+            "Curiosity" %in% title_names[SxRpPop]
+          ) {
+            heatmapRange <- c(0,1)
+          } else {
+            heatmapRange <- c(10,100)
+          }
         } else {
           
           
