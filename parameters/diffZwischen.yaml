@@ -495,7 +495,7 @@ curstarts:
     scMax: [15,15,15,26]
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
-simNumberStart: 1415
+simNumberStart: 1042
 runLength: '10k'
 SylLearnStyle: 'nsL'
 vertObLearn:
@@ -517,10 +517,15 @@ standard_deviation: 2
 # curinh.pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhDistribution
-curinh_pattern: 5
+curinh_pattern: 1
 one_pop_singers: [10, 10]
 RecordSimplifyFactor: 100
 curinhDistribution: 0.75 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+traitInvasion: FALSE
+invasionPopSize: 5
+invasionStyle: # need: curiosity, sylrep, 
+
+screwedUp: FALSE
 
 
 

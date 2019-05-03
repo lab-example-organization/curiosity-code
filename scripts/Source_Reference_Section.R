@@ -66,7 +66,7 @@ referenceSection <- function (referencing_script) {
     # library(R.utils)
     # library(dplyr)
     return (print("See You Space Cowhand"))
-    return (sessionInfo(package = NULL))
+    # return (sessionInfo(package = NULL))
     
 }
 

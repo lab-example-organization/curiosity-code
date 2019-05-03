@@ -28,16 +28,19 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 # heatmapLand <- HtMpDir(extraDir = "sameInh")
 # heatmapLand <- file.path("results", "Heatmaps", "sameInh")
-heatmapLand <- file.path("results", "Heatmaps", "maleInh_maleBias")
+# heatmapLand <- file.path("results", "Heatmaps", "maleInh_maleBias")
+# heatmapLand <- file.path("results", "Heatmaps", "femInh_maleBias")
+heatmapLand <- file.path("results", "Heatmaps", "femInh_femBias")
+
 # heatmapLand <- file.path("results", "Heatmaps")
 
 # all_the_runs <- list.files(heatmapLand, 
 all_the_runs <- extractVarDirs(heatmapLand, 
   #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
   #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
-  "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
-  #"*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
-  #"*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
+  # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
+  # "*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
+  "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
   # "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
   # "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
   # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_|*_1041_")   # oppinh maleBias
@@ -84,16 +87,28 @@ all_the_runs <- extractVarDirs(heatmapLand,
 # all_the_runs <- c(norm1, all_the_runs[125], norm2)
 
 
-# norm1 <- all_the_runs[1:12]  #421-432
-# norm2 <- all_the_runs[13:37] #434-458
-# norm3 <- all_the_runs[38:52] #460-474
-# norm4 <- all_the_runs[53:67] #476-490
-# norm5<- all_the_runs[68:82] #492-506
-# norm6 <- all_the_runs[83:91] #508-516
-# norm7 <- all_the_runs[95:123]#517-545
+norm1 <- all_the_runs[1:12]  #421-432
+norm2 <- all_the_runs[13:37] #434-458
+norm3 <- all_the_runs[38:52] #460-474
+norm4 <- all_the_runs[53:67] #476-490
+norm5<- all_the_runs[68:82] #492-506
+norm6 <- all_the_runs[83:91] #508-516
+norm7 <- all_the_runs[95:123]#517-545
 # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
-#all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
+all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
 # 
+
+
+# # norm1 <- all_the_runs[1:57]  #421-432
+# # norm2 <- all_the_runs[13:37] #434-458
+# # norm3 <- all_the_runs[38:52] #460-474
+# # norm4 <- all_the_runs[53:67] #476-490
+# # norm5<- all_the_runs[68:82] #492-506
+# # norm6 <- all_the_runs[83:91] #508-516
+# # norm7 <- all_the_runs[95:123]#517-545
+# # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# # all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
+# ;
 
 
 profvis({
@@ -108,7 +123,7 @@ profvis({
 
 
 # extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
-extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = TRUE)
+extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
 
 all_the_names <- remakeString(all_the_runs, "_", ".")
 
@@ -126,7 +141,16 @@ names(extractedMeans) <- all_the_names
 
 # whichBias <- c("male","female")
 
-makeHeatmaps(inheritance = 1, diffcurstartBias = 1, absolute = TRUE)
+makeHeatmaps(inheritance = 2, diffcurstartBias = 2, absolute = TRUE)
+# makeHeatmaps(inheritance = 1, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
+# makeHeatmaps(inheritance = 2, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
+# makeHeatmaps(inheritance = 1, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
+# makeHeatmaps(inheritance = 2, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
+
+# makeHeatmaps(inheritance = 3, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
+# makeHeatmaps(inheritance = 3, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
+# makeHeatmaps(inheritance = 4, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
+# makeHeatmaps(inheritance = 4, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
 
 
 
@@ -136,6 +160,155 @@ CombineFigures <- function (
   heatmap_num = 1,
   metrics_num = 1
 ) {
+  
+  for(SxRpPop in 1:8) {
+    for (slice in 1:5) {
+        # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
+      
+      title_names <- c("Ending Curiosity Values - Pop 1 Males",
+                       "Ending Curiosity Values - Pop 2 Males",
+                     "Ending Curiosity Values - Pop 1 Females",
+                     "Ending Curiosity Values - Pop 2 Females",
+                       "Ending Syll Rept Values - Pop 1 Males",
+                       "Ending Syll Rept Values - Pop 2 Males",
+                     "Ending Syll Rept Values - Pop 1 Females",
+                     "Ending Syll Rept Values - Pop 2 Females")
+      
+      if (
+        str_split(title_names[SxRpPop], "Pop ")[[1]][2] == "1 Males" || str_split(title_names[SxRpPop], "Pop ")[[1]][2] == "2 Males"
+      ) {
+        heatmap_axes <- list(
+          plotOne = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2Vfem
+          plotTwo = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1Vfem
+          plotTre = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity") # mp1Vmp2
+        )
+      } else {
+        heatmap_axes <- list(
+          mp2Vfem = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
+          mp1Vfem = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
+          mp1Vmp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Female Starting Curiosity")
+        )
+      }
+
+      for (htmpCycle in 1:3) {
+
+        file_name <- paste0(title_names[SxRpPop], "_slice_", slice, ".png")
+        
+        png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+      
+        dat_array_doh <- array(c(
+            rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(5, 5, 5, 1), 2),
+            rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(5, 5, 5, 2), 2),
+            rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(5, 5, 5, 3), 2),
+            rep(c(4, 1, 1, 1), 2), 4, 4, rep(c(5, 5, 5, 4), 2),
+            rep(c(5, 1, 1, 1), 2), 5, 5, rep(c(5, 5, 5, 5), 2)
+          ), c(3,3,2,5))
+        
+        if(absolute) {
+          if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
+          ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,100)}
+        } else {
+          
+          heatmapRangeDatasetOne <- heatmap_array[
+            dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
+            dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
+            dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
+            SxRpPop]
+          heatmapRangeDatasetTwo <- heatmap_array[
+            dat_array_doh[2,1,1,slice]:dat_array_doh[2,1,2,slice],
+            dat_array_doh[2,2,1,slice]:dat_array_doh[2,2,2,slice],
+            dat_array_doh[2,3,1,slice]:dat_array_doh[2,3,2,slice],
+            SxRpPop]
+          heatmapRangeDatasetTre <- heatmap_array[
+            dat_array_doh[3,1,1,slice]:dat_array_doh[3,1,2,slice],
+            dat_array_doh[3,2,1,slice]:dat_array_doh[3,2,2,slice],
+            dat_array_doh[3,3,1,slice]:dat_array_doh[3,3,2,slice],
+            SxRpPop]
+          heatmap_min <- c(
+            round(min(heatmapRangeDatasetOne), 2),
+            round(min(heatmapRangeDatasetTwo), 2),
+            round(min(heatmapRangeDatasetTre), 2)
+          )
+          heatmap_max <- c(
+            round(max(heatmapRangeDatasetOne), 2),
+            round(max(heatmapRangeDatasetTwo), 2),
+            round(max(heatmapRangeDatasetTre), 2)
+          )
+          
+          heatmapRange <- c(heatmap_min[htmpCycle]-0.01,heatmap_max[htmpCycle]+0.01)
+        }
+        findXLab <- heatmap_axes[[htmpCycle]][1]
+        findYLab <- heatmap_axes[[htmpCycle]][2]
+        image(x = matrix(as.numeric(
+          heatmap_array[
+            dat_array_doh[htmpCycle,1,1,slice]:dat_array_doh[htmpCycle,1,2,slice],
+            dat_array_doh[htmpCycle,2,1,slice]:dat_array_doh[htmpCycle,2,2,slice],
+            dat_array_doh[htmpCycle,3,1,slice]:dat_array_doh[htmpCycle,3,2,slice],
+            SxRpPop
+          ]),5,5),
+        col = colorSeqMultPalette$YlOrBr(100),
+        axes = F, 
+        xlab = findXLab, 
+        ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
+      
+        axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+            c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+        axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+            c("","","","","",""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        
+        axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
+            c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
+            T,0,NA,F,cex.axis=0.6, tck = 0)
+        axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
+            c("","","","","",""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+      }
+      
+      plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+      a <- 0.35; b <- 20.5; c <- (b-a)/10
+      axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
+      axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
+      axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
+      axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
+      if (absolute) {
+        if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
+          ) {
+            axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
+          } else {
+            axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
+          }
+        
+      } else {
+        axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
+        axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
+        axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
+      }
+      
+      mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
+      mtext("Seeks Novel Songs",3,1,cex = 0.8)
+      mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
+      box("outer", "solid")
+      #mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
+      par(mfrow=c(1,1))
+      dev.off()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   library(magick)
 
   heatmap_folderList <- c(

@@ -119,52 +119,101 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params, deeper = FALS
 }
 
 makeHeatmaps <- function (
-  inheritance = 1,
+  inheritance = 3,
   diffcurstartBias = 1,
-  absolute = FALSE
+  absolute = FALSE,
+  reDo = FALSE,
+  hoominReadable = FALSE
 ) {
 
-  if (diffcurstartBias == 1) {
-    heatmap_array <- array(
-    0, dim = c(5,5,5,8), list(
-      c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), 
-      c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), 
-      c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), 
-      c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-    ))
+  whichInh <- c("male","moth","same","opps","sNTn",
+                "sSTf","sSFr","sFrS","sTfS","sTnN")
+
+  whichBias <- c("male","female")
+
+  if (reDo) {
+
+    folderName <- list.files(path = file.path("results", "Heatmaps",
+    "output_objects"), pattern = paste0("_slices_-_", whichInh[inheritance],
+          "inh_", whichBias[diffcurstartBias], "Bias"))
+
+    heatmap_array <- readRDS(file.path("results", "Heatmaps", "output_objects", 
+      folderName, list.files(path = file.path("results", "Heatmaps", "output_objects",
+        folderName), pattern = 
+          "heatmap_output_-_")
+      )
+    )
+    
   } else {
-    heatmap_array <- array(
-    0, dim = c(5,5,5,8), list(
-      c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
-      c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
-      c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
-      c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-    ))
-  }
+
+    folderName <- paste0(
+      str_sub(paste(str_extract_all(
+        Sys.time(), "[0123456789]"
+      )[[1]], collapse = ""), 3, 8),
+      "_slices_-_",
+      whichInh[inheritance],
+      "inh_",
+      whichBias[diffcurstartBias],
+      "Bias"
+    )
+
+    if (diffcurstartBias == 1) {
+      heatmap_array <- array(
+      0, dim = c(5,5,5,8), list(
+        c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), 
+        c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), 
+        c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), 
+        c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+      ))
+    } else {
+      heatmap_array <- array(
+      0, dim = c(5,5,5,8), list(
+        c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
+        c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
+        c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
+        c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+      ))
+    }
 
 
-  for(long in 1:5) { # femalez
-    for(medium in 1:5) { # malez1
-      for(short in 1:5) { # malez2
+    for(long in 1:5) { # femalez
+      for(medium in 1:5) { # malez1
+        for(short in 1:5) { # malez2
 
-        tally <- short + 5*(medium - 1) + 25*(long - 1)
+          tally <- short + 5*(medium - 1) + 25*(long - 1)
 
-        sumStats <- c(
-          extractedMeans[[tally]]$curLvlMeans[1,1,100],
-          extractedMeans[[tally]]$curLvlMeans[1,2,100],
-          extractedMeans[[tally]]$curLvlMeans[2,1,100],
-          extractedMeans[[tally]]$curLvlMeans[2,2,100],
-          extractedMeans[[tally]]$sylRepMeans[1,1,100],
-          extractedMeans[[tally]]$sylRepMeans[1,2,100],
-          extractedMeans[[tally]]$sylRepMeans[2,1,100],
-          extractedMeans[[tally]]$sylRepMeans[2,2,100]
-        )
+          sumStats <- c(
+            extractedMeans[[tally]]$curLvlMeans[1,1,100],
+            extractedMeans[[tally]]$curLvlMeans[1,2,100],
+            extractedMeans[[tally]]$curLvlMeans[2,1,100],
+            extractedMeans[[tally]]$curLvlMeans[2,2,100],
+            extractedMeans[[tally]]$sylRepMeans[1,1,100],
+            extractedMeans[[tally]]$sylRepMeans[1,2,100],
+            extractedMeans[[tally]]$sylRepMeans[2,1,100],
+            extractedMeans[[tally]]$sylRepMeans[2,2,100]
+          )
 
-        heatmap_array[medium,short,long,] <- sumStats
-        
+          heatmap_array[medium,short,long,] <- sumStats
+          
+        }
       }
     }
+
+    if(!(dir.exists(file.path("results", "Heatmaps", "output_objects", folderName)))) {
+      dir.create(file.path("results", "Heatmaps", "output_objects", folderName))
+      if(!(file.exists(file.path(
+        "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
+              )))) {saveRDS(heatmap_array, file.path(
+        "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
+      ))}
+      for (subset in 1:5) {
+        dir.create(file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", subset)))
+      }
+    }
+    
   }
+
+  
 
 
 
@@ -241,47 +290,65 @@ makeHeatmaps <- function (
     byTheCol[(1 + (i - 1)*8):(i*8)] <- rep(layoutDistribution[i], 8)
   }
 
-  legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
 
-  whichInh <- c(
-      "male",
-      "moth",
-      "same",
-      "opps",
-      "sNTn",
-      "sSTf",
-      "sSFr",
-      "sFrS",
-      "sTfS",
-      "sTnN"
-  )
 
-  whichBias <- c(
-    "male",
-    "female"
-  )
-  folderName <- paste0(
-    str_sub(paste(str_extract_all(
-      Sys.time(), "[0123456789]"
-    )[[1]], collapse = ""), 3, 8),
-    "_slices_-_",
-    whichInh[inheritance],
-    "inh_",
-    whichBias[diffcurstartBias],
-    "Bias"
-  )
+  byTheCol <- c(rep(c(11,11,rep(1,4),rep( 2,4)),4),
+                rep(c(11,11,rep(3,4),rep( 4,4)),4),
+                rep(c(11,11,rep(5,4),rep( 6,4)),4),
+                rep(c(11,11,rep(7,4),rep( 8,4)),4),
+                rep(c(11,11,rep(9,4),rep(10,4)),4))
+  # layoutSize <- length(layoutDistribution)
+  # byTheCol <- vector("numeric", length = layoutSize)
+  # for(i in 1:layoutSize) {
+  #   byTheCol[(1 + (i - 1)*8):(i*8)] <- rep(layoutDistribution[i], 8)
+  # }
 
-  if(!(dir.exists(file.path("results", "Heatmaps", "output_objects", folderName)))) {
-    dir.create(file.path("results", "Heatmaps", "output_objects", folderName))
-    if(!(file.exists(file.path(
-      "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
-            )))) {saveRDS(heatmap_array, file.path(
-      "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
-    ))}
-    for (subset in 1:5) {
-      dir.create(file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", subset)))
+  for (specificPlot in 1:3) {
+    file_name <- paste0(title_names[SxRpPop], "_slice_", slice, ".png")
+      # dimensions? dunno; not too worried though
+      
+    png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+
+    layout(matrix(byTheCol,10,20,F))
+
+    for (slice in 1:5) {
+
     }
   }
+
+
+
+  legend_title <- c("Auditory Curiosity", "Syllable Repertoire")
+
+  # whichInh <- c(
+  #     "male",
+  #     "moth",
+  #     "same",
+  #     "opps",
+  #     "sNTn",
+  #     "sSTf",
+  #     "sSFr",
+  #     "sFrS",
+  #     "sTfS",
+  #     "sTnN"
+  # )
+
+  # whichBias <- c(
+  #   "male",
+  #   "female"
+  # )
+  # folderName <- paste0(
+  #   str_sub(paste(str_extract_all(
+  #     Sys.time(), "[0123456789]"
+  #   )[[1]], collapse = ""), 3, 8),
+  #   "_slices_-_",
+  #   whichInh[inheritance],
+  #   "inh_",
+  #   whichBias[diffcurstartBias],
+  #   "Bias"
+  # )
+
+  
   
   
   
@@ -291,7 +358,7 @@ makeHeatmaps <- function (
   for(SxRpPop in 1:8) {
     for (slice in 1:5) {
         # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
-      file_name <- paste0(title_names[SxRpPop], "_slice_", slice".png")
+      file_name <- paste0(title_names[SxRpPop], "_slice_", slice, ".png")
         # dimensions? dunno; not too worried though
       
       png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
@@ -313,17 +380,10 @@ makeHeatmaps <- function (
           ), c(3,3,2,5))
         
         if(absolute) {
-          if (
-            "Curiosity" %in% title_names[SxRpPop]
-          ) {
-            heatmapRange <- c(0,1)
-          } else {
-            heatmapRange <- c(10,100)
-          }
+          if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
+          ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,100)}
         } else {
           
-          
-        
           heatmapRangeDatasetOne <- heatmap_array[
             dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
             dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
@@ -388,7 +448,13 @@ makeHeatmaps <- function (
       axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
       axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
       if (absolute) {
-        axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
+        if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
+          ) {
+            axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
+          } else {
+            axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
+          }
+        
       } else {
         axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
         axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
@@ -399,10 +465,13 @@ makeHeatmaps <- function (
       mtext("Seeks Novel Songs",3,1,cex = 0.8)
       mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
       box("outer", "solid")
-      mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
+      #mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
       par(mfrow=c(1,1))
       dev.off()
     }
+
+    # here's where the pasting-together of slices into a single line of figures would be very helpful
+
   }
   return(print("done, in the specified folder"))
 }
