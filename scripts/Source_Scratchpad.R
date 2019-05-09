@@ -245,5 +245,6 @@ specificSimNumber = 1
   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
   close(connection)
 
-
+paste(c("T","i","o","s"), c("his ", "s ", "ne ",
+"entence."),sep="",collapse="")
 

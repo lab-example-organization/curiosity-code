@@ -157,190 +157,326 @@ makeHeatmaps(inheritance = 2, diffcurstartBias = 2, absolute = TRUE)
 
 
 CombineFigures <- function (
-  heatmap_num = 1
+
+  inheritance = 1, #c("sameinh", "oppsinh", "maleinh", "mothinh")
+  colorRange = 2 # c("relative", "absolute")
+
 ) {
   
-  for(SxRpPop in 1:8) {
-    for (slice in 1:5) {
-        # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
-      
-      title_names <- c("Ending Curiosity Values - Pop 1 Males",
-                       "Ending Curiosity Values - Pop 2 Males",
-                     "Ending Curiosity Values - Pop 1 Females",
-                     "Ending Curiosity Values - Pop 2 Females",
-                       "Ending Syll Rept Values - Pop 1 Males",
-                       "Ending Syll Rept Values - Pop 2 Males",
-                     "Ending Syll Rept Values - Pop 1 Females",
-                     "Ending Syll Rept Values - Pop 2 Females")
-      
-      if (
-        str_split(title_names[SxRpPop], "Pop ")[[1]][2] == "1 Males" || str_split(title_names[SxRpPop], "Pop ")[[1]][2] == "2 Males"
-      ) {
-        heatmap_axes <- list(
-          plotOne = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2Vfem
-          plotTwo = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1Vfem
-          plotTre = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity") # mp1Vmp2
-        )
-      } else {
-        heatmap_axes <- list(
-          mp2Vfem = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
-          mp1Vfem = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
-          mp1Vmp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Female Starting Curiosity")
-        )
-      }
+  ClrRngContainer <- c("relative", "absolute")
+  colorRange <- ClrRngContainer[colorRange]
 
-      for (htmpCycle in 1:3) {
+  inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
+  inheritance <- inheritanceContainer[inheritance]
 
-        file_name <- paste0(title_names[SxRpPop], "_slice_", slice, ".png")
-        
-        png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
-      
-        dat_array_doh <- array(c(
-            rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(5, 5, 5, 1), 2),
-            rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(5, 5, 5, 2), 2),
-            rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(5, 5, 5, 3), 2),
-            rep(c(4, 1, 1, 1), 2), 4, 4, rep(c(5, 5, 5, 4), 2),
-            rep(c(5, 1, 1, 1), 2), 5, 5, rep(c(5, 5, 5, 5), 2)
-          ), c(3,3,2,5))
-        
-        if(absolute) {
-          if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
-          ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,100)}
-        } else {
-          
-          heatmapRangeDatasetOne <- heatmap_array[
-            dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
-            dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
-            dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
-            SxRpPop]
-          heatmapRangeDatasetTwo <- heatmap_array[
-            dat_array_doh[2,1,1,slice]:dat_array_doh[2,1,2,slice],
-            dat_array_doh[2,2,1,slice]:dat_array_doh[2,2,2,slice],
-            dat_array_doh[2,3,1,slice]:dat_array_doh[2,3,2,slice],
-            SxRpPop]
-          heatmapRangeDatasetTre <- heatmap_array[
-            dat_array_doh[3,1,1,slice]:dat_array_doh[3,1,2,slice],
-            dat_array_doh[3,2,1,slice]:dat_array_doh[3,2,2,slice],
-            dat_array_doh[3,3,1,slice]:dat_array_doh[3,3,2,slice],
-            SxRpPop]
-          heatmap_min <- c(
-            round(min(heatmapRangeDatasetOne), 2),
-            round(min(heatmapRangeDatasetTwo), 2),
-            round(min(heatmapRangeDatasetTre), 2)
-          )
-          heatmap_max <- c(
-            round(max(heatmapRangeDatasetOne), 2),
-            round(max(heatmapRangeDatasetTwo), 2),
-            round(max(heatmapRangeDatasetTre), 2)
-          )
-          
-          heatmapRange <- c(heatmap_min[htmpCycle]-0.01,heatmap_max[htmpCycle]+0.01)
-        }
-        findXLab <- heatmap_axes[[htmpCycle]][1]
-        findYLab <- heatmap_axes[[htmpCycle]][2]
-        image(x = matrix(as.numeric(
-          heatmap_array[
-            dat_array_doh[htmpCycle,1,1,slice]:dat_array_doh[htmpCycle,1,2,slice],
-            dat_array_doh[htmpCycle,2,1,slice]:dat_array_doh[htmpCycle,2,2,slice],
-            dat_array_doh[htmpCycle,3,1,slice]:dat_array_doh[htmpCycle,3,2,slice],
-            SxRpPop
-          ]),5,5),
-        col = colorSeqMultPalette$YlOrBr(100),
-        axes = F, 
-        xlab = findXLab, 
-        ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
-      
-        axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-            c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-        axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-            c("","","","","",""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        
-        axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
-            c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
-            T,0,NA,F,cex.axis=0.6, tck = 0)
-        axis(2,c(-0.125,0.125,0.375,0.625,0.875,1.125),
-            c("","","","","",""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-      }
-      
-      plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
-      a <- 0.35; b <- 20.5; c <- (b-a)/10
-      axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
-      axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
-      axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
-      axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
-      if (absolute) {
-        if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
-          ) {
-            axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
-          } else {
-            axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
-          }
-        
-      } else {
-        axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
-        axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
-        axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
-      }
-      
-      mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
-      mtext("Seeks Novel Songs",3,1,cex = 0.8)
-      mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
-      box("outer", "solid")
-      #mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
-      par(mfrow=c(1,1))
-      dev.off()
-    }
+  heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
 
-    library(magick)
+  # heatmapSource_folderList <- c(
+  #     "190421_slices_-_sameinh_maleBias",
+  #     "190421_slices_-_sameinh_femaleBias",
+  #     "190419_slices_-_oppsinh_maleBias",
+  #     "190419_slices_-_oppsinh_femaleBias",
+  #     # "190427_slices_-_maleinh_maleBias",
+  #     # "190410_slices_-_maleinh_femBias",
+  #     "190430_slices_-_mothinh_maleBias",
+  #     "190430_slices_-_mothinh_femaleBias"
+  # )
 
-    heatmap_folderList <- c(
-      "190421_slices_-_sameinh_maleBias",
-      "190421_slices_-_sameinh_femaleBias",
-      "190419_slices_-_oppsinh_maleBias",
-      "190419_slices_-_oppsinh_femaleBias",
-      "190427_slices_-_maleinh_maleBias",
-      "190410_slices_-_maleinh_femBias",
-      "190404_slices_-_mothinh_maleBias",
-      "190403_slices_-_mothinh_femBias"
-    )
+  colorSeqMultPalette <- list(
+    BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+    BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+    GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+    OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+    PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+    PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+    PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+    RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+    YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+    YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+    YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
 
-    subpopMetrics_list <- c(
-      "Ending Curiosity Values - Pop 1 Females.png",
-      "Ending Curiosity Values - Pop 1 Males.png",
-      "Ending Curiosity Values - Pop 2 Females.png",
-      "Ending Curiosity Values - Pop 2 Males.png",
-      "Ending Sylrep Values - Pop 1 Females.png",
-      "Ending Sylrep Values - Pop 1 Males.png",
-      "Ending Sylrep Values - Pop 2 Females.png",
-      "Ending Sylrep Values - Pop 2 Males.png"
-    )
+  SxMtPop_list <- c(
+    "Ending Curiosity Values - Pop 1 Females_slice_",
+    "Ending Curiosity Values - Pop 1 Males_slice_",
+    "Ending Curiosity Values - Pop 2 Females_slice_",
+    "Ending Curiosity Values - Pop 2 Males_slice_",
+    "Ending Sylrep Values - Pop 1 Females_slice_",
+    "Ending Sylrep Values - Pop 1 Males_slice_",
+    "Ending Sylrep Values - Pop 2 Females_slice_",
+    "Ending Sylrep Values - Pop 2 Males_slice_"
+  )
 
-    slice_names <- c(
-      "slice_1",
-      "slice_2",
-      "slice_3",
-      "slice_4",
-      "slice_5"
-    )
+  slice_names <- c(
+    "slice_1",
+    "slice_2",
+    "slice_3",
+    "slice_4",
+    "slice_5"
+  )
 
-    UpperDir <- file.path("results", "Heatmaps", "output_objects")
-    tempFigs <- rep(0,5)
-    for (
-      slice in 1:5
-    ) {
-      tempFigs[slice] <- image_read(file.path(
-        UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], subpopMetrics_list[metrics_num]
-        )
+  title_names <- c("Ending Curiosity Values - Pop 1 Females",
+                   "Ending Curiosity Values - Pop 1 Males",
+                 "Ending Curiosity Values - Pop 2 Females",
+                 "Ending Curiosity Values - Pop 2 Males",
+                   "Ending Syll Rept Values - Pop 1 Females",
+                   "Ending Syll Rept Values - Pop 1 Males",
+                 "Ending Syll Rept Values - Pop 2 Females",
+                 "Ending Syll Rept Values - Pop 2 Males"
+  )
+
+  whichBias <- c("maleBias", "femaleBias")
+
+  for(thisBias in 1:2) {
+
+    folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[thisBias] %in% str_split(x, "_")[[1]][5])))]
+
+    if (thisBias == 1) {
+      heatmap_axes <- list(
+        mp2Vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2Vfem
+        mp1Vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1Vfem
+        mp1Vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity") # mp1Vmp2
+      )
+      slicedPop <- list(
+        "MalPop1",
+        "MalPop2",
+        "FemalePop"
+      )
+    } else {
+      heatmap_axes <- list(
+        mf2Vmal = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
+        mf1Vmal = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
+        mf1Vmf2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Female Starting Curiosity")
+      )
+      slicedPop <- list(
+        "FemPop1",
+        "FemPop2",
+        "MalePop"
       )
     }
-    hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
-    image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
+
+    tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
+
+    # REDUCE THE SHIT.
+
+    lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
+    narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
+
+    inhOptions <- list(
+      lowMedHigh = lowMedHigh,
+      narrowWide = narrowWide,
+      LMHtext = "lowMedHigh",
+      NWtext = "narrowWide"
+    )
+
+    # DONE.
+    # NOW WE NEED TO MAKE THE FIGURES AND SORT THEM INTO FOLDERS THAT WE'LL PULL THEM OUT OF TO MAKE THE STITCHED-TOGETHER FILES.
+    # TITLES DON'T MATTER CURRENTLY, BUT WILL ONCE THEY GET STITCHED TOGETHER.
+    # THIS DIRECTORY (FOR THESE UNSTITCHED ONES) SHOULD BE A SUBFOLDER WITHIN THE STITCHED FIGURE DIR
+
+    if(!(dir.exists(file.path(
+      heatmap_sourceFolder, folderName, "lowMedHigh")))
+    ) {
+      dir.create(file.path(
+        heatmap_sourceFolder, folderName, "lowMedHigh"
+      ))
+      dir.create(file.path(
+        heatmap_sourceFolder, folderName, "narrowWide"
+      ))
+      
+    }
+
+    for (htmpView in 1:3) {
+      for (SxMtPop in 1:8) {
+        for (inhStyle in 1:2) {
+          
+          # dir.create(file.path(
+          #     heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2]
+          # ))
+          if (inhStyle == 1) {
+            sliceNum = 3
+            dat_array_doh <- array(c(
+                rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
+                rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
+                rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
+              ), c(3,3,2,3))
+          } else {
+            sliceNum = 2
+            dat_array_doh <- array(c(
+                rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
+                rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2)
+              ), c(3,3,2,2))
+          }
+          for (slice in 1:sliceNum) {
+            
+            dir.create(file.path(
+              heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
+              paste0("slice_", slice)
+            ))
+              
+            file_name <- paste0(title_names[SxMtPop], "_", slicedPop[htmpView], "_slice_", slice, ".png")
+            # rule of thumb: if we're splitting up htmpView _within_ slice and SxMtPop, then we need to save the output files according to the schema that will help pull back together the slices.
+            png(filename = file.path(
+                heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
+                paste0("slice_", slice), file_name), 
+              width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+
+            if(colorRange == "absolute") {
+              if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
+              ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,100)}
+            } else {
+              
+              heatmapRange <- inhOptions[[inhStyle]][
+                dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
+                dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
+                dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
+                SxMtPop]
+              heatmap_min <- c(
+                round(min(heatmapRangeDatasetOne), 2),
+                round(min(heatmapRangeDatasetTwo), 2),
+                round(min(heatmapRangeDatasetTre), 2)
+              )
+              heatmap_max <- c(
+                round(max(heatmapRangeDatasetOne), 2),
+                round(max(heatmapRangeDatasetTwo), 2),
+                round(max(heatmapRangeDatasetTre), 2)
+              )
+              
+              heatmapRange <- c(heatmap_min[htmpView]-0.01,heatmap_max[htmpView]+0.01)
+              rm(heatmapRangeDatasetOne, heatmapRangeDatasetTwo, heatmapRangeDatasetTre,
+                heatmap_min, heatmap_max)
+            } # UNFINISHED
+            findXLab <- heatmap_axes[[htmpView]][1]
+            findYLab <- heatmap_axes[[htmpView]][2]
+            image(x = matrix(as.numeric(
+              inhOptions[[inhStyle]][
+                dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
+                dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
+                dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
+                SxMtPop
+              ]),sliceNum,sliceNum),
+              col = colorSeqMultPalette$YlOrBr(100),
+              axes = F, 
+              xlab = findXLab, 
+              ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
+          
+            axis(1,c(-0.125,0.0834 ,0.2917,0.5      ,0.7084,0.9167  ,1.125),
+                   c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
+                T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.125,0.2197,0.7084,1.125),
+                c("","","",""),
+                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            
+            axis(2,c(-0.125,0.0834 ,0.2917,0.5      ,0.7084,0.9167  ,1.125),
+                   c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
+                T,0,NA,F,cex.axis=0.6, tck = 0)
+            axis(2,c(-0.125,0.2197,0.7084,1.125),
+                c("","","",""),
+                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          }
+        }
+        
+        
+        # plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+        # a <- 0.35; b <- 20.5; c <- (b-a)/10
+        # axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
+        # axis(2, c(4,17),c(range_list[1,1,ceiling(SxMtPop/4)],range_list[2,1,ceiling(SxMtPop/4)]), las=0,tck = 0, line = 0)
+        # axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
+        # axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
+        # if (absolute) {
+        #   if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
+        #     ) {
+        #       axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
+        #     } else {
+        #       axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
+        #     }
+          
+        # } else {
+        #   axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
+        #   axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
+        #   axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
+        # }
+        
+        # mtext(c(paste0(legend_title[ceiling(SxMtPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
+        # mtext("Seeks Novel Songs",3,1,cex = 0.8)
+        # mtext(range_list[1,2,ceiling(SxMtPop/4)],1,0.7,cex = 0.8)
+        # box("outer", "solid")
+        # #mtext(paste0(title_names[SxMtPop], "                                  "),3,cex = 1.5,line=30)
+        # par(mfrow=c(1,1))
+        dev.off()
+      }
+    }
   }
   return(print("Done, in the specified folder"))
 }
+
+
+                      # library(magick)
+                      # library(stringr)
+
+                      # # heatmapSource_folderList <- c(
+                      # #   "190421_slices_-_sameinh_maleBias",
+                      # #   "190421_slices_-_sameinh_femaleBias",
+                      # #   "190419_slices_-_oppsinh_maleBias",
+                      # #   "190419_slices_-_oppsinh_femaleBias",
+                      # #   "190427_slices_-_maleinh_maleBias",
+                      # #   "190410_slices_-_maleinh_femBias",
+                      # #   "190404_slices_-_mothinh_maleBias",
+                      # #   "190403_slices_-_mothinh_femBias"
+                      # # )
+
+                      # SxMtPop_list <- c(
+                      #   "Ending Curiosity Values - Pop 1 Females_slice_",
+                      #   "Ending Curiosity Values - Pop 1 Males_slice_",
+                      #   "Ending Curiosity Values - Pop 2 Females_slice_",
+                      #   "Ending Curiosity Values - Pop 2 Males_slice_",
+                      #   "Ending Sylrep Values - Pop 1 Females_slice_",
+                      #   "Ending Sylrep Values - Pop 1 Males_slice_",
+                      #   "Ending Sylrep Values - Pop 2 Females_slice_",
+                      #   "Ending Sylrep Values - Pop 2 Males_slice_"
+                      # )
+
+                      # slice_names <- c(
+                      #   "slice_1",
+                      #   "slice_2",
+                      #   "slice_3",
+                      #   "slice_4",
+                      #   "slice_5"
+                      # )
+
+                      # UpperDir <- file.path("results", "Heatmaps", "output_objects")
+                      
+                      # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+                      
+                      #   slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+                      #     slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
+                      #   slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+                      #     slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
+                      #   slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+                      #     slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
+                      #   slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+                      #     slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
+                      #   slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+                      #     slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
+                      # hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
+                      # image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
+                      
+
+
+                      # # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
+                      # # output.list  <- input.list[list.condition]
+
+                      
+                      # # for (
+                      # #   slice in 1:5
+                      # # ) {
+                      # #   tempFigs[slice] <- image_read(file.path(
+                      # #     UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], paste0(SxMtPop_list[metrics_num], slice, ".png")
+                      # #     )
+                      # #   )
+                      # # }
+                      # # hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
+                      # # image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
 # source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
 
 #   UpperDir <- file.path("results", "Heatmaps", "output_objects")
@@ -410,7 +546,7 @@ CombineFigures <- function (
 #     fileOrder <- c(2, 1)
 #     tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]])), pattern = ".RData")))
 
-#     for (SxRpPop in 1:8) {
+#     for (SxMtPop in 1:8) {
 #       for (slice in 1:5) {
 #         dat_array_doh <- array(c(
 #           rep(c(slice, 1, 1, 1), 2),
@@ -423,17 +559,17 @@ CombineFigures <- function (
 #           dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
 #           dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
 #           dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-#           SxRpPop]
+#           SxMtPop]
 #         heatmapRangeDatasetTwo <- tempHtMpArray[
 #           dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
 #           dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
 #           dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-#           SxRpPop]
+#           SxMtPop]
 #         heatmapRangeDatasetTre <- tempHtMpArray[
 #           dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
 #           dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
 #           dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-#           SxRpPop]
+#           SxMtPop]
 #         heatmap_min <- c(
 #           round(min(heatmapRangeDatasetOne), 2),
 #           round(min(heatmapRangeDatasetTwo), 2),
@@ -445,7 +581,7 @@ CombineFigures <- function (
 #           round(max(heatmapRangeDatasetTre), 2)
 #         )
 
-#         maxNMinArray[((1 + 3 * (filechunk - 1)):(3 + 3 * (filechunk - 1))), SxRpPop, slice] <- heatmap_max - heatmap_min
+#         maxNMinArray[((1 + 3 * (filechunk - 1)):(3 + 3 * (filechunk - 1))), SxMtPop, slice] <- heatmap_max - heatmap_min
 
 #       }
 #     }

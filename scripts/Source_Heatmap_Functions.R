@@ -304,7 +304,7 @@ makeHeatmaps <- function (
   # }
 
   for (specificPlot in 1:3) {
-    file_name <- paste0(title_names[SxRpPop], "_slice_", slice, ".png")
+    file_name <- paste0(title_names[SxMtPop], "_slice_", slice, ".png")
       # dimensions? dunno; not too worried though
       
     png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
@@ -355,10 +355,10 @@ makeHeatmaps <- function (
 
   
 
-  for(SxRpPop in 1:8) {
+  for(SxMtPop in 1:8) {
     for (slice in 1:5) {
         # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
-      file_name <- paste0(title_names[SxRpPop], "_slice_", slice, ".png")
+      file_name <- paste0(title_names[SxMtPop], "_slice_", slice, ".png")
         # dimensions? dunno; not too worried though
       
       png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
@@ -380,7 +380,7 @@ makeHeatmaps <- function (
           ), c(3,3,2,5))
         
         if(absolute) {
-          if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
+          if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
           ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,100)}
         } else {
           
@@ -388,17 +388,17 @@ makeHeatmaps <- function (
             dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
             dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
             dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
-            SxRpPop]
+            SxMtPop]
           heatmapRangeDatasetTwo <- heatmap_array[
             dat_array_doh[2,1,1,slice]:dat_array_doh[2,1,2,slice],
             dat_array_doh[2,2,1,slice]:dat_array_doh[2,2,2,slice],
             dat_array_doh[2,3,1,slice]:dat_array_doh[2,3,2,slice],
-            SxRpPop]
+            SxMtPop]
           heatmapRangeDatasetTre <- heatmap_array[
             dat_array_doh[3,1,1,slice]:dat_array_doh[3,1,2,slice],
             dat_array_doh[3,2,1,slice]:dat_array_doh[3,2,2,slice],
             dat_array_doh[3,3,1,slice]:dat_array_doh[3,3,2,slice],
-            SxRpPop]
+            SxMtPop]
           heatmap_min <- c(
             round(min(heatmapRangeDatasetOne), 2),
             round(min(heatmapRangeDatasetTwo), 2),
@@ -419,7 +419,7 @@ makeHeatmaps <- function (
             dat_array_doh[htmpCycle,1,1,slice]:dat_array_doh[htmpCycle,1,2,slice],
             dat_array_doh[htmpCycle,2,1,slice]:dat_array_doh[htmpCycle,2,2,slice],
             dat_array_doh[htmpCycle,3,1,slice]:dat_array_doh[htmpCycle,3,2,slice],
-            SxRpPop
+            SxMtPop
           ]),5,5),
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
@@ -444,11 +444,11 @@ makeHeatmaps <- function (
       plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
       a <- 0.35; b <- 20.5; c <- (b-a)/10
       axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
-      axis(2, c(4,17),c(range_list[1,1,ceiling(SxRpPop/4)],range_list[2,1,ceiling(SxRpPop/4)]), las=0,tck = 0, line = 0)
+      axis(2, c(4,17),c(range_list[1,1,ceiling(SxMtPop/4)],range_list[2,1,ceiling(SxMtPop/4)]), las=0,tck = 0, line = 0)
       axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
       axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
       if (absolute) {
-        if ("Curiosity" %in% str_split(title_names[SxRpPop], " ")[[1]]
+        if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
           ) {
             axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
           } else {
@@ -461,11 +461,11 @@ makeHeatmaps <- function (
         axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
       }
       
-      mtext(c(paste0(legend_title[ceiling(SxRpPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
+      mtext(c(paste0(legend_title[ceiling(SxMtPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
       mtext("Seeks Novel Songs",3,1,cex = 0.8)
-      mtext(range_list[1,2,ceiling(SxRpPop/4)],1,0.7,cex = 0.8)
+      mtext(range_list[1,2,ceiling(SxMtPop/4)],1,0.7,cex = 0.8)
       box("outer", "solid")
-      #mtext(paste0(title_names[SxRpPop], "                                  "),3,cex = 1.5,line=30)
+      #mtext(paste0(title_names[SxMtPop], "                                  "),3,cex = 1.5,line=30)
       par(mfrow=c(1,1))
       dev.off()
     }
