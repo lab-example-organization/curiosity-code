@@ -225,14 +225,14 @@ IndividualFigures <- function (
                  "Ending Syll Rept Values - Pop 2 Males"
   )
 
-  regularNames <- c("EndCurValP1F",
-                    "EndCurValP1M",
-                    "EndCurValP2F",
+  regularNames <- c("EndCurValP1M",
                     "EndCurValP2M",
-                    "EndSRpValP1F",
+                    "EndCurValP1F",
+                    "EndCurValP2F",
                     "EndSRpValP1M",
-                    "EndSRpValP2F",
-                    "EndSRpValP2M"
+                    "EndSRpValP2M",
+                    "EndSRpValP1F",
+                    "EndSRpValP2F"
   )
 
   # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
@@ -438,16 +438,20 @@ CombineSingles <- function (
 
   library(magick)
   
+# Access the same subdirectory where the individual images are stored
+
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
 
-  SxMtPopContainer <- c("EndCurValP1F",
-                        "EndCurValP1M",
-                        "EndCurValP2F",
+  SxMtPopContainer <- c("EndCurValP1M",
                         "EndCurValP2M",
-                        "EndSRpValP1F",
+                        "EndCurValP1F",
+                        "EndCurValP2F",
                         "EndSRpValP1M",
-                        "EndSRpValP2F",
-                        "EndSRpValP2M")
+                        "EndSRpValP2M",
+                        "EndSRpValP1F",
+                        "EndSRpValP2F")
+
+
 
   curstartPatternContainer <- c("narrowWide", "lowMedHigh")
 
@@ -466,13 +470,13 @@ CombineSingles <- function (
   if(
     curstartPattern == 1
   ) {
-    image_1 <- image_read(paste0(singlesFolder, SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png"))
-    image_2 <- image_read(paste0(singlesFolder, SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png"))
+    image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
+    image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
     return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
   } else {
-    image_1 <- image_read(paste0(singlesFolder, SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png"))
-    image_2 <- image_read(paste0(singlesFolder, SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png"))
-    image_3 <- image_read(paste0(singlesFolder, SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png"))
+    image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
+    image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
+    image_3 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png")))
     return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
   }
 }
@@ -493,9 +497,15 @@ stackTriples <- function (
   whichBias <- c("maleBias", "femaleBias")
   folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias(bias) %in% str_split(x, "_")[[1]][5])))]
 
-  stackOne <- image_read(paste0(singlesFolder, SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png"))
+  stackOne <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png"))
   stackTwo <- 
 }
+
+# Triple 'for' loop, or triple 'sapply'?
+
+# duh, triple 'sapply'
+
+sapply()
 
 CombineSingles(1,1,1,1)
 CombineSingles(1,1,2,1)
@@ -505,10 +515,13 @@ CombineSingles(1,1,5,1)
 CombineSingles(1,1,6,1)
 CombineSingles(1,1,7,1)
 CombineSingles(1,1,8,1)
-CombineSingles(1,1,1,1)
-CombineSingles(1,1,1,1)
-CombineSingles(1,1,1,1)
-CombineSingles()
+CombineSingles(1,2,1,1)
+CombineSingles(1,2,2,1)
+CombineSingles(1,2,3,1)
+.
+.
+.
+CombineSingles(1,1,1,2)
 
   library(magick)
   library(stringr)
@@ -561,8 +574,8 @@ CombineSingles()
 
 
 
-  list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
-  output.list  <- input.list[list.condition]
+  # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
+  # output.list  <- input.list[list.condition]
 
 
   for (
