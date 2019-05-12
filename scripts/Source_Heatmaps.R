@@ -377,20 +377,36 @@ IndividualFigures <- function (
               axes = F, 
               xlab = findXLab, 
               ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
-          
-            axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
-                   c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
-                T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.25,0.25,0.75,1.25),
-                c("","","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            if(inhStyle == 1) {
+              axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
+                  c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
+                  T,0,NA,F,cex.axis=1, tck = 0)
+              axis(1,c(-0.25,0.25,0.75,1.25),
+                  c("","","",""),
+                  T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+              
+              axis(2,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
+                  c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
+                  T,0,NA,F,cex.axis=0.6, tck = 0)
+              axis(2,c(-0.25,0.25,0.75,1.25),
+                  c("","","",""),
+                  T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            } else if (inhStyle == 2) {
+              axis(1,c(-0.5,  0  ,0.5,    1    ,1.5),
+                  c(  ""   ,"0-1","" ,".45-.55","" ),
+                  T,0,NA,F,cex.axis=0.8, tck = 0)
+              axis(1,c(-0.5,0.5,1.5),
+                  c("","",""),
+                  T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+              
+              axis(2,c(-0.5,  0  ,0.5,    1    ,1.5),
+                  c(  ""   ,"0-1","" ,".45-.55","" ),
+                  T,0,NA,F,cex.axis=0.6, tck = 0\)
+              axis(2,c(-0.5,0.5,1.5),
+                  c("","",""),
+                  T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            }
             
-            axis(2,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
-                   c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
-                T,0,NA,F,cex.axis=0.6, tck = 0)
-            axis(2,c(-0.25,0.25,0.75,1.25),
-                c("","","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
             dev.off()
           }
 
@@ -437,7 +453,7 @@ CombineSingles <- function (
 ) {
 
   library(magick)
-  
+  source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 # Access the same subdirectory where the individual images are stored
 
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
@@ -461,7 +477,7 @@ CombineSingles <- function (
   whichBias <- c("maleBias", "femaleBias")
   whichPopBias <- c("FemalePop", "MalePop")
 
-  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias(bias) %in% str_split(x, "_")[[1]][5])))]
+  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
 
   PopBias <- whichPopBias[bias]
   
@@ -472,13 +488,18 @@ CombineSingles <- function (
   ) {
     image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
     image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
-    return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
+    # return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
+    # thing <- image_append(image_1, image_2), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern])
+    thing <- image_append(c(image_1, image_2))
+    image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
   } else {
     image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
     image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
     image_3 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png")))
-    return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
+    # return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
+    image_write(mult_ImgAppend(image_1, image_2, image_3), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
   }
+  return(print("Singles Combined"))
 }
 
 stackTriples <- function (
@@ -592,7 +613,7 @@ CombineSingles(1,1,1,2)
 
 
 
-
+}
 
 
 # source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
