@@ -366,7 +366,10 @@ IndividualFigures <- function (
             } # UNFINISHED
             findXLab <- heatmap_axes[[htmpView]][1]
             findYLab <- heatmap_axes[[htmpView]][2]
-            image(x = matrix(as.numeric(
+            
+            if(inhStyle == 1) {
+
+              image(x = matrix(as.numeric(
               inhOptions[[inhStyle]][
                 dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
                 dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
@@ -377,7 +380,7 @@ IndividualFigures <- function (
               axes = F, 
               xlab = findXLab, 
               ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
-            if(inhStyle == 1) {
+
               axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
                   c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
                   T,0,NA,F,cex.axis=1, tck = 0)
@@ -392,6 +395,19 @@ IndividualFigures <- function (
                   c("","","",""),
                   T,-0.03,NA,F,cex.axis=1, tck = -0.03)
             } else if (inhStyle == 2) {
+
+              image(x = matrix(as.numeric(
+              inhOptions[[inhStyle]][
+                dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
+                dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
+                dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
+                SxMtPop
+              ]),sliceNum,sliceNum),
+              col = colorSeqMultPalette$YlOrBr(100),
+              axes = F, 
+              xlab = findXLab, 
+              ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
+
               axis(1,c(-0.5,  0  ,0.5,    1    ,1.5),
                   c(  ""   ,"0-1","" ,".45-.55","" ),
                   T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -401,7 +417,7 @@ IndividualFigures <- function (
               
               axis(2,c(-0.5,  0  ,0.5,    1    ,1.5),
                   c(  ""   ,"0-1","" ,".45-.55","" ),
-                  T,0,NA,F,cex.axis=0.6, tck = 0\)
+                  T,0,NA,F,cex.axis=0.6, tck = 0)
               axis(2,c(-0.5,0.5,1.5),
                   c("","",""),
                   T,-0.03,NA,F,cex.axis=1, tck = -0.03)
@@ -502,11 +518,23 @@ CombineSingles <- function (
   return(print("Singles Combined"))
 }
 
-stackTriples <- function (
-  inheritance = 1
-
+stackMultiples <- function (
+  inheritance = 1,
+  pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
 ) {
-  
+  for (bias in 1:2) {
+    for (metSxPop in 1:8) {
+      CombineSingles(inheritance, bias, metSxPop, pattern)
+    }
+  }
+
+  # maleInhMaleVFemaleBias # LOOK HERE FIRST
+
+  heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
+  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
+  curstartPatternContainer <- c("narrowWide", "lowMedHigh")
+  relevantFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[pattern])
+
   inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
   inheritance <- inheritanceContainer[inheritance]
   
