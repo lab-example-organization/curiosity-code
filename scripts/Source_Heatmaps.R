@@ -499,6 +499,8 @@ CombineSingles <- function (
   
   singlesFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], PopBias)
 
+  if(!(dir.exists(singlesFolder))) {dir.create(singlesFolder)}
+
   if(
     curstartPattern == 1
   ) {
@@ -507,47 +509,64 @@ CombineSingles <- function (
     # return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
     # thing <- image_append(image_1, image_2), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern])
     thing <- image_append(c(image_1, image_2))
-    image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
+    image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], "_", PopBias, ".png")))
   } else {
     image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
     image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
     image_3 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png")))
     # return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
-    image_write(mult_ImgAppend(image_1, image_2, image_3), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
+    image_write(mult_ImgAppend(image_1, image_2, image_3), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
   }
   return(print("Singles Combined"))
 }
 
 stackMultiples <- function (
-  inheritance = 1,
+  inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")
   pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
 ) {
-  for (bias in 1:2) {
-    for (metSxPop in 1:8) {
-      CombineSingles(inheritance, bias, metSxPop, pattern)
-    }
-  }
+  
 
-  # maleInhMaleVFemaleBias # LOOK HERE FIRST
+  # maleInhMaleVFemaleBias
+
+  SxMtPopContainer <- c("EndCurValP1M",
+                        "EndCurValP2M",
+                        "EndCurValP1F",
+                        "EndCurValP2F",
+                        "EndSRpValP1M",
+                        "EndSRpValP2M",
+                        "EndSRpValP1F",
+                        "EndSRpValP2F")
 
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
-  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
+  whichBias <- c("maleBias", "femaleBias")
+  # folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
   curstartPatternContainer <- c("narrowWide", "lowMedHigh")
-  relevantFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[pattern])
+  # relevantFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[pattern])
 
   inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
   inheritance <- inheritanceContainer[inheritance]
   
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
   
-  output_folder <- file.path(heatmap_sourceFolder, paste0("Combined_", inheritance))
+  output_folder <- file.path(heatmap_sourceFolder, paste0("Combined_", inheritance))# "_pattern_", curstartPatternContainer[pattern]))
   if(!(dir.exists(output_folder))) {dir.create(output_folder)}
+  if(!(dir.exists(file.path(output_folder, curstartPatternContainer[pattern])))) {dir.create(file.path(output_folder, curstartPatternContainer[pattern]))}
 
-  whichBias <- c("maleBias", "femaleBias")
-  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias(bias) %in% str_split(x, "_")[[1]][5])))]
+  maleBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[1] %in% str_split(x, "_")[[1]][5])))]
+  femsBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[2] %in% str_split(x, "_")[[1]][5])))]
+  
+  for (metSxPop in 1:8) {
+    CombineSingles(inheritance, 1, metSxPop, pattern)
+    CombineSingles(inheritance, 2, metSxPop, pattern)
+    stackOne <- image_read(file.path(heatmap_sourceFolder, maleBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], ".png"))
+    stackTwo <- image_read(file.path(heatmap_sourceFolder, femsBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], ".png"))
+    image_write(c(stackOne, stackTwo), path = )
+  }
 
-  stackOne <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png"))
-  stackTwo <- 
+  # stackOne <- image_read(file.path(heatmap_sourceFolder, maleBias, curstartPatternContainer[pattern]),)
+  # stackTwo <- image_read(file.path(heatmap_sourceFolder, femsBias, curstartPatternContainer[pattern]),)
+
+
 }
 
 # Triple 'for' loop, or triple 'sapply'?
