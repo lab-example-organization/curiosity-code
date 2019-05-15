@@ -1,3 +1,6 @@
+# Load the C++ functions
+#SourceCpp(file.path('cpp_source','should_pick_neighbor.cpp'))
+
 
 
 syll_learn <- function (parameters, moranData, select_type = 2, 
@@ -358,12 +361,18 @@ sing.selection <- function(parameters, tempMoran,
           should_continue <- FALSE
         }
         
-        if (should_continue) {
-          for (neighbor in c(1, -1)) {
-            if (should_pick_neighbor (
-                neighbor,num_select_chances,select_type,chance_for_selection,
-                golf_score,singSuccessFilter,singer,lower=0.5, upper=0.75)) {
-              
+
+        should_pick_neighbor(1, num_select_chances, select_type,
+                                    chance_for_selection, golf_score,
+                                    singSuccessFilter, singer, lower=0.5,
+                                    upper=0.75)
+
+        if(should_continue) {
+          for(neighbor in c(1, -1)) {
+            if(should_pick_neighbor(neighbor, num_select_chances, select_type,
+                                    chance_for_selection, golf_score,
+                                    singSuccessFilter, singer, lower=0.5,
+                                    upper=0.75)) {
               singer <- golf_score[singer+neighbor]
               
               tempMoran = update_selexn_data(
@@ -378,18 +387,14 @@ sing.selection <- function(parameters, tempMoran,
           }
         }
         
-        if (should_continue) {
-          for (neighbor in c (1, -1, 2, -2)) {
-            if (should_pick_neighbor(
-              neighbor,num_select_chances,select_type, chance_for_selection,
-              golf_score,singSuccessFilter,singer, lower = 0.75)) {
-              singer <- golf_score [singer + neighbor]
-
-              tempMoran = update_selexn_data (
-                parameters, tempMoran, selection.index, singer, 
-                selector.index, curiosity_level, population, 
-                select_type, selection.sylreps, selector.sylrep, 
-                chance_for_selection, F)
+        if(should_continue) {
+          for(neighbor in c(1, -1, 2, -2)) {
+            if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
+              singer <- golf_score[singer+neighbor]
+              
+              moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
+                                         population, select_type, selection.sylreps, selector.sylrep, 
+                                         chance_for_selection, F)
               should_continue <- FALSE
               break
             }

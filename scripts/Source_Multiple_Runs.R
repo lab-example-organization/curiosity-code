@@ -390,6 +390,7 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
         params$curstarts[[shifting_curstart]]$scMax[3],
         params$curstarts[[shifting_curstart]]$scMax[4]),
       simNumber = subsetOrSequence,
+      # simNumber = params$simNumberStart + (shifting_curstart - 1),
       runLength = params$runLength,
       SylLearnStyle = params$SylLearnStyle,
       vertOblLearn = c(
@@ -422,3 +423,9 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
                  number_of_repeats = number_of_reps,
                  paramsSource = paramsSource)
 }
+
+
+
+
+
+

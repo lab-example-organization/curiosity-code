@@ -2,6 +2,7 @@
 source(file.path("scripts", "Source_Reference_Section.R"))
 referenceSection("profvyaml"
 
+source(file.path('scripts', 'Source_Reference_Section.R'))
 source(file.path('scripts', 'Source_Initial_Functions_Parameters.R'))
 source(file.path('scripts', 'Source_Life_Cycle_Functions.R'))
 
@@ -14,7 +15,7 @@ simParams <- define_parameters(
   nsspl = params$num_sylls_per_prob_lvl, 
   one_pop_singers = c(10,10), 
   curlearnprob = params$curinh_value, 
-  learnprob = c(params$vertObLearn$vertical$invent, 
+  learnprob = c(params$vertObLearn$vertical$invent,
     params$vertObLearn$vertical$learn), 
   randlearnprob = c(params$vertObLearn$oblique$invent, 
     params$vertObLearn$oblique$learn), 
