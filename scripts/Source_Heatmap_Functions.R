@@ -267,7 +267,7 @@ makeHeatmaps <- function (
     if(!(file.exists(file.path(
       "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
             )))) {saveRDS(heatmap_array, file.path(
-      "results", "Heatmaps", "output_objects", paste0("heatmap_output_-_", folderName, ".RData")
+      "results", "Heatmaps", "output_objects", folderName, paste0("heatmap_output_-_", folderName, ".RData")
     ))}
     for (subset in 1:5) {
       dir.create(file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", subset)))
@@ -285,6 +285,32 @@ makeHeatmaps <- function (
       rep(c(5, 5, 5, slice), 2)
     ), c(3,3,2))
     
+    heatmapRangeDatasetOne <- heatmap_array[
+      dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+      dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+      dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+      SxRpPop]
+    heatmapRangeDatasetTwo <- heatmap_array[
+      dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+      dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+      dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+      SxRpPop]
+    heatmapRangeDatasetTre <- heatmap_array[
+      dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+      dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+      dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+      SxRpPop]
+    heatmap_min <- c(
+      round(min(heatmapRangeDatasetOne), 2),
+      round(min(heatmapRangeDatasetTwo), 2),
+      round(min(heatmapRangeDatasetTre), 2)
+    )
+    heatmap_max <- c(
+      round(max(heatmapRangeDatasetOne), 2),
+      round(max(heatmapRangeDatasetTwo), 2),
+      round(max(heatmapRangeDatasetTre), 2)
+    )
+
     for(SxRpPop in 1:8) {
 
         # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
@@ -293,46 +319,22 @@ makeHeatmaps <- function (
       
       png(filename = file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
       
-      heatmapRangeDatasetOne <- heatmap_array[
-        dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-        dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-        dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-        SxRpPop]
-      heatmapRangeDatasetTwo <- heatmap_array[
-        dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-        dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-        dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-        SxRpPop]
-      heatmapRangeDatasetTre <- heatmap_array[
-        dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-        dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-        dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-        SxRpPop]
-      heatmap_min <- c(
-        round(min(heatmapRangeDatasetOne), 2),
-        round(min(heatmapRangeDatasetTwo), 2),
-        round(min(heatmapRangeDatasetTre), 2)
-      )
-      
-      heatmap_max <- c(
-        round(max(heatmapRangeDatasetOne), 2),
-        round(max(heatmapRangeDatasetTwo), 2),
-        round(max(heatmapRangeDatasetTre), 2)
-      )
-      
       layout(matrix(byTheCol,16,18,F))
       
-    # The Fake one!
+      # The Fake one!
 
       # plotNames <- array(c("heatmap_axes$plotOne[1]", "heatmap_axes$plotTwo[1]", "heatmap_axes$plotTre[1]", "heatmap_axes$plotOne[2]", "heatmap_axes$plotTwo[2]", "heatmap_axes$plotTre[2]")
       
       for (htmpCycle in 1:3) {
         findXLab <- heatmap_axes[[htmpCycle]][1]
         findYLab <- heatmap_axes[[htmpCycle]][2]
-        image(x = matrix(as.numeric(heatmap_array[dat_array_doh[htmpCycle,1,1]:dat_array_doh[htmpCycle,1,2],
-                                            dat_array_doh[htmpCycle,2,1]:dat_array_doh[htmpCycle,2,2],
-                                            dat_array_doh[htmpCycle,3,1]:dat_array_doh[htmpCycle,3,2],
-                                            SxRpPop]),5,5),
+        image(x = matrix(as.numeric(
+          heatmap_array[
+            dat_array_doh[htmpCycle,1,1]:dat_array_doh[htmpCycle,1,2],
+            dat_array_doh[htmpCycle,2,1]:dat_array_doh[htmpCycle,2,2],
+            dat_array_doh[htmpCycle,3,1]:dat_array_doh[htmpCycle,3,2],
+            SxRpPop
+          ]),5,5),
         col = colorSeqMultPalette$YlOrBr(100),
         axes = F, 
         xlab = findXLab, 

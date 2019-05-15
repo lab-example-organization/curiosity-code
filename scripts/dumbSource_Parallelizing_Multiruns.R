@@ -66,15 +66,15 @@ n_cores <- 16
   sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
   sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
-source(file.path("scripts", "Source_Multiple_Runs.R"))
+# source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:248
-paramsFile <- c("diffZwischen.yaml")
+# shifting_curstart <- 1:248
+# paramsFile <- c("diffZwischen.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
-simDate <- gsub('-', '', substring(Sys.Date(), 3))
-secretCode <- 58418
-mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = simDate, seedNumber = secretCode, mc.cores = n_cores)
+# simDate <- gsub('-', '', substring(Sys.Date(), 3))
+# secretCode <- 58418
+# mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = simDate, seedNumber = secretCode, mc.cores = n_cores)
 
 
 # paramsFile <- c("params.yaml")

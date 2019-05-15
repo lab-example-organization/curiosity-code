@@ -249,7 +249,7 @@ curstarts:
     scMax: [15,15,26,15]
   - scMin: [11,11,11,11]
     scMax: [15,15,15,15]
-simNumberStart: 671
+simNumberStart: [2089, 2105, 2121, 2137, 2153, 2169, 2185, 2201, 2217, 2221, 2233, 2237, 2249, 2253, 2265, 2269, 2270, 2281]
 runLength: '10k'
 SylLearnStyle: 'nsL'
 vertObLearn:

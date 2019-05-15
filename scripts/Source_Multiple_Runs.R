@@ -371,13 +371,14 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       print("/please/ignore/this/line/like/you/always/do")
       sink()
     }
-  if (params$screwedUp) {
-   subsetOrSequence <- params$simNumberStart[shifting_curstart]
-  } else {
-    subsetOrSequence <- params$simNumberStart + (shifting_curstart - 1)
-  }
-
-   life_cycle(
+    if(params$screwedUp == T) {
+      subsetOrSequence <- params$simNumberStart[shifting_curstart]
+      singleOrMixture <- params$curinhDistribution[shifting_curstart]
+    } else {
+      subsetOrSequence <- params$simNumberStart + (shifting_curstart - 1)
+      singleOrMixture <- params$curinhDistribution
+    }
+    life_cycle(
       scMin = c(
         params$curstarts[[shifting_curstart]]$scMin[1],
         params$curstarts[[shifting_curstart]]$scMin[2],
@@ -389,10 +390,7 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
         params$curstarts[[shifting_curstart]]$scMax[3],
         params$curstarts[[shifting_curstart]]$scMax[4]),
       simNumber = subsetOrSequence,
-<<<<<<< HEAD
       # simNumber = params$simNumberStart + (shifting_curstart - 1),
-=======
->>>>>>> 4f6b2cc0cebfc0fdb1a52e4ec8a41104ea8a6a4e
       runLength = params$runLength,
       SylLearnStyle = params$SylLearnStyle,
       vertOblLearn = c(
@@ -411,7 +409,7 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       curinh_style = params$curinh_pattern,
       recordingSimpFact = params$RecordSimplifyFactor,
       one_pop_singers = params$one_pop_singers,
-      curinhProportion = params$curinhDistribution,
+      curinhProportion = singleOrMixture,
       directoryDate = dirDate,
       invasion = params$traitInvasion,
       invPopSize = invasionPopSize,
