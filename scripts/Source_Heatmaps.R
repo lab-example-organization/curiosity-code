@@ -560,7 +560,8 @@ stackMultiples <- function (
     CombineSingles(inheritance, 2, metSxPop, pattern)
     stackOne <- image_read(file.path(heatmap_sourceFolder, maleBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], ".png"))
     stackTwo <- image_read(file.path(heatmap_sourceFolder, femsBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], ".png"))
-    image_write(c(stackOne, stackTwo), path = )
+    thing <- image_append(c(stackOne, stackTwo), stack = TRUE)
+    image_write(thing, path = file.path(output_folder, curstartPatternContainer[pattern]))
   }
 
   # stackOne <- image_read(file.path(heatmap_sourceFolder, maleBias, curstartPatternContainer[pattern]),)
