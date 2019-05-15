@@ -570,98 +570,142 @@ stackMultiples <- function (
 
 }
 
+
+
+
+
+for (inhPattern in 1:4) {
+  for (ranges in 1:2) {
+    stackMultiples(inhPattern, ranges)
+  }
+}
+
+
 # Triple 'for' loop, or triple 'sapply'?
 
 # duh, triple 'sapply'
 
-sapply()
+# sapply()
 
-CombineSingles(1,1,1,1)
-CombineSingles(1,1,2,1)
-CombineSingles(1,1,3,1)
-CombineSingles(1,1,4,1)
-CombineSingles(1,1,5,1)
-CombineSingles(1,1,6,1)
-CombineSingles(1,1,7,1)
-CombineSingles(1,1,8,1)
-CombineSingles(1,2,1,1)
-CombineSingles(1,2,2,1)
-CombineSingles(1,2,3,1)
-.
-.
-.
-CombineSingles(1,1,1,2)
-
-  library(magick)
-  library(stringr)
-
-  regularNames <- c("EndCurValP1F",
-                    "EndCurValP1M",
-                    "EndCurValP2F",
-                    "EndCurValP2M",
-                    "EndSRpValP1F",
-                    "EndSRpValP1M",
-                    "EndSRpValP2F",
-                    "EndSRpValP2M"
-  )
-
-  SxMtPop_list <- c(
-    "Ending Curiosity Values - Pop 1 Females_slice_",
-    "Ending Curiosity Values - Pop 1 Males_slice_",
-    "Ending Curiosity Values - Pop 2 Females_slice_",
-    "Ending Curiosity Values - Pop 2 Males_slice_",
-    "Ending Sylrep Values - Pop 1 Females_slice_",
-    "Ending Sylrep Values - Pop 1 Males_slice_",
-    "Ending Sylrep Values - Pop 2 Females_slice_",
-    "Ending Sylrep Values - Pop 2 Males_slice_"
-  )
-
-  slice_names <- c(
-    "slice_1",
-    "slice_2",
-    "slice_3",
-    "slice_4",
-    "slice_5"
-  )
-
-  UpperDir <- file.path("results", "Heatmaps", "output_objects")
-
-  source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-
-    slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-      slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
-    slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-      slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
-    slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-      slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
-    slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-      slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
-    slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-      slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
-  hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
-  image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
-
-
-
-  # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
-  # output.list  <- input.list[list.condition]
-
-
-  for (
-    slice in 1:5
-  ) {
-    tempFigs[slice] <- image_read(file.path(
-      UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], paste0(SxMtPop_list[metrics_num], slice, ".png")
-      )
-    )
-  }
-  hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
-  image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
+# CombineSingles(1,1,1,1)
+# CombineSingles(1,1,2,1)
+# CombineSingles(1,1,3,1)
+# CombineSingles(1,1,4,1)
+# CombineSingles(1,1,5,1)
+# CombineSingles(1,1,6,1)
+# CombineSingles(1,1,7,1)
+# CombineSingles(1,1,8,1)
+# CombineSingles(1,2,1,1)
+# CombineSingles(1,2,2,1)
+# CombineSingles(1,2,3,1)
+# .
+# .
+# .
+# CombineSingles(1,1,1,2)
 
 
 
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+#   library(magick)
+#   library(stringr)
+
+#   regularNames <- c("EndCurValP1F",
+#                     "EndCurValP1M",
+#                     "EndCurValP2F",
+#                     "EndCurValP2M",
+#                     "EndSRpValP1F",
+#                     "EndSRpValP1M",
+#                     "EndSRpValP2F",
+#                     "EndSRpValP2M"
+#   )
+
+#   SxMtPop_list <- c(
+#     "Ending Curiosity Values - Pop 1 Females_slice_",
+#     "Ending Curiosity Values - Pop 1 Males_slice_",
+#     "Ending Curiosity Values - Pop 2 Females_slice_",
+#     "Ending Curiosity Values - Pop 2 Males_slice_",
+#     "Ending Sylrep Values - Pop 1 Females_slice_",
+#     "Ending Sylrep Values - Pop 1 Males_slice_",
+#     "Ending Sylrep Values - Pop 2 Females_slice_",
+#     "Ending Sylrep Values - Pop 2 Males_slice_"
+#   )
+
+#   slice_names <- c(
+#     "slice_1",
+#     "slice_2",
+#     "slice_3",
+#     "slice_4",
+#     "slice_5"
+#   )
+
+#   UpperDir <- file.path("results", "Heatmaps", "output_objects")
+
+#   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+
+#     slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#       slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
+#     slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#       slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
+#     slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#       slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
+#     slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#       slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
+#     slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#       slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
+#   hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
+#   image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
+
+
+
+#   # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
+#   # output.list  <- input.list[list.condition]
+
+
+#   for (
+#     slice in 1:5
+#   ) {
+#     tempFigs[slice] <- image_read(file.path(
+#       UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], paste0(SxMtPop_list[metrics_num], slice, ".png")
+#       )
+#     )
+#   }
+#   hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
+#   image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
+
+
+
+
+# }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
