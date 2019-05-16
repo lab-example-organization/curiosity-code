@@ -409,7 +409,7 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       curinh_style = params$curinh_pattern,
       recordingSimpFact = params$RecordSimplifyFactor,
       one_pop_singers = params$one_pop_singers,
-      curinhProportion = singleOrMixture,
+      curinhProportion = singleOrMixture, # only used if curinh_pattern = 5
       directoryDate = dirDate,
       invasion = params$traitInvasion,
       invPopSize = invasionPopSize,

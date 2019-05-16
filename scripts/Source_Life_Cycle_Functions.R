@@ -429,7 +429,7 @@ curiosity_learn <- function (parameters,
   
   if(inheritance_pattern == 5) {
 
-    x <- parameters$curinhProportion
+    maleCurInh <- parameters$curinhProportion
 
     newcuriosity <- array(
             data = runif((parameters$num_pop * 2), -1, 1), 
@@ -453,11 +453,11 @@ curiosity_learn <- function (parameters,
         }
         
         curinh_attempts <- 1
-
+        
         while(((
-            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+            (maleCurInh) * tempObjects[1, parameters$sylnum + 2, population] + 
 
-            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+            (1-maleCurInh) * tempObjects[2, parameters$sylnum + 2, population]
           ) + 
           ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
           ]))) < 0) {
@@ -468,9 +468,9 @@ curiosity_learn <- function (parameters,
         }
 
         while(((
-            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+            (maleCurInh) * tempObjects[1, parameters$sylnum + 2, population] + 
 
-            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+            (1-maleCurInh) * tempObjects[2, parameters$sylnum + 2, population]
         ) + 
         ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
         ]))) > 1) {
@@ -481,9 +481,9 @@ curiosity_learn <- function (parameters,
         }
         
         new.curiosity <- (
-            (x) * tempObjects[1, parameters$sylnum + 2, population] + 
+            (maleCurInh) * tempObjects[1, parameters$sylnum + 2, population] + 
 
-            (1-x) * tempObjects[2, parameters$sylnum + 2, population]
+            (1-maleCurInh) * tempObjects[2, parameters$sylnum + 2, population]
           ) + 
           ((1 - parameters$curlearnprob) * (newcuriosity[sex, population
           ])) # Adding small proportion of noise

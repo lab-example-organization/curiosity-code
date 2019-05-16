@@ -60,6 +60,7 @@ referenceSection("multirun")
 n_cores <- 4
 # Specify the number of cores/workers we want to use
     # n_cores <- detectCores() - 3 # built around a maximum allowance
+# n_cores <- 2
 # n_cores <- 1
 
   sourceCpp(file.path('cpp_source', 'median.cpp'))
