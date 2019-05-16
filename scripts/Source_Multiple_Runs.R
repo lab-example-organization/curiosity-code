@@ -93,7 +93,7 @@ makeDocnamez <- function (scMin, scMax, simNumber,
       curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
     
     } else if ((scMin[3] == scMin[4] && 
-                scMax[3] == scMax[4]) 
+                scMax[3] == scMax[4]) &&
                 scMin[1] != scMin[4] && 
                 scMax[1] != scMax[4] &&
                 scMin[2] != scMin[1] && 
