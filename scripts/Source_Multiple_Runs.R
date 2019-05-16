@@ -83,22 +83,36 @@ makeDocnamez <- function (scMin, scMax, simNumber,
       curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", scMin[4], "-", 
                           scMax[4], "fp2", "_", scMin[3], "-", scMax[3], "m")
     
-    } else if (scMin[1] == scMin[2] && 
-               scMax[1] == scMax[2] && 
-               scMin[1] != scMin[4] && 
-               scMax[1] != scMax[4] &&
-               scMin[3] == scMin[4] && 
-               scMax[3] == scMax[4] &&
-               scMin[3] != scMin[1] && 
-               scMax[3] != scMax[1] &&
-               scMin[2] != scMin[3] && 
-               scMax[2] != scMax[3] && 
-               scMin[2] != scMin[4] && 
-               scMax[2] != scMax[4]) {
+    } else if ((scMin[1] == scMin[2] && 
+                scMax[1] == scMax[2]) && 
+               (scMin[3] == scMin[4] && 
+                scMax[3] == scMax[4]) &&
+                scMin[1] != scMin[4] && 
+                scMax[1] != scMax[4]) {
       # 1-7p1_7-13p2
       curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
     
-    }
+    } else if ((scMin[3] == scMin[4] && 
+                scMax[3] == scMax[4]) 
+                scMin[1] != scMin[4] && 
+                scMax[1] != scMax[4] &&
+                scMin[2] != scMin[1] && 
+                scMax[2] != scMax[1]) {
+      # 1-7p1_7-13p2
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "mp1", "_", scMin[4], "-", 
+                          scMax[4], "fp1", "_", scMin[3], "-", scMax[3], "p2")
+    
+    } else if ((scMin[1] == scMin[2] && 
+                scMax[1] == scMax[2]) && 
+                scMin[1] != scMin[4] && 
+                scMax[1] != scMax[4] &&
+                scMin[3] != scMin[4] && 
+                scMax[3] != scMax[4]) {
+      # 1-7p1_7-13p2
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "p1", "_", scMin[4], "-", 
+                          scMax[4], "mp2", "_", scMin[3], "-", scMax[3], "fp2")
+    
+    } else {curstart_ranges <- paste0("wellThisIsUnexpected")}
   } # this is the text insert for the docnamez curstart ranges subsection
   
   if(curinh_value != 0.95) {curinh_output <- paste0(round(curinh_value/0.95,2), "_curinh")} else {curinh_output <- ""}
