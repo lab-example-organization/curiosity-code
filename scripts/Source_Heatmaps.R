@@ -499,7 +499,7 @@ CombineSingles <- function (
   
   singlesFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], PopBias)
 
-  if(!(dir.exists(singlesFolder))) {dir.create(singlesFolder)}
+  # if(!(dir.exists(singlesFolder))) {dir.create(singlesFolder)}
 
   if(
     curstartPattern == 1
@@ -509,15 +509,16 @@ CombineSingles <- function (
     # return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
     # thing <- image_append(image_1, image_2), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern])
     thing <- image_append(c(image_1, image_2))
-    image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], "_", PopBias, ".png")))
+    # image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
   } else {
     image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
     image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
     image_3 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png")))
     # return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
-    image_write(mult_ImgAppend(image_1, image_2, image_3), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
+    thing <- mult_ImgAppend(image_1, image_2, image_3)
+    # image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
   }
-  return(print("Singles Combined"))
+  return(thing)
 }
 
 stackMultiples <- function (
@@ -539,6 +540,7 @@ stackMultiples <- function (
 
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
   whichBias <- c("maleBias", "femaleBias")
+  whichPopBias <- c("FemalePop", "MalePop")
   # folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
   curstartPatternContainer <- c("narrowWide", "lowMedHigh")
   # relevantFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[pattern])
@@ -556,10 +558,10 @@ stackMultiples <- function (
   femsBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[2] %in% str_split(x, "_")[[1]][5])))]
   
   for (metSxPop in 1:8) {
-    CombineSingles(inheritance, 1, metSxPop, pattern)
-    CombineSingles(inheritance, 2, metSxPop, pattern)
-    stackOne <- image_read(file.path(heatmap_sourceFolder, maleBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], ".png"))
-    stackTwo <- image_read(file.path(heatmap_sourceFolder, femsBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], ".png"))
+    stackOne <- CombineSingles(inheritance, 1, metSxPop, pattern)
+    stackTwo <- CombineSingles(inheritance, 2, metSxPop, pattern)
+    # stackOne <- image_read(file.path(heatmap_sourceFolder, maleBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], "_", whichPopBias[1], ".png"))
+    # stackTwo <- image_read(file.path(heatmap_sourceFolder, femsBias, curstartPatternContainer[pattern]), paste0(SxMtPopContainer[metSxPop], "_", whichPopBias[2], ".png"))
     thing <- image_append(c(stackOne, stackTwo), stack = TRUE)
     image_write(thing, path = file.path(output_folder, curstartPatternContainer[pattern]))
   }
@@ -575,8 +577,10 @@ stackMultiples <- function (
 
 
 for (inhPattern in 1:4) {
-  for (ranges in 1:2) {
-    stackMultiples(inhPattern, ranges)
+  IndividualFigures(inhPattern, 2)
+
+  for (SPranges in 1:2) {
+    stackMultiples(inhPattern, SPranges)
   }
 }
 
