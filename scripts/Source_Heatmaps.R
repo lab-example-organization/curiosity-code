@@ -30,7 +30,8 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapLand <- file.path("results", "Heatmaps", "sameInh")
 # heatmapLand <- file.path("results", "Heatmaps", "maleInh_maleBias")
 # heatmapLand <- file.path("results", "Heatmaps", "femInh_maleBias")
-heatmapLand <- file.path("results", "Heatmaps", "femInh_femBias")
+# heatmapLand <- file.path("results", "Heatmaps", "femInh_femBias")
+heatmapLand <- file.path("results")
 
 # heatmapLand <- file.path("results", "Heatmaps")
 
@@ -40,7 +41,7 @@ all_the_runs <- extractVarDirs(heatmapLand,
   #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
   # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
   # "*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
-  "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
+  # "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
   # "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
   # "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
   # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_|*_1041_")   # oppinh maleBias
@@ -52,6 +53,8 @@ all_the_runs <- extractVarDirs(heatmapLand,
   # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
   # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
   # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
+  "*_302[8-9]_|*_30[3-4][0-9]_|*_305[0-3]_")      # sameinh popsplit lmh nw
+  # "*_305[4-9]_|*_30[6-7][0-9]_")      # mixinh popsplit lmh nw
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
@@ -87,16 +90,16 @@ all_the_runs <- extractVarDirs(heatmapLand,
 # all_the_runs <- c(norm1, all_the_runs[125], norm2)
 
 
-norm1 <- all_the_runs[1:12]  #421-432
-norm2 <- all_the_runs[13:37] #434-458
-norm3 <- all_the_runs[38:52] #460-474
-norm4 <- all_the_runs[53:67] #476-490
-norm5<- all_the_runs[68:82] #492-506
-norm6 <- all_the_runs[83:91] #508-516
-norm7 <- all_the_runs[95:123]#517-545
-# 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
-all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
-# 
+# norm1 <- all_the_runs[1:12]  #421-432
+# norm2 <- all_the_runs[13:37] #434-458
+# norm3 <- all_the_runs[38:52] #460-474
+# norm4 <- all_the_runs[53:67] #476-490
+# norm5<- all_the_runs[68:82] #492-506
+# norm6 <- all_the_runs[83:91] #508-516
+# norm7 <- all_the_runs[95:123]#517-545
+# # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
+# # 
 
 
 # # norm1 <- all_the_runs[1:57]  #421-432
@@ -111,12 +114,12 @@ all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all
 # ;
 
 
-profvis({
-#   for(iteration in 1:10) {
-    extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
-        dirHeatMap = heatmapLand, source_of_params = "params.yaml")
-#   }
-})
+# profvis({
+# #   for(iteration in 1:10) {
+#     extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
+#         dirHeatMap = heatmapLand, source_of_params = "params.yaml")
+# #   }
+# })
 
 
 
@@ -141,7 +144,8 @@ names(extractedMeans) <- all_the_names
 
 # whichBias <- c("male","female")
 
-makeHeatmaps(inheritance = 2, diffcurstartBias = 2, absolute = TRUE)
+makeHeatmapFile(inheritance = 3, diffcurstartBias = 5, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
+makeHeatmapFile(inheritance = 3, diffcurstartBias = 5, absolute = TRUE, specialFigs = TRUE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 # makeHeatmaps(inheritance = 1, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
 # makeHeatmaps(inheritance = 2, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
 # makeHeatmaps(inheritance = 1, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
@@ -159,18 +163,20 @@ makeHeatmaps(inheritance = 2, diffcurstartBias = 2, absolute = TRUE)
 IndividualFigures <- function (
 
   inheritance = 1, #c("sameinh", "oppsinh", "maleinh", "mothinh")
-  colorRange = 2 # c("relative", "absolute")
-
+  colorRange = 2, # c("relative", "absolute")
+  thisBias = 1 # 3 or 4
 ) {
   
   ClrRngContainer <- c("relative", "absolute")
   colorRange <- ClrRngContainer[colorRange]
 
-  inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
+  inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh", "sFfFfinh")
   inheritance <- inheritanceContainer[inheritance]
 
-  heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
-
+  # heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
+  heatmap_sourceFolder <- file.path("results")
+  # heatmap_sourceFolder <- file.path("sameSexFigResults", "results")
+  
   # heatmapSource_folderList <- c(
   #     "190421_slices_-_sameinh_maleBias",
   #     "190421_slices_-_sameinh_femaleBias",
@@ -237,9 +243,9 @@ IndividualFigures <- function (
 
   # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
-  whichBias <- c("maleBias", "femaleBias")
+  whichBias <- c("maleBias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
 
-  for(thisBias in 1:2) {
+  # for(thisBias in 1:2) {
 
     folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[thisBias] %in% str_split(x, "_")[[1]][5])))]
 
@@ -254,7 +260,7 @@ IndividualFigures <- function (
         "MalPop2",
         "FemalePop"
       )
-    } else {
+    } else if (thisBias == 2) {
       heatmap_axes <- list(
         mf2Vmal = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
         mf1Vmal = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
@@ -265,14 +271,32 @@ IndividualFigures <- function (
         "FemPop2",
         "MalePop"
       )
+    } else if (thisBias == 5) {
+      heatmap_axes <- list(
+        mf2Vmal = c("Pop 1 Female Starting Curiosity", "Pop 2 Starting Curiosity"),
+        mf1Vmal = c("Pop 1 Male Starting Curiosity", "Pop 2 Starting Curiosity"),
+        mf1Vmf2 = c("Pop 1 Male Starting Curiosity", "Pop 1 Female Starting Curiosity")
+      )
+      slicedPop <- list(
+        "MalPop1",
+        "FemPop1",
+        "Popula2"
+      )
     }
 
     tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
 
     # REDUCE THE SHIT.
 
-    lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
-    narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
+    # lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
+    # narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
+
+    lowMedHigh <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = ".RData")))
+
+
+
+    tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
+    narrowWide <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = ".RData")))
 
     inhOptions <- list(
       lowMedHigh = lowMedHigh,
@@ -457,7 +481,7 @@ IndividualFigures <- function (
         # dev.off()
       }
     }
-  }
+  # }
   return(print("Done, in the specified folder"))
 }
 

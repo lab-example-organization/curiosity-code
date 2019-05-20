@@ -248,3 +248,44 @@ specificSimNumber = 1
 paste(c("T","i","o","s"), c("his ", "s ", "ne ",
 "entence."),sep="",collapse="")
 
+
+
+
+thing <- colorRampPalette(c("#7f3b08", "#b35806", "#e08214", "#fdb863", "#fee0b6", "#f7f7f7", "#d8daeb", "#b2abd2", "#8073ac", "#542788", "#2d004b"))
+
+#7f3b08 – BASAL MALEPOOL
+#b35806 – SIMILAR MALEPOOL
+#e08214 MORAN DETAIL
+#fdb863 LH DETAIL BOXES
+#fee0b6 – MIDDLE MALEPOOL
+#f7f7f7 BACKGROUND
+#d8daeb – FAR END MALEPOOL
+#b2abd2 MORAN BACKGROUND
+#8073ac – FARTHEST MALEPOOL
+#542788
+#2d004b ARROWS
+
+
+
+colorSeqMultPalette <- list(
+    BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+    BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+    GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+    OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+    PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+    PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+    PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+    RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+    YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+    YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+    YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
+
+
+png(filename = file.path(paste0("colorSpectrum.png"), width = 554, height = 554, units = "px", pointsize = 12, bg = "white"))
+      
+plot(matrix(c(rep(1,20),1:20),20,2),col=thing(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+
+dev.off()
+
+

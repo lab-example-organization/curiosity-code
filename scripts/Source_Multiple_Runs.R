@@ -65,52 +65,60 @@ makeDocnamez <- function (scMin, scMax, simNumber,
         scMin[2] == scMin[4] &&
         scMax[2] == scMax[4]) {
       # 1-7_f_7-13m
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", scMax[1], "m")
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", 
+                                scMin[1], "-", scMax[1], "m")
     
     } else if (scMin[2] == scMin[4] &&
                scMax[2] == scMax[4] &&
               (scMin[1] != scMin[3] ||
                scMax[1] != scMax[3])) {
       # 1-7f_1-7mp1_7-13mp2
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", scMin[1], "-", 
-                          scMax[1], "mp1", "_", scMin[3], "-", scMax[3], "mp2")
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "f", "_", 
+                                scMin[1], "-", scMax[1], "mp1", "_", 
+                                scMin[3], "-", scMax[3], "mp2")
     
     } else if (scMin[1] == scMin[3] &&
                scMax[1] == scMax[3] &&
               (scMin[2] != scMin[4] || 
                scMax[2] != scMax[4])) {
       # 1-7f_1-7mp1_7-13mp2
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", scMin[4], "-", 
-                          scMax[4], "fp2", "_", scMin[3], "-", scMax[3], "m")
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "fp1", "_", 
+                                scMin[4], "-", scMax[4], "fp2", "_", 
+                                scMin[3], "-", scMax[3], "m")
     
     } else if ((scMin[1] == scMin[2] && 
                 scMax[1] == scMax[2]) && 
                (scMin[3] == scMin[4] && 
                 scMax[3] == scMax[4]) &&
-                scMin[1] != scMin[4] && 
-                scMax[1] != scMax[4]) {
+               (scMin[1] != scMin[4] || 
+                scMax[1] != scMax[4])) {
       # 1-7p1_7-13p2
-      curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_", scMin[3], "-", scMax[3], "p2")
+      curstart_ranges <- paste0(scMin[1], "-", scMax[1], "p1", "_",
+                                scMin[3], "-", scMax[3], "p2")
     
-    } else if ((scMin[3] == scMin[4] && 
-                scMax[3] == scMax[4]) &&
-                scMin[1] != scMin[4] && 
-                scMax[1] != scMax[4] &&
-                scMin[2] != scMin[1] && 
-                scMax[2] != scMax[1]) {
+    } else if (scMin[3] == scMin[4] && 
+               scMax[3] == scMax[4] &&
+              (scMin[1] != scMin[4] || 
+               scMax[1] != scMax[4]) &&
+              (scMin[2] != scMin[1] || 
+               scMax[2] != scMax[1])) {
       # 1-7p1_7-13p2
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "mp1", "_", scMin[4], "-", 
-                          scMax[4], "fp1", "_", scMin[3], "-", scMax[3], "p2")
+      curstart_ranges <- paste0(scMin[1], "-", scMax[1], "mp1", "_", 
+                                scMin[2], "-", scMax[2], "fp1", "_", 
+                                scMin[4], "-", scMax[4], "p2")
     
-    } else if ((scMin[1] == scMin[2] && 
-                scMax[1] == scMax[2]) && 
-                scMin[1] != scMin[4] && 
-                scMax[1] != scMax[4] &&
-                scMin[3] != scMin[4] && 
-                scMax[3] != scMax[4]) {
+    } else if (scMin[1] == scMin[2] && 
+               scMax[1] == scMax[2] && 
+             ((scMin[1] != scMin[4] || 
+               scMax[1] != scMax[4]) ||
+              (scMin[2] != scMin[4] || 
+               scMax[2] != scMax[4])) &&
+              (scMin[3] != scMin[4] || 
+               scMax[3] != scMax[4])) {
       # 1-7p1_7-13p2
-      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "p1", "_", scMin[4], "-", 
-                          scMax[4], "mp2", "_", scMin[3], "-", scMax[3], "fp2")
+      curstart_ranges <- paste0(scMin[2], "-", scMax[2], "p1", "_", 
+                                scMin[3], "-", scMax[3], "mp2", "_", 
+                                scMin[4], "-", scMax[4], "fp2")
     
     } else {curstart_ranges <- paste0("wellThisIsUnexpected")}
   } # this is the text insert for the docnamez curstart ranges subsection
