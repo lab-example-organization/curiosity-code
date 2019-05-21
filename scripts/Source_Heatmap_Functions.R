@@ -3,9 +3,9 @@
 remakeString <- function(target, comp, out) {
   # tR stands for temporary retainer
   tR <- strsplit(target, comp)
-  
+  size <- length(target)
   remadeStrings <- target
-  for(x in 1:125) {
+  for(x in 1:size) {
     if(is.na(tR[[x]][10])) {
         remadeStrings[x] <- paste("sim", tR[[x]][8], tR[[x]][9], sep = out)
     } else {
@@ -54,7 +54,7 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params, deeper = FALS
   number_of_reps <- length(list.files(file.path(dirHeatMap, allRunDirs[1], "variable_store")))
   dim_source = yaml.load_file(file.path("parameters", source_of_params))
   
-  # RunMeans <- list()
+  RunMeans <- list()
 
   for(individual_run in 1:number_of_runs) {
     
@@ -132,19 +132,21 @@ makeHeatmapFile <- function (
 ) {
 
   whichInh <- c("male","moth","same","opps","sNTn",
-                "sSTf","sSFr","sFrS","sTfS","sTnN", "sFfFf")
+                "sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
 
   whichBias <- c("male","female", "pop1", "pop2", "both")
 
   whichLmhVnw <- c("lowMedHigh", "narrowWide")
   if (lmhVnw) {SpecFigTypeLmhNw = whichLmhVnw[1]} else {SpecFigTypeLmhNw = whichLmhVnw[2]}
 
+  lenF = 5
+
   if (reDo) {
 
     folderName <- list.files(path = file.path("results", "Heatmaps",
     "output_objects"), pattern = paste0("_slices_-_", whichInh[inheritance],
-          # "inh_", whichBias[diffcurstartBias], "Bias"))
-          "inh_", SpecFigTypeLmhNw, "Bias"))
+          "inh_", whichBias[diffcurstartBias], "Bias"))
+          # "inh_", SpecFigTypeLmhNw, "Bias"))
 
     heatmap_array <- readRDS(file.path("results", "Heatmaps", "output_objects", 
       folderName, list.files(path = file.path("results", "Heatmaps", "output_objects",
@@ -155,19 +157,7 @@ makeHeatmapFile <- function (
     
   } else {
 
-    if (specialFigs) {
-      folderName <-  paste0(
-      str_sub(paste(str_extract_all(
-        Sys.time(), "[0123456789]"
-      )[[1]], collapse = ""), 3, 8),
-      "_slices_-_",
-      whichInh[inheritance],
-      "inh_",
-      SpecFigTypeLmhNw,
-      "Bias"
-    )
-    } else {
-      folderName <- paste0(
+    folderName <- paste0(
       str_sub(paste(str_extract_all(
         Sys.time(), "[0123456789]"
       )[[1]], collapse = ""), 3, 8),
@@ -175,10 +165,8 @@ makeHeatmapFile <- function (
       whichInh[inheritance],
       "inh_",
       whichBias[diffcurstartBias],
-      "Bias"
-    )
-    }
-    lenF = 5
+      "Bias")
+
     if (diffcurstartBias == 1) {
       heatmap_array <- array(
       0, dim = c(5,5,5,8), list(
@@ -203,12 +191,13 @@ makeHeatmapFile <- function (
         if (lmhVnw) {
           lenF = 3
           heatmap_array <- array(
-          0, dim = c(3,3,2,8), list(
-            c("1-7mp1", "7-13mp1", "11-26mp1"), 
-            c("1-7fp1", "7-13fp1", "11-26fp1"), 
-            c("1-7p2", "11-26p2"), 
-            c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-          ))
+            0, dim = c(3,3,2,8), list(
+              c("1-7mp1", "7-13mp1", "11-26mp1"), 
+              c("1-7fp1", "7-13fp1", "11-26fp1"), 
+              c("1-7p2", "11-26p2"), 
+              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            )
+          )
         } else {
           lenF = 2
           heatmap_array <- array(
@@ -220,30 +209,55 @@ makeHeatmapFile <- function (
           ))
         }
       }
-    }
-
-    for(long in 1:longLenF) { # femalez
-      for(medium in 1:lenF) { # malez1
-        for(short in 1:lenF) { # malez2
-
-          tally <- short + lenF*(medium - 1) + longLenF*longLenF*(long - 1)
-
-          sumStats <- c(
-            extractedMeans[[tally]]$curLvlMeans[1,1,100],
-            extractedMeans[[tally]]$curLvlMeans[1,2,100],
-            extractedMeans[[tally]]$curLvlMeans[2,1,100],
-            extractedMeans[[tally]]$curLvlMeans[2,2,100],
-            extractedMeans[[tally]]$sylRepMeans[1,1,100],
-            extractedMeans[[tally]]$sylRepMeans[1,2,100],
-            extractedMeans[[tally]]$sylRepMeans[2,1,100],
-            extractedMeans[[tally]]$sylRepMeans[2,2,100]
+    } else if (diffcurstartBias == 4) {
+      longLenF <- 2
+      if (specialFigs) {
+        if (lmhVnw) {
+          lenF = 3
+          heatmap_array <- array(
+            0, dim = c(2,3,3,8), list(
+              c("1-7p1", "11-26p1"), 
+              c("1-7mp2", "7-13mp2", "11-26mp2"), 
+              c("1-7fp2", "7-13fp2", "11-26fp2"), 
+              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            )
           )
-
-          heatmap_array[medium,short,long,] <- sumStats
-          
+        } else {
+          lenF = 2
+          heatmap_array <- array(
+          0, dim = c(2,2,2,8), list(
+            c("1-7p1", "11-26p1"), 
+            c("1-26mp2", "11-15mp2"), 
+            c("1-26fp2", "11-15fp2"), 
+            c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+          ))
         }
       }
     }
+  }
+
+  for(long in 1:longLenF) { # femalez
+    for(medium in 1:lenF) { # malez1
+      for(short in 1:lenF) { # malez2
+
+        tally <- short + lenF*(medium - 1) + longLenF*longLenF*(long - 1)
+        thing <- length(extractedMeans[[1]][[1]][1,1,])
+        sumStats <- c(
+          extractedMeans[[tally]]$curLvlMeans[1,1,thing],
+          extractedMeans[[tally]]$curLvlMeans[1,2,thing],
+          extractedMeans[[tally]]$curLvlMeans[2,1,thing],
+          extractedMeans[[tally]]$curLvlMeans[2,2,thing],
+          extractedMeans[[tally]]$sylRepMeans[1,1,thing],
+          extractedMeans[[tally]]$sylRepMeans[1,2,thing],
+          extractedMeans[[tally]]$sylRepMeans[2,1,thing],
+          extractedMeans[[tally]]$sylRepMeans[2,2,thing]
+        )
+
+        heatmap_array[medium,short,long,] <- sumStats
+        
+      }
+    }
+  }
 
     # if(!(dir.exists(file.path("results", "Heatmaps", "output_objects", folderName)))) {
     #   dir.create(file.path("results", "Heatmaps", "output_objects", folderName))
@@ -257,21 +271,28 @@ makeHeatmapFile <- function (
     #   }
     # }
 
-     if(!(dir.exists(file.path("results", folderName)))) {
-      dir.create(file.path("results", folderName))
-      if(!(file.exists(file.path(
-        "results", folderName, paste0("heatmap_output_-_", folderName, ".RData")
-              )))) {saveRDS(heatmap_array, file.path(
-        "results",folderName, paste0("heatmap_output_-_", folderName, ".RData")
-      ))}
-      for (subset in 1:5) {
-        dir.create(file.path("results", folderName, paste0("slice_", subset)))
-      }
-    }
-    
-  }
+    if(!(dir.exists(file.path("results", folderName)))) {
 
+      dir.create(file.path("results", folderName))}
+      
+    if(!(file.exists(file.path(
+      "results", folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
+      "inh_", whichBias[diffcurstartBias], "Bias_", SpecFigTypeLmhNw, ".RData")
+            )))) {
+      
+      saveRDS(heatmap_array, file.path(
+      "results",folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
+      "inh_", whichBias[diffcurstartBias], "Bias_", SpecFigTypeLmhNw, ".RData")
+
+    ))}
+    # for (subset in 1:5) {
+    #   dir.create(file.path("results", folderName, paste0("slice_", subset)))
+    # }
+  
+    
 }
+
+# }
 
 
 
