@@ -175,13 +175,17 @@ IndividualFigures <- function (
 
   inheritance = 1, #c("maleinh", "mothinh", "sameinh", "oppsinh","sNTninh", "sSTfinh", "sSFrinh", "sFrSinh", "sTfSinh", "sTnNinh", "FfFfinh")
   colorRange = 2, # c("relative", "absolute")
-  thisBias = 1 # 3 or 4
+  thisBias = 1, # 3 or 4
+  numOtherPopRuns = 2 # this will force the dimensions of the data structure to include only the number of starting conditions that are present for the population of non-interest
 ) {
   
   # heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourceFolder <- file.path("results")
   # heatmap_sourceFolder <- file.path("sameSexFigResults", "results")
   
+
+  # Character vectors for args - indices  Not sure what else to call them, but they'll be used to reassign the args to non-numeric objects
+
   ClrRngContainer <- c("relative", "absolute")
   
   inheritanceContainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
@@ -189,126 +193,6 @@ IndividualFigures <- function (
                             "sTfSinh", "sTnNinh", "FfFfinh")
 
   whichBias <- c("maleBias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
-
-
-  colorRange <- ClrRngContainer[colorRange]
-
-  inheritance <- inheritanceContainer[inheritance]
-
-  thisBias <- whichBias[thisBias]
-  
-  folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
-
-  # tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
-  HtMpArrays <- list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")
-
-  # REDUCE THE SHIT.
-
-
-
-  if (length (HtMpArrays) == 1) {
-    tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, HtMpArrays))
-
-    lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
-    narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
-    
-  } else if (length (HtMpArrays) == 2) {
-    lowMedHigh <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "lowMedHigh.RData")))
-    narrowWide <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "narrowWide.RData")))
-  }
-
-  inhOptions <- list(
-    lowMedHigh = lowMedHigh,
-    narrowWide = narrowWide,
-    LMHtext = "lowMedHigh",
-    NWtext = "narrowWide"
-  )
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  # DONE.
-  # NOW WE NEED TO MAKE THE FIGURES AND SORT THEM INTO FOLDERS THAT WE'LL PULL THEM OUT OF TO MAKE THE STITCHED-TOGETHER FILES.
-  # TITLES DON'T MATTER CURRENTLY, BUT WILL ONCE THEY GET STITCHED TOGETHER.
-  # THIS DIRECTORY (FOR THESE UNSTITCHED ONES) SHOULD BE A SUBFOLDER WITHIN THE STITCHED FIGURE DIR
-
-  if(!(dir.exists(file.path(
-    heatmap_sourceFolder, folderName, "lowMedHigh")))
-  ) {
-    dir.create(file.path(
-      heatmap_sourceFolder, folderName, "lowMedHigh"
-    ))
-    dir.create(file.path(
-      heatmap_sourceFolder, folderName, "narrowWide"
-    ))
-    
-  }
-
-  # heatmapSource_folderList <- c(
-  #     "190421_slices_-_sameinh_maleBias",
-  #     "190421_slices_-_sameinh_femaleBias",
-  #     "190419_slices_-_oppsinh_maleBias",
-  #     "190419_slices_-_oppsinh_femaleBias",
-  #     # "190427_slices_-_maleinh_maleBias",
-  #     # "190410_slices_-_maleinh_femBias",
-  #     "190430_slices_-_mothinh_maleBias",
-  #     "190430_slices_-_mothinh_femaleBias"
-  # )
-
-  colorSeqMultPalette <- list(
-    BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
-    BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
-    GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
-    OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
-    PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
-    PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
-    PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
-    RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
-    YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
-    YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
-    YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
-    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
-
-  SxMtPop_list <- c(
-    "Ending Curiosity Values - Pop 1 Females_slice_",
-    "Ending Curiosity Values - Pop 1 Males_slice_",
-    "Ending Curiosity Values - Pop 2 Females_slice_",
-    "Ending Curiosity Values - Pop 2 Males_slice_",
-    "Ending Sylrep Values - Pop 1 Females_slice_",
-    "Ending Sylrep Values - Pop 1 Males_slice_",
-    "Ending Sylrep Values - Pop 2 Females_slice_",
-    "Ending Sylrep Values - Pop 2 Males_slice_"
-  )
-
-  slice_names <- c(
-    "slice_1",
-    "slice_2",
-    "slice_3",
-    "slice_4",
-    "slice_5"
-  )
-
-  title_names <- c("Ending Curiosity Values - Pop 1 Females",
-                   "Ending Curiosity Values - Pop 1 Males",
-                 "Ending Curiosity Values - Pop 2 Females",
-                 "Ending Curiosity Values - Pop 2 Males",
-                   "Ending Syll Rept Values - Pop 1 Females",
-                   "Ending Syll Rept Values - Pop 1 Males",
-                 "Ending Syll Rept Values - Pop 2 Females",
-                 "Ending Syll Rept Values - Pop 2 Males"
-  )
-
-  regularNames <- c("EndCurValP1M",
-                    "EndCurValP2M",
-                    "EndCurValP1F",
-                    "EndCurValP2F",
-                    "EndSRpValP1M",
-                    "EndSRpValP2M",
-                    "EndSRpValP1F",
-                    "EndSRpValP2F"
-  )
-
-  # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-
-  
-
 
   if (thisBias == 1) {
     heatmap_axes <- list(
@@ -332,7 +216,7 @@ IndividualFigures <- function (
       "FemPop2",
       "MalePop"
     )
-  } else if (thisBias == 5) {
+  } else if (thisBias == 3) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Starting Curiosity"),
       mp1Vpp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Starting Curiosity"),
@@ -345,9 +229,83 @@ IndividualFigures <- function (
     )
   }
 
-  for (htmpView in 1:3) {
-    for (SxMtPop in 1:8) {
-      for (inhStyle in 1:2) {
+  colorRange <- ClrRngContainer[colorRange]
+
+  inheritance <- inheritanceContainer[inheritance]
+
+  thisBias <- whichBias[thisBias]
+  
+  folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
+
+  # tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
+  HtMpArrays <- list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")
+
+  if (length (HtMpArrays) == 1) {
+    tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, HtMpArrays))
+
+    lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
+    narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
+    
+  } else if (length (HtMpArrays) == 2) {
+    lowMedHigh <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "lowMedHigh.RData")))
+    narrowWide <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "narrowWide.RData")))
+  }
+
+  inhOptions <- list(
+    lowMedHigh = lowMedHigh,
+    narrowWide = narrowWide,
+    LMHtext = "lowMedHigh",
+    NWtext = "narrowWide"
+  )
+  
+  # DONE.
+  # NOW WE NEED TO MAKE THE FIGURES AND SORT THEM INTO FOLDERS THAT WE'LL PULL THEM OUT OF TO MAKE THE STITCHED-TOGETHER FILES.
+  # TITLES DON'T MATTER CURRENTLY, BUT WILL ONCE THEY GET STITCHED TOGETHER.
+  # THIS DIRECTORY (FOR THESE UNSTITCHED ONES) SHOULD BE A SUBFOLDER WITHIN THE STITCHED FIGURE DIR
+
+  if(!(dir.exists(file.path(
+    heatmap_sourceFolder, folderName, "lowMedHigh")))
+  ) {
+    dir.create(file.path(
+      heatmap_sourceFolder, folderName, "lowMedHigh"
+    ))
+    dir.create(file.path(
+      heatmap_sourceFolder, folderName, "narrowWide"
+    ))
+    
+  }
+
+  colorSeqMultPalette <- list(
+    BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+    BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+    GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+    OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+    PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+    PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+    PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+    RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+    YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+    YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+    YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20"))
+  )
+
+  regularNames <- c(
+    "EndCurValP1M",
+    "EndCurValP2M",
+    "EndCurValP1F",
+    "EndCurValP2F",
+    "EndSRpValP1M",
+    "EndSRpValP2M",
+    "EndSRpValP1F",
+    "EndSRpValP2F"
+  )
+
+  # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+
+  for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
+    for (SxMtPop in 1:8) { # curiosity and sylrep data for each subpopulation
+      for (inhStyle in 1:2) { # lowMedHigh and narrowWide
         
         if(!(dir.exists(file.path(
           heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
@@ -363,19 +321,13 @@ IndividualFigures <- function (
         #     heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2]
         # ))
         if (inhStyle == 1) {
-          sliceNum = 3
-          dat_array_doh <- array(c(
-              rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
-              rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
-              rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
-            ), c(3,3,2,3))
+          if (htmpView == 3) {
+            sliceNum = numOtherPopRuns
+          } else {
+            sliceNum = 3}
         } else if (inhStyle == 2) {
-          sliceNum = 2
-          dat_array_doh <- array(c(
-              rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(2, 2, 2, 1), 2),
-              rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(2, 2, 2, 2), 2)
-            ), c(3,3,2,2))
-        }
+          sliceNum = 2}
+
         for (slice in 1:sliceNum) {
           
           file_name <- paste0(regularNames[SxMtPop], "_slice_", slice, "_", slicedPop[htmpView], ".png")
@@ -387,8 +339,8 @@ IndividualFigures <- function (
             width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
           if(colorRange == "absolute") {
-            if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
-            ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,156)}
+            if (SxMtPop <= 4) {heatmapRange <- c(0,1)
+            } else {           heatmapRange <- c(1,156)}
           } else {
             
             heatmapRange <- inhOptions[[inhStyle]][
@@ -415,6 +367,17 @@ IndividualFigures <- function (
           findYLab <- heatmap_axes[[htmpView]][2]
           
           if(inhStyle == 1) {
+            dim_1 = 3
+            dim_2 = 3
+            dim_3 = 2
+            dat_array_doh <- array(c(
+              1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, numOtherPopRuns,numOtherPopRuns,1,
+              2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, numOtherPopRuns,numOtherPopRuns,2,
+              3,1,1, 1,3,1, 1,1,numOtherPopRuns, 3,3,3, 3,3,3, numOtherPopRuns,numOtherPopRuns,numOtherPopRuns
+              # rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
+              # rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
+              # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
+            ), c(3,3,2,3))
 
             image(x = matrix(as.numeric(
             inhOptions[[inhStyle]][
@@ -422,7 +385,17 @@ IndividualFigures <- function (
               dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
               dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
               SxMtPop
-            ]),sliceNum,sliceNum),
+            ]),nrow(inhOptions[[inhStyle]][
+              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
+              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
+              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
+              SxMtPop
+            ]), ncol(inhOptions[[inhStyle]][
+              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
+              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
+              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
+              SxMtPop
+            ])),
             col = colorSeqMultPalette$YlOrBr(100),
             axes = F, 
             xlab = findXLab, 
@@ -434,14 +407,29 @@ IndividualFigures <- function (
             axis(1,c(-0.25,0.25,0.75,1.25),
                 c("","","",""),
                 T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-            
-            axis(2,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
+
+            if (htmpView == 3) {
+              axis(2,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
                 c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
                 T,0,NA,F,cex.axis=0.6, tck = 0)
-            axis(2,c(-0.25,0.25,0.75,1.25),
+              axis(2,c(-0.25,0.25,0.75,1.25),
                 c("","","",""),
                 T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            } else {
+              axis(2,c(-0.5,  0  ,0.5,    1    ,1.5),
+                c(  ""   ,"0-0.25","" ,".45-1","" ),
+                T,0,NA,F,cex.axis=0.8, tck = 0)
+              axis(2,c(-0.5,0.5,1.5),
+                c("","",""),
+                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            }
+
           } else if (inhStyle == 2) {
+
+            dat_array_doh <- array(c(
+              rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(2, 2, 2, 1), 2),
+              rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(2, 2, 2, 2), 2)
+            ), c(3,3,2,2))
 
             image(x = matrix(as.numeric(
             inhOptions[[inhStyle]][
@@ -449,7 +437,17 @@ IndividualFigures <- function (
               dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
               dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
               SxMtPop
-            ]),sliceNum,sliceNum),
+            ]),nrow(inhOptions[[inhStyle]][
+              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
+              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
+              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
+              SxMtPop
+            ]), ncol(inhOptions[[inhStyle]][
+              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
+              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
+              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
+              SxMtPop
+            ])),
             col = colorSeqMultPalette$YlOrBr(100),
             axes = F, 
             xlab = findXLab, 
@@ -474,100 +472,143 @@ IndividualFigures <- function (
         }
 
       }
-              
-      # plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
-      # a <- 0.35; b <- 20.5; c <- (b-a)/10
-      # axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
-      # axis(2, c(4,17),c(range_list[1,1,ceiling(SxMtPop/4)],range_list[2,1,ceiling(SxMtPop/4)]), las=0,tck = 0, line = 0)
-      # axis(4, c(1,10,19),c("min_val","mid_val","max_val"), las=1,tck = 0, lwd=0, line=0)
-      # axis(4, c(17,18,19),c("min:","mid:","max:"), las=1,tck = 0, lwd=0, line=4)
-      # if (absolute) {
-      #   if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
-      #     ) {
-      #       axis(4, c(17,18,19,20),c("0","0.5","1", "All:"), las=1,tck = 0, lwd=0, line=6)
-      #     } else {
-      #       axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
-      #     }
-        
-      # } else {
-      #   axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
-      #   axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
-      #   axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
-      # }
-      
-      # mtext(c(paste0(legend_title[ceiling(SxMtPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
-      # mtext("Seeks Novel Songs",3,1,cex = 0.8)
-      # mtext(range_list[1,2,ceiling(SxMtPop/4)],1,0.7,cex = 0.8)
-      # box("outer", "solid")
-      # #mtext(paste0(title_names[SxMtPop], "                                  "),3,cex = 1.5,line=30)
-      # par(mfrow=c(1,1))
-      # dev.off()
     }
   }
   # }
   return(print("Done, in the specified folder"))
 }
 
-CombineSingles <- function (
+CombineEditSingles <- function (
   inheritanceStyle = 1,
   bias = 1,
-  metricsSexPop = 1,
-  curstartPattern = 1
+  metricsSexPop = 1, # only allowed 1-4 (p1m, p2m, p1f, p2f)
+  otherPopStyle = 1, # low, high (for lmh & nw stuff round May 2019)
+  edit = FALSE
 ) {
-
-  library(magick)
-  source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+  
+#   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 # Access the same subdirectory where the individual images are stored
+  
 
-  heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
-
+#  heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
+  heatmap_sourceFolder <- file.path("results")
+  
   SxMtPopContainer <- c("EndCurValP1M",
-                        "EndCurValP2M",
-                        "EndCurValP1F",
-                        "EndCurValP2F",
-                        "EndSRpValP1M",
-                        "EndSRpValP2M",
-                        "EndSRpValP1F",
-                        "EndSRpValP2F")
+                          "EndCurValP2M",
+                          "EndCurValP1F",
+                          "EndCurValP2F",
+                          "EndSRpValP1M",
+                          "EndSRpValP2M",
+                          "EndSRpValP1F",
+                          "EndSRpValP2F")
+  
+  
+  
+  curstartPatternContainer <- c("lowMedHigh", "narrowWide")
+  
+  inheritanceContainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
+                              "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
+                              "sTfSinh", "sTnNinh", "FfFfinh")
 
+  titleSxMtPop <- c("Pop 1 Mal", "Pop 2 Mal", 
+                    "Pop 1 Fem", "Pop 2 Fem", 
+                    "Pop 1 Mal", "Pop 2 Mal", 
+                    "Pop 1 Fem", "Pop 2 Fem")
 
+  titleInhStyle <- c("Male", "Female", "Same-Sex", "Opposite",
+                     "90M10F", "75M25F", "60M40F", "40M60F", 
+                     "25M75F", "10M90F", "50-50")
 
-  curstartPatternContainer <- c("narrowWide", "lowMedHigh")
-
-  inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
-  inheritanceStyle <- inheritanceContainer[inheritanceStyle]
-
-  whichBias <- c("maleBias", "femaleBias")
-  whichPopBias <- c("FemalePop", "MalePop")
-
-  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
-
+  titleBackgroundPop <- c("Low", "High")
+  
+  whichBias <- c("maleBias", "femaleBias", "pop1Bias")
+  whichPopBias <- c("FemalePop", "MalePop", "Popula2")
+  
+  subpopulation <- c("p1m", "p2m", "p1f", "p2f")
+  
+  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceContainer[inheritanceStyle] %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
+  
   PopBias <- whichPopBias[bias]
   
-  singlesFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], PopBias)
+  #   for (i in 1:2) {
+      
+  namesForOtherPop <- c("slice_1", "slice_2")
+  stylesForOtherPop <- c("low", "high")
+  
+  lowMedHighFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[1], PopBias)
+  narrowWideFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[2], PopBias)
 
-  # if(!(dir.exists(singlesFolder))) {dir.create(singlesFolder)}
+  image_1 <- image_read(file.path(lowMedHighFolder, paste0(SxMtPopContainer[metricsSexPop], "_", namesForOtherPop[otherPopStyle], "_", PopBias, ".png")))
+  image_2 <- image_read(file.path(narrowWideFolder, paste0(SxMtPopContainer[metricsSexPop], "_", namesForOtherPop[otherPopStyle], "_", PopBias, ".png")))
+  image_3 <- image_read(file.path(lowMedHighFolder, paste0(SxMtPopContainer[metricsSexPop+4], "_", namesForOtherPop[otherPopStyle], "_", PopBias, ".png")))
+  image_4 <- image_read(file.path(narrowWideFolder, paste0(SxMtPopContainer[metricsSexPop+4], "_", namesForOtherPop[otherPopStyle], "_", PopBias, ".png")))
 
-  if(
-    curstartPattern == 1
-  ) {
-    image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
-    image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
-    # return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
-    # thing <- image_append(image_1, image_2), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern])
-    thing <- image_append(c(image_1, image_2))
-    # image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
-  } else {
-    image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
-    image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
-    image_3 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png")))
-    # return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
-    thing <- mult_ImgAppend(image_1, image_2, image_3)
-    # image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
+  if(! (edit)) {
+    
+    top_row <- image_append(c(image_1, image_2))
+    bottom_row <- image_append(c(image_3, image_4))
+    final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
+    # image_write(final_set, path = file.path(heatmap_sourceFolder, folderBias, paste0(PopBias, "_", subpopulation[metricsSexPop], "_measure_", stylesForOtherPop[otherPopStyle], "_background.png")))
+  
+  } else if(edit) {
+    
+    top_row <- image_append(c(image_1, image_2))
+    bottom_row <- image_append(c(image_3, image_4))
+    final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
+    
+    final_set <- image_border(final_set, "white", "75x75")
+
+    final_set <- image_annotate(
+        final_set, paste0(titleSxMtPop[metricsSexPop], 
+                          " Ending Traits - ", 
+                          titleInhStyle[inheritanceStyle],
+                          " AC Inheritance"), 
+        size="50", 
+        location = "+40+25")
+
+    final_set <- image_annotate(
+        final_set, paste0(titleBackgroundPop[otherPopStyle], " Background Population Starting Curiosity"), 
+        size="30",
+        location = "+350+80")
+
+    final_set <- image_annotate(
+        final_set, paste0("Syllable Repertoire        |        Auditory Curiosity"), 
+        size="40",
+        degrees=270,
+        location = "+20+1055")
+
+    final_set <- image_border(final_set, "white", "30x30")
+
+    final_set <- image_annotate(
+        final_set, paste0("Low/Medium/High        |        Narrow/Wide"), 
+        size="35", 
+        location = "+315+1235")
+    
+    
+    # image_write(final_set, path = file.path(
+    #     heatmap_sourceFolder, folderBias, paste0(
+    #                 "Popula2", "_", "p1f", 
+    #                 "_measure_", "low", 
+    #                 "_background.png")))
+      # This is where we edit the stuff we worked on! 
+      # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
+
   }
-  return(thing)
-}
+  
+  image_write(final_set, path = file.path(heatmap_sourceFolder, folderBias, paste0(PopBias, "_", subpopulation[metricsSexPop], "_measure_", inheritanceContainer[inheritanceStyle], "_", stylesForOtherPop[otherPopStyle], "_background.png")))
 
+  return(print("done"))
+}
+for (k in 1:2) {
+    thing <- c(3, 11)
+
+
+    for (i in 1:4) {
+        for (j in 1:2) {
+            CombineEditSingles(thing[k],3,i,j, T)
+        }
+    }
+}
 stackMultiples <- function (
   inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")
   pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
@@ -631,302 +672,3 @@ for (inhPattern in 1:4) {
   }
 }
 
-
-# Triple 'for' loop, or triple 'sapply'?
-
-# duh, triple 'sapply'
-
-# sapply()
-
-# CombineSingles(1,1,1,1)
-# CombineSingles(1,1,2,1)
-# CombineSingles(1,1,3,1)
-# CombineSingles(1,1,4,1)
-# CombineSingles(1,1,5,1)
-# CombineSingles(1,1,6,1)
-# CombineSingles(1,1,7,1)
-# CombineSingles(1,1,8,1)
-# CombineSingles(1,2,1,1)
-# CombineSingles(1,2,2,1)
-# CombineSingles(1,2,3,1)
-# .
-# .
-# .
-# CombineSingles(1,1,1,2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#   library(magick)
-#   library(stringr)
-
-#   regularNames <- c("EndCurValP1F",
-#                     "EndCurValP1M",
-#                     "EndCurValP2F",
-#                     "EndCurValP2M",
-#                     "EndSRpValP1F",
-#                     "EndSRpValP1M",
-#                     "EndSRpValP2F",
-#                     "EndSRpValP2M"
-#   )
-
-#   SxMtPop_list <- c(
-#     "Ending Curiosity Values - Pop 1 Females_slice_",
-#     "Ending Curiosity Values - Pop 1 Males_slice_",
-#     "Ending Curiosity Values - Pop 2 Females_slice_",
-#     "Ending Curiosity Values - Pop 2 Males_slice_",
-#     "Ending Sylrep Values - Pop 1 Females_slice_",
-#     "Ending Sylrep Values - Pop 1 Males_slice_",
-#     "Ending Sylrep Values - Pop 2 Females_slice_",
-#     "Ending Sylrep Values - Pop 2 Males_slice_"
-#   )
-
-#   slice_names <- c(
-#     "slice_1",
-#     "slice_2",
-#     "slice_3",
-#     "slice_4",
-#     "slice_5"
-#   )
-
-#   UpperDir <- file.path("results", "Heatmaps", "output_objects")
-
-#   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-
-#     slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-#       slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
-#     slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-#       slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
-#     slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-#       slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
-#     slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-#       slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
-#     slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
-#       slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
-#   hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
-#   image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
-
-
-
-#   # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
-#   # output.list  <- input.list[list.condition]
-
-
-#   for (
-#     slice in 1:5
-#   ) {
-#     tempFigs[slice] <- image_read(file.path(
-#       UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], paste0(SxMtPop_list[metrics_num], slice, ".png")
-#       )
-#     )
-#   }
-#   hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
-#   image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
-
-
-
-
-# }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
-
-#   UpperDir <- file.path("results", "Heatmaps", "output_objects")
-
-#   for (
-#     slice in 1:5
-#   ) {
-#     c("temp1", "temp2", "temp3", "temp4", "temp5") %=% c(
-#       image_read(file.path(UpperDir, heatmap_folderList[heatmap_num], ))
-#     )
-#   }
-
-# }
-
-
-
-# importMe <- file.path("home", "parker", "Downloads", "crowAndLorikeets1.jpg")
-# image_read(importMe)
-
-# importMe <- image_read(file.path("results", "Heatmaps", "output_objects", "190421_slices_-_sameinh_maleBias", "slice_1", "Ending Curiosity Values - Pop 1 Females.png"))
-
-# image_write(CrLk5, path = "CrowAndLorikeetsFinal.png", format = "png")
-
-
-
-
-
-
-
-
-
-
-
-# # Make max-and-min values in an object,
-# # plot five of those objects for each slice set going 
-# # through the 3d-array of heatmap data, along each dimension
-# maxAndMinPlot <- function (
-
-# ) {
-  
-#   # Read in the RDS file with the data array for the heatmaps
-
-#   #   List folders that contain the .RData file (should be the only one in that dir contained in this list)
-
-  # heatmapDB <- c(
-  #   "190419_slices_-_oppsinh_femaleBias",
-  #   "190419_slices_-_oppsinh_maleBias",
-  #   "190421_slices_-_sameinh_femaleBias",
-  #   "190421_slices_-_sameinh_maleBias"
-  # )
-#
-  # tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[1], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[1])), pattern = ".RData")))
-
-
-
-#   # opps = 2, 1 same = 4, 3 <-- fileOrder for making the figure!
-
-#   maxNMinArray <- array(c(rep(0, 240)), 
-#                       c(6,8,5), 
-#                       list(
-#                         # c("p2mVfem", "p1mVfem", "p1mVp2m", "p2fVmal", "p1fVmal", "p1fVp2f"), 
-#                         c("p1m", "p2m", "fem", "p1f", "p2f", "mal"), 
-#                         c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal", "ES pop1fem", "ES pop1mal", "ES pop2fem", "ES pop2mal"), 
-#                         c("slice 1", "slice 2", "slice 3", "slice 4", "slice 5")))
-#   #   Read files from folderlist database
-#   for (filechunk in 1:2) {
-#     fileOrder <- c(2, 1)
-#     tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]])), pattern = ".RData")))
-
-#     for (SxMtPop in 1:8) {
-#       for (slice in 1:5) {
-#         dat_array_doh <- array(c(
-#           rep(c(slice, 1, 1, 1), 2),
-#           slice, 
-#           slice, 
-#           rep(c(5, 5, 5, slice), 2)
-#         ), c(3,3,2))
-        
-#         heatmapRangeDatasetOne <- tempHtMpArray[
-#           dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-#           dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-#           dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-#           SxMtPop]
-#         heatmapRangeDatasetTwo <- tempHtMpArray[
-#           dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-#           dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-#           dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-#           SxMtPop]
-#         heatmapRangeDatasetTre <- tempHtMpArray[
-#           dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-#           dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-#           dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-#           SxMtPop]
-#         heatmap_min <- c(
-#           round(min(heatmapRangeDatasetOne), 2),
-#           round(min(heatmapRangeDatasetTwo), 2),
-#           round(min(heatmapRangeDatasetTre), 2)
-#         )
-#         heatmap_max <- c(
-#           round(max(heatmapRangeDatasetOne), 2),
-#           round(max(heatmapRangeDatasetTwo), 2),
-#           round(max(heatmapRangeDatasetTre), 2)
-#         )
-
-#         maxNMinArray[((1 + 3 * (filechunk - 1)):(3 + 3 * (filechunk - 1))), SxMtPop, slice] <- heatmap_max - heatmap_min
-
-#       }
-#     }
-
-#   }
-  
-#   return (maxNMinArray)
-# }
-  
-# plot <- maxAndMinPlot()
-# ECplot <- plot[,1:4,]
-# ESplot <- plot[,5:8,]
-
-# colorSeqMultPalette <- list(
-#     BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
-#     BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
-#     GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
-#     OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
-#     PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
-#     PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
-#     PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
-#     RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
-#     YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
-#     YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
-#     YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
-#     YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
-# ECorES <- c("EC", "ES") # split = variable name
-
-# png(filename = paste0(ECorES[split],"_slice", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-# par(mfrow=c(2,5))
-
-# for (split in 1:2) {
-#   for (slice in 1:5) {
-#     ECplot <- apply(ECplot[,,slice], 2, rev)
-#     image(t(ECplot[,,slice]), col = colorSeqMultPalette$PuBuGn(100), 
-#       ylab = c("p1m", "p2m", "fem", "p1f", "p2f", "mal"), 
-#       xlab = c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal"))
-#   }
-# }
-
-
-
-# image(ECplot[,,1])
-# image(t(ECplot[,,1]))
-
-# # image(x, y, z, zlim, xlim, ylim, col = heat.colors(12),
-# #       add = FALSE, xaxs = "i", yaxs = "i", xlab, ylab,
-# #       breaks, oldstyle = FALSE, useRaster, …)
-
-# # mat1 <- apply(mat1, 2, rev)
-# # image(1:3, 1:3, t(mat1))
-
-# # meanz <- cursitylist[[number_of_runs + 1]][10,population,]
-# #     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
-# #     file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".png")
-# #     minY <- mins_n_maxes[2,population,1]
-# #     maxY <- mins_n_maxes[2,population,2]
-# #     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-# #     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
-# #     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-# #     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
-# #                                   ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), 
-# #         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
-# #     eval(parse(text=stuff))
-# #     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
-# #     dev.off()
