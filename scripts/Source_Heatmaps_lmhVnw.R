@@ -509,14 +509,24 @@ CombineEditSingles <- function (
   inheritanceContainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
                               "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
                               "sTfSinh", "sTnNinh", "FfFfinh")
-  inheritanceStyle <- inheritanceContainer[inheritanceStyle]
+
+  titleSxMtPop <- c("Pop 1 Mal", "Pop 2 Mal", 
+                    "Pop 1 Fem", "Pop 2 Fem", 
+                    "Pop 1 Mal", "Pop 2 Mal", 
+                    "Pop 1 Fem", "Pop 2 Fem")
+
+  titleInhStyle <- c("Male", "Female", "Same-Sex", "Opposite",
+                     "90M10F", "75M25F", "60M40F", "40M60F", 
+                     "25M75F", "10M90F", "50-50")
+
+  titleBackgroundPop <- c("Low", "High")
   
   whichBias <- c("maleBias", "femaleBias", "pop1Bias")
   whichPopBias <- c("FemalePop", "MalePop", "Popula2")
   
   subpopulation <- c("p1m", "p2m", "p1f", "p2f")
   
-  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
+  folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceContainer[inheritanceStyle] %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
   
   PopBias <- whichPopBias[bias]
   
@@ -534,48 +544,71 @@ CombineEditSingles <- function (
   image_4 <- image_read(file.path(narrowWideFolder, paste0(SxMtPopContainer[metricsSexPop+4], "_", namesForOtherPop[otherPopStyle], "_", PopBias, ".png")))
 
   if(! (edit)) {
+    
     top_row <- image_append(c(image_1, image_2))
     bottom_row <- image_append(c(image_3, image_4))
     final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
-    image_write(final_set, path = file.path(heatmap_sourceFolder, folderBias, paste0(PopBias, "_", subpopulation[metricsSexPop], "_measure_", stylesForOtherPop[otherPopStyle], "_background.png")))
-  } else {
+    # image_write(final_set, path = file.path(heatmap_sourceFolder, folderBias, paste0(PopBias, "_", subpopulation[metricsSexPop], "_measure_", stylesForOtherPop[otherPopStyle], "_background.png")))
+  
+  } else if(edit) {
     
+    top_row <- image_append(c(image_1, image_2))
+    bottom_row <- image_append(c(image_3, image_4))
+    final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
+    
+    final_set <- image_border(final_set, "white", "75x75")
+
+    final_set <- image_annotate(
+        final_set, paste0(titleSxMtPop[metricsSexPop], 
+                          " Ending Traits - ", 
+                          titleInhStyle[inheritanceStyle],
+                          " AC Inheritance"), 
+        size="50", 
+        location = "+40+25")
+
+    final_set <- image_annotate(
+        final_set, paste0(titleBackgroundPop[otherPopStyle], " Background Population Starting Curiosity"), 
+        size="30",
+        location = "+350+80")
+
+    final_set <- image_annotate(
+        final_set, paste0("Syllable Repertoire        |        Auditory Curiosity"), 
+        size="40",
+        degrees=270,
+        location = "+20+1055")
+
+    final_set <- image_border(final_set, "white", "30x30")
+
+    final_set <- image_annotate(
+        final_set, paste0("Low/Medium/High        |        Narrow/Wide"), 
+        size="35", 
+        location = "+315+1235")
+    
+    
+    # image_write(final_set, path = file.path(
+    #     heatmap_sourceFolder, folderBias, paste0(
+    #                 "Popula2", "_", "p1f", 
+    #                 "_measure_", "low", 
+    #                 "_background.png")))
       # This is where we edit the stuff we worked on! 
       # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
 
   }
-#   }
   
+  image_write(final_set, path = file.path(heatmap_sourceFolder, folderBias, paste0(PopBias, "_", subpopulation[metricsSexPop], "_measure_", inheritanceContainer[inheritanceStyle], "_", stylesForOtherPop[otherPopStyle], "_background.png")))
 
-
-
-  # if(!(dir.exists(singlesFolder))) {dir.create(singlesFolder)}
-
-#   if(
-#     curstartPattern == 2
-#   ) {
-    
-#     # return(image_write(image_append(image_1, image_2)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
-#     # thing <- image_append(image_1, image_2), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern])
-#     thing <- image_append(c(image_1, image_2))
-#     # image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
-#   } else {
-#     image_1 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_1_", PopBias, ".png")))
-#     image_2 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_2_", PopBias, ".png")))
-#     image_3 <- image_read(file.path(singlesFolder, paste0(SxMtPopContainer[metricsSexPop], "_slice_3_", PopBias, ".png")))
-#     # return(image_write(mult_ImgAppend(image_1, image_2, image_3)), path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern]))
-#     thing <- mult_ImgAppend(image_1, image_2, image_3)
-#     # image_write(thing, path = file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], paste0(SxMtPopContainer[metricsSexPop], ".png")))
-#   }
   return(print("done"))
 }
+for (k in 1:2) {
+    thing <- c(3, 11)
 
-for (i in 1:4) {
-    for (j in 1:2) {
-        CombineSingles(3,3,i,j)
+
+    for (i in 1:4) {
+        for (j in 1:2) {
+            CombineEditSingles(thing[k],3,i,j, T)
+        }
     }
 }
-
 stackMultiples <- function (
   inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")
   pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
