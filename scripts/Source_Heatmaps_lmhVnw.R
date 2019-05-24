@@ -53,8 +53,8 @@ all_the_runs <- extractVarDirs(heatmapLand,
   # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
   # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
   # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
-  # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
-  "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
+  "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
+  # "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
   # "*_305[4-9]_|*_30[6][0-9]_|*_307[0-1]")      # mixinh popsplit lmh
   # "*_307[2-9]_")      # mixinh popsplit nw
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
@@ -287,7 +287,14 @@ IndividualFigures <- function (
     YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
     YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
     YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
-    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20"))
+    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")), # 3-class YlOrRd
+    Greys = colorRampPalette(c("#f0f0f0", "#bdbdbd", "#636363"))#, # 3-class Greys
+    # Reds = #fee0d2, #fc9272, #de2d26
+    # Purples = #efedf5, #bcbddc, #756bb1
+    # Oranges = #fee6ce, #fdae6b, #e6550d
+    # Greens = #e5f5e0, #a1d99b, #31a354
+    # Blues = #deebf7, #9ecae1, #3182bd
+
   )
 
   regularNames <- c(
@@ -396,7 +403,7 @@ IndividualFigures <- function (
               dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
               SxMtPop
             ])),
-            col = colorSeqMultPalette$YlOrBr(100),
+            col = colorSeqMultPalette$Greys(100),
             axes = F, 
             xlab = findXLab, 
             ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
