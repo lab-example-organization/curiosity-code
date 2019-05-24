@@ -1,5 +1,7 @@
 library(magick)
-source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_AssignMultVar_BinaryMode.R")
+
+source("scripts/Source_AssignMultVar_BinaryMode.R")
+source("scripts/Source_Magick_Functions.R")
 
 setwd("/home/parker/Downloads/")
 whatever <- getwd()
