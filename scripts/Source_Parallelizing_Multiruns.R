@@ -71,7 +71,7 @@ source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
 shifting_curstart <- 1:441
-paramsFile <- c("unfinishedCurInhDist.yaml")
+paramsFile <- c("HghResLMHSmSxLB.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
@@ -83,4 +83,9 @@ mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = sim
 #   shifting_curstart <- 1
 #   multi_runs(shifting_curstart = shifting_curstart, paramsSource = paramsFile)
 # })
+
+# print("stuff")
+
+
+
 
