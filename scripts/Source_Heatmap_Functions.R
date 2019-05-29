@@ -275,16 +275,30 @@ makeHeatmapFile <- function (
 
       dir.create(file.path("results", folderName))}
       
-    if(!(file.exists(file.path(
-      "results", folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
-      "inh_", whichBias[diffcurstartBias], "Bias_", SpecFigTypeLmhNw, ".RData")
-            )))) {
+    if (specialFigs) {
+      if(!(file.exists(file.path(
+        "results", folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
+        "inh_", whichBias[diffcurstartBias], "Bias_", SpecFigTypeLmhNw, ".RData")
+      )))) {
       
       saveRDS(heatmap_array, file.path(
-      "results",folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
-      "inh_", whichBias[diffcurstartBias], "Bias_", SpecFigTypeLmhNw, ".RData")
+        "results",folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
+        "inh_", whichBias[diffcurstartBias], "Bias_", SpecFigTypeLmhNw, ".RData")
 
-    ))}
+      ))}
+    } else {
+      if(!(file.exists(file.path(
+        "results", folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
+        "inh_", whichBias[diffcurstartBias], "Bias.RData")
+      )))) {
+      
+      saveRDS(heatmap_array, file.path(
+        "results",folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
+        "inh_", whichBias[diffcurstartBias], "Bias.RData")
+
+      ))}
+    }
+    
     # for (subset in 1:5) {
     #   dir.create(file.path("results", folderName, paste0("slice_", subset)))
     # }

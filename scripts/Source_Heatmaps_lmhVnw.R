@@ -31,7 +31,19 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapLand <- file.path("results", "Heatmaps", "maleInh_maleBias")
 # heatmapLand <- file.path("results", "Heatmaps", "femInh_maleBias")
 # heatmapLand <- file.path("results", "Heatmaps", "femInh_femBias")
-heatmapLand <- file.path("results")
+# heatmapLand <- file.path("results")
+# heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+#                          "results", "mixCI_10m-90f")
+# heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+#                          "results", "mixCI_25m-75f")
+# heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+#                          "results", "mixCI_40m-60f")
+# heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+#                          "results", "mixCI_60m-40f")
+# heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+#                          "results", "mixCI_75m-25f")
+heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+                         "results", "mixCI_90m-10f")
 
 # heatmapLand <- file.path("results", "Heatmaps")
 
@@ -53,7 +65,15 @@ all_the_runs <- extractVarDirs(heatmapLand,
   # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
   # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
   # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
-  "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
+  
+  # "*_253[2-9]_|*_25[4-9][0-9]_|*_26[0-9][0-9]_|*_27[0-6][0-9]_|*_277[0-9]_")      # mixCI_10m-90f
+  # "*_228[4-9]_|*_229[0-9]_|*_23[0-9][0-9]_|*_24[0-9][0-9]_|*_25[0-2][0-9]_|*_253[0-1]_")      # mixCI_25m-75f
+  # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_")      # mixCI_40m-60f
+  # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_")      # mixCI_60m-40f
+  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_")      # mixCI_75m-25f
+  "*_27[8-9][0-9]_|*_28[0-9][0-9]_|*_29[0-9][0-9]_|*_30[0-1][0-9]_|*_302[0-7]_")      # mixCI_90m-10f
+  
+  # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
   # "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
   # "*_305[4-9]_|*_30[6][0-9]_|*_307[0-1]")      # mixinh popsplit lmh
   # "*_307[2-9]_")      # mixinh popsplit nw
@@ -61,7 +81,278 @@ all_the_runs <- extractVarDirs(heatmapLand,
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
 
+# # sTnNinh
+# norm1 <- all_the_runs[1:65]  #421-432
+# norm2 <- all_the_runs[66:80] #434-458
+# norm3 <- all_the_runs[81:95] #460-474
+# norm4 <- all_the_runs[96:110] #476-490
+# norm5 <- all_the_runs[111:125] #492-506
+# norm6 <- all_the_runs[126:140] #508-516
+# norm7 <- all_the_runs[141:155] #517-545
+# norm8 <- all_the_runs[156:170] #517-545
+# norm9 <- all_the_runs[171:185] #517-545
+# norm10 <- all_the_runs[186:200] #517-545
+# norm11 <- all_the_runs[201:215] #517-545
+# norm12 <- all_the_runs[216:230] #517-545
+# norm13 <- all_the_runs[231:236] #517-545
+# # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# all_the_runs <- c(norm1, all_the_runs[237], 
+#                   norm2, all_the_runs[238], 
+#                   norm3, all_the_runs[239], 
+#                   norm4, all_the_runs[240], 
+#                   norm5, all_the_runs[241], 
+#                   norm6, all_the_runs[242], 
+#                   norm7, all_the_runs[243], 
+#                   norm8, all_the_runs[244], 
+#                   norm9, all_the_runs[245], 
+#                   norm10, all_the_runs[246], 
+#                   norm11, all_the_runs[247], 
+#                   norm12, all_the_runs[248], 
+#                   norm13
+#                   )
 
+# # sTfSinh
+# norm1 <- all_the_runs[1:63]  #421-432
+# norm2 <- all_the_runs[64:78] #434-458
+# norm3 <- all_the_runs[79:93] #460-474
+# norm4 <- all_the_runs[94:108] #476-490
+# norm5 <- all_the_runs[109:123] #492-506
+# norm6 <- all_the_runs[124:138] #508-516
+# norm7 <- all_the_runs[139:153] #517-545
+# norm8 <- all_the_runs[154:168] #517-545
+# norm9 <- all_the_runs[169:176] #517-545
+# norm10 <- all_the_runs[177:182] #517-545
+# norm11 <- all_the_runs[183:190] #517-545
+# norm12 <- all_the_runs[191:196] #517-545
+# norm13 <- all_the_runs[197:204] #517-545
+# norm14 <- all_the_runs[205:210] #517-545
+# norm15 <- all_the_runs[211:218] #517-545
+# norm16 <- all_the_runs[219:222] #517-545
+# norm17 <- all_the_runs[224:231] #517-545
+# # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# all_the_runs <- c(norm1, all_the_runs[232], 
+#                   norm2, all_the_runs[233], 
+#                   norm3, all_the_runs[234], 
+#                   norm4, all_the_runs[235], 
+#                   norm5, all_the_runs[236], 
+#                   norm6, all_the_runs[237], 
+#                   norm7, all_the_runs[238], 
+#                   norm8, all_the_runs[239], 
+#                   norm9, all_the_runs[240], 
+#                   norm10,all_the_runs[241],  
+#                   norm11, all_the_runs[242], 
+#                   norm12, all_the_runs[243], 
+#                   norm13, all_the_runs[244], 
+#                   norm14, all_the_runs[245], 
+#                   norm15, all_the_runs[246], 
+#                   norm16, all_the_runs[247], 
+#                   all_the_runs[223], all_the_runs[248], 
+#                   norm17
+#                   )
+
+# # sFrSinh
+# norm1 <- all_the_runs[1:53] 
+# norm2 <- all_the_runs[54:68]
+# norm3 <- all_the_runs[69:83]
+# norm4 <- all_the_runs[84:98]
+# norm5 <- all_the_runs[99:113]
+# norm6 <- all_the_runs[114:128]
+# norm7 <- all_the_runs[129:143]
+# norm8 <- all_the_runs[144:158]
+# norm9 <- all_the_runs[159:173]
+# norm10 <- all_the_runs[174:176]
+# norm11 <- all_the_runs[177:187]
+# norm12 <- all_the_runs[188:190]
+# norm13 <- all_the_runs[191:201]
+# norm14 <- all_the_runs[202:204]
+# norm15 <- all_the_runs[205:215]
+# norm16 <- all_the_runs[216:218]
+# norm17 <- all_the_runs[219:228]
+# #92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# all_the_runs <- c(norm1, all_the_runs[231], 
+#                   norm2, all_the_runs[232], 
+#                   norm3, all_the_runs[233], 
+#                   norm4, all_the_runs[234], 
+#                   norm5, all_the_runs[235], 
+#                   norm6, all_the_runs[236], 
+#                   norm7, all_the_runs[237], 
+#                   norm8, all_the_runs[238], 
+#                   norm9, all_the_runs[239], 
+#                   norm10,all_the_runs[240],  
+#                   norm11, all_the_runs[241], 
+#                   norm12, all_the_runs[242], 
+#                   norm13, all_the_runs[243], 
+#                   norm14, all_the_runs[244], 
+#                   norm15, all_the_runs[245], 
+#                   norm16,
+#                   all_the_runs[246], all_the_runs[247],
+#                   norm17, all_the_runs[248],
+#                   all_the_runs[229], all_the_runs[230]
+#                   )
+
+# sSFrinh
+# norm1 <- all_the_runs[1:61] 
+# norm2 <- all_the_runs[63:75]
+# norm3 <- all_the_runs[77:89]
+# norm4 <- all_the_runs[91:103]
+# norm5 <- all_the_runs[105:117]
+# norm6 <- all_the_runs[119:131]
+# norm7 <- all_the_runs[133:145]
+# norm8 <- all_the_runs[147:159]
+# norm9 <- all_the_runs[161:168]
+# norm10 <- all_the_runs[173:180]
+# norm11 <- all_the_runs[185:192]
+# norm12 <- all_the_runs[197:204]
+# norm13 <- all_the_runs[205:206]
+# norm14 <- all_the_runs[209:216]
+# # norm15 <- all_the_runs[205:215]
+# # norm16 <- all_the_runs[216:218]
+# # norm17 <- all_the_runs[219:228]
+# #92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# all_the_runs <- c(norm1, all_the_runs[217], all_the_runs[62], all_the_runs[247],
+#                   norm2, all_the_runs[218], all_the_runs[76], all_the_runs[219],
+#                   norm3, all_the_runs[220], all_the_runs[90], all_the_runs[221],
+#                   norm4, all_the_runs[222], all_the_runs[104], all_the_runs[223],
+#                   norm5, all_the_runs[224], all_the_runs[118], all_the_runs[225],
+#                   norm6, all_the_runs[226], all_the_runs[132], all_the_runs[227],
+#                   norm7, all_the_runs[228], all_the_runs[146], all_the_runs[229],
+#                   norm8, all_the_runs[230], all_the_runs[160], all_the_runs[231],
+#                   norm9, all_the_runs[232], all_the_runs[169], all_the_runs[170], 
+#                   all_the_runs[248], all_the_runs[171], all_the_runs[233], 
+#                   all_the_runs[172], all_the_runs[234], norm10, 
+#                   all_the_runs[235], all_the_runs[181], all_the_runs[182], 
+#                   all_the_runs[236], all_the_runs[183], all_the_runs[237], 
+#                   all_the_runs[184], all_the_runs[238], norm11, 
+#                   all_the_runs[239], all_the_runs[193], all_the_runs[194], 
+#                   all_the_runs[240], all_the_runs[195], all_the_runs[241], 
+#                   all_the_runs[196], all_the_runs[242], norm12, 
+#                   all_the_runs[243], norm13, all_the_runs[244], 
+#                   all_the_runs[207], all_the_runs[245], all_the_runs[208], 
+#                   all_the_runs[246], norm14
+#                   )
+
+# # sSTfinh
+# norm1 <- all_the_runs[1:52] 
+# norm2 <- all_the_runs[53:60]
+# norm3 <- all_the_runs[61:64]
+# norm4 <- all_the_runs[65:72]
+# norm5 <- all_the_runs[73:76]
+# norm6 <- all_the_runs[77:84]
+# norm7 <- all_the_runs[85:88]
+# norm8 <- all_the_runs[90:95]
+# norm9 <- all_the_runs[96:99]
+# norm10 <- all_the_runs[101:106]
+# norm11 <- all_the_runs[107:110]
+# norm12 <- all_the_runs[112:117]
+# norm13 <- all_the_runs[118:121]
+# norm14 <- all_the_runs[123:128]
+# norm15 <- all_the_runs[129:132]
+# norm16 <- all_the_runs[134:139]
+# norm17 <- all_the_runs[140:143]
+# norm18 <- all_the_runs[145:146]
+# norm19 <- all_the_runs[148:151]
+# norm20 <- all_the_runs[153:154]
+# norm21 <- all_the_runs[156:159]
+# norm22 <- all_the_runs[161:162]
+# norm23 <- all_the_runs[164:167]
+# norm24 <- all_the_runs[169:170]
+# norm25 <- all_the_runs[172:175]
+# #92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+# all_the_runs <- c(norm1, all_the_runs[178], norm2, all_the_runs[179], all_the_runs[243], all_the_runs[180],
+#                   norm3, all_the_runs[181], norm4, all_the_runs[182], all_the_runs[183], all_the_runs[184],
+#                   norm5, all_the_runs[185], norm6, all_the_runs[186], all_the_runs[187], all_the_runs[188],
+#                   norm7, all_the_runs[189], all_the_runs[89], all_the_runs[190],
+#                   norm8, all_the_runs[191], all_the_runs[192], all_the_runs[193],
+#                   norm9, all_the_runs[194], all_the_runs[100], all_the_runs[248], 
+#                   norm10, all_the_runs[195], all_the_runs[196], all_the_runs[197], 
+#                   norm11, all_the_runs[198], all_the_runs[111], all_the_runs[199], 
+#                   norm12, all_the_runs[200], all_the_runs[201], all_the_runs[202],
+#                   norm13, all_the_runs[203], all_the_runs[122], all_the_runs[204],
+#                   norm14, all_the_runs[205], all_the_runs[206], all_the_runs[207],
+#                   norm15, all_the_runs[208], all_the_runs[133], all_the_runs[209],
+#                   norm16, all_the_runs[244], all_the_runs[210], all_the_runs[211],
+#                   norm17, all_the_runs[212], all_the_runs[144], all_the_runs[213], 
+#                   norm18, all_the_runs[214], all_the_runs[242], all_the_runs[215], 
+#                   all_the_runs[147], all_the_runs[216], all_the_runs[217], all_the_runs[218],
+#                   norm19, all_the_runs[219], all_the_runs[152], all_the_runs[220], norm20,
+#                   all_the_runs[221], all_the_runs[222], all_the_runs[223], all_the_runs[155], all_the_runs[245], all_the_runs[224], all_the_runs[225],
+#                   norm21, all_the_runs[226], all_the_runs[160], all_the_runs[227],
+#                   norm22, all_the_runs[228], all_the_runs[246], all_the_runs[229], all_the_runs[163], all_the_runs[230], all_the_runs[231],
+#                   all_the_runs[232], norm23, all_the_runs[233], all_the_runs[168], all_the_runs[234], norm24,
+#                   all_the_runs[235], all_the_runs[236], all_the_runs[237], all_the_runs[171], all_the_runs[247], all_the_runs[238], all_the_runs[239],
+#                   norm25, all_the_runs[240], all_the_runs[176], all_the_runs[241], all_the_runs[177]
+#                   )
+
+# sNTninh
+norm1 <- all_the_runs[1:2]
+norm1_5 <- all_the_runs[3:17] 
+norm2 <- all_the_runs[18:25]
+norm2_5 <- all_the_runs[26:31]
+norm3 <- all_the_runs[32:39]
+norm4 <- all_the_runs[40:45]
+norm5 <- all_the_runs[47:52]
+norm5_5 <- all_the_runs[53:56]
+norm6 <- all_the_runs[59:63]
+norm7 <- all_the_runs[64:67]
+norm8 <- all_the_runs[70:74]
+norm9 <- all_the_runs[75:78]
+norm10 <- all_the_runs[81:84]
+norm11 <- all_the_runs[85:88]
+norm12 <- all_the_runs[91:94]
+norm13 <- all_the_runs[95:98]
+norm14 <- all_the_runs[101:104]
+norm14_5 <- all_the_runs[105:108]
+norm15 <- all_the_runs[111:114]
+norm16 <- all_the_runs[115:118]
+norm17 <- all_the_runs[121:124]
+norm18 <- all_the_runs[125:128]
+norm19 <- all_the_runs[133:136]
+norm20 <- all_the_runs[141:144]
+norm21 <- all_the_runs[149:152]
+norm22 <- all_the_runs[157:160]
+# norm23 <- all_the_runs[164:167]
+# norm24 <- all_the_runs[169:170]
+# norm25 <- all_the_runs[172:175]
+#92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
+all_the_runs <- c(
+  norm1, all_the_runs[233], norm1_5, all_the_runs[164], 
+  norm2, all_the_runs[231], norm2_5, all_the_runs[165], 
+  norm3, all_the_runs[166], norm4, all_the_runs[167], 
+  all_the_runs[46], all_the_runs[168], norm5, all_the_runs[169], 
+  norm5_5, all_the_runs[170], all_the_runs[57], all_the_runs[171], 
+  all_the_runs[58], all_the_runs[172], all_the_runs[173], norm6, 
+  all_the_runs[174], norm7, all_the_runs[175], all_the_runs[68], 
+  all_the_runs[176], all_the_runs[69], all_the_runs[177], 
+  all_the_runs[234], norm8, all_the_runs[178], norm9,
+  all_the_runs[235], all_the_runs[79], all_the_runs[179],
+  all_the_runs[80], all_the_runs[180], all_the_runs[181], all_the_runs[236], 
+  norm10, all_the_runs[182], norm11, all_the_runs[183],
+  all_the_runs[89], all_the_runs[184], all_the_runs[90], all_the_runs[185], 
+  all_the_runs[186], all_the_runs[187], norm12, all_the_runs[188], 
+  norm13, all_the_runs[189], all_the_runs[99], all_the_runs[190],
+  all_the_runs[100], all_the_runs[237], all_the_runs[191], all_the_runs[238], 
+  norm14, all_the_runs[192],
+  norm14_5, all_the_runs[193], all_the_runs[109], all_the_runs[194],
+  all_the_runs[110], all_the_runs[239], all_the_runs[195], all_the_runs[196],
+  norm15, all_the_runs[197], norm16, all_the_runs[198], 
+  all_the_runs[119], all_the_runs[199], all_the_runs[120], all_the_runs[200], 
+  all_the_runs[201], all_the_runs[202], norm17, all_the_runs[203],
+  norm18, all_the_runs[240], all_the_runs[129], all_the_runs[204],
+  all_the_runs[130], all_the_runs[241],
+  all_the_runs[205], all_the_runs[206], all_the_runs[131],
+  all_the_runs[232], all_the_runs[242], all_the_runs[132], all_the_runs[207],
+  norm19, all_the_runs[208], all_the_runs[137],
+  all_the_runs[209], all_the_runs[138], all_the_runs[210], all_the_runs[211], 
+  all_the_runs[212], all_the_runs[139], all_the_runs[213], all_the_runs[214], all_the_runs[140], 
+  all_the_runs[215], norm20, all_the_runs[248], all_the_runs[145],
+  all_the_runs[216], all_the_runs[146], all_the_runs[243],
+  all_the_runs[217], all_the_runs[218], all_the_runs[147], all_the_runs[244], all_the_runs[245], all_the_runs[148], all_the_runs[219], 
+  norm21, all_the_runs[220], all_the_runs[153],                  
+  all_the_runs[221], all_the_runs[154], all_the_runs[222], all_the_runs[223], all_the_runs[224], all_the_runs[155],                  
+  all_the_runs[225], all_the_runs[226], all_the_runs[156], all_the_runs[227],                   
+  norm22, all_the_runs[246], all_the_runs[161], all_the_runs[228], all_the_runs[162],
+  all_the_runs[247], all_the_runs[229], all_the_runs[230], all_the_runs[163]
+)
 
 
 # stuff <- vector("character", length(all_the_runs))
@@ -124,15 +415,37 @@ all_the_runs <- extractVarDirs(heatmapLand,
 # })
 
 
+all_the_MaleRuns <- c(all_the_runs[1:124], all_the_runs[248])
+all_the_FemaleRuns <- c(all_the_runs[1], all_the_runs[125:248])
 
+# extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
+# all_the_names <- remakeString(all_the_runs, "_", ".")
 
+# names(extractedMeans) <- all_the_names
 
-# extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
-extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
+extractedFemaleMeans <- extractMeans(allRunDirs = all_the_FemaleRuns, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
+# all_the_names <- remakeString(all_the_FemaleRuns, "_", ".")
+# names(extractedFemaleMeans) <- all_the_names
+makeHeatmapFile(inheritance = 5, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedFemaleMeans)
+# makeHeatmapFile(inheritance = 9, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 8, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 7, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 6, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 5, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 
-all_the_names <- remakeString(all_the_runs, "_", ".")
+# names(extractedMeans) <- all_the_names
 
-names(extractedMeans) <- all_the_names
+extractedMaleMeans <- extractMeans(allRunDirs = all_the_MaleRuns, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
+# all_the_names <- remakeString(all_the_MaleRuns, "_", ".")
+# names(extractedMaleMeans) <- all_the_names
+makeHeatmapFile(inheritance = 5, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMaleMeans)
+# makeHeatmapFile(inheritance = 9, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 8, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 7, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 6, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 5, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+
+# names(extractedMaleMeans) <- all_the_names
 
 
 # heatmapLand
@@ -147,7 +460,9 @@ names(extractedMeans) <- all_the_names
 # whichBias <- c("male","female")
 
 # makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
-makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+makeHeatmapFile(inheritance = 10, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+
 # makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
 # makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 # makeHeatmaps(inheritance = 1, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
