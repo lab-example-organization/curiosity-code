@@ -830,12 +830,12 @@ for (inhPattern in 1:4) {
 
 #     for (SxMtPop in 1:8) {
 #       for (slice in 1:5) {
-#         dat_array_doh <- array(c(
-#           rep(c(slice, 1, 1, 1), 2),
-#           slice, 
-#           slice, 
-#           rep(c(5, 5, 5, slice), 2)
-#         ), c(3,3,2))
+        # dat_array_doh <- array(c(
+        #   rep(c(slice, 1, 1, 1), 2),
+        #   slice, 
+        #   slice, 
+        #   rep(c(5, 5, 5, slice), 2)
+        # ), c(3,3,2))
         
 #         heatmapRangeDatasetOne <- tempHtMpArray[
 #           dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
