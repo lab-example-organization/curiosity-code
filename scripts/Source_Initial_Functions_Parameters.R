@@ -2,7 +2,7 @@
 rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
   zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
                             0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
-                             0.8,0.85,0.9,0.95,0.99,1.0)
+                             0.8,0.85,0.9,0.95,0.99,1.0,0.09,0.18,0.27,0.36,0.45,0.54,0.63,0.72,0.81)
   if(number_repeats %% divisions_per_repeat != 0) {
     stop("first element must be divisible by the second element")}
   if(!(value_entered %in% c(1 : length(zero_to_one_template)))) {
@@ -38,12 +38,24 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   #new.curiosity <- array(0,c(2,num_pop))
   curiositybreaks <- (0 : (num_pop * one_pop_singers[1])) * (1 / (num_pop * one_pop_singers[1]))
   curiosity_counter <- matrix(data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = F)
-  zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
-  #                           #1,  #2,  #3, #4,  #5, #6,  #7, #8,  #9,#10,
-                            0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
-  #                          #11, #12,#13, #14, #15, #16,#17, #18,#19, #20,
-                             0.8,0.85,0.9,0.95,0.99,1.0)
-  #                          #21, #22,#23, #24, #25,#26
+  # zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
+  # #                           #1,  #2,  #3, #4,  #5, #6,  #7, #8,  #9,#10,
+  #                           0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
+  # #                          #11, #12,#13, #14, #15, #16,#17, #18,#19, #20,
+  #                            0.8,0.85,0.9,0.95,0.99,1.0,0.09,0.18,0.27,0.36,
+  # #                          #21, #22,#23, #24, #25,#26, #27, #28, #29, #30,
+  #                            0.45,0.54,0.63,0.72,0.81)
+  # #                           #31, #32, #33, #34, #35
+  
+  zero_to_one_template <- c( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
+  #                            #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
+                              0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
+  #                           #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
+                             0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
+  #                           #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
+                              0.9,0.95,0.99,1.0)
+  #                           #31, #32, #33,#34
+  
   # Syllable probability distribution stuff; ends with reference matrix where each row defines a different pattern of syllable probability distributions
   if(num_pop == 1) {
     syllprob_vector <- c(
@@ -181,9 +193,10 @@ initialize.curiosity <- function(P, cur.min, cur.max, invasion = FALSE) {
     stop("cur.max and cur.min have to be the same length.")
   }
   for(i in 1:length(cur.min)) {
-    if(cur.max[i] <= cur.min[i] || 
-       cur.max[i] %% 1 != 0 || 
-       cur.min[i] %% 1 != 0) {
+    if(P$zero_to_one_template[cur.max[i]] <= P$zero_to_one_template[cur.min[i]] # || 
+      #  cur.max[i] %% 1 != 0 || 
+      #  cur.min[i] %% 1 != 0
+       ) {
       stop("maximum value needs to be bigger than minimum value. 
             They need to be integers too - these are reference 
             calls to zero_to_one_template- check out the values")
