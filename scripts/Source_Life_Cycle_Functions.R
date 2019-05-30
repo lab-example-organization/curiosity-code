@@ -392,7 +392,7 @@ sing.selection <- function(parameters, tempMoran,
             if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
               singer <- golf_score[singer+neighbor]
               
-              moran = update_selexn_data(parameters, moran, selection.index, singer, selector.index, curiosity_level, 
+              tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
                                          population, select_type, selection.sylreps, selector.sylrep, 
                                          chance_for_selection, F)
               should_continue <- FALSE
