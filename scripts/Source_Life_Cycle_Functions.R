@@ -372,7 +372,7 @@ sing.selection <- function(parameters, tempMoran,
             if(should_pick_neighbor(neighbor, num_select_chances, select_type,
                                     chance_for_selection, golf_score,
                                     singSuccessFilter, singer, lower=0.5,
-                                    upper=0.75)) {
+                                    upper=0.75) == TRUE) {
               singer <- golf_score[singer+neighbor]
               
               tempMoran = update_selexn_data(
@@ -389,7 +389,7 @@ sing.selection <- function(parameters, tempMoran,
         
         if(should_continue) {
           for(neighbor in c(1, -1, 2, -2)) {
-            if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75)) {
+            if(should_pick_neighbor(neighbor,num_select_chances,select_type,chance_for_selection,golf_score,singSuccessFilter,singer,lower=0.75) == TRUE) {
               singer <- golf_score[singer+neighbor]
               
               tempMoran = update_selexn_data(parameters, tempMoran, selection.index, singer, selector.index, curiosity_level, 
