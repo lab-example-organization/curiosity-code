@@ -258,8 +258,9 @@ life_cycle <- function(
                                   randlearn_context = 2, 
                                   verbose = F) 
         
-        curiosity_level <- recuriosity.offspring(parameters = simParams, objectMoran = moranObjects, 
-                            curiosity_object = curiosity_level)
+        curiosity_level <- recuriosity.offspring(parameters = simParams, 
+                                            objectMoran = moranObjects, 
+                                            curiosity_object = curiosity_level)
         
         sylreps <- resylreps.offspring(parameters = simParams, 
                                        moranObjectTemp = moranObjects,
