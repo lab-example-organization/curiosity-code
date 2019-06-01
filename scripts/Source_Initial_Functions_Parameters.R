@@ -81,7 +81,7 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   }
    
   population_syll_probs <- matrix(data = syllprob_vector,
-                                  nrow = length(syllprob_vector) / sylnum, #number of rows to complement the number of combinations I've come up with; so if I come up with more, fix it doofus.
+                                  nrow = length(syllprob_vector) / sylnum, #number of rows to complement the number of combinations I've come up with; so if I come up with more, fix it.
                                   ncol = sylnum,
                                   byrow = TRUE
   )
