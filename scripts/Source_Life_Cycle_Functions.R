@@ -254,7 +254,7 @@ sing.selection <- function(parameters, tempMoran,
             tempMoran = update_selexn_data(
               parameters, tempMoran, auto.teachers[1,], MTsylrep_filter, 
               auto.teachers[2,MTsylrep_filter], curiosity_level, population, 
-              select_type, sylrep_object[auto.teachers[1,],,], 
+              select_type, sylrep_object[auto.teachers[1,],,population], 
               sylrep_object[auto.teachers[2,MTsylrep_filter],,population], 
               num_select_chances[select_type], T)
             
