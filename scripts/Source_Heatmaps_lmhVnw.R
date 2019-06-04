@@ -496,7 +496,7 @@ for (
   for (
     sexBIAS in 1:8
   ) {
-    CombineEditSingles(10, 1, sexBIAS, 3, T, F)
+    CombineEditSingles(inhREtnce[thing], 1, sexBIAS, 3, T, F)
   }
 }
 
