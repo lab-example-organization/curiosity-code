@@ -141,21 +141,21 @@ make.offspring.calls <- function(parameters, temporMan){
 update_selexn_data <- function(
   main_parameters, temping, suitor_choices, preferred_bird, selector_bird,
   curiosity_value, selector_population, selection_context, 
-  sylreps_choices, sylrep_selector, selection_count, giving_up = FALSE) {
+  sylreps_choices, sylrep_selector, selection_count){#}), giving_up = FALSE) {
 
   selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
                        selector_bird)          # Bird doing the selecting
 
-  if(!(giving_up)) {
+  #if(!(giving_up)) {
     singer_population <- ceiling(
     preferred_bird/main_parameters$one_pop_singers[selection_context])
     
     sylrep_pairs <- rbind(sylreps_choices[preferred_bird,], sylrep_selector)
-  } else {
-    singer_population <- selector_population 
+  #}# else {
+  #   singer_population <- selector_population 
     
-    sylrep_pairs <- rbind(sylreps_choices[preferred_bird,], sylrep_selector)
-  } # This happens if giving_up == TRUE. Not ideal for tutor selection, 
+  #   sylrep_pairs <- rbind(sylreps_choices[preferred_bird,], sylrep_selector)
+  # } # This happens if giving_up == TRUE. Not ideal for tutor selection, 
     # but I guess that's the point of giving up... also, this should 
     # basically NEVER happen for tutor context anyway.
 
@@ -191,15 +191,21 @@ update_selexn_data <- function(
 }
 
 should_pick_neighbor <- function(index,total_chances,selection_context,
-                                 current_chance, sorted_selections,
-                                 selection_filter,preferred_bird,
-                                 lower=0,upper=Inf) {
+                                 current_chance, sortSimlr,
+                                 repBarrier,chosenBird,
+                                 lower=0,upper=1) {
+  stuff = FALSE
   lower_bound <- round(total_chances[selection_context] * lower) # 50
+  
   upper_bound <- round(total_chances[selection_context] * upper) # 75
-  is_desperate <- between(current_chance, lower_bound, upper_bound) # 
-  is_neighbor_better <- sorted_selections[
-    preferred_bird+index] %in% selection_filter
-  return((is_desperate == TRUE) && (is_neighbor_better == TRUE))
+  
+  # is_desperate <- between(current_chance, lower_bound, upper_bound) # 
+  
+  # is_neighbor_better <- sortSimlr[chosenBird+index] %in% repBarrier
+  
+  stuff <- between(current_chance, lower_bound, upper_bound) == TRUE && (sortSimlr[chosenBird+index] %in% repBarrier) == TRUE
+  
+  return(stuff)
 }
 
 score_similarity <- function(suitor_vector, selector_vector) {
@@ -256,7 +262,7 @@ sing.selection <- function(parameters, tempMoran,
               auto.teachers[2,MTsylrep_filter], curiosity_level, population, 
               select_type, sylrep_object[auto.teachers[1,],,population], 
               sylrep_object[auto.teachers[2,MTsylrep_filter],,population], 
-              num_select_chances[select_type], T)
+              num_select_chances[select_type])#, T)
             
             # if(MTsylrep_filter >= 1) {}
             stop = TRUE
@@ -360,7 +366,7 @@ sing.selection <- function(parameters, tempMoran,
             parameters, tempMoran, selection.index, singer, 
             selector.index, curiosity_level, population, 
             select_type, selection.sylreps, selector.sylrep, 
-            chance_for_selection, F)
+            chance_for_selection)#, F)
           
           should_continue <- FALSE
         }
@@ -371,16 +377,16 @@ sing.selection <- function(parameters, tempMoran,
         #                             singSuccessFilter, singer, lower=0.5,
         #                             upper=0.75)
 
-        if(should_continue) {
+        if(should_continue == TRUE) {
           for(neighbor in c(1, -1)) {
-            if(should_pick_neighbor(
+            jeff <- should_pick_neighbor(
               index = neighbor, total_chances = num_select_chances, 
               selection_context = select_type, 
               current_chance = chance_for_selection, 
-              sorted_selections = golf_score,
-              selection_filter = singSuccessFilter, preferred_bird = singer, 
-              lower=0.5, upper=0.75) == TRUE) 
-            {
+              sortSimlr = golf_score,
+              repBarrier = singSuccessFilter, chosenBird = singer, 
+              lower=0.5, upper=0.75) 
+            if (jeff == TRUE) {
 
               singer <- golf_score[singer+neighbor]
               
@@ -388,7 +394,7 @@ sing.selection <- function(parameters, tempMoran,
                 parameters, tempMoran, selection.index, singer, 
                 selector.index, curiosity_level, population, 
                 select_type, selection.sylreps, selector.sylrep,
-                chance_for_selection, F)
+                chance_for_selection)#, F)
               
               should_continue <- FALSE
               break
@@ -396,19 +402,20 @@ sing.selection <- function(parameters, tempMoran,
           }
         }
         
-        if(should_continue) {
+        if(should_continue == TRUE) {
           for(neighbor in c(1, -1, 2, -2)) {
-            if(should_pick_neighbor(neighbor, num_select_chances, select_type,
+            jeff <- should_pick_neighbor(neighbor, num_select_chances, select_type,
                                     chance_for_selection, golf_score,
                                     singSuccessFilter, singer, lower=0.75
-                                    ) == TRUE) {
+                                    )
+            if (jeff == TRUE) {
               singer <- golf_score[singer+neighbor]
               
               tempMoran = update_selexn_data(
                 parameters, tempMoran, selection.index, singer, 
                 selector.index, curiosity_level, population, 
                 select_type, selection.sylreps, selector.sylrep, 
-                chance_for_selection, F)
+                chance_for_selection)#, F)
               should_continue <- FALSE
               break
             }
@@ -426,7 +433,7 @@ sing.selection <- function(parameters, tempMoran,
             parameters, tempMoran, selection.index, singer, 
             selector.index, curiosity_level, population, 
             select_type, selection.sylreps, selector.sylrep, 
-            chance_for_selection, F)
+            chance_for_selection)#, F)
           
           break
         }

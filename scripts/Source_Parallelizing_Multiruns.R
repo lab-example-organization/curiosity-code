@@ -70,8 +70,8 @@ n_cores <- 16
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:21
-paramsFile <- c("HghResLMHSmSxLBleftovers.yaml")
+shifting_curstart <- 1:89
+paramsFile <- c("HghResLMHSmSxHBleftovers.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
