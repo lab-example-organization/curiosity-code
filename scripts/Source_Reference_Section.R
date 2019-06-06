@@ -25,31 +25,32 @@ referenceSection <- function (referencing_script) {
     # A list of all the packages needed for this code to function:
     
     reference_list <- list(
-        "multirun",
-        "heatmaps",
-        "profiler",
-        "profvyaml",
-        "pfvSrrYml",
-        "profTest"#,
-        #"",
-        #"",
-        #"",
-        #"",
-        #"",
-        #"",
-        #"",
+        'multirun',
+        'heatmaps',
+        'profiler',
+        'profvyaml',
+        'pfvSrrYml',
+        'profTest'#,
+        #'',
+        #'',
+        #'',
+        #'',
+        #'',
+        #'',
+        #'',
         
     )
 
     package_list <- list(
-        multirun = c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp", "tidyr", "data.table"),
-        heatmaps = c("stringr", "yaml", "magick"),
-        profiler = c("doParallel", "abind", "stringr", "Hmisc", "yaml", "R.utils", "dplyr", "Rcpp", "tidyr", "data.table", "profvis"),
-        profvyaml = c("profvis", "yaml"),
-        pfvSrrYml = c("profvis", "stringr", "yaml"),
-        profTest = c("profvis")#,
+        multirun = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table'),
+        heatmaps = c('stringr', 'yaml', 'magick'),
+        profiler = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table', 'profvis'),
+        profvyaml = c('profvis', 'yaml'),
+        pfvSrrYml = c('profvis', 'stringr', 'yaml'),
+        profTest = c('profvis'),
+        testings = c('testthat', '')#,
         
-        #c("") #,
+        #c('') #,
         
     )
 
@@ -65,7 +66,7 @@ referenceSection <- function (referencing_script) {
     # library(yaml)
     # library(R.utils)
     # library(dplyr)
-    return (print("See You Space Cowhand"))
+    return (print('See You Space Cowhand'))
     # return (sessionInfo(package = NULL))
     
 }

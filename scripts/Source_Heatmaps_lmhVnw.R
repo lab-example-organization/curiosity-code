@@ -42,9 +42,10 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 #                          "results", "mixCI_60m-40f")
 # heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
 #                          "results", "mixCI_75m-25f")
-heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
-                         "results", "mixCI_90m-10f")
-
+# heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
+#                          "results", "mixCI_90m-10f")
+heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRSmSxLB")
+#190601_old_stuff/HRSmSxLB/
 # heatmapLand <- file.path("results", "Heatmaps")
 
 # all_the_runs <- list.files(heatmapLand, 
@@ -71,8 +72,10 @@ all_the_runs <- extractVarDirs(heatmapLand,
   # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_")      # mixCI_40m-60f
   # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_")      # mixCI_60m-40f
   # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_")      # mixCI_75m-25f
-  "*_27[8-9][0-9]_|*_28[0-9][0-9]_|*_29[0-9][0-9]_|*_30[0-1][0-9]_|*_302[0-7]_")      # mixCI_90m-10f
+  #"*_27[8-9][0-9]_|*_28[0-9][0-9]_|*_29[0-9][0-9]_|*_30[0-1][0-9]_|*_302[0-7]_")      # mixCI_90m-10f
   
+  "10k") # Carefully curated directory, contains all necessary runs and nothing else
+
   # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
   # "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
   # "*_305[4-9]_|*_30[6][0-9]_|*_307[0-1]")      # mixinh popsplit lmh
@@ -80,8 +83,8 @@ all_the_runs <- extractVarDirs(heatmapLand,
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
-
-thing <- sapply(1:248, function(x) str_split(all_the_runs[x], "_")[[1]][2])
+totalNumberOfRuns <- 100
+thing <- sapply(1:totalNumberOfRuns, function(x) str_split(all_the_runs[x], "_")[[1]][2])
 all_the_runs <- all_the_runs[str_order(thing)]
 
 # profvis({
@@ -92,35 +95,31 @@ all_the_runs <- all_the_runs[str_order(thing)]
 # })
 
 
-all_the_MaleRuns <- c(all_the_runs[1:124], all_the_runs[248])
-all_the_FemaleRuns <- c(all_the_runs[1], all_the_runs[125:248])
 
-# extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
-# all_the_names <- remakeString(all_the_runs, "_", ".")
 
-# names(extractedMeans) <- all_the_names
+extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
+all_the_names <- remakeString(all_the_runs, "_", ".")
 
-extractedFemaleMeans <- extractMeans(allRunDirs = all_the_FemaleRuns, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
-# all_the_names <- remakeString(all_the_FemaleRuns, "_", ".")
-# names(extractedFemaleMeans) <- all_the_names
-makeHeatmapFile(inheritance = 5, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedFemaleMeans)
-# makeHeatmapFile(inheritance = 9, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 8, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 7, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 6, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 5, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+names(extractedMeans) <- all_the_names
 
-# names(extractedMeans) <- all_the_names
+### SEPARATE SEXES (extractMeans)
 
-extractedMaleMeans <- extractMeans(allRunDirs = all_the_MaleRuns, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
-# all_the_names <- remakeString(all_the_MaleRuns, "_", ".")
-# names(extractedMaleMeans) <- all_the_names
-makeHeatmapFile(inheritance = 5, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMaleMeans)
-# makeHeatmapFile(inheritance = 9, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 8, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 7, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 6, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-# makeHeatmapFile(inheritance = 5, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# all_the_MaleRuns <- c(all_the_runs[1:124], all_the_runs[248])
+# all_the_FemaleRuns <- c(all_the_runs[1], all_the_runs[125:248])
+
+# extractedFemaleMeans <- extractMeans(allRunDirs = all_the_FemaleRuns, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
+# # all_the_names <- remakeString(all_the_FemaleRuns, "_", ".")
+# # names(extractedFemaleMeans) <- all_the_names
+# makeHeatmapFile(inheritance = 5, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedFemaleMeans)
+# ## inheritance went from 5 to 9
+
+# extractedMaleMeans <- extractMeans(allRunDirs = all_the_MaleRuns, dirHeatMap = heatmapLand, source_of_params = "params.yaml")
+# # all_the_names <- remakeString(all_the_MaleRuns, "_", ".")
+# # names(extractedMaleMeans) <- all_the_names
+# makeHeatmapFile(inheritance = 5, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMaleMeans)
+# ## inheritance went from 5 to 9
+
+### END OF SEPARATE SEXES
 
 # names(extractedMaleMeans) <- all_the_names
 
@@ -132,13 +131,13 @@ makeHeatmapFile(inheritance = 5, diffcurstartBias = 1, absolute = TRUE, specialF
 #   diffcurstartBias = 1
 # )
 
-#   whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
+# whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
 
-# whichBias <- c("male","female")
+# whichBias <- c("male","female", "pop1", "pop2", "both")
 
-# makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
-makeHeatmapFile(inheritance = 10, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, highRes = TRUE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 10, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
+# makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 
 # makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
 # makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = FALSE, extractedMeans = extractedMeans)
@@ -166,15 +165,18 @@ makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, special
 # thisBias = 1
 # numOtherPopRuns = 5
 
-thing <- c(5, 6, 7, 8, 9, 10)
-for (inhREtnce in 1:5) {
-  for (sexBIAS in 1:2) {
+# thing <- c(5, 6, 7, 8, 9, 10)
+# for (inhREtnce in 1:5) {
+#   for (sexBIAS in 1:2) {
     
-    IndividualFigures(10, 2, sexBIAS, 3)
+#     IndividualFigures(10, 2, sexBIAS, 3)
 
-  }
-}
+#   }
+# }
 
+##### ? WILL THIS WORK?
+IndividualFigures(3, 2, 3, 1)
+#####
 
 IndividualFigures <- function (
 

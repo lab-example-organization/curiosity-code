@@ -203,7 +203,8 @@ should_pick_neighbor <- function(index,total_chances,selection_context,
   
   # is_neighbor_better <- sortSimlr[chosenBird+index] %in% repBarrier
   
-  stuff <- between(current_chance, lower_bound, upper_bound) == TRUE && (sortSimlr[chosenBird+index] %in% repBarrier) == TRUE
+  stuff <- between(current_chance, lower_bound, upper_bound) == TRUE && 
+           (sortSimlr[chosenBird+index] %in% repBarrier) == TRUE
   
   return(stuff)
 }
@@ -345,9 +346,13 @@ sing.selection <- function(parameters, tempMoran,
       #               FUN = score_similarity,
       #               selector_vector = selector.sylrep))$ix
       
+      # Golf Score: orders selection of males according to 
+      # the value of their selection.sylreps[row] measured 
+      # against the selector.sylrep vector, according to score_similarity, 
+      # but spits out a vector of their indices within selection.sylreps and selection.index
       golf_score <- cpp_sort_indices(apply(X = selection.sylreps, MARGIN = 1,
-                               FUN = score_similarity,
-                               selector_vector = selector.sylrep))
+                          FUN = score_similarity,
+                          selector_vector = selector.sylrep))
       # orders the scored list of suitors; subsets one suitor from the rest,
       # according to the value of the selector's (auditory) curiosity.
       singer <- golf_score[round(curiosity_level[selector.index, population] *(

@@ -123,11 +123,12 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params, deeper = FALS
 makeHeatmapFile <- function (
   inheritance = 3,
   diffcurstartBias = 1,
-  absolute = FALSE,
+  absolute = TRUE,
   reDo = FALSE,
   hoominReadable = FALSE,
   specialFigs = FALSE,
   lmhVnw = TRUE,
+  highRes = FALSE,
   extractedMeans = extractedMeans
 ) {
 
@@ -156,8 +157,8 @@ makeHeatmapFile <- function (
     )
     
   } else {
-
-    folderName <- paste0(
+    if (!highRes) {
+      folderName <- paste0(
       str_sub(paste(str_extract_all(
         Sys.time(), "[0123456789]"
       )[[1]], collapse = ""), 3, 8),
@@ -167,80 +168,93 @@ makeHeatmapFile <- function (
       whichBias[diffcurstartBias],
       "Bias")
 
-    if (diffcurstartBias == 1) {
-      heatmap_array <- array(
-      0, dim = c(5,5,5,8), list(
-        c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), 
-        c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), 
-        c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), 
-        c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-      ))
-      longLenF <- 5
-    } else if (diffcurstartBias == 2) {
-      heatmap_array <- array(
-      0, dim = c(5,5,5,8), list(
-        c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
-        c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
-        c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
-        c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-      ))
-      longLenF <- 5
-    } else if (diffcurstartBias == 3) {
-      longLenF <- 2
-      if (specialFigs) {
-        if (lmhVnw) {
-          lenF = 3
-          heatmap_array <- array(
-            0, dim = c(3,3,2,8), list(
-              c("1-7mp1", "7-13mp1", "11-26mp1"), 
-              c("1-7fp1", "7-13fp1", "11-26fp1"), 
+      if (diffcurstartBias == 1) {
+        heatmap_array <- array(
+        0, dim = c(5,5,5,8), list(
+          c("1-7mp1", "7-13mp1", "11-26mp1", "1-26mp1", "11-15mp1"), 
+          c("1-7mp2", "7-13mp2", "11-26mp2", "1-26mp2", "11-15mp2"), 
+          c("1-7f", "7-13f", "11-26f", "1-26f", "11-15f"), 
+          c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+        ))
+        longLenF <- 5
+      } else if (diffcurstartBias == 2) {
+        heatmap_array <- array(
+        0, dim = c(5,5,5,8), list(
+          c("1-7fp1", "7-13fp1", "11-26fp1", "1-26fp1", "11-15fp1"), 
+          c("1-7fp2", "7-13fp2", "11-26fp2", "1-26fp2", "11-15fp2"), 
+          c("1-7m", "7-13m", "11-26m", "1-26m", "11-15m"), 
+          c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+        ))
+        longLenF <- 5
+      } else if (diffcurstartBias == 3) {
+        longLenF <- 2
+        if (specialFigs) {
+          if (lmhVnw) {
+            lenF = 3
+            heatmap_array <- array(
+              0, dim = c(3,3,2,8), list(
+                c("1-7mp1", "7-13mp1", "11-26mp1"), 
+                c("1-7fp1", "7-13fp1", "11-26fp1"), 
+                c("1-7p2", "11-26p2"), 
+                c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              )
+            )
+          } else {
+            lenF = 2
+            heatmap_array <- array(
+            0, dim = c(2,2,2,8), list(
+              c("1-26mp1", "11-15mp1"), 
+              c("1-26fp1", "11-15fp1"), 
               c("1-7p2", "11-26p2"), 
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-            )
-          )
-        } else {
-          lenF = 2
-          heatmap_array <- array(
-          0, dim = c(2,2,2,8), list(
-            c("1-26mp1", "11-15mp1"), 
-            c("1-26fp1", "11-15fp1"), 
-            c("1-7p2", "11-26p2"), 
-            c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-          ))
+            ))
+          }
         }
-      }
-    } else if (diffcurstartBias == 4) {
-      longLenF <- 2
-      if (specialFigs) {
-        if (lmhVnw) {
-          lenF = 3
-          heatmap_array <- array(
-            0, dim = c(2,3,3,8), list(
+      } else if (diffcurstartBias == 4) {
+        longLenF <- 2
+        if (specialFigs) {
+          if (lmhVnw) {
+            lenF = 3
+            heatmap_array <- array(
+              0, dim = c(2,3,3,8), list(
+                c("1-7p1", "11-26p1"), 
+                c("1-7mp2", "7-13mp2", "11-26mp2"), 
+                c("1-7fp2", "7-13fp2", "11-26fp2"), 
+                c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              )
+            )
+          } else {
+            lenF = 2
+            heatmap_array <- array(
+            0, dim = c(2,2,2,8), list(
               c("1-7p1", "11-26p1"), 
-              c("1-7mp2", "7-13mp2", "11-26mp2"), 
-              c("1-7fp2", "7-13fp2", "11-26fp2"), 
+              c("1-26mp2", "11-15mp2"), 
+              c("1-26fp2", "11-15fp2"), 
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-            )
-          )
-        } else {
-          lenF = 2
-          heatmap_array <- array(
-          0, dim = c(2,2,2,8), list(
-            c("1-7p1", "11-26p1"), 
-            c("1-26mp2", "11-15mp2"), 
-            c("1-26fp2", "11-15fp2"), 
-            c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-          ))
+            ))
+          }
         }
       }
+    } else {
+      lenF = 10
+      longLenF = 1
+      heatmap_array <- array(
+            0, dim = c(10,10,1,8), list(
+              c("1-7mp1", "4-10mp1", "7-13mp1", "10-15mp1", "13-19mp1", "15-23mp1", "19-26mp1", "23-29mp1", "26-31mp1", "29-34mp1"), 
+              c("1-7fp1", "4-10fp1", "7-13fp1", "10-15fp1", "13-19fp1", "15-23fp1", "19-26fp1", "23-29fp1", "26-31fp1", "29-34fp1"), 
+              # c("7-10p2", "26-29fp2"), 
+              c("7-10p2"), 
+              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            ))
     }
   }
+    
 
   for(long in 1:longLenF) { # femalez
     for(medium in 1:lenF) { # malez1
       for(short in 1:lenF) { # malez2
 
-        tally <- short + lenF*(medium - 1) + longLenF*longLenF*(long - 1)
+        tally <- short + lenF*(medium - 1) + lenF*lenF*(long - 1)
         thing <- length(extractedMeans[[1]][[1]][1,1,])
         sumStats <- c(
           extractedMeans[[tally]]$curLvlMeans[1,1,thing],
