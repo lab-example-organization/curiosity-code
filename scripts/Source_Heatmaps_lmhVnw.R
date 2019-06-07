@@ -83,9 +83,7 @@ all_the_runs <- extractVarDirs(heatmapLand,
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
-totalNumberOfRuns <- 100
-thing <- sapply(1:totalNumberOfRuns, function(x) str_split(all_the_runs[x], "_")[[1]][2])
-all_the_runs <- all_the_runs[str_order(thing)]
+
 
 # profvis({
 # #   for(iteration in 1:10) {
@@ -97,7 +95,11 @@ all_the_runs <- all_the_runs[str_order(thing)]
 
 
 
-extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapLand, source_of_params = "params.yaml", deeper = FALSE)
+extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
+                               dirHeatMap = heatmapLand, 
+                               source_of_params = "params.yaml", 
+                               totalNumberOfRuns = 100,
+                               deeper = FALSE)
 all_the_names <- remakeString(all_the_runs, "_", ".")
 
 names(extractedMeans) <- all_the_names

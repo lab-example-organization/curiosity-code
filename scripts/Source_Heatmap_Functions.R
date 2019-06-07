@@ -49,11 +49,20 @@ extractVarDirs <- function(home_path, fileNamePattern) {
   return(variableStore_folderList)
 }
 
-extractMeans <- function(allRunDirs, dirHeatMap, source_of_params, deeper = FALSE) {
+extractMeans <- function(allRunDirs, 
+                         dirHeatMap, 
+                         source_of_params, 
+                         totalNumberOfRuns,
+                         deeper = FALSE) {
   number_of_runs <- length(allRunDirs)
-  number_of_reps <- length(list.files(file.path(dirHeatMap, allRunDirs[1], "variable_store")))
+  number_of_reps <- length(list.files(
+    file.path(dirHeatMap, allRunDirs[1], "variable_store")))
   dim_source = yaml.load_file(file.path("parameters", source_of_params))
   
+  # totalNumberOfRuns <- 100
+  thing <- sapply(1:totalNumberOfRuns, function(x) str_split(allRunDirs[x], "_")[[1]][2])
+  allRunDirs <- allRunDirs[str_order(thing)]
+
   RunMeans <- list()
 
   for(individual_run in 1:number_of_runs) {

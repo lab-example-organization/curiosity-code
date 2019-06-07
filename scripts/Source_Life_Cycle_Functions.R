@@ -139,9 +139,10 @@ make.offspring.calls <- function(parameters, temporMan){
 
 
 update_selexn_data <- function(
-  main_parameters, temping, suitor_choices, preferred_bird, selector_bird,
-  curiosity_value, selector_population, selection_context, 
-  sylreps_choices, sylrep_selector, selection_count){#}), giving_up = FALSE) {
+  main_parameters, temping, suitor_choices, preferred_bird, 
+  selector_bird, curiosity_value, selector_population, 
+  selection_context, sylreps_choices, sylrep_selector, 
+  selection_count) {#}), giving_up = FALSE) {
 
   selected_pair <- c(suitor_choices[preferred_bird], # Bird being selected
                        selector_bird)          # Bird doing the selecting
@@ -285,6 +286,7 @@ sing.selection <- function(parameters, tempMoran,
         # "1-20"
         singSuccessFilter <- 1 : (
           (parameters$one_pop_singers[select_type]) * (parameters$num_pop)) 
+        # male offspring from this timestep, lookin for a tutor
         selector.index <- tempMoran[3, parameters$sylnum + 1, population]
 
       } else {
@@ -293,6 +295,7 @@ sing.selection <- function(parameters, tempMoran,
             population * parameters$one_pop_singers[select_type]) 
             # "1-10," or "11-20"
         selector.index <- sample(parameters$pop_calls_matrix[2, ], 1)
+            # randomly sample a female from the population
       }
       
       selector.sylrep <- sylrep_object[selector.index, , population]

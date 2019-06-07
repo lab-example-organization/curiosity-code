@@ -30,8 +30,8 @@ referenceSection <- function (referencing_script) {
         'profiler',
         'profvyaml',
         'pfvSrrYml',
-        'profTest'#,
-        #'',
+        'profTest',
+        'testings'#,
         #'',
         #'',
         #'',
@@ -48,7 +48,7 @@ referenceSection <- function (referencing_script) {
         profvyaml = c('profvis', 'yaml'),
         pfvSrrYml = c('profvis', 'stringr', 'yaml'),
         profTest = c('profvis'),
-        testings = c('testthat', '')#,
+        testings = c('testthat', 'dplyr')#,
         
         #c('') #,
         
