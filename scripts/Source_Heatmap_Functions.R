@@ -162,11 +162,11 @@ makeHeatmapFile <- function (
   whichBias <- c("male","female", "pop1", "pop2", "both")
   diffcurstartBias <- whichBias[diffcurstartBias]
 
-  whichLmhVnw <- c("lowMedHigh", "narrowWide")
+  whichRunStyle <- c("lowMedHigh", "narrowWide")
   if (runStyle == 1) {
-    runStyle = whichLmhVnw[runStyle]
+    runStyle = whichRunStyle[runStyle]
   } else if (runStyle == 2) {
-    runStyle = whichLmhVnw[runStyle]
+    runStyle = whichRunStyle[runStyle]
   }
 
   # biasSize = 5
@@ -186,7 +186,7 @@ makeHeatmapFile <- function (
     )
     
   } else {
-    if (!highRes) {
+    if (highRes == FALSE) {
       folderName <- paste0(
       str_sub(paste(str_extract_all(
         Sys.time(), "[0123456789]"
@@ -265,6 +265,15 @@ makeHeatmapFile <- function (
         }
       }
     } else {
+      folderName <- paste0(
+      str_sub(paste(str_extract_all(
+        Sys.time(), "[0123456789]"
+      )[[1]], collapse = ""), 3, 8),
+      "_slices_-_",
+      inheritance,
+      "inh_",
+      diffcurstartBias,
+      "Bias_", runStyle)
       biasSize = 10
       otherSize = 1
       heatmap_array <- array(
@@ -299,9 +308,9 @@ makeHeatmapFile <- function (
         # disinterest continues to be the final addition
         if(reversedRuns) {
           if (otherSize == 1) {
-            heatmap_array[biasSize - medium, biasSize - short, long,] <- sumStats
+            heatmap_array[biasSize - (medium - 1), biasSize - (short - 1), long,] <- sumStats
           } else {
-            heatmap_array[biasSize - medium, biasSize - short, otherBias - long,] <- sumStats
+            heatmap_array[biasSize - (medium - 1), biasSize - (short - 1), otherBias - (long - 1),] <- sumStats
           }
         } else {
           heatmap_array[medium,short,long,] <- sumStats
@@ -328,24 +337,24 @@ makeHeatmapFile <- function (
       
     if (specialFigs) {
       if(!(file.exists(file.path(
-        "results", folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
-        "inh_", whichBias[diffcurstartBias], "Bias_", runStyle, ".RData")
+        "results", folderName, paste0("heatmap_output_-_", inheritance, 
+        "inh_", diffcurstartBias, "Bias_", runStyle, ".RData")
       )))) {
       
       saveRDS(heatmap_array, file.path(
-        "results",folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
-        "inh_", whichBias[diffcurstartBias], "Bias_", runStyle, ".RData")
+        "results",folderName, paste0("heatmap_output_-_", inheritance, 
+        "inh_", diffcurstartBias, "Bias_", runStyle, ".RData")
 
       ))}
     } else {
       if(!(file.exists(file.path(
-        "results", folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
-        "inh_", whichBias[diffcurstartBias], "Bias.RData")
+        "results", folderName, paste0("heatmap_output_-_", inheritance, 
+        "inh_", diffcurstartBias, "Bias.RData")
       )))) {
       
       saveRDS(heatmap_array, file.path(
-        "results",folderName, paste0("heatmap_output_-_", whichInh[inheritance], 
-        "inh_", whichBias[diffcurstartBias], "Bias.RData")
+        "results",folderName, paste0("heatmap_output_-_", inheritance, 
+        "inh_", diffcurstartBias, "Bias.RData")
 
       ))}
     }
@@ -353,8 +362,14 @@ makeHeatmapFile <- function (
     # for (subset in 1:5) {
     #   dir.create(file.path("results", folderName, paste0("slice_", subset)))
     # }
-  
-    
+    outputBall <- list(
+      folderName = folderName,
+      inheritance = inheritance,
+      diffcurstartBias = diffcurstartBias,
+      biasSize = biasSize,
+      otherSize = otherSize
+    )
+    return(outputBall)
 }
 
 # }

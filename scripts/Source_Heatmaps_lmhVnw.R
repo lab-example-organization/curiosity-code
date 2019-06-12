@@ -44,7 +44,9 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 #                          "results", "mixCI_75m-25f")
 # heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
 #                          "results", "mixCI_90m-10f")
-heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRSmSxLB")
+# heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRSmSxLB")
+heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRFfFfLB")
+
 #190601_old_stuff/HRSmSxLB/
 # heatmapLand <- file.path("results", "Heatmaps")
 
@@ -98,7 +100,6 @@ all_the_runs <- extractVarDirs(heatmapLand,
 extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
                                dirHeatMap = heatmapLand, 
                                source_of_params = "params.yaml", 
-                               totalNumberOfRuns = 100,
                                deeper = FALSE)
 all_the_names <- remakeString(all_the_runs, "_", ".")
 
@@ -137,7 +138,14 @@ names(extractedMeans) <- all_the_names
 
 # whichBias <- c("male","female", "pop1", "pop2", "both")
 
-makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, highRes = TRUE, extractedMeans = extractedMeans)
+heatmapOutput <- list()
+heatmapOutput <- makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, 
+                biasSize = 10, otherSize = 1, 
+                reversedRuns = TRUE, specialFigs = TRUE, 
+                runStyle = 1, highRes = TRUE, 
+                extractedMeans = extractedMeans)
+
+
 # makeHeatmapFile(inheritance = 10, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 # makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 
@@ -177,17 +185,22 @@ makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialF
 # }
 
 ##### ? WILL THIS WORK?
-IndividualFigures(3, 2, 3, 1)
+IndividualFigures(2,5,heatmapOutput)
 #####
 
 IndividualFigures <- function (
 
-  inheritance = 1, #c("maleinh", "mothinh", "sameinh", "oppsinh","sNTninh", "sSTfinh", "sSFrinh", "sFrSinh", "sTfSinh", "sTnNinh", "FfFfinh")
+  # inheritance = 1, #c("maleinh", "mothinh", "sameinh", "oppsinh","sNTninh", "sSTfinh", "sSFrinh", "sFrSinh", "sTfSinh", "sTnNinh", "FfFfinh")
   colorRange = 2, # c("relative", "absolute")
-  thisBias = 1, # 3 or 4
-  numOtherPopRuns = 3 # USE THIS WHEN POP 2 HAS FEWER CONDITIONS THAN POPULATION OF INTEREST. this will force the dimensions of the data structure to include only the number of starting conditions that are present for the population of non-interest
+  colorPalette = 5, # Numbers correspond to specific color palettes
+  # thisBias = 1, # 3 or 4
+  # numOtherPopRuns = 3, # USE THIS WHEN POP 2 HAS FEWER CONDITIONS THAN POPULATION OF INTEREST. this will force the dimensions of the data structure to include only the number of starting conditions that are present for the population of non-interest
+  folderName = heatmapOutput
 ) {
   
+  # Reds, RdPu, Oranges, OrRd, YlOrRd, YlOrBr, YlGn, YlGnBu, Greens, GnBu, Blues, BuGn, BuPu, Purples, PuRd, PuBu, PuBuGn, Greys
+  #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18
+
   # heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourceFolder <- file.path("results")
   # heatmap_sourceFolder <- file.path("sameSexFigResults", "results")
@@ -196,14 +209,16 @@ IndividualFigures <- function (
   # Character vectors for args - indices  Not sure what else to call them, but they'll be used to reassign the args to non-numeric objects
 
   ClrRngContainer <- c("relative", "absolute")
-  
+
+  colorRange <- ClrRngContainer[colorRange]
+
   inheritanceContainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
                             "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
                             "sTfSinh", "sTnNinh", "FfFfinh")
 
   whichBias <- c("maleBias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
 
-  if (thisBias == 1) {
+  if (folderName$diffcurstartBias == "male") {
     heatmap_axes <- list(
       mp2Vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2Vfem
       mp1Vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1Vfem
@@ -214,7 +229,7 @@ IndividualFigures <- function (
       "MalPop2",
       "FemalePop"
     )
-  } else if (thisBias == 2) {
+  } else if (folderName$diffcurstartBias == "moth") {
     heatmap_axes <- list(
       mf2Vmal = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
       mf1Vmal = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
@@ -225,7 +240,7 @@ IndividualFigures <- function (
       "FemPop2",
       "MalePop"
     )
-  } else if (thisBias == 3) {
+  } else if (folderName$diffcurstartBias == "pop1") {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Starting Curiosity"),
       mp1Vpp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Starting Curiosity"),
@@ -236,74 +251,52 @@ IndividualFigures <- function (
       "FemPop1",
       "Popula2"
     )
+  } else if (folderName$diffcurstartBias == "pop2") {
+    heatmap_axes <- list(
+      fp1Vpp2 = c("Pop 2 Female Starting Curiosity", "Pop 1 Starting Curiosity"),
+      mp1Vpp2 = c("Pop 2 Male Starting Curiosity", "Pop 1 Starting Curiosity"),
+      mp1Vfp1 = c("Pop 2 Male Starting Curiosity", "Pop 2 Female Starting Curiosity")
+    )
+    slicedPop <- list(
+      "MalPop2",
+      "FemPop2",
+      "Popula1"
+    )
   }
 
-  colorRange <- ClrRngContainer[colorRange]
 
-  inheritance <- inheritanceContainer[inheritance]
+  # inheritance <- inheritanceContainer[inheritance]
 
-  thisBias <- whichBias[thisBias]
+  # thisBias <- whichBias[thisBias]
   
-  folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
+  # folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
+  # folderName <- 
 
   # tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
-  HtMpArrays <- list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")
+  HtMpArrays <- list.files(file.path(heatmap_sourceFolder, folderName$folderName), pattern = ".RData")
 
-  if (length (HtMpArrays) == 1) {
-    tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, HtMpArrays))
 
-    lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
-    narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
-    
-  } else if (length (HtMpArrays) == 2) {
-    lowMedHigh <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "lowMedHigh.RData")))
-    narrowWide <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "narrowWide.RData")))
-  }
-
-  inhOptions <- list(
-    lowMedHigh = lowMedHigh,
-    narrowWide = narrowWide,
-    LMHtext = "lowMedHigh",
-    NWtext = "narrowWide"
-  )
-  
-  # DONE.
-  # NOW WE NEED TO MAKE THE FIGURES AND SORT THEM INTO FOLDERS THAT WE'LL PULL THEM OUT OF TO MAKE THE STITCHED-TOGETHER FILES.
-  # TITLES DON'T MATTER CURRENTLY, BUT WILL ONCE THEY GET STITCHED TOGETHER.
-  # THIS DIRECTORY (FOR THESE UNSTITCHED ONES) SHOULD BE A SUBFOLDER WITHIN THE STITCHED FIGURE DIR
-
-  if(!(dir.exists(file.path(
-    heatmap_sourceFolder, folderName, "lowMedHigh")))
-  ) {
-    dir.create(file.path(
-      heatmap_sourceFolder, folderName, "lowMedHigh"
-    ))
-    dir.create(file.path(
-      heatmap_sourceFolder, folderName, "narrowWide"
-    ))
-    
-  }
+  tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName$folderName, HtMpArrays))
 
   colorSeqMultPalette <- list(
-    BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
-    BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
-    GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
-    OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
-    PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
-    PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
-    PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
-    RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
-    YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
-    YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
-    YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
-    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")), # 3-class YlOrRd
-    Greys = colorRampPalette(c("#f0f0f0", "#bdbdbd", "#636363"))#, # 3-class Greys
-    # Reds = #fee0d2, #fc9272, #de2d26
-    # Purples = #efedf5, #bcbddc, #756bb1
-    # Oranges = #fee6ce, #fdae6b, #e6550d
-    # Greens = #e5f5e0, #a1d99b, #31a354
-    # Blues = #deebf7, #9ecae1, #3182bd
-
+    Reds = colorRampPalette(c("#fee0d2", "#fc9272", "#de2d26")), # 3-class Reds       ### 1
+    RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu       ### 2
+    Oranges = colorRampPalette(c("#fee6ce", "#fdae6b", "#e6550d")), # 3-class Oranges ### 3
+    OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd       ### 4
+    YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")), # 3-class YlOrRd   ### 5
+    YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr   ### 6
+    YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn       ### 7
+    YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu   ### 8
+    Greens = colorRampPalette(c("#e5f5e0", "#a1d99b", "#31a354")), # 3-class Greens   ### 9
+    GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu       ### 10
+    Blues = colorRampPalette(c("#deebf7", "#9ecae1", "#3182bd")), # 3-class Blues     ### 11
+    BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn       ### 12
+    BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu       ### 13
+    Purples = colorRampPalette(c("#efedf5", "#bcbddc", "#756bb1")), # 3-class Purples ### 14
+    PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd       ### 15
+    PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu       ### 16
+    PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn   ### 17
+    Greys = colorRampPalette(c("#f0f0f0", "#bdbdbd", "#636363")) # 3-class Greys      ### 18
   )
 
   regularNames <- c(
@@ -319,190 +312,231 @@ IndividualFigures <- function (
 
   # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
-  for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
-    for (SxMtPop in 1:8) { # curiosity and sylrep data for each subpopulation
-      for (inhStyle in 1:2) { # lowMedHigh and narrowWide
+  # for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
+  
+  if(!(dir.exists(file.path(
+    heatmap_sourceFolder, folderName$folderName, slicedPop[3] # paste0("slice_", slice)
+  )))) {
+    dir.create(file.path(
+      heatmap_sourceFolder, folderName$folderName, slicedPop[3] # paste0("slice_", slice)
+    ))
+  }
+  
+  for (SxMtPop in 1:8) { 
+    for (slice in 1:folderName$otherSize) {
+      
+      file_name <- paste0(regularNames[SxMtPop], "_slice_", slice, "_", slicedPop[3], ".png")
+      # rule of thumb: if we're splitting up htmpView _within_ slice and SxMtPop, then we need to save the output files according to the schema that will help pull back together the slices.
+      png(filename = file.path(
+          heatmap_sourceFolder, folderName$folderName, #inhOptions[inhStyle + 2], 
+          # paste0("slice_", slice), file_name), 
+          slicedPop[3], file_name), 
+        width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+
+      if(colorRange == "absolute") {
+        if (SxMtPop <= 4) {
+          heatmapRange <- c(0,1)
+        } else {
+          heatmapRange <- c(1,156)
+        }
+      } else {
         
-        if(!(dir.exists(file.path(
-          heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
-          slicedPop[htmpView] # paste0("slice_", slice)
-        )))) {
-          dir.create(file.path(
-            heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
-            slicedPop[htmpView] # paste0("slice_", slice)
-          ))
+        heatmapRange <- inhOptions[[inhStyle]][
+          dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
+          dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
+          dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
+          SxMtPop]
+        heatmap_min <- c(
+          round(min(heatmapRangeDatasetOne), 2),
+          round(min(heatmapRangeDatasetTwo), 2),
+          round(min(heatmapRangeDatasetTre), 2)
+        )
+        heatmap_max <- c(
+          round(max(heatmapRangeDatasetOne), 2),
+          round(max(heatmapRangeDatasetTwo), 2),
+          round(max(heatmapRangeDatasetTre), 2)
+        )
+        
+        heatmapRange <- c(heatmap_min[3]-0.01,heatmap_max[3]+0.01)
+        rm(heatmapRangeDatasetOne, heatmapRangeDatasetTwo, heatmapRangeDatasetTre,
+          heatmap_min, heatmap_max)
+      } # UNFINISHED - depreciated?
+      # findXLab <- heatmap_axes[[3]][1]
+      # findYLab <- heatmap_axes[[3]][2]
+      
+      # if(inhStyle == 1) {
+        # dim_1 = 3
+        # dim_2 = 3
+        # dim_3 = 2
+        numOtherPopRuns <- folderName$otherSize
+        dat_array_doh <- array(c(
+          1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, numOtherPopRuns,numOtherPopRuns,1,
+          2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, numOtherPopRuns,numOtherPopRuns,2,
+          3,1,1, 1,3,1, 1,1,numOtherPopRuns, 3,3,3, 3,3,3, numOtherPopRuns,numOtherPopRuns,numOtherPopRuns
+          # rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
+          # rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
+          # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
+        ), c(3,3,folderName$otherSize,3))
+
+        image(x = tempHtMpArray[,,,SxMtPop],
+          col = colorSeqMultPalette[[colorPalette]](100),
+          axes = F, 
+          xlab = heatmap_axes[[3]][1], 
+          ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmapRange
+        )
+
+        tempHtMpDimensions <- dimnames(tempHtMpArray)
+        temptemp <- vector(mode = "character", length = length(tempHtMpDimensions))
+        for (theThing in 1:length(tempHtMpDimensions[[1]])) {
+          temptemp[theThing] <- str_extract_all(tempHtMpDimensions[[1]][theThing], "[:digit:]*-[:digit:]*")
+        }
+        
+
+        # sets up the axes regardless of size, based on what they were labeled when they were originally run.
+        if (folderName$biasSize == 2) {
+          axis(1,c(-0.495,  0  ,0.5,    1    ,1.495), 
+            c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.495,0.5,1.495),
+            c("","",""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
+            c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.495,0.5,1.495),
+            c("","",""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 3) {
+          axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.25, 0.25, 0.75, 1.25),
+            c("", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.25, 0.25, 0.75, 1.25),
+            c("", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize ==  4) {
+          axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+            c("", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+            c("", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 5) {
+          axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+            c("", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+            c("", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 6) {
+          axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+            c("", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+            c("", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 7) {
+          axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+            c("", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+            c("", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 8) {
+          axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
+            c("", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
+            c("", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 9) {
+          axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+            c("", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+            c("", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (folderName$biasSize == 10) {
+          axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                 c(     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+            c("", "", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+            c("", "", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
         }
 
-        # dir.create(file.path(
-        #     heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2]
-        # ))
-        if (inhStyle == 1) {
-          if (htmpView == 3) {
-            sliceNum = numOtherPopRuns
-          } else {
-            sliceNum = 3}
-        } else if (inhStyle == 2) {
-          sliceNum = 2}
 
-        for (slice in 1:sliceNum) {
-          
-          file_name <- paste0(regularNames[SxMtPop], "_slice_", slice, "_", slicedPop[htmpView], ".png")
-          # rule of thumb: if we're splitting up htmpView _within_ slice and SxMtPop, then we need to save the output files according to the schema that will help pull back together the slices.
-          png(filename = file.path(
-              heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
-              # paste0("slice_", slice), file_name), 
-              slicedPop[htmpView], file_name), 
-            width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
-
-          if(colorRange == "absolute") {
-            if (SxMtPop <= 4) {heatmapRange <- c(0,1)
-            } else {           heatmapRange <- c(1,156)}
-          } else {
-            
-            heatmapRange <- inhOptions[[inhStyle]][
-              dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
-              dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
-              dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
-              SxMtPop]
-            heatmap_min <- c(
-              round(min(heatmapRangeDatasetOne), 2),
-              round(min(heatmapRangeDatasetTwo), 2),
-              round(min(heatmapRangeDatasetTre), 2)
-            )
-            heatmap_max <- c(
-              round(max(heatmapRangeDatasetOne), 2),
-              round(max(heatmapRangeDatasetTwo), 2),
-              round(max(heatmapRangeDatasetTre), 2)
-            )
-            
-            heatmapRange <- c(heatmap_min[htmpView]-0.01,heatmap_max[htmpView]+0.01)
-            rm(heatmapRangeDatasetOne, heatmapRangeDatasetTwo, heatmapRangeDatasetTre,
-              heatmap_min, heatmap_max)
-          } # UNFINISHED
-          findXLab <- heatmap_axes[[htmpView]][1]
-          findYLab <- heatmap_axes[[htmpView]][2]
-          
-          if(inhStyle == 1) {
-            dim_1 = 3
-            dim_2 = 3
-            dim_3 = 2
-            dat_array_doh <- array(c(
-              1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, numOtherPopRuns,numOtherPopRuns,1,
-              2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, numOtherPopRuns,numOtherPopRuns,2,
-              3,1,1, 1,3,1, 1,1,numOtherPopRuns, 3,3,3, 3,3,3, numOtherPopRuns,numOtherPopRuns,numOtherPopRuns
-              # rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
-              # rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
-              # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
-            ), c(3,3,2,3))
-
-            image(x = matrix(as.numeric(
-            inhOptions[[inhStyle]][
-              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
-              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
-              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
-              SxMtPop
-            ]),nrow(inhOptions[[inhStyle]][
-              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
-              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
-              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
-              SxMtPop
-            ]), ncol(inhOptions[[inhStyle]][
-              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
-              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
-              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
-              SxMtPop
-            ])),
-            col = colorSeqMultPalette$Greys(100),
-            axes = F, 
-            xlab = findXLab, 
-            ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
-
-            axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
-                c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
-                T,0,NA,F,cex.axis=1, tck = 0)
-            axis(1,c(-0.25,0.25,0.75,1.25),
-                c("","","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            if (htmpView == 3) {
-              axis(2,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
-                c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
-                T,0,NA,F,cex.axis=0.6, tck = 0)
-              axis(2,c(-0.25,0.25,0.75,1.25),
-                c("","","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-            } else {
-              axis(2,c(-0.5,  0  ,0.5,    1    ,1.5),
-                c(  ""   ,"0-0.25","" ,".45-1","" ),
-                T,0,NA,F,cex.axis=0.8, tck = 0)
-              axis(2,c(-0.5,0.5,1.5),
-                c("","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-            }
-
-          } else if (inhStyle == 2) {
-
-            dat_array_doh <- array(c(
-              rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(2, 2, 2, 1), 2),
-              rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(2, 2, 2, 2), 2)
-            ), c(3,3,2,2))
-
-            image(x = matrix(as.numeric(
-            inhOptions[[inhStyle]][
-              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
-              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
-              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
-              SxMtPop
-            ]),nrow(inhOptions[[inhStyle]][
-              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
-              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
-              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
-              SxMtPop
-            ]), ncol(inhOptions[[inhStyle]][
-              dat_array_doh[htmpView,1,1,slice]:dat_array_doh[htmpView,1,2,slice],
-              dat_array_doh[htmpView,2,1,slice]:dat_array_doh[htmpView,2,2,slice],
-              dat_array_doh[htmpView,3,1,slice]:dat_array_doh[htmpView,3,2,slice],
-              SxMtPop
-            ])),
-            col = colorSeqMultPalette$YlOrBr(100),
-            axes = F, 
-            xlab = findXLab, 
-            ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
-
-            axis(1,c(-0.5,  0  ,0.5,    1    ,1.5),
-                c(  ""   ,"0-1","" ,".45-.55","" ),
-                T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.5,0.5,1.5),
-                c("","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-            
-            axis(2,c(-0.5,  0  ,0.5,    1    ,1.5),
-                c(  ""   ,"0-1","" ,".45-.55","" ),
-                T,0,NA,F,cex.axis=0.6, tck = 0)
-            axis(2,c(-0.5,0.5,1.5),
-                c("","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          }
-          
-          dev.off()
-        }
-
-      }
+      dev.off()
     }
   }
-  # }
   return(print("Done, in the specified folder"))
 }
-thing <- c(5, 6, 7, 8, 9, 10)
-for (
-  inhREtnce in 1:6
-) {
-  for (
-    sexBIAS in 1:8
-  ) {
-    CombineEditSingles(inhREtnce[thing], 1, sexBIAS, 3, T, F)
-  }
-}
+# thing <- c(5, 6, 7, 8, 9, 10)
+# for (
+#   inhREtnce in 1:6
+# ) {
+#   for (
+#     sexBIAS in 1:8
+#   ) {
+#     CombineEditSingles(inhREtnce[thing], 1, sexBIAS, 3, T, F)
+#   }
+# }
 
 CombineEditSingles(5, 1, 1, 3, T, F)
 
