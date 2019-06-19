@@ -145,6 +145,11 @@ heatmapOutput <- makeHeatmapFile(inheritance = 11, diffcurstartBias = 3,
                 runStyle = 1, highRes = TRUE, 
                 extractedMeans = extractedMeans)
 
+heatmapOutput <- makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, 
+                biasSize = 10, otherSize = 1, 
+                reversedRuns = TRUE, reDo = TRUE, specialFigs = TRUE, 
+                runStyle = 1, highRes = TRUE, 
+                extractedMeans = NULL)
 
 # makeHeatmapFile(inheritance = 10, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 # makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
@@ -218,7 +223,7 @@ IndividualFigures <- function (
 
   whichBias <- c("maleBias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
 
-  if (folderName$diffcurstartBias == "male") {
+  if (folderName$diffcurstartBias == "male" || folderName$diffcurstartBias == 1) {
     heatmap_axes <- list(
       mp2Vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2Vfem
       mp1Vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1Vfem
@@ -229,7 +234,7 @@ IndividualFigures <- function (
       "MalPop2",
       "FemalePop"
     )
-  } else if (folderName$diffcurstartBias == "moth") {
+  } else if (folderName$diffcurstartBias == "moth" || folderName$diffcurstartBias == 2) {
     heatmap_axes <- list(
       mf2Vmal = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
       mf1Vmal = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
@@ -240,7 +245,7 @@ IndividualFigures <- function (
       "FemPop2",
       "MalePop"
     )
-  } else if (folderName$diffcurstartBias == "pop1") {
+  } else if (folderName$diffcurstartBias == "pop1" || folderName$diffcurstartBias == 3) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Starting Curiosity"),
       mp1Vpp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Starting Curiosity"),
@@ -251,7 +256,7 @@ IndividualFigures <- function (
       "FemPop1",
       "Popula2"
     )
-  } else if (folderName$diffcurstartBias == "pop2") {
+  } else if (folderName$diffcurstartBias == "pop2" || folderName$diffcurstartBias == 4) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 2 Female Starting Curiosity", "Pop 1 Starting Curiosity"),
       mp1Vpp2 = c("Pop 2 Male Starting Curiosity", "Pop 1 Starting Curiosity"),
@@ -385,142 +390,274 @@ IndividualFigures <- function (
           ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmapRange
         )
 
-        tempHtMpDimensions <- dimnames(tempHtMpArray)
-        temptemp <- vector(mode = "character", length = length(tempHtMpDimensions))
-        for (theThing in 1:length(tempHtMpDimensions[[1]])) {
-          temptemp[theThing] <- str_extract_all(tempHtMpDimensions[[1]][theThing], "[:digit:]*-[:digit:]*")
+        if (!(is.null(dimnames(tempHtMpArray)))) {  
+          tempHtMpDimensions <- dimnames(tempHtMpArray)
+          temptemp <- vector(mode = "character", length = length(tempHtMpDimensions))
+          for (theThing in 1:length(tempHtMpDimensions[[1]])) {
+            temptemp[theThing] <- str_extract_all(tempHtMpDimensions[[1]][theThing], "[:digit:]*-[:digit:]*")
+          }
+          
+
+          # sets up the axes regardless of size, based on what they were labeled when they were originally run.
+          if (folderName$biasSize == 2) {
+            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495), 
+              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.495,0.5,1.495),
+              c("","",""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
+              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.495,0.5,1.495),
+              c("","",""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 3) {
+            axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.25, 0.25, 0.75, 1.25),
+              c("", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.25, 0.25, 0.75, 1.25),
+              c("", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize ==  4) {
+            axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+              c("", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+              c("", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 5) {
+            axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+              c("", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+              c("", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 6) {
+            axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+              c("", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+              c("", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 7) {
+            axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+              c("", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+              c("", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 8) {
+            axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
+              c("", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
+              c("", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 9) {
+            axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+              c("", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+              c("", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 10) {
+            axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                  c(     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+              c("", "", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+              c("", "", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          }
+
+        } else {
+
+
+          if (folderName$biasSize == 2) {
+            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495), 
+              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.495,0.5,1.495),
+              c("","",""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
+              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.495,0.5,1.495),
+              c("","",""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 3) {
+            axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.25, 0.25, 0.75, 1.25),
+              c("", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.25, 0.25, 0.75, 1.25),
+              c("", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize ==  4) {
+            axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+              c("", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+              c("", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 5) {
+            axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+              c("", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+              c("", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 6) {
+            axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+              c("", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+              c("", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 7) {
+            axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+              c("", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+              c("", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 8) {
+            axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
+              c("", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
+              c("", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 9) {
+            axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+              c("", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+              c("", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          } else if (folderName$biasSize == 10) {
+            axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                  c("", "1-7", "", "4-10", "", "7-13", "", "10-15", "", "13-19", "", "15-23", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+              c("", "", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+            axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                  c("", "1-7", "", "4-10", "", "7-13", "", "10-15", "", "13-19", "", "15-23", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
+              T,0,NA,F,cex.axis=0.8, tck = 0)
+            axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+              c("", "", "", "", "", "", "", "", "", "", ""),
+              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+          }
         }
-        
-
-        # sets up the axes regardless of size, based on what they were labeled when they were originally run.
-        if (folderName$biasSize == 2) {
-          axis(1,c(-0.495,  0  ,0.5,    1    ,1.495), 
-            c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.495,0.5,1.495),
-            c("","",""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
-            c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.495,0.5,1.495),
-            c("","",""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 3) {
-          axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.25, 0.25, 0.75, 1.25),
-            c("", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.25, 0.25, 0.75, 1.25),
-            c("", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize ==  4) {
-          axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
-            c("", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
-            c("", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 5) {
-          axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
-            c("", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
-            c("", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 6) {
-          axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
-            c("", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
-            c("", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 7) {
-          axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
-            c("", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
-            c("", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 8) {
-          axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
-            c("", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
-                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
-            c("", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 9) {
-          axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
-            c("", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
-            c("", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (folderName$biasSize == 10) {
-          axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                 c(     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
-            c("", "", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-          axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
-          axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
-            c("", "", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        }
-
 
       dev.off()
     }

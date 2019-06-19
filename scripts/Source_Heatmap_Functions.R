@@ -173,9 +173,8 @@ makeHeatmapFile <- function (
 
   if (reDo) {
 
-    folderName <- list.files(path = file.path("results", "Heatmaps",
-    "output_objects"), pattern = paste0("_slices_-_", whichInh[inheritance],
-          "inh_", whichBias[diffcurstartBias], "Bias"))
+    folderName <- list.files(path = file.path("results"#, "Heatmaps", "output_objects"
+    ), pattern = paste0(inheritance, "inh_", diffcurstartBias, "Bias"))
           # "inh_", runStyle, "Bias"))
 
     heatmap_array <- readRDS(file.path("results", "Heatmaps", "output_objects", 
@@ -185,6 +184,41 @@ makeHeatmapFile <- function (
       )
     )
     
+    placeholder <- array(rep(0,biasSize * biasSize * 8), dim(heatmap_array))
+
+    for (long in 1:otherSize) { # femalez
+      for (medium in 1:biasSize) { # malez1
+        for(short in 1:biasSize) { # malez2
+          # placeholder <- array(rep(0,biasSize * biasSize * 8))
+          # tally <- short + biasSize*(medium - 1) + biasSize*biasSize*(long - 1)
+          # thing <- length (extractedMeans [[1]][[1]][1,1,])
+          # sumStats <- c (
+            # extractedMeans [[tally]]$curLvlMeans [1,1,thing],
+            # extractedMeans [[tally]]$curLvlMeans [1,2,thing],
+            # extractedMeans [[tally]]$curLvlMeans [2,1,thing],
+            # extractedMeans [[tally]]$curLvlMeans [2,2,thing],
+            # extractedMeans [[tally]]$sylRepMeans [1,1,thing],
+            # extractedMeans [[tally]]$sylRepMeans [1,2,thing],
+            # extractedMeans [[tally]]$sylRepMeans [2,1,thing],
+            # extractedMeans [[tally]]$sylRepMeans [2,2,thing]
+          # )
+          # this part might not work if the population of 
+          # disinterest continues to be the final addition
+          # if (reversedRuns) {
+            # if (otherSize == 1) {
+              placeholder [medium, short, long, ] <- heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), long,]
+            # } else {
+              # heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), otherBias - (long - 1),] <- sumStats
+            # }
+          # } else {
+            # heatmap_array [medium, short, long, ] <- sumStats
+          # }
+        }
+      }
+    }
+
+    heatmap_array <- placeholder
+
   } else {
     if (highRes == FALSE) {
       folderName <- paste0(
@@ -285,39 +319,38 @@ makeHeatmapFile <- function (
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
     }
-  }
     
 
-  for(long in 1:otherSize) { # femalez
-    for(medium in 1:biasSize) { # malez1
-      for(short in 1:biasSize) { # malez2
+    for (long in 1:otherSize) { # femalez
+      for (medium in 1:biasSize) { # malez1
+        for(short in 1:biasSize) { # malez2
 
-        tally <- short + biasSize*(medium - 1) + biasSize*biasSize*(long - 1)
-        thing <- length(extractedMeans[[1]][[1]][1,1,])
-        sumStats <- c(
-          extractedMeans[[tally]]$curLvlMeans[1,1,thing],
-          extractedMeans[[tally]]$curLvlMeans[1,2,thing],
-          extractedMeans[[tally]]$curLvlMeans[2,1,thing],
-          extractedMeans[[tally]]$curLvlMeans[2,2,thing],
-          extractedMeans[[tally]]$sylRepMeans[1,1,thing],
-          extractedMeans[[tally]]$sylRepMeans[1,2,thing],
-          extractedMeans[[tally]]$sylRepMeans[2,1,thing],
-          extractedMeans[[tally]]$sylRepMeans[2,2,thing]
-        )
-        # this part might not work if the population of 
-        # disinterest continues to be the final addition
-        if(reversedRuns) {
-          if (otherSize == 1) {
-            heatmap_array[biasSize - (medium - 1), biasSize - (short - 1), long,] <- sumStats
+          tally <- short + biasSize*(medium - 1) + biasSize*biasSize*(long - 1)
+          thing <- length (extractedMeans [[1]][[1]][1,1,])
+          sumStats <- c (
+            extractedMeans [[tally]]$curLvlMeans [1,1,thing],
+            extractedMeans [[tally]]$curLvlMeans [1,2,thing],
+            extractedMeans [[tally]]$curLvlMeans [2,1,thing],
+            extractedMeans [[tally]]$curLvlMeans [2,2,thing],
+            extractedMeans [[tally]]$sylRepMeans [1,1,thing],
+            extractedMeans [[tally]]$sylRepMeans [1,2,thing],
+            extractedMeans [[tally]]$sylRepMeans [2,1,thing],
+            extractedMeans [[tally]]$sylRepMeans [2,2,thing]
+          )
+          # this part might not work if the population of 
+          # disinterest continues to be the final addition
+          if (reversedRuns) {
+            if (otherSize == 1) {
+              heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), long,] <- sumStats
+            } else {
+              heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), otherBias - (long - 1),] <- sumStats
+            }
           } else {
-            heatmap_array[biasSize - (medium - 1), biasSize - (short - 1), otherBias - (long - 1),] <- sumStats
+            heatmap_array [medium, short, long, ] <- sumStats
           }
-        } else {
-          heatmap_array[medium,short,long,] <- sumStats
         }
       }
     }
-  }
 
     # if(!(dir.exists(file.path("results", "Heatmaps", "output_objects", folderName)))) {
     #   dir.create(file.path("results", "Heatmaps", "output_objects", folderName))
@@ -358,18 +391,18 @@ makeHeatmapFile <- function (
 
       ))}
     }
-    
-    # for (subset in 1:5) {
-    #   dir.create(file.path("results", folderName, paste0("slice_", subset)))
-    # }
-    outputBall <- list(
-      folderName = folderName,
-      inheritance = inheritance,
-      diffcurstartBias = diffcurstartBias,
-      biasSize = biasSize,
-      otherSize = otherSize
-    )
-    return(outputBall)
+  }
+  # for (subset in 1:5) {
+  #   dir.create(file.path("results", folderName, paste0("slice_", subset)))
+  # }
+  outputBall <- list(
+    folderName = folderName,
+    inheritance = inheritance,
+    diffcurstartBias = diffcurstartBias,
+    biasSize = biasSize,
+    otherSize = otherSize
+  )
+  return(outputBall)
 }
 
 # }
