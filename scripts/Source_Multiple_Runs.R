@@ -1,7 +1,7 @@
 savinStuff <- function (Parameters, Output_Filename, moran) {
     datez <- Sys.Date ()
     deetz <- c (Parameters$num_timesteps, Parameters$num_pop, 
-               Parameters$pop_size, Parameters$sylnum, Parameters$nsspl, 
+               Parameters$pop_size, Parameters$sylnum, Parameters$nSL, 
                Parameters$one_pop_singers, Parameters$curlearnprob, 
                Parameters$learnprob, Parameters$randlearnprob, 
                Parameters$stand.dev, dim (Parameters$pop_calls_matrix), 
@@ -11,7 +11,7 @@ savinStuff <- function (Parameters, Output_Filename, moran) {
                length (Parameters$zero_to_one_template), dim (moran))
     names (deetz) <- c ("Parameters$num_timesteps", "Parameters$num_pop", 
                       "Parameters$pop_size", "Parameters$sylnum", 
-                      "Parameters$nsspl", rep ("Parameters$one_pop_singers", 
+                      "Parameters$nSL", rep ("Parameters$one_pop_singers", 
                        2), "Parameters$curlearnprob", 
                        rep ("Parameters$learnprob", 2), 
                        rep ("Parameters$randlearnprob", 2), 
@@ -157,7 +157,7 @@ life_cycle <- function(
   simParams <- define_parameters(
     num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
     num_pop = number_populations, pop_size = population_size, 
-    sylnum = syllable_number, nsspl = number_sylls_probability_level, 
+    sylnum = syllable_number, nSL = number_sylls_probability_level, 
     one_pop_singers = one_pop_singers, curlearnprob = curinh_value, 
     learnprob = c(vertOblLearn[2], vertOblLearn[1]), 
     randlearnprob = c(vertOblLearn[4], vertOblLearn[3]), 

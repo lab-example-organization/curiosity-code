@@ -280,7 +280,22 @@ colorSeqMultPalette <- list(
     YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
     YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
     YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
+stuff <- colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20"))
 
+png(filename = file.path(paste0("colorSpectrum.png")), width = 554, height = 554)
+      
+plot(matrix(c(rep(1,20),1:20),20,2),col=stuff(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
+
+dev.off()
+
+zero_to_one_template <- c( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
+#                            #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
+                            0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
+#                           #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
+                            0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
+#                           #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
+                            0.9,0.95,0.99,1.0)
+#                           #31, #32, #33,#34
 
 png(filename = file.path(paste0("colorSpectrum.png"), width = 554, height = 554, units = "px", pointsize = 12, bg = "white"))
       

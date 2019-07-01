@@ -1,32 +1,37 @@
 
-rep.frac <- function(number_repeats, divisions_per_repeat, value_entered) {
-  zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
-                            0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
-                             0.8,0.85,0.9,0.95,0.99,1.0,0.09,0.18,0.27,0.36,0.45,0.54,0.63,0.72,0.81)
-  if(number_repeats %% divisions_per_repeat != 0) {
+rpF <- function(numberOfRepeats, divisions_per_repeat, zeroOneValue) {
+  zero_to_one_template <- c( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
+  #                            #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
+                              0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
+  #                           #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
+                             0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
+  #                           #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
+                              0.9,0.95,0.99,1.0)
+  #                           #31, #32, #33,#34
+  if(numberOfRepeats %% divisions_per_repeat != 0) {
     stop("first element must be divisible by the second element")}
-  if(!(value_entered %in% c(1 : length(zero_to_one_template)))) {
-    stop("in order to work, value_entered must be contained within zero_to_one_template")}
+  if(!(zeroOneValue %in% c(1 : length(zero_to_one_template)))) {
+    stop("in order to work, zeroOneValue must be contained within zero_to_one_template")}
   return(replicate(
-    c(length = number_repeats / divisions_per_repeat), zero_to_one_template[value_entered]))
+    c(length = numberOfRepeats / divisions_per_repeat), zero_to_one_template[zeroOneValue]))
 }
 
-define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, one_pop_singers, 
+define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nSL, one_pop_singers, 
                               curlearnprob, learnprob, randlearnprob, stand.dev, curinhProportion){
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
-  if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsspl %% 1 != 0) {
-    stop("(num_pop, pop_size, nsspl) need to be integers")}
+  if(num_pop %% 1 != 0 || pop_size %% 1 != 0 || nSL %% 1 != 0) {
+    stop("(num_pop, pop_size, nSL) need to be integers")}
   if((num_pop == 3 || num_pop == 4) && 
-      ((sylnum - 4 * nsspl) %% 2 != 0 || (nsspl) %% 2 != 0)) {
+      ((sylnum - 4 * nSL) %% 2 != 0 || (nSL) %% 2 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
   if((num_pop == 5 || num_pop == 6) && 
-      ((sylnum - 4 * nsspl) %% 6 != 0 || (nsspl) %% 4 != 0)) {
+      ((sylnum - 4 * nSL) %% 6 != 0 || (nSL) %% 4 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
   if((num_pop == 7 || num_pop == 8) && 
-      ((sylnum - 4 * nsspl) %% 12 != 0 || (nsspl) %% 12 != 0)) {
+      ((sylnum - 4 * nSL) %% 12 != 0 || (nSL) %% 12 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
   if((num_pop == 9 || num_pop == 10) && 
-      ((sylnum - 4 * nsspl) %% 60 != 0 || (nsspl) %% 24 != 0)) {
+      ((sylnum - 4 * nSL) %% 60 != 0 || (nSL) %% 24 != 0)) {
     stop("Don't be a fool; check error log #_0001")}
   if(num_timesteps %% 1000 != 0) {
     stop("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
@@ -39,7 +44,7 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   curiositybreaks <- (0 : (num_pop * one_pop_singers[1])) * (1 / (num_pop * one_pop_singers[1]))
   curiosity_counter <- matrix(data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = F)
   # zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
-  # #                           #1,  #2,  #3, #4,  #5, #6,  #7, #8,  #9,#10,
+  # #                           #1,  #2, #3,  #4,  #5,  #6, #7,  #8, #9,#10,
   #                           0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
   # #                          #11, #12,#13, #14, #15, #16,#17, #18,#19, #20,
   #                            0.8,0.85,0.9,0.95,0.99,1.0,0.09,0.18,0.27,0.36,
@@ -59,24 +64,24 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   # Syllable probability distribution stuff; ends with reference matrix where each row defines a different pattern of syllable probability distributions
   if(num_pop == 1) {
     syllprob_vector <- c(
-      c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1))
+      c(rpF(sylnum-4*nSL,2,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,2,1))
     )
   } else if(num_pop > 1) {
     syllprob_vector <- c(
-      c(rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,1,2),rep.frac(nsspl,1,4),rep.frac(nsspl,1,23),rep.frac(nsspl,1,25)),
-      c(rep.frac(nsspl,1,25),rep.frac(nsspl,1,23),rep.frac(nsspl,1,4),rep.frac(nsspl,1,2),rep.frac(sylnum-4*nsspl,1,1)),
-      c(rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,2,1)),
-      c(rep.frac(nsspl,2,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,1,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,2,25))
-      #c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,3,1))
-      #c(rep.frac(nsspl,4,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,2,25),rep.frac(nsspl,4,23),rep.frac(nsspl,4,4),rep.frac(nsspl,4,2),rep.frac(sylnum-4*nsspl,2,1),rep.frac(nsspl,4,2),rep.frac(nsspl,4,4),rep.frac(nsspl,4,23),rep.frac(nsspl,4,25)),
-      #c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,4,1)),
-      #c(rep.frac(nsspl,6,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,3,25),rep.frac(nsspl,6,23),rep.frac(nsspl,6,4),rep.frac(nsspl,6,2),rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,6,2),rep.frac(nsspl,6,4),rep.frac(nsspl,6,23),rep.frac(nsspl,6,25)),
-      #c(rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,5,1)),
-      #c(rep.frac(nsspl,8,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,4,25),rep.frac(nsspl,8,23),rep.frac(nsspl,8,4),rep.frac(nsspl,8,2),rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,8,2),rep.frac(nsspl,8,4),rep.frac(nsspl,8,23),rep.frac(nsspl,8,25))
-      #c(rep.frac(sylnum-4*nsspl,3,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(3/2),1)),
-      #c(rep.frac(sylnum-4*nsspl,(3/2),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,3,1))
-      #c(rep.frac(sylnum-4*nsspl,4,1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,(4/3),1)),
-      #c(rep.frac(sylnum-4*nsspl,(4/3),1),rep.frac(nsspl,2,2),rep.frac(nsspl,2,4),rep.frac(nsspl,2,23),rep.frac(nsspl,1,25),rep.frac(nsspl,2,23),rep.frac(nsspl,2,4),rep.frac(nsspl,2,2),rep.frac(sylnum-4*nsspl,4,1))
+      c(rpF(sylnum-4*nSL,(4/3),1),rpF(nSL,1,2),rpF(nSL,1,5),rpF(nSL,1,9),rpF(nSL,1,27),rpF(nSL,1,31),rpF(nSL,1,33),rpF(nSL,1,34),rpF(sylnum-4*nSL,4,1)),
+      c(rpF(sylnum-4*nSL,4,1),rpF(nSL,1,34),rpF(nSL,1,33),rpF(nSL,1,31),rpF(nSL,1,27),rpF(nSL,1,9),rpF(nSL,1,5),rpF(nSL,1,2),rpF(sylnum-4*nSL,(4/3),1)),
+      c(rpF(sylnum-4*nSL,2,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,2,1)),
+      c(rpF(sylnum-4*nSL,4,1),rpF(nSL,2,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,2,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,2,33),rpF(sylnum-4*nSL,4,1))
+      #c(rpF(sylnum-4*nSL,3,1),rpF(nSL,4,2),rpF(nSL,4,5),rpF(nSL,4,31),rpF(nSL,2,33),rpF(nSL,4,31),rpF(nSL,4,5),rpF(nSL,4,2),rpF(sylnum-4*nSL,3,1),rpF(nSL,4,2),rpF(nSL,4,5),rpF(nSL,4,31),rpF(nSL,2,33),rpF(nSL,4,31),rpF(nSL,4,5),rpF(nSL,4,2),rpF(sylnum-4*nSL,3,1))
+      #c(rpF(nSL,4,33),rpF(nSL,4,31),rpF(nSL,4,5),rpF(nSL,4,2),rpF(sylnum-4*nSL,2,1),rpF(nSL,4,2),rpF(nSL,4,5),rpF(nSL,4,31),rpF(nSL,2,33),rpF(nSL,4,31),rpF(nSL,4,5),rpF(nSL,4,2),rpF(sylnum-4*nSL,2,1),rpF(nSL,4,2),rpF(nSL,4,5),rpF(nSL,4,31),rpF(nSL,4,33)),
+      #c(rpF(sylnum-4*nSL,4,1),rpF(nSL,6,2),rpF(nSL,6,5),rpF(nSL,6,31),rpF(nSL,3,33),rpF(nSL,6,31),rpF(nSL,6,5),rpF(nSL,6,2),rpF(sylnum-4*nSL,4,1),rpF(nSL,6,2),rpF(nSL,6,5),rpF(nSL,6,31),rpF(nSL,3,33),rpF(nSL,6,31),rpF(nSL,6,5),rpF(nSL,6,2),rpF(sylnum-4*nSL,4,1),rpF(nSL,6,2),rpF(nSL,6,5),rpF(nSL,6,31),rpF(nSL,3,33),rpF(nSL,6,31),rpF(nSL,6,5),rpF(nSL,6,2),rpF(sylnum-4*nSL,4,1)),
+      #c(rpF(nSL,6,33),rpF(nSL,6,31),rpF(nSL,6,5),rpF(nSL,6,2),rpF(sylnum-4*nSL,3,1),rpF(nSL,6,2),rpF(nSL,6,5),rpF(nSL,6,31),rpF(nSL,3,33),rpF(nSL,6,31),rpF(nSL,6,5),rpF(nSL,6,2),rpF(sylnum-4*nSL,3,1),rpF(nSL,6,2),rpF(nSL,6,5),rpF(nSL,6,31),rpF(nSL,3,33),rpF(nSL,6,31),rpF(nSL,6,5),rpF(nSL,6,2),rpF(sylnum-4*nSL,3,1),rpF(nSL,6,2),rpF(nSL,6,5),rpF(nSL,6,31),rpF(nSL,6,33)),
+      #c(rpF(sylnum-4*nSL,5,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,5,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,5,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,5,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,5,1)),
+      #c(rpF(nSL,8,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,4,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,4,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,4,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,4,33),rpF(nSL,8,31),rpF(nSL,8,5),rpF(nSL,8,2),rpF(sylnum-4*nSL,4,1),rpF(nSL,8,2),rpF(nSL,8,5),rpF(nSL,8,31),rpF(nSL,8,33))
+      #c(rpF(sylnum-4*nSL,3,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,(3/2),1)),
+      #c(rpF(sylnum-4*nSL,(3/2),1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,3,1))
+      #c(rpF(sylnum-4*nSL,4,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,(4/3),1)),
+      #c(rpF(sylnum-4*nSL,(4/3),1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,4,1))
     )
   }
    
@@ -86,11 +91,19 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
                                   byrow = TRUE
   )
   
+  # population_syll_probs <- array(data = syllprob_vector,
+  #                                dim = c(length(syllprob_vector) / sylnum,
+  #                                        sylnum,
+                                         
+  #                                ),
+  #                                dimnames = 
+  # )
+  
   Parameters <- list(num_timesteps = num_timesteps, 
                      num_pop = num_pop, 
                      pop_size = pop_size, 
                      sylnum = sylnum, 
-                     nsspl = nsspl, 
+                     nSL = nSL, 
                      one_pop_singers = one_pop_singers,  
                      pop_calls_matrix = pop_calls_matrix,
                      curiositybreaks = curiositybreaks, 
@@ -112,7 +125,7 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nsspl, o
   # 2 - num_pop,         # 9 - curiosity_counter,      # 16- ,
   # 3 - pop_size,        # 10- zero_to_one_template,    # 17- ,
   # 4 - sylnum,          # 11- population_syll_probs, # 18- ,
-  # 5 - nsspl,           # 12- curlearnprob,# 19- 
+  # 5 - nSL,           # 12- curlearnprob,# 19- 
   # 6 - one_pop_singers, # 13- learnprob,
   # 7 - pop_calls_matrix,# 14- randlearnprob,
 #return(Parameters)
@@ -128,6 +141,14 @@ define_temp_data <- function(universal_parameters) {
   # } else {
     # temp_data <- array(0, c(5, 5, universal_parameters$num_pop))
   # }
+  
+  # REALLY WANT TO HAVE:
+  #   SPLIT DATA INTO ARRAY OF 2-D SYLL DATA
+  #   AND THE OTHER, AC-RELATED METRICS
+  #   IS A LIST GOING TO BE THE BEST OPTION HERE?
+
+
+
   return(temp_data)
 }
 

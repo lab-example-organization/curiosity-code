@@ -12,7 +12,7 @@ simParams <- define_parameters(
   num_pop = params$num_pop, 
   pop_size = params$pop_size, 
   sylnum = params$sylnum, 
-  nsspl = params$num_sylls_per_prob_lvl, 
+  nSL = params$num_sylls_per_prob_lvl, 
   one_pop_singers = c(10,10), 
   curlearnprob = params$curinh_value, 
   learnprob = c(params$vertObLearn$vertical$invent,
