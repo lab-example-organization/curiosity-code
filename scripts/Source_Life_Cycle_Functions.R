@@ -203,10 +203,15 @@ should_pick_neighbor <- function(index,total_chances,selection_context,
   # is_desperate <- between(current_chance, lower_bound, upper_bound) # 
   
   # is_neighbor_better <- sortSimlr[chosenBird+index] %in% repBarrier
-  
-  stuff <- between(current_chance, lower_bound, upper_bound) == TRUE && 
-           (sortSimlr[chosenBird+index] %in% repBarrier) == TRUE
-  
+  if (
+    chosenBird+index %in% c(1:20)
+  ) {
+    stuff <- between(current_chance, lower_bound, upper_bound) == TRUE && 
+             (sortSimlr[chosenBird+index] %in% repBarrier) == TRUE
+  } else {
+    stuff <- FALSE
+  }
+    
   return(stuff)
 }
 
@@ -227,11 +232,11 @@ score_similarity <- function(suitor_vector, selector_vector) {
 sing.selection <- function(parameters, tempMoran, 
                            curiosity_level, select_type, 
                            sylrep_object, 
-                           num_select_chances = c(10, 42), 
+                           num_select_chances = c(16, 40), 
                            sylrep_fill_chances = 10, 
                            verbose_output = TRUE, 
                            interbreed = FALSE){
-
+  if (num_select_chances %% 4 != 0) {stop("Error management systems need to split num_select_chances into 4 equal integer values. Please make it divisible by 4 to address this.")}
   #print("sing.selection beginning")
   for(population in 1 : parameters$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
@@ -386,7 +391,32 @@ sing.selection <- function(parameters, tempMoran,
         #                             upper=0.75)
 
         if(should_continue == TRUE) {
-          for(neighbor in c(1, -1)) {
+          for(neighbor in c(1, -1, 2, -2)) {
+            jeff <- should_pick_neighbor(
+              index = neighbor, total_chances = num_select_chances, 
+              selection_context = select_type, 
+              current_chance = chance_for_selection, 
+              sortSimlr = golf_score,
+              repBarrier = singSuccessFilter, chosenBird = singer, 
+              lower=0.25, upper=0.5) 
+            if (jeff == TRUE) {
+
+              singer <- golf_score[singer+neighbor]
+              
+              tempMoran = update_selexn_data(
+                parameters, tempMoran, selection.index, singer, 
+                selector.index, curiosity_level, population, 
+                select_type, selection.sylreps, selector.sylrep,
+                chance_for_selection)#, F)
+              
+              should_continue <- FALSE
+              break
+            }
+          }
+        }
+
+        if(should_continue == TRUE) {
+          for(neighbor in c(1, -1, 2, -2, 3, -3, 4, -4, 5, -5)) {
             jeff <- should_pick_neighbor(
               index = neighbor, total_chances = num_select_chances, 
               selection_context = select_type, 
@@ -411,7 +441,7 @@ sing.selection <- function(parameters, tempMoran,
         }
         
         if(should_continue == TRUE) {
-          for(neighbor in c(1, -1, 2, -2)) {
+          for(neighbor in c(1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7, 8, -8, 9, -9, 10, -10)) {
             jeff <- should_pick_neighbor(neighbor, num_select_chances, select_type,
                                     chance_for_selection, golf_score,
                                     singSuccessFilter, singer, lower=0.75

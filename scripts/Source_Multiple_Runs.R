@@ -221,7 +221,7 @@ life_cycle <- function(
                                       curiosity_level = curiosity_level, 
                                       select_type = 2, 
                                       sylrep_object = sylreps, 
-                                      num_select_chances = c(100, 100), 
+                                      num_select_chances = c(40, 40), 
                                       verbose_output = F, 
                                       interbreed = F)
         
@@ -247,7 +247,7 @@ life_cycle <- function(
                                       curiosity_level = curiosity_level, 
                                       select_type = 1, 
                                       sylrep_object = sylreps, 
-                                      num_select_chances = c(100, 100), 
+                                      num_select_chances = c(40, 40), 
                                       verbose_output = F, 
                                       interbreed = F)
         
