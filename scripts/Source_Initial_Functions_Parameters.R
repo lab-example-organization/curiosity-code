@@ -68,8 +68,8 @@ define_parameters <- function(num_timesteps, num_pop, pop_size, sylnum, nSL, one
     )
   } else if(num_pop > 1) {
     syllprob_vector <- c(
-      c(rpF(sylnum-4*nSL,(4/3),1),rpF(nSL,1,2),rpF(nSL,1,5),rpF(nSL,1,9),rpF(nSL,1,27),rpF(nSL,1,31),rpF(nSL,1,33),rpF(nSL,1,34),rpF(sylnum-4*nSL,4,1)),
-      c(rpF(sylnum-4*nSL,4,1),rpF(nSL,1,34),rpF(nSL,1,33),rpF(nSL,1,31),rpF(nSL,1,27),rpF(nSL,1,9),rpF(nSL,1,5),rpF(nSL,1,2),rpF(sylnum-4*nSL,(4/3),1)),
+      c(rpF(sylnum-7*nSL,(4/3),1),rpF(nSL,1,2),rpF(nSL,1,5),rpF(nSL,1,9),rpF(nSL,1,27),rpF(nSL,1,31),rpF(nSL,1,33),rpF(nSL,1,34),rpF(sylnum-7*nSL,4,1)),
+      c(rpF(sylnum-7*nSL,4,1),rpF(nSL,1,34),rpF(nSL,1,33),rpF(nSL,1,31),rpF(nSL,1,27),rpF(nSL,1,9),rpF(nSL,1,5),rpF(nSL,1,2),rpF(sylnum-7*nSL,(4/3),1)),
       c(rpF(sylnum-4*nSL,2,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,1,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,2,1)),
       c(rpF(sylnum-4*nSL,4,1),rpF(nSL,2,33),rpF(nSL,2,31),rpF(nSL,2,5),rpF(nSL,2,2),rpF(sylnum-4*nSL,2,1),rpF(nSL,2,2),rpF(nSL,2,5),rpF(nSL,2,31),rpF(nSL,2,33),rpF(sylnum-4*nSL,4,1))
       #c(rpF(sylnum-4*nSL,3,1),rpF(nSL,4,2),rpF(nSL,4,5),rpF(nSL,4,31),rpF(nSL,2,33),rpF(nSL,4,31),rpF(nSL,4,5),rpF(nSL,4,2),rpF(sylnum-4*nSL,3,1),rpF(nSL,4,2),rpF(nSL,4,5),rpF(nSL,4,31),rpF(nSL,2,33),rpF(nSL,4,31),rpF(nSL,4,5),rpF(nSL,4,2),rpF(sylnum-4*nSL,3,1))
