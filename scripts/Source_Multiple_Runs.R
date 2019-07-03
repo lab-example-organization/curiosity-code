@@ -154,7 +154,7 @@ life_cycle <- function(
   #parent_directory <- getwd()
   source(file.path("scripts", "Source_Initial_Functions_Parameters.R"))
   
-  simParams <- define_parameters(
+  simParams <- define_parameters (
     num_timesteps = as.numeric(strsplit(runLength, "k")[[1]][1])*1000, 
     num_pop = number_populations, pop_size = population_size, 
     sylnum = syllable_number, nSL = number_sylls_probability_level, 
@@ -166,30 +166,30 @@ life_cycle <- function(
   
   ##### Timestep Data Object (TDO)
 
-  moranObjects <- define_temp_data(simParams)
+  moranObjects <- define_temp_data (simParams)
   # pairing_pool <- define_temp_data(simParams, 2)
     
-  sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
+  sylreps <- initialize.sylrep (simParams, c (1,2), T, T)
   
-  curiosity_level <- initialize.curiosity(simParams, scMin, scMax)
+  curiosity_level <- initialize.curiosity (simParams, scMin, scMax)
   
-  sylrep_rowcol <- recordvariable.initialize(
+  sylrep_rowcol <- recordvariable.initialize (
       simParams, recordingSimpFact, variableID = 1)
   
-  sylrep_dstbxn <- recordvariable.initialize(
+  sylrep_dstbxn <- recordvariable.initialize (
       simParams, recordingSimpFact, variableID = 2)
 
-  curity_mean_t <- recordvariable.initialize(
+  curity_mean_t <- recordvariable.initialize (
       simParams, recordingSimpFact, variableID = 3)
 
-  curity_repert <- recordvariable.initialize(
+  curity_repert <- recordvariable.initialize (
       simParams, recordingSimpFact, variableID = 4)
 
-  source(file.path("scripts", "Source_Life_Cycle_Functions.R"))
+  source (file.path ("scripts", "Source_Life_Cycle_Functions.R"))
   
   
 
-  stuff_to_save <- savinStuff(Parameters = simParams, 
+  stuff_to_save <- savinStuff (Parameters = simParams, 
                               Output_Filename = docnamez, 
                               moran = moranObjects)
   
@@ -435,8 +435,8 @@ multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
       curinhProportion = singleOrMixture, # only used if curinh_pattern = 5
       directoryDate = dirDate,
       invasion = params$traitInvasion,
-      invPopSize = invasionPopSize,
-      invStyle = invasionStyle
+      invPopSize = params$invasionPopSize,
+      invStyle = params$invasionStyle
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }
