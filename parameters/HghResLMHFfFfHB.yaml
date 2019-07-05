@@ -215,7 +215,7 @@ curinh_value: 0.95
 num_pop: 2
 pop_size: 400
 sylnum: 156
-num_sylls_per_prob_lvl: 12
+num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
 
