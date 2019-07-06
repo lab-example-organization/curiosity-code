@@ -1,0 +1,53 @@
+curstarts:
+  - scMin: [29, 1,26,26]
+    scMax: [34, 7,29,29]
+  - scMin: [23,13,26,26]
+    scMax: [29,19,29,29]
+  - scMin: [15,26,26,26]
+    scMax: [23,31,29,29]
+  - scMin: [13, 7,26,26]
+    scMax: [19,13,29,29]
+  - scMin: [ 7,26,26,26]
+    scMax: [13,31,29,29]
+  - scMin: [ 7,19,26,26]
+    scMax: [13,26,29,29]
+  - scMin: [ 4, 7,26,26]
+    scMax: [10,13,29,29]
+  - scMin: [ 4, 1,26,26]
+    scMax: [10, 7,29,29]
+  - scMin: [ 1,26,26,26]
+    scMax: [ 7,31,29,29]
+
+simNumberStart: [3290, 3306, 3322, 3338, 3352, 3354, 3368, 3370, 3372]
+runLength: '10k'
+SylLearnStyle: 'nsL'
+vertObLearn:
+  vertical:
+    learn: 0.95
+    invent: 0.1
+  oblique:
+    learn: 0.1
+    invent: 0.01
+sylDist: 'oppsyl'
+curinh_value: 0.95
+num_pop: 2
+pop_size: 400
+sylnum: 156
+num_sylls_per_prob_lvl: 8
+number_of_reps: 50
+standard_deviation: 2
+
+# curinh.pattern - calling either the row number 
+# or name of row for different curiosity inheritance patterns - 
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhDistribution
+curinh_pattern: 3
+one_pop_singers: [10, 10]
+RecordSimplifyFactor: 100
+curinhDistribution: [0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50] # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+traitInvasion: FALSE
+invasionPopSize: 5
+invasionStyle: 'curiosity' # need: curiosity, sylrep, 
+
+screwedUp: TRUE
+
+

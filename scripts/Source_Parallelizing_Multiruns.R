@@ -71,7 +71,7 @@ source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
 shifting_curstart <- 1:100
-paramsFile <- c("HghResLMHSmSxHB.yaml")
+paramsFile <- c("HghResLMHFfFfHB.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
