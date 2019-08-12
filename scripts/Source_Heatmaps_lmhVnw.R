@@ -45,7 +45,10 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapLand <- file.path("..", "..", "old_stuff", "curiosity-code", 
 #                          "results", "mixCI_90m-10f")
 # heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRSmSxLB")
-heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRFfFfLB")
+# heatmapLand <- file.path("..", "..", "190601_old_stuff", "HRFfFfLB")
+
+heatmapLand <- file.path("results", "190704_SmSxHB")
+heatmapLand <- file.path("results", "190705_FfFfHB")
 
 #190601_old_stuff/HRSmSxLB/
 # heatmapLand <- file.path("results", "Heatmaps")

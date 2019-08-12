@@ -1,3 +1,11 @@
+for (i in 1:length (all_the_runs)) {
+  if(length(list.files(file.path(heatmapLand,  all_the_runs[i]))) == 1) {
+    print(paste0("Folder ", all_the_runs[i], " is not done"))
+  } else {
+    # print(paste0("Folder ", all_the_runs[i], " is not done"))
+  }
+}
+
 sing.selection <- function(universal_parameters, moran, curiosity_level, select_type, sylrep_object, num_select_chances = c(10, 42), sylrep_fill_chances = 10, verbose_output = TRUE, interbreed = FALSE){
   
   for(population in 1 : universal_parameters$num_pop) { #population <- 1 rm(population)
