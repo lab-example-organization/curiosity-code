@@ -141,12 +141,16 @@ names(extractedMeans) <- all_the_names
 
 # whichBias <- c("male","female", "pop1", "pop2", "both")
 
+# source(file.path("scripts", "Source_Heatmap_Functions.R"))
+
 heatmapOutput <- list()
 heatmapOutput <- makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, 
                 biasSize = 10, otherSize = 1, 
                 reversedRuns = TRUE, specialFigs = TRUE, 
                 runStyle = 1, highRes = TRUE, 
                 extractedMeans = extractedMeans)
+
+# USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
 
 heatmapOutput <- makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, 
                 biasSize = 10, otherSize = 1, 

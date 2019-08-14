@@ -171,6 +171,8 @@ makeHeatmapFile <- function (
 
   # biasSize = 5
 
+  # print("and a one")
+
   if (reDo) {
 
     folderName <- list.files(path = file.path("results"#, "Heatmaps", "output_objects"
@@ -184,6 +186,8 @@ makeHeatmapFile <- function (
       )
     )
     
+    # print("and a two")
+
     placeholder <- array(rep(0,biasSize * biasSize * 8), dim(heatmap_array))
 
     for (long in 1:otherSize) { # femalez
@@ -299,6 +303,8 @@ makeHeatmapFile <- function (
         }
       }
     } else {
+      # print("and a three")
+
       folderName <- paste0(
       str_sub(paste(str_extract_all(
         Sys.time(), "[0123456789]"
@@ -308,10 +314,11 @@ makeHeatmapFile <- function (
       "inh_",
       diffcurstartBias,
       "Bias_", runStyle)
+      # print("and a four")
       biasSize = 10
       otherSize = 1
       heatmap_array <- array(
-            0, dim = c(10,10,1,8), list(
+            0, dim = c(biasSize,biasSize,otherSize,8), list(
               c("1-7mp1", "4-10mp1", "7-13mp1", "10-15mp1", "13-19mp1", "15-23mp1", "19-26mp1", "23-29mp1", "26-31mp1", "29-34mp1"), 
               c("1-7fp1", "4-10fp1", "7-13fp1", "10-15fp1", "13-19fp1", "15-23fp1", "19-26fp1", "23-29fp1", "26-31fp1", "29-34fp1"), 
               # c("7-10p2", "26-29fp2"), 
@@ -319,8 +326,9 @@ makeHeatmapFile <- function (
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
     }
-    
 
+    # print("and a five")    
+    print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
     for (long in 1:otherSize) { # femalez
       for (medium in 1:biasSize) { # malez1
         for(short in 1:biasSize) { # malez2
@@ -328,22 +336,23 @@ makeHeatmapFile <- function (
           tally <- short + biasSize*(medium - 1) + biasSize*biasSize*(long - 1)
           thing <- length (extractedMeans [[1]][[1]][1,1,])
           sumStats <- c (
-            extractedMeans [[tally]]$curLvlMeans [1,1,thing],
-            extractedMeans [[tally]]$curLvlMeans [1,2,thing],
-            extractedMeans [[tally]]$curLvlMeans [2,1,thing],
-            extractedMeans [[tally]]$curLvlMeans [2,2,thing],
-            extractedMeans [[tally]]$sylRepMeans [1,1,thing],
-            extractedMeans [[tally]]$sylRepMeans [1,2,thing],
-            extractedMeans [[tally]]$sylRepMeans [2,1,thing],
-            extractedMeans [[tally]]$sylRepMeans [2,2,thing]
+            extractedMeans[[tally]][[3]][1,1,thing],
+            extractedMeans[[tally]][[3]][1,2,thing],
+            extractedMeans[[tally]][[3]][2,1,thing],
+            extractedMeans[[tally]][[3]][2,2,thing],
+            extractedMeans[[tally]][[1]][1,1,thing],
+            extractedMeans[[tally]][[1]][1,2,thing],
+            extractedMeans[[tally]][[1]][2,1,thing],
+            extractedMeans[[tally]][[1]][2,2,thing]
           )
+          # print(paste(length(sumStats)))
           # this part might not work if the population of 
           # disinterest continues to be the final addition
           if (reversedRuns) {
             if (otherSize == 1) {
               heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), long,] <- sumStats
             } else {
-              heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), otherBias - (long - 1),] <- sumStats
+              heatmap_array [biasSize - (medium - 1), biasSize - (short - 1), otherSize - (long - 1),] <- sumStats
             }
           } else {
             heatmap_array [medium, short, long, ] <- sumStats
@@ -363,6 +372,8 @@ makeHeatmapFile <- function (
     #     dir.create(file.path("results", "Heatmaps", "output_objects", folderName, paste0("slice_", subset)))
     #   }
     # }
+
+    # print("and a six")
 
     if(!(dir.exists(file.path("results", folderName)))) {
 
@@ -395,6 +406,13 @@ makeHeatmapFile <- function (
   # for (subset in 1:5) {
   #   dir.create(file.path("results", folderName, paste0("slice_", subset)))
   # }
+#   print("and a seven")
+# print("and an eight")
+# print("and a nine")
+# print("and a ten")
+# print("and an eleven")
+# print("and a twelve")
+# print("and a thirteen")
   outputBall <- list(
     folderName = folderName,
     inheritance = inheritance,
