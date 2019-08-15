@@ -150,13 +150,13 @@ heatmapOutput <- makeHeatmapFile(inheritance = 11, diffcurstartBias = 3,
                 runStyle = 1, highRes = TRUE, 
                 extractedMeans = extractedMeans)
 
-# USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
+# # USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
 
-heatmapOutput <- makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, 
-                biasSize = 10, otherSize = 1, 
-                reversedRuns = TRUE, reDo = TRUE, specialFigs = TRUE, 
-                runStyle = 1, highRes = TRUE, 
-                extractedMeans = NULL)
+# heatmapOutput <- makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, 
+#                 biasSize = 10, otherSize = 1, 
+#                 reversedRuns = TRUE, reDo = TRUE, specialFigs = TRUE, 
+#                 runStyle = 1, highRes = TRUE, 
+#                 extractedMeans = NULL)
 
 # makeHeatmapFile(inheritance = 10, diffcurstartBias = 1, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)
 # makeHeatmapFile(inheritance = 10, diffcurstartBias = 2, absolute = TRUE, specialFigs = FALSE, lmhVnw = FALSE, extractedMeans = extractedMeans)

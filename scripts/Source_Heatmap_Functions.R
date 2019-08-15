@@ -328,7 +328,7 @@ makeHeatmapFile <- function (
     }
 
     # print("and a five")    
-    print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
+    # print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
     for (long in 1:otherSize) { # femalez
       for (medium in 1:biasSize) { # malez1
         for(short in 1:biasSize) { # malez2

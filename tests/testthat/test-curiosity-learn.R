@@ -7,13 +7,13 @@ source (file.path ('..', '..', script_dir, source_file))
 context ('should pick neighbor')
 
 
-test_that ('shouldPickNeighbor outputs TRUE or FALSE when working normally', {
+test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
   
   
   ##### These shouldn't throw any errors.
 
   # upper specified
-  expect_true (should_pick_neighbor (index = 1,
+  expect_true (curiosity_learn (index = 1,
                                      total_chances = c (100, 100),
                                      selection_context = 1,
                                      current_chance = 47,
@@ -27,7 +27,7 @@ test_that ('shouldPickNeighbor outputs TRUE or FALSE when working normally', {
     #sortSimlr[chosenBird + index] is found within repBarrier
 
   # unspecified upper limit
-  expect_true (should_pick_neighbor (index = 1,
+  expect_true (curiosity_learn (index = 1,
                                      total_chances = c (100, 100),
                                      selection_context = 1,
                                      current_chance = 47,
@@ -43,7 +43,7 @@ test_that ('shouldPickNeighbor outputs TRUE or FALSE when working normally', {
   ##### FALSE Results - 
   
   # neighbor is not in repBarrier
-  expect_false (should_pick_neighbor (index = 1,
+  expect_false (curiosity_learn (index = 1,
                                      total_chances = c (100, 100),
                                      selection_context = 1,
                                      current_chance = 47,
@@ -57,7 +57,7 @@ test_that ('shouldPickNeighbor outputs TRUE or FALSE when working normally', {
 
   # current chance is not within the lower and upper bounds - upper specified 
   # (the ones that let you know you've reached the appropriate level of desperation.)
-  expect_false (should_pick_neighbor (index = 1,
+  expect_false (curiosity_learn (index = 1,
                                      total_chances = c (100, 100),
                                      selection_context = 1,
                                      current_chance = 45,
@@ -71,7 +71,7 @@ test_that ('shouldPickNeighbor outputs TRUE or FALSE when working normally', {
   
   # current chance is not within the lower and upper bounds - upper specified 
   # (the ones that let you know you've reached the appropriate level of desperation.)
-  expect_false (should_pick_neighbor (index = 1,
+  expect_false (curiosity_learn (index = 1,
                                      total_chances = c (100, 100),
                                      selection_context = 1,
                                      current_chance = 45,
