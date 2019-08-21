@@ -201,7 +201,7 @@ initialize.sylrep <- function (P, population.pattern, eqpop = TRUE, eqsex = TRUE
   return (sylreps)
 }
 
-initialize.curiosity <- function (P, cur.min, cur.max, invasion = FALSE) {
+initialize.curiosity <- function (P, cur.min, cur.max) {
   warning ("These arguments must be ordered - highest level 
             population, next sex- singers, then choosers")
   if (length (cur.min) != length (cur.max) || 
@@ -238,9 +238,6 @@ initialize.curiosity <- function (P, cur.min, cur.max, invasion = FALSE) {
           sexes, pop.num
         ]]])
     }
-  }
-  if (invasion) {
-    invasion_function (curiosity_level)
   }
   return (curiosity_level)
 }

@@ -232,7 +232,9 @@ life_cycle <- function(
         # Add noise to inherited curiosity trait, store temporarily
         moranObjects <- curiosity_learn(parameters = simParams, 
                                         tempObjects = moranObjects, 
-                                        inheritance_pattern = curinh_style) 
+                                        inheritance_pattern = curinh_style,
+                                        invasion = (invasion && (invStyle == 'curiosity')),
+                                        invPopSize = invPopSize) 
         
         # 
         moranObjects <- syll_learn(parameters = simParams, 
