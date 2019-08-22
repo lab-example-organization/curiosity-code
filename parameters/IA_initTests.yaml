@@ -3,8 +3,8 @@ curstarts:
     scMax: [ 7, 7,34,34]
   - scMin: [29,29,29,29]
     scMax: [34,34,34,34]
-  - scMin: [ 1, 1, 1, 1]
-    scMax: [ 7, 7, 7, 7]
+  - scMin: [ 1, 1, 1, 1] #
+    scMax: [ 7, 7, 7, 7] #
   - scMin: [ 1,29, 1,29] #
     scMax: [ 7,34, 7,34] #
   - scMin: [29, 1,29, 1] #
@@ -42,7 +42,9 @@ standard_deviation: 2
 curinh_pattern: 3
 one_pop_singers: [10, 10]
 RecordSimplifyFactor: 100
-curinhDistribution: 0.50 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+curinhDistribution: 0.50 
+# must be between 0 and 1; [value displayed] == male; [1 - value] == female - 
+# distribution of curinh between parents
 traitInvasion: FALSE
 invasionPopSize: 5
 invasionStyle: 'curiosity' # need: curiosity, sylrep, 

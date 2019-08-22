@@ -367,7 +367,57 @@ archiveSimFiles <- function(path, filename, archive = FALSE, new_dir = FALSE){
   } # else{print("")}
 }
 
-multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber) {
+
+restart_from_save <- function (
+  # what do you need here?
+  parameters, # "params" in multi_runs
+  inputPattern, # pattern of input that is unique and helps find the completed
+  
+  #      
+  #      
+  
+) {
+  # SCRATCH
+  source(file.path("scripts", "Source_Reference_Section.R"))
+  referenceSection("multirun")
+  parameters <- yaml.load_file(file.path("parameters", "IA_initTests.yaml"))
+  inputPattern <- "3481"
+  # Control of improper data
+  if (typeof (inputPattern) != "character") {stop ("input pattern must be data type 'string'")}
+
+  # what do you need here?
+  relevantPaths <- file.path("results", list.files(file.path("results"), pattern = inputPattern))
+  #      List of paths to source files ("end_cursty.RData," and "end_sylbls.RData")
+  pathList <- list.files(file.path(relevantPaths, "variable_store"))
+  #      Way to extract final curiosity and sylrep values from old runs
+  #          Within a FOR loop:
+
+  # parameters$sylnum   = parameters[[10]]
+  # parameters$num_pop  = parameters[[8]]
+  # parameters$pop_size = parameters[[9]]
+
+  # array (0, c (2, P$num_pop, (1000/timestep_fraction)))
+
+  # making an array to store all the 50 replicate values for the ending timestep...
+
+  someKindaOutput <- array(0, c(parameters[[8]], parameters[[9]], parameters[[10]] + 1, length(pathList)))
+  #                            `Number of Pops` `Population Size``Number of Syllables*``number of replicates`
+  # * <- Syllable position [NUM_SYLLS + 1] is reserved for curiosity level
+
+  for (i in 1:length(pathList)) {
+    # i = 1
+    
+    endCur <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_cursty.RData")))
+    endRep <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_sylbls.RData")))
+
+    someKindaOutput[,,,i]
+  }
+    
+  #           make into 
+  return (someKindaOutput)
+}
+
+multi_runs <- function(shifting_curstart, paramsSource, dirDate, seedNumber, load_from_save = FALSE) {
   # # Load the C++ functions
   #sourceCpp(file.path('cpp_source', 'median.cpp'))
   #sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
