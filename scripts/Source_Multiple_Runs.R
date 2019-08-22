@@ -378,10 +378,12 @@ restart_from_save <- function (
   
 ) {
   # SCRATCH
-  source(file.path("scripts", "Source_Reference_Section.R"))
-  referenceSection("multirun")
-  parameters <- yaml.load_file(file.path("parameters", "IA_initTests.yaml"))
-  inputPattern <- "3481"
+
+  #      source(file.path("scripts", "Source_Reference_Section.R"))
+  #      referenceSection("multirun")
+  #      parameters <- yaml.load_file(file.path("parameters", "IA_initTests.yaml"))
+  #      inputPattern <- "3481"
+
   # Control of improper data
   if (typeof (inputPattern) != "character") {stop ("input pattern must be data type 'string'")}
 
@@ -398,7 +400,7 @@ restart_from_save <- function (
 
   # array (0, c (2, P$num_pop, (1000/timestep_fraction)))
 
-  # making an array to store all the 50 replicate values for the ending timestep...
+  # making an array to store all the 50 replicate values for the recording variables in the ending timestep
 
   someKindaOutput <- array(0, c(parameters[[8]], parameters[[9]], parameters[[10]] + 1, length(pathList)))
   #                            `Number of Pops` `Population Size``Number of Syllables*``number of replicates`
@@ -409,8 +411,10 @@ restart_from_save <- function (
     
     endCur <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_cursty.RData")))
     endRep <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_sylbls.RData")))
+    # curHstMeans <- colMeans(aperm(curhistlist, c(4, 1, 2, 3)), na.rm = TRUE) # | # | # aperm is part of base R.
 
-    someKindaOutput[,,,i]
+    someKindaOutput[,,1:parameters[[10]],i] <- aperm (endRep, c (2,1,3))
+    someKindaOutput[,,parameters[[10]] + 1,i] <- aperm (endCur, c (2,1))
   }
     
   #           make into 
