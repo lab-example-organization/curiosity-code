@@ -36,7 +36,7 @@ num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
 
-# curinh.pattern - calling either the row number 
+# curinh_pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhDistribution
 curinh_pattern: 3
@@ -48,7 +48,8 @@ curinhDistribution: 0.50
 traitInvasion: FALSE
 invasionPopSize: 5
 invasionStyle: 'curiosity' # need: curiosity, sylrep, 
+screwedUp: FALSE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
 
-screwedUp: FALSE
-
-
+# This is for starting a run again, using pre-specified endrep and endcur from a past run.
+lastRunInit: FALSE
+lastRunID: '3481'

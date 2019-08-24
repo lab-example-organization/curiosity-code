@@ -188,20 +188,26 @@ recordvariable.initialize <- function (P, variableID, RecSimFct) {
 
 #day.tuh <- recordvariable.initialize
 
-initialize.sylrep <- function (P, population.pattern, eqpop = TRUE, eqsex = TRUE) {
+initialize.sylrep <- function (P, population.pattern, eqpop = TRUE, eqsex = TRUE, pastRunInit = FALSE) {
   
   if (length (population.pattern) != P$num_pop) {
     stop ("This determines the initial syllable distributions of each subpopulation. It is a vector of row calls for population_syll_probs, so it must match the number of populations")}
   
   # making the object that will hold each instance of the function, hopefully to-be-assigned to specific variables for an instantiation of the model ¯\_(ツ)_/¯
-  sylreps <- array (0, c (P$pop_size, P$sylnum, P$num_pop))
-  for (i in 1 : P$num_pop) {
-    sylreps [, , i] <- t (replicate (P$pop_size, rbinom (length (P$population_syll_probs [population.pattern [i], ]), size = 1, prob = P$population_syll_probs [population.pattern [i], ])))
+  if (pastRunInit) {
+    sylreps <- aperm(endRep, c(3,2,1), na.rm = TRUE)
+  } else {
+    sylreps <- array (0, c (P$pop_size, P$sylnum, P$num_pop))
+    for (i in 1 : P$num_pop) {
+      sylreps [, , i] <- t (replicate (P$pop_size, rbinom (length (P$population_syll_probs [population.pattern [i], ]), size = 1, prob = P$population_syll_probs [population.pattern [i], ])))
+    }
   }
+  
+  
   return (sylreps)
 }
 
-initialize.curiosity <- function (P, cur.min, cur.max) {
+initialize.curiosity <- function (P, cur.min, cur.max, pastRunInit = FALSE) {
   warning ("These arguments must be ordered - highest level 
             population, next sex- singers, then choosers")
   if (length (cur.min) != length (cur.max) || 
