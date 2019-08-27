@@ -188,32 +188,48 @@ recordvariable.initialize <- function (P, variableID, RecSimFct) {
 
 #day.tuh <- recordvariable.initialize
 
-initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE, eqpop = TRUE, eqsex = TRUE, pastRunInit = FALSE) {
+initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE, 
+                            eqpop = TRUE, eqsex = TRUE, pastRunInit = FALSE) {
   
   if (length (population.pattern) != P$num_pop) {
-    stop ("This determines the initial syllable distributions of each subpopulation. It is a vector of row calls for population_syll_probs, so it must match the number of populations")}
-  
-  IF (!(pastRunObject && pastRunInit)) {
-    stop ("Both pastRunObject and pastRunInit need to both be engaged together... if they aren't, it won't work!")
+    stop ("This determines the initial syllable distributions of each
+           subpopulation. It is a vector of row calls for 
+           population_syll_probs, so it must match the number of populations")
   }
 
-  # making the object that will hold each instance of the function, hopefully to-be-assigned to specific variables for an instantiation of the model ¯\_(ツ)_/¯
+  if (! (xor (pastRunObject, pastRunInit))) {
+    stop ("Both pastRunObject and pastRunInit need to both 
+    be engaged together... if they aren't, it won't work!")
+  }
+
+  # making the object that will hold each instance of the function, 
+  # hopefully to-be-assigned to specific variables for an 
+  # instantiation of the model ¯\_(ツ)_/¯
   if (pastRunInit) {
-    sylreps <- aperm(pastRunObject[,,1:P$sylnum], c(2,3,1), na.rm = TRUE)
+    sylreps <- aperm (pastRunObject [, , 1 : P$sylnum], c (2, 3, 1), 
+                na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
   } else {
     sylreps <- array (0, c (P$pop_size, P$sylnum, P$num_pop))
+
     for (i in 1 : P$num_pop) {
-      sylreps [, , i] <- t (replicate (P$pop_size, rbinom (length (P$population_syll_probs [population.pattern [i], ]), size = 1, prob = P$population_syll_probs [population.pattern [i], ])))
+      sylreps [, , i] <- t (replicate (P$pop_size, rbinom (
+        length (P$population_syll_probs [population.pattern [i], ]), 
+        size = 1, prob = P$population_syll_probs [population.pattern [i], ])))
     }
   }
-  
-  
   return (sylreps)
 }
 
-initialize.curiosity <- function (P, cur.min, cur.max, pastRunInit = FALSE) {
+initialize.curiosity <- function (P, cur.min, cur.max, 
+            pastRunObject = FALSE, pastRunInit = FALSE) {
+  
+  if (! (pastRunObject && pastRunInit)) {
+    stop ("Both pastRunObject and pastRunInit need to both 
+    be engaged together... if they aren't, it won't work!")
+  }
+  
   warning ("These arguments must be ordered - highest level 
-            population, next sex- singers, then choosers")
+            population, then role- singers before choosers")
   if (length (cur.min) != length (cur.max) || 
      length (cur.min) != (P$num_pop * 2)) {
     print ("Error Log #0003: each argument needs to be a 
@@ -224,7 +240,8 @@ initialize.curiosity <- function (P, cur.min, cur.max, pastRunInit = FALSE) {
     stop ("cur.max and cur.min have to be the same length.")
   }
   for (i in 1 : length (cur.min)) {
-    if (P$zero_to_one_template [cur.max [i]] <= P$zero_to_one_template [cur.min [i]] # || 
+    if (P$zero_to_one_template [cur.max [i]
+    ] <= P$zero_to_one_template [cur.min [i]] # || 
       #  cur.max[i] %% 1 != 0 || 
       #  cur.min[i] %% 1 != 0
        ) {
@@ -234,19 +251,24 @@ initialize.curiosity <- function (P, cur.min, cur.max, pastRunInit = FALSE) {
     }
   }
   curiosity_level <- array (0, c (P$pop_size, P$num_pop))
-  for (pop.num in 1 : P$num_pop) {
-    for (sexes in 1 : 2) {
-      curiosity_level [((
-          1 + ((sexes - 1) * (P$pop_size / 2))
-        ) : (
-          sexes * P$pop_size / 2
-        )), pop.num
-      ] <- runif (
-        P$pop_size / 2, P$zero_to_one_template [
-          cur.min [P$curiosity_counter [sexes, pop.num]]
-        ], P$zero_to_one_template [cur.max [P$curiosity_counter [
-          sexes, pop.num
+  if (pastRunInit) {
+    curiosity_object <- pastRunObject [, , P$sylnum + 1]
+    curiosity_level <- aperm (curiosity_object, c (2, 1), na.rm = TRUE)
+  } else {
+    for (pop.num in 1 : P$num_pop) {
+      for (sexes in 1 : 2) {
+        curiosity_level [((
+            1 + ((sexes - 1) * (P$pop_size / 2))
+          ) : (
+            sexes * P$pop_size / 2
+          )), pop.num
+        ] <- runif (
+          P$pop_size / 2, P$zero_to_one_template [
+            cur.min [P$curiosity_counter [sexes, pop.num]]
+          ], P$zero_to_one_template [cur.max [P$curiosity_counter [
+            sexes, pop.num
         ]]])
+      }
     }
   }
   return (curiosity_level)
