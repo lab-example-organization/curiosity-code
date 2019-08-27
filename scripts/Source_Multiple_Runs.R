@@ -152,7 +152,7 @@ restart_from_save <- function (
   pathList <- list.files(file.path(relevantPaths, "variable_store"))
   
   someKindaOutput <- array(0, c(parameters[[8]], parameters[[9]], parameters[[10]] + 1, length(pathList)))
-  
+                              # num_pop,         pop_size,        sylnum
   for (i in 1:length(pathList)) {
     
     endCur <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_cursty.RData")))
@@ -171,7 +171,8 @@ life_cycle <- function (
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
   recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, 
-  directoryDate, invasion, invPopSize, invStyle, initFromLastRun = FALSE) {
+  directoryDate, invasion, invPopSize, invStyle, initFromLastRun = FALSE, 
+  lastRunPattern = FALSE) {
   
   docnamez <- makeDocnamez (
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
@@ -197,10 +198,10 @@ life_cycle <- function (
   moranObjects <- define_temp_data (simParams)
   # pairing_pool <- define_temp_data(simParams, 2)
   if (initFromLastRun) {
-    sylreps <- initialize.sylrep (simParams, c (1,2), T, T, T)
+    sylreps <- initialize.sylrep (P = simParams, population.pattern = c (1,2), pastRunObject = lastRunObject, eqpop = T, eqsex = T, pastRunInit = T)
     curiosity_level <- initialize.curiosity (simParams, scMin, scMax, T)
   } else {
-    sylreps <- initialize.sylrep (simParams, c (1,2), T, T)
+    sylreps <- initialize.sylrep (P = simParams, population.pattern = c (1,2), eqpop = T, eqsex = T)
     curiosity_level <- initialize.curiosity (simParams, scMin, scMax)
   }
 
@@ -417,7 +418,7 @@ multi_runs <- function (shifting_curstart, paramsSource, dirDate, seedNumber) {
   # This wrapped up the restart_from_save function, 
   # so that life_cycle has last-run data as an accessible object
   if (params$lastRunInit) {
-    lastRun_init <- restart_from_save (parameters = params)
+    lastRun_init <- restart_from_save (parameters = params, inputPattern = params$lastRunID)
   }
 
   for (rep_number in 1 : number_of_reps) {
@@ -468,7 +469,8 @@ multi_runs <- function (shifting_curstart, paramsSource, dirDate, seedNumber) {
       invasion = params$traitInvasion,
       invPopSize = params$invasionPopSize,
       invStyle = params$invasionStyle,
-      initFromLastRun = params$lastRunInit
+      initFromLastRun = params$lastRunInit,
+      lastRunObject = lastRun_init[,,,rep_number]
     )
     print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
   }

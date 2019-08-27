@@ -50,6 +50,7 @@ invasionPopSize: 5
 invasionStyle: 'curiosity' # need: curiosity, sylrep, 
 screwedUp: FALSE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
 
-# This is for starting a run again, using pre-specified endrep and endcur from a past run.
+# This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 lastRunInit: FALSE
+# If this is being used, use an unique pattern from the run whose last timestep you would like to use.
 lastRunID: '3481'
