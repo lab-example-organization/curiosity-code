@@ -197,7 +197,7 @@ initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE,
            population_syll_probs, so it must match the number of populations")
   }
 
-  if (! (xor (pastRunObject, pastRunInit))) {
+  if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
     stop ("Both pastRunObject and pastRunInit need to both 
     be engaged together... if they aren't, it won't work!")
   }
@@ -223,7 +223,7 @@ initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE,
 initialize.curiosity <- function (P, cur.min, cur.max, 
             pastRunObject = FALSE, pastRunInit = FALSE) {
   
-  if (! (pastRunObject && pastRunInit)) {
+  if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
     stop ("Both pastRunObject and pastRunInit need to both 
     be engaged together... if they aren't, it won't work!")
   }

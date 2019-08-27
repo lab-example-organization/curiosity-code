@@ -171,8 +171,8 @@ life_cycle <- function (
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
   recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, 
-  directoryDate, invasion, invPopSize, invStyle, initFromLastRun = FALSE, 
-  lastRunPattern = FALSE) {
+  directoryDate, invasion, invPopSize, invStyle, initFromLastRun = FALSE,
+  lastRunObject = FALSE) {
   
   docnamez <- makeDocnamez (
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
@@ -199,7 +199,7 @@ life_cycle <- function (
   # pairing_pool <- define_temp_data(simParams, 2)
   if (initFromLastRun) {
     sylreps <- initialize.sylrep (P = simParams, population.pattern = c (1,2), pastRunObject = lastRunObject, eqpop = T, eqsex = T, pastRunInit = T)
-    curiosity_level <- initialize.curiosity (simParams, scMin, scMax, T)
+    curiosity_level <- initialize.curiosity (P = simParams, cur.min = scMin, cur.max = scMax, pastRunObject = lastRunObject, pastRunInit = T)
   } else {
     sylreps <- initialize.sylrep (P = simParams, population.pattern = c (1,2), eqpop = T, eqsex = T)
     curiosity_level <- initialize.curiosity (simParams, scMin, scMax)

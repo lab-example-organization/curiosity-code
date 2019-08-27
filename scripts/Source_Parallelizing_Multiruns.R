@@ -70,7 +70,7 @@ n_cores <- 8
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:8
+shifting_curstart <- 1
 paramsFile <- c("IA_initTests.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))

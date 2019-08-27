@@ -1,22 +1,6 @@
 curstarts:
   - scMin: [ 1, 1,29,29]
     scMax: [ 7, 7,34,34]
-  - scMin: [29,29,29,29]
-    scMax: [34,34,34,34]
-  - scMin: [ 1, 1, 1, 1] #
-    scMax: [ 7, 7, 7, 7] #
-  - scMin: [ 1,29, 1,29] #
-    scMax: [ 7,34, 7,34] #
-  - scMin: [29, 1,29, 1] #
-    scMax: [34, 7,34, 7] #
-  - scMin: [ 1,29,29,29]
-    scMax: [ 7,34,34,34]
-  - scMin: [29, 1,29,29]
-    scMax: [34, 7,34,34]
-  - scMin: [ 1,29, 1, 1] #
-    scMax: [ 7,34, 7, 7] #
-  - scMin: [29, 1, 1, 1]
-    scMax: [34, 7, 7, 7]
 simNumberStart: [3481]
 runLength: '100k'
 SylLearnStyle: 'nsL'
@@ -51,6 +35,6 @@ invasionStyle: 'curiosity' # need: curiosity, sylrep,
 screwedUp: FALSE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
-lastRunInit: FALSE
+lastRunInit: TRUE
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
 lastRunID: '3481'
