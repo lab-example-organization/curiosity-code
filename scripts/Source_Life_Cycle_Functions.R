@@ -667,7 +667,8 @@ curiosity_learn <- function (parameters,
         new.curiosity <- tempObjects [curinh_patterns [
             inheritance_pattern,sex
           ], parameters$sylnum + 2, population] + 
-          ((1 - parameters$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+          ((1 - parameters$curlearnprob) * (
+            newcuriosity [2 * (population - 1) + sex
           ])) # Adding small proportion of noise
         
         tempObjects [
@@ -684,6 +685,7 @@ curiosity_learn <- function (parameters,
   }
 
   if (invasion) {
+    invaderIDs <- sample(,invPopSize,)
     
   }
 

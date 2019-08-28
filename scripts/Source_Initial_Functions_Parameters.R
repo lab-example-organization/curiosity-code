@@ -146,9 +146,6 @@ define_temp_data <- function (universal_parameters) {
   #   SPLIT DATA INTO ARRAY OF 2-D SYLL DATA
   #   AND THE OTHER, AC-RELATED METRICS
   #   IS A LIST GOING TO BE THE BEST OPTION HERE?
-
-
-
   return (temp_data)
 }
 
@@ -197,15 +194,19 @@ initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE,
            population_syll_probs, so it must match the number of populations")
   }
 
-  if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
-    stop ("Both pastRunObject and pastRunInit need to both 
-    be engaged together... if they aren't, it won't work!")
-  }
+  # if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
+  #   stop ("Both pastRunObject and pastRunInit need to both 
+  #   be engaged together... if they aren't, it won't work!")
+  # }
 
   # making the object that will hold each instance of the function, 
   # hopefully to-be-assigned to specific variables for an 
   # instantiation of the model ¯\_(ツ)_/¯
   if (pastRunInit) {
+    if (!(pastRunObject)) {
+      stop ("Both pastRunObject and pastRunInit need to both 
+    be engaged together... if they aren't, it won't work!")
+    }
     sylreps <- aperm (pastRunObject [, , 1 : P$sylnum], c (2, 3, 1), 
                 na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
   } else {

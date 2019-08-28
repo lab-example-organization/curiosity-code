@@ -145,18 +145,24 @@ restart_from_save <- function (
   parameters, # "params" in multi_runs
   inputPattern
 ) {
-  if (typeof (inputPattern) != "character") {stop ("input pattern must be data type 'string'")}
+  if (typeof (inputPattern) != "character") {
+    stop ("input pattern must be data type 'string'")}
   
-  relevantPaths <- file.path("results", list.files(file.path("results"), pattern = inputPattern))
+  relevantPaths <- file.path("results", list.files(
+    file.path("results"), pattern = inputPattern))
   
-  pathList <- list.files(file.path(relevantPaths, "variable_store"))
+  pathList <- list.files(
+    file.path(relevantPaths, "variable_store"))
   
-  someKindaOutput <- array(0, c(parameters[[8]], parameters[[9]], parameters[[10]] + 1, length(pathList)))
-                              # num_pop,         pop_size,        sylnum
+  someKindaOutput <- array(0, c(parameters[[8]], 
+    parameters[[9]], parameters[[10]] + 1, length(pathList)))
+  # num_pop, pop_size,    sylnum
   for (i in 1:length(pathList)) {
     
-    endCur <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_cursty.RData")))
-    endRep <- readRDS (file.path (relevantPaths, "variable_store", paste0(pathList[i], "/end_sylbls.RData")))
+    endCur <- readRDS (file.path (relevantPaths, "variable_store", 
+      paste0(pathList[i], "/end_cursty.RData")))
+    endRep <- readRDS (file.path (relevantPaths, "variable_store", 
+      paste0(pathList[i], "/end_sylbls.RData")))
   
     someKindaOutput[,,1:parameters[[10]],i] <- aperm (endRep, c (2,1,3))
     someKindaOutput[,,parameters[[10]] + 1,i] <- aperm (endCur, c (2,1))
@@ -166,13 +172,22 @@ restart_from_save <- function (
 
 }
 
+
+      invasion = params$traitInvasion,
+      invPopSize = params$invasionPopSize,
+      invStyle = params$invasionStyle,
+      invPop = params$invasionPop,
+      invSex = params$invasionSex,
+      invTraitValue = params$invasionTraitValue,
+
+
 life_cycle <- function (
   scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
   recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, 
-  directoryDate, invasion, invPopSize, invStyle, initFromLastRun = FALSE,
-  lastRunObject = FALSE) {
+  directoryDate, invasion, invPopSize, invStyle, invPop, invSex, 
+  invTraitValue, initFromLastRun = FALSE, lastRunObject = FALSE) {
   
   docnamez <- makeDocnamez (
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
@@ -198,11 +213,17 @@ life_cycle <- function (
   moranObjects <- define_temp_data (simParams)
   # pairing_pool <- define_temp_data(simParams, 2)
   if (initFromLastRun) {
-    sylreps <- initialize.sylrep (P = simParams, population.pattern = c (1,2), pastRunObject = lastRunObject, eqpop = T, eqsex = T, pastRunInit = T)
-    curiosity_level <- initialize.curiosity (P = simParams, cur.min = scMin, cur.max = scMax, pastRunObject = lastRunObject, pastRunInit = T)
+    sylreps <- initialize.sylrep (P = simParams, 
+      population.pattern = c (1,2), pastRunObject = lastRunObject, 
+      eqpop = T, eqsex = T, pastRunInit = T)
+    curiosity_level <- initialize.curiosity (
+      P = simParams, cur.min = scMin, cur.max = scMax, 
+      pastRunObject = lastRunObject, pastRunInit = T)
   } else {
-    sylreps <- initialize.sylrep (P = simParams, population.pattern = c (1,2), eqpop = T, eqsex = T)
-    curiosity_level <- initialize.curiosity (simParams, scMin, scMax)
+    sylreps <- initialize.sylrep (P = simParams, 
+      population.pattern = c (1,2), eqpop = T, eqsex = T)
+    curiosity_level <- initialize.curiosity (
+      simParams, scMin, scMax)
   }
 
   
@@ -266,7 +287,9 @@ life_cycle <- function (
         moranObjects <- curiosity_learn(parameters = simParams, 
                                         tempObjects = moranObjects, 
                                         inheritance_pattern = curinh_style,
-                                        invasion = (invasion && (invStyle == 'curiosity')),
+                                        invasion = (
+                                          invasion && (
+                                            invStyle == 'curiosity')),
                                         invPopSize = invPopSize) 
         
         # 
@@ -336,9 +359,10 @@ life_cycle <- function (
 
 
     # print("console_copy_sink")
-    sink(file = file.path("source", "temp", paste0(SimNumberLC, "_console_copy.txt")), 
-      append = TRUE, split = TRUE)
-    print(paste0("Sim Number ", strsplit(docnamez, "_")[[1]][2], " - storing data packet ", 
+    sink(file = file.path("source", "temp", paste0(
+      SimNumberLC, "_console_copy.txt")), append = TRUE, split = TRUE)
+    print(paste0("Sim Number ", strsplit(docnamez, 
+      "_")[[1]][2], " - storing data packet ", 
       thousand_timesteps, " at ", Sys.time()))
     sink()
 
@@ -358,13 +382,19 @@ life_cycle <- function (
                     syll_container = sylreps,
                     cur_container = curiosity_level,
                     run_timedate = run_timedate,
-                    FolderName = file.path("results", stuff_to_save$docnamez, "variable_store", paste0(run_timedate, "-GMT-variable-store")))
+                    FolderName = file.path(
+                      "results", stuff_to_save$docnamez, "variable_store", 
+                      paste0(run_timedate, "-GMT-variable-store")))
 
       #     FolderName <- 
 
     # print("sim_data_sink")
-    if((thousand_timesteps==(simParams$num_timesteps/1000))&&(simplify==1000/recordingSimpFact)&&(single_timestep==recordingSimpFact)) {
-      sink(file = file.path("source", "temp", paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)
+    if((thousand_timesteps==(simParams$num_timesteps/1000)
+      )&&(
+        simplify==1000/recordingSimpFact
+      )&&(single_timestep==recordingSimpFact)) {
+      sink(file = file.path("source", "temp", 
+        paste0(SimNumberLC, "_sim_data.txt")), append = TRUE)
       print(FolderName)
       sink()
     }
@@ -375,24 +405,31 @@ life_cycle <- function (
 #       for(single_timestep in 1:recordingSimpFact) {
 
 
-archiveSimFiles <- function (path, filename, archive = FALSE, new_dir = FALSE) {
+archiveSimFiles <- function (path, filename, 
+  archive = FALSE, new_dir = FALSE) {
   if (file.exists (path)) {
     if (archive) {
       archivePrefix <- gsub ('[-: ]', '', substring (Sys.time (), 3))
       if (new_dir) {
-        file.copy (from = file.path (path, filename), to = file.path ("source", "archive", new_dir, filename))
-        file.rename (from = file.path ("source", "archive", new_dir, filename), 
-          to=file.path("source", "archive", new_dir, paste0(archivePrefix, "_", filename)))  
+        file.copy (from = file.path (path, filename), to = file.path (
+          "source", "archive", new_dir, filename))
+        file.rename (from = file.path ("source", "archive", new_dir, 
+          filename), to=file.path("source", "archive", new_dir, 
+          paste0(archivePrefix, "_", filename)))  
       } else {
-        file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename))
+        file.copy(from=file.path(path, filename), 
+          to=file.path("source", "archive", filename))
         file.rename(from=file.path("source", "archive", filename), 
-          to=file.path("source", "archive", paste0(archivePrefix, "_", filename)))
+          to=file.path("source", 
+          "archive", paste0(archivePrefix, "_", filename)))
       }
     } else {
       if(new_dir) {
-        file.copy(from=file.path(path, filename), to=file.path("source", "archive", new_dir, filename))
+        file.copy(from=file.path(path, filename), 
+          to=file.path("source", "archive", new_dir, filename))
       } else {
-        file.copy(from=file.path(path, filename), to=file.path("source", "archive", filename))
+        file.copy(from=file.path(path, filename), 
+          to=file.path("source", "archive", filename))
       }
     }
     file.remove(file.path(path, filename))
@@ -400,7 +437,8 @@ archiveSimFiles <- function (path, filename, archive = FALSE, new_dir = FALSE) {
   } # else{print("")}
 }
 
-multi_runs <- function (shifting_curstart, paramsSource, dirDate, seedNumber) {
+multi_runs <- function (shifting_curstart, paramsSource, 
+  dirDate, seedNumber) {
 
   # hashtag Repeatable Data! Thanks, set.seed!
   set.seed (seedNumber + shifting_curstart)
@@ -418,7 +456,10 @@ multi_runs <- function (shifting_curstart, paramsSource, dirDate, seedNumber) {
   # This wrapped up the restart_from_save function, 
   # so that life_cycle has last-run data as an accessible object
   if (params$lastRunInit) {
-    lastRun_init <- restart_from_save (parameters = params, inputPattern = params$lastRunID)
+    lastRun_init <- restart_from_save (parameters = params, 
+      inputPattern = params$lastRunID)
+  } else {
+    lastRun_init <- FALSE
   }
 
   for (rep_number in 1 : number_of_reps) {
@@ -426,7 +467,7 @@ multi_runs <- function (shifting_curstart, paramsSource, dirDate, seedNumber) {
       file.create (file.path ("source", "temp", paste0 (
         shifting_curstart,"_sim_data.txt")))
     }
-    if (params$screwedUp == T) {
+    if (params$IndRunRedo == T) {
       subsetOrSequence <- params$simNumberStart [shifting_curstart]
       singleOrMixture <- params$curinhDistribution [shifting_curstart]
     } else {
@@ -469,10 +510,15 @@ multi_runs <- function (shifting_curstart, paramsSource, dirDate, seedNumber) {
       invasion = params$traitInvasion,
       invPopSize = params$invasionPopSize,
       invStyle = params$invasionStyle,
+      invPop = params$invasionPop,
+      invSex = params$invasionSex,
+      invTraitValue = params$invasionTraitValue,
       initFromLastRun = params$lastRunInit,
       lastRunObject = lastRun_init[,,,rep_number]
     )
-    print(paste0("Rep Number: ", rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", (format(Sys.time(), "%F-%H%M%S"))))
+    print(paste0("Rep Number: ", 
+      rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", 
+      (format(Sys.time(), "%F-%H%M%S"))))
   }
   
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
