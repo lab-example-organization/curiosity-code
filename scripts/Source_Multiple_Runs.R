@@ -464,8 +464,15 @@ multi_runs <- function (shifting_curstart, paramsSource,
 
   for (rep_number in 1 : number_of_reps) {
     if (rep_number == 1) {
-      file.create (file.path ("source", "temp", paste0 (
-        shifting_curstart,"_sim_data.txt")))
+
+      sink(file = file.path(	
+          "source", "temp", paste0(shifting_curstart,"_sim_data.txt")	
+        ), append = FALSE)	
+      print("/please/ignore/this/line/like/you/always/do")	
+      sink()
+
+      # file.create (file.path ("source", "temp", paste0 (
+      #   shifting_curstart,"_sim_data.txt")))
     }
     if (params$IndRunRedo == T) {
       subsetOrSequence <- params$simNumberStart [shifting_curstart]

@@ -1,23 +1,11 @@
 curstarts:
-  - scMin: [ 1, 1,29,29] #
-    scMax: [ 7, 7,34,34] #
   - scMin: [29,29,29,29]	
     scMax: [34,34,34,34]
-  - scMin: [ 1, 1, 1, 1] #	
-    scMax: [ 7, 7, 7, 7] #	
-  - scMin: [ 1,29, 1,29] #	
-    scMax: [ 7,34, 7,34] #	
-  - scMin: [29, 1,29, 1] #
-    scMax: [34, 7,34, 7] #
   - scMin: [ 1,29,29,29]	
     scMax: [ 7,34,34,34]	
   - scMin: [29, 1,29,29]	
     scMax: [34, 7,34,34]
-  - scMin: [ 1,29, 1, 1] #
-    scMax: [ 7,34, 7, 7] #
-  - scMin: [29, 1, 1, 1] #
-    scMax: [34, 7, 7, 7] #
-simNumberStart: [3481]
+simNumberStart: [3482, 3486, 3487]
 runLength: '200k'
 SylLearnStyle: 'nsL'
 vertObLearn:
@@ -42,7 +30,7 @@ standard_deviation: 2
 curinh_pattern: 3
 one_pop_singers: [10, 10]
 RecordSimplifyFactor: 100
-curinhDistribution: 0.50 
+curinhDistribution: [0.50, 0.5, 0.5]
 # must be between 0 and 1; [value displayed] == male; [1 - value] == female - 
 # distribution of curinh between parents
 
