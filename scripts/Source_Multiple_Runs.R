@@ -255,45 +255,92 @@ life_cycle <- function (
 
 
     # Invasion Setup
-    #   invasion
-    #   invKTmstps
-    #   invStyle
-    #   invPopSize
-    #   invFocus
-    #   invTraitValue
+    #   invasion, i
+    #   invKTmstps, iK
+    #   invStyle, iS
+    #   invPopSize, iP
+    #   invFocus, iF
+    #   invTraitValue, iT
     #   sylreps
     #   simParams
     #   
 
-    if (
-      invasion &&
-      thousand_timesteps == invKTmstps &&
-      invStyle == 'wholesale'
+    invasion_parameters <- function (
+      i = invasion,
+      kTm = thousand_timesteps,
+      iK = invKTmstps,
+      iP = invasionPop,
+      iSx = invSex,
+      iPs = invPopSize,
+      iF = invFocus,
+      iT = invTraitValue,
+      sylrep_container = sylreps,
+      someParameters = simParams
     ) {
-      for (population in 1 : simParams$num_pop) {
-        pop_subset <- sample (simParams$pop_calls_matrix [1,], invPopSize)
-        if (invFocus = "curiosity") {
-          curiosity_level [pop_subset [1 : invPopSize], population] <- 1 - curiosity_level [pop_subset [1 : invPopSize], population]
-        } else if (invFocus = "sylrep") {
-          if(!(invTraitValue)) {
-            for (variable in 1 : invPopSize) {
-              thing <- (syllable_number + 1) - which(sylreps [pop_subset [variable], , population] == 1)
-              # stuff <- (syllable_number + 1) - thing
-              sylreps [pop_subset [variable], , population] <- thing
-            }
-          } else { # this is the point at which the string of values (c (1,2)) 
-            
-            for (variable in 1 : invPopSize) {
-              thing <- (syllable_number + 1) - which(sylreps [pop_subset [variable], , population] == 1)
-              # stuff <- (syllable_number + 1) - thing
-              sylreps [pop_subset [variable], , population] <- thing
-            }
-            
-            # sample(x, size, replace = FALSE, prob = NULL)
+      if (i) {
+        if (kTm == iK) {
+          # for (population in 1 : someParameters$num_pop) {
+          
+          if (iP == 'focal') {
+            population <- 1
+          } else {
+            population <- 2
           }
+          
+          pop_subset <- sample (someParameters$pop_calls_matrix [1,], iPs)
+          
+          if (iF = 'curiosity') {
+            if(!(iT)) {
+              
+              # this substitutes the current curiosity value for the population subset, with "1 - current curiosity value"
+              curiosity_level [pop_subset [1 : iPs], population] <- 1 - curiosity_level [pop_subset [1 : iPs], population]
+
+            } else {
+
+              # this substitutes the current curiosity value for the population subset, with "1 - current curiosity value"
+              curiosity_level [pop_subset [1 : iPs], population] <- sample((100*(iT[1]-(iT[2]/2))):(100*(iT[1]+(iT[2]/2))), pop_subset)/100
+
+            }
+          } else if (iF = 'sylrep') {
+            if(!(iT)) {
+              for (variable in 1 : iPs) {
+                thing <- (syllable_number + 1) - which(sylrep_container [pop_subset [variable], , population] == 1)
+                # stuff <- (syllable_number + 1) - thing
+                sylrep_container [pop_subset [variable], thing[1:length(thing)], population] <- 1
+              }
+            } else { # this is the point at which the string of values (c (1,2)) 
+              
+              for (variable in 1 : iPs) {
+                sylrep_size <- length(which(sylrep_container [pop_subset [variable], , population] == 1))
+                sylrep_mean <- iT[1]*someParameters$sylnum
+                building_a_sylrep = unique(sort(sample(1:156,50,T,c(rep(0.001,20),rep(0.75,80),rep(0.001,56)))))
+                if (length(building_a_sylrep) < sylrep_size) {
+                  building_a_sylrep <- unique(sort(sample(1:156,50,T,c(rep(0.01,20),rep(0.75,80),rep(0.01,56)))))
+                } else if (length(building_a_sylrep) > sylrep_size) {
+                  
+                }
+                # thing <- (syllable_number + 1) - which(sylrep_container [pop_subset [variable], , population] == 1)
+                # stuff <- (syllable_number + 1) - thing
+                sylrep_container [pop_subset [variable], building_a_sylrep[1:length(building_a_sylrep)], population] <- 1
+              }
+              
+              # sample(x, size, replace = FALSE, prob = NULL)
+              
+              # > unique(sort(sample(1:156,50,T,c(rep(0.01,20),rep(0.5,80),rep(0.01,56)))))
+              #  [1]  21  24  25  26  27  29  31  37  39  48  49  50  52  54  56  57  58  59  64
+              # [20]  65  66  73  74  76  77  78  81  82  83  85  86  90  93  94  95  96  99 100
+            }
+          }
+        # }
         }
       }
+      if(iF == 'curiosity') {
+        return(curiosity_level)
+      } else if (iF == 'sylrep'){
+        return(sylrep_container)
+      }
     }
+    
 
     for(simplify in 1:(1000/recordingSimpFact)) {
       for(single_timestep in 1:recordingSimpFact) {

@@ -38,7 +38,7 @@ curinhDistribution: [0.50, 0.5, 0.5]
 traitInvasion: TRUE
 invasionThouTmstps: 2
 invasionPopSize: 5
-invasionStyle: 'offspring' # need: offspring, wholesale, 
+# invasionStyle: 'offspring' # need: offspring, wholesale, 
 invasionFocus: 'curiosity' # need: curiosity, sylrep, both!
 invasionPop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionSex: 'male' # or female (or, perhaps, both?)
