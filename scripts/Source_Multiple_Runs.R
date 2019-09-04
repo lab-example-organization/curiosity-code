@@ -173,21 +173,13 @@ restart_from_save <- function (
 }
 
 
-      invasion = params$traitInvasion,
-      invPopSize = params$invasionPopSize,
-      invStyle = params$invasionStyle,
-      invPop = params$invasionPop,
-      invSex = params$invasionSex,
-      invTraitValue = params$invasionTraitValue,
-
-
 life_cycle <- function (
   scMin, scMax, simNumber, runLength, SylLearnStyle, vertOblLearn, sylDist, 
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standDev, SimNumberLC, curinh_style, 
   recordingSimpFact, one_pop_singers = c(10,10), curinhProportion, 
-  directoryDate, invasion, invPopSize, invStyle, invPop, invSex, 
-  invTraitValue, initFromLastRun = FALSE, lastRunObject = FALSE) {
+  directoryDate, invasion, invPopSize, invStyle, invTrait, invPop, invSex, 
+  invTraitValue, invKTmstps, initFromLastRun = FALSE, lastRunObject = FALSE) {
   
   docnamez <- makeDocnamez (
     scMin = scMin, scMax = scMax, simNumber = simNumber, runLength = runLength,
@@ -251,20 +243,57 @@ life_cycle <- function (
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     
-    # Invasion Setup
 
-    # if (
-    #   invasion &&
-    #   thousand_timesteps == 2
-    # ) {
-    #   for (population in 1:simParams$num_pop) {
-    #     pop_subset <- sample(simParams$pop_calls_matrix[1,],invasion)
-    #     if (invStyle = "curiosity") {
-    #       curiosity_level
-    #     } else if (invStyle = "sylrep") {}
-    #   }
-      
-    # }
+      # invasion = params$traitInvasion,
+      # invKTmstps = params$invasionThouTmstps,
+      # invPopSize = params$invasionPopSize,
+      # invStyle = params$invasionStyle,
+      # invTrait = params$invasionFocus,
+      # invPop = params$invasionPop,
+      # invSex = params$invasionSex,
+      # invTraitValue = params$invasionTraitValue,
+
+
+    # Invasion Setup
+    #   invasion
+    #   invKTmstps
+    #   invStyle
+    #   invPopSize
+    #   invFocus
+    #   invTraitValue
+    #   sylreps
+    #   simParams
+    #   
+
+    if (
+      invasion &&
+      thousand_timesteps == invKTmstps &&
+      invStyle == 'wholesale'
+    ) {
+      for (population in 1 : simParams$num_pop) {
+        pop_subset <- sample (simParams$pop_calls_matrix [1,], invPopSize)
+        if (invFocus = "curiosity") {
+          curiosity_level [pop_subset [1 : invPopSize], population] <- 1 - curiosity_level [pop_subset [1 : invPopSize], population]
+        } else if (invFocus = "sylrep") {
+          if(!(invTraitValue)) {
+            for (variable in 1 : invPopSize) {
+              thing <- (syllable_number + 1) - which(sylreps [pop_subset [variable], , population] == 1)
+              # stuff <- (syllable_number + 1) - thing
+              sylreps [pop_subset [variable], , population] <- thing
+            }
+          } else { # this is the point at which the string of values (c (1,2)) 
+            
+            for (variable in 1 : invPopSize) {
+              thing <- (syllable_number + 1) - which(sylreps [pop_subset [variable], , population] == 1)
+              # stuff <- (syllable_number + 1) - thing
+              sylreps [pop_subset [variable], , population] <- thing
+            }
+            
+            # sample(x, size, replace = FALSE, prob = NULL)
+          }
+        }
+      }
+    }
 
     for(simplify in 1:(1000/recordingSimpFact)) {
       for(single_timestep in 1:recordingSimpFact) {
@@ -289,7 +318,10 @@ life_cycle <- function (
                                         inheritance_pattern = curinh_style,
                                         invasion = (
                                           invasion && (
-                                            invStyle == 'curiosity')),
+                                            invStyle == 'offspring'
+                                          ) && (
+                                            invTrait == 'curiosity'
+                                            )),
                                         invPopSize = invPopSize) 
         
         # 
@@ -459,7 +491,7 @@ multi_runs <- function (shifting_curstart, paramsSource,
     lastRun_init <- restart_from_save (parameters = params, 
       inputPattern = params$lastRunID)
   } else {
-    lastRun_init <- FALSE
+    lastRun_init <- array(0, c(1,1,1,number_of_reps))
   }
 
   for (rep_number in 1 : number_of_reps) {
@@ -515,8 +547,10 @@ multi_runs <- function (shifting_curstart, paramsSource,
       curinhProportion = singleOrMixture, # only used if curinh_pattern = 5
       directoryDate = dirDate,
       invasion = params$traitInvasion,
+      invKTmstps = params$invasionThouTmstps,
       invPopSize = params$invasionPopSize,
       invStyle = params$invasionStyle,
+      invTrait = params$invasionFocus,
       invPop = params$invasionPop,
       invSex = params$invasionSex,
       invTraitValue = params$invasionTraitValue,

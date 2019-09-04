@@ -6,7 +6,7 @@ curstarts:
   - scMin: [29, 1,29,29]	
     scMax: [34, 7,34,34]
 simNumberStart: [3482, 3486, 3487]
-runLength: '200k'
+runLength: '100k'
 SylLearnStyle: 'nsL'
 vertObLearn:
   vertical:
@@ -35,11 +35,13 @@ curinhDistribution: [0.50, 0.5, 0.5]
 # distribution of curinh between parents
 
 
-traitInvasion: FALSE
+traitInvasion: TRUE
+invasionThouTmstps: 2
 invasionPopSize: 5
-invasionStyle: 'curiosity' # need: curiosity, sylrep, 
+invasionStyle: 'offspring' # need: offspring, wholesale, 
+invasionFocus: 'curiosity' # need: curiosity, sylrep, both!
 invasionPop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
-invasionSex: 'male' # or female
+invasionSex: 'male' # or female (or, perhaps, both?)
 invasionTraitValue: FALSE # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]). 
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
