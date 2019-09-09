@@ -185,6 +185,29 @@ invasion_parameters <- function (
   curiosity_container = curiosity_level,
   someParameters = simParams
 ) {
+
+
+      # invasion = params$traitInvasion,
+      # invKTmstps = params$invasionThouTmstps,
+      # invPopSize = params$invasionPopSize,
+      # invStyle = params$invasionStyle,
+      # invTrait = params$invasionFocus,
+      # invPop = params$invasionPop,
+      # invSex = params$invasionSex,
+      # invTraitValue = params$invasionTraitValue,
+
+
+      # Invasion Setup
+      #   invasion, i
+      #   invKTmstps, iK
+      #   invStyle, iS
+      #   invPopSize, iP
+      #   invFocus, iF
+      #   invTraitValue, iT
+      #   sylreps
+      #   simParams
+      #   
+
   if (i) {
     if (kTm == iK) {
       # for (population in 1 : someParameters$num_pop) {
@@ -359,31 +382,14 @@ life_cycle <- function (
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     
 
-      # invasion = params$traitInvasion,
-      # invKTmstps = params$invasionThouTmstps,
-      # invPopSize = params$invasionPopSize,
-      # invStyle = params$invasionStyle,
-      # invTrait = params$invasionFocus,
-      # invPop = params$invasionPop,
-      # invSex = params$invasionSex,
-      # invTraitValue = params$invasionTraitValue,
-
-
-    # Invasion Setup
-    #   invasion, i
-    #   invKTmstps, iK
-    #   invStyle, iS
-    #   invPopSize, iP
-    #   invFocus, iF
-    #   invTraitValue, iT
-    #   sylreps
-    #   simParams
-    #   
-    if (invFocus == 'curiosity') {
-      curiosity_level <- invasion_parameters()
-    } else {
-      sylreps <- invasion_parameters()
-    }    
+    if (invasion) {
+      if (invFocus == 'curiosity') {
+        curiosity_level <- invasion_parameters()
+      } else {
+        sylreps <- invasion_parameters()
+      }  
+    }
+      
 
     for(simplify in 1:(1000/recordingSimpFact)) {
       for(single_timestep in 1:recordingSimpFact) {
