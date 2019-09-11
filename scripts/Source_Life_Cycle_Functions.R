@@ -59,7 +59,8 @@ syll_learn <- function (parameters, moranData, select_type = 2,
         if (verbose == TRUE) {
           print (paste0 ("tutor has no syllables for population ", population))
         }
-        next} # if curiosity is so low that tutor can teach nothing, just skip 
+        next
+      } # if curiosity is so low that tutor can teach nothing, just skip 
               # this population's tutor learning step
     } # Oblique Learning parameters and considerations
     #if(randlearn_context == 1) {
@@ -287,7 +288,8 @@ sing.selection <- function (parameters, tempMoran,
             break
           }
         }
-        if (stop) {break}
+        if (stop) {break
+        }
       }
       
       if (select_type == 1) {
@@ -382,7 +384,8 @@ sing.selection <- function (parameters, tempMoran,
         select_type] * parameters$num_pop) + 0.5)]
       if (sum (selection.sylreps [singer,])==0) {
         chance_for_selection = chance_for_selection + 1
-        next}
+        next
+      }
       
       #should_pick_neighbor <- function(index,lower,upper=Inf) {
       

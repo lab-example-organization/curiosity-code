@@ -145,31 +145,57 @@ restart_from_save <- function (
   parameters, # "params" in multi_runs
   inputPattern
 ) {
-  if (typeof (inputPattern) != "character") {
-    stop ("input pattern must be data type 'string'")}
-  
-  relevantPaths <- file.path("results", list.files(
-    file.path("results"), pattern = inputPattern))
-  
-  pathList <- list.files(
-    file.path(relevantPaths, "variable_store"))
-  
-  someKindaOutput <- array(0, c(parameters[[8]], 
-    parameters[[9]], parameters[[10]] + 1, length(pathList)))
-  # num_pop, pop_size,    sylnum
-  for (i in 1:length(pathList)) {
-    
-    endCur <- readRDS (file.path (relevantPaths, "variable_store", 
-      paste0(pathList[i], "/end_cursty.RData")))
-    endRep <- readRDS (file.path (relevantPaths, "variable_store", 
-      paste0(pathList[i], "/end_sylbls.RData")))
-  
-    someKindaOutput[,,1:parameters[[10]],i] <- aperm (endRep, c (2,1,3))
-    someKindaOutput[,,parameters[[10]] + 1,i] <- aperm (endCur, c (2,1))
-  }
-  
-  return (someKindaOutput) #dim(someKindaOutput) # # # [1]   2 400 157  50
 
+  if (typeof (inputPattern) != "character") {
+      stop ("input pattern must be data type 'string'")}
+
+  # someKindaOutput <- array (0, c(1,1,1,1,length(inputPattern)))
+
+  # if (length (inputPattern > 1)) {
+      
+  #   for (iP in 1 : length (inputPattern)) {
+  #     relevantPaths <- file.path("results", list.files(
+  #     file.path("results"), pattern = inputPattern))
+  #     pathList <- list.files (
+  #       file.path (relevantPaths, "variable_store"))
+      
+  #     someKindaOutput[,,,,iP] <- array (0, c (parameters[[8]], 
+  #       parameters[[9]], parameters[[10]] + 1, length (pathList)))
+  #     # num_pop, pop_size,    sylnum
+  #     for (i in 1:length(pathList)) {
+        
+  #       endCur <- readRDS (file.path (relevantPaths, "variable_store", 
+  #         paste0 (pathList[i], "/end_cursty.RData")))
+  #       endRep <- readRDS (file.path (relevantPaths, "variable_store", 
+  #         paste0 (pathList[i], "/end_sylbls.RData")))
+      
+  #       someKindaOutput[,,1 : parameters[[10]],i,iP] <- aperm (endRep, c (2,1,3))
+  #       someKindaOutput[,,parameters[[10]] + 1,i,iP] <- aperm (endCur, c (2,1))
+  #     }
+  #   }
+  # } else {
+    relevantPaths <- file.path ("results", list.files(
+      file.path ("results"), pattern = inputPattern))
+    
+    pathList <- list.files (
+      file.path (relevantPaths, "variable_store"))
+    
+    someKindaOutput <- array (0, c (parameters[[8]], 
+      parameters[[9]], parameters[[10]] + 1, length (pathList),1))
+    # num_pop, pop_size,    sylnum
+    for (i in 1:length (pathList)) {
+      
+      endCur <- readRDS (file.path (relevantPaths, "variable_store", 
+        paste0 (pathList[i], "/end_cursty.RData")))
+      endRep <- readRDS (file.path (relevantPaths, "variable_store", 
+        paste0 (pathList[i], "/end_sylbls.RData")))
+    
+      someKindaOutput[,,1 : parameters[[10]],i] <- aperm (endRep, c (2,1,3))
+      someKindaOutput[,,parameters[[10]] + 1,i] <- aperm (endCur, c (2,1))
+    }
+    
+  # }
+  return (someKindaOutput) #dim(someKindaOutput) # # # [1]   2 400 157  50
 }
 
 invasion_parameters <- function (
@@ -186,128 +212,137 @@ invasion_parameters <- function (
   someParameters = simParams
 ) {
 
+  if (kTm == iK) {
+    # for (population in 1 : someParameters$num_pop) {
+    
+    ifelse (iP == 'focal', population <- 1, population <- 2)
+    
+    pop_subset <- sample (someParameters$pop_calls_matrix [1,], iPs)
+    
+    if (iF == 'curiosity') {
+      if (! (iT)) {
+        
+        # this substitutes the current curiosity value 
+        # for the population subset, with "1 - current curiosity value"
+        curiosity_container [pop_subset [
+          1 : iPs], population] <- 1 - curiosity_level [
+          pop_subset [1 : iPs], population]
 
-      # invasion = params$traitInvasion,
-      # invKTmstps = params$invasionThouTmstps,
-      # invPopSize = params$invasionPopSize,
-      # invStyle = params$invasionStyle,
-      # invTrait = params$invasionFocus,
-      # invPop = params$invasionPop,
-      # invSex = params$invasionSex,
-      # invTraitValue = params$invasionTraitValue,
+        return (curiosity_container)
 
-
-      # Invasion Setup
-      #   invasion, i
-      #   invKTmstps, iK
-      #   invStyle, iS
-      #   invPopSize, iP
-      #   invFocus, iF
-      #   invTraitValue, iT
-      #   sylreps
-      #   simParams
-      #   
-
-  if (i) {
-    if (kTm == iK) {
-      # for (population in 1 : someParameters$num_pop) {
-      
-      if (iP == 'focal') {
-        population <- 1
       } else {
-        population <- 2
+
+        # this substitutes the current curiosity value 
+        # for the population subset, with "1 - current curiosity value"
+        curiosity_container [pop_subset [
+          1 : iPs], population] <- sample ((
+            100 * (iT [1]-(iT [2] / 2))) : (100 * (
+              iT [1] + (iT [2] / 2))), pop_subset) / 100
+
+        return (curiosity_container)
+
       }
-      
-      pop_subset <- sample (someParameters$pop_calls_matrix [1,], iPs)
-      
-      if (iF == 'curiosity') {
-        if(!(iT)) {
-          
-          # this substitutes the current curiosity value for the population subset, with "1 - current curiosity value"
-          curiosity_container [pop_subset [1 : iPs], population] <- 1 - curiosity_level [pop_subset [1 : iPs], population]
+    } else if (iF == 'sylrep') {
+      if (! (iT)) {
+        for (variable in 1 : iPs) {
+          thing <- (someParameters$sylnum + 1) - which (
+            sylrep_container [pop_subset [variable], , population] == 1)
+          # stuff <- (someParameters$sylnum + 1) - thing
+          sylrep_container [pop_subset [variable], thing [
+            1 : length (thing)], population] <- 1
 
-          return(curiosity_container)
-
-        } else {
-
-          # this substitutes the current curiosity value for the population subset, with "1 - current curiosity value"
-          curiosity_container [pop_subset [1 : iPs], population] <- sample((100*(iT[1]-(iT[2]/2))):(100*(iT[1]+(iT[2]/2))), pop_subset)/100
-
-          return(curiosity_container)
+        return (sylrep_container)
 
         }
-      } else if (iF == 'sylrep') {
-        if(!(iT)) {
-          for (variable in 1 : iPs) {
-            thing <- (someParameters$sylnum + 1) - which(sylrep_container [pop_subset [variable], , population] == 1)
-            # stuff <- (someParameters$sylnum + 1) - thing
-            sylrep_container [pop_subset [variable], thing[1:length(thing)], population] <- 1
+      } else { 
+        
+        # this is the point at which the string of values (
+          # c (1,2)) produces the necessary 
+        
+        for (variable in 1 : iPs) {
+          sylrep_size <- length (which (sylrep_container [
+            pop_subset [variable], , population] == 1))
+          sylrep_mean <- round (iT [1] * someParameters$sylnum)
+          sample_size <- iT [2]
 
-          return(sylrep_container)
+          building_a_sylrep = unique (
+            sort (
+              sample (1 : 156,sample_size,T,c (
+                rep (0.001,(sylrep_mean - (sample_size/2))), 
+                # from point in sylnum where the target is 
+                # located (fraction * sylnum), with 1/2 the 
+                # sylrep range subracted, = the number of syllables 
+                # that fill in the beginning of the hypothetical sylrep 
+                # before the ones desired (defined by iT[1] and iT[2])
 
-          }
-        } else { # this is the point at which the string of values (c (1,2)) produces the necessary 
-          
-          for (variable in 1 : iPs) {
-            sylrep_size <- length(which(sylrep_container [pop_subset [variable], , population] == 1))
-            sylrep_mean <- round(iT[1]*someParameters$sylnum)
-            sample_size <- iT[2]
+                rep (0.75,(iT[2]*(1/0.75))), 
+                # the syllables desired, populating a slightly larger 
+                # area with a slightly lower chance of any one syllable 
+                # being selected, so hopefully the number evens out to 
+                # the same range of the target sylrep size
 
-            building_a_sylrep = unique (
-              sort (
-                sample(1:156,sample_size,T,c(
-                  rep(0.001,(sylrep_mean - (sample_size/2))), # from point in sylnum where the target is located (fraction * sylnum), with 1/2 the sylrep range subracted, = the number of syllables that fill in the beginning of the hypothetical sylrep before the ones desired (defined by iT[1] and iT[2])
-                  rep(0.75,(iT[2]*(1/0.75))), # the syllables desired, populating a slightly larger area with a slightly lower chance of any one syllable being selected, so hopefully the number evens out to the same range of the target sylrep size
-                  rep(0.001,someParameters$sylnum - (iT[2]*(1/0.75)) - (sylrep_mean - (sample_size/2))) # other two subtracted from total = leftovers
-            ))))
+                rep (0.001,someParameters$sylnum - (
+                  iT[2]*(1/0.75)) - (sylrep_mean - (sample_size/2))) 
+                # other two subtracted from total = leftovers
+          ))))
 
-            while (!(length(building_a_sylrep) %in% c(sample_size - 10 : sample_size + 10))) {
-              if (length(building_a_sylrep) > (sample_size + 10)) {
-                
-                sample_size <- sample_size - 1
-                
-                building_a_sylrep = unique (
-                  sort (
-                    sample(1:156,sample_size - 5,T,c(
-                      rep(0.001,(sylrep_mean - ((sample_size - 5)/2))), # from point in sylnum where the target is located (fraction * sylnum), with 1/2 the sylrep range subracted, = the number of syllables that fill in the beginning of the hypothetical sylrep before the ones desired (defined by iT[1] and iT[2])
-                      rep(0.75,(iT[2]*(1/0.75))), # the syllables desired, populating a slightly larger area with a slightly lower chance of any one syllable being selected, so hopefully the number evens out to the same range of the target sylrep size
-                      rep(0.001,someParameters$sylnum - (iT[2]*(1/0.75)) - (sylrep_mean - ((sample_size - 5)/2))) # other two subtracted from total = leftovers
-                ))))
+          while (!(length(building_a_sylrep) %in% c(
+            sample_size - 10 : sample_size + 10))) {
+            
+            if (length(building_a_sylrep) > (sample_size + 10)) {
+              
+              sample_size <- sample_size - 1
+              
+              building_a_sylrep = unique (
+                sort (
+                  sample(1:156,sample_size - 5,T,c(
+                    rep(0.001,(sylrep_mean - ((sample_size - 5)/2))), 
+                    
+                    rep(0.75,(iT[2]*(1/0.75))), 
+                    
+                    rep(0.001,someParameters$sylnum - (
+                      iT[2]*(1/0.75)) - (
+                        sylrep_mean - ((sample_size - 5)/2)))
+              ))))
 
-              } else if (length(building_a_sylrep) < (sample_size - 10)) {
-                
-                sample_size <- sample_size + 1
-                
-                building_a_sylrep = unique (
-                  sort (
-                    sample(1:156,sample_size + 5,T,c(
-                      rep(0.001,(sylrep_mean - ((sample_size + 5)/2))), # from point in sylnum where the target is located (fraction * sylnum), with 1/2 the sylrep range subracted, = the number of syllables that fill in the beginning of the hypothetical sylrep before the ones desired (defined by iT[1] and iT[2])
-                      rep(0.75,(iT[2]*(1/0.75))), # the syllables desired, populating a slightly larger area with a slightly lower chance of any one syllable being selected, so hopefully the number evens out to the same range of the target sylrep size
-                      rep(0.001,someParameters$sylnum - (iT[2]*(1/0.75)) - (sylrep_mean - ((sample_size + 5)/2))) # other two subtracted from total = leftovers
-                ))))
-
-              }
-              # building_a_sylrep <- unique(sort(sample(1:156,50,T,c(rep(0.001,20),rep(0.75,80),rep(0.001,56)))))
+            } else if (length(building_a_sylrep) < (sample_size - 10)) {
+              
+              sample_size <- sample_size + 1
+              
+              building_a_sylrep = unique (
+                sort (
+                  sample(1:156,sample_size + 5,T,c(
+                    rep(0.001,(sylrep_mean - ((sample_size + 5)/2))), 
+                    
+                    rep(0.75,(iT[2]*(1/0.75))), 
+                    
+                    rep(0.001,someParameters$sylnum - (
+                      iT[2]*(1/0.75)) - (
+                        sylrep_mean - ((sample_size + 5)/2)))
+              ))))
             }
-            # thing <- (someParameters$sylnum + 1) - which(sylrep_container [pop_subset [variable], , population] == 1)
-            # stuff <- (someParameters$sylnum + 1) - thing
-            sylrep_container [pop_subset [variable], building_a_sylrep[1:length(building_a_sylrep)], population] <- 1
-
-          return(sylrep_container)
-
+            # building_a_sylrep <- unique(sort(sample(
+              # 1:156,50,T,c(rep(0.001,20),rep(0.75,80),rep(0.001,56)))))
           }
-          
-          # sample(x, size, replace = FALSE, prob = NULL)
-          
-          # > unique(sort(sample(1:156,50,T,c(rep(0.01,20),rep(0.5,80),rep(0.01,56)))))
-          #  [1]  21  24  25  26  27  29  31  37  39  48  49  50  52  54  56  57  58  59  64
-          # [20]  65  66  73  74  76  77  78  81  82  83  85  86  90  93  94  95  96  99 100
+          # thing <- (someParameters$sylnum + 1) - which(
+            # sylrep_container [pop_subset [variable], , population] == 1)
+          # stuff <- (someParameters$sylnum + 1) - thing
+          sylrep_container [pop_subset [variable], building_a_sylrep[
+            1:length(building_a_sylrep)], population] <- 1
         }
+
+      return (sylrep_container)
+        # sample(x, size, replace = FALSE, prob = NULL)
+        
+        # > unique(sort(sample(1:156,50,T,c(
+          # rep(0.01,20),rep(0.5,80),rep(0.01,56)))))
+        #  [1]  21  24  25  26  27  29  31  37  39  48  
+        #       49  50  52  54  56  57  58  59  64
+        # [20]  65  66  73  74  76  77  78  81  82  83  
+        #       85  86  90  93  94  95  96  99 100
       }
-    # }
     }
-  } else {
-    return ("No invasion today.")
+  # }
   }
 }
 
@@ -584,8 +619,14 @@ multi_runs <- function (shifting_curstart, paramsSource,
   # This wrapped up the restart_from_save function, 
   # so that life_cycle has last-run data as an accessible object
   if (params$lastRunInit) {
-    lastRun_init <- restart_from_save (parameters = params, 
-      inputPattern = params$lastRunID)
+    if (length (params$lastRunID) > 1) {
+      lastRun_init <- restart_from_save (parameters = params, 
+        inputPattern = params$lastRunID [shifting_curstart - 1])
+    } else {
+      lastRun_init <- restart_from_save (parameters = params, 
+        inputPattern = params$lastRunID)
+    }
+
   } else {
     lastRun_init <- array(0, c(1,1,1,number_of_reps))
   }

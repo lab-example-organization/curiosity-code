@@ -205,8 +205,8 @@ initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE,
   if (pastRunInit) {
     if (!(pastRunObject)) {
       stop ("Both pastRunObject and pastRunInit need to both 
-    be engaged together... if they aren't, it won't work!")
-    }
+        be engaged together... if they aren't, it won't work!")
+      }
     sylreps <- aperm (pastRunObject [, , 1 : P$sylnum], c (2, 3, 1), 
                 na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
   } else {
