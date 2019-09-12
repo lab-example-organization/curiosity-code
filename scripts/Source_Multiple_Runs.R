@@ -181,7 +181,7 @@ restart_from_save <- function (
       file.path (relevantPaths, "variable_store"))
     
     someKindaOutput <- array (0, c (parameters[[8]], 
-      parameters[[9]], parameters[[10]] + 1, length (pathList),1))
+      parameters[[9]], parameters[[10]] + 1, length (pathList)))
     # num_pop, pop_size,    sylnum
     for (i in 1:length (pathList)) {
       
@@ -199,9 +199,9 @@ restart_from_save <- function (
 }
 
 invasion_parameters <- function (
+  kTm,
+  iK,
   i = invasion,
-  kTm = thousand_timesteps,
-  iK = invKTmstps,
   iP = invasionPop,
   iSx = invSex,
   iPs = invPopSize,
@@ -419,9 +419,9 @@ life_cycle <- function (
 
     if (invasion) {
       if (invFocus == 'curiosity') {
-        curiosity_level <- invasion_parameters()
+        curiosity_level <- invasion_parameters(kTm = thousand_timesteps, iK = invKTmstps)
       } else {
-        sylreps <- invasion_parameters()
+        sylreps <- invasion_parameters(kTm = thousand_timesteps, iK = invKTmstps)
       }  
     }
       
@@ -621,7 +621,7 @@ multi_runs <- function (shifting_curstart, paramsSource,
   if (params$lastRunInit) {
     if (length (params$lastRunID) > 1) {
       lastRun_init <- restart_from_save (parameters = params, 
-        inputPattern = params$lastRunID [shifting_curstart - 1])
+        inputPattern = params$lastRunID [shifting_curstart])
     } else {
       lastRun_init <- restart_from_save (parameters = params, 
         inputPattern = params$lastRunID)

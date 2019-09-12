@@ -55,6 +55,6 @@ lastRunInit: TRUE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
 # lastRunID: '190820_3481'
-lastRunID: [3482, 3486, 3487]
+lastRunID: ['3482', '3486', '3487']
 # want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it. 
 # BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastRunID's, that won't propagate down to restart_from_save! Awesome!
