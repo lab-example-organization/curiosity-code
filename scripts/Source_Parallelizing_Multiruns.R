@@ -57,7 +57,7 @@ source(file.path("scripts", "Source_Reference_Section.R"))
 referenceSection("multirun")
 # referenceSection("profiler")
 
-n_cores <- 3
+n_cores <- 2
 # Specify the number of cores/workers we want to use
     # n_cores <- detectCores() - 3 # built around a maximum allowance
 # n_cores <- 2
@@ -70,8 +70,8 @@ n_cores <- 3
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:3
-paramsFile <- c("IA_restartFromSave.yaml")
+shifting_curstart <- 1:2
+paramsFile <- c("IA_vanilla.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418

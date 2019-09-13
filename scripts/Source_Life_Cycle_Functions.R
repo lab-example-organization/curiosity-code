@@ -539,9 +539,10 @@ sing.selection <- function (parameters, tempMoran,
 
 curiosity_learn <- function (parameters, 
                              tempObjects, 
-                             inheritance_pattern = 1,
-                             invasion = FALSE,
-                             invPopSize = 5) {
+                             inheritance_pattern = 1#,
+                            #  invasion = FALSE,
+                            #  invPopSize = 5
+                            ) {
   
   if (inheritance_pattern == 5) {
 
@@ -687,10 +688,10 @@ curiosity_learn <- function (parameters,
     }
   }
 
-  if (invasion) {
-    invaderIDs <- sample(,invPopSize,)
+  # if (invasion) {
+  #   invaderIDs <- sample(,invPopSize,)
     
-  }
+  # }
 
   return (tempObjects)
 }
