@@ -454,7 +454,6 @@ life_cycle <- function (
           iPs = invPopSize,
           iF = invFocus,
           iT = invTraitValue,
-          sylrep_container = sylreps,
           curiosity_container = curiosity_level,
           someParameters = simParams
         )
@@ -466,7 +465,6 @@ life_cycle <- function (
           iF = invFocus,
           iT = invTraitValue,
           sylrep_container = sylreps,
-          curiosity_container = curiosity_level,
           someParameters = simParams
         )
       }  
