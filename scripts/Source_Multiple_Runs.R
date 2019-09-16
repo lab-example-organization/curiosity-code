@@ -198,13 +198,12 @@ restart_from_save <- function (
   return (someKindaOutput) #dim(someKindaOutput) # # # [1]   2 400 157  50
 }
 
-invasion_parameters <- function (
-  iP = invasionPop,
+invasion_parameters_curiosity <- function (
+  iP = invPop,
   iSx = invSex,
   iPs = invPopSize,
   iF = invFocus,
   iT = invTraitValue,
-  sylrep_container = sylreps,
   curiosity_container = curiosity_level,
   someParameters = simParams
 ) {
@@ -217,38 +216,62 @@ invasion_parameters <- function (
   
   } else {
     theSex <- c (1, 2)
-    iPs <- iPs / 2
+    # iPs <- iPs / 2
   }
   
   pop_subset <- sample (someParameters$pop_calls_matrix [theSex,], iPs)
   
-  if (iF == 'curiosity') {
+  if (! (iT)) {
+      
+    # this substitutes the current curiosity value 
+    # for the population subset, with "1 - current curiosity value"
+    curiosity_container [pop_subset [
+      1 : iPs], population] <- 1 - curiosity_container [
+      pop_subset [1 : iPs], population]
 
-    if (! (iT)) {
-        
-      # this substitutes the current curiosity value 
-      # for the population subset, with "1 - current curiosity value"
-      curiosity_container [pop_subset [
-        1 : iPs], population] <- 1 - curiosity_container [
-        pop_subset [1 : iPs], population]
+    # return (curiosity_container)
 
-      # return (curiosity_container)
+  } else {
 
-    } else {
+    # this substitutes the current curiosity value 
+    # for the population subset, with "1 - current curiosity value"
+    curiosity_container [pop_subset [
+      1 : iPs], population] <- sample ((
+        100 * (iT [1] - (iT [2] / 2))) : (100 * (
+          iT [1] + (iT [2] / 2))), length(pop_subset), replace = TRUE) / 100
 
-      # this substitutes the current curiosity value 
-      # for the population subset, with "1 - current curiosity value"
-      curiosity_container [pop_subset [
-        1 : iPs], population] <- sample ((
-          100 * (iT [1] - (iT [2] / 2))) : (100 * (
-            iT [1] + (iT [2] / 2))), pop_subset) / 100
+    # return (curiosity_container)
 
-      # return (curiosity_container)
+  }
 
-    }
+  return(curiosity_container)
+  
+}
 
-    return(curiosity_container)
-  } else if (iF == 'sylrep') {
+invasion_parameters_sylrep <- function (
+  iP = invPop,
+  iSx = invSex,
+  iPs = invPopSize,
+  iF = invFocus,
+  iT = invTraitValue,
+  sylrep_container = sylreps,
+  someParameters = simParams
+) {
+  
+  ifelse (iP == 'focal', population <- 1, population <- 2)
+  
+  if (iSx != 'both') {
+  
+    ifelse (iSx == 'male', theSex <- 1, theSex <- 2)
+  
+  } else {
+    theSex <- c (1, 2)
+    # iPs <- iPs / 2
+  }
+  
+  pop_subset <- sample (someParameters$pop_calls_matrix [theSex,], iPs)
+  
+  # if (iF == 'sylrep') {
 
     if (! (iT)) {
       for (variable in 1 : iPs) {
@@ -351,17 +374,6 @@ invasion_parameters <- function (
 
   return(sylrep_container)
   
-  }
-    
-    # if (iF == 'curiosity') {
-      
-    # } else if (iF == 'sylrep') {
-      
-    # }
-  # }
-  # } else {
-
-  # }
 }
 
 life_cycle <- function (
@@ -436,7 +448,7 @@ life_cycle <- function (
     
     if (invasion && (thousand_timesteps == invKTmstps)) {
       if (invFocus == 'curiosity') {
-        curiosity_level <- invasion_parameters(
+        curiosity_level <- invasion_parameters_curiosity (
           iP = invPop,
           iSx = invSex,
           iPs = invPopSize,
@@ -447,7 +459,7 @@ life_cycle <- function (
           someParameters = simParams
         )
       } else {
-        sylreps <- invasion_parameters(
+        sylreps <- invasion_parameters_sylrep (
           iP = invPop,
           iSx = invSex,
           iPs = invPopSize,
