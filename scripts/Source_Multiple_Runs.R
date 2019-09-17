@@ -147,7 +147,10 @@ restart_from_save <- function (
 ) {
 
   if (typeof (inputPattern) != "character") {
-      stop ("input pattern must be data type 'string'")}
+    stop ("input pattern must be data type 'string'")}
+  if (length(inputPattern) > 1) {
+    stop ("length of inputPattern should be 1. Right?")
+  }
 
   # someKindaOutput <- array (0, c(1,1,1,1,length(inputPattern)))
 
