@@ -449,7 +449,7 @@ life_cycle <- function (
   
   for(thousand_timesteps in 1:(simParams$num_timesteps/1000)) {
     
-    if (invasion && (thousand_timesteps == invKTmstps)) {
+    if (invasion && ((thousand_timesteps - 1) == invKTmstps)) {
       if (invFocus == 'curiosity') {
         curiosity_level <- invasion_parameters_curiosity (
           iP = invPop,
@@ -658,6 +658,7 @@ multi_runs <- function (shifting_curstart, paramsSource,
   
   # This wrapped up the restart_from_save function, 
   # so that life_cycle has last-run data as an accessible object
+  lastRun_init <- array(0, c(1,1,1,number_of_reps))
   if (params$lastRunInit) {
     if (length (params$lastRunID) > 1) {
       lastRun_init <- restart_from_save (parameters = params, 
@@ -666,9 +667,6 @@ multi_runs <- function (shifting_curstart, paramsSource,
       lastRun_init <- restart_from_save (parameters = params, 
         inputPattern = params$lastRunID)
     }
-
-  } else {
-    lastRun_init <- array(0, c(1,1,1,number_of_reps))
   }
 
   for (rep_number in 1 : number_of_reps) {
@@ -733,8 +731,8 @@ multi_runs <- function (shifting_curstart, paramsSource,
       initFromLastRun = params$lastRunInit,
       lastRunObject = lastRun_init[,,,rep_number]
     )
-    print(paste0("Rep Number: ", 
-      rep_number, ", done at (YYYY-MM-DD-HHMMSS): ", 
+    print(paste0("Replicate Run # ", 
+      rep_number, ", done at: ", 
       (format(Sys.time(), "%F-%H%M%S"))))
   }
   
