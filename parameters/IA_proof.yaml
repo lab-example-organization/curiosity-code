@@ -3,7 +3,7 @@ curstarts:
     scMax: [ 7, 7, 7, 7]
   - scMin: [14,14,14,14]	
     scMax: [22,22,22,22]
-simNumberStart: [3500]
+simNumberStart: [3508]
 runLength: '10k'
 SylLearnStyle: 'nsL'
 vertObLearn:
@@ -25,22 +25,22 @@ standard_deviation: 2
 # curinh_pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhDistribution
-curinh_pattern: 3
+curinh_pattern: 5
 one_pop_singers: [10, 10]
 RecordSimplifyFactor: 100
-curinhDistribution: 0.5
+curinhDistribution: 0.95
 # must be between 0 and 1; [value displayed] == male; [1 - value] == female
 # distribution of curinh between parents. Only need more than one value here IF 1)IndRunRedo == T AND 2) curinh_pattern == 5
 
 
 traitInvasion: TRUE
-invasionThouTmstps: 3
-invasionPopSize: 200 # max 200... it pulls from "pop_calls_matrix"
+invasionThouTmstps: 2
+invasionPopSize: 150 # max 200... it pulls from "pop_calls_matrix"
 # invasionStyle: 'offspring' # need: offspring, wholesale, 
 invasionFocus: 'curiosity' # need: curiosity, sylrep, both!
 invasionPop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionSex: 'male' # male or female (or, perhaps, both?)
-invasionTraitValue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]). 
+invasionTraitValue: [0.75, 0.3] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]). 
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
 
