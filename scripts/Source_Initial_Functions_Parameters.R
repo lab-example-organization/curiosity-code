@@ -224,10 +224,10 @@ initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE,
 initialize.curiosity <- function (P, cur.min, cur.max, 
             pastRunObject = FALSE, pastRunInit = FALSE) {
   
-  if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
-    stop ("Both pastRunObject and pastRunInit need to both 
-    be engaged together... if they aren't, it won't work!")
-  }
+  # if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
+  #   stop ("Both pastRunObject and pastRunInit need to both 
+  #   be engaged together... if they aren't, it won't work!")
+  # }
   
   warning ("These arguments must be ordered - highest level 
             population, then role- singers before choosers")
