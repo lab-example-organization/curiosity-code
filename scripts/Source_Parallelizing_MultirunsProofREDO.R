@@ -71,14 +71,14 @@ source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
 shifting_curstart <- 1:2
-paramsfile <- c("IA_proof.yaml")
+paramsfile <- c("IA_proofREDO.yaml")
 # paramsfile <- c("diffZwischensTnN.yaml")
-simDate <- gsub('-', '', substring(Sys.Date(), 3))
+simdate <- gsub('-', '', substring(Sys.Date(), 3))
 secretcode <- 58418
 mclapply(shifting_curstart,
          multi_runs,
          paramssource = paramsfile,
-         dirdate = simDate,
+         dirdate = simdate,
          seednumber = secretcode,
          mc.cores = n_cores)
 
