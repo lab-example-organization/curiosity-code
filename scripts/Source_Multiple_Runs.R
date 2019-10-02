@@ -375,7 +375,7 @@ invasion_parameters_sylrep <- function (
 life_cycle <- function (
   scmin, scmax, simnumber, runlength, syllearnstyle, vertoblearn, syldist,
   curinh_value, number_populations, population_size, syllable_number,
-  number_sylls_probability_level, standdev, simnumberlc, curinh_style,
+  number_sylls_probability_level, standdev, curinh_style,
   recordingsimpfact, one_pop_singers = c(10,10), curinhproportion,
   directorydate, invasion, invpopsize, invfocus, invpop, invsex,
   invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE) {
@@ -556,7 +556,7 @@ life_cycle <- function (
 
     # print("console_copy_sink")
     sink(file = file.path("source", "temp", paste0(
-      simnumberlc, "_console_copy.txt")), append = TRUE, split = TRUE)
+      simnumber, "_console_copy.txt")), append = TRUE, split = TRUE)
     print(paste0("Sim Number ", strsplit(docnamez,
       "_")[[1]][2], " - storing data packet ",
       thousand_timesteps, " at ", Sys.time()))
@@ -588,7 +588,7 @@ life_cycle <- function (
         simplify==1000/recordingsimpfact
       )&&(single_timestep==recordingsimpfact)) {
       sink(file = file.path("source", "temp",
-        paste0(simnumberlc, "_sim_data.txt")), append = TRUE)
+        paste0(simnumber, "_sim_data.txt")), append = TRUE)
       print(foldername)
       sink()
     }
@@ -703,7 +703,6 @@ multi_runs <- function (shifting_curstart, paramssource,
       syllable_number = params$sylnum,
       number_sylls_probability_level = params$num_sylls_per_prob_lvl,
       standdev = as.numeric(params$standard_deviation),
-      simnumberlc = shifting_curstart,
       curinh_style = params$curinh_pattern,
       recordingsimpfact = params$recordsimplifyfactor,
       one_pop_singers = params$one_pop_singers,
@@ -725,7 +724,7 @@ multi_runs <- function (shifting_curstart, paramssource,
   }
 
   source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-  figprodmultrun(specificsimnumber = shifting_curstart,
+  figprodmultrun(specificsimnumber = subsetorsequence,
                  number_of_repeats = number_of_reps,
                  paramssource = paramssource)
 }
