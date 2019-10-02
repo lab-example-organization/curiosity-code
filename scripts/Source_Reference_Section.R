@@ -2,7 +2,7 @@
 # A great lil function stolen off stackexchange (https://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them)
     # This function loads packages that the code depends on, BUT:
     # if a package is not installed, it installs it first, then loads it.
-    load.installIfRequired <- function(package_list = package_list[[which (reference_list == referencing_script)]]){
+    load.installifrequired <- function(package_list = package_list[[which (reference_list == referencing_script)]]){
         
 
         for( i in 1:length(package_list) ){
@@ -21,7 +21,7 @@
     }
 
 
-referenceSection <- function (referencing_script) {
+referencesection <- function (referencing_script) {
     # A list of all the packages needed for this code to function:
     
     reference_list <- list(
@@ -55,7 +55,7 @@ referenceSection <- function (referencing_script) {
     )
 
     #  Then try/install packages...
-    load.installIfRequired(package_list = package_list[[which (reference_list == referencing_script)]])
+    load.installifrequired(package_list = package_list[[which (reference_list == referencing_script)]])
 
     # # # This is how this file used to look:
 
