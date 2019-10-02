@@ -31,7 +31,7 @@ source(file.path("scripts", "Source_Reference_Section.R"))
 referenceSection("multirun")
 
 shifting_curstart <- 1
-paramsFile <- c("IA_proof.yaml")
+paramsFile <- c("IA_proofREDO.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
 paramsSource = paramsFile
@@ -194,3 +194,27 @@ if (invasion && (thousand_timesteps == invKTmstps)) {
   sylrep_container = sylreps
   curiosity_container = curiosity_level
   someParameters = simParams
+
+
+break_tester <- function (levels) {
+
+  levels
+
+  for (top_level in 1:)
+
+}
+
+v <- c("Hello","loop")
+cnt <- 2
+thing <- c("one", "two", "three", "four", "five")
+for (ad_nauseum in 1:5) {
+  repeat {
+    print(v)
+    cnt <- cnt + 1
+    
+    if(cnt > 5) {
+        break
+    }
+  }
+  print (thing[ad_nauseum])
+}

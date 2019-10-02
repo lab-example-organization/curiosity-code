@@ -1,5 +1,5 @@
 
-rpF <- function (numberOfRepeats, divisions_per_repeat, zeroOneValue) {
+rpf <- function (numberofrepeats, divisions_per_repeat, zeroonevalue) {
   zero_to_one_template <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
   #                             #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
                                0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
@@ -8,30 +8,30 @@ rpF <- function (numberOfRepeats, divisions_per_repeat, zeroOneValue) {
   #                            #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
                                0.9,0.95,0.99,1.0)
   #                            #31, #32, #33,#34
-  if (numberOfRepeats %% divisions_per_repeat != 0) {
+  if (numberofrepeats %% divisions_per_repeat != 0) {
     stop ("first element must be divisible by the second element")}
-  if (! (zeroOneValue %in% c (1 : length (zero_to_one_template)))) {
-    stop ("in order to work, zeroOneValue must be contained within zero_to_one_template")}
+  if (! (zeroonevalue %in% c (1 : length (zero_to_one_template)))) {
+    stop ("in order to work, zeroonevalue must be contained within zero_to_one_template")}
   return (replicate (
-    c (length = numberOfRepeats / divisions_per_repeat), zero_to_one_template [zeroOneValue]))
+    c (length = numberofrepeats / divisions_per_repeat), zero_to_one_template [zeroonevalue]))
 }
 
-define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nSL, one_pop_singers, 
-                              curlearnprob, learnprob, randlearnprob, stand.dev, curinhProportion) {
+define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, one_pop_singers, 
+                              curlearnprob, learnprob, randlearnprob, stand.dev, curinhproportion) {
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
-  if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nSL %% 1 != 0) {
-    stop ("(num_pop, pop_size, nSL) need to be integers")}
+  if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsl %% 1 != 0) {
+    stop ("(num_pop, pop_size, nsl) need to be integers")}
   if ((num_pop == 3 || num_pop == 4) && 
-      ((sylnum - 4 * nSL) %% 2 != 0 || (nSL) %% 2 != 0)) {
+      ((sylnum - 4 * nsl) %% 2 != 0 || (nsl) %% 2 != 0)) {
     stop ("Don't be a fool; check error log #_0001")}
   if ((num_pop == 5 || num_pop == 6) && 
-      ((sylnum - 4 * nSL) %% 6 != 0 || (nSL) %% 4 != 0)) {
+      ((sylnum - 4 * nsl) %% 6 != 0 || (nsl) %% 4 != 0)) {
     stop ("Don't be a fool; check error log #_0001")}
   if ((num_pop == 7 || num_pop == 8) && 
-      ((sylnum - 4 * nSL) %% 12 != 0 || (nSL) %% 12 != 0)) {
+      ((sylnum - 4 * nsl) %% 12 != 0 || (nsl) %% 12 != 0)) {
     stop ("Don't be a fool; check error log #_0001")}
   if ((num_pop == 9 || num_pop == 10) && 
-      ((sylnum - 4 * nSL) %% 60 != 0 || (nSL) %% 24 != 0)) {
+      ((sylnum - 4 * nsl) %% 60 != 0 || (nsl) %% 24 != 0)) {
     stop ("Don't be a fool; check error log #_0001")}
   if (num_timesteps %% 1000 != 0) {
     stop ("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
@@ -64,24 +64,24 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nSL, on
   # Syllable probability distribution stuff; ends with reference matrix where each row defines a different pattern of syllable probability distributions
   if (num_pop == 1) {
     syllprob_vector <- c (
-      c (rpF (sylnum - 4 * nSL,2,1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,1,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,2,1))
+      c (rpf (sylnum - 4 * nsl,2,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,2,1))
     )
   } else if (num_pop > 1) {
     syllprob_vector <- c (
-      c (rpF (sylnum - 7 * nSL,(4/3),1),rpF (nSL,1,2),rpF (nSL,1,5),rpF (nSL,1,9),rpF (nSL,1,27),rpF (nSL,1,31),rpF (nSL,1,33),rpF (nSL,1,34),rpF (sylnum - 7 * nSL,4,1)),
-      c (rpF (sylnum - 7 * nSL,4,1),rpF (nSL,1,34),rpF (nSL,1,33),rpF (nSL,1,31),rpF (nSL,1,27),rpF (nSL,1,9),rpF (nSL,1,5),rpF (nSL,1,2),rpF (sylnum - 7 * nSL,(4/3),1)),
-      c (rpF (sylnum - 4 * nSL,2,1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,1,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,2,1)),
-      c (rpF (sylnum - 4 * nSL,4,1),rpF (nSL,2,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,2,1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,2,33),rpF (sylnum - 4 * nSL,4,1))
-      #c (rpF (sylnum - 4 * nSL,3,1),rpF (nSL,4,2),rpF (nSL,4,5),rpF (nSL,4,31),rpF (nSL,2,33),rpF (nSL,4,31),rpF (nSL,4,5),rpF (nSL,4,2),rpF (sylnum - 4 * nSL,3,1),rpF (nSL,4,2),rpF (nSL,4,5),rpF (nSL,4,31),rpF (nSL,2,33),rpF (nSL,4,31),rpF (nSL,4,5),rpF (nSL,4,2),rpF (sylnum - 4 * nSL,3,1))
-      #c (rpF (nSL,4,33),rpF (nSL,4,31),rpF (nSL,4,5),rpF (nSL,4,2),rpF (sylnum - 4 * nSL,2,1),rpF (nSL,4,2),rpF (nSL,4,5),rpF (nSL,4,31),rpF (nSL,2,33),rpF (nSL,4,31),rpF (nSL,4,5),rpF (nSL,4,2),rpF (sylnum - 4 * nSL,2,1),rpF (nSL,4,2),rpF (nSL,4,5),rpF (nSL,4,31),rpF (nSL,4,33)),
-      #c (rpF (sylnum - 4 * nSL,4,1),rpF (nSL,6,2),rpF (nSL,6,5),rpF (nSL,6,31),rpF (nSL,3,33),rpF (nSL,6,31),rpF (nSL,6,5),rpF (nSL,6,2),rpF (sylnum - 4 * nSL,4,1),rpF (nSL,6,2),rpF (nSL,6,5),rpF (nSL,6,31),rpF (nSL,3,33),rpF (nSL,6,31),rpF (nSL,6,5),rpF (nSL,6,2),rpF (sylnum - 4 * nSL,4,1),rpF (nSL,6,2),rpF (nSL,6,5),rpF (nSL,6,31),rpF (nSL,3,33),rpF (nSL,6,31),rpF (nSL,6,5),rpF (nSL,6,2),rpF (sylnum - 4 * nSL,4,1)),
-      #c (rpF (nSL,6,33),rpF (nSL,6,31),rpF (nSL,6,5),rpF (nSL,6,2),rpF (sylnum - 4 * nSL,3,1),rpF (nSL,6,2),rpF (nSL,6,5),rpF (nSL,6,31),rpF (nSL,3,33),rpF (nSL,6,31),rpF (nSL,6,5),rpF (nSL,6,2),rpF (sylnum - 4 * nSL,3,1),rpF (nSL,6,2),rpF (nSL,6,5),rpF (nSL,6,31),rpF (nSL,3,33),rpF (nSL,6,31),rpF (nSL,6,5),rpF (nSL,6,2),rpF (sylnum - 4 * nSL,3,1),rpF (nSL,6,2),rpF (nSL,6,5),rpF (nSL,6,31),rpF (nSL,6,33)),
-      #c (rpF (sylnum - 4 * nSL,5,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,5,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,5,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,5,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,5,1)),
-      #c (rpF (nSL,8,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,4,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,4,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,4,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,4,33),rpF (nSL,8,31),rpF (nSL,8,5),rpF (nSL,8,2),rpF (sylnum - 4 * nSL,4,1),rpF (nSL,8,2),rpF (nSL,8,5),rpF (nSL,8,31),rpF (nSL,8,33))
-      #c (rpF (sylnum - 4 * nSL,3,1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,1,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,(3/2),1)),
-      #c (rpF (sylnum - 4 * nSL,(3/2),1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,1,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,3,1))
-      #c (rpF (sylnum - 4 * nSL,4,1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,1,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,(4/3),1)),
-      #c (rpF (sylnum - 4 * nSL,(4/3),1),rpF (nSL,2,2),rpF (nSL,2,5),rpF (nSL,2,31),rpF (nSL,1,33),rpF (nSL,2,31),rpF (nSL,2,5),rpF (nSL,2,2),rpF (sylnum - 4 * nSL,4,1))
+      c (rpf (sylnum - 7 * nsl,(4/3),1),rpf (nsl,1,2),rpf (nsl,1,5),rpf (nsl,1,9),rpf (nsl,1,27),rpf (nsl,1,31),rpf (nsl,1,33),rpf (nsl,1,34),rpf (sylnum - 7 * nsl,4,1)),
+      c (rpf (sylnum - 7 * nsl,4,1),rpf (nsl,1,34),rpf (nsl,1,33),rpf (nsl,1,31),rpf (nsl,1,27),rpf (nsl,1,9),rpf (nsl,1,5),rpf (nsl,1,2),rpf (sylnum - 7 * nsl,(4/3),1)),
+      c (rpf (sylnum - 4 * nsl,2,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,2,1)),
+      c (rpf (sylnum - 4 * nsl,4,1),rpf (nsl,2,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,2,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,2,33),rpf (sylnum - 4 * nsl,4,1))
+      #c (rpf (sylnum - 4 * nsl,3,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,2,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,2,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,3,1))
+      #c (rpf (nsl,4,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,2,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,2,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,2,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,4,33)),
+      #c (rpf (sylnum - 4 * nsl,4,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,4,1)),
+      #c (rpf (nsl,6,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,6,33)),
+      #c (rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1)),
+      #c (rpf (nsl,8,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,8,33))
+      #c (rpf (sylnum - 4 * nsl,3,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,(3/2),1)),
+      #c (rpf (sylnum - 4 * nsl,(3/2),1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,3,1))
+      #c (rpf (sylnum - 4 * nsl,4,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,(4/3),1)),
+      #c (rpf (sylnum - 4 * nsl,(4/3),1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,4,1))
     )
   }
    
@@ -99,11 +99,11 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nSL, on
   #                                dimnames = 
   # )
   
-  Parameters <- list (num_timesteps = num_timesteps, 
+  parameters <- list (num_timesteps = num_timesteps, 
                      num_pop = num_pop, 
                      pop_size = pop_size, 
                      sylnum = sylnum, 
-                     nSL = nSL, 
+                     nsl = nsl, 
                      one_pop_singers = one_pop_singers,  
                      pop_calls_matrix = pop_calls_matrix,
                      curiositybreaks = curiositybreaks, 
@@ -114,10 +114,10 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nSL, on
                      learnprob = learnprob,
                      randlearnprob = randlearnprob,
                      stand.dev = stand.dev,
-                     curinhProportion = curinhProportion
+                     curinhproportion = curinhproportion
                      )
   
-  return (Parameters)
+  return (parameters)
 }
 #Results of Function:
 #Parameters <- list(      
@@ -125,7 +125,7 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nSL, on
   # 2 - num_pop,         # 9 - curiosity_counter,      # 16- ,
   # 3 - pop_size,        # 10- zero_to_one_template,    # 17- ,
   # 4 - sylnum,          # 11- population_syll_probs, # 18- ,
-  # 5 - nSL,           # 12- curlearnprob,# 19- 
+  # 5 - nsl,           # 12- curlearnprob,# 19- 
   # 6 - one_pop_singers, # 13- learnprob,
   # 7 - pop_calls_matrix,# 14- randlearnprob,
 #return(Parameters)
@@ -151,22 +151,22 @@ define_temp_data <- function (universal_parameters) {
 
 # INITIALIZING FUNCTIONS ##################################
 
-recordvariable.initialize <- function (P, variableID, RecSimFct) {
+recordvariable.initialize <- function (parameters_rvi, variableid, recsimfct) {
 
-  timestepRecordLength <- 1000 / RecSimFct
+  timestepRecordLength <- 1000 / recsimfct
 
-  if (variableID == 1) {
+  if (variableid == 1) {
     record_variable <- array (
-      0, c (2, P$num_pop, timestepRecordLength))
-  } else if (variableID == 2) {
+      0, c (2, parameters_rvi$num_pop, timestepRecordLength))
+  } else if (variableid == 2) {
     record_variable <- array (
-      0, c ((2 * P$num_pop), P$sylnum, timestepRecordLength))
-  } else if (variableID == 3) {
+      0, c ((2 * parameters_rvi$num_pop), parameters_rvi$sylnum, timestepRecordLength))
+  } else if (variableid == 3) {
     record_variable <- array (
-      0, c (12, P$num_pop, timestepRecordLength))
-  } else if (variableID == 4) {
+      0, c (12, parameters_rvi$num_pop, timestepRecordLength))
+  } else if (variableid == 4) {
     record_variable <- array (
-      0, c ((2 * P$num_pop), (P$num_pop * P$one_pop_singers [1]), 
+      0, c ((2 * parameters_rvi$num_pop), (parameters_rvi$num_pop * parameters_rvi$one_pop_singers [1]), 
         timestepRecordLength))
   }
   # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
@@ -185,54 +185,54 @@ recordvariable.initialize <- function (P, variableID, RecSimFct) {
 
 #day.tuh <- recordvariable.initialize
 
-initialize.sylrep <- function (P, population.pattern, pastRunObject = FALSE, 
-                            eqpop = TRUE, eqsex = TRUE, pastRunInit = FALSE) {
+initialize.sylrep <- function (parameters_is, population.pattern, pastrunobject_is = FALSE, 
+                            eqpop = TRUE, eqsex = TRUE, pastruninit_is = FALSE) {
   
-  if (length (population.pattern) != P$num_pop) {
+  if (length (population.pattern) != parameters_is$num_pop) {
     stop ("This determines the initial syllable distributions of each
            subpopulation. It is a vector of row calls for 
            population_syll_probs, so it must match the number of populations")
   }
 
-  # if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
-  #   stop ("Both pastRunObject and pastRunInit need to both 
+  # if (xor ((pastrunobject_is == FALSE), (pastruninit_is == FALSE))) {
+  #   stop ("Both pastrunobject_is and pastruninit_is need to both 
   #   be engaged together... if they aren't, it won't work!")
   # }
 
   # making the object that will hold each instance of the function, 
   # hopefully to-be-assigned to specific variables for an 
   # instantiation of the model ¯\_(ツ)_/¯
-  if (pastRunInit) {
-    # if (!(pastRunObject)) {
-    #   stop ("Both pastRunObject and pastRunInit need to both 
+  if (pastruninit_is) {
+    # if (!(pastrunobject_is)) {
+    #   stop ("Both pastrunobject_is and pastruninit_is need to both 
     #     be engaged together... if they aren't, it won't work!")
     #   }
-    sylreps <- aperm (pastRunObject [, , 1 : P$sylnum], c (2, 3, 1), 
+    sylreps <- aperm (pastrunobject_is [, , 1 : parameters_is$sylnum], c (2, 3, 1), 
                 na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
   } else {
-    sylreps <- array (0, c (P$pop_size, P$sylnum, P$num_pop))
+    sylreps <- array (0, c (parameters_is$pop_size, parameters_is$sylnum, parameters_is$num_pop))
 
-    for (i in 1 : P$num_pop) {
-      sylreps [, , i] <- t (replicate (P$pop_size, rbinom (
-        length (P$population_syll_probs [population.pattern [i], ]), 
-        size = 1, prob = P$population_syll_probs [population.pattern [i], ])))
+    for (i in 1 : parameters_is$num_pop) {
+      sylreps [, , i] <- t (replicate (parameters_is$pop_size, rbinom (
+        length (parameters_is$population_syll_probs [population.pattern [i], ]), 
+        size = 1, prob = parameters_is$population_syll_probs [population.pattern [i], ])))
     }
   }
   return (sylreps)
 }
 
-initialize.curiosity <- function (P, cur.min, cur.max, 
-            pastRunObject = FALSE, pastRunInit = FALSE) {
+initialize.curiosity <- function (parameters_ic, cur.min, cur.max, 
+            pastrunobject_ic = FALSE, pastruninit_ic = FALSE) {
   
-  # if (xor ((pastRunObject == FALSE), (pastRunInit == FALSE))) {
-  #   stop ("Both pastRunObject and pastRunInit need to both 
+  # if (xor ((pastrunobject_ic == FALSE), (pastruninit_ic == FALSE))) {
+  #   stop ("Both pastrunobject_ic and pastruninit_ic need to both 
   #   be engaged together... if they aren't, it won't work!")
   # }
   
   warning ("These arguments must be ordered - highest level 
             population, then role- singers before choosers")
   if (length (cur.min) != length (cur.max) || 
-     length (cur.min) != (P$num_pop * 2)) {
+     length (cur.min) != (parameters_ic$num_pop * 2)) {
     print ("Error Log #0003: each argument needs to be a 
            vector that matches the number of populations 
            AND the number of sexes - Make sure the number 
@@ -241,8 +241,8 @@ initialize.curiosity <- function (P, cur.min, cur.max,
     stop ("cur.max and cur.min have to be the same length.")
   }
   for (i in 1 : length (cur.min)) {
-    if (P$zero_to_one_template [cur.max [i]
-    ] <= P$zero_to_one_template [cur.min [i]] # || 
+    if (parameters_ic$zero_to_one_template [cur.max [i]
+    ] <= parameters_ic$zero_to_one_template [cur.min [i]] # || 
       #  cur.max[i] %% 1 != 0 || 
       #  cur.min[i] %% 1 != 0
        ) {
@@ -251,22 +251,22 @@ initialize.curiosity <- function (P, cur.min, cur.max,
             calls to zero_to_one_template- check out the values")
     }
   }
-  curiosity_level <- array (0, c (P$pop_size, P$num_pop))
-  if (pastRunInit) {
-    curiosity_object <- pastRunObject [, , P$sylnum + 1]
+  curiosity_level <- array (0, c (parameters_ic$pop_size, parameters_ic$num_pop))
+  if (pastruninit_ic) {
+    curiosity_object <- pastrunobject_ic [, , parameters_ic$sylnum + 1]
     curiosity_level <- aperm (curiosity_object, c (2, 1), na.rm = TRUE)
   } else {
-    for (pop.num in 1 : P$num_pop) {
+    for (pop.num in 1 : parameters_ic$num_pop) {
       for (sexes in 1 : 2) {
         curiosity_level [((
-            1 + ((sexes - 1) * (P$pop_size / 2))
+            1 + ((sexes - 1) * (parameters_ic$pop_size / 2))
           ) : (
-            sexes * P$pop_size / 2
+            sexes * parameters_ic$pop_size / 2
           )), pop.num
         ] <- runif (
-          P$pop_size / 2, P$zero_to_one_template [
-            cur.min [P$curiosity_counter [sexes, pop.num]]
-          ], P$zero_to_one_template [cur.max [P$curiosity_counter [
+          parameters_ic$pop_size / 2, parameters_ic$zero_to_one_template [
+            cur.min [parameters_ic$curiosity_counter [sexes, pop.num]]
+          ], parameters_ic$zero_to_one_template [cur.max [parameters_ic$curiosity_counter [
             sexes, pop.num
         ]]])
       }
