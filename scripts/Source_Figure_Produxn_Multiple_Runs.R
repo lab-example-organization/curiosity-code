@@ -13,8 +13,12 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
   params = yaml.load_file (file.path ("parameters", paramssource))
     print ("params load")
   converted_data <- vector ("list", number_of_repeats)
+
+  print(paste0("source SVD"))
+  source(file.path("scripts", "Source_Visualizing_Data.R"))
+  
   for (run_visual in 1:number_of_repeats) {
-    run_visual=1
+    # run_visual=1
     if (run_visual == 1) {
       multiRunTime <- format (Sys.time (), "%F-%H%M%S")
     print ("run_visual == 1")
@@ -39,7 +43,8 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
           #         file.path(strsplit(multirun_folderlist[run_visual], 
           #         "variable_store", )[[1]][1], paste0("Group_", 
           #         specificsimnumber, "_folderList.RData")))}
-    print ("yes we do.")
+          print ("yes we do.")
+
           saveRDS(multirun_folderlist, file.path(strsplit(
               multirun_folderlist[run_visual], "variable_store", 
             )[[1]][1], paste0(
@@ -50,8 +55,7 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
 # results, saves multirun_folderlist there.
     
     
-    print(paste0("source SVD - ", run_visual, " round"))
-    source(file.path("scripts", "Source_Visualizing_Data.R"))
+    
     print("multirun_directory")
     multirun_directory <- paste0(
       strsplit(multirun_folderlist[run_visual],
@@ -65,27 +69,22 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
     info <- readRDS(file = file.path(
       multirun_folderlist[run_visual], "metadata.RData"))
 
-    # info1 <- fread(file.path(multirun_folderlist[
-      # run_visual], "docnamez.csv"))
-    # info2 <- fread(file.path(multirun_folderlist[
-      # run_visual], "datez.csv"))
-    # info3 <- fread(file.path(multirun_folderlist[
-      # run_visual], "deetz.csv"))
-
-    # data_convert <- paste0("converted_data", run_visual, " <- convert_stored_data(parms = params, data_dir = \"", 
+    # data_convert <- paste0("converted_data", run_visual, " <- concatenate_data(parms = params, data_dir = \"", 
     #                        multirun_folderlist[run_visual], "\", simpleObjectSize = simplification_factor)")
     # cat(data_convert, file = file.path("source", "RtempFiles", paste0(specificsimnumber, "-", run_visual, "_data_convert.R")), sep = "\n")
     # source(file.path("source", "RtempFiles", paste0(specificsimnumber, "-", run_visual, "_data_convert.R")), local=TRUE)
     print("converted_data time")
-    converted_data[[run_visual]] <- convert_stored_data(parms = params, data_dir = multirun_folderlist[run_visual])
-#     print("process_data time")
-    process_data(converted_data, specificrepeat = run_visual, path = multirun_directory)
+    converted_data <- concatenate_data(specific_run = run_visual, converteddata = converted_data, parms = params, data_dir = multirun_folderlist)
+    # print("process_data time")
+    # process_data(converted_data[[run_visual]], specificrepeat = run_visual, path = multirun_directory)
 
     # movingOutput <- paste0("process_data(converted_data", run_visual, ", specificrepeat = run_visual, path = multirun_directory)")
     # eval(parse(text=movingOutput))
   } 
   
-    print("makin' lists")
+  process_data(converted_data, specificrepeat = number_of_repeats, path = multirun_directory)
+
+  print("makin' lists")
   datanames <- c("CurHist","Cursity","SylDist","SylReps")
   listnames <- c("hist","sity","sdst","repz")
   for(i in 1:4) {
@@ -95,59 +94,97 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
   }
   
   
-  sylrepzlist <- list()
-  sdstbxnlist <- list()
-  cursitylist <- list()
-  curhistlist <- list()
+  curhistlist <- vector (mode = "list", length = number_of_repeats + 1)
+  sylrepzlist <- vector (mode = "list", length = number_of_repeats + 1)
+  sdstbxnlist <- vector (mode = "list", length = number_of_repeats + 1)
+  cursitylist <- vector (mode = "list", length = number_of_repeats + 1)
+
+  # multirun_directory <- paste0(strsplit(multirun_folderlist[1], "variable")[[1]][1], 
+  #                               "multirun_output/", 
+  #                                list.files(path = paste0(strsplit(multirun_folderlist[1], 
+  #                                  "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
 
   multirun_directory <- paste0(strsplit(multirun_folderlist[1], "variable")[[1]][1], 
-                                "multirun_output/", 
-                                 list.files(path = paste0(strsplit(multirun_folderlist[1], 
-                                   "variable")[[1]][1], "multirun_output/"), pattern = "multirun_output$"))
+                                "multirun_output/")
+
     print("sourcing from lists")
   for(i in 1:number_of_repeats) {
-    curhistlist[[i]] <- readRDS(paste0(multirun_directory, "/", histlist[i]))
-    cursitylist[[i]] <- readRDS(paste0(multirun_directory, "/", sitylist[i]))
-    sdstbxnlist[[i]] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
-    sylrepzlist[[i]] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
+    # print(paste0(multirun_directory, "/", histlist[i]))
+    curhistlist[[i]] <- readRDS(paste0(multirun_directory, histlist[i]))
+    # print(paste0(multirun_directory, "/", sitylist[i]))
+    cursitylist[[i]] <- readRDS(paste0(multirun_directory, sitylist[i]))
+    # print(paste0(multirun_directory, "/", sdstlist[i]))
+    sdstbxnlist[[i]] <- readRDS(paste0(multirun_directory, sdstlist[i]))
+    # print(paste0(multirun_directory, "/", repzlist[i]))
+    sylrepzlist[[i]] <- readRDS(paste0(multirun_directory, repzlist[i]))
 
     # curhistlist[[i]] <- fread(file.path(multirun_directory, histlist[i]))
     # cursitylist[[i]] <- fread(file.path(multirun_directory, sitylist[i]))
     # sdstbxnlist[[i]] <- fread(file.path(multirun_directory, sdstlist[i]))
     # sylrepzlist[[i]] <- fread(file.path(multirun_directory, repzlist[i]))
   }
+  print(paste0("curhistlist length = ", length(curhistlist)))
+  print(paste0("cursitylist length = ", length(cursitylist)))
+  print(paste0("sdstbxnlist length = ", length(sdstbxnlist)))
+  print(paste0("sylrepzlist length = ", length(sylrepzlist)))
+  
   
 
-
-  sylrepzlist[[number_of_repeats + 1]] <- sylrepzlist[[number_of_repeats]]
-  sdstbxnlist[[number_of_repeats + 1]] <- sdstbxnlist[[number_of_repeats]]
-  cursitylist[[number_of_repeats + 1]] <- cursitylist[[number_of_repeats]]
-  curhistlist[[number_of_repeats + 1]] <- curhistlist[[number_of_repeats]]
+  # sylrepzlist[[number_of_repeats + 1]] <- sylrepzlist[[number_of_repeats]]
+  # sdstbxnlist[[number_of_repeats + 1]] <- sdstbxnlist[[number_of_repeats]]
+  # cursitylist[[number_of_repeats + 1]] <- cursitylist[[number_of_repeats]]
+  # curhistlist[[number_of_repeats + 1]] <- curhistlist[[number_of_repeats]]
     print("histlist")
   for(i in 1:length(curhistlist[[1]])) {
     eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[", 
                            paste0(1:(number_of_repeats - 1),"]][i],curhistlist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
-    print("sitylist")
+
+  print ("dimensions of curhistlist[[1]] - ")
+  print (dim (curhistlist[[1]]))
+  thing <- dim (curhistlist[[1]])
+  dim (curhistlist[[number_of_repeats + 1]]) <- thing
+
+  print("sitylist")
   for(i in 1:length(cursitylist[[1]])) {
     eval(parse(text=paste0("cursitylist[[number_of_repeats + 1]][i] <- mean(c(cursitylist[[", 
                            paste0(1:(number_of_repeats - 1),"]][i],cursitylist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
-    print("sdstlist")
+
+  print ("dimensions of cursitylist[[1]] - ")
+  print (dim (cursitylist[[1]]))
+  thing <- dim (cursitylist[[1]])
+  dim (cursitylist[[number_of_repeats + 1]]) <- thing
+
+  print("sdstlist")
+  
   for(i in 1:length(sdstbxnlist[[1]])) {
     eval(parse(text=paste0("sdstbxnlist[[number_of_repeats + 1]][i] <- mean(c(sdstbxnlist[[", 
                            paste0(1:(number_of_repeats - 1),"]][i],sdstbxnlist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
-    print("repzlist")
+
+  print ("dimensions of sdstbxnlist[[1]] - ")
+  print (dim (sdstbxnlist[[1]]))
+  thing <- dim (sdstbxnlist[[1]])
+  dim (sdstbxnlist[[number_of_repeats + 1]]) <- thing
+
+  print("repzlist")
+
   for(i in 1:length(sylrepzlist[[1]])) {
     eval(parse(text=paste0("sylrepzlist[[number_of_repeats + 1]][i] <- mean(c(sylrepzlist[[", 
                            paste0(1:(number_of_repeats - 1),"]][i],sylrepzlist[[", collapse=''), 
                            number_of_repeats, "]][i]))")))
   }
-    print("last_stats")
+
+  print ("dimensions of sylrepzlist[[1]] - ")
+  print (dim (sylrepzlist[[1]]))
+  thing <- dim (sylrepzlist[[1]])
+  dim (sylrepzlist[[number_of_repeats + 1]]) <- thing
+
+  print("last_stats")
   last_stats <- paste0("rm(sylrepz", number_of_repeats, ", sdstbxn", number_of_repeats,
                        ", cursity", number_of_repeats, ", curhist", number_of_repeats,
                        ", last_stats, histlist, sitylist, sdstlist, repzlist",
@@ -164,7 +201,10 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
   mins_n_maxes <- min_n_max(parameters = params, number_of_runs = number_of_repeats, 
                             cursitylist = cursitylist, sdstbxnlist = sdstbxnlist, 
                             curhistlist = curhistlist, sylrepzlist = sylrepzlist)
-    print("mins_n_maxes")
+    print("mins_n_maxes: ")
+    print (mins_n_maxes)
+    print ("length of cursitylist: ")
+    print (dim (cursitylist[[number_of_repeats + 1]]))
   simple_plots(parameters = params, plot_info = plot_info, converted_data = "converted_data", extra_lines = TRUE, 
                number_of_runs = number_of_repeats, cursitylist = cursitylist, 
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist, 

@@ -1,7 +1,9 @@
-convert_stored_data <- function(parms = params, 
-                                data_dir = getwd()) {
+concatenate_data <- function(specific_run,
+                                converteddata = converted_data,
+                                parms = params, 
+                                data_dir = multirun_folderlist) {
   # This function takes
-  
+  data_dir <- data_dir[specific_run]
   nts = as.numeric(strsplit(parms$runlength, "k")[[1]][1]) # number of 1k timesteps
   # knts = nts*1000
   # cnts = nts*100
@@ -18,55 +20,44 @@ convert_stored_data <- function(parms = params,
   #               "curity_mean_t",
   #               "curity_repert")
   
-  converted_names = c("sylrepz","sdstbxn","cursity","curhist")
+  converted_names = c("sylrepz", "sdstbxn", "cursity", "curhist")
     
-  # converted_data <- list(
-  #   sylrepz = array (0, c (2, npp,  nts*numslice)),
-  #   sdstbxn = array (0, c ((2 * npp), snm,  nts*numslice)), 
-  #   cursity = array (0, c (12, npp,  nts*numslice)), 
-  #   curhist = array (0, c ((2*npp), (npp * ops[1]),  nts*numslice)))
-
   
-    sylrepz = array (0, c (2, npp,  nts*numslice))
-    sdstbxn = array (0, c ((2 * npp), snm,  nts*numslice))
-    cursity = array (0, c (12, npp,  nts*numslice))
-    curhist = array (0, c ((2*npp), (npp * ops[1]),  nts*numslice))
-    
-    converted_data <- list(
-      sylrepz = sylrepz,
-      sdstbxn = sdstbxn,
-      cursity = cursity,
-      curhist = curhist
-    )
+  sylrepz = array (0, c (2, npp,  nts * numslice))
+  sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
+  cursity = array (0, c (12, npp,  nts * numslice))
+  curhist = array (0, c ((2 * npp), (npp * ops[1]),  nts * numslice))
 
-  for(specificchunk in 1:nts) {
+  # converteddata <- vector (mode = "list", length = length(specific_run))
+
+  converteddata[[specific_run]] <- vector (mode = "list", length (converted_names))
+
+  converteddata[[specific_run]][[1]] <- sylrepz
+  converteddata[[specific_run]][[2]] <- sdstbxn
+  converteddata[[specific_run]][[3]] <- cursity
+  converteddata[[specific_run]][[4]] <- curhist
+
+  # converteddata <- list(
+  #   sylrepz = sylrepz,
+  #   sdstbxn = sdstbxn,
+  #   cursity = cursity,
+  #   curhist = curhist
+  # )
+
+  for(specificchunk in 1 : nts) {
       # specificchunk <- 1
-      sc <- (1 + ((specificchunk - 1)*numslice)) # output_chunk_start
-      ec <- specificchunk*numslice # output_chunk_end
+      sc <- (1 + ((specificchunk - 1) * numslice)) # output_chunk_start
+      ec <- specificchunk * numslice # output_chunk_end
           
-      # for (data_subset in 1:4) {
-      #   sc <- (1 + ((specificchunk - 1)*numslice)) # output_chunk_start
-      #   ec <- (specificchunk)*numslice # output_chunk_end
-      #   converted_data[[data_subset]][,,sc:ec] <- readRDS(
-      #     file.path(data_dir, paste0(
-      #       "variable-store-", specificchunk, "-",  
-      #       old_names[data_subset], ".RData")))
-      # }
+      converteddata[[specific_run]][[1]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_rowcol.RData")))
 
-      # converted_data[[sylrep_rowcol]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-",  old_names[data_subset], ".RData")))
-      # converted_data[[sylrep_dstbxn]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-",  old_names[data_subset], ".RData")))
-      # converted_data[[curity_mean_t]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-",  old_names[data_subset], ".RData")))
-      # converted_data[[curity_repert]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-",  old_names[data_subset], ".RData")))
-#print("sylrepz")
-      converted_data$sylrepz[,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_rowcol.RData")))
-#print("sdstbxn")
-      converted_data$sdstbxn[,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
-#print("cursity")
-      converted_data$cursity[,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_mean_t.RData")))
-#print("curhist")
-      converted_data$curhist[,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_repert.RData")))
+      converteddata[[specific_run]][[2]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
+
+      converteddata[[specific_run]][[3]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_mean_t.RData")))
+
+      converteddata[[specific_run]][[4]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_repert.RData")))
   }
-  return(converted_data)
+  return(converteddata)
 }
 
 process_data <- function (data_conglomerate = converted_data, specificrepeat = run_visual, path = getwd()) {
@@ -79,7 +70,7 @@ process_data <- function (data_conglomerate = converted_data, specificrepeat = r
         modified_data <- data_conglomerate[[iteration]][[data_subset]]
         # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificrepeat, ".RData")))
 
-        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], specificrepeat, ".RData")))
+        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], iteration, ".RData")))
       }
     }
   } else {
@@ -87,7 +78,7 @@ process_data <- function (data_conglomerate = converted_data, specificrepeat = r
         modified_data <- data_conglomerate[[data_subset]]
         # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificrepeat, ".RData")))
 
-        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], specificrepeat, ".RData")))
+        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], iteration, ".RData")))
     }
   }
 }

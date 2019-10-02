@@ -31,7 +31,7 @@ source(file.path("scripts", "Source_Reference_Section.R"))
 referenceSection("multirun")
 
 shifting_curstart <- 1
-paramsFile <- c("IA_proof.yaml")
+paramsFile <- c("IA_proofREDO.yaml")
 simDate <- gsub('-', '', substring(Sys.Date(), 3))
 secretCode <- 58418
 paramsSource = paramsFile
