@@ -691,7 +691,7 @@ multi_runs <- function (shifting_curstart, paramssource,
         params$curstarts [[shifting_curstart]]$scmax [3],
         params$curstarts [[shifting_curstart]]$scmax [4]),
       simnumber = subsetorsequence,
-      # simnumber = params$simNumberStart + (shifting_curstart - 1),
+      # simnumber = params$simnumberstart + (shifting_curstart - 1),
       runlength = params$runlength,
       syllearnstyle = params$syllearnstyle,
       vertoblearn = c(

@@ -40,13 +40,13 @@ seedNumber = secretCode
 set.seed (seedNumber + shifting_curstart)
 params <- yaml.load_file (file.path ("parameters", paramsSource))
 number_of_reps <- as.numeric (params$number_of_reps)
-if (params$lastRunInit) {
-  if (length (params$lastRunID) > 1) {
+if (params$lastruninit) {
+  if (length (params$lastrunid) > 1) {
     lastRun_init <- restart_from_save (parameters = params, 
-      inputPattern = params$lastRunID [shifting_curstart])
+      inputPattern = params$lastrunid [shifting_curstart])
   } else {
     lastRun_init <- restart_from_save (parameters = params, 
-      inputPattern = params$lastRunID)
+      inputPattern = params$lastrunid)
   }
 
 } else {
@@ -54,37 +54,37 @@ if (params$lastRunInit) {
 }
 rep_number = 1
 
-if (params$IndRunRedo == T) {
-  subsetOrSequence <- params$simNumberStart [shifting_curstart]
-  singleOrMixture <- params$curinhDistribution [shifting_curstart]
+if (params$Indrunredo == T) {
+  subsetOrSequence <- params$simnumberstart [shifting_curstart]
+  singleOrMixture <- params$curinhdistribution [shifting_curstart]
 } else {
-  subsetOrSequence <- params$simNumberStart + (shifting_curstart - 1)
-  singleOrMixture <- params$curinhDistribution
+  subsetOrSequence <- params$simnumberstart + (shifting_curstart - 1)
+  singleOrMixture <- params$curinhdistribution
 }
 
 
 
 
-scMin = c (
-  params$curstarts [[shifting_curstart]]$scMin [1],
-  params$curstarts [[shifting_curstart]]$scMin [2],
-  params$curstarts [[shifting_curstart]]$scMin [3],
-  params$curstarts [[shifting_curstart]]$scMin [4])
-scMax = c(
-  params$curstarts [[shifting_curstart]]$scMax [1],
-  params$curstarts [[shifting_curstart]]$scMax [2],
-  params$curstarts [[shifting_curstart]]$scMax [3],
-  params$curstarts [[shifting_curstart]]$scMax [4])
+scmin = c (
+  params$curstarts [[shifting_curstart]]$scmin [1],
+  params$curstarts [[shifting_curstart]]$scmin [2],
+  params$curstarts [[shifting_curstart]]$scmin [3],
+  params$curstarts [[shifting_curstart]]$scmin [4])
+scmax = c(
+  params$curstarts [[shifting_curstart]]$scmax [1],
+  params$curstarts [[shifting_curstart]]$scmax [2],
+  params$curstarts [[shifting_curstart]]$scmax [3],
+  params$curstarts [[shifting_curstart]]$scmax [4])
 simNumber = subsetOrSequence
-# simNumber = params$simNumberStart + (shifting_curstart - 1),
-runLength = params$runLength
-SylLearnStyle = params$SylLearnStyle
+# simNumber = params$simnumberstart + (shifting_curstart - 1),
+runlength = params$runlength
+Syllearnstyle = params$Syllearnstyle
 vertOblLearn = c(
-  params$vertObLearn$vertical$learn,
-  params$vertObLearn$vertical$invent,
-  params$vertObLearn$oblique$learn,
-  params$vertObLearn$oblique$invent)
-sylDist = params$sylDist
+  params$vertoblearn$vertical$learn,
+  params$vertoblearn$vertical$invent,
+  params$vertoblearn$oblique$learn,
+  params$vertoblearn$oblique$invent)
+syldist = params$syldist
 curinh_value = params$curinh_value
 number_populations = params$num_pop
 population_size = params$pop_size
@@ -93,25 +93,25 @@ number_sylls_probability_level = params$num_sylls_per_prob_lvl
 standDev = as.numeric(params$standard_deviation)
 SimNumberLC = shifting_curstart
 curinh_style = params$curinh_pattern
-recordingSimpFact = params$RecordSimplifyFactor
+recordingSimpFact = params$Recordsimplifyfactor
 one_pop_singers = params$one_pop_singers
 curinhProportion = singleOrMixture # only used if curinh_pattern = 5
 directoryDate = dirDate
-invasion = params$traitInvasion
+invasion = params$traitinvasion
 invKTmstps = params$invasionThouTmstps
-invPopSize = params$invasionPopSize
+invPopSize = params$invasionpopsize
 invFocus = params$invasionFocus
-invPop = params$invasionPop
-invSex = params$invasionSex
-invTraitValue = params$invasionTraitValue
-initFromLastRun = params$lastRunInit
+invPop = params$invasionpop
+invSex = params$invasionsex
+invTraitValue = params$invasiontraitvalue
+initFromLastRun = params$lastruninit
 lastRunObject = lastRun_init[,,,rep_number]
 
 
 source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
 
 simParams <- define_parameters (
-    num_timesteps = as.numeric (strsplit (runLength, "k")[[1]][1]) * 1000, 
+    num_timesteps = as.numeric (strsplit (runlength, "k")[[1]][1]) * 1000, 
     num_pop = number_populations, pop_size = population_size, 
     sylnum = syllable_number, nSL = number_sylls_probability_level, 
     one_pop_singers = one_pop_singers, curlearnprob = curinh_value, 
@@ -129,13 +129,13 @@ simParams <- define_parameters (
       population.pattern = c (1,2), pastRunObject = lastRunObject, 
       eqpop = T, eqsex = T, pastRunInit = T)
     curiosity_level <- initialize.curiosity (
-      P = simParams, cur.min = scMin, cur.max = scMax, 
+      P = simParams, cur.min = scmin, cur.max = scmax, 
       pastRunObject = lastRunObject, pastRunInit = T)
   } else {
     sylreps <- initialize.sylrep (P = simParams, 
       population.pattern = c (1,2), eqpop = T, eqsex = T)
     curiosity_level <- initialize.curiosity (
-      simParams, scMin, scMax)
+      simParams, scmin, scmax)
   }
 
   
@@ -218,3 +218,5 @@ for (ad_nauseum in 1:5) {
   }
   print (thing[ad_nauseum])
 }
+
+

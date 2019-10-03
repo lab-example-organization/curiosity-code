@@ -1,64 +1,64 @@
 curstarts:
-  - scMin: [ 1,11, 1,11]
-    scMax: [26,26, 7,26]
-  - scMin: [11,11, 1,11]
-    scMax: [26,26,26,26]
-  - scMin: [11,11,11, 7]
-    scMax: [26,26,26,13]
-  - scMin: [11,11,11,11]
-    scMax: [15,26,15,15]
-  - scMin: [ 1,11, 1,11]
-    scMax: [ 7,26,26,26]
-  - scMin: [11,11,11,11]
-    scMax: [26,26,26,26]
-  - scMin: [11,11,11, 7]
-    scMax: [15,26,15,13]
-  - scMin: [11,11, 7,11]
-    scMax: [26,26,13,26]
-  - scMin: [11,11, 1,11]
-    scMax: [26,26,26,26]
-  - scMin: [11,11,11, 7]
-    scMax: [26,26,26,13]
-  - scMin: [11,11,11,11]
-    scMax: [26,26,26,15]
-  - scMin: [ 1,11,11,11]
-    scMax: [ 7,26,26,26]
-  - scMin: [11,11, 7,11]
-    scMax: [26,26,13,26]
-  - scMin: [11,11,11,11]
-    scMax: [26,26,26,26]
-  - scMin: [11,11, 1,11]
-    scMax: [26,26,26,26]
-  - scMin: [ 1,11,11,11]
-    scMax: [ 7,15,26,15]
-  - scMin: [ 1, 1,11, 1]
-    scMax: [ 7, 7,26, 7]
-  - scMin: [ 1, 7,11, 7]
-    scMax: [ 7,13,26,13]
-  - scMin: [ 1,11,11,11]
-    scMax: [ 7,26,26,26]
-  - scMin: [11,11,11,11]
-    scMax: [26,26,15,26]
-  - scMin: [ 1,11,11,11]
-    scMax: [26,26,15,26]
-  - scMin: [ 1,11,11,11]
-    scMax: [ 7,15,26,15]
-  - scMin: [11,11,11, 7]
-    scMax: [26,26,26,13]
-  - scMin: [11,11,11,11]
-    scMax: [26,26,26,26]
+  - scmin: [ 1,11, 1,11]
+    scmax: [26,26, 7,26]
+  - scmin: [11,11, 1,11]
+    scmax: [26,26,26,26]
+  - scmin: [11,11,11, 7]
+    scmax: [26,26,26,13]
+  - scmin: [11,11,11,11]
+    scmax: [15,26,15,15]
+  - scmin: [ 1,11, 1,11]
+    scmax: [ 7,26,26,26]
+  - scmin: [11,11,11,11]
+    scmax: [26,26,26,26]
+  - scmin: [11,11,11, 7]
+    scmax: [15,26,15,13]
+  - scmin: [11,11, 7,11]
+    scmax: [26,26,13,26]
+  - scmin: [11,11, 1,11]
+    scmax: [26,26,26,26]
+  - scmin: [11,11,11, 7]
+    scmax: [26,26,26,13]
+  - scmin: [11,11,11,11]
+    scmax: [26,26,26,15]
+  - scmin: [ 1,11,11,11]
+    scmax: [ 7,26,26,26]
+  - scmin: [11,11, 7,11]
+    scmax: [26,26,13,26]
+  - scmin: [11,11,11,11]
+    scmax: [26,26,26,26]
+  - scmin: [11,11, 1,11]
+    scmax: [26,26,26,26]
+  - scmin: [ 1,11,11,11]
+    scmax: [ 7,15,26,15]
+  - scmin: [ 1, 1,11, 1]
+    scmax: [ 7, 7,26, 7]
+  - scmin: [ 1, 7,11, 7]
+    scmax: [ 7,13,26,13]
+  - scmin: [ 1,11,11,11]
+    scmax: [ 7,26,26,26]
+  - scmin: [11,11,11,11]
+    scmax: [26,26,15,26]
+  - scmin: [ 1,11,11,11]
+    scmax: [26,26,15,26]
+  - scmin: [ 1,11,11,11]
+    scmax: [ 7,15,26,15]
+  - scmin: [11,11,11, 7]
+    scmax: [26,26,26,13]
+  - scmin: [11,11,11,11]
+    scmax: [26,26,26,26]
 
-simNumberStart: [2597, 2347, 2468, 2521, 2089, 2221, 2270, 1724, 1726, 1847, 1850, 1467, 1476, 1477, 1478, 1517, 2782, 2807, 2832, 2844, 2849, 2882, 2964, 2965]
-runLength: '10k'
-SylLearnStyle: 'nsL'
-vertObLearn:
+simnumberstart: [2597, 2347, 2468, 2521, 2089, 2221, 2270, 1724, 1726, 1847, 1850, 1467, 1476, 1477, 1478, 1517, 2782, 2807, 2832, 2844, 2849, 2882, 2964, 2965]
+runlength: '10k'
+Syllearnstyle: 'nsL'
+vertoblearn:
   vertical:
     learn: 0.95
     invent: 0.1
   oblique:
     learn: 0.1
     invent: 0.01
-sylDist: 'oppsyl'
+syldist: 'oppsyl'
 curinh_value: 0.95
 num_pop: 2
 pop_size: 400
@@ -69,14 +69,14 @@ standard_deviation: 2
 
 # curinh.pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
-# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhDistribution
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
 curinh_pattern: 5
 one_pop_singers: [10, 10]
-RecordSimplifyFactor: 100
-curinhDistribution: [0.1, 0.25, 0.25, 0.25, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6, 0.75, 0.75, 0.75, 0.75, 0.75, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9] # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
-traitInvasion: FALSE
-invasionPopSize: 5
-invasionStyle: 'curiosity' # need: curiosity, sylrep, 
+Recordsimplifyfactor: 100
+curinhdistribution: [0.1, 0.25, 0.25, 0.25, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6, 0.75, 0.75, 0.75, 0.75, 0.75, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9] # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+traitinvasion: FALSE
+invasionpopsize: 5
+invasionstyle: 'curiosity' # need: curiosity, sylrep, 
 
 screwedUp: TRUE
 

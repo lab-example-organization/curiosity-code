@@ -79,7 +79,7 @@ extractMeans <- function(allRunDirs, dirHeatMap, source_of_params) {
       sdstbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", sdstlist[i]))
       sylrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", repzlist[i]))
     }
-    #num_timesteps = as.numeric(strsplit(dim_source$runLength, "k")[[1]][1])*1000
+    #num_timesteps = as.numeric(strsplit(dim_source$runlength, "k")[[1]][1])*1000
         
     curHstMeans <- colMeans(aperm(curhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
     curLvlMeans <- colMeans(aperm(cursitylist, c(4, 1, 2, 3)), na.rm = TRUE)

@@ -212,25 +212,25 @@ paramsFile <- c("params.yaml")
 paramsSource = paramsFile
 params <- yaml.load_file(file.path("parameters", paramsSource))
 
-scMin = c(
-        params$curstarts[[shifting_curstart]]$scMin[1],
-        params$curstarts[[shifting_curstart]]$scMin[2],
-        params$curstarts[[shifting_curstart]]$scMin[3],
-        params$curstarts[[shifting_curstart]]$scMin[4])
-      scMax = c(
-        params$curstarts[[shifting_curstart]]$scMax[1],
-        params$curstarts[[shifting_curstart]]$scMax[2],
-        params$curstarts[[shifting_curstart]]$scMax[3],
-        params$curstarts[[shifting_curstart]]$scMax[4])
-      simNumber = params$simNumberStart + (shifting_curstart - 1)
-      runLength = params$runLength
-      SylLearnStyle = params$SylLearnStyle
+scmin = c(
+        params$curstarts[[shifting_curstart]]$scmin[1],
+        params$curstarts[[shifting_curstart]]$scmin[2],
+        params$curstarts[[shifting_curstart]]$scmin[3],
+        params$curstarts[[shifting_curstart]]$scmin[4])
+      scmax = c(
+        params$curstarts[[shifting_curstart]]$scmax[1],
+        params$curstarts[[shifting_curstart]]$scmax[2],
+        params$curstarts[[shifting_curstart]]$scmax[3],
+        params$curstarts[[shifting_curstart]]$scmax[4])
+      simNumber = params$simnumberstart + (shifting_curstart - 1)
+      runlength = params$runlength
+      Syllearnstyle = params$Syllearnstyle
       vertOblLearn = c(
-        params$vertObLearn$vertical$learn,
-        params$vertObLearn$vertical$invent,
-        params$vertObLearn$oblique$learn,
-        params$vertObLearn$oblique$invent)
-      sylDist = params$sylDist
+        params$vertoblearn$vertical$learn,
+        params$vertoblearn$vertical$invent,
+        params$vertoblearn$oblique$learn,
+        params$vertoblearn$oblique$invent)
+      syldist = params$syldist
       curinh_value = params$curinh_value
       number_populations = params$num_pop
       population_size = params$pop_size
@@ -239,7 +239,7 @@ scMin = c(
       standDev = as.numeric(params$standard_deviation)
       SimNumberLC = shifting_curstart
       curinh_style = params$curinh_pattern
-      recordingSimpFact = params$RecordSimplifyFactor
+      recordingSimpFact = params$Recordsimplifyfactor
       one_pop_singers = params$one_pop_singers
 
 "/home/parker/Documents/projects/Code/curiosity-code/results/190327_296_-_2k_nsL_normVO_oppsyl_1-7_c/variable_store/2019-03-27-144523-GMT-variable-store/"
@@ -517,26 +517,26 @@ axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
             c("","","",""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
 
-      scMin = c(
-        params$curstarts[[shifting_curstart]]$scMin[1],
-        params$curstarts[[shifting_curstart]]$scMin[2],
-        params$curstarts[[shifting_curstart]]$scMin[3],
-        params$curstarts[[shifting_curstart]]$scMin[4])
-      scMax = c(
-        params$curstarts[[shifting_curstart]]$scMax[1],
-        params$curstarts[[shifting_curstart]]$scMax[2],
-        params$curstarts[[shifting_curstart]]$scMax[3],
-        params$curstarts[[shifting_curstart]]$scMax[4])
+      scmin = c(
+        params$curstarts[[shifting_curstart]]$scmin[1],
+        params$curstarts[[shifting_curstart]]$scmin[2],
+        params$curstarts[[shifting_curstart]]$scmin[3],
+        params$curstarts[[shifting_curstart]]$scmin[4])
+      scmax = c(
+        params$curstarts[[shifting_curstart]]$scmax[1],
+        params$curstarts[[shifting_curstart]]$scmax[2],
+        params$curstarts[[shifting_curstart]]$scmax[3],
+        params$curstarts[[shifting_curstart]]$scmax[4])
       simNumber = subsetOrSequence
-      # simNumber = params$simNumberStart + (shifting_curstart - 1),
-      runLength = params$runLength
-      SylLearnStyle = params$SylLearnStyle
+      # simNumber = params$simnumberstart + (shifting_curstart - 1),
+      runlength = params$runlength
+      Syllearnstyle = params$Syllearnstyle
       vertOblLearn = c(
-        params$vertObLearn$vertical$learn,
-        params$vertObLearn$vertical$invent,
-        params$vertObLearn$oblique$learn,
-        params$vertObLearn$oblique$invent)
-      sylDist = params$sylDist
+        params$vertoblearn$vertical$learn,
+        params$vertoblearn$vertical$invent,
+        params$vertoblearn$oblique$learn,
+        params$vertoblearn$oblique$invent)
+      syldist = params$syldist
       curinh_value = params$curinh_value
       number_populations = params$num_pop
       population_size = params$pop_size
@@ -545,13 +545,13 @@ axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
       standDev = as.numeric(params$standard_deviation)
       SimNumberLC = shifting_curstart
       curinh_style = params$curinh_pattern
-      recordingSimpFact = params$RecordSimplifyFactor
+      recordingSimpFact = params$Recordsimplifyfactor
       one_pop_singers = params$one_pop_singers
       curinhProportion = singleOrMixture # only used if curinh_pattern = 5
       directoryDate = dirDate
-      invasion = params$traitInvasion
-      invPopSize = params$invasionPopSize
-      invStyle = params$invasionStyle
+      invasion = params$traitinvasion
+      invPopSize = params$invasionpopsize
+      invStyle = params$invasionstyle
 
 
 

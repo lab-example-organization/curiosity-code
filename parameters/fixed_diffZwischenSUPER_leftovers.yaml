@@ -1,27 +1,27 @@
 curstarts:
-  - scMin: [11,11,11, 1]
-    scMax: [26,26,26,26]
-  - scMin: [11,11, 1,11]
-    scMax: [26,26,26,26]
-  - scMin: [ 1, 1,11, 1] 
-    scMax: [ 7, 7,26, 7]
-  - scMin: [ 1, 7,11, 7] 
-    scMax: [ 7,13,26,13]
-  - scMin: [ 1,11,11,11]
-    scMax: [ 7,15,26,15]
-  - scMin: [11,11,11, 7] 
-    scMax: [26,26,26,13]
-simNumberStart: [1601, 1726, 2782, 2807, 2882, 2964]
-runLength: '10k'
-SylLearnStyle: 'nsL'
-vertObLearn:
+  - scmin: [11,11,11, 1]
+    scmax: [26,26,26,26]
+  - scmin: [11,11, 1,11]
+    scmax: [26,26,26,26]
+  - scmin: [ 1, 1,11, 1] 
+    scmax: [ 7, 7,26, 7]
+  - scmin: [ 1, 7,11, 7] 
+    scmax: [ 7,13,26,13]
+  - scmin: [ 1,11,11,11]
+    scmax: [ 7,15,26,15]
+  - scmin: [11,11,11, 7] 
+    scmax: [26,26,26,13]
+simnumberstart: [1601, 1726, 2782, 2807, 2882, 2964]
+runlength: '10k'
+Syllearnstyle: 'nsL'
+vertoblearn:
   vertical:
     learn: 0.95
     invent: 0.1
   oblique:
     learn: 0.1
     invent: 0.01
-sylDist: 'oppsyl'
+syldist: 'oppsyl'
 curinh_value: 0.95
 num_pop: 2
 pop_size: 400
@@ -32,11 +32,11 @@ standard_deviation: 2
 
 # curinh.pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
-# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhDistribution
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
 curinh_pattern: 5
 one_pop_singers: [10, 10]
-RecordSimplifyFactor: 100
-curinhDistribution: [0.6, 0.6, 0.9, 0.9, 0.9, 0.9] # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+Recordsimplifyfactor: 100
+curinhdistribution: [0.6, 0.6, 0.9, 0.9, 0.9, 0.9] # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
 screwedUp: TRUE
 
 
