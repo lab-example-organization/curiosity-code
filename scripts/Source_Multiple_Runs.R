@@ -658,17 +658,7 @@ multi_runs <- function (shifting_curstart, paramssource,
   }
 
   for (rep_number in 1 : number_of_reps) {
-    if (rep_number == 1) {
-
-      sink(file = file.path(
-          "source", "temp", paste0(shifting_curstart,"_sim_data.txt")
-        ), append = FALSE)
-      print("/please/ignore/this/line/like/you/always/do")
-      sink()
-
-      # file.create (file.path ("source", "temp", paste0 (
-      #   shifting_curstart,"_sim_data.txt")))
-    }
+    
     if (params$indrunredo == T) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
       singleormixture <- params$curinhdistribution [shifting_curstart]
@@ -676,6 +666,19 @@ multi_runs <- function (shifting_curstart, paramssource,
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
       singleormixture <- params$curinhdistribution
     }
+
+    if (rep_number == 1) {
+
+      sink(file = file.path(
+          "source", "temp", paste0(subsetorsequence,"_sim_data.txt")
+        ), append = FALSE)
+      print("/please/ignore/this/line/like/you/always/do")
+      sink()
+
+      # file.create (file.path ("source", "temp", paste0 (
+      #   shifting_curstart,"_sim_data.txt")))
+    }
+
     life_cycle(
       scmin = c (
         params$curstarts [[shifting_curstart]]$scmin [1],
