@@ -70,8 +70,8 @@ n_cores <- 2
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:2
-paramsfile <- c("params.yaml")
+shifting_curstart <- 1:9
+paramsfile <- c("IA_initTestsCI1.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simdate <- gsub('-', '', substring(Sys.Date(), 3))
 secretcode <- 58418
