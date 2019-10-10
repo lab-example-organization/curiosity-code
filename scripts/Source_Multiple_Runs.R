@@ -198,7 +198,6 @@ invasion_parameters_curiosity <- function (
   ip = invpop,
   isx = invsex,
   ips = invpopsize,
-  ifocus = invfocus,
   itv = invtraitvalue,
   curiosity_container = curiosity_level,
   someparameters = simparams
@@ -248,7 +247,6 @@ invasion_parameters_sylrep <- function (
   ip = invpop,
   isx = invsex,
   ips = invpopsize,
-  ifocus = invfocus,
   itv = invtraitvalue,
   sylrep_container = sylreps,
   someparameters = simparams
@@ -377,7 +375,7 @@ life_cycle <- function (
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standdev, curinh_style,
   recordingsimpfact, one_pop_singers = c(10,10), curinhproportion,
-  directorydate, invasion, invpopsize, invfocus, invpop, invsex,
+  directorydate, invasion, invpopsize, invstyle, invpop, invsex,
   invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE) {
 
   docnamez <- makedocnamez (
@@ -443,12 +441,11 @@ life_cycle <- function (
   for(thousand_timesteps in 1:(simparams$num_timesteps/1000)) {
 
     if (invasion && ( (thousand_timesteps - 1) == invktmstps)) {
-      if (invfocus == 'curiosity') {
+      if (invstyle == 'curiosity') {
         curiosity_level <- invasion_parameters_curiosity (
           ip = invpop,
           isx = invsex,
           ips = invpopsize,
-          ifocus = invfocus,
           itv = invtraitvalue,
           curiosity_container = curiosity_level,
           someparameters = simparams
@@ -458,7 +455,6 @@ life_cycle <- function (
           ip = invpop,
           isx = invsex,
           ips = invpopsize,
-          ifocus = invfocus,
           itv = invtraitvalue,
           sylrep_container = sylreps,
           someparameters = simparams
@@ -714,7 +710,7 @@ multi_runs <- function (shifting_curstart, paramssource,
       invasion = params$traitinvasion,
       invktmstps = params$invasionthoutmstps,
       invpopsize = params$invasionpopsize,
-      invfocus = params$invasionfocus,
+      invstyle = params$invasionstyle,
       invpop = params$invasionpop,
       invsex = params$invasionsex,
       invtraitvalue = params$invasiontraitvalue,

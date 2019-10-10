@@ -18,7 +18,7 @@ curstarts:
   - scmin: [29, 1, 1, 1] #
     scmax: [34, 7, 7, 7] #
 simnumberstart: [3758]
-runlength: '200k'
+runlength: '10k'
 Syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
@@ -48,6 +48,7 @@ curinhdistribution: 0.50
 
 
 traitinvasion: TRUE
+invasionthoutmstps: 2
 invasionpopsize: 100
 invasionstyle: 'curiosity' # need: curiosity, sylrep, 
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
