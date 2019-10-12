@@ -551,7 +551,7 @@ axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
       directoryDate = dirDate
       invasion = params$traitinvasion
       invPopSize = params$invasionpopsize
-      invStyle = params$invasionstyle
+      invstyle = params$invasionstyle
 
 
 
