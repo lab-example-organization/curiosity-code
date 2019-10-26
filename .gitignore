@@ -13,3 +13,5 @@ source
 *.zip
 *.tar.gz
 TerminalOutput
+.pdf
+.odp

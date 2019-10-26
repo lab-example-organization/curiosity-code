@@ -236,9 +236,9 @@ makeheatmapfile <- function (
       if (diffcurstartbias == "male") {
         heatmap_array <- array(
         0, dim = c(5,5,5,8), list(
-          c("1-9mp1", "9-17mp1", "15-34mp1", "1-34mp1", "15-20mp1"),
-          c("1-9mp2", "9-17mp2", "15-34mp2", "1-34mp2", "15-20mp2"), 
-          c("1-9f", "9-17f", "15-34f", "1-34f", "15-20f"), 
+          c("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1", "0-1.0mp1", "0.45-0.55mp1"),
+          c("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"), 
+          c("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"), 
           c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
         ))
         othersize <- 5
@@ -246,9 +246,9 @@ makeheatmapfile <- function (
         if (othersize == 5) {
           heatmap_array <- array(
             0, dim = c(5,5,5,8), list(
-              c("1-9fp1", "9-17fp1", "15-34fp1", "1-34fp1", "15-20fp1"),
-              c("1-9fp2", "9-17fp2", "15-34fp2", "1-34fp2", "15-20fp2"), 
-              c("1-9m", "9-17m", "15-34m", "1-34m", "15-20m"), 
+              c("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1", "0-1.0fp1", "0.45-0.55fp1"),
+              c("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2", "0-1.0fp2", "0.45-0.55fp2"), 
+              c("0-0.25m", "0.25-0.5m", "0.5-1.0m", "0-1.0m", "0.45-0.55m"), 
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             )
           )
@@ -260,27 +260,27 @@ makeheatmapfile <- function (
             if (runstyle == "lowMedHigh") {
               heatmap_array <- array(
                 0, dim = c(3,3,2,8), list(
-                  c("1-9mp1", "9-17mp1", "15-34mp1"),
-                  c("1-9fp1", "9-17fp1", "15-34fp1"), 
-                  c("1-9p2", "15-34p2"), 
+                  c("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1"),
+                  c("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"), 
+                  c("0-0.25p2", "0.5-1.0p2"), 
                   c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
                 )
               )
             } else if (runstyle == "narrowWide") {
               heatmap_array <- array(
               0, dim = c(2,2,2,8), list(
-                c("1-34mp1", "15-20mp1"),
-                c("1-34fp1", "15-20fp1"), 
-                c("1-9p2", "15-34p2"),
+                c("0-1.0mp1", "0.45-0.55mp1"),
+                c("0-1.0fp1", "0.45-0.55fp1"), 
+                c("0-0.25p2", "0.5-1.0p2"),
                 c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               ))
             } else if (runstyle == "lowHigh") {
               print("and a four")
               heatmap_array <- array(
               0, dim = c (biassize, biassize, othersize, 8), list(
-                c("1-8mp1", "8-11mp1", "14-22mp1", "20-27mp1", "25-28mp1"), 
-                c("1-8fp1", "8-11fp1", "14-22fp1", "20-27fp1", "25-28fp1"), 
-                c("8-11p2", "25-28p2"), 
+                c("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"), 
+                c("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"), 
+                c("0.2-0.3p2", "0.7-0.8p2"), 
                 c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               ))
             }
@@ -293,9 +293,9 @@ makeheatmapfile <- function (
           if (runstyle == "lowMedHigh") {
             heatmap_array <- array(
               0, dim = c (othersize, biassize, biassize, 8), list(
-                c("1-9p1", "15-34p1"),
-                c("1-9mp2", "9-17mp2", "15-34mp2"),
-                c("1-9fp2", "9-17fp2", "15-34fp2"), 
+                c("0-0.25p1", "0.5-1.0p1"),
+                c("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2"),
+                c("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2"), 
                 c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               )
             )
@@ -303,9 +303,9 @@ makeheatmapfile <- function (
             # biassize = 2
             heatmap_array <- array(
             0, dim = c (othersize, biassize, biassize, 8), list(
-              c("1-9p1", "15-34p1"), 
-              c("1-34mp2", "15-20mp2"),
-              c("1-34fp2", "15-20fp2"), 
+              c("0-0.25p1", "0.5-1.0p1"), 
+              c("0-1.0mp2", "0.45-0.55mp2"),
+              c("0-1.0fp2", "0.45-0.55fp2"), 
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
           }
@@ -327,10 +327,10 @@ makeheatmapfile <- function (
       othersize = 1
       heatmap_array <- array(
             0, dim = c(biassize,biassize,othersize,8), list(
-              c("1-7mp1", "4-10mp1", "7-13mp1", "10-15mp1", "13-19mp1", "15-23mp1", "19-26mp1", "23-29mp1", "26-31mp1", "29-34mp1"), 
-              c("1-7fp1", "4-10fp1", "7-13fp1", "10-15fp1", "13-19fp1", "15-23fp1", "19-26fp1", "23-29fp1", "26-31fp1", "29-34fp1"), 
-              # c("7-10p2", "26-29fp2"), 
-              c("7-10p2"), 
+              c("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "19-26mp1", "23-29mp1", "26-31mp1", "29-34mp1"), 
+              c("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "19-26fp1", "23-29fp1", "26-31fp1", "29-34fp1"), 
+              # c("0.18-0.27p2", "0.72-0.81fp2"), 
+              c("0.18-0.27p2"), 
               c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
     }
@@ -886,14 +886,14 @@ individualfigures <- function (
               T,-0.03,NA,F,cex.axis=1, tck = -0.03)
           } else if (foldername$biassize == 10) {
             axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", "1-7", "", "4-10", "", "7-13", "", "10-15", "", "13-19", "", "15-23", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
+                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
               T,0,NA,F,cex.axis=0.8, tck = 0)
             axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
               c("", "", "", "", "", "", "", "", "", "", ""),
               T,-0.03,NA,F,cex.axis=1, tck = -0.03)
 
             axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", "1-7", "", "4-10", "", "7-13", "", "10-15", "", "13-19", "", "15-23", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
+                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
               T,0,NA,F,cex.axis=0.8, tck = 0)
             axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
               c("", "", "", "", "", "", "", "", "", "", ""),
