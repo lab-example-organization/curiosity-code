@@ -113,10 +113,14 @@ all_the_runs <- extractvardirs(heatmapland,
 
 # profvis({
 # #   for(iteration in 1:10) {
-#     extractedmeans <- extractmeans(allrundirs = all_the_runs, 
-#         dirheatmap = heatmapland, source_of_params = "params.yaml")
+    # extractedmeans <- extractmeans(allrundirs = all_the_runs, 
+    #     dirheatmap = heatmapland, source_of_params = "params.yaml")
 # #   }
 # })
+
+extractedmeans <- extractmeans(allrundirs = all_the_runs, 
+        dirheatmap = heatmapland, source_of_params = "params.yaml")
+all_the_names <- remakestring(all_the_runs, "_", ".")
 
 
 all_the_low_background <- c(all_the_runs[1:25])
@@ -163,16 +167,32 @@ names(extractedmeans) <- all_the_names
 
 # whichbias <- c("male","female", "pop1", "pop2", "both")
 
-# whichrunstyle <- c("lowMedHigh", "narrowWide", "lowHigh")
-
+# whichrunstyle <- c(
+  # "lowMedHigh", ### 0-0.25, 0.25-0.5, 0.5-1 (background 0-0.25, 0.5-1)
+  # "narrowWide", ### 0.45-0.55 (background 0-0.25, 0.5-1)
+  # "lowHigh") ### 0-0.2, 0.2-0.3, 0.4-0.6, 0.55-0.75, 0.7-0.8 (background 0.2-0.3, 0.7-0.8)
+  
+  # IFF highres,
+  # ### 0-0.18, 0.09-0.27, 0.18-0.36, 0.27-0.45, 0.36-0.54, 0.45-0.63, 0.54-0.72, 0.63-0.81, 0.72-0.9, 0.81-1
 # source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 heatmapoutput <- list()
-heatmapoutput <- makeheatmapfile(inheritance = 1, diffcurstartbias = 3, 
+heatmapoutput <- makeheatmapfile(
+                inheritance = 1, diffcurstartbias = "pop1", 
                 biassize = 5, othersize = 1, 
                 reversedruns = TRUE, specialfigs = TRUE, 
-                runstyle = 3, highres = FALSE, 
+                runstyle = "lowHigh", highres = FALSE, 
                 extractedmeans = extractedmeans)
+
+# inheritance = 1
+# diffcurstartbias = 3
+# biassize = 5
+# othersize = 1
+# reversedruns = TRUE
+# specialfigs = TRUE
+# runstyle = "pop1"
+# highres = FALSE
+# extractedmeans = extractedmeans
 
 # # USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
 
