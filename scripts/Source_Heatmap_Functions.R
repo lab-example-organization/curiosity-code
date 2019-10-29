@@ -159,8 +159,8 @@ makeheatmapfile <- function (
   whichinh <- c("male","moth","same","opps","sNTn",
                 "sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
   inheritance <- whichinh[inheritance]
-  whichbias <- c("male","female", "pop1", "pop2", "both")
-  diffcurstartbias <- whichbias[diffcurstartbias]
+  # whichbias <- c("male","female", "pop1", "pop2", "both")
+  # diffcurstartbias <- whichbias[diffcurstartbias]
 
   whichrunstyle <- c("lowMedHigh", "narrowWide", "lowHigh")
   if (runstyle %in% 1 : length(whichrunstyle)) {
@@ -222,7 +222,31 @@ makeheatmapfile <- function (
     heatmap_array <- placeholder
 
   } else {
-    if (highres == FALSE) {
+    if (highres) {
+      
+      print("and a three")
+
+      foldername <- paste0(
+      str_sub(paste(str_extract_all(
+        Sys.time(), "[0123456789]"
+      )[[1]], collapse = ""), 3, 8),
+      "_slices_-_",
+      inheritance,
+      "inh_",
+      diffcurstartbias,
+      "Bias_", runstyle)
+      biassize = 10
+      othersize = 1
+      heatmap_array <- array(
+            0, dim = c(biassize,biassize,othersize,8), list(
+              c("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "0.54-0.72mp1", "0.63-0.81mp1", "0.72-0.9mp1", "0.81-1mp1"), 
+              c("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "0.54-0.72fp1", "0.63-0.81fp1", "0.72-0.9fp1", "0.81-1fp1"), 
+              # c("0.18-0.27p2", "0.72-0.81fp2"), 
+              c("0.18-0.27p2"), 
+              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            ))
+    } else {
+      print("and no highres three")
       foldername <- paste0(
       str_sub(paste(str_extract_all(
         Sys.time(), "[0123456789]"
@@ -311,28 +335,6 @@ makeheatmapfile <- function (
           }
         }
       }
-    } else {
-      print("and a three")
-
-      foldername <- paste0(
-      str_sub(paste(str_extract_all(
-        Sys.time(), "[0123456789]"
-      )[[1]], collapse = ""), 3, 8),
-      "_slices_-_",
-      inheritance,
-      "inh_",
-      diffcurstartbias,
-      "Bias_", runstyle)
-      biassize = 10
-      othersize = 1
-      heatmap_array <- array(
-            0, dim = c(biassize,biassize,othersize,8), list(
-              c("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "19-26mp1", "23-29mp1", "26-31mp1", "29-34mp1"), 
-              c("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "19-26fp1", "23-29fp1", "26-31fp1", "29-34fp1"), 
-              # c("0.18-0.27p2", "0.72-0.81fp2"), 
-              c("0.18-0.27p2"), 
-              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-            ))
     }
 
     print("and a five")    
@@ -886,14 +888,14 @@ individualfigures <- function (
               T,-0.03,NA,F,cex.axis=1, tck = -0.03)
           } else if (foldername$biassize == 10) {
             axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
+                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "0.54-0.72", "", "0.63-0.81", "", "0.72-0.9", "", "0.81-1", ""),
               T,0,NA,F,cex.axis=0.8, tck = 0)
             axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
               c("", "", "", "", "", "", "", "", "", "", ""),
               T,-0.03,NA,F,cex.axis=1, tck = -0.03)
 
             axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "19-26", "", "23-29", "", "26-31", "", "29-34", ""),
+                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "0.54-0.72", "", "0.63-0.81", "", "0.72-0.9", "", "0.81-1", ""),
               T,0,NA,F,cex.axis=0.8, tck = 0)
             axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
               c("", "", "", "", "", "", "", "", "", "", ""),
