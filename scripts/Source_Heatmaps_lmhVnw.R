@@ -31,7 +31,21 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "maleInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
-heatmapland <- file.path("results")
+# heatmapland <- file.path("results")
+
+
+
+  # "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results
+  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results
+  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results
+  # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
+  # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
+
+
+
+heatmapland <- file.path("results", "oct3n8results", "results")
+heatmapland <- file.path("results", "octXresults", "results")
+heatmapland <- file.path("results", "oct22stuff", "results")
 # heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
 #                          "results", "mixCI_10m-90f")
 # heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
@@ -82,10 +96,11 @@ all_the_runs <- extractvardirs(heatmapland,
   # "10k") # Carefully curated directory, contains all necessary runs and nothing else
   # "191008") # Carefully curated directory, contains all necessary runs and nothing else
 
-  "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_")
-  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_")
-  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_")
-  # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_")
+  "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results
+  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results
+  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results
+  # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
+  # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
   # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
   # "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
@@ -98,19 +113,24 @@ all_the_runs <- extractvardirs(heatmapland,
 
 # profvis({
 # #   for(iteration in 1:10) {
-#     extractedmeans <- extractmeans(allrundirs = all_the_runs, 
-#         dirheatmap = heatmapland, source_of_params = "params.yaml")
+    # extractedmeans <- extractmeans(allrundirs = all_the_runs, 
+    #     dirheatmap = heatmapland, source_of_params = "params.yaml")
 # #   }
 # })
 
-
-
-
 extractedmeans <- extractmeans(allrundirs = all_the_runs, 
+        dirheatmap = heatmapland, source_of_params = "params.yaml")
+all_the_names <- remakestring(all_the_runs, "_", ".")
+
+
+all_the_low_background <- c(all_the_runs[1:25])
+all_the_high_background <- c(all_the_runs[26:50])
+
+extractedmeans <- extractmeans(allrundirs = all_the_low_background, 
                                dirheatmap = heatmapland, 
                                source_of_params = "params.yaml", 
                                deeper = FALSE)
-all_the_names <- remakestring(all_the_runs, "_", ".")
+all_the_names <- remakestring(all_the_low_background, "_", ".")
 
 names(extractedmeans) <- all_the_names
 
@@ -147,16 +167,32 @@ names(extractedmeans) <- all_the_names
 
 # whichbias <- c("male","female", "pop1", "pop2", "both")
 
-# whichrunstyle <- c("lowMedHigh", "narrowWide", "lowHigh")
-
+# whichrunstyle <- c(
+  # "lowMedHigh", ### 0-0.25, 0.25-0.5, 0.5-1 (background 0-0.25, 0.5-1)
+  # "narrowWide", ### 0.45-0.55 (background 0-0.25, 0.5-1)
+  # "lowHigh") ### 0-0.2, 0.2-0.3, 0.4-0.6, 0.55-0.75, 0.7-0.8 (background 0.2-0.3, 0.7-0.8)
+  
+  # IFF highres,
+  # ### 0-0.18, 0.09-0.27, 0.18-0.36, 0.27-0.45, 0.36-0.54, 0.45-0.63, 0.54-0.72, 0.63-0.81, 0.72-0.9, 0.81-1
 # source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 heatmapoutput <- list()
-heatmapoutput <- makeheatmapfile(inheritance = 1, diffcurstartbias = 3, 
-                biassize = 5, othersize = 2, 
+heatmapoutput <- makeheatmapfile(
+                inheritance = 1, diffcurstartbias = "pop1", 
+                biassize = 5, othersize = 1, 
                 reversedruns = TRUE, specialfigs = TRUE, 
-                runstyle = 3, highres = FALSE, 
+                runstyle = "lowHigh", highres = FALSE, 
                 extractedmeans = extractedmeans)
+
+# inheritance = 1
+# diffcurstartbias = 3
+# biassize = 5
+# othersize = 1
+# reversedruns = TRUE
+# specialfigs = TRUE
+# runstyle = "pop1"
+# highres = FALSE
+# extractedmeans = extractedmeans
 
 # # USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
 

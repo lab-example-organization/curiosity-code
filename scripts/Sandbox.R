@@ -100,7 +100,7 @@ directoryDate = dirDate
 invasion = params$traitinvasion
 invKTmstps = params$invasionThouTmstps
 invPopSize = params$invasionpopsize
-invFocus = params$invasionFocus
+invFocus = params$invasionstyle
 invPop = params$invasionpop
 invSex = params$invasionsex
 invTraitValue = params$invasiontraitvalue
@@ -209,14 +209,14 @@ cnt <- 2
 thing <- c("one", "two", "three", "four", "five")
 for (ad_nauseum in 1:5) {
   repeat {
-    print(v)
+#     print(v)
     cnt <- cnt + 1
     
     if(cnt > 5) {
         break
     }
   }
-  print (thing[ad_nauseum])
+#  print (thing[ad_nauseum])
 }
 
 

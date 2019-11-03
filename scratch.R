@@ -80,7 +80,7 @@ for (firstFor in 1:2) {
         firstWhile <- firstWhile + 1
         print(paste0("ForAWhile = ", firstFor))
     }
-    print(paste0("firstFor = ", firstFor))
+#     print(paste0("firstFor = ", firstFor))
 }
 
 

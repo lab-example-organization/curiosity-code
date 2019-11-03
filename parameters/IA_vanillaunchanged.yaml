@@ -37,7 +37,7 @@ traitinvasion: FALSE
 invasionThouTmstps: 2
 invasionpopsize: 5
 # invasionstyle: 'offspring' # need: offspring, wholesale, 
-invasionFocus: 'curiosity' # need: curiosity, sylrep, both!
+invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionsex: 'male' # or female (or, perhaps, both?)
 invasiontraitvalue: FALSE # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]). 
