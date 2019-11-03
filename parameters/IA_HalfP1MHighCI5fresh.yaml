@@ -17,7 +17,7 @@ curstarts:
     scmax: [ 7,34, 7, 7] #
   - scmin: [29, 1, 1, 1] #
     scmax: [34, 7, 7, 7] #
-simnumberstart: [3853]
+simnumberstart: [3880]
 runlength: '10k'
 Syllearnstyle: 'nsL'
 vertoblearn:
@@ -39,7 +39,7 @@ standard_deviation: 2
 # curinh_pattern - calling either the row number 
 # or name of row for different curiosity inheritance patterns - 
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
-curinh_pattern: 1
+curinh_pattern: 5
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
 curinhdistribution: 0.50 
@@ -65,5 +65,5 @@ indrunredo: FALSE
 lastruninit: FALSE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
-# lastrunid: ['191003_3581', '191003_3582', '191003_3583', '191003_3584', '191003_3585', '191003_3586', '191003_3587', '191003_3588', '191003_3589']
+# lastrunid: ['191003_3599', '191003_3600', '191003_3601', '191003_3602', '191003_3603', '191003_3604', '191003_3605', '191003_3606', '191003_3607']
 lastrunid: FALSE

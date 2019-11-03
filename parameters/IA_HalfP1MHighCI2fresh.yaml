@@ -17,7 +17,7 @@ curstarts:
     scmax: [ 7,34, 7, 7] #
   - scmin: [29, 1, 1, 1] #
     scmax: [34, 7, 7, 7] #
-simnumberstart: [3853]
+simnumberstart: [3862]
 runlength: '10k'
 Syllearnstyle: 'nsL'
 vertoblearn:
@@ -65,5 +65,5 @@ indrunredo: FALSE
 lastruninit: FALSE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
-# lastrunid: ['191003_3581', '191003_3582', '191003_3583', '191003_3584', '191003_3585', '191003_3586', '191003_3587', '191003_3588', '191003_3589']
+# lastrunid: ['191012_3785', '191012_3786', '191012_3787', '191012_3788', '191012_3789', '191012_3790', '191012_3791', '191012_3792', '191012_3793']
 lastrunid: FALSE
