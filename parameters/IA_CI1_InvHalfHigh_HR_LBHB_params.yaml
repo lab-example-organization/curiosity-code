@@ -133,7 +133,7 @@ traitinvasion: TRUE
 invasionthoutmstps: 2
 invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale,
-invasionfocus: 'curiosity' # need: curiosity, sylrep, both!
+invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionsex: 'male' # male or female (or, perhaps, both?)
 invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).

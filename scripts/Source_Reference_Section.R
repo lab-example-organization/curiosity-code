@@ -42,9 +42,9 @@ referencesection <- function (referencing_script) {
     )
 
     package_list <- list(
-        multirun = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table'),
+        multirun = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table', 'zip'),
         heatmaps = c('stringr', 'yaml', 'magick'),
-        profiler = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table', 'profvis'),
+        profiler = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table', 'zip', 'profvis'),
         profvyaml = c('profvis', 'yaml'),
         pfvSrrYml = c('profvis', 'stringr', 'yaml'),
         profTest = c('profvis'),

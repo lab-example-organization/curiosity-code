@@ -169,7 +169,7 @@ makeheatmapfile <- function (
 
   # biassize = 5
 
-  print("and a one")
+#  print("and a one")
 
   if (redo) {
 
@@ -184,7 +184,7 @@ makeheatmapfile <- function (
       )
     )
     
-    print("and a two")
+#     print("and a two")
 
     placeholder <- array(rep(0,biassize * biassize * 8), dim(heatmap_array))
 
@@ -337,7 +337,7 @@ makeheatmapfile <- function (
       }
     }
 
-    print("and a five")    
+#     print("and a five")    
     # print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
     for (long in 1:othersize) { # femalez
       for (medium in 1:biassize) { # malez1

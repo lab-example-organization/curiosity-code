@@ -1,6 +1,6 @@
 for (i in 1:length (all_the_runs)) {
   if(length(list.files(file.path(heatmapLand,  all_the_runs[i]))) == 1) {
-    print(paste0("Folder ", all_the_runs[i], " is not done"))
+#     print(paste0("Folder ", all_the_runs[i], " is not done"))
   } else {
     # print(paste0("Folder ", all_the_runs[i], " is not done"))
   }
@@ -166,7 +166,7 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
 
 
   for(population in 1 : 2) {
-    print(paste0("population = ", population))
+#     print(paste0("population = ", population))
     chance_for_selection = 100
     while(chance_for_selection <= 100) {
       stop = FALSE
@@ -187,7 +187,7 @@ sing.selection <- function(universal_parameters, moran, curiosity_level, select_
       }
       print("the break worked! This doesn't get printed!")
     }
-    print("This text prints after 'oh yeah!' as long as the break works")
+#     print("This text prints after 'oh yeah!' as long as the break works")
   }
 
   
