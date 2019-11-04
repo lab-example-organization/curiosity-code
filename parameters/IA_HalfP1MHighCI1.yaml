@@ -48,7 +48,7 @@ curinhdistribution: 0.50
 
 
 traitinvasion: TRUE
-invasionthoutmstps: 2
+invasionthoutmstps: 1
 invasionpopsize: 100
 invasionstyle: 'curiosity' # need: curiosity, sylrep, 
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)

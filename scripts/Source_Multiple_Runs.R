@@ -440,7 +440,7 @@ life_cycle <- function (
 
   for(thousand_timesteps in 1:(simparams$num_timesteps/1000)) {
 
-    if (invasion && ( (thousand_timesteps - 1) == invktmstps)) {
+    if (invasion && (thousand_timesteps == invktmstps)) {
       if (invstyle == 'curiosity') {
         curiosity_level <- invasion_parameters_curiosity (
           ip = invpop,

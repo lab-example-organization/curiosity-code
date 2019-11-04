@@ -130,7 +130,7 @@ curinhdistribution: 0.5
 
 
 traitinvasion: TRUE
-invasionthoutmstps: 2
+invasionthoutmstps: 1
 invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)

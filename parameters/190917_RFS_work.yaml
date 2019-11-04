@@ -36,7 +36,7 @@ curinhdistribution: 0.95
 
 traitinvasion: FALSE
 # traitinvasion: TRUE
-invasionthoutmstps: 2
+invasionthoutmstps: 1
 invasionpopsize: 50 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale, 
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!

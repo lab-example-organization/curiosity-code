@@ -34,7 +34,7 @@ curinhdistribution: [0.50, 0.5, 0.5]
 
 
 traitinvasion: TRUE
-invasionThouTmstps: 2
+invasionthoutmstps: 1
 invasionpopsize: 5
 # invasionstyle: 'offspring' # need: offspring, wholesale, 
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
