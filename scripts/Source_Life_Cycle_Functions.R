@@ -945,12 +945,6 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
       "variable-store-", filename, "-", thing[data_categories], ".RData")))
     # print("saved")
   }
-  
-  # saveRDS (foldername, file.path (
-  #   "source", "temp", paste0 (
-  #     "foldername_", simnumber, ".RData")))
-# this seems unnecessary considering that I just pull the names of all the variable-store directories by listing them into an object.
-
   saveRDS (parameters_storetimesteps, file.path (
     foldername, "defined_parameters.RData"))
   saveRDS (syll_container, file.path (
