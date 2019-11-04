@@ -417,16 +417,16 @@ life_cycle <- function (
 
 
   sylrep_rowcol <- recordvariable.initialize (
-      parameters_rvi = simparams, variableid = 1, recsimfct = recordingsimpfact)
+      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 1)
 
   sylrep_dstbxn <- recordvariable.initialize (
-      parameters_rvi = simparams, variableid = 2, recsimfct = recordingsimpfact)
+      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 2)
 
   curity_mean_t <- recordvariable.initialize (
-      parameters_rvi = simparams, variableid = 3, recsimfct = recordingsimpfact)
+      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 3)
 
   curity_repert <- recordvariable.initialize (
-      parameters_rvi = simparams, variableid = 4, recsimfct = recordingsimpfact)
+      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 4)
 
   source (file.path ("scripts", "Source_Life_Cycle_Functions.R"))
 

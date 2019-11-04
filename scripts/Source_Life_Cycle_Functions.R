@@ -761,20 +761,20 @@ resylreps.offspring <- function (parameters_resylreps, temp_data_resylreps, sylr
 }
 
 
-recordvariable.initialize <- function (parameters_rvi, timestep_fraction, variableid) {
+recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
   if (variableid == 1) {
     record.variable <- array (0, c (
-      2, parameters_rvi$num_pop, (1000 / timestep_fraction)))
+      2, parameters_rvi$num_pop, (1000 / recsimfct)))
   } else if (variableid == 2) {
     record.variable <- array (0, c (
-      (2 * parameters_rvi$num_pop), parameters_rvi$sylnum, (1000 / timestep_fraction)))
+      (2 * parameters_rvi$num_pop), parameters_rvi$sylnum, (1000 / recsimfct)))
   } else if (variableid == 3) {
     record.variable <- array (0, c (
-      12, parameters_rvi$num_pop, (1000 / timestep_fraction)))
+      12, parameters_rvi$num_pop, (1000 / recsimfct)))
   } else if (variableid == 4) {
     record.variable <- array (0, c (
       (2 * parameters_rvi$num_pop), (parameters_rvi$num_pop * parameters_rvi$one_pop_singers [1]), 
-      (1000 / timestep_fraction)))
+      (1000 / recsimfct)))
   }
   return (record.variable)
 }

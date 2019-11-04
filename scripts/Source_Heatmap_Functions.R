@@ -86,9 +86,11 @@ extractmeans <- function(allrundirs,
 
   runmeans <- list()
 
+  timespanchunks <- as.numeric(str_split(str_split(allrundirs[1], "_")[[1]][4], "k")[[1]][1]) * (1000 / dim_source$recordsimplifyfactor)
+
   for(individual_run in 1:number_of_runs) {
     
-    #individual_run <- 1
+    # individual_run <- 1
     if (deeper) {
       multirun_directory <-
       file.path(
@@ -107,7 +109,7 @@ extractmeans <- function(allrundirs,
     
     namedrdatas <- outputfilenames(number_of_reps)
 
-    timespanchunks <- 1000
+    
 
     datanrepzlist <- array(0, c(2, dim_source$num_pop, timespanchunks, number_of_reps))
     datantbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timespanchunks, number_of_reps))
