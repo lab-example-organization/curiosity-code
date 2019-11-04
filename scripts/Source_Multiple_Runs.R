@@ -662,6 +662,12 @@ multi_runs <- function (shifting_curstart, paramssource,
       singleormixture <- params$curinhdistribution
     }
 
+    if (length(params$curinh_pattern) != 1) {
+      curinh_binary <- params$curinh_pattern[shifting_curstart]
+    } else {
+      curinh_binary <- params$curinh_pattern
+    }
+
     if (rep_number == 1) {
 
       sink(file = file.path(
@@ -701,7 +707,7 @@ multi_runs <- function (shifting_curstart, paramssource,
       syllable_number = params$sylnum,
       number_sylls_probability_level = params$num_sylls_per_prob_lvl,
       standdev = as.numeric(params$standard_deviation),
-      curinh_style = params$curinh_pattern,
+      curinh_style = curinh_binary,
       recordingsimpfact = params$recordsimplifyfactor,
       one_pop_singers = params$one_pop_singers,
       curinhproportion = singleormixture, # only used if curinh_pattern = 5
