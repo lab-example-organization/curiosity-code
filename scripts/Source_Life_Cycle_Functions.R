@@ -900,7 +900,9 @@ curity_repert.archive <- function (parameters_crp_archive,
 
 store_timesteps <- function (parameters_storetimesteps, filename = thousand_timesteps, 
   rowcol, dstbxn, mean_t, repert, saved_stuff, syll_container, 
-  cur_container, run_timedate, foldername = foldername) {
+  cur_container, run_timedate, foldername = foldername#,
+  # simnumber = simnumber
+  ) {
    # # # #  #directory <- getwd()
   results_directory <- file.path ('results')
   if (filename == 1) {
@@ -922,10 +924,11 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
   #         "foldername_", parameters$simnumber, ".RData")
   # ))}
   
-
+  thing <- c ("sylrep_rowcol", "sylrep_dstbxn", 
+              "curity_mean_t", "curity_repert")
+  
   for (data_categories in 1:4) {
-    thing <- c ("sylrep_rowcol", "sylrep_dstbxn", 
-      "curity_mean_t", "curity_repert")
+    
     file.create (file.path (foldername, paste0 (
       "variable-store-", filename, "-", thing[data_categories], ".RData")))
     if (data_categories == 1) {
@@ -943,11 +946,13 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
     # print("saved")
   }
   
-  saveRDS (foldername, file.path (
-    "source", "temp", paste0 (
-      "foldername_", parameters_storetimesteps$simnumber, ".RData")))
+  # saveRDS (foldername, file.path (
+  #   "source", "temp", paste0 (
+  #     "foldername_", simnumber, ".RData")))
+# this seems unnecessary considering that I just pull the names of all the variable-store directories by listing them into an object.
+
   saveRDS (parameters_storetimesteps, file.path (
-    foldername, "parameters_storetimesteps.RData"))
+    foldername, "defined_parameters.RData"))
   saveRDS (syll_container, file.path (
     foldername, "end_sylbls.RData"))
   saveRDS (cur_container, file.path (

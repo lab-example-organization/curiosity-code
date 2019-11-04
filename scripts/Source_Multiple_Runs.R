@@ -576,8 +576,10 @@ life_cycle <- function (
                     run_timedate = run_timedate,
                     foldername = file.path(
                       "results", stuff_to_save$docnamez, "variable_store",
-                      paste0(run_timedate, "-GMT-variable-store")))
-
+                      paste0(run_timedate, "-GMT-variable-store"))#,
+                    # simnumber = simnumber
+                    )
+# simnumber is only necessary if we're saving the names of every variable_store directory as separate .RData files in temp. Probably don't need this, marked for deprecation.
 
     if( (thousand_timesteps==(simparams$num_timesteps/1000)
       )&&(
