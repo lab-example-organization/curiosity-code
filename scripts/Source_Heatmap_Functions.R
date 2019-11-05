@@ -260,22 +260,22 @@ makeheatmapfile <- function (
       "Bias")
 
       if (diffcurstartbias == "male") {
-        heatmap_array <- array(
-        0, dim = c(5,5,5,8), list(
-          c("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1", "0-1.0mp1", "0.45-0.55mp1"),
-          c("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"), 
-          c("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"), 
-          c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+        heatmap_array <- array (
+        0, dim = c(5,5,5,8), list (
+          c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1", "0-1.0mp1", "0.45-0.55mp1"),
+          c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"), 
+          c ("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"), 
+          c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
         ))
         othersize <- 5
       } else if (diffcurstartbias == "female") {
         if (othersize == 5) {
-          heatmap_array <- array(
-            0, dim = c(5,5,5,8), list(
-              c("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1", "0-1.0fp1", "0.45-0.55fp1"),
-              c("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2", "0-1.0fp2", "0.45-0.55fp2"), 
-              c("0-0.25m", "0.25-0.5m", "0.5-1.0m", "0-1.0m", "0.45-0.55m"), 
-              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+          heatmap_array <- array (
+            0, dim = c(5,5,5,8), list (
+              c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1", "0-1.0fp1", "0.45-0.55fp1"),
+              c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2", "0-1.0fp2", "0.45-0.55fp2"), 
+              c ("0-0.25m", "0.25-0.5m", "0.5-1.0m", "0-1.0m", "0.45-0.55m"), 
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             )
           )
         }
@@ -284,30 +284,30 @@ makeheatmapfile <- function (
         if (othersize == 2) {
           if (specialfigs) {
             if (runstyle == "lowMedHigh") {
-              heatmap_array <- array(
-                0, dim = c(3,3,2,8), list(
-                  c("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1"),
-                  c("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"), 
-                  c("0-0.25p2", "0.5-1.0p2"), 
-                  c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              heatmap_array <- array (
+                0, dim = c(3,3,2,8), list (
+                  c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1"),
+                  c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"), 
+                  c ("0-0.25p2", "0.5-1.0p2"), 
+                  c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
                 )
               )
             } else if (runstyle == "narrowWide") {
-              heatmap_array <- array(
-              0, dim = c(2,2,2,8), list(
-                c("0-1.0mp1", "0.45-0.55mp1"),
-                c("0-1.0fp1", "0.45-0.55fp1"), 
-                c("0-0.25p2", "0.5-1.0p2"),
-                c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              heatmap_array <- array (
+              0, dim = c(2,2,2,8), list (
+                c ("0-1.0mp1", "0.45-0.55mp1"),
+                c ("0-1.0fp1", "0.45-0.55fp1"), 
+                c ("0-0.25p2", "0.5-1.0p2"),
+                c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               ))
             } else if (runstyle == "lowHigh") {
               print("and a four")
-              heatmap_array <- array(
-              0, dim = c (biassize, biassize, othersize, 8), list(
-                c("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"), 
-                c("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"), 
-                c("0.2-0.3p2", "0.7-0.8p2"), 
-                c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              heatmap_array <- array (
+              0, dim = c (biassize, biassize, othersize, 8), list (
+                c ("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"), 
+                c ("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"), 
+                c ("0.2-0.3p2", "0.7-0.8p2"), 
+                c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               ))
             }
           }
@@ -318,24 +318,31 @@ makeheatmapfile <- function (
         if (specialfigs) {
           if (runstyle == "lowMedHigh") {
             heatmap_array <- array(
-              0, dim = c (othersize, biassize, biassize, 8), list(
-                c("0-0.25p1", "0.5-1.0p1"),
-                c("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2"),
-                c("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2"), 
-                c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              0, dim = c (othersize, biassize, biassize, 8), list (
+                c ("0-0.25p1", "0.5-1.0p1"),
+                c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2"),
+                c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2"), 
+                c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               )
             )
           } else if (runstyle == "narrowWide") {
             # biassize = 2
             heatmap_array <- array(
-            0, dim = c (othersize, biassize, biassize, 8), list(
-              c("0-0.25p1", "0.5-1.0p1"), 
-              c("0-1.0mp2", "0.45-0.55mp2"),
-              c("0-1.0fp2", "0.45-0.55fp2"), 
-              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            0, dim = c (othersize, biassize, biassize, 8), list (
+              c ("0-0.25p1", "0.5-1.0p1"), 
+              c ("0-1.0mp2", "0.45-0.55mp2"),
+              c ("0-1.0fp2", "0.45-0.55fp2"), 
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
           }
         }
+      } else if (diffcurstartbias == "binary") {
+        othersize = 2
+        heatmap_array <- array(
+          0, dim = c (biassize, biassize, othersize, 8), list (
+            c (WORKING HERE NOT DONE YET)
+          )
+        )
       }
     }
 
