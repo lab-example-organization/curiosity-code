@@ -31,7 +31,7 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "maleInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
-# heatmapland <- file.path("results")
+heatmapland <- file.path("results")
 
 
 
@@ -43,9 +43,9 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 
 
-heatmapland <- file.path("results", "oct3n8results", "results")
-heatmapland <- file.path("results", "octXresults", "results")
-heatmapland <- file.path("results", "oct22stuff", "results")
+# heatmapland <- file.path("results", "oct3n8results", "results")
+# heatmapland <- file.path("results", "octXresults", "results")
+# heatmapland <- file.path("results", "oct22stuff", "results")
 # heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
 #                          "results", "mixCI_10m-90f")
 # heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
@@ -96,7 +96,12 @@ all_the_runs <- extractvardirs(heatmapland,
   # "10k") # Carefully curated directory, contains all necessary runs and nothing else
   # "191008") # Carefully curated directory, contains all necessary runs and nothing else
 
-  "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results
+  "*_358[1-9]_") ### fathinh, 200k setup
+  # "*_359[0-8]_") ### sameinh, 200k setup
+  # "*_3599_|*_360[0-7]_") ### mixedinh55, 200k setup
+  # "*_378[5-9]_|*_379[0-3]_") ### mothinh, 200k setup
+
+  # "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results
   # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results
   # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results
   # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
@@ -117,6 +122,10 @@ all_the_runs <- extractvardirs(heatmapland,
     #     dirheatmap = heatmapland, source_of_params = "params.yaml")
 # #   }
 # })
+
+# allrundirs = all_the_runs
+# dirheatmap = heatmapland
+# source_of_params = "params.yaml"
 
 extractedmeans <- extractmeans(allrundirs = all_the_runs, 
         dirheatmap = heatmapland, source_of_params = "params.yaml")

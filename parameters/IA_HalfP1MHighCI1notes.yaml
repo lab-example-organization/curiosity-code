@@ -1,0 +1,90 @@
+curstarts:
+  - scmin: [ 1, 1,29,29] #
+    scmax: [ 7, 7,34,34] #
+  - scmin: [29,29,29,29]	
+    scmax: [34,34,34,34]
+  - scmin: [ 1, 1, 1, 1] #	
+    scmax: [ 7, 7, 7, 7] #	
+  - scmin: [ 1,29, 1,29] #	
+    scmax: [ 7,34, 7,34] #	
+  - scmin: [29, 1,29, 1] #
+    scmax: [34, 7,34, 7] #
+  - scmin: [ 1,29,29,29]	
+    scmax: [ 7,34,34,34]	
+  - scmin: [29, 1,29,29]	
+    scmax: [34, 7,34,34]
+  - scmin: [ 1,29, 1, 1] #
+    scmax: [ 7,34, 7, 7] #
+  - scmin: [29, 1, 1, 1] #
+    scmax: [34, 7, 7, 7] #
+
+    # REARRANGED TO HELP FIGURE OUT HOW THE HEATMAPS SHOULD LOOK
+  # - scmin: [ 1, 1, 1, 1] #	
+  #   scmax: [ 7, 7, 7, 7] #
+  # - scmin: [ 1,29, 1, 1] #
+  #   scmax: [ 7,34, 7, 7] #
+  # - scmin: [29, 1, 1, 1] #
+  #   scmax: [34, 7, 7, 7] #
+    # - scmin: [ 1,29, 1,29] #	
+    #   scmax: [ 7,34, 7,34] #	
+    # - scmin: [29, 1,29, 1] #
+    #   scmax: [34, 7,34, 7] #
+  # - scmin: [ 1, 1,29,29] #
+  #   scmax: [ 7, 7,34,34] #
+  # - scmin: [ 1,29,29,29]	
+  #   scmax: [ 7,34,34,34]	
+  # - scmin: [29, 1,29,29]	
+  #   scmax: [34, 7,34,34]
+  # - scmin: [29,29,29,29]	
+  #   scmax: [34,34,34,34]
+
+simnumberstart: [3758]
+runlength: '10k'
+Syllearnstyle: 'nsL'
+vertoblearn:
+  vertical:
+    learn: 0.95
+    invent: 0.1
+  oblique:
+    learn: 0.1
+    invent: 0.01
+syldist: 'oppsyl'
+curinh_value: 0.95
+num_pop: 2
+pop_size: 400
+sylnum: 156
+num_sylls_per_prob_lvl: 8
+number_of_reps: 50
+standard_deviation: 2
+
+# curinh_pattern - calling either the row number 
+# or name of row for different curiosity inheritance patterns - 
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
+curinh_pattern: 1
+one_pop_singers: [10, 10]
+recordsimplifyfactor: 100
+curinhdistribution: 0.50 
+# must be between 0 and 1; [value displayed] == male; [1 - value] == female - 
+# distribution of curinh between parents
+
+
+traitinvasion: TRUE
+invasionthoutmstps: 1
+invasionpopsize: 100
+invasionstyle: 'curiosity' # need: curiosity, sylrep, 
+invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
+invasionsex: 'male' # or female
+invasiontraitvalue: [0.9, 0.05] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]). 
+                          # If it's not FALSE, then it's a string of two values (target value, size of range)
+
+
+                          # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
+indrunredo: FALSE
+
+# This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
+lastruninit: TRUE
+# lastruninit: FALSE
+
+# If this is being used, use an unique pattern from the run whose last timestep you would like to use.
+lastrunid: ['191003_3581', '191003_3582', '191003_3583', '191003_3584', '191003_3585', '191003_3586', '191003_3587', '191003_3588', '191003_3589']
+# lastrunid: FALSE
