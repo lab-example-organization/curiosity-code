@@ -190,7 +190,7 @@ heatmapoutput <- makeheatmapfile(
                 inheritance = 1, diffcurstartbias = "pop1", 
                 biassize = 5, othersize = 1, 
                 reversedruns = TRUE, specialfigs = TRUE, 
-                runstyle = "lowHigh", highres = FALSE, 
+                runstyle = "binary", highres = FALSE, 
                 extractedmeans = extractedmeans)
 
 # inheritance = 1

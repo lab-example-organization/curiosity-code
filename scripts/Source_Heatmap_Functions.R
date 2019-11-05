@@ -53,20 +53,20 @@ outputfilenames <- function (totalreplicates) {
   datanames <- c("CurHist","Cursity","SylDist","SylReps")
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz")
   listnames <- c("hist","sity","sdst","repz")
-  that_output_object <- list()
-  that_output_object <- list(
+  # filenamelist <- list()
+  filenamelist <- list(
     histlist = vector(length = totalreplicates),
     sitylist = vector(length = totalreplicates),
     sdstlist = vector(length = totalreplicates),
     repzlist = vector(length = totalreplicates)
   )
-  for (godwhathaveidone in 1:totalreplicates) {
-      that_output_object$histlist[godwhathaveidone] <- paste0("CurHist", godwhathaveidone, ".RData")
-      that_output_object$sitylist[godwhathaveidone] <- paste0("Cursity", godwhathaveidone, ".RData")
-      that_output_object$sdstlist[godwhathaveidone] <- paste0("SylDist", godwhathaveidone, ".RData")
-      that_output_object$repzlist[godwhathaveidone] <- paste0("SylReps", godwhathaveidone, ".RData")
+  for (individualreplicates in 1:totalreplicates) {
+      filenamelist$histlist[individualreplicates] <- paste0("CurHist", individualreplicates, ".RData")
+      filenamelist$sitylist[individualreplicates] <- paste0("Cursity", individualreplicates, ".RData")
+      filenamelist$sdstlist[individualreplicates] <- paste0("SylDist", individualreplicates, ".RData")
+      filenamelist$repzlist[individualreplicates] <- paste0("SylReps", individualreplicates, ".RData")
   }
-  return(that_output_object)
+  return(filenamelist)
 }
 
 extractmeans <- function(allrundirs, 
@@ -152,11 +152,19 @@ makeheatmapfile <- function (
   othersize,# = 2,
   reversedruns = FALSE,
   redo = FALSE,
-  specialfigs = FALSE,
   runstyle = 1,
   highres = FALSE,
   extractedmeans = extractedmeans
 ) {
+
+  zero_to_one_template <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
+  #                             #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
+                               0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
+  #                            #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
+                              0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
+  #                            #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
+                               0.9,0.95,0.99,1.0)
+  #                            #31, #32, #33,#34
 
   whichinh <- c("male","moth","same","opps","sNTn",
                 "sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
@@ -186,7 +194,7 @@ makeheatmapfile <- function (
       )
     )
     
-#     print("and a two")
+    #     print("and a two")
 
     placeholder <- array(rep(0,biassize * biassize * 8), dim(heatmap_array))
 
@@ -226,11 +234,11 @@ makeheatmapfile <- function (
   } else {
     if (highres) {
       
-      print("and a three")
+      # print("and a three")
 
-      foldername <- paste0(
-      str_sub(paste(str_extract_all(
-        Sys.time(), "[0123456789]"
+      foldername <- paste0 (
+      str_sub (paste (str_extract_all (
+        Sys.time (), "[0123456789]"
       )[[1]], collapse = ""), 3, 8),
       "_slices_-_",
       inheritance,
@@ -239,19 +247,19 @@ makeheatmapfile <- function (
       "Bias_", runstyle)
       biassize = 10
       othersize = 1
-      heatmap_array <- array(
-            0, dim = c(biassize,biassize,othersize,8), list(
-              c("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "0.54-0.72mp1", "0.63-0.81mp1", "0.72-0.9mp1", "0.81-1mp1"), 
-              c("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "0.54-0.72fp1", "0.63-0.81fp1", "0.72-0.9fp1", "0.81-1fp1"), 
+      heatmap_array <- array (
+            0, dim = c(biassize, biassize, othersize, 8), list (
+              c ("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "0.54-0.72mp1", "0.63-0.81mp1", "0.72-0.9mp1", "0.81-1mp1"), 
+              c ("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "0.54-0.72fp1", "0.63-0.81fp1", "0.72-0.9fp1", "0.81-1fp1"), 
               # c("0.18-0.27p2", "0.72-0.81fp2"), 
-              c("0.18-0.27p2"), 
-              c("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+              c ("0.18-0.27p2"), 
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
     } else {
-      print("and no highres three")
-      foldername <- paste0(
-      str_sub(paste(str_extract_all(
-        Sys.time(), "[0123456789]"
+      # print("and no highres three")
+      foldername <- paste0 (
+      str_sub (paste (str_extract_all (
+        Sys.time (), "[0123456789]"
       )[[1]], collapse = ""), 3, 8),
       "_slices_-_",
       inheritance,
@@ -260,18 +268,20 @@ makeheatmapfile <- function (
       "Bias")
 
       if (diffcurstartbias == "male") {
-        heatmap_array <- array (
-        0, dim = c(5,5,5,8), list (
-          c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1", "0-1.0mp1", "0.45-0.55mp1"),
-          c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"), 
-          c ("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"), 
-          c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-        ))
+        if (othersize == 5) {
+          heatmap_array <- array (
+          0, dim = c (biassize, biassize, othersize, 8), list (
+            c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1", "0-1.0mp1", "0.45-0.55mp1"),
+            c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"), 
+            c ("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"), 
+            c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+          ))
+        }
         othersize <- 5
       } else if (diffcurstartbias == "female") {
         if (othersize == 5) {
           heatmap_array <- array (
-            0, dim = c(5,5,5,8), list (
+            0, dim = c(biassize, biassize, othersize, 8), list (
               c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1", "0-1.0fp1", "0.45-0.55fp1"),
               c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2", "0-1.0fp2", "0.45-0.55fp2"), 
               c ("0-0.25m", "0.25-0.5m", "0.5-1.0m", "0-1.0m", "0.45-0.55m"), 
@@ -281,41 +291,51 @@ makeheatmapfile <- function (
         }
         
       } else if (diffcurstartbias == "pop1") {
-        if (othersize == 2) {
-          if (specialfigs) {
-            if (runstyle == "lowMedHigh") {
-              heatmap_array <- array (
-                0, dim = c(3,3,2,8), list (
-                  c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1"),
-                  c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"), 
-                  c ("0-0.25p2", "0.5-1.0p2"), 
-                  c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-                )
-              )
-            } else if (runstyle == "narrowWide") {
-              heatmap_array <- array (
-              0, dim = c(2,2,2,8), list (
-                c ("0-1.0mp1", "0.45-0.55mp1"),
-                c ("0-1.0fp1", "0.45-0.55fp1"), 
-                c ("0-0.25p2", "0.5-1.0p2"),
-                c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-              ))
-            } else if (runstyle == "lowHigh") {
-              print("and a four")
-              heatmap_array <- array (
-              0, dim = c (biassize, biassize, othersize, 8), list (
-                c ("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"), 
-                c ("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"), 
-                c ("0.2-0.3p2", "0.7-0.8p2"), 
-                c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
-              ))
-            }
-          }
+        # if (othersize == 2) {
+          # if (specialfigs) {
+        if (runstyle == "lowMedHigh") {
+          heatmap_array <- array (
+            0, dim = c(biassize, biassize, othersize, 8), list (
+              c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1"),
+              c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"), 
+              c ("0-0.25p2", "0.5-1.0p2"), 
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            )
+          )
+        } else if (runstyle == "narrowWide") {
+          heatmap_array <- array (
+          0, dim = c(biassize, biassize, othersize, 8), list (
+            c ("0-1.0mp1", "0.45-0.55mp1"),
+            c ("0-1.0fp1", "0.45-0.55fp1"), 
+            c ("0-0.25p2", "0.5-1.0p2"),
+            c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+          ))
+        } else if (runstyle == "lowHigh") {
+          # print("and a four")
+          heatmap_array <- array (
+          0, dim = c (biassize, biassize, othersize, 8), list (
+            c ("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"), 
+            c ("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"), 
+            c ("0.2-0.3p2", "0.7-0.8p2"), 
+            c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+          ))
+        } else if (runstyle == "binary") {
+          # othersize = 2
+          heatmap_array <- array(
+            0, dim = c (biassize, biassize, othersize, 8), list (
+              c ("0-0.18mp1", "0.81-1mp1"),
+              c ("0-0.18fp1", "0.81-1fp1"),
+              c ("0-0.18p2", "0.81-1p2"),
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            )
+          )
         }
+          # }
+        # }
         
       } else if (diffcurstartbias == "pop2") {
-        othersize <- 2
-        if (specialfigs) {
+        # othersize <- 2
+        # if (specialfigs) {
           if (runstyle == "lowMedHigh") {
             heatmap_array <- array(
               0, dim = c (othersize, biassize, biassize, 8), list (
@@ -335,15 +355,8 @@ makeheatmapfile <- function (
               c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
           }
-        }
-      } else if (diffcurstartbias == "binary") {
-        othersize = 2
-        heatmap_array <- array(
-          0, dim = c (biassize, biassize, othersize, 8), list (
-            c (WORKING HERE NOT DONE YET)
-          )
-        )
-      }
+        # }
+      } 
     }
 
 #     print("and a five")    
@@ -409,18 +422,18 @@ makeheatmapfile <- function (
         "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
 
       ))}
-    } else {
-      if(!(file.exists(file.path(
-        "results", foldername, paste0("heatmap_output_-_", inheritance, 
-        "inh_", diffcurstartbias, "Bias.RData")
-      )))) {
+    }# else {
+    #   if(!(file.exists(file.path(
+    #     "results", foldername, paste0("heatmap_output_-_", inheritance, 
+    #     "inh_", diffcurstartbias, "Bias.RData")
+    #   )))) {
       
-      saveRDS(heatmap_array, file.path(
-        "results",foldername, paste0("heatmap_output_-_", inheritance, 
-        "inh_", diffcurstartbias, "Bias.RData")
+    #   saveRDS(heatmap_array, file.path(
+    #     "results",foldername, paste0("heatmap_output_-_", inheritance, 
+    #     "inh_", diffcurstartbias, "Bias.RData")
 
-      ))}
-    }
+    #   ))}
+    # }
   }
   # for (subset in 1:5) {
   #   dir.create(file.path("results", foldername, paste0("slice_", subset)))
@@ -445,11 +458,8 @@ makeheatmapfile <- function (
 
 individualfigures <- function (
 
-  # inheritance = 1, #c("maleinh", "mothinh", "sameinh", "oppsinh","sNTninh", "sSTfinh", "sSFrinh", "sFrSinh", "sTfSinh", "sTnNinh", "FfFfinh")
   colorrange = 2, # c("relative", "absolute")
   colorpalette = 5, # Numbers correspond to specific color palettes
-  # thisBias = 1, # 3 or 4
-  # otherpopsize = 3, # USE THIS WHEN POP 2 HAS FEWER CONDITIONS THAN POPULATION OF INTEREST. this will force the dimensions of the data structure to include only the number of starting conditions that are present for the population of non-interest
   foldername = heatmapoutput
 ) {
   
