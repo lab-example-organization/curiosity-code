@@ -16,19 +16,19 @@ remakestring <- function(target, comp, out) {
       }
     }
   }
-  
+
   remadestrings <- str_replace_all(remadestrings, "[-]", ".")
 
   return(remadestrings)
 }
 
 htmpdir <- function(extradir = "extraDirectory") {
-  
+
   heatmapdirectory <- file.path("results", "Heatmaps")
   if(exists("extradir")) {
     for (sepdirs in 1:length(extradir)) {
       heatmapdirectory <- file.path(heatmapdirectory, extradir[sepdirs])
-      
+
       if(!(dir.exists(file.path(heatmapdirectory)))) {
         dir.create(file.path(heatmapdirectory))
       }
@@ -36,7 +36,7 @@ htmpdir <- function(extradir = "extraDirectory") {
   }
 
   return(heatmapdirectory)
-  
+
 }
 
 # heatmapLand <- htmpdir("extraDirectory")
@@ -45,7 +45,7 @@ htmpdir <- function(extradir = "extraDirectory") {
 extractvardirs <- function(home_path, filenamepattern) {
   variablestore_folderlist <- list.files(file.path(home_path), pattern = filenamepattern)
   # list.files(file.path(home_path), pattern = filenamepattern)
-  
+
   return(variablestore_folderlist)
 }
 
@@ -69,47 +69,55 @@ outputfilenames <- function (totalreplicates) {
   return(filenamelist)
 }
 
-extractmeans <- function(allrundirs, 
-                         dirheatmap, 
-                         source_of_params, 
+extractmeans <- function(allrundirs,
+                         dirheatmap,
+                         source_of_params,
+                         ordering = FALSE,
                          deeper = FALSE) {
+  if (ordering != FALSE && length(ordering) < 2) {
+    stop("either the runs are ordered correctly for later heatmap building, or they have to be rearranged.
+        So, if the order needs to be set up differently then you need a vector of numbers to tell it how to rearrange.")
+  }
   number_of_runs <- length(allrundirs)
   number_of_reps <- length(list.files(
     file.path(dirheatmap, allrundirs[1], "variable_store")))
   dim_source = yaml.load_file(file.path("parameters", source_of_params))
-  
-  # reordering the elements of the directory to line up right
-  thing <- sapply(1:number_of_runs, function(x) 
-    str_split(allrundirs[x], "_")[[1]][2])
-  
-  allrundirs <- allrundirs[str_order(thing)]
 
+  # reordering the elements of the directory to line up right
+  if (!(ordering)) {
+    thing <- sapply(1:number_of_runs, function(x)
+    str_split(allrundirs[x], "_")[[1]][2])
+
+    allrundirs <- allrundirs[str_order(thing)]
+  } else {
+    allrundirs <- allrundirs[ordering]
+  }
   runmeans <- list()
 
   timespanchunks <- as.numeric(str_split(str_split(allrundirs[1], "_")[[1]][4], "k")[[1]][1]) * (1000 / dim_source$recordsimplifyfactor)
 
   for(individual_run in 1:number_of_runs) {
-    
+
     # individual_run <- 1
     if (deeper) {
       multirun_directory <-
       file.path(
-        dirheatmap, allrundirs[individual_run], "multirun_output", 
+        dirheatmap, allrundirs[individual_run], "multirun_output",
       list.files(path = file.path(
-        dirheatmap, allrundirs[individual_run], "multirun_output"), 
+        dirheatmap, allrundirs[individual_run], "multirun_output"),
         pattern = "output$")
       )
     } else {
       multirun_directory <-
-      file.path(dirheatmap, allrundirs[individual_run], "multirun_output"#, 
-      # list.files(path = file.path(dirheatmap, 
+      file.path(dirheatmap, allrundirs[individual_run], "multirun_output"#,
+      # list.files(path = file.path(dirheatmap,
       # allrundirs[individual_run], "multirun_output"), pattern = "output$")
       )
     }
-    
+
     namedrdatas <- outputfilenames(number_of_reps)
 
-    
+
 
     datanrepzlist <- array(0, c(2, dim_source$num_pop, timespanchunks, number_of_reps))
     datantbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timespanchunks, number_of_reps))
@@ -127,14 +135,14 @@ extractmeans <- function(allrundirs,
       # sdstbxnlist[,,,i] <- fread(file.path(multirun_directory, sdstlist[i]))
       # sylrepzlist[,,,i] <- fread(file.path(multirun_directory, repzlist[i]))
     }
-    
+
     # These four lines calculate the mean value across all the replicates
 
     curhstmeans <- colMeans(aperm(datanhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
     curlvlmeans <- colMeans(aperm(datansitylist, c(4, 1, 2, 3)), na.rm = TRUE)
     syldbnmeans <- colMeans(aperm(datantbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
     sylrepmeans <- colMeans(aperm(datanrepzlist, c(4, 1, 2, 3)), na.rm = TRUE)
-    
+
     runmeans[[individual_run]] <- list(
       sylrepmeans = sylrepmeans,
       syldbnmeans = syldbnmeans,
@@ -187,22 +195,22 @@ makeheatmapfile <- function (
     ), pattern = paste0(inheritance, "inh_", diffcurstartbias, "Bias"))
           # "inh_", runstyle, "Bias"))
 
-    heatmap_array <- readRDS(file.path("results", "Heatmaps", "output_objects", 
+    heatmap_array <- readRDS(file.path("results", "Heatmaps", "output_objects",
       foldername, list.files(path = file.path("results", "Heatmaps", "output_objects",
-        foldername), pattern = 
+        foldername), pattern =
           "heatmap_output_-_")
       )
     )
-    
+
     #     print("and a two")
 
     placeholder <- array(rep(0,biassize * biassize * 8), dim(heatmap_array))
 
-    for (long in 1:othersize) { # femalez
-      for (medium in 1:biassize) { # malez1
-        for(short in 1:biassize) { # malez2
+    for (third_dimension in 1:othersize) { # femalez
+      for (second_dimension in 1:biassize) { # malez1
+        for(first_dimension in 1:biassize) { # malez2
           # placeholder <- array(rep(0,biassize * biassize * 8))
-          # tally <- short + biassize*(medium - 1) + biassize*biassize*(long - 1)
+          # tally <- first_dimension + biassize*(second_dimension - 1) + biassize*biassize*(third_dimension - 1)
           # thing <- length (extractedmeans [[1]][[1]][1,1,])
           # sumstats <- c (
             # extractedmeans [[tally]]$curlvlmeans [1,1,thing],
@@ -214,16 +222,16 @@ makeheatmapfile <- function (
             # extractedmeans [[tally]]$sylrepmeans [2,1,thing],
             # extractedmeans [[tally]]$sylrepmeans [2,2,thing]
           # )
-          # this part might not work if the population of 
+          # this part might not work if the population of
           # disinterest continues to be the final addition
           # if (reversedruns) {
             # if (othersize == 1) {
-              placeholder [medium, short, long, ] <- heatmap_array [biassize - (medium - 1), biassize - (short - 1), long,]
+              placeholder [second_dimension, first_dimension, third_dimension, ] <- heatmap_array [biassize - (second_dimension - 1), biassize - (first_dimension - 1), third_dimension,]
             # } else {
-              # heatmap_array [biassize - (medium - 1), biassize - (short - 1), otherBias - (long - 1),] <- sumstats
+              # heatmap_array [biassize - (second_dimension - 1), biassize - (first_dimension - 1), otherBias - (third_dimension - 1),] <- sumstats
             # }
           # } else {
-            # heatmap_array [medium, short, long, ] <- sumstats
+            # heatmap_array [second_dimension, first_dimension, third_dimension, ] <- sumstats
           # }
         }
       }
@@ -233,7 +241,7 @@ makeheatmapfile <- function (
 
   } else {
     if (highres) {
-      
+
       # print("and a three")
 
       foldername <- paste0 (
@@ -249,10 +257,10 @@ makeheatmapfile <- function (
       othersize = 1
       heatmap_array <- array (
             0, dim = c(biassize, biassize, othersize, 8), list (
-              c ("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "0.54-0.72mp1", "0.63-0.81mp1", "0.72-0.9mp1", "0.81-1mp1"), 
-              c ("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "0.54-0.72fp1", "0.63-0.81fp1", "0.72-0.9fp1", "0.81-1fp1"), 
-              # c("0.18-0.27p2", "0.72-0.81fp2"), 
-              c ("0.18-0.27p2"), 
+              c ("0-0.18mp1", "0.09-0.27mp1", "0.18-0.36mp1", "0.27-0.45mp1", "0.36-0.54mp1", "0.45-0.63mp1", "0.54-0.72mp1", "0.63-0.81mp1", "0.72-0.9mp1", "0.81-1mp1"),
+              c ("0-0.18fp1", "0.09-0.27fp1", "0.18-0.36fp1", "0.27-0.45fp1", "0.36-0.54fp1", "0.45-0.63fp1", "0.54-0.72fp1", "0.63-0.81fp1", "0.72-0.9fp1", "0.81-1fp1"),
+              # c("0.18-0.27p2", "0.72-0.81fp2"),
+              c ("0.18-0.27p2"),
               c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
     } else {
@@ -272,8 +280,8 @@ makeheatmapfile <- function (
           heatmap_array <- array (
           0, dim = c (biassize, biassize, othersize, 8), list (
             c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1", "0-1.0mp1", "0.45-0.55mp1"),
-            c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"), 
-            c ("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"), 
+            c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2", "0-1.0mp2", "0.45-0.55mp2"),
+            c ("0-0.25f", "0.25-0.5f", "0.5-1.0f", "0-1.0f", "0.45-0.55f"),
             c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
           ))
         }
@@ -283,44 +291,46 @@ makeheatmapfile <- function (
           heatmap_array <- array (
             0, dim = c(biassize, biassize, othersize, 8), list (
               c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1", "0-1.0fp1", "0.45-0.55fp1"),
-              c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2", "0-1.0fp2", "0.45-0.55fp2"), 
-              c ("0-0.25m", "0.25-0.5m", "0.5-1.0m", "0-1.0m", "0.45-0.55m"), 
+              c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2", "0-1.0fp2", "0.45-0.55fp2"),
+              c ("0-0.25m", "0.25-0.5m", "0.5-1.0m", "0-1.0m", "0.45-0.55m"),
               c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             )
           )
         }
-        
+
       } else if (diffcurstartbias == "pop1") {
         # if (othersize == 2) {
           # if (specialfigs) {
         if (runstyle == "lowMedHigh") {
+          # print("dcb pop1, runstyle lowMedHigh")
           heatmap_array <- array (
             0, dim = c(biassize, biassize, othersize, 8), list (
               c ("0-0.25mp1", "0.25-0.5mp1", "0.5-1.0mp1"),
-              c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"), 
-              c ("0-0.25p2", "0.5-1.0p2"), 
+              c ("0-0.25fp1", "0.25-0.5fp1", "0.5-1.0fp1"),
+              c ("0-0.25p2", "0.5-1.0p2"),
               c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             )
           )
         } else if (runstyle == "narrowWide") {
+          # print("dcb pop1, runstyle narrowWide")
           heatmap_array <- array (
           0, dim = c(biassize, biassize, othersize, 8), list (
             c ("0-1.0mp1", "0.45-0.55mp1"),
-            c ("0-1.0fp1", "0.45-0.55fp1"), 
+            c ("0-1.0fp1", "0.45-0.55fp1"),
             c ("0-0.25p2", "0.5-1.0p2"),
             c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
           ))
         } else if (runstyle == "lowHigh") {
-          # print("and a four")
+          # print("dcb pop1, runstyle lowHigh")
           heatmap_array <- array (
           0, dim = c (biassize, biassize, othersize, 8), list (
-            c ("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"), 
-            c ("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"), 
-            c ("0.2-0.3p2", "0.7-0.8p2"), 
+            c ("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"),
+            c ("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"),
+            c ("0.2-0.3p2", "0.7-0.8p2"),
             c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
           ))
         } else if (runstyle == "binary") {
-          # othersize = 2
+          # print("dcb pop1, runstyle binary")
           heatmap_array <- array(
             0, dim = c (biassize, biassize, othersize, 8), list (
               c ("0-0.18mp1", "0.81-1mp1"),
@@ -329,43 +339,64 @@ makeheatmapfile <- function (
               c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             )
           )
+        } else if (runstyle == "binaryHB") {
+          # print("dcb pop1, runstyle binaryHB")
+          heatmap_array <- array(
+            0, dim = c (biassize, biassize, othersize, 8), list (
+              c ("0-0.18mp1", "0.81-1mp1"),
+              c ("0-0.18fp1", "0.81-1fp1"),
+              c ("0.81-1p2"),
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            )
+          )
+        } else if (runstyle == "binaryLB") {
+          # print("dcb pop1, runstyle binaryLB")
+          heatmap_array <- array(
+            0, dim = c (biassize, biassize, othersize, 8), list (
+              c ("0-0.18mp1", "0.81-1mp1"),
+              c ("0-0.18fp1", "0.81-1fp1"),
+              c ("0-0.18p2"),
+              c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
+            )
+          )
         }
           # }
         # }
-        
+
       } else if (diffcurstartbias == "pop2") {
         # othersize <- 2
         # if (specialfigs) {
           if (runstyle == "lowMedHigh") {
+            # print("dcb pop2, runstyle lowMedHigh")
             heatmap_array <- array(
               0, dim = c (othersize, biassize, biassize, 8), list (
                 c ("0-0.25p1", "0.5-1.0p1"),
                 c ("0-0.25mp2", "0.25-0.5mp2", "0.5-1.0mp2"),
-                c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2"), 
+                c ("0-0.25fp2", "0.25-0.5fp2", "0.5-1.0fp2"),
                 c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
               )
             )
           } else if (runstyle == "narrowWide") {
-            # biassize = 2
+            # print("dcb pop2, runstyle narrowWide")
             heatmap_array <- array(
             0, dim = c (othersize, biassize, biassize, 8), list (
-              c ("0-0.25p1", "0.5-1.0p1"), 
+              c ("0-0.25p1", "0.5-1.0p1"),
               c ("0-1.0mp2", "0.45-0.55mp2"),
-              c ("0-1.0fp2", "0.45-0.55fp2"), 
+              c ("0-1.0fp2", "0.45-0.55fp2"),
               c ("endcurm1","endcurm2","endcurf1","endcurf2","endrepm1","endrepm2","endrepf1","endrepf2")
             ))
           }
         # }
-      } 
+      }
     }
 
-#     print("and a five")    
+#     print("and a five")
     # print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
-    for (long in 1:othersize) { # femalez
-      for (medium in 1:biassize) { # malez1
-        for(short in 1:biassize) { # malez2
+    for (third_dimension in 1:othersize) { # femalez
+      for (second_dimension in 1:biassize) { # malez1
+        for(first_dimension in 1:biassize) { # malez2
 
-          tally <- short + biassize*(medium - 1) + biassize*biassize*(long - 1)
+          tally <- first_dimension + biassize*(second_dimension - 1) + biassize*biassize*(third_dimension - 1)
           thing <- length (extractedmeans [[1]][[1]][1,1,])
           sumstats <- c (
             extractedmeans[[tally]][[3]][1,1,thing],
@@ -378,16 +409,16 @@ makeheatmapfile <- function (
             extractedmeans[[tally]][[1]][2,2,thing]
           )
           # print(paste(length(sumstats)))
-          # this part might not work if the population of 
+          # this part might not work if the population of
           # disinterest continues to be the final addition
           if (reversedruns) {
             if (othersize == 1) {
-              heatmap_array [biassize - (medium - 1), biassize - (short - 1), long,] <- sumstats
+              heatmap_array [biassize - (second_dimension - 1), biassize - (first_dimension - 1), third_dimension,] <- sumstats
             } else {
-              heatmap_array [biassize - (medium - 1), biassize - (short - 1), othersize - (long - 1),] <- sumstats
+              heatmap_array [biassize - (second_dimension - 1), biassize - (first_dimension - 1), othersize - (third_dimension - 1),] <- sumstats
             }
           } else {
-            heatmap_array [medium, short, long, ] <- sumstats
+            heatmap_array [second_dimension, first_dimension, third_dimension, ] <- sumstats
           }
         }
       }
@@ -410,26 +441,26 @@ makeheatmapfile <- function (
     if(!(dir.exists(file.path("results", foldername)))) {
 
       dir.create(file.path("results", foldername))}
-      
-    if (specialfigs) {
-      if(!(file.exists(file.path(
-        "results", foldername, paste0("heatmap_output_-_", inheritance, 
-        "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
-      )))) {
-      
-      saveRDS(heatmap_array, file.path(
-        "results",foldername, paste0("heatmap_output_-_", inheritance, 
-        "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
 
-      ))}
-    }# else {
+    # if (specialfigs) {
+    if(!(file.exists(file.path(
+      "results", foldername, paste0("heatmap_output_-_", inheritance,
+      "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
+    )))) {
+
+    saveRDS(heatmap_array, file.path(
+      "results",foldername, paste0("heatmap_output_-_", inheritance,
+      "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
+
+    ))}
+    # }# else {
     #   if(!(file.exists(file.path(
-    #     "results", foldername, paste0("heatmap_output_-_", inheritance, 
+    #     "results", foldername, paste0("heatmap_output_-_", inheritance,
     #     "inh_", diffcurstartbias, "Bias.RData")
     #   )))) {
-      
+
     #   saveRDS(heatmap_array, file.path(
-    #     "results",foldername, paste0("heatmap_output_-_", inheritance, 
+    #     "results",foldername, paste0("heatmap_output_-_", inheritance,
     #     "inh_", diffcurstartbias, "Bias.RData")
 
     #   ))}
@@ -462,14 +493,14 @@ individualfigures <- function (
   colorpalette = 5, # Numbers correspond to specific color palettes
   foldername = heatmapoutput
 ) {
-  
+
   # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys
   #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18
 
   # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourcefolder <- file.path("results")
   # heatmap_sourcefolder <- file.path("sameSexFigResults", "results")
-  
+
 
   # Character vectors for args - indices  Not sure what else to call them, but they'll be used to reassign the args to non-numeric objects
 
@@ -533,9 +564,9 @@ individualfigures <- function (
   # inheritance <- inheritancecontainer[inheritance]
 
   # thisBias <- whichbias[thisBias]
-  
+
   # foldername <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
-  # foldername <- 
+  # foldername <-
 
   # temphtmparray <- readRDS(file.path(heatmap_sourcefolder, foldername, list.files(file.path(heatmap_sourcefolder, foldername), pattern = ".RData")))
   htmparrays <- list.files (file.path (heatmap_sourcefolder, foldername$foldername), pattern = ".RData")
@@ -543,7 +574,7 @@ individualfigures <- function (
   if (length (htmparrays) == 1) {
     temphtmparray <- readRDS (file.path (heatmap_sourcefolder, foldername$foldername, htmparrays))
   } else {stop ("there's more than one .RData file in that directory!")}
-  
+
   colorseqmultpalette <- list (
     reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds       ### 1
     rdpu = colorRampPalette (c ("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class rdpu       ### 2
@@ -579,7 +610,7 @@ individualfigures <- function (
   # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
   # for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
-  
+
   if (! (dir.exists (file.path (
     heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
   )))) {
@@ -587,7 +618,7 @@ individualfigures <- function (
       heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
     ))
   }
-  
+
   otherpopsize <- foldername$othersize
   dat_array_doh <- array (c (
     1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
@@ -598,15 +629,15 @@ individualfigures <- function (
     # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
   ), c (3, 3, otherpopsize, 3))
 
-  for (sxmtpop in 1:8) { 
+  for (sxmtpop in 1:8) {
     for (slice in 1:otherpopsize) {
-      
+
       file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
       # rule of thumb: if we're splitting up htmpView _within_ slice and sxmtpop, then we need to save the output files according to the schema that will help pull back together the slices.
       png (filename = file.path (
-          heatmap_sourcefolder, foldername$foldername, #inhoptions[inhstyle + 2], 
-          # paste0("slice_", slice), file_name), 
-          slicedpop[3], file_name), 
+          heatmap_sourcefolder, foldername$foldername, #inhoptions[inhstyle + 2],
+          # paste0("slice_", slice), file_name),
+          slicedpop[3], file_name),
         width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
       if (colorrange == "absolute") {
@@ -616,7 +647,7 @@ individualfigures <- function (
           heatmaprange <- c (1,156)
         }
       } else {
-        
+
         heatmaprange <- inhoptions[[inhstyle]][
           dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
           dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
@@ -632,38 +663,38 @@ individualfigures <- function (
           round(max(heatmaprangedatasettwo), 2),
           round(max(heatmaprangedatasettre), 2)
         )
-        
+
         heatmaprange <- c (heatmap_min[3] - 0.01, heatmap_max[3] + 0.01)
         rm(heatmaprangedatasetone, heatmaprangedatasettwo, heatmaprangedatasettre,
           heatmap_min, heatmap_max)
       } # UNFINISHED - depreciated?
       # findXLab <- heatmap_axes[[3]][1]
       # findYLab <- heatmap_axes[[3]][2]
-      
+
       # if(inhstyle == 1) {
         # dim_1 = 3
         # dim_2 = 3
         # dim_3 = 2
-        
+
 
         image(x = temphtmparray[,,,sxmtpop],
           col = colorseqmultpalette[[colorpalette]](100),
-          axes = F, 
-          xlab = heatmap_axes[[3]][1], 
+          axes = F,
+          xlab = heatmap_axes[[3]][1],
           ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
         )
 
-        if (!(is.null(dimnames(temphtmparray)))) {  
+        if (!(is.null(dimnames(temphtmparray)))) {
           temphtmpdimensions <- dimnames(temphtmparray)
           temptemp <- vector(mode = "character", length = length(temphtmpdimensions))
           for (thething in 1:length(temphtmpdimensions[[1]])) {
             temptemp[thething] <- str_extract_all(temphtmpdimensions[[1]][thething], "[:digit:]*-[:digit:]*")
           }
-          
+
 
           # sets up the axes regardless of size, based on what they were labeled when they were originally run.
           if (foldername$biassize == 2) {
-            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495), 
+            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
               c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
               T,0,NA,F,cex.axis=0.8, tck = 0)
             axis(1,c(-0.495,0.5,1.495),
@@ -794,7 +825,7 @@ individualfigures <- function (
 
 
           if (foldername$biassize == 2) {
-            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495), 
+            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
               c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
               T,0,NA,F,cex.axis=0.8, tck = 0)
             axis(1,c(-0.495,0.5,1.495),
@@ -930,67 +961,74 @@ individualfigures <- function (
 
 
 combineeditsingles <- function (
-  inheritancestyle = 1,
-  bias = 1,
+  # inheritancestyle = 1,
+  # bias = 1,
   metricssexpop = 1, # only allowed 1-4 (p1m, p2m, p1f, p2f)
   otherpopstyle = 3, # 1 = low, 2 = high (for lmh & nw stuff round May 2019) # 3 = third group has same number of tested conditions (slices) as the first two groups.
   edit = FALSE,
-  lmhvnw = FALSE
+  lmhvnw = FALSE,
+  heatmapfile = heatmapoutput
 ) {
-  
+
+inheritancestyle <- paste0(heatmapfile$inheritance, "inh")
+bias <- paste0(heatmapfile$diffcurstartbias, "Bias")
+whichbias <- c("maleBias", "femaleBias", "pop1Bias")
+popbias <- c("FemalePop", "MalePop", "Popula2")[which(whichbias == bias)]
 #   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 # Access the same subdirectory where the individual images are stored
-  
-
 #  heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourcefolder <- file.path("results")
-  
-  sxmtpopcontainer <- c("EndCurValP1M",
-                          "EndCurValP2M",
-                          "EndCurValP1F",
-                          "EndCurValP2F",
-                          "EndSRpValP1M",
-                          "EndSRpValP2M",
-                          "EndSRpValP1F",
-                          "EndSRpValP2F")
-  
-  
-  
-  curstartpatterncontainer <- c("lowMedHigh", "narrowWide")
-  
-  inheritancecontainer <- c("maleinh", "mothinh", "sameinh", "oppsinh", "sNTninh", 
-                            "sSTfinh", "sSFrinh", "sFrSinh", "sTfSinh", "sTnNinh", 
-                            "FfFfinh")
 
-  titlesxmtpop <- c("Pop 1 Mal", "Pop 2 Mal", 
-                    "Pop 1 Fem", "Pop 2 Fem", 
-                    "Pop 1 Mal", "Pop 2 Mal", 
+  sxmtpopcontainer <- c("EndCurValP1M",
+                        "EndCurValP2M",
+                        "EndCurValP1F",
+                        "EndCurValP2F",
+                        "EndSRpValP1M",
+                        "EndSRpValP2M",
+                        "EndSRpValP1F",
+                        "EndSRpValP2F")
+
+
+
+  curstartpatterncontainer <- c("lowMedHigh", "narrowWide", "lowHigh")
+
+  # inheritancecontainer <- c("maleinh", "mothinh", "sameinh", "oppsinh", "sNTninh",
+  #                           "sSTfinh", "sSFrinh", "sFrSinh", "sTfSinh", "sTnNinh",
+  #                           "FfFfinh")
+  # inheritancecontainer <- inheritancecontainer[inheritancestyle]
+
+  titlesxmtpop <- c("Pop 1 Mal", "Pop 2 Mal",
+                    "Pop 1 Fem", "Pop 2 Fem",
+                    "Pop 1 Mal", "Pop 2 Mal",
                     "Pop 1 Fem", "Pop 2 Fem")
 
-  titleinhstyle <- c("Male", "Female", "Same-Sex", "Opposite", "90M10F", 
-                     "75M25F", "60M40F", "40M60F", "25M75F", "10M90F", 
+  titleinhstyle <- c("Male", "Female", "Same-Sex", "Opposite", "90M10F",
+                     "75M25F", "60M40F", "40M60F", "25M75F", "10M90F",
                      "50-50")
-  
-  
+
+  namesforotherpop <- c("slice_1", "slice_2", "slice_3")
+  stylesforotherpop <- c("low", "high", "lmh")
+
   if (otherpopstyle == 3) { # LMH and NW are still split up, but pop 2 also has lmh and nw, so there's a new arrangement needed?
     if (lmhvnw == TRUE) {
       for (
         comparisonpattern in 1:2
       ) {
         titlebackgroundpop <- c("Low", "Med", "High")
-        whichbias <- c("malebias", "femaleBias", "pop1Bias")
-        whichpopbias <- c("FemalePop", "MalePop", "Popula2")
-        
+
         subpopulation <- c("p1mAC", "p2mAC", "p1fAC", "p2fAC", "p1mSR", "p2mSR", "p1fSR", "p2fSR")
-        
-        folderbias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritancecontainer[inheritancestyle] %in% str_split(x, "_")[[1]][4])))]
-        
-        
+
+        folderbias <- list.files(heatmap_sourcefolder)[
+          which(sapply(list.files(heatmap_sourcefolder), function(x) (
+          inheritancestyle %in% str_split(x, "_")[[1]][4])))
+        ]
+
+
         #   for (i in 1:2) {
-            
+
         namesforotherpop <- c("slice_1", "slice_2", "slice_3")
         stylesforotherpop <- c("low", "high", "lmh")
-        
+
         firstbiasfolder <- file.path(heatmap_sourcefolder, folderbias[2], curstartpatterncontainer[comparisonpattern], whichpopbias[1])
         firstbiaslist <- list.files(file.path(heatmap_sourcefolder, folderbias[2], curstartpatterncontainer[comparisonpattern], whichpopbias[1]), pattern = sxmtpopcontainer[metricssexpop])
         secndbiasfolder <- file.path(heatmap_sourcefolder, folderbias[1], curstartpatterncontainer[comparisonpattern], whichpopbias[2])
@@ -1003,28 +1041,28 @@ combineeditsingles <- function (
           image_5 <- image_read(file.path(secndbiasfolder, secndbiaslist[2]))
           image_6 <- image_read(file.path(secndbiasfolder, secndbiaslist[3]))
 
-        
+
           top_row <- image_append(c(image_1, image_2, image_3))
           bottom_row <- image_append(c(image_4, image_5, image_6))
           final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
-          
+
           final_set <- image_border(final_set, "white", "75x75")
 
           final_set <- image_annotate(
-              final_set, paste0(titlesxmtpop[metricssexpop], 
-                                " Ending Traits - ", 
+              final_set, paste0(titlesxmtpop[metricssexpop],
+                                " Ending Traits - ",
                                 titleinhstyle[inheritancestyle],
-                                " AC Inheritance"), 
-              size="50", 
+                                " AC Inheritance"),
+              size="50",
               location = "+40+25")
 
           final_set <- image_annotate(
-              final_set, paste0("Low-Med-High Background Population Starting Curiosity"), 
+              final_set, paste0("Low-Med-High Background Population Starting Curiosity"),
               size="30",
               location = "+350+80")
 
           final_set <- image_annotate(
-              final_set, paste0("Female Split        |        Male Split"), 
+              final_set, paste0("Female Split        |        Male Split"),
               size="40",
               degrees=270,
               location = "+20+1055")
@@ -1032,38 +1070,38 @@ combineeditsingles <- function (
           final_set <- image_border(final_set, "white", "30x30")
 
           final_set <- image_annotate(
-              final_set, paste0("Background Starting AC: Low        Medium        High"), 
-              size="35", 
+              final_set, paste0("Background Starting AC: Low        Medium        High"),
+              size="35",
               location = "+275+1235")
         } else if (length(firstbiaslist) == 2) {
           image_1 <- image_read(file.path(firstbiasfolder, firstbiaslist[1]))
           image_2 <- image_read(file.path(firstbiasfolder, firstbiaslist[2]))
           image_3 <- image_read(file.path(secndbiasfolder, secndbiaslist[1]))
           image_4 <- image_read(file.path(secndbiasfolder, secndbiaslist[2]))
-          
 
-        
+
+
           top_row <- image_append(c(image_1, image_2))
           bottom_row <- image_append(c(image_3, image_4))
           final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
-          
+
           final_set <- image_border(final_set, "white", "75x75")
 
           final_set <- image_annotate(
-              final_set, paste0(titlesxmtpop[metricssexpop], 
-                                " Ending Traits - ", 
+              final_set, paste0(titlesxmtpop[metricssexpop],
+                                " Ending Traits - ",
                                 titleinhstyle[inheritancestyle],
-                                " AC Inheritance"), 
-              size="50", 
+                                " AC Inheritance"),
+              size="50",
               location = "+40+25")
 
           final_set <- image_annotate(
-              final_set, paste0("Narrow-Wide Background Population Starting Curiosity"), 
+              final_set, paste0("Narrow-Wide Background Population Starting Curiosity"),
               size="30",
               location = "+350+80")
 
           final_set <- image_annotate(
-              final_set, paste0("Female Split        |        Male Split"), 
+              final_set, paste0("Female Split        |        Male Split"),
               size="40",
               degrees=270,
               location = "+20+1055")
@@ -1071,39 +1109,38 @@ combineeditsingles <- function (
           final_set <- image_border(final_set, "white", "30x30")
 
           final_set <- image_annotate(
-              final_set, paste0("Background Starting AC: Narrow             Wide"), 
-              size="35", 
+              final_set, paste0("Background Starting AC: Narrow             Wide"),
+              size="35",
               location = "+275+1235")
         }
-        
-        
-        
+
+
+
         # image_write(final_set, path = file.path(
         #     heatmap_sourcefolder, folderbias, paste0(
-        #                 "Popula2", "_", "p1f", 
-        #                 "_measure_", "low", 
+        #                 "Popula2", "_", "p1f",
+        #                 "_measure_", "low",
         #                 "_background.png")))
-          # This is where we edit the stuff we worked on! 
+          # This is where we edit the stuff we worked on!
           # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {stop("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
-        
-        image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias[1], paste0("BothSexes_", subpopulation[metricssexpop], "_measure_", inheritancecontainer[inheritancestyle], "_", stylesforotherpop[otherpopstyle], "_background.png")))
+
+        image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias[1], paste0("BothSexes_", subpopulation[metricssexpop], "_measure_", inheritancestyle, "_", stylesforotherpop[otherpopstyle], "_background.png")))
       }
     } else {
 
       titlebackgroundpop <- c("Low", "Med", "High")
-      whichbias <- c("malebias", "femaleBias", "pop1Bias")
-      whichpopbias <- c("FemalePop", "MalePop", "Popula2")
-      
+      # whichbias <- c("maleBias", "femaleBias", "pop1Bias")
+      # whichpopbias <- c("FemalePop", "MalePop", "Popula2")
+
       subpopulation <- c("p1mAC", "p2mAC", "p1fAC", "p2fAC", "p1mSR", "p2mSR", "p1fSR", "p2fSR")
-      
-      folderbias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritancecontainer[inheritancestyle] %in% str_split(x, "_")[[1]][4])))]
-      
-      popbias <- whichpopbias[bias]
-      
+
+      folderbias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritancestyle %in% str_split(x, "_")[[1]][4])))]
+
+      # popbias <- whichpopbias[bias]
+
       #   for (i in 1:2) {
-          
-      namesforotherpop <- c("slice_1", "slice_2", "slice_3")
-      stylesforotherpop <- c("low", "high", "lmh")
+
+
       lmhvnw <- 1
       if (
         bias == 1
@@ -1118,7 +1155,7 @@ combineeditsingles <- function (
         secndbiasfolder <- file.path(heatmap_sourcefolder, folderbias[2], curstartpatterncontainer[lmhvnw], whichpopbias[1])
         secndbiaslist <- list.files(file.path(heatmap_sourcefolder, folderbias[2], curstartpatterncontainer[lmhvnw], whichpopbias[1]), pattern = sxmtpopcontainer[metricssexpop])
       }
-      
+
 
       image_1 <- image_read(file.path(firstbiasfolder, firstbiaslist[1]))
       image_2 <- image_read(file.path(firstbiasfolder, firstbiaslist[2]))
@@ -1128,91 +1165,94 @@ combineeditsingles <- function (
       image_6 <- image_read(file.path(secndbiasfolder, secndbiaslist[3]))
 
       if(edit == TRUE) {
-        
+
         top_row <- image_append(c(image_1, image_2, image_3))
         bottom_row <- image_append(c(image_4, image_5, image_6))
         final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
-        
+
         final_set <- image_border(final_set, "white", "75x75")
 
         final_set <- image_annotate(
-            final_set, paste0(titlesxmtpop[metricssexpop], 
-                              " Ending Traits - ", 
+            final_set, paste0(titlesxmtpop[metricssexpop],
+                              " Ending Traits - ",
                               titleinhstyle[inheritancestyle],
-                              " AC Inheritance"), 
-            size="50", 
+                              " AC Inheritance"),
+            size="50",
             location = "+300+25")
 
         final_set <- image_annotate(
-            final_set, paste0("Low-Med-High Background Population Starting Curiosity"), 
+            final_set, paste0("Low-Med-High Background Population Starting Curiosity"),
             size="30",
             location = "+530+80")
         if (
           bias == 1
         ) {
           final_set <- image_annotate(
-            final_set, paste0("Female Split                     |                    Male Split"), 
+            final_set, paste0("Female Split                     |                    Male Split"),
             size="40",
             degrees=270,
             location = "+20+1055")
         } else {
           final_set <- image_annotate(
-            final_set, paste0("Male Split                |                Female Split"), 
+            final_set, paste0("Male Split                |                Female Split"),
             size="40",
             degrees=270,
             location = "+20+1055")
         }
-        
+
 
         final_set <- image_border(final_set, "white", "30x30")
 
         final_set <- image_annotate(
-            final_set, paste0("Background Starting AC:     Low                                Medium                                             High"), 
-            size="35", 
+            final_set, paste0("Background Starting AC:     Low                                Medium                                             High"),
+            size="35",
             location = "+65+1235")
-        
-        
+
+
         # image_write(final_set, path = file.path(
         #     heatmap_sourcefolder, folderbias, paste0(
-        #                 "Popula2", "_", "p1f", 
-        #                 "_measure_", "low", 
+        #                 "Popula2", "_", "p1f",
+        #                 "_measure_", "low",
         #                 "_background.png")))
-          # This is where we edit the stuff we worked on! 
+          # This is where we edit the stuff we worked on!
           # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
 
       } else {
-        
+
         top_row <- image_append(c(image_1, image_2))
         bottom_row <- image_append(c(image_3, image_4))
         final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
         # image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias, paste0(popbias, "_", subpopulation[metricssexpop], "_measure_", stylesforotherpop[otherpopstyle], "_background.png")))
-      
-      } 
-      
+
+      }
+
       if(!(dir.exists(file.path(heatmap_sourcefolder, paste0("SexBiasedCurInhRange"))))) {dir.create(file.path(heatmap_sourcefolder, paste0("SexBiasedCurInhRange")))}
 
-      image_write(final_set, path = file.path(heatmap_sourcefolder, paste0("SexBiasedCurInhRange"), paste0(inheritancecontainer[inheritancestyle], "_", subpopulation[metricssexpop], "_measure_", stylesforotherpop[otherpopstyle], "_background.png")))
+      image_write(final_set, path = file.path(heatmap_sourcefolder, paste0("SexBiasedCurInhRange"), paste0(inheritancestyle, "_", subpopulation[metricssexpop], "_measure_", stylesforotherpop[otherpopstyle], "_background.png")))
     }
-    
-    
+
+
   } else {
 
     titlebackgroundpop <- c("Low", "High")
 
-    whichbias <- c("malebias", "femaleBias", "pop1Bias")
-    whichpopbias <- c("FemalePop", "MalePop", "Popula2")
-    
+    # whichbias <- c("maleBias", "femaleBias", "pop1Bias")
+    # whichpopbias <- c("FemalePop", "MalePop", "Popula2")
+
     subpopulation <- c("p1m", "p2m", "p1f", "p2f")
-    
-    folderbias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritancecontainer[inheritancestyle] %in% str_split(x, "_")[[1]][4] && whichbias[bias] %in% str_split(x, "_")[[1]][5])))]
-    
-    popbias <- whichpopbias[bias]
-    
+
+    folderbias <- list.files(heatmap_sourcefolder)[
+      which(sapply(list.files(heatmap_sourcefolder), function(x) (
+      inheritancestyle %in% str_split(x, "_")[[1]][4] &&
+      which (whichbias == bias) %in% str_split(x, "_")[[1]][5])))]
+
+    # popbias <- whichpopbias[bias]
+
     #   for (i in 1:2) {
-        
-    namesforotherpop <- c("slice_1", "slice_2", "slice_3")
-    stylesforotherpop <- c("low", "high")
-    
+
+    # namesforotherpop <- c("slice_1", "slice_2", "slice_3")
+    # stylesforotherpop <- c("low", "high")
+
     lowmedhighfolder <- file.path(heatmap_sourcefolder, folderbias, curstartpatterncontainer[1], popbias)
     narrowwidefolder <- file.path(heatmap_sourcefolder, folderbias, curstartpatterncontainer[2], popbias)
 
@@ -1222,28 +1262,28 @@ combineeditsingles <- function (
     image_4 <- image_read(file.path(narrowwidefolder, paste0(sxmtpopcontainer[metricssexpop+4], "_", namesforotherpop[otherpopstyle], "_", popbias, ".png")))
 
     if(edit == TRUE) {
-      
+
       top_row <- image_append(c(image_1, image_2))
       bottom_row <- image_append(c(image_3, image_4))
       final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
-      
+
       final_set <- image_border(final_set, "white", "75x75")
 
       final_set <- image_annotate(
-          final_set, paste0(titlesxmtpop[metricssexpop], 
-                            " Ending Traits - ", 
+          final_set, paste0(titlesxmtpop[metricssexpop],
+                            " Ending Traits - ",
                             titleinhstyle[inheritancestyle],
-                            " AC Inheritance"), 
-          size="50", 
+                            " AC Inheritance"),
+          size="50",
           location = "+40+25")
 
       final_set <- image_annotate(
-          final_set, paste0(titlebackgroundpop[otherpopstyle], " Background Population Starting Curiosity"), 
+          final_set, paste0(titlebackgroundpop[otherpopstyle], " Background Population Starting Curiosity"),
           size="30",
           location = "+350+80")
 
       final_set <- image_annotate(
-          final_set, paste0("Syllable Repertoire        |        Auditory Curiosity"), 
+          final_set, paste0("Syllable Repertoire        |        Auditory Curiosity"),
           size="40",
           degrees=270,
           location = "+20+1055")
@@ -1251,33 +1291,33 @@ combineeditsingles <- function (
       final_set <- image_border(final_set, "white", "30x30")
 
       final_set <- image_annotate(
-          final_set, paste0("Low/Medium/High        |        Narrow/Wide"), 
-          size="35", 
+          final_set, paste0("Low/Medium/High        |        Narrow/Wide"),
+          size="35",
           location = "+315+1235")
-      
-      
+
+
       # image_write(final_set, path = file.path(
       #     heatmap_sourcefolder, folderbias, paste0(
-      #                 "Popula2", "_", "p1f", 
-      #                 "_measure_", "low", 
+      #                 "Popula2", "_", "p1f",
+      #                 "_measure_", "low",
       #                 "_background.png")))
-        # This is where we edit the stuff we worked on! 
+        # This is where we edit the stuff we worked on!
         # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
 
     } else {
-      
+
       top_row <- image_append(c(image_1, image_2))
       bottom_row <- image_append(c(image_3, image_4))
       final_set <- image_append(c(top_row, bottom_row), stack = TRUE)
       # image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias, paste0(popbias, "_", subpopulation[metricssexpop], "_measure_", stylesforotherpop[otherpopstyle], "_background.png")))
-    
-    } 
-    
-    image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias, paste0(popbias, "_", subpopulation[metricssexpop], "_measure_", inheritancecontainer[inheritancestyle], "_", stylesforotherpop[otherpopstyle], "_background.png")))
+
+    }
+
+    image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias, paste0(popbias, "_", subpopulation[metricssexpop], "_measure_", inheritancestyle, "_", stylesforotherpop[otherpopstyle], "_background.png")))
 
   }
 
-  
+
 
   return(print("done"))
 }
@@ -1287,7 +1327,7 @@ stackmultiples <- function (
   inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")
   pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
 ) {
-  
+
 
   # maleInhMaleVFemaleBias
 
@@ -1301,7 +1341,7 @@ stackmultiples <- function (
                         "EndSRpValP2F")
 
   heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
-  whichbias <- c("malebias", "femaleBias")
+  whichbias <- c("maleBias", "femaleBias")
   whichpopbias <- c("FemalePop", "MalePop")
   # folderbias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichbias[bias] %in% str_split(x, "_")[[1]][5])))]
   curstartpatterncontainer <- c("narrowWide", "lowMedHigh")
@@ -1309,16 +1349,16 @@ stackmultiples <- function (
 
   inheritancecontainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
   inheritance <- inheritancecontainer[inheritance]
-  
+
   heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
-  
+
   output_folder <- file.path(heatmap_sourcefolder, paste0("Combined_", inheritance))# "_pattern_", curstartpatterncontainer[pattern]))
   if(!(dir.exists(output_folder))) {dir.create(output_folder)}
   if(!(dir.exists(file.path(output_folder, curstartpatterncontainer[pattern])))) {dir.create(file.path(output_folder, curstartpatterncontainer[pattern]))}
 
   malebias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichbias[1] %in% str_split(x, "_")[[1]][5])))]
   femsbias <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichbias[2] %in% str_split(x, "_")[[1]][5])))]
-  
+
   for (metsxpop in 1:8) {
     stackone <- CombineSingles(inheritance, 1, metsxpop, pattern)
     stacktwo <- CombineSingles(inheritance, 2, metsxpop, pattern)
@@ -1339,7 +1379,7 @@ stackmultiples <- function (
 
 #   #image(x = matrix(as.numeric(heatmap_array[,,1,1]),5,5),col =colorSeqMultPalette$PuBuGn(100), xlab = "")
 
- 
+
 #   # heatmap_array <- readRDS("../../../../../../media/parker/A443-E926/simulation runs/heatmap_output.RData")
 #   colorSeqMultPalette <- list(
 #     BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
@@ -1426,7 +1466,7 @@ stackmultiples <- function (
 #   for (specificPlot in 1:3) {
 #     file_name <- paste0(title_names[SxMtPop], "_slice_", slice, ".png")
 #       # dimensions? dunno; not too worried though
-      
+
 #     png(filename = file.path("results", "Heatmaps", "output_objects", foldername, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
 #     layout(matrix(byTheCol,10,20,F))
@@ -1468,29 +1508,29 @@ stackmultiples <- function (
 #   #   "Bias"
 #   # )
 
-  
-  
-  
-  
 
-  
+
+
+
+
+
 
 #   for(SxMtPop in 1:8) {
 #     for (slice in 1:5) {
 #         # Start to make the file ########### still need to fix the name so they don't overwrite one another ############
 #       file_name <- paste0(title_names[SxMtPop], "_slice_", slice, ".png")
 #         # dimensions? dunno; not too worried though
-      
+
 #       png(filename = file.path("results", "Heatmaps", "output_objects", foldername, paste0("slice_", slice), file_name), width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
-      
+
 #       layout(matrix(byTheCol,16,18,F))
-      
+
 #       # The Fake one!
 
 #       # plotNames <- array(c("heatmap_axes$plotOne[1]", "heatmap_axes$plotTwo[1]", "heatmap_axes$plotTre[1]", "heatmap_axes$plotOne[2]", "heatmap_axes$plotTwo[2]", "heatmap_axes$plotTre[2]")
-      
+
 #       for (htmpCycle in 1:3) {
-        
+
 #         dat_array_doh <- array(c(
 #             rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(5, 5, 5, 1), 2),
 #             rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(5, 5, 5, 2), 2),
@@ -1498,12 +1538,12 @@ stackmultiples <- function (
 #             rep(c(4, 1, 1, 1), 2), 4, 4, rep(c(5, 5, 5, 4), 2),
 #             rep(c(5, 1, 1, 1), 2), 5, 5, rep(c(5, 5, 5, 5), 2)
 #           ), c(3,3,2,5))
-        
+
 #         if(absolute) {
 #           if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
 #           ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,100)}
 #         } else {
-          
+
 #           heatmapRangeDatasetOne <- heatmap_array[
 #             dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
 #             dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
@@ -1529,7 +1569,7 @@ stackmultiples <- function (
 #             round(max(heatmapRangeDatasetTwo), 2),
 #             round(max(heatmapRangeDatasetTre), 2)
 #           )
-          
+
 #           heatmapRange <- c(heatmap_min[htmpCycle]-0.01,heatmap_max[htmpCycle]+0.01)
 #         }
 #         findXLab <- heatmap_axes[[htmpCycle]][1]
@@ -1542,17 +1582,17 @@ stackmultiples <- function (
 #             SxMtPop
 #           ]),5,5),
 #         col = colorSeqMultPalette$YlOrBr(100),
-#         axes = F, 
-#         xlab = findXLab, 
+#         axes = F,
+#         xlab = findXLab,
 #         ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
-      
+
 #         axis(1,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
 #             c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
 #             T,0,NA,F,cex.axis=0.8, tck = 0)
 #         axis(1,c(-0.125,0.125,0.375,0.625,0.875,1.125),
 #             c("","","","","",""),
 #             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        
+
 #         axis(2,c(-0.125,0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1,1.12),
 #             c("","0-.25","", ".25-.5","", ".45-1","", "0-1","", ".45-.55",""),
 #             T,0,NA,F,cex.axis=0.6, tck = 0)
@@ -1560,7 +1600,7 @@ stackmultiples <- function (
 #             c("","","","","",""),
 #             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
 #       }
-      
+
 #       plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
 #       a <- 0.35; b <- 20.5; c <- (b-a)/10
 #       axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
@@ -1574,13 +1614,13 @@ stackmultiples <- function (
 #           } else {
 #             axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
 #           }
-        
+
 #       } else {
 #         axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
 #         axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
 #         axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
 #       }
-      
+
 #       mtext(c(paste0(legend_title[ceiling(SxMtPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
 #       mtext("Seeks Novel Songs",3,1,cex = 0.8)
 #       mtext(range_list[1,2,ceiling(SxMtPop/4)],1,0.7,cex = 0.8)
@@ -1595,6 +1635,6 @@ stackmultiples <- function (
 #   }
 #   return(print("done, in the specified folder"))
 # # }
-  
+
 # }
 print("htmpdir, extractvardirs, remakestring, extractmeans, makeHeatmaps, individualfigures, combineeditsingles and stackmultiples loaded")

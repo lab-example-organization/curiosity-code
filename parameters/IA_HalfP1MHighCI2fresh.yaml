@@ -1,17 +1,17 @@
 curstarts:
   - scmin: [ 1, 1,29,29] #
     scmax: [ 7, 7,34,34] #
-  - scmin: [29,29,29,29]	
+  - scmin: [29,29,29,29]
     scmax: [34,34,34,34]
-  - scmin: [ 1, 1, 1, 1] #	
-    scmax: [ 7, 7, 7, 7] #	
-  - scmin: [ 1,29, 1,29] #	
-    scmax: [ 7,34, 7,34] #	
+  - scmin: [ 1, 1, 1, 1] #
+    scmax: [ 7, 7, 7, 7] #
+  - scmin: [ 1,29, 1,29] #
+    scmax: [ 7,34, 7,34] #
   - scmin: [29, 1,29, 1] #
     scmax: [34, 7,34, 7] #
-  - scmin: [ 1,29,29,29]	
-    scmax: [ 7,34,34,34]	
-  - scmin: [29, 1,29,29]	
+  - scmin: [ 1,29,29,29]
+    scmax: [ 7,34,34,34]
+  - scmin: [29, 1,29,29]
     scmax: [34, 7,34,34]
   - scmin: [ 1,29, 1, 1] #
     scmax: [ 7,34, 7, 7] #
@@ -36,24 +36,24 @@ num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
 
-# curinh_pattern - calling either the row number 
-# or name of row for different curiosity inheritance patterns - 
+# curinh_pattern - calling either the row number
+# or name of row for different curiosity inheritance patterns -
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
-curinh_pattern: 1
+curinh_pattern: 2
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
-curinhdistribution: 0.50 
-# must be between 0 and 1; [value displayed] == male; [1 - value] == female - 
+curinhdistribution: 0.50
+# must be between 0 and 1; [value displayed] == male; [1 - value] == female -
 # distribution of curinh between parents
 
 
 traitinvasion: TRUE
 invasionthoutmstps: 1
 invasionpopsize: 100
-invasionstyle: 'curiosity' # need: curiosity, sylrep, 
+invasionstyle: 'curiosity' # need: curiosity, sylrep,
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionsex: 'male' # or female
-invasiontraitvalue: [0.9, 0.05] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]). 
+invasiontraitvalue: [0.9, 0.05] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
 

@@ -5,10 +5,10 @@ referencesection("heatmaps")
 #
 #   ___ ______________   _____________________      _____ __________  _________
 #  /   |   \_   _____/  /  _  \__    ___/     \    /  _  \\______   \/   _____/
-# /    ~    \    __)_  /  /_\  \|    | /  \ /  \  /  /_\  \|     ___/\_____  \ 
+# /    ~    \    __)_  /  /_\  \|    | /  \ /  \  /  /_\  \|     ___/\_____  \
 # \    Y    /        \/    |    \    |/    Y    \/    |    \    |    /        \
 #  \___|_  /_______  /\____|__  /____|\____|__  /\____|__  /____|   /_______  /
-#        \/        \/         \/              \/         \/                 \/ 
+#        \/        \/         \/              \/         \/                 \/
 
 
 
@@ -46,17 +46,17 @@ heatmapland <- file.path("results")
 # heatmapland <- file.path("results", "oct3n8results", "results")
 # heatmapland <- file.path("results", "octXresults", "results")
 # heatmapland <- file.path("results", "oct22stuff", "results")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
+# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
 #                          "results", "mixCI_10m-90f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
+# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
 #                          "results", "mixCI_25m-75f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
+# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
 #                          "results", "mixCI_40m-60f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
+# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
 #                          "results", "mixCI_60m-40f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
+# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
 #                          "results", "mixCI_75m-25f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code", 
+# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
 #                          "results", "mixCI_90m-10f")
 # heatmapland <- file.path("..", "..", "190601_old_stuff", "HRSmSxLB")
 # heatmapland <- file.path("..", "..", "190601_old_stuff", "HRFfFfLB")
@@ -67,8 +67,8 @@ heatmapland <- file.path("results")
 #190601_old_stuff/HRSmSxLB/
 # heatmapland <- file.path("results", "Heatmaps")
 
-# all_the_runs <- list.files(heatmapland, 
-all_the_runs <- extractvardirs(heatmapland, 
+# all_the_runs <- list.files(heatmapland,
+all_the_runs <- extractvardirs(heatmapland,
   #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
   #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
   # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh malebias
@@ -79,24 +79,24 @@ all_the_runs <- extractvardirs(heatmapland,
   # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_|*_1041_")   # oppinh malebias
   # "*_794_|*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
   ##### "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
-  ##### "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") # 
+  ##### "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") #
   # "*_129[0-9]_|*_13[0-9][0-9]_|*_140[0-9]_|*_141[0-4]_") # mixedCurInh - sNTn (males 90%, females 10%)
-  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_") # mixedCurInh_-_sSTf (males 75%, females 25%) 
+  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_") # mixedCurInh_-_sSTf (males 75%, females 25%)
   # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
   # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
   # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
-  
+
   # "*_253[2-9]_|*_25[4-9][0-9]_|*_26[0-9][0-9]_|*_27[0-6][0-9]_|*_277[0-9]_")      # mixCI_10m-90f
   # "*_228[4-9]_|*_229[0-9]_|*_23[0-9][0-9]_|*_24[0-9][0-9]_|*_25[0-2][0-9]_|*_253[0-1]_")      # mixCI_25m-75f
   # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_")      # mixCI_40m-60f
   # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_")      # mixCI_60m-40f
   # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_")      # mixCI_75m-25f
   #"*_27[8-9][0-9]_|*_28[0-9][0-9]_|*_29[0-9][0-9]_|*_30[0-1][0-9]_|*_302[0-7]_")      # mixCI_90m-10f
-  
+
   # "10k") # Carefully curated directory, contains all necessary runs and nothing else
   # "191008") # Carefully curated directory, contains all necessary runs and nothing else
 
-  "*_358[1-9]_") ### fathinh, 200k setup
+  # "*_358[1-9]_") ### fathinh, 200k setup
   # "*_359[0-8]_") ### sameinh, 200k setup
   # "*_3599_|*_360[0-7]_") ### mixedinh55, 200k setup
   # "*_378[5-9]_|*_379[0-3]_") ### mothinh, 200k setup
@@ -105,6 +105,52 @@ all_the_runs <- extractvardirs(heatmapland,
   # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results
   # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results
   # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
+
+  # 1, 2, 6, 7 - High Background
+  # 3, 8, 9, 3889-3892 - Low Background
+
+  ### 200k vanilla:
+    ### Father Inheritance: 3581-3589, 3889
+      # "*_358[3, 8, 9]_|*_3889_") ### Low Background
+      # "*_358[1, 2, 6, 7]_") ### High Background
+    ### Mother Inheritance: 3785-3793, 3890
+      # "*_3787_|*_379[2, 3]_|*_3890_") ### Low Background
+      # "*_378[5, 6]_|*_379[0, 1]_") ### High Background
+    ### SameSex Inheritance: 3590-3598, 3891
+      # "*_359[2, 7, 8]_|*_3891_") ### Low Background
+      # "*_359[0, 1, 5, 6]_") ### High Background
+    ### Mixed55 Inheritance: 3599-3607, 3892
+      # "*_360[1, 6, 7_|*_3892_") ### Low Background
+      # "*_3599_|*_360[0, 4, 5]_") ### High Background
+  ### 200k post-inv:
+    ### Father Inheritance: 3758-3766, 3893
+      # "*_376[0, 5, 6]_|*_3893_") ### Low Background
+      # "*_375[8, 9]_|*_376[3, 4]_") ### High Background
+    ### Mother Inheritance: 3844-3852, 3894
+      # "*_3846_|*_385[1, 2]_|*_3894_") ### Low Background
+      # "*_384[4, 5, 9]_|*_3850_") ### High Background
+    ### SameSex Inheritance: 3767-3775, 3895
+      # "*_3769_|*_377[4, 5]_|*_3895_") ### Low Background
+      # "*_376[7, 8]_|*_377[2, 3]_") ### High Background
+    ### Mixed55 Inheritance: 3776-3784, 3896
+      # "*_3778_|*_378[3, 4]_|*_3896_") ### Low Background
+      # "*_377[6, 7]_|*_378[1, 2]_") ### High Background
+  ### Inv no 200k:
+    ### Father Inheritance: 3853-3861, 3897
+      # "*_3855_|*_386[0,1]_|*_3897_") ### Low Background
+      # "*_385[3, 4, 8, 9]_") ### High Background
+    ### Mother Inheritance: 3862-3870, 3898
+      # "*_386[4, 9]_|*_3870_|*_3898_") ### Low Background
+      "*_386[2, 3, 7, 8]_") ### High Background
+    ### SameSex Inheritance: 3871-3879, 3899
+      # "*_387[3, 8, 9]_|*_3899_") ### Low Background
+      # "*_387[1, 2, 6, 7]_") ### High Background
+    ### Mixed55 Inheritance: 3880-3888, 3900
+      # "*_388[2, 7, 8]_|*_3900_") ### Low Background
+      # "*_388[0, 1, 5, 6]_") ### High Background
+
+
+
   # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
   # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
@@ -118,7 +164,7 @@ all_the_runs <- extractvardirs(heatmapland,
 
 # profvis({
 # #   for(iteration in 1:10) {
-    # extractedmeans <- extractmeans(allrundirs = all_the_runs, 
+    # extractedmeans <- extractmeans(allrundirs = all_the_runs,
     #     dirheatmap = heatmapland, source_of_params = "params.yaml")
 # #   }
 # })
@@ -127,19 +173,28 @@ all_the_runs <- extractvardirs(heatmapland,
 # dirheatmap = heatmapland
 # source_of_params = "params.yaml"
 
-extractedmeans <- extractmeans(allrundirs = all_the_runs, 
-        dirheatmap = heatmapland, source_of_params = "params.yaml")
+# extractedmeans <- extractmeans(
+#   allrundirs = all_the_runs,
+#   dirheatmap = heatmapland,
+#   source_of_params = "params.yaml")
+
+extractedmeans <- extractmeans(
+  allrundirs = all_the_runs,
+  dirheatmap = heatmapland,
+  # ordering = c(1, 3, 4, 2),
+  ordering = c(1, 3, 4, 2),
+  source_of_params = "params.yaml")
 all_the_names <- remakestring(all_the_runs, "_", ".")
 
 
-all_the_low_background <- c(all_the_runs[1:25])
-all_the_high_background <- c(all_the_runs[26:50])
+      # all_the_low_background <- c(all_the_runs[1:25])
+      # all_the_high_background <- c(all_the_runs[26:50])
 
-extractedmeans <- extractmeans(allrundirs = all_the_low_background, 
-                               dirheatmap = heatmapland, 
-                               source_of_params = "params.yaml", 
-                               deeper = FALSE)
-all_the_names <- remakestring(all_the_low_background, "_", ".")
+      # extractedmeans <- extractmeans(allrundirs = all_the_low_background,
+      #                               dirheatmap = heatmapland,
+      #                               source_of_params = "params.yaml",
+      #                               deeper = FALSE)
+      # all_the_names <- remakestring(all_the_low_background, "_", ".")
 
 names(extractedmeans) <- all_the_names
 
@@ -179,18 +234,29 @@ names(extractedmeans) <- all_the_names
 # whichrunstyle <- c(
   # "lowMedHigh", ### 0-0.25, 0.25-0.5, 0.5-1 (background 0-0.25, 0.5-1)
   # "narrowWide", ### 0.45-0.55 (background 0-0.25, 0.5-1)
-  # "lowHigh") ### 0-0.2, 0.2-0.3, 0.4-0.6, 0.55-0.75, 0.7-0.8 (background 0.2-0.3, 0.7-0.8)
-  
+  # "lowHigh") ### 0-0.2, 0.2-0.3, 0.4-0.6, 0.55-0.75, 07-0.8 (background 0.2-0.3, 0.7-0.8)
+  # "binary") ### 0-0.18, 0.81-1 (background same)
+  # "binaryHB") ### 0-0.18, 0.81-1 (background 0.81-1)
+  # "binaryLB") ### 0-0.18, 0.81-1 (background 0-0.18)
+
   # IFF highres,
   # ### 0-0.18, 0.09-0.27, 0.18-0.36, 0.27-0.45, 0.36-0.54, 0.45-0.63, 0.54-0.72, 0.63-0.81, 0.72-0.9, 0.81-1
 # source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 heatmapoutput <- list()
+### the higher-res 10k fresh invasions ("11" for 50/50 MixedInh)
+# heatmapoutput <- makeheatmapfile(
+#                 inheritance = 11, diffcurstartbias = "pop1",
+#                 biassize = 5, othersize = 2,
+#                 reversedruns = TRUE,
+#                 runstyle = "lowHigh", highres = FALSE,
+#                 extractedmeans = extractedmeans)
+
 heatmapoutput <- makeheatmapfile(
-                inheritance = 1, diffcurstartbias = "pop1", 
-                biassize = 5, othersize = 1, 
-                reversedruns = TRUE, specialfigs = TRUE, 
-                runstyle = "binary", highres = FALSE, 
+                inheritance = 2, diffcurstartbias = "pop1",
+                biassize = 2, othersize = 1,
+                reversedruns = TRUE,
+                runstyle = "binaryHB", highres = FALSE,
                 extractedmeans = extractedmeans)
 
 # inheritance = 1
@@ -205,10 +271,10 @@ heatmapoutput <- makeheatmapfile(
 
 # # USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
 
-# heatmapoutput <- makeheatmapfile(inheritance = 3, diffcurstartbias = 3, 
-#                 biassize = 10, othersize = 1, 
-#                 reversedruns = TRUE, reDo = TRUE, specialfigs = TRUE, 
-#                 runstyle = 1, highres = TRUE, 
+# heatmapoutput <- makeheatmapfile(inheritance = 3, diffcurstartbias = 3,
+#                 biassize = 10, othersize = 1,
+#                 reversedruns = TRUE, reDo = TRUE, specialfigs = TRUE,
+#                 runstyle = 1, highres = TRUE,
 #                 extractedmeans = NULL)
 
 # makeheatmapfile(inheritance = 10, diffcurstartbias = 1, absolute = TRUE, specialfigs = FALSE, lmhvnw = FALSE, extractedmeans = extractedmeans)
@@ -243,7 +309,7 @@ heatmapoutput <- makeheatmapfile(
 # thing <- c(5, 6, 7, 8, 9, 10)
 # for (inhREtnce in 1:5) {
 #   for (sexBIAS in 1:2) {
-    
+
 #     individualfigures(10, 2, sexBIAS, 3)
 
 #   }
@@ -265,10 +331,12 @@ individualfigures(2,5,heatmapoutput)
 #   }
 # }
 
-combineeditsingles(5, 1, 1, 3, T, F)
+# combineeditsingles(5, 1, 1, 3, T, F)
+
+combineeditsingles(1, 3, 1, 2, T, F)
 
 # inheritancestyle = 5
-# bias = 1
+# bias = 3
 # metricssexpop = 1
 # otherpopstyle = 3
 # edit = TRUE
