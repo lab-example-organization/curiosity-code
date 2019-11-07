@@ -120,7 +120,7 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_359[2, 7, 8]_|*_3891_") ### Low Background
       # "*_359[0, 1, 5, 6]_") ### High Background
     ### Mixed55 Inheritance: 3599-3607, 3892
-      # "*_360[1, 6, 7_|*_3892_") ### Low Background
+      # "*_360[1, 6, 7]_|*_3892_") ### Low Background
       # "*_3599_|*_360[0, 4, 5]_") ### High Background
   ### 200k post-inv:
     ### Father Inheritance: 3758-3766, 3893
@@ -141,12 +141,12 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_385[3, 4, 8, 9]_") ### High Background
     ### Mother Inheritance: 3862-3870, 3898
       # "*_386[4, 9]_|*_3870_|*_3898_") ### Low Background
-      "*_386[2, 3, 7, 8]_") ### High Background
+      # "*_386[2, 3, 7, 8]_") ### High Background
     ### SameSex Inheritance: 3871-3879, 3899
       # "*_387[3, 8, 9]_|*_3899_") ### Low Background
       # "*_387[1, 2, 6, 7]_") ### High Background
     ### Mixed55 Inheritance: 3880-3888, 3900
-      # "*_388[2, 7, 8]_|*_3900_") ### Low Background
+      "*_388[2, 7, 8]_|*_3900_") ### Low Background
       # "*_388[0, 1, 5, 6]_") ### High Background
 
 
@@ -182,7 +182,7 @@ extractedmeans <- extractmeans(
   allrundirs = all_the_runs,
   dirheatmap = heatmapland,
   # ordering = c(1, 3, 4, 2),
-  ordering = c(1, 3, 4, 2),
+  # ordering = c(1, 3, 4, 2),
   source_of_params = "params.yaml")
 all_the_names <- remakestring(all_the_runs, "_", ".")
 
@@ -253,10 +253,10 @@ heatmapoutput <- list()
 #                 extractedmeans = extractedmeans)
 
 heatmapoutput <- makeheatmapfile(
-                inheritance = 2, diffcurstartbias = "pop1",
+                inheritance = 11, diffcurstartbias = "pop1",
                 biassize = 2, othersize = 1,
                 reversedruns = TRUE,
-                runstyle = "binaryHB", highres = FALSE,
+                runstyle = "binaryLB", highres = FALSE,
                 extractedmeans = extractedmeans)
 
 # inheritance = 1
