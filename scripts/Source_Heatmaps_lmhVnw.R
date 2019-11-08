@@ -101,10 +101,12 @@ all_the_runs <- extractvardirs(heatmapland,
   # "*_3599_|*_360[0-7]_") ### mixedinh55, 200k setup
   # "*_378[5-9]_|*_379[0-3]_") ### mothinh, 200k setup
 
-  # "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results
-  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results
-  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results
+  # "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results ### Father Inheritance 5x5x2 lowHigh Background
+  # "*_379[4-9]_|*_38[0-3][0-9]_|*_384[0-3]_") ### octXresults ### Mother Inheritance 5x5x2 lowHigh Background
+  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results ### SameSex Inheritance 5x5x2 lowHigh Background
+  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results ### Mixed55 Inheritance 5x5x2 lowHigh Background
   # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
+
 
   # 1, 2, 6, 7 - High Background
   # 3, 8, 9, 3889-3892 - Low Background
@@ -146,7 +148,7 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_387[3, 8, 9]_|*_3899_") ### Low Background
       # "*_387[1, 2, 6, 7]_") ### High Background
     ### Mixed55 Inheritance: 3880-3888, 3900
-      "*_388[2, 7, 8]_|*_3900_") ### Low Background
+      # "*_388[2, 7, 8]_|*_3900_") ### Low Background
       # "*_388[0, 1, 5, 6]_") ### High Background
 
 
@@ -190,11 +192,11 @@ all_the_names <- remakestring(all_the_runs, "_", ".")
       # all_the_low_background <- c(all_the_runs[1:25])
       # all_the_high_background <- c(all_the_runs[26:50])
 
-      # extractedmeans <- extractmeans(allrundirs = all_the_low_background,
-      #                               dirheatmap = heatmapland,
-      #                               source_of_params = "params.yaml",
-      #                               deeper = FALSE)
-      # all_the_names <- remakestring(all_the_low_background, "_", ".")
+      # extractedmeans <- extractmeans(allrundirs = all_the_high_background,
+                                    # dirheatmap = heatmapland,
+                                    # source_of_params = "params.yaml",
+                                    # deeper = FALSE)
+      # all_the_names <- remakestring(all_the_high_background, "_", ".")
 
 names(extractedmeans) <- all_the_names
 
@@ -253,10 +255,10 @@ heatmapoutput <- list()
 #                 extractedmeans = extractedmeans)
 
 heatmapoutput <- makeheatmapfile(
-                inheritance = 11, diffcurstartbias = "pop1",
-                biassize = 2, othersize = 1,
-                reversedruns = TRUE,
-                runstyle = "binaryLB", highres = FALSE,
+                inheritance = 2, diffcurstartbias = "pop1",
+                biassize = 5, othersize = 2,
+                reversedruns = FALSE,
+                runstyle = "lowHigh", highres = FALSE,
                 extractedmeans = extractedmeans)
 
 # inheritance = 1
