@@ -677,7 +677,7 @@ individualfigures <- function (
         # dim_3 = 2
 
 
-        image(x = temphtmparray[,,,sxmtpop],
+        image(x = temphtmparray[,,slice,sxmtpop],
           col = colorseqmultpalette[[colorpalette]](100),
           axes = F,
           xlab = heatmap_axes[[3]][1],
@@ -688,7 +688,7 @@ individualfigures <- function (
           temphtmpdimensions <- dimnames(temphtmparray)
           temptemp <- vector(mode = "character", length = length(temphtmpdimensions))
           for (thething in 1:length(temphtmpdimensions[[1]])) {
-            temptemp[thething] <- str_extract_all(temphtmpdimensions[[1]][thething], "[:digit:]*-[:digit:]*")
+            temptemp[thething] <- str_extract_all(temphtmpdimensions[[1]][thething], "[0123456789|0123456789.0123456789]*-[0123456789|0123456789.0123456789]*")
           }
 
 
