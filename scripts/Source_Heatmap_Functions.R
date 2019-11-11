@@ -486,7 +486,6 @@ makeheatmapfile <- function (
   return(outputBall)
 }
 
-
 individualfigures <- function (
 
   colorrange = 2, # c("relative", "absolute")
@@ -573,7 +572,7 @@ individualfigures <- function (
 
   if (length (htmparrays) == 1) {
     temphtmparray <- readRDS (file.path (heatmap_sourcefolder, foldername$foldername, htmparrays))
-  } else {stop ("there's more than one .RData file in that directory!")}
+  } else {stop ("there's either more or less than one .RData file in that directory!")}
 
   colorseqmultpalette <- list (
     reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds       ### 1
@@ -959,6 +958,18 @@ individualfigures <- function (
   return(print("Done, in the specified folder"))
 }
 
+heatmap_difference <- function (
+
+) {
+  source_directory <-
+  first_heatmap <-
+  second_heatmap <-
+
+  output_heatmap <- first_heatmap - second_heatmap
+  output_directory <-
+
+  return (output_heatmap)
+}
 
 combineeditsingles <- function (
   # inheritancestyle = 1,

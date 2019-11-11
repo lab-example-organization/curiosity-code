@@ -158,7 +158,7 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_395[1-9]_|*_39[6-9][0-9]_|*_4000_") ###
     ### SamSex Inheritance: 4001-4050
       # "*_400[1-9]_|*_40[1-4][0-9]_|*_4050_") ###
-    ### Miixed Inheritance: 4051-4100
+    ## Miixed Inheritance: 4051-4100
       # "*_405[1-9]_|*_40[6-9][0-9]_|*_4100_") ###
 
   ### No invasion, 10k highLow follow-up (biassize 5, othersize 2)
@@ -283,7 +283,7 @@ heatmapoutput <- list()
 #                 extractedmeans = extractedmeans)
 
 heatmapoutput <- makeheatmapfile(
-                inheritance = 2, diffcurstartbias = "pop1",
+                inheritance = 1, diffcurstartbias = "pop1",
                 biassize = 5, othersize = 2,
                 reversedruns = FALSE,
                 runstyle = "lowHigh", highres = FALSE,
