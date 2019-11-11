@@ -400,7 +400,7 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [4101]
+simnumberstart: [4301]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -433,7 +433,7 @@ curinhdistribution: 0.5
 # distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
 
 
-traitinvasion: FALSE
+traitinvasion: TRUE
 invasionthoutmstps: 1
 invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale,
