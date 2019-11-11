@@ -151,7 +151,35 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_388[2, 7, 8]_|*_3900_") ### Low Background
       # "*_388[0, 1, 5, 6]_") ### High Background
 
+  ### No invasion, 10k highLow (biassize 5, othersize 2)
+    ### Father Inheritance: 3901-3950
+      # "*_390[1-9]_|*_39[1-4][0-9]_|*_3950_") ###
+    ### Mother Inheritance: 3951-4000
+      # "*_395[1-9]_|*_39[6-9][0-9]_|*_4000_") ###
+    ### SamSex Inheritance: 4001-4050
+      # "*_400[1-9]_|*_40[1-4][0-9]_|*_4050_") ###
+    ### Miixed Inheritance: 4051-4100
+      # "*_405[1-9]_|*_40[6-9][0-9]_|*_4100_") ###
 
+  ### No invasion, 10k highLow follow-up (biassize 5, othersize 2)
+    ### Father Inheritance: 4101-4150
+      # "*_410[1-9]_|*_41[1-4][0-9]_|*_4150_") ###
+    ### Mother Inheritance: 4151-4200
+      # "*_415[1-9]_|*_41[6-9][0-9]_|*_4200_") ###
+    ### SamSex Inheritance: 4201-4250
+      # "*_420[1-9]_|*_42[1-4][0-9]_|*_4250_") ###
+    ### Miixed Inheritance: 4251-4300
+      # "*_425[1-9]_|*_42[6-9][0-9]_|*_4300_") ###
+
+  ### Invasion! 10k highLow follow-up (biassize 5, othersize 2)
+    ### Father Inheritance: 4301-4350
+      # "*_430[1-9]_|*_43[1-4][0-9]_|*_4350_") ###
+    ### Mother Inheritance: 4351-4400
+      # "*_435[1-9]_|*_43[6-9][0-9]_|*_4400_") ###
+    ### SamSex Inheritance: 4401-4450
+      # "*_440[1-9]_|*_44[1-4][0-9]_|*_4450_") ###
+    ### Miixed Inheritance: 4451-4500
+      # "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
 
   # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
