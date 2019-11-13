@@ -349,6 +349,38 @@ heatmapoutput <- makeheatmapfile(
 individualfigures(2,5,heatmapoutput)
 #####
 
+source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
+
+output_heatmap <- heatmap_difference (
+                    source_pattern = "FfFf",
+                    first_source_names = "five-by-five-vanilla_lowHigh_Background",
+                    secnd_source_names = "five-by-five-Inv3k_lowHigh_Background"
+                    # foldername =
+                    )
+
+individualfigures(2,5,list(
+  foldername = output_heatmap$foldername,
+  biassize = 5,
+  othersize = 2,
+  diffcurstartbias = "pop1"
+))
+
+### Divergent, Red vs. Blue coloring:
+
+output_heatmap <- heatmap_difference (
+                    source_pattern = "FfFf",
+                    first_source_names = "five-by-five-vanilla_lowHigh_Background",
+                    secnd_source_names = "five-by-five-Inv3k_lowHigh_Background",
+                    visualization = "upNdown"
+                    )
+
+individualfigures(2,19,list(
+  foldername = output_heatmap$foldername,
+  biassize = 5,
+  othersize = 2,
+  diffcurstartbias = "pop1"
+))
+
 
 # thing <- c(5, 6, 7, 8, 9, 10)
 # for (
