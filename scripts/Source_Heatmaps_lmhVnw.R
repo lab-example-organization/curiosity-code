@@ -179,7 +179,7 @@ all_the_runs <- extractvardirs(heatmapland,
     ### SamSex Inheritance: 4401-4450
       # "*_440[1-9]_|*_44[1-4][0-9]_|*_4450_") ###
     ### Miixed Inheritance: 4451-4500
-      # "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
+      "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
 
   # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
@@ -283,7 +283,7 @@ heatmapoutput <- list()
 #                 extractedmeans = extractedmeans)
 
 heatmapoutput <- makeheatmapfile(
-                inheritance = 1, diffcurstartbias = "pop1",
+                inheritance = 11, diffcurstartbias = "pop1",
                 biassize = 5, othersize = 2,
                 reversedruns = FALSE,
                 runstyle = "lowHigh", highres = FALSE,
@@ -349,12 +349,18 @@ heatmapoutput <- makeheatmapfile(
 individualfigures(2,5,heatmapoutput)
 #####
 
+print("Stop here, Parker!")
+print("Stop here, Parker!")
+
+source(file.path("scripts", "Source_Heatmap_Functions.R"))
 source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
 
 output_heatmap <- heatmap_difference (
                     source_pattern = "FfFf",
                     first_source_names = "five-by-five-vanilla_lowHigh_Background",
-                    secnd_source_names = "five-by-five-Inv3k_lowHigh_Background"
+                    secnd_source_names = "five-by-five-Inv3k_lowHigh_Background",
+                    visualization = "absolute",
+                    replace = TRUE
                     # foldername =
                     )
 
@@ -371,7 +377,8 @@ output_heatmap <- heatmap_difference (
                     source_pattern = "FfFf",
                     first_source_names = "five-by-five-vanilla_lowHigh_Background",
                     secnd_source_names = "five-by-five-Inv3k_lowHigh_Background",
-                    visualization = "upNdown"
+                    visualization = "midpoint",
+                    replace = TRUE
                     )
 
 individualfigures(2,19,list(
@@ -380,6 +387,9 @@ individualfigures(2,19,list(
   othersize = 2,
   diffcurstartbias = "pop1"
 ))
+
+# _source_names = "five-by-five-followUpVanilla_lowHigh_Background", ### 4101-4300
+# _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300
 
 
 # thing <- c(5, 6, 7, 8, 9, 10)

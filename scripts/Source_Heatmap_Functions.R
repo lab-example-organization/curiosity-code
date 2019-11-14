@@ -493,7 +493,7 @@ individualfigures <- function (
   foldername = heatmapoutput
 ) {
 
-  # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, upNdown
+  # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint
   #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,      19
 
   # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
@@ -593,7 +593,7 @@ individualfigures <- function (
     pubu = colorRampPalette (c ("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class pubu                                        ### 16
     pubugn = colorRampPalette (c ("#ece2f0", "#a6bddb", "#1c9099")), # 3-class pubugn                                    ### 17
     greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
-    upNdown = colorRampPalette (c ("#b2182b", "#b2182b", "#2166ac", "#2166ac")) # 4-class divergent Red -> Blue Spectrum ### 19
+    midpoint = colorRampPalette (c ("#67001f", "#b2182b", "#b2182b", "#b2182b", "#d6604d", "#fddbc7", "#fddbc7", "#f7f7f7", "#d1e5f0", "#d1e5f0", "#4393c3", "#2166ac", "#2166ac", "#2166ac", "#053061")) # 2-class divergent Red -> Blue Spectrum ### 19
   )
 
   regularnames <- c (
@@ -1639,4 +1639,4 @@ stackmultiples <- function (
 # # }
 
 # }
-print("htmpdir, extractvardirs, remakestring, extractmeans, makeHeatmaps, individualfigures, combineeditsingles and stackmultiples loaded")
+print("htmpdir, extractvardirs, remakestring, extractmeans, makeheatmapfile, individualfigures, combineeditsingles and stackmultiples loaded")
