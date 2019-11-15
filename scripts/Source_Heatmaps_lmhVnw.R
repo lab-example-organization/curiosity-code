@@ -137,7 +137,9 @@ all_the_runs <- extractvardirs(heatmapland,
     ### Mixed55 Inheritance: 3776-3784, 3896
       # "*_3778_|*_378[3, 4]_|*_3896_") ### Low Background
       # "*_377[6, 7]_|*_378[1, 2]_") ### High Background
-  ### Inv no 200k:
+
+
+  ### Inv 3k; 10k total, not 200k:
     ### Father Inheritance: 3853-3861, 3897
       # "*_3855_|*_386[0,1]_|*_3897_") ### Low Background
       # "*_385[3, 4, 8, 9]_") ### High Background
@@ -179,7 +181,7 @@ all_the_runs <- extractvardirs(heatmapland,
     ### SamSex Inheritance: 4401-4450
       # "*_440[1-9]_|*_44[1-4][0-9]_|*_4450_") ###
     ### Miixed Inheritance: 4451-4500
-      "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
+      # "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
 
   # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
@@ -374,14 +376,14 @@ individualfigures(2,5,list(
 ### Divergent, Red vs. Blue coloring:
 
 output_heatmap <- heatmap_difference (
-                    source_pattern = "FfFf",
-                    first_source_names = "five-by-five-vanilla_lowHigh_Background",
-                    secnd_source_names = "five-by-five-Inv3k_lowHigh_Background",
+                    source_pattern = "male",
+                    first_source_names = "five-by-five-followUpInv1k_lowHigh_Background",
+                    secnd_source_names = "five-by-five-followUpVanilla_lowHigh_Background",
                     visualization = "midpoint",
                     replace = TRUE
                     )
 
-individualfigures(2,19,list(
+individualfigures(3,19,list(
   foldername = output_heatmap$foldername,
   biassize = 5,
   othersize = 2,
@@ -391,6 +393,11 @@ individualfigures(2,19,list(
 # _source_names = "five-by-five-followUpVanilla_lowHigh_Background", ### 4101-4300
 # _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300
 
+# source_pattern = "male" # "moth", "same", "FfFf"
+# first_source_names = c("five-by-five-vanilla_lowHigh_Background")
+# secnd_source_names = c("five-by-five-Inv3k_lowHigh_Background")
+# visualization = "absolute" # "absolute" - takes absolute value of differences between different conditions. "midpoint" - grades differences according to which of the two heatmaps has a greater value!
+# replace = FALSE
 
 # thing <- c(5, 6, 7, 8, 9, 10)
 # for (

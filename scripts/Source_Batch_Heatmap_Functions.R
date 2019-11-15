@@ -115,9 +115,13 @@ heatmap_difference <- function (
   first_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = first_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = first_source_directory), pattern = ".RData")))
   second_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), pattern = ".RData")))
   if (visualization == "absolute") {
-    output_heatmap <- abs(first_heatmap - second_heatmap)
+    output_curiosity <- (abs(first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) / 2)
+    output_sylreps <- (abs(first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / (2 * (156 - 1)))
+    output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
   } else if (visualization == "midpoint") {
-    output_heatmap <- 0.5 + 0.5 * (first_heatmap - second_heatmap) # for curiosity
+    output_curiosity <- (abs(first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) / 2) + 0.5
+    output_sylreps <- ((first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / (2 * (156 - 1))) + 0.5
+    output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
   }
 
 

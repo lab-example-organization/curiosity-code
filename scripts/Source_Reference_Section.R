@@ -3,19 +3,19 @@
     # This function loads packages that the code depends on, BUT:
     # if a package is not installed, it installs it first, then loads it.
     load.installifrequired <- function(package_list = package_list[[which (reference_list == referencing_script)]]){
-        
+
 
         for( i in 1:length(package_list) ){
-            
+
             #  require returns TRUE invisibly if it was able to load package
             if( ! require( package_list[i] , character.only = TRUE ) ){
-                
+
                 #  If package was not able to be loaded then re-install
                 install.packages( package_list[i] , dependencies = TRUE )
-                
+
                 #  Load package after installing
                 require( package_list[i] , character.only = TRUE )
-            
+
             }
         }
     }
@@ -23,7 +23,7 @@
 
 referencesection <- function (referencing_script) {
     # A list of all the packages needed for this code to function:
-    
+
     reference_list <- list(
         'multirun',
         'heatmaps',
@@ -38,20 +38,20 @@ referencesection <- function (referencing_script) {
         #'',
         #'',
         #'',
-        
+
     )
 
     package_list <- list(
         multirun = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table', 'zip'),
-        heatmaps = c('stringr', 'yaml', 'magick'),
+        heatmaps = c('stringr', 'abind', 'yaml', 'magick'),
         profiler = c('doParallel', 'abind', 'stringr', 'Hmisc', 'yaml', 'R.utils', 'dplyr', 'Rcpp', 'tidyr', 'data.table', 'zip', 'profvis'),
         profvyaml = c('profvis', 'yaml'),
         pfvSrrYml = c('profvis', 'stringr', 'yaml'),
         profTest = c('profvis'),
         testings = c('testthat', 'dplyr')#,
-        
+
         #c('') #,
-        
+
     )
 
     #  Then try/install packages...
@@ -68,7 +68,7 @@ referencesection <- function (referencing_script) {
     # library(dplyr)
     return (print('See You Space Cowhand'))
     # return (sessionInfo(package = NULL))
-    
+
 }
 
 # sessionInfo(package = NULL)
