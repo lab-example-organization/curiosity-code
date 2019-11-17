@@ -593,7 +593,19 @@ individualfigures <- function (
     pubu = colorRampPalette (c ("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class pubu                                        ### 16
     pubugn = colorRampPalette (c ("#ece2f0", "#a6bddb", "#1c9099")), # 3-class pubugn                                    ### 17
     greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
-    midpoint = colorRampPalette (c ("#67001f", "#b2182b", "#b2182b", "#b2182b", "#d6604d", "#d6604d", "#fddbc7", "#fddbc7", "#fddbc7", "#f7f7f7", "#d1e5f0", "#d1e5f0", "#d1e5f0", "#4393c3", "#4393c3", "#2166ac", "#2166ac", "#2166ac", "#053061")) # 2-class divergent Red -> Blue Spectrum ### 19
+    midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
+    # ("#ef8a62", "#f7f7f7", "#67a9cf"))
+
+    # ("#ca0020", "#ca0020", "#f4a582", "#f4a582", "#f7f7f7", "#92c5de", "#92c5de", "#0571b0", "#0571b0"))
+                                  #  ("#67001f",
+                                  #   "#b2182b", "#b2182b", "#b2182b",
+                                  #   "#d6604d", "#d6604d", "#d6604d", "#d6604d",
+                                  #   "#fddbc7", "#fddbc7",
+                                  #   "#f7f7f7",
+                                  #   "#d1e5f0", "#d1e5f0",
+                                  #   "#4393c3", "#4393c3", "#4393c3", "#4393c3",
+                                  #   "#2166ac", "#2166ac", "#2166ac",
+                                  #   "#053061")) # 2-class divergent Red -> Blue Spectrum ### 19
   )
 
   regularnames <- c (
@@ -669,9 +681,9 @@ individualfigures <- function (
         heatmaprange <- c (heatmap_min[3] - 0.01, heatmap_max[3] + 0.01)
         rm(heatmaprangedatasetone, heatmaprangedatasettwo, heatmaprangedatasettre,
           heatmap_min, heatmap_max)
-      } else if (colorrange == "differences") {
-        heatmaprange <- c (0,1)
-      }
+      }# else if (colorrange == "differences") {
+      #   heatmaprange <- c (0,1)
+      # }
 
        # UNFINISHED - depreciated?
       # findXLab <- heatmap_axes[[3]][1]

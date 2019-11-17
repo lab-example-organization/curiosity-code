@@ -173,7 +173,7 @@ all_the_runs <- extractvardirs(heatmapland,
     ### Miixed Inheritance: 4251-4300
       # "*_425[1-9]_|*_42[6-9][0-9]_|*_4300_") ###
 
-  ### Invasion! 10k highLow follow-up (biassize 5, othersize 2)
+  ### Invasion! 10k highLow follow-up HIGH (biassize 5, othersize 2)
     ### Father Inheritance: 4301-4350
       # "*_430[1-9]_|*_43[1-4][0-9]_|*_4350_") ###
     ### Mother Inheritance: 4351-4400
@@ -182,6 +182,16 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_440[1-9]_|*_44[1-4][0-9]_|*_4450_") ###
     ### Miixed Inheritance: 4451-4500
       # "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
+
+  ### Invasion! 10k highLow follow-up LOW (biassize 5, othersize 2)
+    ### Father Inheritance: 4501-4550
+      # "*_450[1-9]_|*_45[1-4][0-9]_|*_4550_") ###
+    ### Mother Inheritance: 4551-4600
+      # "*_455[1-9]_|*_45[6-9][0-9]_|*_4600_") ###
+    ### SamSex Inheritance: 4601-4650
+      # "*_460[1-9]_|*_46[1-4][0-9]_|*_4650_") ###
+    ### Miixed Inheritance: 4651-4700
+      "*_465[1-9]_|*_46[6-9][0-9]_|*_4700_") ###
 
   # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
@@ -383,7 +393,7 @@ output_heatmap <- heatmap_difference (
                     replace = TRUE
                     )
 
-individualfigures(3,19,list(
+individualfigures(2,19,list(
   foldername = output_heatmap$foldername,
   biassize = 5,
   othersize = 2,
@@ -394,10 +404,24 @@ individualfigures(3,19,list(
 # _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300
 
 # source_pattern = "male" # "moth", "same", "FfFf"
-# first_source_names = c("five-by-five-vanilla_lowHigh_Background")
-# secnd_source_names = c("five-by-five-Inv3k_lowHigh_Background")
-# visualization = "absolute" # "absolute" - takes absolute value of differences between different conditions. "midpoint" - grades differences according to which of the two heatmaps has a greater value!
-# replace = FALSE
+# first_source_names = c("five-by-five-followUpInv1k_lowHigh_Background")
+# secnd_source_names = c("five-by-five-followUpVanilla_lowHigh_Background")
+# visualization = "absolute"
+# replace = TRUE
+
+output_heatmap <- heatmap_difference (
+                    source_pattern = "male",
+first_source_names = "five-by-five-followUpVanilla_lowHigh_Background",
+secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background",
+visualization = "midpoint",
+                    replace = TRUE
+                    )
+
+first_source_names = "five-by-five-followUpVanilla_lowHigh_Background"
+secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background"
+
+first_source_names = "five-by-five-followUpInv1k_lowHigh_Background"
+secnd_source_names = "five-by-five-followUpVanilla_lowHigh_Background"
 
 # thing <- c(5, 6, 7, 8, 9, 10)
 # for (
