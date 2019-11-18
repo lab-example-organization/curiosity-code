@@ -393,6 +393,13 @@ output_heatmap <- heatmap_difference (
                     replace = TRUE
                     )
 
+#### Blue values = High Number,
+#### Red values = Low Number
+
+#### So, for example, Inv(high) - Vanilla = Blue,
+#### while, in contrast, Van - Inv(high) = Red
+
+# five-by-five-followUpInvLow1k_lowHigh_Background
 individualfigures(2,19,list(
   foldername = output_heatmap$foldername,
   biassize = 5,
@@ -409,13 +416,13 @@ individualfigures(2,19,list(
 # visualization = "absolute"
 # replace = TRUE
 
-output_heatmap <- heatmap_difference (
-                    source_pattern = "male",
-first_source_names = "five-by-five-followUpVanilla_lowHigh_Background",
-secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background",
-visualization = "midpoint",
-                    replace = TRUE
-                    )
+  output_heatmap <- heatmap_difference (
+                      source_pattern = "male",
+                      first_source_names = "five-by-five-followUpVanilla_lowHigh_Background",
+                      secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background",
+                      visualization = "midpoint",
+                      replace = TRUE
+                      )
 
 first_source_names = "five-by-five-followUpVanilla_lowHigh_Background"
 secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background"

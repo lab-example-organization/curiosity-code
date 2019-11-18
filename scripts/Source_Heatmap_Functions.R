@@ -490,7 +490,8 @@ individualfigures <- function (
 
   colorrange = 2, # c("relative", "absolute", "differences")
   colorpalette = 5, # Numbers correspond to specific color palettes
-  foldername = heatmapoutput
+  foldername = heatmapoutput,
+  midpoint_size = 1 # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
 ) {
 
   # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint
@@ -574,6 +575,13 @@ individualfigures <- function (
     temphtmparray <- readRDS (file.path (heatmap_sourcefolder, foldername$foldername, htmparrays))
   } else {stop ("there's either more or less than one .RData file in that directory!")}
 
+  if (colorpalette == 19) {
+
+    whatever <- array(c(2, 16, 30, 44, 58, 72, 86, 7, 6, 5, 4, 3, 2, 1), c(7,2))
+    stuff <- whatever[midpoint_size,]
+  }
+
+
   colorseqmultpalette <- list (
     reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds                                        ### 1
     rdpu = colorRampPalette (c ("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class rdpu                                        ### 2
@@ -593,8 +601,31 @@ individualfigures <- function (
     pubu = colorRampPalette (c ("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class pubu                                        ### 16
     pubugn = colorRampPalette (c ("#ece2f0", "#a6bddb", "#1c9099")), # 3-class pubugn                                    ### 17
     greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
-    midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
+    # midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
+
+    eval (parse (text = paste0 ("midpoint = colorRampPalette (c (rep(\"#67001f\", ",
+                                                   stuff[2], "), rep(\"#b2182b\", ",
+                                                   stuff[2], "), rep(\"#ca0020\", ",
+                                                   stuff[2], "), rep(\"#d6604d\", ",
+                                                   stuff[2], "), rep(\"#ef8aC2\", ",
+                                                   stuff[2], "), rep(\"#f4a582\", ",
+                                                   stuff[2], "), rep(\"#fddbc7\", ",
+                                                   stuff[2], "), rep(\"#f7f7f7\", ",
+                                                   stuff[1], "), rep(\"#d1e5f0\", ",
+                                                   stuff[2], "), rep(\"#92c5de\", ",
+                                                   stuff[2], "), rep(\"#67a9cf\", ",
+                                                   stuff[2], "), rep(\"#4393c3\", ",
+                                                   stuff[2], "), rep(\"#2166ac\", ",
+                                                   stuff[2], "), rep(\"#0571b0\", ",
+                                                   stuff[2], "), rep(\"#053061\", ",
+                                                   stuff[2], ")))")))
+  )
     # ("#ef8a62", "#f7f7f7", "#67a9cf"))
+    # ("#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061"))
+
+# eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[",
+#                            paste0(1:(number_of_repeats - 1),"]][i],curhistlist[[", collapse=''),
+#                            number_of_repeats, "]][i]))")))
 
     # ("#ca0020", "#ca0020", "#f4a582", "#f4a582", "#f7f7f7", "#92c5de", "#92c5de", "#0571b0", "#0571b0"))
                                   #  ("#67001f",
@@ -606,7 +637,7 @@ individualfigures <- function (
                                   #   "#4393c3", "#4393c3", "#4393c3", "#4393c3",
                                   #   "#2166ac", "#2166ac", "#2166ac",
                                   #   "#053061")) # 2-class divergent Red -> Blue Spectrum ### 19
-  )
+  # )
 
   regularnames <- c (
     "EndCurValP1M",
