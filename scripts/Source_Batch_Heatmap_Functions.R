@@ -43,6 +43,7 @@ heatmap_difference <- function (
   secnd_source_names = c("five-by-five-Inv3k_lowHigh_Background"),
   visualization = "absolute", # "absolute" - takes absolute value of differences between different conditions. "midpoint" - grades differences according to which of the two heatmaps has a greater value!
   replace = FALSE,
+  special_source = FALSE,
 #   foldername = list(
     #   diffcurstartbias = ,
     #   biassize = ,
