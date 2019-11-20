@@ -119,7 +119,7 @@ heatmap_difference <- function (
     output_sylreps <- (abs(first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / (156 - 1))
     output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
   } else if (visualization == "midpoint") {
-    output_curiosity <- (first_heatmap[,,,1:4] - second_heatmap[,,,1:4] / 2) + 0.5
+    output_curiosity <- ((first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) / 2) + 0.5
     output_sylreps <- ((first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / 2) + (155/2)
     output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
   }

@@ -687,3 +687,82 @@ individualfigures(2,5,heatmapoutput)
 # individualfigures(2,5,heatmapoutput)
 
 # all_the_runs <- extractvardirs(heatmapland,
+
+source(file.path("scripts", "Source_Reference_Section.R"))
+referencesection("heatmaps")
+
+source(file.path("scripts", "Source_Heatmap_Functions.R"))
+source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
+
+thing <- c("male", "moth", "same", "FfFf")
+# das_dinge <- c(1,2,3,11)
+stuff <- c("five-by-five-Inv3k_lowHigh_Background",
+           "five-by-five-vanilla_lowHigh_Background",
+           "five-by-five-followUpVanilla_lowHigh_Background",
+           "five-by-five-followUpInvLow1k_lowHigh_Background",
+           "five-by-five-followUpInvHigh1k_lowHigh_Background")
+
+stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
+
+for (bs in 1:dim(stuff_n_things)[1]) {
+  for(whaaat in 1:4) {
+
+    output_heatmap <- heatmap_difference (
+                        source_pattern = thing[whaaat],
+                        first_source_names = stuff[stuff_n_things[bs, 1]],
+                        secnd_source_names = stuff[stuff_n_things[bs, 2]],
+                        visualization = "midpoint",
+                        replace = TRUE
+                        )
+
+    #### Blue values = High Number,
+    #### Red values = Low Number
+
+    #### So, for example, Inv(high) - Vanilla = Blue,
+    #### while, in contrast, Van - Inv(high) = Red
+
+    # five-by-five-followUpInvLow1k_lowHigh_Background
+    individualfigures(2,19,list(
+      foldername = output_heatmap$foldername,
+      biassize = 5,
+      othersize = 2,
+      diffcurstartbias = "pop1"
+    ))
+
+    # _source_names = "five-by-five-followUpVanilla_lowHigh_Background", ### 4101-4300
+    # _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300
+
+    # source_pattern = "male" # "moth", "same", "FfFf"
+    # first_source_names = c("five-by-five-followUpInv1k_lowHigh_Background")
+    # secnd_source_names = c("five-by-five-followUpVanilla_lowHigh_Background")
+    # visualization = "absolute"
+    # replace = TRUE
+
+    output_heatmap <- heatmap_difference (
+                        source_pattern = thing[whaaat],
+                        first_source_names = stuff[stuff_n_things[bs, 2]],
+                        secnd_source_names = stuff[stuff_n_things[bs, 1]],
+                        visualization = "midpoint",
+                        replace = TRUE
+                        )
+
+    individualfigures(2,19,list(
+      foldername = output_heatmap$foldername,
+      biassize = 5,
+      othersize = 2,
+      diffcurstartbias = "pop1"
+    ))
+
+  }
+}
+
+
+# image(x = array(c(39:63)/100, c(5,5)),
+thing <- as.matrix((first_heatmap[,,1,1] - second_heatmap[,,1,1])/2 + 0.5)
+thing2 <- as.matrix((second_heatmap[,,1,1] - first_heatmap[,,1,1])/2 + 0.5)
+thing3 <- output_heatmap[,,1,1]
+# image(x = thing,
+image(x = thing3,
+# image(x = array(c(39:63)/100, c(5,5)),
+          col = colorseqmultpalette[[19]](100),
+          axes = F, zlim = c(0, 1))

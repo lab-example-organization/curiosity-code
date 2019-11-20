@@ -387,7 +387,7 @@ individualfigures(2,5,list(
 
 output_heatmap <- heatmap_difference (
                     source_pattern = "male",
-                    first_source_names = "five-by-five-followUpInv1k_lowHigh_Background",
+                    first_source_names = "five-by-five-followUpInvHigh1k_lowHigh_Background",
                     secnd_source_names = "five-by-five-followUpVanilla_lowHigh_Background",
                     visualization = "midpoint",
                     replace = TRUE
@@ -411,15 +411,15 @@ individualfigures(2,19,list(
 # _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300
 
 # source_pattern = "male" # "moth", "same", "FfFf"
-# first_source_names = c("five-by-five-followUpInv1k_lowHigh_Background")
+# first_source_names = c("five-by-five-followUpInvHigh1k_lowHigh_Background")
 # secnd_source_names = c("five-by-five-followUpVanilla_lowHigh_Background")
-# visualization = "absolute"
+# visualization = "midpoint"
 # replace = TRUE
 
   output_heatmap <- heatmap_difference (
                       source_pattern = "male",
                       first_source_names = "five-by-five-followUpVanilla_lowHigh_Background",
-                      secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background",
+                      secnd_source_names = "five-by-five-followUpInvHigh1k_lowHigh_Background",
                       visualization = "midpoint",
                       replace = TRUE
                       )
