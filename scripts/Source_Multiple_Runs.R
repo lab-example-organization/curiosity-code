@@ -620,7 +620,7 @@ archivesimfiles <- function (path, filename,
       }
     }
     file.remove(file.path(path, filename))
-    
+
   }
 }
 
@@ -653,7 +653,7 @@ multi_runs <- function (shifting_curstart, paramssource,
   }
 
   for (rep_number in 1 : number_of_reps) {
-    
+
     if (params$indrunredo == T) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
       singleormixture <- params$curinhdistribution [shifting_curstart]
