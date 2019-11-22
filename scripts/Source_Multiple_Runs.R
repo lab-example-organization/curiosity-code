@@ -211,7 +211,7 @@ invasion_parameters_curiosity <- function (
 
   } else {
     thesex <- c (1, 2)
-    # ips <- ips / 2
+    ips <- ips / 2
   }
 
   pop_subset <- sample (someparameters$pop_calls_matrix [thesex,], ips)
@@ -260,7 +260,7 @@ invasion_parameters_sylrep <- function (
 
   } else {
     thesex <- c (1, 2)
-    # ips <- ips / 2
+    ips <- ips / 2
   }
 
   pop_subset <- sample (someparameters$pop_calls_matrix [thesex,], ips)

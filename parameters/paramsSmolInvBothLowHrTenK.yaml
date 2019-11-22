@@ -400,7 +400,7 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [4901]
+simnumberstart: [5501]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -435,12 +435,12 @@ curinhdistribution: 0.5
 
 traitinvasion: TRUE
 invasionthoutmstps: 1
-invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
+invasionpopsize: 50 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale,
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionsex: 'both' # male or female (or, perhaps, both?)
-invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
 
