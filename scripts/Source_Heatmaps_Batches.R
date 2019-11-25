@@ -700,9 +700,14 @@ stuff <- c("five-by-five-Inv3k_lowHigh_Background",
            "five-by-five-vanilla_lowHigh_Background",
            "five-by-five-followUpVanilla_lowHigh_Background",
            "five-by-five-followUpInvLow1k_lowHigh_Background",
-           "five-by-five-followUpInvHigh1k_lowHigh_Background")
+           "five-by-five-followUpInvHigh1k_lowHigh_Background",
+           "five-by-five-followUpFemInvHigh1k_lowHigh_Background"#,
+          #  "tenKfiveByFive_child-lowFemInvtK/five-by-five-followUpFemHigh1k_lowHigh_Background",
+         #  "",)
+)
 
-stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
+# stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
+stuff_n_things <- array (c (1, 2, 3, 4, 5, 6, 6, 6, 6, 6), c (5,2))
 
 for (bs in 1:dim(stuff_n_things)[1]) {
   for(whaaat in 1:4) {
