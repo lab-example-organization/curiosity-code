@@ -579,6 +579,8 @@ individualfigures <- function (
 
     whatever <- array(c(2, 16, 30, 44, 58, 72, 86, 7, 6, 5, 4, 3, 2, 1), c(7,2))
     stuff <- whatever[midpoint_size,]
+  } else {
+    stuff <- c(2, 7)
   }
 
 

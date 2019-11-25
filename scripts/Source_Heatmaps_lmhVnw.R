@@ -33,6 +33,7 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
 heatmapland <- file.path("results")
 heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemInvtK")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowBothInvtK")
 # setwd("../../../../../../media/park/A443-E926/")"
 
 
@@ -194,7 +195,7 @@ all_the_runs <- extractvardirs(heatmapland,
     ### Miixed Inheritance: 4651-4700
       # "*_465[1-9]_|*_46[6-9][0-9]_|*_4700_") ###
 
-  ### Invasion! 10k Fem_HL follow-up HIGH (biassize 5, othersize 2)
+  ### Invasion! 10k Fem_HL follow-up LOW (biassize 5, othersize 2)
     ### Father Inheritance: 4701-4750
       # "*_470[1-9]_|*_47[1-4][0-9]_|*_4750_") ###
     ### Mother Inheritance: 4751-4800
@@ -202,7 +203,39 @@ all_the_runs <- extractvardirs(heatmapland,
     ### SamSex Inheritance: 4801-4850
       # "*_480[1-9]_|*_48[1-4][0-9]_|*_4850_") ###
     ### Miixed Inheritance: 4851-4900
-      "*_485[1-9]_|*_48[6-9][0-9]_|*_4900_") ###
+      # "*_485[1-9]_|*_48[6-9][0-9]_|*_4900_") ###
+
+  ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
+      ### Father Inheritance: 4901-4950
+        # "*_490[1-9]_|*_49[1-4][0-9]_|*_4950_") ###
+      ### Mother Inheritance: 4951-5000
+        # "*_495[1-9]_|*_49[6-9][0-9]_|*_5000_") ###
+      ### SamSex Inheritance: 5001-5050
+        # "*_500[1-9]_|*_50[1-4][0-9]_|*_5050_") ###
+      ### Miixed Inheritance: 5051-5100
+        # "*_505[1-9]_|*_50[6-9][0-9]_|*_5100_") ###
+
+  ### Invasion! 10k Both_HL follow-up LOW (biassize 5, othersize 2)
+      ### Father Inheritance: 5101-5150
+        # "*_510[1-9]_|*_51[1-4][0-9]_|*_5150_") ###
+      ### Mother Inheritance: 5151-5200
+        # "*_515[1-9]_|*_51[6-9][0-9]_|*_5200_") ###
+      ### SamSex Inheritance: 5201-5250
+        # "*_520[1-9]_|*_52[1-4][0-9]_|*_5250_") ###
+      ### Miixed Inheritance: 5251-5300
+        "*_525[1-9]_|*_52[6-9][0-9]_|*_5300_") ###
+
+  ### Invasion! 10k Fem_HL follow-up HIGH (biassize 5, othersize 2)
+    ### Father Inheritance: 5301-5350
+      # "*_530[1-9]_|*_53[1-4][0-9]_|*_5350_") ###
+    ### Mother Inheritance: 5351-5400
+      # "*_535[1-9]_|*_53[6-9][0-9]_|*_5400_") ###
+    ### SamSex Inheritance: 5401-5450
+      # "*_540[1-9]_|*_54[1-4][0-9]_|*_5450_") ###
+    ### Miixed Inheritance: 5451-5500
+      # "*_545[1-9]_|*_54[6-9][0-9]_|*_5500_") ###
+
+
 
 
 
