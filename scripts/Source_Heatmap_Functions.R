@@ -607,7 +607,7 @@ individualfigures <- function (
                                                    stuff[2], "), rep(\"#b2182b\", ",
                                                    stuff[2], "), rep(\"#ca0020\", ",
                                                    stuff[2], "), rep(\"#d6604d\", ",
-                                                   stuff[2], "), rep(\"#ef8aC2\", ",
+                                                   stuff[2], "), rep(\"#ef8a62\", ",
                                                    stuff[2], "), rep(\"#f4a582\", ",
                                                    stuff[2], "), rep(\"#fddbc7\", ",
                                                    stuff[2], "), rep(\"#f7f7f7\", ",
@@ -615,8 +615,8 @@ individualfigures <- function (
                                                    stuff[2], "), rep(\"#92c5de\", ",
                                                    stuff[2], "), rep(\"#67a9cf\", ",
                                                    stuff[2], "), rep(\"#4393c3\", ",
-                                                   stuff[2], "), rep(\"#2166ac\", ",
                                                    stuff[2], "), rep(\"#0571b0\", ",
+                                                   stuff[2], "), rep(\"#2166ac\", ",
                                                    stuff[2], "), rep(\"#053061\", ",
                                                    stuff[2], ")))")))
   )

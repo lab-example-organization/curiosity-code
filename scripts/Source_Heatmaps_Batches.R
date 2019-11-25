@@ -700,9 +700,14 @@ stuff <- c("five-by-five-Inv3k_lowHigh_Background",
            "five-by-five-vanilla_lowHigh_Background",
            "five-by-five-followUpVanilla_lowHigh_Background",
            "five-by-five-followUpInvLow1k_lowHigh_Background",
-           "five-by-five-followUpInvHigh1k_lowHigh_Background")
+           "five-by-five-followUpInvHigh1k_lowHigh_Background",
+           "five-by-five-followUpFemInvHigh1k_lowHigh_Background"#,
+          #  "tenKfiveByFive_child-lowFemInvtK/five-by-five-followUpFemHigh1k_lowHigh_Background",
+         #  "",)
+)
 
-stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
+# stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
+stuff_n_things <- array (c (1, 2, 3, 4, 5, 6, 6, 6, 6, 6), c (5,2))
 
 for (bs in 1:dim(stuff_n_things)[1]) {
   for(whaaat in 1:4) {
@@ -766,3 +771,35 @@ image(x = thing3,
 # image(x = array(c(39:63)/100, c(5,5)),
           col = colorseqmultpalette[[19]](100),
           axes = F, zlim = c(0, 1))
+
+
+
+
+
+
+
+
+# 777
+
+# x <- array(c(1:100, rep(1,100)), c(100, 2))
+
+# plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = F, xlab = "", ylab = "")
+# plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = F, xlab = "", ylab = "")
+# axis(1, c(0, 0.1, 1, 10, 100), c("0", "0.1", "1", "10", "100"),T,0,NA,F,cex.axis = 0.8, tck = 0)
+
+
+plot_that_shit <- function () {
+
+plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "")
+# axis(1, c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-0.08", "-0.02", "0.02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-11.5,NA,F,cex.axis = 0.7, tck = 0.015)
+axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-0.02", "0.02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-11.5,NA,F,cex.axis = 0.7, tck = -0.015)
+axis(1, c(50), c(""), )
+# axis(1, c(1, 8, 15, 22, 29, 36, 43, 47.5, 52, 59, 66, 73, 80, 87, 94, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-10,NA,F,cex.axis = 0.8, tck = 0) # Curiosity Range
+axis(1, c(4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5), c("", "", "", "", "", "", "-1", "1", "", "", "", "", "", "", ""),T,-10,NA,F,cex.axis = 0.3, tck = 0) # Syllable Range
+
+}
+
+c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5)
+length(c(1, 8, 15, 22, 29, 36, 43, 47.5, 52, 59, 66, 73, 80, 87, 94, 100.5))
+
+

@@ -32,6 +32,7 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "femInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
 heatmapland <- file.path("results")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemInvtK")
 # setwd("../../../../../../media/park/A443-E926/")"
 
 
@@ -191,7 +192,19 @@ all_the_runs <- extractvardirs(heatmapland,
     ### SamSex Inheritance: 4601-4650
       # "*_460[1-9]_|*_46[1-4][0-9]_|*_4650_") ###
     ### Miixed Inheritance: 4651-4700
-      "*_465[1-9]_|*_46[6-9][0-9]_|*_4700_") ###
+      # "*_465[1-9]_|*_46[6-9][0-9]_|*_4700_") ###
+
+  ### Invasion! 10k Fem_HL follow-up HIGH (biassize 5, othersize 2)
+    ### Father Inheritance: 4701-4750
+      # "*_470[1-9]_|*_47[1-4][0-9]_|*_4750_") ###
+    ### Mother Inheritance: 4751-4800
+      # "*_475[1-9]_|*_47[6-9][0-9]_|*_4800_") ###
+    ### SamSex Inheritance: 4801-4850
+      # "*_480[1-9]_|*_48[1-4][0-9]_|*_4850_") ###
+    ### Miixed Inheritance: 4851-4900
+      "*_485[1-9]_|*_48[6-9][0-9]_|*_4900_") ###
+
+
 
   # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
 
