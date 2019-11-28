@@ -400,7 +400,7 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [5501]
+simnumberstart: [5701]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:
