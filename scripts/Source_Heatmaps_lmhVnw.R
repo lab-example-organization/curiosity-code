@@ -32,8 +32,21 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "femInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
 heatmapland <- file.path("results")
-heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemInvtK")
-heatmapland <- file.path("results", "tenKfiveByFive_child-lowBothInvtK")
+
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowMalInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-highMalInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-highFemInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowBothInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-highBothInv")
+
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowMalSmolInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-highMalSmolInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemSmolInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-highFemSmolInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowBothSmolInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-highBothSmolInv")
+
 # setwd("../../../../../../media/park/A443-E926/")"
 
 
@@ -205,15 +218,15 @@ all_the_runs <- extractvardirs(heatmapland,
     ### Miixed Inheritance: 4851-4900
       # "*_485[1-9]_|*_48[6-9][0-9]_|*_4900_") ###
 
-  ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
-      ### Father Inheritance: 4901-4950
-        # "*_490[1-9]_|*_49[1-4][0-9]_|*_4950_") ###
-      ### Mother Inheritance: 4951-5000
-        # "*_495[1-9]_|*_49[6-9][0-9]_|*_5000_") ###
-      ### SamSex Inheritance: 5001-5050
-        # "*_500[1-9]_|*_50[1-4][0-9]_|*_5050_") ###
-      ### Miixed Inheritance: 5051-5100
-        # "*_505[1-9]_|*_50[6-9][0-9]_|*_5100_") ###
+  ##### ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
+  #####     ### Father Inheritance: 4901-4950
+  #####       # "*_490[1-9]_|*_49[1-4][0-9]_|*_4950_") ###
+  #####     ### Mother Inheritance: 4951-5000
+  #####       # "*_495[1-9]_|*_49[6-9][0-9]_|*_5000_") ###
+  #####     ### SamSex Inheritance: 5001-5050
+  #####       # "*_500[1-9]_|*_50[1-4][0-9]_|*_5050_") ###
+  #####     ### Miixed Inheritance: 5051-5100
+  #####       # "*_505[1-9]_|*_50[6-9][0-9]_|*_5100_") ###
 
   ### Invasion! 10k Both_HL follow-up LOW (biassize 5, othersize 2)
       ### Father Inheritance: 5101-5150
@@ -223,7 +236,7 @@ all_the_runs <- extractvardirs(heatmapland,
       ### SamSex Inheritance: 5201-5250
         # "*_520[1-9]_|*_52[1-4][0-9]_|*_5250_") ###
       ### Miixed Inheritance: 5251-5300
-        "*_525[1-9]_|*_52[6-9][0-9]_|*_5300_") ###
+        # "*_525[1-9]_|*_52[6-9][0-9]_|*_5300_") ###
 
   ### Invasion! 10k Fem_HL follow-up HIGH (biassize 5, othersize 2)
     ### Father Inheritance: 5301-5350
@@ -234,6 +247,57 @@ all_the_runs <- extractvardirs(heatmapland,
       # "*_540[1-9]_|*_54[1-4][0-9]_|*_5450_") ###
     ### Miixed Inheritance: 5451-5500
       # "*_545[1-9]_|*_54[6-9][0-9]_|*_5500_") ###
+
+  ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
+    ### Father Inheritance: 5501-5550
+      # "*_550[1-9]_|*_55[1-4][0-9]_|*_5550_") ###
+    ### Mother Inheritance: 5351-5400
+      # "*_555[1-9]_|*_55[6-9][0-9]_|*_5600_") ###
+    ### SamSex Inheritance: 5601-5650
+      # "*_560[1-9]_|*_56[1-4][0-9]_|*_5650_") ###
+    ### Miixed Inheritance: 5651-5700
+      # "*_565[1-9]_|*_56[6-9][0-9]_|*_5700_") ###
+
+  ### Invasion! 10k Mal_HL follow-up HIGH (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 5701-5750
+      # "*_570[1-9]_|*_57[1-4][0-9]_|*_5750_") ###
+    ### Mother Inheritance: 5751-5800
+      # "*_575[1-9]_|*_57[6-9][0-9]_|*_5800_") ###
+    ### SamSex Inheritance: 5801-5850
+      # "*_580[1-9]_|*_58[1-4][0-9]_|*_5850_") ###
+    ### Miixed Inheritance: 5851-5900
+      # "*_585[1-9]_|*_58[6-9][0-9]_|*_5900_") ###
+
+  ### Invasion! 10k Mal_HL follow-up LOW (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 5701-5750
+      # "*_570[1-9]_|*_57[1-4][0-9]_|*_5750_") ###
+    ### Mother Inheritance: 5751-5800
+      # "*_575[1-9]_|*_57[6-9][0-9]_|*_5800_") ###
+    ### SamSex Inheritance: 5801-5850
+      # "*_580[1-9]_|*_58[1-4][0-9]_|*_5850_") ###
+    ### Miixed Inheritance: 5851-5900
+      # "*_585[1-9]_|*_58[6-9][0-9]_|*_5900_") ###
+
+  ### Invasion! 10k Fem_HL follow-up HIGH (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 6101-6150
+      # "*_610[1-9]_|*_61[1-4][0-9]_|*_6150_") ###
+    ### Mother Inheritance: 6151-6200
+      # "*_615[1-9]_|*_61[6-9][0-9]_|*_6200_") ###
+    ### SamSex Inheritance: 6201-6250
+      # "*_620[1-9]_|*_62[1-4][0-9]_|*_6250_") ###
+    ### Miixed Inheritance: 6251-6300
+      # "*_625[1-9]_|*_62[6-9][0-9]_|*_6300_") ###
+
+  ### Invasion! 10k Fem_HL follow-up LOW (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 6301-6350
+      # "*_630[1-9]_|*_63[1-4][0-9]_|*_6350_") ###
+    ### Mother Inheritance: 6351-6400
+      # "*_635[1-9]_|*_63[6-9][0-9]_|*_6400_") ###
+    ### SamSex Inheritance: 6401-6450
+      # "*_640[1-9]_|*_64[1-4][0-9]_|*_6450_") ###
+    ### Miixed Inheritance: 6451-6500
+      # "*_645[1-9]_|*_64[6-9][0-9]_|*_6500_") ###
+
 
 
 
