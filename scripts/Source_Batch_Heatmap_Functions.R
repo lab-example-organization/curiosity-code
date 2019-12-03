@@ -238,7 +238,7 @@ heatmap_difference <- function (
     }
   }
 
-  plot_that_spectrum(file_name = file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
+  # plot_that_spectrum(file_name = file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
 
   output_heatmap <- list(
     # biassize = foldername$biassize,

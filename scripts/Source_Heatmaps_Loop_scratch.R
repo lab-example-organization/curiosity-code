@@ -696,21 +696,28 @@ source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
 
 thing <- c("male", "moth", "same", "FfFf")
 # das_dinge <- c(1,2,3,11)
-stuff <- c("five-by-five-Inv3k_lowHigh_Background",
-           "five-by-five-vanilla_lowHigh_Background",
-           "five-by-five-followUpVanilla_lowHigh_Background",
-           "five-by-five-followUpInvLow1k_lowHigh_Background",
-           "five-by-five-followUpInvHigh1k_lowHigh_Background",
-           "five-by-five-followUpFemInvLow1k_lowHigh_Background",
-           "five-by-five-followUpBothInvLow1k_lowHigh_Background",
-           "",
+stuff <- c("five-by-five-Inv3k_lowHigh_Background",                       #1
+           "five-by-five-vanilla_lowHigh_Background",                     #2
+           "five-by-five-followUpVanilla_lowHigh_Background",             #3
+           "five-by-five-followUpInvLow1k_lowHigh_Background",            #4
+           "five-by-five-followUpInvHigh1k_lowHigh_Background",           #5
+           "five-by-five-followUpFemInvLow1k_lowHigh_Background",         #6
+           "five-by-five-followUpBothInvLow1k_lowHigh_Background",        #7
+           "five-by-five-followUpFemInvHigh1k_lowHigh_Background",        #8
+           "five-by-five-followUpMalSmolInvHigh1k_lowHigh_Background",    #9
+           "five-by-five-followUpMalSmolInvLow1k_lowHigh_Background",    #10
+           "five-by-five-followUpBothInvHigh1k_lowHigh_Background",      #11
+           "five-by-five-followUpBothInvHighAgain1k_lowHigh_Background", #12
+           "five-by-five-followUpFemSmolInvHigh1k_lowHigh_Background"#,  #13
+        #    "five-by-five-followUpFemSmolInvLow1k_lowHigh_Background",  #14
           #  "tenKfiveByFive_child-lowFemInvtK/five-by-five-followUpFemHigh1k_lowHigh_Background",
          #  "",)
 )
 
 # stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
-stuff_n_things <- array (c (1, 2, 3, 4, 5, 6, 7, 7, 7, 7, 7, 7), c (6,2))
-
+# stuff_n_things <- array (c (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13), c (6,2))
+stuff_n_things <- array (c (1, 2, rep(8,7), rep(9,8), rep(10,9), rep(11,10), rep(12,11), rep(13,12), 4, 4, c(1:7), c(1:8), c(1:9), c(1:10), c(1:11), c(1:12)), c (59,2))
+stuff_n_things <- array (c(1,2), c(1,2))
 for (bs in 1:dim(stuff_n_things)[1]) {
   for(whaaat in 1:4) {
 
@@ -918,4 +925,716 @@ plot_that_spectrum <- function (file_name) {
 # c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5)
 # length(c(1, 8, 15, 22, 29, 36, 43, 47.5, 52, 59, 66, 73, 80, 87, 94, 100.5))
 
+source(file.path("scripts", "Source_Reference_Section.R"))
+referencesection("heatmaps")
+source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
+
+# heatmapland <- file.path("results", "tenKfiveByFive_child-highFemInv")
+# all_the_runs <- extractvardirs(heatmapland,
+
+### Invasion! 10k Fem_HL follow-up HIGH (biassize 5, othersize 2)
+    ### Father Inheritance: 5301-5350
+    #   "*_530[1-9]_|*_53[1-4][0-9]_|*_5350_") ###
+
+        # extractedmeans <- extractmeans(
+        #     allrundirs = all_the_runs,
+        #     dirheatmap = heatmapland,
+        #     # ordering = c(1, 3, 4, 2),
+        #     # ordering = c(1, 3, 4, 2),
+        #     source_of_params = "params.yaml")
+        #     all_the_names <- remakestring(all_the_runs, "_", ".")
+        #     names(extractedmeans) <- all_the_names
+
+        #     heatmapoutput <- list()
+
+        #     heatmapoutput <- makeheatmapfile(
+        #                     inheritance = 1, diffcurstartbias = "pop1",
+        #                     biassize = 5, othersize = 2,
+        #                     reversedruns = FALSE,
+        #                     runstyle = "lowHigh", highres = FALSE,
+        #                     extractedmeans = extractedmeans)
+
+        #     individualfigures(2,5,heatmapoutput)
+    ### Mother Inheritance: 5351-5400
+    #   "*_535[1-9]_|*_53[6-9][0-9]_|*_5400_") ###
+
+    #     extractedmeans <- extractmeans(
+    #         allrundirs = all_the_runs,
+    #         dirheatmap = heatmapland,
+    #         # ordering = c(1, 3, 4, 2),
+    #         # ordering = c(1, 3, 4, 2),
+    #         source_of_params = "params.yaml")
+    #         all_the_names <- remakestring(all_the_runs, "_", ".")
+    #         names(extractedmeans) <- all_the_names
+
+    #         heatmapoutput <- list()
+
+    #         heatmapoutput <- makeheatmapfile(
+    #                         inheritance = 2, diffcurstartbias = "pop1",
+    #                         biassize = 5, othersize = 2,
+    #                         reversedruns = FALSE,
+    #                         runstyle = "lowHigh", highres = FALSE,
+    #                         extractedmeans = extractedmeans)
+
+    #         individualfigures(2,5,heatmapoutput)
+    ### SamSex Inheritance: 5401-5450
+    #   "*_540[1-9]_|*_54[1-4][0-9]_|*_5450_") ###
+
+    #         extractedmeans <- extractmeans(
+    #             allrundirs = all_the_runs,
+    #             dirheatmap = heatmapland,
+    #             # ordering = c(1, 3, 4, 2),
+    #             # ordering = c(1, 3, 4, 2),
+    #             source_of_params = "params.yaml")
+    #             all_the_names <- remakestring(all_the_runs, "_", ".")
+    #             names(extractedmeans) <- all_the_names
+
+    #             heatmapoutput <- list()
+
+    #             heatmapoutput <- makeheatmapfile(
+    #                             inheritance = 3, diffcurstartbias = "pop1",
+    #                             biassize = 5, othersize = 2,
+    #                             reversedruns = FALSE,
+    #                             runstyle = "lowHigh", highres = FALSE,
+    #                             extractedmeans = extractedmeans)
+
+    #             individualfigures(2,5,heatmapoutput)
+
+    ### Mixed Inheritance: 5451-5500
+    #   "*_545[1-9]_|*_54[6-9][0-9]_|*_5500_") ###
+
+    #     extractedmeans <- extractmeans(
+    #         allrundirs = all_the_runs,
+    #         dirheatmap = heatmapland,
+    #         # ordering = c(1, 3, 4, 2),
+    #         # ordering = c(1, 3, 4, 2),
+    #         source_of_params = "params.yaml")
+    #         all_the_names <- remakestring(all_the_runs, "_", ".")
+    #         names(extractedmeans) <- all_the_names
+
+    #         heatmapoutput <- list()
+
+    #         heatmapoutput <- makeheatmapfile(
+    #                         inheritance = 11, diffcurstartbias = "pop1",
+    #                         biassize = 5, othersize = 2,
+    #                         reversedruns = FALSE,
+    #                         runstyle = "lowHigh", highres = FALSE,
+    #                         extractedmeans = extractedmeans)
+
+    #         individualfigures(2,5,heatmapoutput)
+
+# heatmapland <- file.path("results", "tenKfiveByFive_child-highMalSmolInv")
+# all_the_runs <- extractvardirs(heatmapland,
+
+  ### Invasion! 10k Mal_HL follow-up HIGH (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 5701-5750
+#       "*_570[1-9]_|*_57[1-4][0-9]_|*_5750_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 1, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+# individualfigures(2,5,heatmapoutput)
+
+    ### Mother Inheritance: 5751-5800
+    #   "*_575[1-9]_|*_57[6-9][0-9]_|*_5800_") ###
+
+    #       extractedmeans <- extractmeans(
+    #         allrundirs = all_the_runs,
+    #         dirheatmap = heatmapland,
+    #         # ordering = c(1, 3, 4, 2),
+    #         # ordering = c(1, 3, 4, 2),
+    #         source_of_params = "params.yaml")
+    #         all_the_names <- remakestring(all_the_runs, "_", ".")
+    #         names(extractedmeans) <- all_the_names
+
+    #         heatmapoutput <- list()
+
+    #         heatmapoutput <- makeheatmapfile(
+    #                         inheritance = 2, diffcurstartbias = "pop1",
+    #                         biassize = 5, othersize = 2,
+    #                         reversedruns = FALSE,
+    #                         runstyle = "lowHigh", highres = FALSE,
+    #                         extractedmeans = extractedmeans)
+
+    #         individualfigures(2,5,heatmapoutput)
+
+    ### SamSex Inheritance: 5801-5850
+    #   "*_580[1-9]_|*_58[1-4][0-9]_|*_5850_") ###
+
+    #       extractedmeans <- extractmeans(
+    #         allrundirs = all_the_runs,
+    #         dirheatmap = heatmapland,
+    #         # ordering = c(1, 3, 4, 2),
+    #         # ordering = c(1, 3, 4, 2),
+    #         source_of_params = "params.yaml")
+    #         all_the_names <- remakestring(all_the_runs, "_", ".")
+    #         names(extractedmeans) <- all_the_names
+
+    #         heatmapoutput <- list()
+
+    #         heatmapoutput <- makeheatmapfile(
+    #                         inheritance = 3, diffcurstartbias = "pop1",
+    #                         biassize = 5, othersize = 2,
+    #                         reversedruns = FALSE,
+    #                         runstyle = "lowHigh", highres = FALSE,
+    #                         extractedmeans = extractedmeans)
+
+    #         individualfigures(2,5,heatmapoutput)
+
+    ### Miixed Inheritance: 5851-5900
+    #   "*_585[1-9]_|*_58[6-9][0-9]_|*_5900_") ###
+
+        # extractedmeans <- extractmeans(
+        #     allrundirs = all_the_runs,
+        #     dirheatmap = heatmapland,
+        #     # ordering = c(1, 3, 4, 2),
+        #     # ordering = c(1, 3, 4, 2),
+        #     source_of_params = "params.yaml")
+        #     all_the_names <- remakestring(all_the_runs, "_", ".")
+        #     names(extractedmeans) <- all_the_names
+
+        #     heatmapoutput <- list()
+
+        #     heatmapoutput <- makeheatmapfile(
+        #                     inheritance = 11, diffcurstartbias = "pop1",
+        #                     biassize = 5, othersize = 2,
+        #                     reversedruns = FALSE,
+        #                     runstyle = "lowHigh", highres = FALSE,
+        #                     extractedmeans = extractedmeans)
+
+        #     individualfigures(2,5,heatmapoutput)
+
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowMalSmolInv")
+all_the_runs <- extractvardirs(heatmapland,
+
+  ### Invasion! 10k Mal_HL follow-up LOW (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 5901-5950
+    #   "*_590[1-9]_|*_59[1-4][0-9]_|*_5950_") ###
+
+        # extractedmeans <- extractmeans(
+        #     allrundirs = all_the_runs,
+        #     dirheatmap = heatmapland,
+        #     # ordering = c(1, 3, 4, 2),
+        #     # ordering = c(1, 3, 4, 2),
+        #     source_of_params = "params.yaml")
+            # all_the_names <- remakestring(all_the_runs, "_", ".")
+            # names(extractedmeans) <- all_the_names
+
+            # heatmapoutput <- list()
+
+            # heatmapoutput <- makeheatmapfile(
+            #                 inheritance = 1, diffcurstartbias = "pop1",
+            #                 biassize = 5, othersize = 2,
+            #                 reversedruns = FALSE,
+            #                 runstyle = "lowHigh", highres = FALSE,
+            #                 extractedmeans = extractedmeans)
+
+            # individualfigures(2,5,heatmapoutput)
+
+    ### Mother Inheritance: 5951-6000
+    #   "*_595[1-9]_|*_59[6-9][0-9]_|*_6000_") ###
+
+        # extractedmeans <- extractmeans(
+        #     allrundirs = all_the_runs,
+        #     dirheatmap = heatmapland,
+        #     # ordering = c(1, 3, 4, 2),
+        #     # ordering = c(1, 3, 4, 2),
+        #     source_of_params = "params.yaml")
+            # all_the_names <- remakestring(all_the_runs, "_", ".")
+            # names(extractedmeans) <- all_the_names
+
+            # heatmapoutput <- list()
+
+            # heatmapoutput <- makeheatmapfile(
+            #                 inheritance = 2, diffcurstartbias = "pop1",
+            #                 biassize = 5, othersize = 2,
+            #                 reversedruns = FALSE,
+            #                 runstyle = "lowHigh", highres = FALSE,
+            #                 extractedmeans = extractedmeans)
+
+            # individualfigures(2,5,heatmapoutput)
+
+    ### SamSex Inheritance: 6001-6050
+# all_the_runs <- extractvardirs(heatmapland,
+#       "*_600[1-9]_|*_60[1-4][0-9]_|*_6050_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 3, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### Miixed Inheritance: 6051-6100
+#  all_the_runs <- extractvardirs(heatmapland,
+#      "*_605[1-9]_|*_60[6-9][0-9]_|*_6100_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 11, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+
+# heatmapland <- file.path("results", "tenKfiveByFive_child-highBothInv")
+# all_the_runs <- extractvardirs(heatmapland,
+
+#   ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
+#     ### Father Inheritance: 5501-5550
+#       "*_550[1-9]_|*_55[1-4][0-9]_|*_5550_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 1, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### Mother Inheritance: 5351-5400
+#       all_the_runs <- extractvardirs(heatmapland,
+# "*_555[1-9]_|*_55[6-9][0-9]_|*_5600_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 2, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### SamSex Inheritance: 5601-5650
+# all_the_runs <- extractvardirs(heatmapland,
+#       "*_560[1-9]_|*_56[1-4][0-9]_|*_5650_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 3, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### Miixed Inheritance: 5651-5700
+# all_the_runs <- extractvardirs(heatmapland,
+#       "*_565[1-9]_|*_56[6-9][0-9]_|*_5700_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 11, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+
+# heatmapland <- file.path("results", "tenKfiveByFive_49-51s - bothHigh?")
+# all_the_runs <- extractvardirs(heatmapland,
+
+# ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
+#       ### Father Inheritance: 4901-4950
+#         "*_490[1-9]_|*_49[1-4][0-9]_|*_4950_") ###
+
+#           extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 1, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#       ### Mother Inheritance: 4951-5000
+# all_the_runs <- extractvardirs(heatmapland,
+#         "*_495[1-9]_|*_49[6-9][0-9]_|*_5000_") ###
+
+#           extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 2, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#       ### SamSex Inheritance: 5001-5050
+# all_the_runs <- extractvardirs(heatmapland,
+#         "*_500[1-9]_|*_50[1-4][0-9]_|*_5050_") ###
+
+#           extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 3, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#       ### Miixed Inheritance: 5051-5100
+# all_the_runs <- extractvardirs(heatmapland,
+#         "*_505[1-9]_|*_50[6-9][0-9]_|*_5100_") ###
+
+#           extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 11, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+
+# heatmapland <- file.path("results", "tenKfiveByFive_child-highFemSmolInv")
+# all_the_runs <- extractvardirs(heatmapland,
+
+#   ### Invasion! 10k Fem_HL follow-up HIGH (Small Invasion Population Size) (biassize 5, othersize 2)
+#     ### Father Inheritance: 6101-6150
+#       "*_610[1-9]_|*_61[1-4][0-9]_|*_6150_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 1, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### Mother Inheritance: 6151-6200
+# all_the_runs <- extractvardirs(heatmapland,
+#       "*_615[1-9]_|*_61[6-9][0-9]_|*_6200_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 2, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### SamSex Inheritance: 6201-6250
+# all_the_runs <- extractvardirs(heatmapland,
+#       "*_620[1-9]_|*_62[1-4][0-9]_|*_6250_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+#             all_the_names <- remakestring(all_the_runs, "_", ".")
+#             names(extractedmeans) <- all_the_names
+
+#             heatmapoutput <- list()
+
+#             heatmapoutput <- makeheatmapfile(
+#                             inheritance = 3, diffcurstartbias = "pop1",
+#                             biassize = 5, othersize = 2,
+#                             reversedruns = FALSE,
+#                             runstyle = "lowHigh", highres = FALSE,
+#                             extractedmeans = extractedmeans)
+
+#             individualfigures(2,5,heatmapoutput)
+
+#     ### Miixed Inheritance: 6251-6300
+# all_the_runs <- extractvardirs(heatmapland,
+#       "*_625[1-9]_|*_62[6-9][0-9]_|*_6300_") ###
+
+#         extractedmeans <- extractmeans(
+#             allrundirs = all_the_runs,
+#             dirheatmap = heatmapland,
+#             # ordering = c(1, 3, 4, 2),
+#             # ordering = c(1, 3, 4, 2),
+#             source_of_params = "params.yaml")
+            # all_the_names <- remakestring(all_the_runs, "_", ".")
+            # names(extractedmeans) <- all_the_names
+
+            # heatmapoutput <- list()
+
+            # heatmapoutput <- makeheatmapfile(
+            #                 inheritance = 11, diffcurstartbias = "pop1",
+            #                 biassize = 5, othersize = 2,
+            #                 reversedruns = FALSE,
+            #                 runstyle = "lowHigh", highres = FALSE,
+            #                 extractedmeans = extractedmeans)
+
+            # individualfigures(2,5,heatmapoutput)
+
+
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemSmolInv")
+all_the_runs <- extractvardirs(heatmapland,
+
+  ### Invasion! 10k Fem_HL follow-up LOW (Small Invasion Population Size) (biassize 5, othersize 2)
+    ### Father Inheritance: 6301-6350
+      "*_630[1-9]_|*_63[1-4][0-9]_|*_6350_") ###
+
+        extractedmeans <- extractmeans(
+            allrundirs = all_the_runs,
+            dirheatmap = heatmapland,
+            # ordering = c(1, 3, 4, 2),
+            # ordering = c(1, 3, 4, 2),
+            source_of_params = "params.yaml")
+            all_the_names <- remakestring(all_the_runs, "_", ".")
+            names(extractedmeans) <- all_the_names
+
+            heatmapoutput <- list()
+
+            heatmapoutput <- makeheatmapfile(
+                            inheritance = 1, diffcurstartbias = "pop1",
+                            biassize = 5, othersize = 2,
+                            reversedruns = FALSE,
+                            runstyle = "lowHigh", highres = FALSE,
+                            extractedmeans = extractedmeans)
+
+            individualfigures(2,5,heatmapoutput)
+
+    ### Mother Inheritance: 6351-6400
+all_the_runs <- extractvardirs(heatmapland,
+      "*_635[1-9]_|*_63[6-9][0-9]_|*_6400_") ###
+
+        extractedmeans <- extractmeans(
+            allrundirs = all_the_runs,
+            dirheatmap = heatmapland,
+            # ordering = c(1, 3, 4, 2),
+            # ordering = c(1, 3, 4, 2),
+            source_of_params = "params.yaml")
+            all_the_names <- remakestring(all_the_runs, "_", ".")
+            names(extractedmeans) <- all_the_names
+
+            heatmapoutput <- list()
+
+            heatmapoutput <- makeheatmapfile(
+                            inheritance = 2, diffcurstartbias = "pop1",
+                            biassize = 5, othersize = 2,
+                            reversedruns = FALSE,
+                            runstyle = "lowHigh", highres = FALSE,
+                            extractedmeans = extractedmeans)
+
+            individualfigures(2,5,heatmapoutput)
+
+    ### SamSex Inheritance: 6401-6450
+all_the_runs <- extractvardirs(heatmapland,
+      "*_640[1-9]_|*_64[1-4][0-9]_|*_6450_") ###
+
+        extractedmeans <- extractmeans(
+            allrundirs = all_the_runs,
+            dirheatmap = heatmapland,
+            # ordering = c(1, 3, 4, 2),
+            # ordering = c(1, 3, 4, 2),
+            source_of_params = "params.yaml")
+            all_the_names <- remakestring(all_the_runs, "_", ".")
+            names(extractedmeans) <- all_the_names
+
+            heatmapoutput <- list()
+
+            heatmapoutput <- makeheatmapfile(
+                            inheritance = 3, diffcurstartbias = "pop1",
+                            biassize = 5, othersize = 2,
+                            reversedruns = FALSE,
+                            runstyle = "lowHigh", highres = FALSE,
+                            extractedmeans = extractedmeans)
+
+            individualfigures(2,5,heatmapoutput)
+
+    ### Miixed Inheritance: 6451-6500
+all_the_runs <- extractvardirs(heatmapland,
+      "*_645[1-9]_|*_64[6-9][0-9]_|*_6500_") ###
+
+        extractedmeans <- extractmeans(
+        allrundirs = all_the_runs,
+        dirheatmap = heatmapland,
+        # ordering = c(1, 3, 4, 2),
+        # ordering = c(1, 3, 4, 2),
+        source_of_params = "params.yaml")
+        all_the_names <- remakestring(all_the_runs, "_", ".")
+        names(extractedmeans) <- all_the_names
+
+        heatmapoutput <- list()
+
+        heatmapoutput <- makeheatmapfile(
+                        inheritance = 11, diffcurstartbias = "pop1",
+                        biassize = 5, othersize = 2,
+                        reversedruns = FALSE,
+                        runstyle = "lowHigh", highres = FALSE,
+                        extractedmeans = extractedmeans)
+
+        individualfigures(2,5,heatmapoutput)
+
+
+#   extractedmeans <- extractmeans(
+#   allrundirs = all_the_runs,
+#   dirheatmap = heatmapland,
+#   # ordering = c(1, 3, 4, 2),
+#   # ordering = c(1, 3, 4, 2),
+#   source_of_params = "params.yaml")
+# all_the_names <- remakestring(all_the_runs, "_", ".")
+# names(extractedmeans) <- all_the_names
+
+# heatmapoutput <- list()
+
+# heatmapoutput <- makeheatmapfile(
+#                 inheritance = 1, diffcurstartbias = "pop1",
+#                 biassize = 5, othersize = 2,
+#                 reversedruns = FALSE,
+#                 runstyle = "lowHigh", highres = FALSE,
+#                 extractedmeans = extractedmeans)
+
+# individualfigures(2,5,heatmapoutput)
