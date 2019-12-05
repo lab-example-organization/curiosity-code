@@ -11,52 +11,76 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
 ) {
 
     path_results <- file.path("results")
-    twoHundyKdir <- list.files(path_results, pattern = stack_directory)
-    twoHundyK_dir <- list.files(file.path(path_results, twoHundyKdir))
+    dirStackDir <- list.files(path_results, pattern = stack_directory)
+    twoHundyKdirs <- list.files(file.path(path_results, dirStackDir))
     # that_stacked_object <- array (0, c(400, 157, 2, 50))
     # dimnames(that_stacked_object) <- list("individuals", "traits", "population", "reps", "inheritance_pattern", "curstart_patterns")
-    for hundyDir in 1:length(twoHundyK_dir) {
-        # hundyDir <- 2
+    for oneSimsDir in 1:length(twoHundyKdirs) {
+        # oneSimsDir <- 2 ### 1:200
 
-        if (hundyDir == 1) {that_stacked_object <- array (0, c (400, 157, 2, 50))}
+        if (oneSimsDir == 1) {that_stacked_object <- array (0, c (400, 2, 50))}
 
-        path_dirs <- file.path(path_results, twoHundyKdir, twoHundyK_dir[hundyDir], "variable_store")
+        path_dirs <- file.path(path_results, dirStackDir, twoHundyKdirs[oneSimsDir], "variable_store")
 
-        twoHundyReps <- list.files(file.path(path_dirs))
+        repDirs <- list.files(file.path(path_dirs))
 
-        for hundyRun in 1:length(twoHundyReps) {
-            # hundyRun <- 1
-            # path_runs <- file.path(path_dirs, twoHundyRuns[hundyRun], "variable_store")
+        for singleRep in 1:length(repDirs) {
+            # singleRep <- 1 ### 1:50
+            # path_runs <- file.path(path_dirs, twoHundyRuns[singleRep], "variable_store")
 
             # twoHundyVarStore <- list.files(path_runs)
 
             # for hundyVar in 1:length(twoHundyVarStore) {
                 # hundyVar <- 1
-                path_vars <- file.path(path_dirs, twoHundyReps[hundyRun])
+            path_vars <- file.path(path_dirs, repDirs[singleRep])
 
-                twoHundyEndData <- list.files(file.path(path_vars), pattern = "end*")
+            # twoHundyEndData <- list.files(file.path(path_vars), pattern = "end*")
 
-                end_cursity <- readRDS (file.path(path_vars, "end_cursty.RData"))
-                    # > dim(end_cursity)
-                    # [1] 400   2
-                end_sylreps <- readRDS (file.path(path_vars, "end_sylbls.RData"))
-                    # > dim(end_sylreps)
-                    # [1] 400 156   2
-                # variance_file_path <- file.path("results", )
+            end_cursity <- readRDS (file.path(path_vars, "end_cursty.RData"))
+                # > dim(end_cursity)
+                # [1] 400   2
 
-                end_data <- array (0, c (400, 157, 2))
-                end_data[,1:156,] <- end_sylreps
-                end_data[,157,] <- end_cursity
+# For the time being, forget about sylreps.
 
-                that_stacked_object[,,,] <- end_data
+#             end_sylreps <- readRDS (file.path(path_vars, "end_sylbls.RData"))
+#                 # > dim(end_sylreps)
+#                 # [1] 400 156   2
+#             end_sylreps_mean <- array(sapply(1:2, function(x) mean(which(end_sylreps[1,,x] == 1))), c(1,2))
+#             end_sylreps_varn <- array(sapply(1:2, function(x) var(which(end_sylreps[1,,x] == 1)/156)*156), c(1,2))
+#             list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
+#             sapply(X, FUN, ..., simplify = TRUE, USE.NAMES = TRUE)
+#             thing <- sapply(1:number_of_runs, function(x) str_split(allrundirs[x], "_")[[1]][2])
+#             variance_file_path <- file.path("results", )
+
+#             # if (singleRep == 1) {end_data <- array (0, c (400, 157, 2))}
+# # var(which(end_sylreps[1,,1] == 1)/156)*156
+# # mean(which(end_sylreps[1,,1] == 1))
+
+#             that_stacked_object[,1,,singleRep] <- end_sylreps_mean
+            that_stacked_object[,,singleRep] <- end_cursity
+
+            # that_stacked_object[,,,singleRep] <- end_data
             # }
         }
 
+
         # this is where the var() and mean() functions will be called :P
+        # variance_between_sims
+
+        for (pop in 1:2) {
+            for (sex in 1:2) {
+
+            }
+        }
+            variance_between_sims <- sapply(1:50, function(x) var(that_stacked_object[,,x]))
+            # apply mean() across rows (dim 1) of that_stacked_object, make a data structure to hold all the reps' , then var() on whichever object the mean() results were saved to.
+        # variance_within_sims ### Or maybe "variance_between_reps"?
+            # apply var()
+            varn_curiosities[] <-
 
     }
 
-    return (that_stacked_object)
+    return (output_obec)
 
 }
 # input:
