@@ -7,6 +7,8 @@
 finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     # curiosity_or_sylrep = "curiosity",
     # heatmap_stack = TRUE,
+    pop_size = 400,
+    num_pop = 2,
     stack_directory = "child-lowMalInv"
 ) {
 
@@ -18,7 +20,7 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     for oneSimsDir in 1:length(twoHundyKdirs) {
         # oneSimsDir <- 2 ### 1:200
 
-        if (oneSimsDir == 1) {that_stacked_object <- array (0, c (400, 2, 50))}
+        if (oneSimsDir == 1) {that_stacked_object <- array (0, c (pop_size, num_pop, 50))}
 
         path_dirs <- file.path(path_results, dirStackDir, twoHundyKdirs[oneSimsDir], "variable_store")
 
@@ -66,13 +68,18 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
 
         # this is where the var() and mean() functions will be called :P
         # variance_between_sims
-
-        for (pop in 1:2) {
+        variance_between_sims <- array(0, c(2, 2, 50))
+        variance_between_sims <- array(0, c(2, 2))
+        variance_within_sims <- array(0, c(2, 2, 50))
+        for (pop in 1:num_pop) {
             for (sex in 1:2) {
-
+                #
+                variance_between_sims[pop, sex,] <- sapply(1:50, function(x) mean(that_stacked_object[1 + ((sex - 1)*(pop_size/2)):(sex*(pop_size/2)),pop,x]))
+                variance_btween_sims[pop, sex] <- var(variance_between_sims[pop, sex,])
+                variance_within_sims[pop, sex,] <- sapply(1:50, function(x) var(that_stacked_object[1 + ((sex - 1)*(pop_size/2)):(sex*(pop_size/2)),pop,x]))
             }
         }
-            variance_between_sims <- sapply(1:50, function(x) var(that_stacked_object[,,x]))
+            # variance_between_sims <- sapply(1:50, function(x) var(that_stacked_object[,,x]))
             # apply mean() across rows (dim 1) of that_stacked_object, make a data structure to hold all the reps' , then var() on whichever object the mean() results were saved to.
         # variance_within_sims ### Or maybe "variance_between_reps"?
             # apply var()
@@ -80,7 +87,7 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
 
     }
 
-    return (output_obec)
+    return (output_object)
 
 }
 # input:
