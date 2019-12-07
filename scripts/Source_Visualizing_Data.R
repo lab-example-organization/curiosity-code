@@ -1,6 +1,6 @@
 concatenate_data <- function(specific_run,
                                 converteddata = converted_data,
-                                parms = params, 
+                                parms = params,
                                 data_dir = multirun_folderlist) {
   # This function takes
   data_dir <- data_dir[specific_run]
@@ -8,9 +8,9 @@ concatenate_data <- function(specific_run,
   # knts = nts*1000
   # cnts = nts*100
   # dnts = nts*10
-  
+
   numslice <- 1000/parms$recordsimplifyfactor # number of slices to take from 1000 timesteps
-  
+
   npp <- parms$num_pop
   ops <- parms$one_pop_singers
   snm <- parms$sylnum
@@ -19,10 +19,10 @@ concatenate_data <- function(specific_run,
   #               "sylrep_dstbxn",
   #               "curity_mean_t",
   #               "curity_repert")
-  
+
   converted_names = c("sylrepz", "sdstbxn", "cursity", "curhist")
-    
-  
+
+
   sylrepz = array (0, c (2, npp,  nts * numslice))
   sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
   cursity = array (0, c (12, npp,  nts * numslice))
@@ -48,7 +48,7 @@ concatenate_data <- function(specific_run,
       # specificchunk <- 1
       sc <- (1 + ((specificchunk - 1) * numslice)) # output_chunk_start
       ec <- specificchunk * numslice # output_chunk_end
-          
+
       converteddata[[specific_run]][[1]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_rowcol.RData")))
 
       converteddata[[specific_run]][[2]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
@@ -103,10 +103,10 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   sylsub_palette <- colorRampPalette(c("#5b2c6f00", "#abebc6"))
   best_colorbrewpal <- colorRampPalette(c("#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f")) # 4-class orrd
   diverge_colbruplt <- colorRampPalette(c("#f1a340", "#f7f7f7", "#998ec3"))
-  
-  
+
+
   ### SEQUENTIAL, MULTI-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
-  
+
   colorseqmultpalette <- matrix (data = c (c ("#e5f5f9", "#99d8c9", "#2ca25f"), # 3-class bugn
                                           c ("#e0ecf4", "#9ebcda", "#8856a7"), # 3-class bupu
                                           c ("#e0f3db", "#a8ddb5", "#43a2ca"), # 3-class gnbu
@@ -121,10 +121,10 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
                                           c ("#ffeda0", "#feb24c", "#f03b20")), # 3-class ylorrd
                                 nrow = 12, ncol = 3,byrow = T,dimnames = list (
                                   c ("bugn", "bupu", "gnbu", "orrd", "pubu", "pubugn", "purd",
-                                    "rdpu", "ylgn", "ylgnbu", "ylorbr", "ylorrd"), 
+                                    "rdpu", "ylgn", "ylgnbu", "ylorbr", "ylorrd"),
                                   c ("Light first color", "Middle color", "Dark final color")))
-  
-  
+
+
   colorseqmultpalette <- list (bugn = colorRampPalette (c ("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class bugn
                               bupu = colorRampPalette (c ("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class bupu
                               gnbu = colorRampPalette (c ("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class gnbu
@@ -137,10 +137,10 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
                               ylgnbu = colorRampPalette (c ("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class ylgnbu
                               ylorbr = colorRampPalette (c ("#fff7bc", "#fec44f", "#d95f0e")), # 3-class ylorbr
                               ylorrd = colorRampPalette (c ("#ffeda0", "#feb24c", "#f03b20")))
-  
-  
+
+
   ### SEQUENTIAL, SINGLE-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
-  
+
   colorseqsingpalette <- matrix (data = c (c ("#deebf7", "#9ecae1", "#3182bd"), # 3-class blues
                                           c ("#e5f5e0", "#a1d99b", "#31a354"), # 3-class greens
                                           c ("#f0f0f0", "#bdbdbd", "#636363"), # 3-class greys
@@ -148,18 +148,18 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
                                           c ("#efedf5", "#bcbddc", "#756bb1"), # 3-class purples
                                           c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds
                                 nrow = 6, ncol = 3,byrow = T,dimnames = list(
-                                  c ("blue", "green", "grey", "orange", "purple", "red"), 
+                                  c ("blue", "green", "grey", "orange", "purple", "red"),
                                   c ("Light first color", "Middle color", "Dark final color")))
-  
-  
+
+
   sexes_lc <- c ("male", "female")
   sexes_uc <- c ("Male", "Female")
   popgroup <- c ("Pop_1_male","Pop_1_female","Pop_2_male","Pop_2_female") #, "Pop_3_male", "Pop_3_female", "Pop_4_male", "Pop_4_female"
-  plot_info <- list (sylnum_palette = sylnum_palette, sylsub_palette = sylsub_palette, 
-                    datez = datez, run_name = run_name, sexes_lc = sexes_lc, sexes_uc = sexes_uc, 
-                    popgroup = popgroup, colorseqmultpalette = colorseqmultpalette, 
+  plot_info <- list (sylnum_palette = sylnum_palette, sylsub_palette = sylsub_palette,
+                    datez = datez, run_name = run_name, sexes_lc = sexes_lc, sexes_uc = sexes_uc,
+                    popgroup = popgroup, colorseqmultpalette = colorseqmultpalette,
                     colorseqsingpalette = colorseqsingpalette, best_colorbrewpal = best_colorbrewpal)
-  
+
   return (plot_info)
 }
 
@@ -210,12 +210,12 @@ figure_maker <- function (parameters, converted_data, plot_info, population, q_s
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
-                                  ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), 
+                                  ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))),
         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
     eval(parse(text=stuff))
     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
     dev.off()
-    
+
     meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
     stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_mean_repertoire_size_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
@@ -225,12 +225,12 @@ figure_maker <- function (parameters, converted_data, plot_info, population, q_s
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
-                                  ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), 
+                                  ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))),
         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
     eval(parse(text=stuff))
     lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
     dev.off()
-    
+
   }
 }
 
@@ -242,54 +242,54 @@ summary_statistics <- function(parameters, converted_data, plot_info, population
     print(mean(converted_data$sylrepz[sex, population,
     (num_timesteps / parameters$recordsimplifyfactor-1):num_timesteps / parameters$recordsimplifyfactor]))
     print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " rep size - avg over last 5% of timesteps"))
-    print(mean(converted_data$sylrepz[sex, population, 
+    print(mean(converted_data$sylrepz[sex, population,
     (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
     print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " curiosity - avg over last 1% of timesteps"))
-    print(mean(converted_data$cursity[sex, population, 
+    print(mean(converted_data$cursity[sex, population,
     (num_timesteps / parameters$recordsimplifyfactor-1):num_timesteps / parameters$recordsimplifyfactor]))
     print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " curiosity - avg over last 5% of timesteps"))
-    print(mean(converted_data$cursity[sex, population, 
+    print(mean(converted_data$cursity[sex, population,
     (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
-    sink() 
+    sink()
   }
 }
 
 
-min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist, 
-                         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, 
+min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist,
+                         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist) {
   nrowsminsmaxes <- 14
   mins_n_maxes <- array(0,c(nrowsminsmaxes,parameters$num_pop,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
-  mn_mx_container <- c("min", "max") # 3rd-dim-dependent --- 
+  mn_mx_container <- c("min", "max") # 3rd-dim-dependent ---
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectsubset[k]])
   figuresubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2) # row-dependent --- k
   objectsubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2) # row-dependent --- k
-  
+
   for(j in 1:parameters$num_pop) {
     for(k in 1:nrowsminsmaxes ) {
       for(L in 1:2) {
         # This is for min (1) and max (2)
         container <- vector("numeric", number_of_runs)
-        
+
         for(i in 1:number_of_runs) {
           #container[i] <- min(eval(parse(text=paste0(objectnames, "list[[", i, "]][", subset, ", ", j, ",]"))))
           eval(parse(text=paste0("container[i] <- ", mn_mx_container[L], "(", paste0(objectnames[objectsubset[k]], "list[[", i, "]][", figuresubset[k], ", ", j, ",])"))))
         }
-        
+
         eval(parse(text=paste0("mins_n_maxes[k,j,L] <- ", mn_mx_container[L], "(container)")))
       }
     }
     #thing_to_evalparse <- paste0("mins_n_maxes[," ,j, ",] <- min(container)")
   }
-  
+
   return(mins_n_maxes)
 }
 
 
 curiosity_figures <- function(parameters, number_of_runs, population, cursitylist, plot_info, mins_n_maxes, saving_dir = multirun_directory) {
   figure_retainer <- c(3,10,4,5,6,7,8,9,11)
-  
-  filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop", 
+
+  filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop",
                           "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
                           "_AC_replaced_f_pop", "_cur_inh_attempts")
   plot_title_retainer <- c(" Mate Selection Chances", " Tutor Selection Chances", " Father AC", " Mother AC",
@@ -302,25 +302,25 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, filename_retainer[individual_figures], population, ".png")
     miny <- mins_n_maxes[individual_figures,population,1]
     maxy <- mins_n_maxes[individual_figures,population,2]
-    
+
     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(miny, maxy), xaxt="n")
-    axis(side = 1, 
+    axis(side = 1,
           at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]),
                                   ((length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]))/10))),
           labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
-    
+
     eval(parse(text=stuff))
     lines(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,],col="black", cex=0.2)
     dev.off()
 
-  }  
+  }
 }
 
 
 simple_plots <- function(parameters, plot_info = plot_info, converted_data = converted_data, extra_lines = FALSE,
-                         number_of_runs=number_of_runs, cursitylist = cursitylist, 
-                         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, 
+                         number_of_runs=number_of_runs, cursitylist = cursitylist,
+                         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory) {
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
   if(extra_lines == FALSE) {
@@ -339,18 +339,18 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "sex_dependent == TRUE", "_mean_curiosity_-_pop_", T, T, "Pop", "s - Mean Curiosity", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sdstbxn", "sex_dependent == TRUE", "_sylnum_pop_", T, T, "Pop", "s Sylnum", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "curhist", "sex_dependent == TRUE", "_curiosity_bins_pop_", T, T, "Pop", "s Curiosity Bin", number_of_runs = number_of_runs)
-      
+
       summary_statistics(parameters = parameters, converted_data, plot_info, population)
     }
   } else {
     for(population in 1:parameters$num_pop) {
-      
-      curiosity_figures(parameters = parameters, number_of_runs = number_of_runs, 
-                        population = population, cursitylist = cursitylist, plot_info = plot_info, 
+
+      curiosity_figures(parameters = parameters, number_of_runs = number_of_runs,
+                        population = population, cursitylist = cursitylist, plot_info = plot_info,
                         mins_n_maxes = mins_n_maxes, saving_dir = saving_dir)
-      
+
       for(sex in 1:2) {
-        
+
         meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
         stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_mean_repertoire_size_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
@@ -359,12 +359,12 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
         png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
         axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
-                                      ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), 
+                                      ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))),
               labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
         eval(parse(text=stuff))
         lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off()
-        
+
         meanz <- cursitylist[[number_of_runs + 1]][sex,population,]
         stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_mean_curiosity_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
@@ -373,13 +373,13 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
         png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
         plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
         axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
-                                      ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))), 
+                                      ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))),
               labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
         eval(parse(text=stuff))
         lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off()
-        
-        
+
+
         meanz <- sdstbxnlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
         file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
         png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
@@ -388,8 +388,8 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
         axis(2, tck=-0.05, at=c(seq.int(0,1,(1/12))),labels=c(seq.int(0,1,(1/12))*156), col.axis="black", las=2)
         minor.tick(nx=4, ny=4.8, tick.ratio=1, x.args = list(), y.args = list())
         dev.off()
-        
-        
+
+
         meanz <- curhistlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
         file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_curiosity_bins_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
         png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
@@ -398,22 +398,22 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
         axis(2, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*20), col.axis="black", las=2)
         minor.tick(nx=4, ny=4, tick.ratio=1, x.args = list(), y.args = list())
         dev.off()
-        
+
         sink(file = paste0(saving_dir, plot_info$datez, plot_info$run_name, "_Summary_Statistics"), append = TRUE)
         print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " rep size - avg over last 1% of timesteps"))
-        print(mean(sylrepzlist[[number_of_runs + 1]][sex, population, 
+        print(mean(sylrepzlist[[number_of_runs + 1]][sex, population,
           ((num_timesteps / parameters$recordsimplifyfactor-1):(num_timesteps / parameters$recordsimplifyfactor))]))
         print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " rep size - avg over last 5% of timesteps"))
         print(mean(sylrepzlist[[number_of_runs + 1]][sex, population,
           (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
         print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " curiosity - avg over last 1% of timesteps"))
-        print(mean(cursitylist[[number_of_runs + 1]][sex, population, 
+        print(mean(cursitylist[[number_of_runs + 1]][sex, population,
           (num_timesteps / parameters$recordsimplifyfactor-1):num_timesteps / parameters$recordsimplifyfactor]))
         print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " curiosity - avg over last 5% of timesteps"))
-        print(mean(cursitylist[[number_of_runs + 1]][sex, population, 
+        print(mean(cursitylist[[number_of_runs + 1]][sex, population,
           (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
         sink()
-        
+
       }
     }
   }
