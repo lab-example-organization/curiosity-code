@@ -117,6 +117,17 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
 
 }
 
+# stuff <- readRDS(file.path("results", "variance_heatmap_output", "child-noInv.RData"))
+
+# dimnames(stuff) <- list(c("vLowMalC","lowMalC","midMalC","highMalC","vHighMalC"),
+                        # c("vLowFemC","lowFemC","midFemC","highFemC","vHighFemC"),
+                        # c("pop1Sex1","pop1Sex2","pop2Sex1","pop2Sex2"),
+                        # c("LowBG","HighBG"),
+                        # c("varBetween","carWithin"),
+                        # c("curInhMale","curInhMoth","curInhSame","curInhFfFf"))
+
+
+
 # things_need_doin <- c("parent-noInv", "child-noInv", "child-highMalInv", "child-lowMalInv", "child-lowFemInv", "child-highFemInv", "child-highMalSmolInv", "child-lowMalSmolInv", "child-highBothInv", "child-lowBothInv", "child-highFemSmolInv", "child-lowFemSmolInv")
 
 # for (thing in 1:length(things_need_doin)) {
