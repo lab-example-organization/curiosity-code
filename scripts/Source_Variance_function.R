@@ -133,6 +133,17 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
 # for (thing in 1:length(things_need_doin)) {
 #     finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = things_need_doin[thing])
 # }
+for (ordering in 1:length (things_need_doin)) {
+    foldername <- list(
+        foldername <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering]),
+        inheritance = ,
+        diffcurstartbias,
+        biassize = 5,
+        othersize = 1
+    )
+
+    individualfigures (2,5,foldername)
+}
 
 
 # finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = "parent-noInv")
