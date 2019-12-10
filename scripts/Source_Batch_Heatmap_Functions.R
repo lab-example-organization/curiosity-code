@@ -37,7 +37,7 @@ find_the_dir <- function (
   return (final_dir) # "results/five-by-five-vanilla_lowHigh_Background/191111_slices_-_maleinh_pop1Bias"
 }
 
-plot_that_spectrum <- function (file_name) {
+plot_that_spectrum <- function (file_name, colorPalette) {
 
   x <- array(c(1:100, rep(9.5,100), rep(9.7,100), rep(9.9,100), rep(10.1,100), rep(10.3,100), rep(10.5,100), rep(10.7,100), rep(10.9,100), rep(11.1,100), rep(11.3,100)), c(100, 11))
 
@@ -72,7 +72,7 @@ plot_that_spectrum <- function (file_name) {
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 12, cex = 1, axes = F, xlab = "", ylab = "")
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 13, cex = 1, axes = F, xlab = "", ylab = "")
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 14, cex = 1, axes = F, xlab = "", ylab = "")
-  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[19]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = "Legend
+  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = "Legend
   (heatmap 1 minus heatmap 2)")
 
   # legend(x = "bottomleft", legend = c("legend", "great", "this", "aw", "fuck", "now", "what", "goddammit", "cmon", "wat", "four", "score", "and", "seven", "years", "ago", "our", "forefathers", "arrived", "and", "threw", "a", "banger", "party", "sucks"), fill = "#efedf5", col = colorseqmultpalette[[19]](23), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)

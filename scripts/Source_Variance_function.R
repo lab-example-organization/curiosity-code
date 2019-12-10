@@ -1,3 +1,7 @@
+source(file.path("scripts", "Source_Reference_Section.R"))
+referencesection("heatmaps")
+source(file.path("scripts", "Source_Heatmap_Functions.R"))
+
 # args for this function: curiosity_or_sylrep = "curiosity", heatmap_stack = TRUE, stack_directory = "tenKfiveByFive_[ET CETERA]" (only matters if heatmap_stack == TRUE)
 
 # stack_directory junk...
@@ -88,10 +92,10 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
                     #
                     variance_between_sims[pop, sex,] <- sapply(1:50, function(x) mean(that_stacked_object[(1 + ((sex - 1)*(pop_size/2))):(sex*(pop_size/2)),pop,x]))
                     variance_btween_sims[pop, sex] <- var(variance_between_sims[pop, sex,])
-                    output_object[osd_p1mc,osd_p1fc,(((pop - 1) * 2) + sex),osd_lbhb,1,osd_curh] <- variance_btween_sims[pop,sex]
+                    output_object[osd_p1mc,osd_p1fc,(((sex - 1) * 2) + pop),osd_lbhb,1,osd_curh] <- variance_btween_sims[pop,sex]
                     variance_witheen_sims[pop, sex,] <- sapply(1:50, function(x) var(that_stacked_object[(1 + ((sex - 1)*(pop_size/2))):(sex*(pop_size/2)),pop,x]))
                     variance_within_sims[pop, sex] <- mean(variance_witheen_sims[pop, sex,])
-                    output_object[osd_p1mc,osd_p1fc,(((pop - 1) * 2) + sex),osd_lbhb,2,osd_curh] <- variance_within_sims[pop,sex]
+                    output_object[osd_p1mc,osd_p1fc,(((sex - 1) * 2) + pop),osd_lbhb,2,osd_curh] <- variance_within_sims[pop,sex]
                     # output_object - dim = c(5, 5, 4, 2, 2, 4) <- 5x5 for different pop 1 curstarts, 4 for trait being measured (pop-then-sex), and 2 for low background, high background curstart. Added addn'l dim for which variance (between or within). Added addn'l dim for curinh pattern - male, moth, same, FfFf
                     # output_object[floor(oneSimsDir/5),if(oneSimsDir %% 5 != 0) {oneSimsDir %% 5} else {5}},pop,sex,LBHB,which_variance,(ceilng(oneSimsDir/50))]
                 }
@@ -123,26 +127,99 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
                         # c("vLowFemC","lowFemC","midFemC","highFemC","vHighFemC"),
                         # c("pop1Sex1","pop1Sex2","pop2Sex1","pop2Sex2"),
                         # c("LowBG","HighBG"),
-                        # c("varBetween","carWithin"),
+                        # c("varBetween","varWithin"),
                         # c("curInhMale","curInhMoth","curInhSame","curInhFfFf"))
 
+things_need_doin <- c("parent-noInv", "child-noInv", "child-highMalInv", "child-lowMalInv", "child-lowFemInv", "child-highFemInv", "child-highMalSmolInv", "child-lowMalSmolInv", "child-highBothInv", "child-lowBothInv", "child-highFemSmolInv", "child-lowFemSmolInv")
+
+for (thing in 1:length(things_need_doin)) {
+    finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = things_need_doin[thing])
+}
 
 
-# things_need_doin <- c("parent-noInv", "child-noInv", "child-highMalInv", "child-lowMalInv", "child-lowFemInv", "child-highFemInv", "child-highMalSmolInv", "child-lowMalSmolInv", "child-highBothInv", "child-lowBothInv", "child-highFemSmolInv", "child-lowFemSmolInv")
+extract_subset <- function (
+    the_file_path,
+    subsetta
+) {
 
-# for (thing in 1:length(things_need_doin)) {
-#     finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = things_need_doin[thing])
-# }
-for (ordering in 1:length (things_need_doin)) {
-    foldername <- list(
-        foldername <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering]),
-        inheritance = ,
-        diffcurstartbias,
-        biassize = 5,
-        othersize = 1
+    # This function is for when I need to pull out the subset of the variance
+    # function output that individualfigures needs to make a heatmap.
+
+    output <- readRDS(file = file.path (the_file_path))
+
+    eval(parse(text = paste0("output <- output[", subsetta, "]")))
+
+    subset_categories <- list (
+        c("LowBG","HighBG"),
+        c("varBetween","varWithin"),
+        c("curInhMale","curInhMoth","curInhSame","curInhFfFf")
     )
 
-    individualfigures (2,5,foldername)
+    # str_split(subsetta, ",")[[1]][4]
+    # str_split(subsetta, ",")[[1]][5]
+    # str_split(subsetta, ",")[[1]][6]
+
+    subset_folder <- str_replace_all (
+        the_file_path,"fullData", paste0 (
+            subset_categories[[1]][as.numeric(str_split(subsetta, ",")[[1]][4])],
+            subset_categories[[2]][as.numeric(str_split(subsetta, ",")[[1]][5])],
+            subset_categories[[3]][as.numeric(str_split(subsetta, ",")[[1]][6])]
+        )
+    )
+
+    gawd <- str_split (subset_folder, "/")
+    subset_folder <- str_remove (subset_folder, gawd[[1]][5])
+
+    if (! (dir.exists (subset_folder))) {dir.create(subset_folder)}
+
+    saveRDS(output, file = file.path (subset_folder, paste0 (gawd[[1]][4], ".RData")))
+
+    return (gawd[[1]][4])
+}
+
+things_need_doin <- c("parent-noInv", "child-noInv", "child-highMalInv", "child-lowMalInv", "child-lowFemInv", "child-highFemInv", "child-highMalSmolInv", "child-lowMalSmolInv", "child-highBothInv", "child-lowBothInv", "child-highFemSmolInv", "child-lowFemSmolInv")
+
+for (ordering in 1:length (things_need_doin)) {
+    for (sake_of_pete in 1:2) {
+        for (out_loud_crying in 1:2) {
+            for (pony in 1:4) {
+                # ordering <- 1
+                # sake_of_pete <- 1
+                # out_loud_crying <- 1
+                # pony <- 1
+                thing <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering], "fullData", paste0 (things_need_doin[ordering], ".RData"))
+                subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = paste0 ("1:5,1:5,1:4,", sake_of_pete, ",", out_loud_crying, ",", pony))
+                stuff <- file.path ("variance_heatmap_output", things_need_doin[ordering], subsets_folder)
+
+                foldername <- list(
+                    foldername = stuff,
+                    inheritance = 1,
+                    diffcurstartbias = "pop1",
+                    biassize = 5,
+                    othersize = 1
+                )
+
+                individualfigures (2,21,foldername = foldername, var = TRUE)
+            }
+        }
+    }
+    # # ordering <- 1
+    # thing <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering], "fullData", paste0 (things_need_doin[ordering], ".RData"))
+
+    # # subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = c("5:1,5:1,1:4,1,1,1"))
+    # subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = paste0 ("5:1,5:1,1:4,", sake_of_pete, ",", out_loud_crying, ",", pony))
+
+    # stuff <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering], subsets_folder)
+
+    # foldername <- list(
+    #     foldername <- stuff,
+    #     inheritance = 1,
+    #     diffcurstartbias = "pop1",
+    #     biassize = 5,
+    #     othersize = 1
+    # )
+
+    # individualfigures (2,5,foldername, var = TRUE)
 }
 
 

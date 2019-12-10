@@ -9,7 +9,7 @@ results
 source
 *.out
 .vscode
-.png
+*.png
 *.zip
 *.tar.gz
 TerminalOutput

@@ -491,7 +491,8 @@ individualfigures <- function (
   colorrange = 2, # c("relative", "absolute", "differences")
   colorpalette = 5, # Numbers correspond to specific color palettes
   foldername = heatmapoutput,
-  midpoint_size = 1 # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
+  midpoint_size = 1, # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
+  var = FALSE
 ) {
 
   # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint
@@ -620,8 +621,13 @@ individualfigures <- function (
                                                    stuff[2], "), rep(\"#0571b0\", ",
                                                    stuff[2], "), rep(\"#2166ac\", ",
                                                    stuff[2], "), rep(\"#053061\", ",
-                                                   stuff[2], ")))")))
+                                                   stuff[2], ")))"))),
+    midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
+    midpoint_but_smooshed = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7",
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7"))
   )
+
     # ("#ef8a62", "#f7f7f7", "#67a9cf"))
     # ("#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061"))
 
@@ -676,7 +682,13 @@ individualfigures <- function (
 
   # saveRDS(foldername, file.path (heatmap_sourcefolder, foldername$foldername, "foldername.RData"))
 
-  for (sxmtpop in 1:8) {
+  if (var) {
+    sexPopMetrics <- 4
+  } else {
+    sexPopMetrics <- 8
+  }
+
+  for (sxmtpop in 1:sexPopMetrics) {
     for (slice in 1:otherpopsize) {
 
       file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
@@ -727,13 +739,22 @@ individualfigures <- function (
         # dim_2 = 3
         # dim_3 = 2
 
+        if (slice == 1) {
+          image(x = temphtmparray[,,sxmtpop],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        } else {
+          image(x = temphtmparray[,,slice,sxmtpop],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        }
 
-        image(x = temphtmparray[,,slice,sxmtpop],
-          col = colorseqmultpalette[[colorpalette]](100),
-          axes = F,
-          xlab = heatmap_axes[[3]][1],
-          ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
-        )
 
         if (!(is.null(dimnames(temphtmparray)))) {
           temphtmpdimensions <- dimnames(temphtmparray)
@@ -874,6 +895,13 @@ individualfigures <- function (
 
         } else {
 
+          temptemp <- list (
+            "0-0.2",
+            "0.2-0.3",
+            "0.4-0.6",
+            "0.55-0.75",
+            "0.7-0.8"
+          )
 
           if (foldername$biassize == 2) {
             axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
