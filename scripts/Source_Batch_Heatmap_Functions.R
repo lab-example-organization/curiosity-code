@@ -37,9 +37,12 @@ find_the_dir <- function (
   return (final_dir) # "results/five-by-five-vanilla_lowHigh_Background/191111_slices_-_maleinh_pop1Bias"
 }
 
-plot_that_spectrum <- function (file_name, colorPalette) {
+source()
 
-  x <- array(c(1:100, rep(9.5,100), rep(9.7,100), rep(9.9,100), rep(10.1,100), rep(10.3,100), rep(10.5,100), rep(10.7,100), rep(10.9,100), rep(11.1,100), rep(11.3,100)), c(100, 11))
+plot_that_spectrum <- function (file_name, colorPalette, legend_scale, theme) {
+
+  # x <- array(c(1:100, rep(9.5,100), rep(9.7,100), rep(9.9,100), rep(10.1,100), rep(10.3,100), rep(10.5,100), rep(10.7,100), rep(10.9,100), rep(11.1,100), rep(11.3,100)), c(100, 11))
+  x <- array(c(1:100, rep(9.7,100), rep(10.1,100), rep(10.5,100), rep(10.9,100), rep(11.3,100), rep(11.7,100), rep(12.1,100), rep(12.5,100), rep(12.9,100), rep(13.3,100)), c(100, 11))
 
   # sink(file = file.path("source", "temp", paste0(
   #       simnumber, "_console_copy.txt")), append = TRUE, split = TRUE)
@@ -54,7 +57,7 @@ plot_that_spectrum <- function (file_name, colorPalette) {
             # paste0("slice_", slice), file_name),
             # slicedpop[3], file_name
             file_name),
-          width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+          width = 554, height = 277, units = "px", pointsize = 12, bg = "white")
 
 
 
@@ -72,10 +75,16 @@ plot_that_spectrum <- function (file_name, colorPalette) {
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 12, cex = 1, axes = F, xlab = "", ylab = "")
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 13, cex = 1, axes = F, xlab = "", ylab = "")
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 14, cex = 1, axes = F, xlab = "", ylab = "")
-  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = "Legend
-  (heatmap 1 minus heatmap 2)")
+  if (theme == "difference") {
+    title_and_stuff <- c("Legend
+(heatmap 1 minus heatmap 2)")
+  } else if (theme == "variance") {
+    title_and_stuff <- c("Legend
+(variance scale)")
+  }
 
-  # legend(x = "bottomleft", legend = c("legend", "great", "this", "aw", "fuck", "now", "what", "goddammit", "cmon", "wat", "four", "score", "and", "seven", "years", "ago", "our", "forefathers", "arrived", "and", "threw", "a", "banger", "party", "sucks"), fill = "#efedf5", col = colorseqmultpalette[[19]](23), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)
+  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = title_and_stuff)
+
   # legend(x = "bottomleft", legend = array(c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-.02", ".02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"), c(4,4)), fill = "#efedf5", col = colorseqmultpalette[[19]](16), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)
 
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 16, cex = 1, axes = F, xlab = "", ylab = "")
@@ -88,20 +97,31 @@ plot_that_spectrum <- function (file_name, colorPalette) {
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 23, cex = 1, axes = F, xlab = "", ylab = "")
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 24, cex = 1, axes = F, xlab = "", ylab = "")
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 25, cex = 1, axes = F, xlab = "", ylab = "")
+  if (legend_scale == "midpoint") {
+    # axis(1, c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-0.08", "-0.02", "0.02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-11.5,NA,F,cex.axis = 0.7, tck = 0.015)
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-4.1,NA,F,cex.axis = 0.7, tck = -0.02)
+    # axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 47.5, 53.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-.02", ".02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-12.5,NA,F,cex.axis = 0.7, tck = -0.015)
+    title(xlab = c("-1       -0.86     -0.72    -0.58     -0.44       -0.3      -0.16  -0.02  0.02    0.16       0.3        0.44        0.58       0.72     0.86           1 "), line = -3.7, cex.lab = 0.7)
 
-  # axis(1, c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-0.08", "-0.02", "0.02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-11.5,NA,F,cex.axis = 0.7, tck = 0.015)
-  axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-8.5,NA,F,cex.axis = 0.7, tck = -0.015)
-  # axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 47.5, 53.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-.02", ".02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-12.5,NA,F,cex.axis = 0.7, tck = -0.015)
-  title(xlab = c("-1     -0.86    -0.72   -0.58   -0.44     -0.3     -0.16  -0.02  0.02   0.16     0.3     0.44      0.58      0.72    0.86         1 "), line = -8, cex.lab = 0.7)
+    # axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-155", "-133", "-111", "-89", "-67", "-45", "-23", "-3", "3", "23", "45", "67", "89", "111", "133", "155"),T,-14.5,NA,F,cex.axis = 0.7, tck = 0.015)
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-7.6,NA,F,cex.axis = 0.7, tck = 0.02)
+    title(xlab = c("-155       -133       -111        -89        -67         -45        -23          -3  3            23          45          67           89         111          133       155 "), line = -8.9, cex.lab = 0.7)
 
-  # axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-155", "-133", "-111", "-89", "-67", "-45", "-23", "-3", "3", "23", "45", "67", "89", "111", "133", "155"),T,-14.5,NA,F,cex.axis = 0.7, tck = 0.015)
-  axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-12.8,NA,F,cex.axis = 0.7, tck = 0.015)
-  title(xlab = c("-155     -133     -111      -89       -67      -45      -23        -3  3         23       45        67        89       111       133      155 "), line = -14.3, cex.lab = 0.7)
+    title(xlab = c("Syllable Repertoire Differences"), line = -10, cex.lab = 0.7)
+    title(xlab = c("Curiosity Level Differences"), line = -2.5, cex.lab = 0.7)
+
+
+  } else if (legend_scale == "variance") {
+    # axis(1, c(0.5, 10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5, 100.5), c("0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1"),T,-7.6,NA,F,cex.axis = 0.7, tck = 0.015)
+    axis(1, c(0.5, 10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5, 100.5), c("", "", "", "", "", "", "", "", "", "", ""),T,-7.6,NA,F,cex.axis = 0.7, tck = 0.015)
+    title(xlab = c("0                0.1                0.2                0.3                0.4                0.5                0.6                0.7                0.8                0.9                1"), line = -9.7, cex.lab = 0.7)
+    axis(1, c(5.5, 15.5, 25.5, 35.5, 45.5, 55.5, 65.5, 75.5, 85.5, 95.5), c("0.05", "0.15", "0.25", "0.35", "0.45", "0.55", "0.65", "0.75", "0.85", "0.95"),T,-4.1,NA,F,cex.axis = 0.7, tck = -0.015)
+    # title(xlab = c("-155       -133       -111        -89        -67         -45         -23          -3  3           23           45          67          89          111          133        155 "), line = -10.3, cex.lab = 0.7)
+  }
+
 
   # c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
-  title(xlab = c("Syllable Repertoire Differences"), line = -15.3, cex.lab = 0.7)
-  title(xlab = c("Curiosity Level Differences"), line = -7, cex.lab = 0.7)
 
   # axis(1, c(50), c(""), )
   # axis(1, c(1, 8, 15, 22, 29, 36, 43, 47.5, 52, 59, 66, 73, 80, 87, 94, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-10,NA,F,cex.axis = 0.8, tck = 0) # Curiosity Range
@@ -110,6 +130,10 @@ plot_that_spectrum <- function (file_name, colorPalette) {
   # sink()
   dev.off()
 }
+
+# plot_that_spectrum (file.path ("spectra", "variance.png"), 21, "variance", "variance") ###
+
+# plot_that_spectrum (file.path ("spectra", "midpoint.png"), 19, "midpoint", "difference") ###
 
 heatmap_difference <- function (
   source_pattern = "male", # "moth", "same", "FfFf"
@@ -126,7 +150,7 @@ heatmap_difference <- function (
   UL = 10
 ) {
   if (length (source_pattern) > 1) {
-    stop ("Trying to compare things along a categorical axis? Then pick one!")
+    stop ("Trying to compare things using a category? Then pick a category!")
   }
   if (first_source_names[1] != secnd_source_names[1]) {
     if (length (first_source_names) == 1) {
