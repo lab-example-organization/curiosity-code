@@ -88,14 +88,6 @@ all_the_runs <- extractvardirs(heatmapland,
 
 
 
-
-
-  # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
-
-  # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
-  # "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
-  # "*_305[4-9]_|*_30[6][0-9]_|*_307[0-1]")      # mixinh popsplit lmh
-  # "*_307[2-9]_")      # mixinh popsplit nw
 #   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
 #   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
 #   close(connection)
@@ -137,50 +129,9 @@ all_the_names <- remakestring(all_the_runs, "_", ".")
 
 names(extractedmeans) <- all_the_names
 
-### SEPARATE SEXES (extractmeans)
-
-# all_the_MaleRuns <- c(all_the_runs[1:124], all_the_runs[248])
-# all_the_FemaleRuns <- c(all_the_runs[1], all_the_runs[125:248])
-
-# extractedFemaleMeans <- extractmeans(allrundirs = all_the_FemaleRuns, dirheatmap = heatmapland, source_of_params = "params.yaml", deeper = FALSE)
-# # all_the_names <- remakestring(all_the_FemaleRuns, "_", ".")
-# # names(extractedFemaleMeans) <- all_the_names
-# makeheatmapfile(inheritance = 5, diffcurstartbias = 2, absolute = TRUE, specialfigs = FALSE, lmhvnw = FALSE, extractedmeans = extractedFemaleMeans)
-# ## inheritance went from 5 to 9
-
-# extractedMaleMeans <- extractmeans(allrundirs = all_the_MaleRuns, dirheatmap = heatmapland, source_of_params = "params.yaml")
-# # all_the_names <- remakestring(all_the_MaleRuns, "_", ".")
-# # names(extractedMaleMeans) <- all_the_names
-# makeheatmapfile(inheritance = 5, diffcurstartbias = 1, absolute = TRUE, specialfigs = FALSE, lmhvnw = FALSE, extractedmeans = extractedMaleMeans)
-# ## inheritance went from 5 to 9
-
-### END OF SEPARATE SEXES
-
-# names(extractedMaleMeans) <- all_the_names
 
 
-# heatmapland
 
-# makeHeatmaps <- function (
-#   inheritance = 1,
-#   diffcurstartbias = 1
-# )
-
-# whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
-
-# whichbias <- c("male","female", "pop1", "pop2", "both")
-
-# whichrunstyle <- c(
-  # "lowMedHigh", ### 0-0.25, 0.25-0.5, 0.5-1 (background 0-0.25, 0.5-1)
-  # "narrowWide", ### 0.45-0.55 (background 0-0.25, 0.5-1)
-  # "lowHigh") ### 0-0.2, 0.2-0.3, 0.4-0.6, 0.55-0.75, 07-0.8 (background 0.2-0.3, 0.7-0.8)
-  # "binary") ### 0-0.18, 0.81-1 (background same)
-  # "binaryHB") ### 0-0.18, 0.81-1 (background 0.81-1)
-  # "binaryLB") ### 0-0.18, 0.81-1 (background 0-0.18)
-
-  # IFF highres,
-  # ### 0-0.18, 0.09-0.27, 0.18-0.36, 0.27-0.45, 0.36-0.54, 0.45-0.63, 0.54-0.72, 0.63-0.81, 0.72-0.9, 0.81-1
-# source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 heatmapoutput <- list()
 ### the higher-res 10k fresh invasions ("11" for 50/50 MixedInh)
@@ -198,44 +149,9 @@ heatmapoutput <- makeheatmapfile(
                 runstyle = "lowHigh", highres = FALSE,
                 extractedmeans = extractedmeans)
 
-# inheritance = 1
-# diffcurstartbias = 3
-# biassize = 5
-# othersize = 1
-# reversedruns = TRUE
-# specialfigs = TRUE
-# runstyle = "pop1"
-# highres = FALSE
-# extractedmeans = extractedmeans
-
-# # USING SOME OLD RDS FILES? USE THIS VERSION OF THE FUNCTION
-
-# heatmapoutput <- makeheatmapfile(inheritance = 3, diffcurstartbias = 3,
-#                 biassize = 10, othersize = 1,
-#                 reversedruns = TRUE, reDo = TRUE, specialfigs = TRUE,
-#                 runstyle = 1, highres = TRUE,
-#                 extractedmeans = NULL)
-
-# makeheatmapfile(inheritance = 10, diffcurstartbias = 1, absolute = TRUE, specialfigs = FALSE, lmhvnw = FALSE, extractedmeans = extractedmeans)
-# makeheatmapfile(inheritance = 10, diffcurstartbias = 2, absolute = TRUE, specialfigs = FALSE, lmhvnw = FALSE, extractedmeans = extractedmeans)
-
-# makeheatmapfile(inheritance = 11, diffcurstartbias = 3, absolute = TRUE, specialfigs = TRUE, lmhvnw = TRUE, extractedmeans = extractedmeans)
-# makeheatmapfile(inheritance = 11, diffcurstartbias = 3, absolute = TRUE, specialfigs = TRUE, lmhvnw = FALSE, extractedmeans = extractedmeans)
-# makeHeatmaps(inheritance = 1, diffcurstartbias = 1, absolute = TRUE, reDo = TRUE)
-# makeHeatmaps(inheritance = 2, diffcurstartbias = 1, absolute = TRUE, reDo = TRUE)
-# makeHeatmaps(inheritance = 1, diffcurstartbias = 2, absolute = TRUE, reDo = TRUE)
-# makeHeatmaps(inheritance = 2, diffcurstartbias = 2, absolute = TRUE, reDo = TRUE)
-
-# makeHeatmaps(inheritance = 3, diffcurstartbias = 1, absolute = TRUE, reDo = TRUE)
-# makeHeatmaps(inheritance = 3, diffcurstartbias = 2, absolute = TRUE, reDo = TRUE)
-# makeHeatmaps(inheritance = 4, diffcurstartbias = 1, absolute = TRUE, reDo = TRUE)
-# makeHeatmaps(inheritance = 4, diffcurstartbias = 2, absolute = TRUE, reDo = TRUE)
 
 
-
-
-
-  # whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
+# whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
 
 
 # individualfigures(5:10, 2, 1:2, 5)
@@ -367,11 +283,11 @@ combineeditsingles(1, 3, 1, 2, T, F)
 
 
 
-for (inhpattern in 1:4) {
-  individualfigures(inhpattern, 2)
+# for (inhpattern in 1:4) {
+#   individualfigures(inhpattern, 2)
 
-  for (spranges in 1:2) {
-    stackmultiples(inhpattern, spranges)
-  }
-}
+#   for (spranges in 1:2) {
+#     stackmultiples(inhpattern, spranges)
+#   }
+# }
 
