@@ -33,143 +33,17 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
 # heatmapland <- file.path("results")
 
-# heatmapland <- file.path("results", "tenKfiveByFive_child-lowMalInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-highMalInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemInv")
-heatmapland <- file.path("results", "tenKfiveByFive_child-highFemInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-highMalSmolInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-lowMalSmolInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-highBothInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_49-51s - bothHigh?")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-highFemSmolInv")
-
-# heatmapland <- file.path("results", "tenKfiveByFive_child-lowBothInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemSmolInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-lowBothSmolInv")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-highBothSmolInv")
+heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF2")
+# heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF3")
+# heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF4")
 
 
+# setwd("../../../../../../media/park/A443-E926/")
 
-# setwd("../../../../../../media/park/A443-E926/")"
-
-
-  # "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results
-  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results
-  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results
-  # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
-  # "*_378[5-9]_|*_379[0-9]_|*_38[0-3][0-9]_|*_384[0-2]_") ### oct22stuff
-
-
-
-# heatmapland <- file.path("results", "oct3n8results", "results")
-# heatmapland <- file.path("results", "octXresults", "results")
-# heatmapland <- file.path("results", "oct22stuff", "results")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
-#                          "results", "mixCI_10m-90f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
-#                          "results", "mixCI_25m-75f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
-#                          "results", "mixCI_40m-60f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
-#                          "results", "mixCI_60m-40f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
-#                          "results", "mixCI_75m-25f")
-# heatmapland <- file.path("..", "..", "old_stuff", "curiosity-code",
-#                          "results", "mixCI_90m-10f")
-# heatmapland <- file.path("..", "..", "190601_old_stuff", "HRSmSxLB")
-# heatmapland <- file.path("..", "..", "190601_old_stuff", "HRFfFfLB")
-
-# heatmapland <- file.path("results", "190704_SmSxHB")
-# heatmapland <- file.path("results", "190705_FfFfHB")
-
-#190601_old_stuff/HRSmSxLB/
 # heatmapland <- file.path("results", "Heatmaps")
 
 # all_the_runs <- list.files(heatmapland,
 all_the_runs <- extractvardirs(heatmapland,
-  #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
-  #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
-  # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh malebias
-  # "*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh malebias
-  # "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
-  # "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
-  # "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
-  # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_|*_1041_")   # oppinh malebias
-  # "*_794_|*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
-  ##### "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
-  ##### "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") #
-  # "*_129[0-9]_|*_13[0-9][0-9]_|*_140[0-9]_|*_141[0-4]_") # mixedCurInh - sNTn (males 90%, females 10%)
-  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_") # mixedCurInh_-_sSTf (males 75%, females 25%)
-  # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
-  # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
-  # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
-
-  # "*_253[2-9]_|*_25[4-9][0-9]_|*_26[0-9][0-9]_|*_27[0-6][0-9]_|*_277[0-9]_")      # mixCI_10m-90f
-  # "*_228[4-9]_|*_229[0-9]_|*_23[0-9][0-9]_|*_24[0-9][0-9]_|*_25[0-2][0-9]_|*_253[0-1]_")      # mixCI_25m-75f
-  # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_")      # mixCI_40m-60f
-  # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_")      # mixCI_60m-40f
-  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_")      # mixCI_75m-25f
-  #"*_27[8-9][0-9]_|*_28[0-9][0-9]_|*_29[0-9][0-9]_|*_30[0-1][0-9]_|*_302[0-7]_")      # mixCI_90m-10f
-
-  # "10k") # Carefully curated directory, contains all necessary runs and nothing else
-  # "191008") # Carefully curated directory, contains all necessary runs and nothing else
-
-  # "*_358[1-9]_") ### fathinh, 200k setup
-  # "*_359[0-8]_") ### sameinh, 200k setup
-  # "*_3599_|*_360[0-7]_") ### mixedinh55, 200k setup
-  # "*_378[5-9]_|*_379[0-3]_") ### mothinh, 200k setup
-
-  # "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results ### Father Inheritance 5x5x2 lowHigh Background
-  # "*_379[4-9]_|*_38[0-3][0-9]_|*_384[0-3]_") ### octXresults ### Mother Inheritance 5x5x2 lowHigh Background
-  # "*_365[8-9]_|*_36[6-9][0-9]_|*_370[0-7]_") ### oct3n8results ### SameSex Inheritance 5x5x2 lowHigh Background
-  # "*_370[8-9]_|*_37[1-4][0-9]_|*_375[0-7]_") ### oct3n8results ### Mixed55 Inheritance 5x5x2 lowHigh Background
-  # "*_375[8-9]_|*_37[6-7][0-9]_|*_378[0-4]_") ### octXresults
-
-
-  # 1, 2, 6, 7 - High Background
-  # 3, 8, 9, 3889-3892 - Low Background
-
-  ### 200k vanilla:
-    ### Father Inheritance: 3581-3589, 3889
-      # "*_358[3, 8, 9]_|*_3889_") ### Low Background
-      # "*_358[1, 2, 6, 7]_") ### High Background
-    ### Mother Inheritance: 3785-3793, 3890
-      # "*_3787_|*_379[2, 3]_|*_3890_") ### Low Background
-      # "*_378[5, 6]_|*_379[0, 1]_") ### High Background
-    ### SameSex Inheritance: 3590-3598, 3891
-      # "*_359[2, 7, 8]_|*_3891_") ### Low Background
-      # "*_359[0, 1, 5, 6]_") ### High Background
-    ### Mixed55 Inheritance: 3599-3607, 3892
-      # "*_360[1, 6, 7]_|*_3892_") ### Low Background
-      # "*_3599_|*_360[0, 4, 5]_") ### High Background
-  ### 200k post-inv:
-    ### Father Inheritance: 3758-3766, 3893
-      # "*_376[0, 5, 6]_|*_3893_") ### Low Background
-      # "*_375[8, 9]_|*_376[3, 4]_") ### High Background
-    ### Mother Inheritance: 3844-3852, 3894
-      # "*_3846_|*_385[1, 2]_|*_3894_") ### Low Background
-      # "*_384[4, 5, 9]_|*_3850_") ### High Background
-    ### SameSex Inheritance: 3767-3775, 3895
-      # "*_3769_|*_377[4, 5]_|*_3895_") ### Low Background
-      # "*_376[7, 8]_|*_377[2, 3]_") ### High Background
-    ### Mixed55 Inheritance: 3776-3784, 3896
-      # "*_3778_|*_378[3, 4]_|*_3896_") ### Low Background
-      # "*_377[6, 7]_|*_378[1, 2]_") ### High Background
-
-
-  ### Inv 3k; 10k total, not 200k:
-    ### Father Inheritance: 3853-3861, 3897
-      # "*_3855_|*_386[0,1]_|*_3897_") ### Low Background
-      # "*_385[3, 4, 8, 9]_") ### High Background
-    ### Mother Inheritance: 3862-3870, 3898
-      # "*_386[4, 9]_|*_3870_|*_3898_") ### Low Background
-      # "*_386[2, 3, 7, 8]_") ### High Background
-    ### SameSex Inheritance: 3871-3879, 3899
-      # "*_387[3, 8, 9]_|*_3899_") ### Low Background
-      # "*_387[1, 2, 6, 7]_") ### High Background
-    ### Mixed55 Inheritance: 3880-3888, 3900
-      # "*_388[2, 7, 8]_|*_3900_") ### Low Background
-      # "*_388[0, 1, 5, 6]_") ### High Background
 
   ### No invasion, 10k highLow (biassize 5, othersize 2)
     ### Father Inheritance: 3901-3950
@@ -181,125 +55,35 @@ all_the_runs <- extractvardirs(heatmapland,
     ## Miixed Inheritance: 4051-4100
       # "*_405[1-9]_|*_40[6-9][0-9]_|*_4100_") ###
 
-  ### No invasion, 10k highLow follow-up (biassize 5, othersize 2)
-    ### Father Inheritance: 4101-4150
-      # "*_410[1-9]_|*_41[1-4][0-9]_|*_4150_") ###
-    ### Mother Inheritance: 4151-4200
-      # "*_415[1-9]_|*_41[6-9][0-9]_|*_4200_") ###
-    ### SamSex Inheritance: 4201-4250
-      # "*_420[1-9]_|*_42[1-4][0-9]_|*_4250_") ###
-    ### Miixed Inheritance: 4251-4300
-      # "*_425[1-9]_|*_42[6-9][0-9]_|*_4300_") ###
+  ### Invasion! 10k noInv follow-up F2 (biassize 5, othersize 2)
+    ### Father Inheritance: 6501-6550
+      "*_650[1-9]_|*_65[1-4][0-9]_|*_6550_") ###
+    ### Mother Inheritance: 6551-6600
+      # "*_655[1-9]_|*_65[6-9][0-9]_|*_6600_") ###
+    ### SamSex Inheritance: 6601-6650
+      # "*_660[1-9]_|*_66[1-4][0-9]_|*_6650_") ###
+    ### Miixed Inheritance: 6651-6700
+      # "*_665[1-9]_|*_66[6-9][0-9]_|*_6700_") ###
 
-  ### Invasion! 10k highLow follow-up HIGH (biassize 5, othersize 2)
-    ### Father Inheritance: 4301-4350
-      # "*_430[1-9]_|*_43[1-4][0-9]_|*_4350_") ###
-    ### Mother Inheritance: 4351-4400
-      # "*_435[1-9]_|*_43[6-9][0-9]_|*_4400_") ###
-    ### SamSex Inheritance: 4401-4450
-      # "*_440[1-9]_|*_44[1-4][0-9]_|*_4450_") ###
-    ### Miixed Inheritance: 4451-4500
-      # "*_445[1-9]_|*_44[6-9][0-9]_|*_4500_") ###
+  ### Invasion! 10k noInv follow-up F3 (biassize 5, othersize 2)
+    ### Father Inheritance: 6701-6750
+      # "*_670[1-9]_|*_67[1-4][0-9]_|*_6750_") ###
+    ### Mother Inheritance: 6751-6800
+      # "*_675[1-9]_|*_67[6-9][0-9]_|*_6800_") ###
+    ### SamSex Inheritance: 6801-6850
+      # "*_680[1-9]_|*_68[1-4][0-9]_|*_6850_") ###
+    ### Miixed Inheritance: 6851-6900
+      # "*_685[1-9]_|*_68[6-9][0-9]_|*_6900_") ###
 
-  ### Invasion! 10k highLow follow-up LOW (biassize 5, othersize 2)
-    ### Father Inheritance: 4501-4550
-      # "*_450[1-9]_|*_45[1-4][0-9]_|*_4550_") ###
-    ### Mother Inheritance: 4551-4600
-      # "*_455[1-9]_|*_45[6-9][0-9]_|*_4600_") ###
-    ### SamSex Inheritance: 4601-4650
-      # "*_460[1-9]_|*_46[1-4][0-9]_|*_4650_") ###
-    ### Miixed Inheritance: 4651-4700
-      # "*_465[1-9]_|*_46[6-9][0-9]_|*_4700_") ###
-
-  ### Invasion! 10k Fem_HL follow-up LOW (biassize 5, othersize 2)
-    ### Father Inheritance: 4701-4750
-      # "*_470[1-9]_|*_47[1-4][0-9]_|*_4750_") ###
-    ### Mother Inheritance: 4751-4800
-      # "*_475[1-9]_|*_47[6-9][0-9]_|*_4800_") ###
-    ### SamSex Inheritance: 4801-4850
-      # "*_480[1-9]_|*_48[1-4][0-9]_|*_4850_") ###
-    ### Miixed Inheritance: 4851-4900
-      # "*_485[1-9]_|*_48[6-9][0-9]_|*_4900_") ###
-
-  ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
-      ### Father Inheritance: 4901-4950
-        # "*_490[1-9]_|*_49[1-4][0-9]_|*_4950_") ###
-      ### Mother Inheritance: 4951-5000
-        # "*_495[1-9]_|*_49[6-9][0-9]_|*_5000_") ###
-      ### SamSex Inheritance: 5001-5050
-        # "*_500[1-9]_|*_50[1-4][0-9]_|*_5050_") ###
-      ### Miixed Inheritance: 5051-5100
-        # "*_505[1-9]_|*_50[6-9][0-9]_|*_5100_") ###
-
-  ### Invasion! 10k Both_HL follow-up LOW (biassize 5, othersize 2)
-      ### Father Inheritance: 5101-5150
-        # "*_510[1-9]_|*_51[1-4][0-9]_|*_5150_") ###
-      ### Mother Inheritance: 5151-5200
-        # "*_515[1-9]_|*_51[6-9][0-9]_|*_5200_") ###
-      ### SamSex Inheritance: 5201-5250
-        # "*_520[1-9]_|*_52[1-4][0-9]_|*_5250_") ###
-      ### Miixed Inheritance: 5251-5300
-        # "*_525[1-9]_|*_52[6-9][0-9]_|*_5300_") ###
-
-  ### Invasion! 10k Fem_HL follow-up HIGH (biassize 5, othersize 2)
-    ### Father Inheritance: 5301-5350
-      # "*_530[1-9]_|*_53[1-4][0-9]_|*_5350_") ###
-    ### Mother Inheritance: 5351-5400
-      # "*_535[1-9]_|*_53[6-9][0-9]_|*_5400_") ###
-    ### SamSex Inheritance: 5401-5450
-      # "*_540[1-9]_|*_54[1-4][0-9]_|*_5450_") ###
-    ### Miixed Inheritance: 5451-5500
-      # "*_545[1-9]_|*_54[6-9][0-9]_|*_5500_") ###
-
-  ### Invasion! 10k Both_HL follow-up HIGH (biassize 5, othersize 2)
-    ### Father Inheritance: 5501-5550
-      # "*_550[1-9]_|*_55[1-4][0-9]_|*_5550_") ###
-    ### Mother Inheritance: 5351-5400
-      # "*_555[1-9]_|*_55[6-9][0-9]_|*_5600_") ###
-    ### SamSex Inheritance: 5601-5650
-      # "*_560[1-9]_|*_56[1-4][0-9]_|*_5650_") ###
-    ### Miixed Inheritance: 5651-5700
-      # "*_565[1-9]_|*_56[6-9][0-9]_|*_5700_") ###
-
-  ### Invasion! 10k Mal_HL follow-up HIGH (Small Invasion Population Size) (biassize 5, othersize 2)
-    ### Father Inheritance: 5701-5750
-      # "*_570[1-9]_|*_57[1-4][0-9]_|*_5750_") ###
-    ### Mother Inheritance: 5751-5800
-      # "*_575[1-9]_|*_57[6-9][0-9]_|*_5800_") ###
-    ### SamSex Inheritance: 5801-5850
-      # "*_580[1-9]_|*_58[1-4][0-9]_|*_5850_") ###
-    ### Miixed Inheritance: 5851-5900
-      # "*_585[1-9]_|*_58[6-9][0-9]_|*_5900_") ###
-
-  ### Invasion! 10k Mal_HL follow-up LOW (Small Invasion Population Size) (biassize 5, othersize 2)
-    ### Father Inheritance: 5901-5950
-      # "*_590[1-9]_|*_59[1-4][0-9]_|*_5950_") ###
-    ### Mother Inheritance: 5951-6000
-      # "*_595[1-9]_|*_59[6-9][0-9]_|*_6000_") ###
-    ### SamSex Inheritance: 6001-6050
-      # "*_600[1-9]_|*_60[1-4][0-9]_|*_6050_") ###
-    ### Miixed Inheritance: 6051-6100
-      # "*_605[1-9]_|*_60[6-9][0-9]_|*_6100_") ###
-
-  ### Invasion! 10k Fem_HL follow-up HIGH (Small Invasion Population Size) (biassize 5, othersize 2)
-    ### Father Inheritance: 6101-6150
-      # "*_610[1-9]_|*_61[1-4][0-9]_|*_6150_") ###
-    ### Mother Inheritance: 6151-6200
-      # "*_615[1-9]_|*_61[6-9][0-9]_|*_6200_") ###
-    ### SamSex Inheritance: 6201-6250
-      # "*_620[1-9]_|*_62[1-4][0-9]_|*_6250_") ###
-    ### Miixed Inheritance: 6251-6300
-      # "*_625[1-9]_|*_62[6-9][0-9]_|*_6300_") ###
-
-  ### Invasion! 10k Fem_HL follow-up LOW (Small Invasion Population Size) (biassize 5, othersize 2)
-    ### Father Inheritance: 6301-6350
-      # "*_630[1-9]_|*_63[1-4][0-9]_|*_6350_") ###
-    ### Mother Inheritance: 6351-6400
-      # "*_635[1-9]_|*_63[6-9][0-9]_|*_6400_") ###
-    ### SamSex Inheritance: 6401-6450
-      # "*_640[1-9]_|*_64[1-4][0-9]_|*_6450_") ###
-    ### Miixed Inheritance: 6451-6500
-      # "*_645[1-9]_|*_64[6-9][0-9]_|*_6500_") ###
+  ### Invasion! 10k noInv follow-up F4 (biassize 5, othersize 2)
+    ### Father Inheritance: 6901-6950
+      # "*_690[1-9]_|*_69[1-4][0-9]_|*_6950_") ###
+    ### Mother Inheritance: 6951-7000
+      # "*_695[1-9]_|*_69[6-9][0-9]_|*_7000_") ###
+    ### SamSex Inheritance: 7001-7050
+      # "*_700[1-9]_|*_70[1-4][0-9]_|*_7050_") ###
+    ### Miixed Inheritance: 7051-71 00
+      # "*_705[1-9]_|*_70[6-9][0-9]_|*_7100_") ###
 
 
 
