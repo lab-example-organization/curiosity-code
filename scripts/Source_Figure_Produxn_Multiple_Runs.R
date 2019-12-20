@@ -123,17 +123,7 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
     # sdstbxnlist[[i]] <- fread(file.path(multirun_directory, sdstlist[i]))
     # sylrepzlist[[i]] <- fread(file.path(multirun_directory, repzlist[i]))
   }
-#  print(paste0("curhistlist length = ", length(curhistlist)))
-#  print(paste0("cursitylist length = ", length(cursitylist)))
-#  print(paste0("sdstbxnlist length = ", length(sdstbxnlist)))
-#  print(paste0("sylrepzlist length = ", length(sylrepzlist)))
 
-
-
-  # sylrepzlist[[number_of_repeats + 1]] <- sylrepzlist[[number_of_repeats]]
-  # sdstbxnlist[[number_of_repeats + 1]] <- sdstbxnlist[[number_of_repeats]]
-  # cursitylist[[number_of_repeats + 1]] <- cursitylist[[number_of_repeats]]
-  # curhistlist[[number_of_repeats + 1]] <- curhistlist[[number_of_repeats]]
 #     print("histlist")
   for(i in 1:length(curhistlist[[1]])) {
     eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[",
