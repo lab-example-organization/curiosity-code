@@ -26,6 +26,7 @@ concatenate_data <- function(specific_run,
   sylrepz = array (0, c (2, npp,  nts * numslice))
   sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
   cursity = array (0, c (12, npp,  nts * numslice))
+  # let's make another dimension, for recording the variance at the timestep snapshots...
   curhist = array (0, c ((2 * npp), (npp * ops[1]),  nts * numslice))
 
   # converteddata <- vector (mode = "list", length = length(specific_run))
@@ -35,6 +36,7 @@ concatenate_data <- function(specific_run,
   converteddata[[specific_run]][[1]] <- sylrepz
   converteddata[[specific_run]][[2]] <- sdstbxn
   converteddata[[specific_run]][[3]] <- cursity
+  # let's make another dimension, for recording the variance at the timestep snapshots...
   converteddata[[specific_run]][[4]] <- curhist
 
   # converteddata <- list(
@@ -54,6 +56,7 @@ concatenate_data <- function(specific_run,
       converteddata[[specific_run]][[2]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
 
       converteddata[[specific_run]][[3]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_mean_t.RData")))
+      # let's make another dimension, for recording the variance at the timestep snapshots...
 
       converteddata[[specific_run]][[4]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_repert.RData")))
   }
