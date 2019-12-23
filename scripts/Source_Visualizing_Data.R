@@ -26,6 +26,7 @@ concatenate_data <- function(specific_run,
   sylrepz = array (0, c (2, npp,  nts * numslice))
   sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
   cursity = array (0, c (12, npp,  nts * numslice))
+  # let's make another dimension, for recording the variance at the timestep snapshots...
   curhist = array (0, c ((2 * npp), (npp * ops[1]),  nts * numslice))
 
   # converteddata <- vector (mode = "list", length = length(specific_run))
@@ -35,6 +36,7 @@ concatenate_data <- function(specific_run,
   converteddata[[specific_run]][[1]] <- sylrepz
   converteddata[[specific_run]][[2]] <- sdstbxn
   converteddata[[specific_run]][[3]] <- cursity
+  # let's make another dimension, for recording the variance at the timestep snapshots...
   converteddata[[specific_run]][[4]] <- curhist
 
   # converteddata <- list(
@@ -54,6 +56,7 @@ concatenate_data <- function(specific_run,
       converteddata[[specific_run]][[2]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
 
       converteddata[[specific_run]][[3]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_mean_t.RData")))
+      # let's make another dimension, for recording the variance at the timestep snapshots...
 
       converteddata[[specific_run]][[4]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_repert.RData")))
   }
@@ -107,22 +110,22 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
 
   ### SEQUENTIAL, MULTI-HUE, COLORBLIND FRIENDLY, PRINT FRIENDLY, PHOTOCOPY FRIENDLY
 
-  colorseqmultpalette <- matrix (data = c (c ("#e5f5f9", "#99d8c9", "#2ca25f"), # 3-class bugn
-                                          c ("#e0ecf4", "#9ebcda", "#8856a7"), # 3-class bupu
-                                          c ("#e0f3db", "#a8ddb5", "#43a2ca"), # 3-class gnbu
-                                          c ("#fee8c8", "#fdbb84", "#e34a33"), # 3-class orrd
-                                          c ("#ece7f2", "#a6bddb", "#2b8cbe"), # 3-class pubu
-                                          c ("#ece2f0", "#a6bddb", "#1c9099"), # 3-class pubugn
-                                          c ("#e7e1ef", "#c994c7", "#dd1c77"), # 3-class purd
-                                          c ("#fde0dd", "#fa9fb5", "#c51b8a"), # 3-class rdpu
-                                          c ("#f7fcb9", "#addd8e", "#31a354"), # 3-class ylgn
-                                          c ("#edf8b1", "#7fcdbb", "#2c7fb8"), # 3-class ylgnbu
-                                          c ("#fff7bc", "#fec44f", "#d95f0e"), # 3-class ylorbr
-                                          c ("#ffeda0", "#feb24c", "#f03b20")), # 3-class ylorrd
-                                nrow = 12, ncol = 3,byrow = T,dimnames = list (
-                                  c ("bugn", "bupu", "gnbu", "orrd", "pubu", "pubugn", "purd",
-                                    "rdpu", "ylgn", "ylgnbu", "ylorbr", "ylorrd"),
-                                  c ("Light first color", "Middle color", "Dark final color")))
+  # colorseqmultpalette <- matrix (data = c (c ("#e5f5f9", "#99d8c9", "#2ca25f"), # 3-class bugn
+  #                                         c ("#e0ecf4", "#9ebcda", "#8856a7"), # 3-class bupu
+  #                                         c ("#e0f3db", "#a8ddb5", "#43a2ca"), # 3-class gnbu
+  #                                         c ("#fee8c8", "#fdbb84", "#e34a33"), # 3-class orrd
+  #                                         c ("#ece7f2", "#a6bddb", "#2b8cbe"), # 3-class pubu
+  #                                         c ("#ece2f0", "#a6bddb", "#1c9099"), # 3-class pubugn
+  #                                         c ("#e7e1ef", "#c994c7", "#dd1c77"), # 3-class purd
+  #                                         c ("#fde0dd", "#fa9fb5", "#c51b8a"), # 3-class rdpu
+  #                                         c ("#f7fcb9", "#addd8e", "#31a354"), # 3-class ylgn
+  #                                         c ("#edf8b1", "#7fcdbb", "#2c7fb8"), # 3-class ylgnbu
+  #                                         c ("#fff7bc", "#fec44f", "#d95f0e"), # 3-class ylorbr
+  #                                         c ("#ffeda0", "#feb24c", "#f03b20")), # 3-class ylorrd
+  #                               nrow = 12, ncol = 3,byrow = T,dimnames = list (
+  #                                 c ("bugn", "bupu", "gnbu", "orrd", "pubu", "pubugn", "purd",
+  #                                   "rdpu", "ylgn", "ylgnbu", "ylorbr", "ylorrd"),
+  #                                 c ("Light first color", "Middle color", "Dark final color")))
 
 
   colorseqmultpalette <- list (bugn = colorRampPalette (c ("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class bugn

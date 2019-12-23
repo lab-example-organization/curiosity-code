@@ -835,6 +835,10 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
       3, parameters_cmt_archive$sylnum + 3, population]
 
     for (sex in 1 : 2) {
+
+      # let's make another dimension, for recording the variance at the timestep snapshots...
+      # first, we need to make sure that everywhere else it's referenced, ALSO, gets accounted for and changed accordingly.
+
       data_container [sex, population, timestep] <- mean(
         curiosity_object [((
           1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)

@@ -32,8 +32,9 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 # heatmapland <- file.path("results", "Heatmaps", "femInh_maleBias")
 # heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
 # heatmapland <- file.path("results")
+heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemSmolInv")
 
-heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF2")
+# heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF2")
 # heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF3")
 # heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF4")
 
@@ -174,8 +175,8 @@ heatmapoutput <- makeheatmapfile(
 individualfigures(2,5,heatmapoutput)
 #####
 
-print("Stop here, Parker!")
-print("Stop here, Parker!")
+# print("Stop here, Parker!")
+# print("Stop here, Parker!")
 
 source(file.path("scripts", "Source_Heatmap_Functions.R"))
 source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
