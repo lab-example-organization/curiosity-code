@@ -25,7 +25,7 @@ concatenate_data <- function(specific_run,
 
   sylrepz = array (0, c (2, npp,  nts * numslice))
   sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
-  cursity = array (0, c (12, npp,  nts * numslice))
+  cursity = array (0, c (14, npp,  nts * numslice))
   # let's make another dimension, for recording the variance at the timestep snapshots...
   curhist = array (0, c ((2 * npp), (npp * ops[1]),  nts * numslice))
 
