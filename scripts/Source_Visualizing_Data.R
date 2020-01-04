@@ -166,7 +166,7 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   return (plot_info)
 }
 
-figure_maker <- function (parameters, converted_data, plot_info, population, q_subset, subset_number, filename, sex_dependent, simple, ylab1, ylab2, number_of_runs, saving_dir = multirun_directory) { # needs number_of_runs passed to it if simple ever == FALSE
+figure_maker <- function (parameters, converted_data, plot_info, population, q_subset, subset_number, filename, sex_dependent, simple, ylab1, ylab2, number_of_runs, saving_dir = multirun_directory, mean_not_var = TRUE) { # needs number_of_runs passed to it if simple ever == FALSE
   num_timesteps = as.numeric (strsplit (parameters$runlength, "k")[[1]][1])*1000
   if (simple == T) {
     if (sex_dependent == T) {
