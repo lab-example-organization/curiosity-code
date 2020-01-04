@@ -163,7 +163,7 @@ recordvariable.initialize <- function (parameters_rvi, variableid, recsimfct) {
       0, c ((2 * parameters_rvi$num_pop), parameters_rvi$sylnum, timestepRecordLength))
   } else if (variableid == 3) {
     record_variable <- array (
-      0, c (12, parameters_rvi$num_pop, timestepRecordLength))
+      0, c (14, parameters_rvi$num_pop, timestepRecordLength))
       # let's make another dimension, for recording the variance at the timestep snapshots...
   } else if (variableid == 4) {
     record_variable <- array (
