@@ -836,7 +836,7 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
 
     for (sex in 1 : 2) {
 
-      # let's make another dimension, for recording the variance at the timestep snapshots...
+      # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
       # first, we need to make sure that everywhere else it's referenced, ALSO, gets accounted for and changed accordingly.
 
       data_container [sex, population, timestep] <- mean(

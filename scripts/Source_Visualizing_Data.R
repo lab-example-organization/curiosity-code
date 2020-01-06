@@ -26,7 +26,7 @@ concatenate_data <- function(specific_run,
   sylrepz = array (0, c (2, npp,  nts * numslice))
   sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
   cursity = array (0, c (14, npp,  nts * numslice))
-  # let's make another dimension, for recording the variance at the timestep snapshots...
+  # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   curhist = array (0, c ((2 * npp), (npp * ops[1]),  nts * numslice))
 
   # converteddata <- vector (mode = "list", length = length(specific_run))
@@ -36,7 +36,7 @@ concatenate_data <- function(specific_run,
   converteddata[[specific_run]][[1]] <- sylrepz
   converteddata[[specific_run]][[2]] <- sdstbxn
   converteddata[[specific_run]][[3]] <- cursity
-  # let's make another dimension, for recording the variance at the timestep snapshots...
+  # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   converteddata[[specific_run]][[4]] <- curhist
 
   # converteddata <- list(
@@ -56,7 +56,7 @@ concatenate_data <- function(specific_run,
       converteddata[[specific_run]][[2]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
 
       converteddata[[specific_run]][[3]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_mean_t.RData")))
-      # let's make another dimension, for recording the variance at the timestep snapshots...
+      # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
 
       converteddata[[specific_run]][[4]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_repert.RData")))
   }
@@ -338,6 +338,8 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "9", "_AC_replaced_f_pop", F, T, "Pop", " Dead Woman AC", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "11", "_cur_inh_attempts", F, T, "Pop", " Cur Inh Attempts", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "12", "_newsyll_attempts", F, T, "Pop", " New Syll Attempts", number_of_runs = number_of_runs)
+      # figure maker male variance, cursity, 13, 
+      # figure maker female variance, cursity, 14, 
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sylrepz", "sex_dependent == TRUE", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Repertoire Size", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "sex_dependent == TRUE", "_mean_curiosity_-_pop_", T, T, "Pop", "s - Mean Curiosity", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sdstbxn", "sex_dependent == TRUE", "_sylnum_pop_", T, T, "Pop", "s Sylnum", number_of_runs = number_of_runs)

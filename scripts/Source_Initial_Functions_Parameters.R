@@ -164,7 +164,7 @@ recordvariable.initialize <- function (parameters_rvi, variableid, recsimfct) {
   } else if (variableid == 3) {
     record_variable <- array (
       0, c (14, parameters_rvi$num_pop, timestepRecordLength))
-      # let's make another dimension, for recording the variance at the timestep snapshots...
+      # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   } else if (variableid == 4) {
     record_variable <- array (
       0, c ((2 * parameters_rvi$num_pop), (parameters_rvi$num_pop * parameters_rvi$one_pop_singers [1]),

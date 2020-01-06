@@ -425,7 +425,7 @@ life_cycle <- function (
   curity_mean_t <- recordvariable.initialize (
       parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 3)
 
-  # let's make another dimension, for recording the variance at the timestep snapshots...
+  # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
 
   curity_repert <- recordvariable.initialize (
       parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 4)
@@ -541,7 +541,7 @@ life_cycle <- function (
         curiosity_object = curiosity_level,
         timestep = simplify)
 
-      # let's make another dimension, for recording the variance at the timestep snapshots...
+      # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
 
       curity_repert <- curity_repert.archive(
         parameters_crp_archive = simparams,
@@ -573,7 +573,7 @@ life_cycle <- function (
                     rowcol = sylrep_rowcol,
                     dstbxn = sylrep_dstbxn,
                     mean_t = curity_mean_t,
-                    # let's make another dimension, for recording the variance at the timestep snapshots...
+                    # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
                     repert = curity_repert,
                     saved_stuff = stuff_to_save,
                     syll_container = sylreps,
