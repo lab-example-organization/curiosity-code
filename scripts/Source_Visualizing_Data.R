@@ -338,8 +338,8 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "9", "_AC_replaced_f_pop", F, T, "Pop", " Dead Woman AC", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "11", "_cur_inh_attempts", F, T, "Pop", " Cur Inh Attempts", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "12", "_newsyll_attempts", F, T, "Pop", " New Syll Attempts", number_of_runs = number_of_runs)
-      # figure maker male variance, cursity, 13, 
-      # figure maker female variance, cursity, 14, 
+      # figure maker mal variance, cursity, 13, figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "13", "_cur_var_m_pop", F, T, "Pop", " Cur Var Mal", number_of_runs = number_of_runs)
+      # figure maker fem variance, cursity, 14, figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "14", "_cur_var_f_pop", F, T, "Pop", " Cur Var Fem", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sylrepz", "sex_dependent == TRUE", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Repertoire Size", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "sex_dependent == TRUE", "_mean_curiosity_-_pop_", T, T, "Pop", "s - Mean Curiosity", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sdstbxn", "sex_dependent == TRUE", "_sylnum_pop_", T, T, "Pop", "s Sylnum", number_of_runs = number_of_runs)

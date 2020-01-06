@@ -746,6 +746,7 @@ recuriosity.offspring <- function (parameters_recuriosity, temp_data_recuriosity
   return (curiosity_object)
 }
 
+
 resylreps.offspring <- function (parameters_resylreps, temp_data_resylreps, sylrep_object) {
   for (population in 1 : parameters_resylreps$num_pop) {
     for (sex in 1 : 2) {
@@ -758,25 +759,6 @@ resylreps.offspring <- function (parameters_resylreps, temp_data_resylreps, sylr
     }
   }
   return (sylrep_object)
-}
-
-
-recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
-  if (variableid == 1) {
-    record.variable <- array (0, c (
-      2, parameters_rvi$num_pop, (1000 / recsimfct)))
-  } else if (variableid == 2) {
-    record.variable <- array (0, c (
-      (2 * parameters_rvi$num_pop), parameters_rvi$sylnum, (1000 / recsimfct)))
-  } else if (variableid == 3) {
-    record.variable <- array (0, c (
-      12, parameters_rvi$num_pop, (1000 / recsimfct)))
-  } else if (variableid == 4) {
-    record.variable <- array (0, c (
-      (2 * parameters_rvi$num_pop), (parameters_rvi$num_pop * parameters_rvi$one_pop_singers [1]),
-      (1000 / recsimfct)))
-  }
-  return (record.variable)
 }
 
 
@@ -866,6 +848,16 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
       data_container [
         12, population, timestep
       ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
+
+      # data_container [
+      #   13, population, timestep
+      # ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
+
+      # data_container [
+      #   14, population, timestep
+      # ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
+
+
     }
   }
   return (data_container)

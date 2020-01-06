@@ -151,7 +151,7 @@ define_temp_data <- function (universal_parameters) {
 
 # INITIALIZING FUNCTIONS ##################################
 
-recordvariable.initialize <- function (parameters_rvi, variableid, recsimfct) {
+recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
 
   timestepRecordLength <- 1000 / recsimfct
 
