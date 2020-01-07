@@ -850,7 +850,7 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
       ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
 
       # data_container [
-      #   13, population, timestep
+      #   (sex + 12), population, timestep
       # ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
 
       # data_container [

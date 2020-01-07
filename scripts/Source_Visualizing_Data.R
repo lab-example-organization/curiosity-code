@@ -261,12 +261,12 @@ summary_statistics <- function(parameters, converted_data, plot_info, population
 min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist) {
-  nrowsminsmaxes <- 14
+  nrowsminsmaxes <- 16
   mins_n_maxes <- array(0,c(nrowsminsmaxes,parameters$num_pop,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
   mn_mx_container <- c("min", "max") # 3rd-dim-dependent ---
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectsubset[k]])
-  figuresubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2) # row-dependent --- k
-  objectsubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2) # row-dependent --- k
+  figuresubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2,13,14) # row-dependent --- k
+  objectsubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2,2,2) # row-dependent --- k
 
   for(j in 1:parameters$num_pop) {
     for(k in 1:nrowsminsmaxes ) {
@@ -290,15 +290,15 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist =
 
 
 curiosity_figures <- function(parameters, number_of_runs, population, cursitylist, plot_info, mins_n_maxes, saving_dir = multirun_directory) {
-  figure_retainer <- c(3,10,4,5,6,7,8,9,11)
+  figure_retainer <- c(3,10,4,5,6,7,8,9,11,13,14)
 
   filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop",
                           "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
-                          "_AC_replaced_f_pop", "_cur_inh_attempts")
+                          "_AC_replaced_f_pop", "_cur_inh_attempts", "_AC_var_m_pop", "_AC_var_f_pop")
   plot_title_retainer <- c(" Mate Selection Chances", " Tutor Selection Chances", " Father AC", " Mother AC",
-                            " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts")
+                            " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts", "AC Variance Mal", "AC Variance Fem")
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
-  for(individual_figures in 1:9) {
+  for(individual_figures in 1:length(figure_retainer)) {
 
     meanz <- cursitylist[[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
