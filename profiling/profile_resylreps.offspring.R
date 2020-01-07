@@ -32,7 +32,7 @@ sylreps <- initialize.sylrep(simParams, c(1,2), T, T)
 
 moranObjects <- sing.selection(parameters = simParams, moran = moranObjects,
                               curiosity_level = curiosity_level,
-                              select_type = 2, sylrep_object = sylreps,
+                              select_type = "mate", sylrep_object = sylreps,
                               num_select_chances = c(100, 100),
                               verbose_output = F, interbreed = F)
 
@@ -49,7 +49,7 @@ moranObjects <- syll_learn(parameters = simParams, moran = moranObjects,
 
 moranObjects <- sing.selection(parameters = simParams, moran = moranObjects,
                                curiosity_level = curiosity_level,
-                               select_type = 1, sylrep_object = sylreps,
+                               select_type = "tutor", sylrep_object = sylreps,
                                num_select_chances = c(100, 100),
                                verbose_output = F, interbreed = F)
 

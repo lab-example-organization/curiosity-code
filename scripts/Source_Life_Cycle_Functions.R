@@ -248,6 +248,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                            verbose_output = TRUE,
                            interbreed = FALSE) {
 
+  if (select_type == "mate") {select_type <- 2} else if (select_type == "tutor") {select_type <- 1}
+
   for (divisible in 1 : 2) {
     if (num_select_chances[divisible] %% 4 != 0) {
     stop ("Error management system needs to split num_select_chances into 4
