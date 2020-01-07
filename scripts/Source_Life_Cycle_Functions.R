@@ -302,7 +302,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
       if (select_type == 1) {
         #This statement separates specific mating and tutoring selection
-        # qualities: singsuccessfilter will inform the selection of a
+        # manipulations: singsuccessfilter will inform the selection of a
         # mate by restricting the successful mate to those individuals
         # from the same population as the selector. Similarly, selector.index
         # distinguishes between mating and tutoring, except here it uses
@@ -859,7 +859,16 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
 
       # data_container [
       #   (sex + 12), population, timestep
-      # ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
+      # ] <- temp_data_cmt_archive [sex + 3, parameters_cmt_archive$sylnum + 3, population] # once curiosity variance is recorded, it'll be forwarded to the permanent data object
+
+      data_container [
+        (sex + 12), population, timestep
+      ] <- var(
+        curiosity_object [((
+          1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
+        ) : (
+          sex * parameters_cmt_archive$pop_size / 2)), population]
+        ) # once curiosity variance is recorded, it'll be forwarded to the permanent data object
 
       # data_container [
       #   14, population, timestep

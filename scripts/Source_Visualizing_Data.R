@@ -177,33 +177,23 @@ figure_maker <- function (parameters, converted_data, plot_info, population, q_s
           thing <- paste0 ("objectz <- converted_data$", q_subset, "[", sex + ((population - 1) * 2), ",,]")
           eval (parse (text=thing))
           if (q_subset == "sdstbxn") {
-            image (t (objectz), col = plot_info$sylnum_palette (100), xlab = "Timestep", ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc[sex], ylab2))
-          } else {
-            image (t (objectz), col = plot_info$sylsub_palette (100), xlab = "Timestep", ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc[sex], ylab2))
-          }
+            image (t (objectz), col = plot_info$sylnum_palette (100), xlab = "Timestep", ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc[sex], ylab2))} else {
+            image (t (objectz), col = plot_info$sylsub_palette (100), xlab = "Timestep", ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc[sex], ylab2))}
         } else {
           thing <- paste0 ("objectz <- converted_data$", q_subset, "[", sex, ",population,]")
           eval (parse (text = thing))
           plot (objectz, xlab = paste0 ("Timestep"), ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc [sex], ylab2))
-        }
-        dev.off()
-      }
+        } dev.off()}
     } else {
       thing <- paste0("objectz <- converted_data$", q_subset, "[", subset_number, ",population,]")
       eval(parse(text=thing))
       file_name <- paste0(plot_info$datez, "_", plot_info$run_name, filename, population, ".png")
       png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
       plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, ylab2))
-      dev.off()
-    }
+      dev.off()}
   } else {
     if(sex_dependent == T) {
-      for(sex in 1:2) {
-        #
-      }
-    } else {
-      #
-    }
+      for(sex in 1:2) {}} else {}
     meanz <- cursitylist[[number_of_runs + 1]][10,population,]
     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_tutor_selections_pop", population, ".png")
@@ -338,8 +328,8 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "9", "_AC_replaced_f_pop", F, T, "Pop", " Dead Woman AC", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "11", "_cur_inh_attempts", F, T, "Pop", " Cur Inh Attempts", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "12", "_newsyll_attempts", F, T, "Pop", " New Syll Attempts", number_of_runs = number_of_runs)
-      # figure maker mal variance, cursity, 13, figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "13", "_cur_var_m_pop", F, T, "Pop", " Cur Var Mal", number_of_runs = number_of_runs)
-      # figure maker fem variance, cursity, 14, figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "14", "_cur_var_f_pop", F, T, "Pop", " Cur Var Fem", number_of_runs = number_of_runs)
+      figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "13", "_cur_var_m_pop", F, T, "Pop", " Cur Var Mal", number_of_runs = number_of_runs)
+      figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "14", "_cur_var_f_pop", F, T, "Pop", " Cur Var Fem", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sylrepz", "sex_dependent == TRUE", "_mean_repertoire_size_-_pop_", T, T, "Pop", "s - Mean Repertoire Size", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "cursity", "sex_dependent == TRUE", "_mean_curiosity_-_pop_", T, T, "Pop", "s - Mean Curiosity", number_of_runs = number_of_runs)
       figure_maker(parameters = parameters, converted_data, plot_info, population, "sdstbxn", "sex_dependent == TRUE", "_sylnum_pop_", T, T, "Pop", "s Sylnum", number_of_runs = number_of_runs)
