@@ -489,7 +489,7 @@ life_cycle <- function (
         #
         moranobjects <- syll_learn(parameters_sylllearn = simparams,
                                   temp_data_sylllearn = moranobjects,
-                                  select_type = 2,
+                                  select_type = "mate",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = F)
@@ -505,7 +505,7 @@ life_cycle <- function (
 
         moranobjects <- syll_learn(parameters_sylllearn = simparams,
                                   temp_data_sylllearn = moranobjects,
-                                  select_type = 1,
+                                  select_type = "tutor",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = F)

@@ -3,7 +3,7 @@
 
 
 
-syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type = 2,
+syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type = "mate",
                        totally_new = FALSE, randlearn_context = 1,
                        verbose = FALSE) {
 
@@ -16,7 +16,7 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
 
     #Vertical Learning;  parameters_sylllearn (set up source_of_ones), and considerations
 
-    if (select_type == 2) {
+    if (select_type == "mate") {
 
       #parameters_sylllearn and considerations for VERTICAL LEARNING
       source_of_ones <- which (
@@ -34,7 +34,7 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
       } # clear the sylreps rows about to be filled in :D
 
 
-    } else { #Oblique Learning; source_of_ones setup, and considerations
+    } else if (select_type == "tutor") { #Oblique Learning; source_of_ones setup, and considerations
 
 
       # double-check that the tutor isn't out
@@ -73,18 +73,24 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
     #print(probs)
     #sink()
 
-    for (sex in 1 : select_type) {
+    if (select_type == "mate") {
+      loop_size <- 2
+    } else if (select_type == "tutor") {
+      loop_size <- 1
+    }
+
+    for (sex in 1 : loop_size) {
       average_rate_randlearn_overlap <- c ()
       #print(source_of_ones)
       probs <- runif (source_of_ones, 0, 1)
       for (sylls_to_learn in 1 : length (source_of_ones)) {
         # moran$learning.pool[(sex + 2),
         # source_of_ones[sylls_to_learn], population] <- 0
-        if (probs [sylls_to_learn] <= (parameters_sylllearn$learnprob [select_type])) {
+        if (probs [sylls_to_learn] <= (parameters_sylllearn$learnprob [loop_size])) {
           temp_data_sylllearn [(sex + 2), source_of_ones [sylls_to_learn], population] <- 1
         }
         if (probs [sylls_to_learn] > (
-          1 - parameters_sylllearn$randlearnprob [select_type])) {
+          1 - parameters_sylllearn$randlearnprob [loop_size])) {
           r_norm <- rnorm (1, mean = ifelse (randlearn_context == 1,
                                            mean (source_of_ones),
                                            source_of_ones [sylls_to_learn]),
