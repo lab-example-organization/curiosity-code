@@ -830,44 +830,33 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
       # first, we need to make sure that everywhere else it's referenced, ALSO, gets accounted for and changed accordingly.
 
       data_container [sex, population, timestep] <- mean(
-        curiosity_object [((
-          1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
-        ) : (
-          sex * parameters_cmt_archive$pop_size / 2)), population]
-        )
+        curiosity_object [((1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
+        ) : (sex * parameters_cmt_archive$pop_size / 2)), population])
 
       # Individual Curiosity Values
-      data_container [
-        (sex + 3), population, timestep
+      data_container [(sex + 3), population, timestep
       ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 2, population]
 
-      data_container [
-        (sex + 5), population, timestep
+      data_container [(sex + 5), population, timestep
       ] <- temp_data_cmt_archive [(sex + 2), parameters_cmt_archive$sylnum + 2, population]
 
-      data_container [
-        (sex + 7), population, timestep
+      data_container [(sex + 7), population, timestep
       ] <- temp_data_cmt_archive [(sex + 2), parameters_cmt_archive$sylnum + 4, population]
 
-      data_container [
-        11, population, timestep
+      data_container [11, population, timestep
       ] <- temp_data_cmt_archive [(sex + 2), parameters_cmt_archive$sylnum + 5, population] # problems: this value degenerates two into one, by not leaving "sex" variable on left of equation
 
-      data_container [
-        12, population, timestep
+      data_container [12, population, timestep
       ] <- temp_data_cmt_archive [sex, parameters_cmt_archive$sylnum + 5, population] # same as above
 
       # data_container [
       #   (sex + 12), population, timestep
       # ] <- temp_data_cmt_archive [sex + 3, parameters_cmt_archive$sylnum + 3, population] # once curiosity variance is recorded, it'll be forwarded to the permanent data object
 
-      data_container [
-        (sex + 12), population, timestep
+      data_container [(sex + 12), population, timestep
       ] <- var(
-        curiosity_object [((
-          1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
-        ) : (
-          sex * parameters_cmt_archive$pop_size / 2)), population]
+        curiosity_object [((1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
+        ) : (sex * parameters_cmt_archive$pop_size / 2)), population]
         ) # once curiosity variance is recorded, it'll be forwarded to the permanent data object
 
       # data_container [

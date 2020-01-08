@@ -1,0 +1,60 @@
+curstarts:
+  - scmin: [ 1, 1, 1, 1]
+    scmax: [ 8, 8, 8, 8]
+  - scmin: [25,25,25,25]
+    scmax: [28,28,28,28]
+
+simnumberstart: [99998]
+runlength: '3k'
+syllearnstyle: 'nsL'
+vertoblearn:
+  vertical:
+    learn: 0.95
+    invent: 0.1
+  oblique:
+    learn: 0.1
+    invent: 0.01
+syldist: 'oppsyl'
+curinh_value: 0.95
+num_pop: 2
+pop_size: 400
+sylnum: 156
+num_sylls_per_prob_lvl: 8
+number_of_reps: 10
+standard_deviation: 2
+
+# curinh_pattern - calling either the row number
+# or name of row for different curiosity inheritance patterns -
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
+curinh_pattern: 5
+one_pop_singers: [10, 10]
+recordsimplifyfactor: 100
+curinhdistribution: 0.5
+# must be between 0 and 1; [value displayed] == male; [1 - value] == female
+# distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
+
+
+traitinvasion: TRUE
+invasionthoutmstps: 1
+invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
+# invasionstyle: 'offspring' # need: offspring, wholesale,
+invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
+invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
+invasionsex: 'male' # male or female (or, perhaps, both?)
+invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+                          # If it's not FALSE, then it's a string of two values (target value, size of range)
+
+
+                          # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
+indrunredo: FALSE
+
+# This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
+# lastruninit: TRUE
+lastruninit: FALSE
+
+# If this is being used, use an unique pattern from the run whose last timestep you would like to use.
+# lastrunid: '190820_3481'
+# lastrunid: ['3482', '3486', '3487']
+lastrunid: FALSE
+# want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it.
+# BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastrunid's, that won't propagate down to restart_from_save! Awesome!

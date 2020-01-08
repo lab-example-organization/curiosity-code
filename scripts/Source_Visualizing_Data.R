@@ -183,7 +183,8 @@ figure_maker <- function (parameters, converted_data, plot_info, population, q_s
           thing <- paste0 ("objectz <- converted_data$", q_subset, "[", sex, ",population,]")
           eval (parse (text = thing))
           plot (objectz, xlab = paste0 ("Timestep"), ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc [sex], ylab2))
-        } dev.off()}
+        }
+        dev.off()}
     } else {
       thing <- paste0("objectz <- converted_data$", q_subset, "[", subset_number, ",population,]")
       eval(parse(text=thing))
@@ -286,7 +287,7 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
                           "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
                           "_AC_replaced_f_pop", "_cur_inh_attempts", "_AC_var_m_pop", "_AC_var_f_pop")
   plot_title_retainer <- c(" Mate Selection Chances", " Tutor Selection Chances", " Father AC", " Mother AC",
-                            " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts", "AC Variance Mal", "AC Variance Fem")
+                            " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts", " AC Variance Mal", " AC Variance Fem")
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
   for(individual_figures in 1:length(figure_retainer)) {
 

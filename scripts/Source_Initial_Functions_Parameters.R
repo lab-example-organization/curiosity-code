@@ -8,7 +8,7 @@ rpf <- function (numberofrepeats, divisions_per_repeat, zeroonevalue) {
   #                            #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
                                0.9,0.95,0.99,1.0)
   #                            #31, #32, #33,#34
-  if (numberofrepeats %% divisions_per_repeat != 0) {
+  if (numberofrepeats %% divisions_per_repeat > 1e-10) {
     stop ("first element must be divisible by the second element")}
   if (! (zeroonevalue %in% c (1 : length (zero_to_one_template)))) {
     stop ("in order to work, zeroonevalue must be contained within zero_to_one_template")}
