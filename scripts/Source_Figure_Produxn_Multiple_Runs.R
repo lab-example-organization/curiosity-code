@@ -125,6 +125,9 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
   }
 
 #     print("histlist")
+  thing <- dim (curhistlist[[1]])
+  dim (curhistlist[[number_of_repeats + 1]]) <- thing
+
   for(i in 1:length(curhistlist[[1]])) {
     eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[",
                            paste0(1:(number_of_repeats - 1),"]][i],curhistlist[[", collapse=''),
@@ -133,8 +136,8 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
 
 #  print ("dimensions of curhistlist[[1]] - ")
 #  print (dim (curhistlist[[1]]))
-  thing <- dim (curhistlist[[1]])
-  dim (curhistlist[[number_of_repeats + 1]]) <- thing
+  thing <- dim (cursitylist[[1]])
+  dim (cursitylist[[number_of_repeats + 1]]) <- thing
 
 #  print("sitylist")
   for(i in 1:length(cursitylist[[1]])) {
@@ -145,8 +148,8 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
 
 #  print ("dimensions of cursitylist[[1]] - ")
 #  print (dim (cursitylist[[1]]))
-  thing <- dim (cursitylist[[1]])
-  dim (cursitylist[[number_of_repeats + 1]]) <- thing
+  thing <- dim (sdstbxnlist[[1]])
+  dim (sdstbxnlist[[number_of_repeats + 1]]) <- thing
 
 #  print("sdstlist")
 
@@ -158,8 +161,8 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
 
 #  print ("dimensions of sdstbxnlist[[1]] - ")
 #  print (dim (sdstbxnlist[[1]]))
-  thing <- dim (sdstbxnlist[[1]])
-  dim (sdstbxnlist[[number_of_repeats + 1]]) <- thing
+  thing <- dim (sylrepzlist[[1]])
+  dim (sylrepzlist[[number_of_repeats + 1]]) <- thing
 
 #  print("repzlist")
 
@@ -171,8 +174,7 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
 
 #  print ("dimensions of sylrepzlist[[1]] - ")
 #  print (dim (sylrepzlist[[1]]))
-  thing <- dim (sylrepzlist[[1]])
-  dim (sylrepzlist[[number_of_repeats + 1]]) <- thing
+
 
 #  print("last_stats")
   last_stats <- paste0("rm(sylrepz", number_of_repeats, ", sdstbxn", number_of_repeats,
