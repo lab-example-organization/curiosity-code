@@ -249,6 +249,14 @@ summary_statistics <- function(parameters, converted_data, plot_info, population
 }
 
 
+# parameters = params
+# number_of_runs = number_of_repeats
+# cursitylist = cursitylist
+# sdstbxnlist = sdstbxnlist
+# curhistlist = curhistlist
+# sylrepzlist = sylrepzlist
+
+
 min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist) {
@@ -256,8 +264,9 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist =
   mins_n_maxes <- array(0,c(nrowsminsmaxes,parameters$num_pop,2)) # rows = different things being measured, columns = populations (1&2) for 1:9 and populations & sex ((1) pop1male (2) pop1female (3) pop2male (4) pop2female); depth = min (1) and max (2)
   mn_mx_container <- c("min", "max") # 3rd-dim-dependent ---
   objectnames <- c("curhist","cursity","sdstbxn","sylrepz") # row-dependent --- k -> (objectnames[objectsubset[k]])
-  figuresubset <- c(3,10,4,5,6,7,8,9,11,12,1,2,1,2,13,14) # row-dependent --- k
-  objectsubset <- c(2,2,2,2,2,2,2,2,2,2,4,4,2,2,2,2) # row-dependent --- k
+  figuresubset <- c(3,10,4,5,6,7,8,9,11,12, 1, 2, 1, 2,13,14) # row-dependent --- k
+  #                 1,2, 3,4,5,6,7,8, 9,10,11,12,13,14,15,16
+  objectsubset <- c(2,2, 2,2,2,2,2,2, 2, 2, 4, 4, 2, 2, 2, 2) # row-dependent --- k
 
   for(j in 1:parameters$num_pop) {
     for(k in 1:nrowsminsmaxes ) {
@@ -279,9 +288,10 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist =
   return(mins_n_maxes)
 }
 
-
 curiosity_figures <- function(parameters, number_of_runs, population, cursitylist, plot_info, mins_n_maxes, saving_dir = multirun_directory) {
   figure_retainer <- c(3,10,4,5,6,7,8,9,11,13,14)
+  just_curiosity <- c (1, 2,3,4,5,6,7,8,9,15,16)
+  ### 1,2 - mate/tutor select chances; 3,4 - curlevel parents; 5,6 - curlevel offspring; 7,8 - curlevel replaced individuals; 9 - curinh attempts; 10,11 -
 
   filename_retainer <- c("_mate_selections_pop", "_tutor_selections_pop", "_AC_parent_m_pop",
                           "_AC_parent_f_pop", "_AC_offspring_m_pop", "_AC_offspring_f_pop", "_AC_replaced_m_pop",
@@ -294,8 +304,8 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
     meanz <- cursitylist[[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, filename_retainer[individual_figures], population, ".png")
-    miny <- mins_n_maxes[individual_figures,population,1]
-    maxy <- mins_n_maxes[individual_figures,population,2]
+    miny <- mins_n_maxes[just_curiosity[individual_figures],population,1]
+    maxy <- mins_n_maxes[just_curiosity[individual_figures],population,2]
 
     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(miny, maxy), xaxt="n")
