@@ -178,18 +178,27 @@ restart_from_save <- function (
   pathlist <- list.files (
     file.path (relevantpaths, "variable_store"))
 
-  somekindaoutput <- array (0, c (parameters[[8]],
-    parameters[[9]], parameters[[10]] + 1, length (pathlist)))
+  # somekindaoutput <- array (0, c (parameters[[8]],
+  #   parameters[[9]], parameters[[10]] + 1, length (pathlist)))
+
+  somekindaoutput <- vector("list", length(pathlist))
+
   # num_pop, pop_size,    sylnum
   for (i in 1:length (pathlist)) {
+
+    somekindaoutput[[i]] <- vector("list", 2)
 
     endcur <- readRDS (file.path (relevantpaths, "variable_store",
       paste0 (pathlist[i], "/end_cursty.RData")))
     endrep <- readRDS (file.path (relevantpaths, "variable_store",
       paste0 (pathlist[i], "/end_sylbls.RData")))
 
-    somekindaoutput[, , 1 : parameters[[10]], i] <- aperm (endrep, c (2, 1, 3))
-    somekindaoutput[, , parameters[[10]] + 1, i] <- aperm (endcur, c (2, 1))
+    # somekindaoutput[, , 1 : parameters[[10]], i] <- aperm (endrep, c (2, 1, 3))
+    # somekindaoutput[, , parameters[[10]] + 1, i] <- aperm (endcur, c (2, 1))
+
+    somekindaoutput[[i]][[1]] <- endrep
+    somekindaoutput[[i]][[2]] <- endcur
+
   }
   return (somekindaoutput)
 }
@@ -646,7 +655,10 @@ multi_runs <- function (shifting_curstart, paramssource,
 
   # This wrapped up the restart_from_save function,
   # so that life_cycle has last-run data as an accessible object
-  lastrun_init <- array(0, c(1,1,1,number_of_reps))
+  # lastrun_init <- array(0, c(1,1,1,number_of_reps))
+
+  lastrun_init <- list()
+
   if (params$lastruninit) {
     if (length (params$lastrunid) > 1) {
       lastrun_init <- restart_from_save (parameters = params,
@@ -725,7 +737,8 @@ multi_runs <- function (shifting_curstart, paramssource,
       invsex = params$invasionsex,
       invtraitvalue = params$invasiontraitvalue,
       initfromlastrun = params$lastruninit,
-      lastrunobject = lastrun_init[, , , rep_number]
+      lastrunobject = lastrun_init[[rep_number]]
+      # lastrunobject = lastrun_init[, , , rep_number]
     )
     print(paste0("Replicate Run # ",
       rep_number, ", done at: ",

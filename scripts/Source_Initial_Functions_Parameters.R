@@ -208,8 +208,11 @@ initialize.sylrep <- function (parameters_is, population.pattern, pastrunobject_
     #   stop ("Both pastrunobject_is and pastruninit_is need to both
     #     be engaged together... if they aren't, it won't work!")
     #   }
-    sylreps <- aperm (pastrunobject_is [, , 1 : parameters_is$sylnum], c (2, 3, 1),
-                na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
+    # sylreps <- aperm (pastrunobject_is [, , 1 : parameters_is$sylnum], c (2, 3, 1),
+    #             na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
+
+    sylreps <- pastrunobject_is[[1]]
+
   } else {
     sylreps <- array (0, c (parameters_is$pop_size, parameters_is$sylnum, parameters_is$num_pop))
 
@@ -254,8 +257,11 @@ initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
   }
   curiosity_level <- array (0, c (parameters_ic$pop_size, parameters_ic$num_pop))
   if (pastruninit_ic) {
-    curiosity_object <- pastrunobject_ic [, , parameters_ic$sylnum + 1]
-    curiosity_level <- aperm (curiosity_object, c (2, 1), na.rm = TRUE)
+    # curiosity_object <- pastrunobject_ic [, , parameters_ic$sylnum + 1]
+    # curiosity_level <- aperm (curiosity_object, c (2, 1), na.rm = TRUE)
+
+    curiosity_level <- pastrunobject_ic[[2]]
+
   } else {
     for (pop.num in 1 : parameters_ic$num_pop) {
       for (sexes in 1 : 2) {
