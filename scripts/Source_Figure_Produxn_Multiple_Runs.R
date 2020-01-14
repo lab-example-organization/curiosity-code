@@ -241,6 +241,6 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
   zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsFiles.zip"), file.path(parmdir), T, 9, T)
   saveRDS(params, file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsSource.RData"))
 
-  return(print("Exit Status: 0"))
+  return (print (paste0 (specificsimnumber," - Exit Status: 0")))
 }
 
