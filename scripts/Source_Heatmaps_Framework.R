@@ -262,51 +262,7 @@ plot_that_spectrum <- function (file_name) {
 # c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5)
 # length(c(1, 8, 15, 22, 29, 36, 43, 47.5, 52, 59, 66, 73, 80, 87, 94, 100.5))
 
-source(file.path("scripts", "Source_Reference_Section.R"))
-referencesection("heatmaps")
-source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
-
-super_generic_function <- function (
-  4_digit_number_range, # "3456-3567" ### this is "thing"
-  4_digit_div # = "_"
-) {
-
-first_term <- str_split(str_split(thing, "-")[[1]][1], "")
-secnd_term <- str_split(str_split(thing, "-")[[1]][2], "")
-new_term <- c()
-new_term_first_part <- c()
-new_term_secnd_part <- c()
-
-# where is the second term bigger than the first term?
-
-difference <- as.numeric(paste(str_split(thing, "-")[[1]][2], collapse = "")) - as.numeric(paste(str_split(thing, "-")[[1]][1], collapse = ""))
-
-if (difference < 1) {
-  string_to_search <- paste(str_split(thing, "-")[[1]][2], collapse = "")
-} else if (difference >= 1 && difference <= 9) {
-  if (as.numeric(secnd_term[[1]][4]) < as.numeric(first_term[[1]][4])) {
-
-  } else {
-
-  }
-} else if (difference > 10 && difference <= 100) {
-
-} else if (difference > 100 && difference <= 1000) {
-
-}
-
-if (first_term[[1]][4] != "9") {first_term_ones <- paste0(first_term[[1]][4], "-9")}
-first_term_ones <- paste0(first_term[[1]][1], first_term[[1]][2], first_term[[1]][3], "[", first_term_ones, "]")
-if (as.numeric(first_term[[1]][3]) + 1 != 9) {first_term_tens <- paste0(as.character(as.numeric(first_term[[1]][3]) + 1), "-9")}
-
-
-
-
-string_to_search <-
-
-return(string_to_search)
-}
 
 twohundyKrun <- c("tenKfiveByFive_child-lowFemSmolInv")
 inh_pattern_list <- c(1, 2, 3, 11)
