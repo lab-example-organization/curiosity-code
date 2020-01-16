@@ -30,7 +30,8 @@ print_regex_num_range <- function (
     first_term <- str_split(str_split(num_range, "-")[[1]][1], "")
     secnd_term <- str_split(str_split(num_range, "-")[[1]][2], "")
 
-
+    # Working number data structure
+    zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
 
     ### This function lives and breathes on "append" as the builder function;
     ### each step in the control flow below is slowly building the ending
@@ -363,7 +364,7 @@ print_regex_num_range <- function (
                                 # 2DEF where D > 0
                                 if (as.numeric (secnd_term[[1]][2]) > 0) {
                                     # append "[0-(D-1)][0-9][0-9]_|*_2D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D"
-                                    output_object <- append (output_object, paste0 ()) ### HERE IS WHERE YOU STOPPED
+                                    output_object <- append (output_object, paste0 ())
                                     # 2DEF where E > 0
                                     if (as.numeric (secnd_term[[1]][3]) > 0) {
                                         # append "[0-(E-1)][0-9]_|*_2DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D[0-(E-1)][0-9]_|*_2DE"
