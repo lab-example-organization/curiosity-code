@@ -5,10 +5,10 @@ referenceSection("heatmaps")
 #
 #   ___ ______________   _____________________      _____ __________  _________
 #  /   |   \_   _____/  /  _  \__    ___/     \    /  _  \\______   \/   _____/
-# /    ~    \    __)_  /  /_\  \|    | /  \ /  \  /  /_\  \|     ___/\_____  \ 
+# /    ~    \    __)_  /  /_\  \|    | /  \ /  \  /  /_\  \|     ___/\_____  \
 # \    Y    /        \/    |    \    |/    Y    \/    |    \    |    /        \
 #  \___|_  /_______  /\____|__  /____|\____|__  /\____|__  /____|   /_______  /
-#        \/        \/         \/              \/         \/                 \/ 
+#        \/        \/         \/              \/         \/                 \/
 
 
 
@@ -26,103 +26,21 @@ source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-# heatmapLand <- HtMpDir(extraDir = "sameInh")
-# heatmapLand <- file.path("results", "Heatmaps", "sameInh")
-# heatmapLand <- file.path("results", "Heatmaps", "maleInh_maleBias")
-# heatmapLand <- file.path("results", "Heatmaps", "femInh_maleBias")
-# heatmapLand <- file.path("results", "Heatmaps", "femInh_femBias")
 heatmapLand <- file.path("results")
 
 # heatmapLand <- file.path("results", "Heatmaps")
 
-# all_the_runs <- list.files(heatmapLand, 
-all_the_runs <- extractVarDirs(heatmapLand, 
-  #"_1[7-9][0-9]|2[0-9][0-9]|3[0-9][0-9]|4[0-1][0-9]_") # <- This was for the very first run - non-automated... more code to follow.
-  #"190304_1[7-9][0-9]_|190304_2[0-8][0-9]_|190304_29[0-5]_")
-  # "*_1[7-9][0-9]_|*_2[0-8][0-9]_|*_29[0-5]_")                # maleinh maleBias
-  # "*_2[9][6-9]_|*_3[0-9][0-9]_|*_4[0-1][0-9]_|*_420_")       # mothinh maleBias
-  # "*_42[1-9]_|*_4[3-9][0-9]_|*_5[0-3][0-9]_|*_54[0-5]_")      # mothinh femBias
-  # "*_54[6-9]_|*_5[5-9][0-9]_|*_6[0-6][0-9]_|*_670_")     # sameinh femaleBias
-  # "*_67[1-9]_|*_6[8-9][0-9]_|*_7[0-8][0-9]_|*_79[0-4]_")  # sameinh_maleBias
-  # "*_79[4-9]_|*_8[0-9][0-9]_|*_90[0-9]_|*_91[0-7]_|*_1041_")   # oppinh maleBias
-  # "*_794_|*_91[8-9]_|*_9[2-9][0-9]_|*_10[0-3][0-9]_|*_104[0-1]_")   # oppinh femBias
-  ##### "*_104[2-9]_|*_10[5-9][0-9]_|*_11[0-5][0-9]_|*_116[0-5]_|*_1289_") # maleinh femBias
-  ##### "*_116[6-9]_|*_11[7-9][0-9]_|*_12[0-8][0-9]_") # 
-  # "*_129[0-9]_|*_13[0-9][0-9]_|*_140[0-9]_|*_141[0-4]_") # mixedCurInh - sNTn (males 90%, females 10%)
-  # "*_141[5-9]_|*_14[2-9][0-9]_|*_15[0-9][0-9]_|*_16[0-5][0-9]_|*_166[0-2]_") # mixedCurInh_-_sSTf (males 75%, females 25%) 
-  # "*_166[3-9]_|*_16[7-9][0-9]_|*_1[7-8][0-9][0-9]_|*_190[0-9]_|*_1910_") # mixedCurInh_-_sSFr (males 60%, females 40%) ### running on LeonServer
-  # "*_191[1-9]_|*_19[2-9][0-9]_|*_20[1-2][0-9]_|*_203[0-5]_") # mothInh_femaleBias_SD=5 ### running on pComp
-  # "*_203[6-9]_|*_20[4-9][0-9]_|*_21[0-9][0-9]_|*_22[0-7][0-9]_|*_228[0-3]_") # mixedCurInh_-_sTnN (sub curinh males - 10%, curinh females - 90%)
-  # "*_302[8-9]_|*_303[0-9]_|*_304[0-5]_")      # sameinh popsplit lmh
-  "*_304[6-9]_|*_305[0-3]_")      # sameinh popsplit nw
-  # "*_305[4-9]_|*_30[6][0-9]_|*_307[0-1]")      # mixinh popsplit lmh
-  # "*_307[2-9]_")      # mixinh popsplit nw
-#   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
-#   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
-#   close(connection)
+# all_the_runs <- list.files(heatmapLand,
 
+filename_range <- print_regex_num_range(
+# 3901-4100
+  #3901-3950 ### mal inh
+  #3951-4000 ### fem inh
+  #4001-4050 ### sam inh
+  #4051-4100 ### mix inh
+)
 
-
-
-# stuff <- vector("character", length(all_the_runs))
-# for(thing in length(all_the_runs)) {
-# stuff[thing] <- str_sub(all_the_runs[thing], 8L, 10L)
-# }
-
-### Opposite Inheritance - Female Bias (differing curstarts between populations)
-# norm1 <- all_the_runs[1:5]  #794, 918-921
-# norm2 <- all_the_runs[6:35] #1000-1029
-# norm3 <- all_the_runs[36:113] #922-999
-# norm4 <- all_the_runs[114:125] #1030-1041
-# all_the_runs <- c(norm1, norm3, norm2, norm4)
-
-# norm1 <- all_the_runs[1:86]  #546-631
-# norm2 <- all_the_runs[87:101] #633-647
-# norm3 <- all_the_runs[102:111] #649-658
-# norm4 <- all_the_runs[112:115] #660-663
-# norm5<- all_the_runs[116:121] #665-670
-# all_the_runs <- c(norm1, all_the_runs[123], norm2, all_the_runs[125], norm3, all_the_runs[124], norm4, all_the_runs[122], norm5)
-
-# norm1 <- all_the_runs[1:117]  #671-792
-# norm2 <- all_the_runs[120:125] #633-647
-# all_the_runs <- c(norm1, norm2, all_the_runs[118:119])
-
-# norm1 <- all_the_runs[1:57]
-# norm2 <- all_the_runs[58:124]
-# all_the_runs <- c(norm1, all_the_runs[125], norm2)
-
-
-# norm1 <- all_the_runs[1:12]  #421-432
-# norm2 <- all_the_runs[13:37] #434-458
-# norm3 <- all_the_runs[38:52] #460-474
-# norm4 <- all_the_runs[53:67] #476-490
-# norm5<- all_the_runs[68:82] #492-506
-# norm6 <- all_the_runs[83:91] #508-516
-# norm7 <- all_the_runs[95:123]#517-545
-# # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
-# all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
-# # 
-
-
-# # norm1 <- all_the_runs[1:57]  #421-432
-# # norm2 <- all_the_runs[13:37] #434-458
-# # norm3 <- all_the_runs[38:52] #460-474
-# # norm4 <- all_the_runs[53:67] #476-490
-# # norm5<- all_the_runs[68:82] #492-506
-# # norm6 <- all_the_runs[83:91] #508-516
-# # norm7 <- all_the_runs[95:123]#517-545
-# # 92 - 475; 93 - 491; 94 - 507; 124 - 433; 125 - 459
-# # all_the_runs <- c(norm1, all_the_runs[124], norm2, all_the_runs[125], norm3, all_the_runs[92], norm4, all_the_runs[93], norm5, all_the_runs[94], norm6, norm7)
-# ;
-
-
-# profvis({
-# #   for(iteration in 1:10) {
-#     extractedMeans <- extractMeans(allRunDirs = all_the_runs, 
-#         dirHeatMap = heatmapLand, source_of_params = "params.yaml")
-# #   }
-# })
-
+all_the_runs <- extractVarDirs(heatmapLand, filename_range)
 
 
 
@@ -177,13 +95,13 @@ IndividualFigures <- function (
   colorRange = 2, # c("relative", "absolute")
   thisBias = 1 # 3 or 4
 ) {
-  
+
   # heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourceFolder <- file.path("results")
   # heatmap_sourceFolder <- file.path("sameSexFigResults", "results")
-  
+
   ClrRngContainer <- c("relative", "absolute")
-  
+
   inheritanceContainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
                             "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
                             "sTfSinh", "sTnNinh", "FfFfinh")
@@ -196,7 +114,7 @@ IndividualFigures <- function (
   inheritance <- inheritanceContainer[inheritance]
 
   thisBias <- whichBias[thisBias]
-  
+
   folderName <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
 
   # tempHtMpArray <- readRDS(file.path(heatmap_sourceFolder, folderName, list.files(file.path(heatmap_sourceFolder, folderName), pattern = ".RData")))
@@ -211,7 +129,7 @@ IndividualFigures <- function (
 
     lowMedHigh <- tempHtMpArray[1:3,1:3,1:3,]
     narrowWide <- tempHtMpArray[4:5,4:5,4:5,]
-    
+
   } else if (length (HtMpArrays) == 2) {
     lowMedHigh <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "lowMedHigh.RData")))
     narrowWide <- readRDS(file.path("results", folderName, list.files(file.path("results", folderName), pattern = "narrowWide.RData")))
@@ -238,7 +156,7 @@ IndividualFigures <- function (
     dir.create(file.path(
       heatmap_sourceFolder, folderName, "narrowWide"
     ))
-    
+
   }
 
   # heatmapSource_folderList <- c(
@@ -307,7 +225,7 @@ IndividualFigures <- function (
 
   # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
-  
+
 
 
   if (thisBias == 1) {
@@ -348,13 +266,13 @@ IndividualFigures <- function (
   for (htmpView in 1:3) {
     for (SxMtPop in 1:8) {
       for (inhStyle in 1:2) {
-        
+
         if(!(dir.exists(file.path(
-          heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
+          heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2],
           slicedPop[htmpView] # paste0("slice_", slice)
         )))) {
           dir.create(file.path(
-            heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
+            heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2],
             slicedPop[htmpView] # paste0("slice_", slice)
           ))
         }
@@ -377,20 +295,20 @@ IndividualFigures <- function (
             ), c(3,3,2,2))
         }
         for (slice in 1:sliceNum) {
-          
+
           file_name <- paste0(regularNames[SxMtPop], "_slice_", slice, "_", slicedPop[htmpView], ".png")
           # rule of thumb: if we're splitting up htmpView _within_ slice and SxMtPop, then we need to save the output files according to the schema that will help pull back together the slices.
           png(filename = file.path(
-              heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2], 
-              # paste0("slice_", slice), file_name), 
-              slicedPop[htmpView], file_name), 
+              heatmap_sourceFolder, folderName, inhOptions[inhStyle + 2],
+              # paste0("slice_", slice), file_name),
+              slicedPop[htmpView], file_name),
             width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
           if(colorRange == "absolute") {
             if ("Curiosity" %in% str_split(title_names[SxMtPop], " ")[[1]]
             ) {heatmapRange <- c(0,1)} else {heatmapRange <- c(1,156)}
           } else {
-            
+
             heatmapRange <- inhOptions[[inhStyle]][
               dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
               dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
@@ -406,14 +324,14 @@ IndividualFigures <- function (
               round(max(heatmapRangeDatasetTwo), 2),
               round(max(heatmapRangeDatasetTre), 2)
             )
-            
+
             heatmapRange <- c(heatmap_min[htmpView]-0.01,heatmap_max[htmpView]+0.01)
             rm(heatmapRangeDatasetOne, heatmapRangeDatasetTwo, heatmapRangeDatasetTre,
               heatmap_min, heatmap_max)
           } # UNFINISHED
           findXLab <- heatmap_axes[[htmpView]][1]
           findYLab <- heatmap_axes[[htmpView]][2]
-          
+
           if(inhStyle == 1) {
 
             image(x = matrix(as.numeric(
@@ -424,8 +342,8 @@ IndividualFigures <- function (
               SxMtPop
             ]),sliceNum,sliceNum),
             col = colorSeqMultPalette$YlOrBr(100),
-            axes = F, 
-            xlab = findXLab, 
+            axes = F,
+            xlab = findXLab,
             ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
 
             axis(1,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
@@ -434,7 +352,7 @@ IndividualFigures <- function (
             axis(1,c(-0.25,0.25,0.75,1.25),
                 c("","","",""),
                 T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-            
+
             axis(2,c(-0.25 ,0      ,0.25  ,0.5      ,0.75  ,0.97    ,1.25),
                 c(""    ,"0-.25",""    , ".25-.5",""    , ".45-1",""  ),
                 T,0,NA,F,cex.axis=0.6, tck = 0)
@@ -451,8 +369,8 @@ IndividualFigures <- function (
               SxMtPop
             ]),sliceNum,sliceNum),
             col = colorSeqMultPalette$YlOrBr(100),
-            axes = F, 
-            xlab = findXLab, 
+            axes = F,
+            xlab = findXLab,
             ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
 
             axis(1,c(-0.5,  0  ,0.5,    1    ,1.5),
@@ -461,7 +379,7 @@ IndividualFigures <- function (
             axis(1,c(-0.5,0.5,1.5),
                 c("","",""),
                 T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-            
+
             axis(2,c(-0.5,  0  ,0.5,    1    ,1.5),
                 c(  ""   ,"0-1","" ,".45-.55","" ),
                 T,0,NA,F,cex.axis=0.6, tck = 0)
@@ -469,12 +387,12 @@ IndividualFigures <- function (
                 c("","",""),
                 T,-0.03,NA,F,cex.axis=1, tck = -0.03)
           }
-          
+
           dev.off()
         }
 
       }
-              
+
       # plot(matrix(c(rep(1,20),1:20),20,2),col=colorSeqMultPalette$YlOrBr(20),pch=15,cex=15, xlab = NA, ylab = NA, axes = F)
       # a <- 0.35; b <- 20.5; c <- (b-a)/10
       # axis(2, seq(a,b,c),c("","","","","","","","","","",""), line=0)
@@ -488,13 +406,13 @@ IndividualFigures <- function (
       #     } else {
       #       axis(4, c(17,18,19,20),c("1","50.5","100", "All:"), las=1,tck = 0, lwd=0, line=6)
       #     }
-        
+
       # } else {
       #   axis(4, c(17,18,19,20),c(heatmap_min[1],round((heatmap_min[1]+heatmap_max[1])/2,2),heatmap_max[1], "d2s"), las=1,tck = 0, lwd=0, line=6)
       #   axis(4, c(17,18,19,20),c(heatmap_min[2],round((heatmap_min[2]+heatmap_max[2])/2,2),heatmap_max[2], "d1s"), las=1,tck = 0, lwd=0, line=9)
       #   axis(4, c(17,18,19,20),c(heatmap_min[3],round((heatmap_min[3]+heatmap_max[3])/2,2),heatmap_max[3], "d12"), las=1,tck = 0, lwd=0, line=12)
       # }
-      
+
       # mtext(c(paste0(legend_title[ceiling(SxMtPop/4)],"    ")),3,2.2,cex=1) # the fecking spaces are for keeping text center-aligned
       # mtext("Seeks Novel Songs",3,1,cex = 0.8)
       # mtext(range_list[1,2,ceiling(SxMtPop/4)],1,0.7,cex = 0.8)
@@ -543,7 +461,7 @@ CombineSingles <- function (
   folderBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritanceStyle %in% str_split(x, "_")[[1]][4] && whichBias[bias] %in% str_split(x, "_")[[1]][5])))]
 
   PopBias <- whichPopBias[bias]
-  
+
   singlesFolder <- file.path(heatmap_sourceFolder, folderBias, curstartPatternContainer[curstartPattern], PopBias)
 
   # if(!(dir.exists(singlesFolder))) {dir.create(singlesFolder)}
@@ -572,7 +490,7 @@ stackMultiples <- function (
   inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")
   pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
 ) {
-  
+
 
   # maleInhMaleVFemaleBias
 
@@ -594,16 +512,16 @@ stackMultiples <- function (
 
   inheritanceContainer <- c("sameinh", "oppsinh", "maleinh", "mothinh")
   inheritance <- inheritanceContainer[inheritance]
-  
+
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
-  
+
   output_folder <- file.path(heatmap_sourceFolder, paste0("Combined_", inheritance))# "_pattern_", curstartPatternContainer[pattern]))
   if(!(dir.exists(output_folder))) {dir.create(output_folder)}
   if(!(dir.exists(file.path(output_folder, curstartPatternContainer[pattern])))) {dir.create(file.path(output_folder, curstartPatternContainer[pattern]))}
 
   maleBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[1] %in% str_split(x, "_")[[1]][5])))]
   femsBias <- list.files(heatmap_sourceFolder)[which(sapply(list.files(heatmap_sourceFolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && whichBias[2] %in% str_split(x, "_")[[1]][5])))]
-  
+
   for (metSxPop in 1:8) {
     stackOne <- CombineSingles(inheritance, 1, metSxPop, pattern)
     stackTwo <- CombineSingles(inheritance, 2, metSxPop, pattern)
@@ -705,15 +623,15 @@ for (inhPattern in 1:4) {
 
 #   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
-#     slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#     slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
 #       slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
-#     slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#     slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
 #       slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
-#     slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#     slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
 #       slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
-#     slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#     slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
 #       slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
-#     slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num], 
+#     slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
 #       slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
 #   hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
 #   image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
@@ -793,12 +711,12 @@ for (inhPattern in 1:4) {
 
 
 # # Make max-and-min values in an object,
-# # plot five of those objects for each slice set going 
+# # plot five of those objects for each slice set going
 # # through the 3d-array of heatmap data, along each dimension
 # maxAndMinPlot <- function (
 
 # ) {
-  
+
 #   # Read in the RDS file with the data array for the heatmaps
 
 #   #   List folders that contain the .RData file (should be the only one in that dir contained in this list)
@@ -816,12 +734,12 @@ for (inhPattern in 1:4) {
 
 #   # opps = 2, 1 same = 4, 3 <-- fileOrder for making the figure!
 
-#   maxNMinArray <- array(c(rep(0, 240)), 
-#                       c(6,8,5), 
+#   maxNMinArray <- array(c(rep(0, 240)),
+#                       c(6,8,5),
 #                       list(
-#                         # c("p2mVfem", "p1mVfem", "p1mVp2m", "p2fVmal", "p1fVmal", "p1fVp2f"), 
-#                         c("p1m", "p2m", "fem", "p1f", "p2f", "mal"), 
-#                         c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal", "ES pop1fem", "ES pop1mal", "ES pop2fem", "ES pop2mal"), 
+#                         # c("p2mVfem", "p1mVfem", "p1mVp2m", "p2fVmal", "p1fVmal", "p1fVp2f"),
+#                         c("p1m", "p2m", "fem", "p1f", "p2f", "mal"),
+#                         c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal", "ES pop1fem", "ES pop1mal", "ES pop2fem", "ES pop2mal"),
 #                         c("slice 1", "slice 2", "slice 3", "slice 4", "slice 5")))
 #   #   Read files from folderlist database
 #   for (filechunk in 1:2) {
@@ -832,11 +750,11 @@ for (inhPattern in 1:4) {
 #       for (slice in 1:5) {
         # dat_array_doh <- array(c(
         #   rep(c(slice, 1, 1, 1), 2),
-        #   slice, 
-        #   slice, 
+        #   slice,
+        #   slice,
         #   rep(c(5, 5, 5, slice), 2)
         # ), c(3,3,2))
-        
+
 #         heatmapRangeDatasetOne <- tempHtMpArray[
 #           dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
 #           dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
@@ -869,10 +787,10 @@ for (inhPattern in 1:4) {
 #     }
 
 #   }
-  
+
 #   return (maxNMinArray)
 # }
-  
+
 # plot <- maxAndMinPlot()
 # ECplot <- plot[,1:4,]
 # ESplot <- plot[,5:8,]
@@ -898,8 +816,8 @@ for (inhPattern in 1:4) {
 # for (split in 1:2) {
 #   for (slice in 1:5) {
 #     ECplot <- apply(ECplot[,,slice], 2, rev)
-#     image(t(ECplot[,,slice]), col = colorSeqMultPalette$PuBuGn(100), 
-#       ylab = c("p1m", "p2m", "fem", "p1f", "p2f", "mal"), 
+#     image(t(ECplot[,,slice]), col = colorSeqMultPalette$PuBuGn(100),
+#       ylab = c("p1m", "p2m", "fem", "p1f", "p2f", "mal"),
 #       xlab = c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal"))
 #   }
 # }
@@ -925,7 +843,7 @@ for (inhPattern in 1:4) {
 # #     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
 # #     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
 # #     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
-# #                                   ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))), 
+# #                                   ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))),
 # #         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
 # #     eval(parse(text=stuff))
 # #     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
