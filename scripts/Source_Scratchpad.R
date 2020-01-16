@@ -172,8 +172,8 @@ print_regex_num_range <- function (
                                 }
                             }
                         # 1XY where Y == 9
-                        } 
-                        
+                        }
+
                     }
                 # 1XY-2ZA
                 } else if (as.numeric (first_term[[1]][1]) + 1 == as.numeric (secnd_term[[1]][1])) {
@@ -234,7 +234,7 @@ print_regex_num_range <- function (
                                 output_object <- append (output_object, "0_")
                             }
                         # 11X where X = 9
-                        } 
+                        }
                     # 11X-12X
                     } else if (as.numeric (first_term[[1]][2]) + 1 == as.numeric(secnd_term[[1]][2])) {
                         # 11X where X < 9
@@ -250,7 +250,7 @@ print_regex_num_range <- function (
                                 # append "0_" ###  ### "*_11[X-9]_|*_120_"
                                 output_object <- append (output_object, "0_")
                             }
-                        # 
+                        #
                     # 11X -11Y
                     } else if (as.numeric (first_term[[1]][2]) == as.numeric(secnd_term[[1]][2])) {
                         # append "1[X-Y]_" ### "*_11[X-Y]_"
@@ -268,22 +268,25 @@ print_regex_num_range <- function (
                 # 1XXX-4XXX
                 if (as.numeric (first_term[[1]][1]) + 1 < as.numeric(secnd_term[[1]][1])) {
                     # 1ABC where A < 9
-                    if (as.numeric (first_term[[1]][2]) < 9) {
+                    # if (as.numeric (first_term[[1]][2]) < 9) {
                         # append "A" ### "*_1A"
-                        output_object <- append (output_object, paste0 (first_term[[1]][2]))
+                        # output_object <- append (output_object, paste0 (first_term[[1]][2]))
                         # 1ABC where B < 9
-                        if (as.numeric (first_term[[1]][3]) < 9) {
+                        # if (as.numeric (first_term[[1]][3]) < 9) {
                             # append "B" ### "*_1AB"
-                            output_object <- append (output_object, paste0 (first_term[[1]][3]))
+                            # output_object <- append (output_object, paste0 (first_term[[1]][3]))
                             # 1ABC where C < 9
-                            if (as.numeric (first_term[[1]][4]) < 9) {
-                                # append "[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4"
+                            # if (as.numeric (first_term[[1]][4]) < 9) {
+                                # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4"
+                                output_object <- append (output_object, paste0 (first_term[[1]][2], first_term[[1]][3], "[", first_term[[1]][4], "-9]_|*_", first_term[[1]][1], first_term[[1]][2], "[", first_term[[1]][3], "-9][0-9]_|*_", first_term[[1]][1], "[", first_term[[1]][2], "-9][0-9][0-9]_|*_[", as.numeric(first_term[[1]][1]) + 1, "-", as.numeric(secnd_term[[1]][1]) - 1, "][0-9][0-9][0-9]_|*_", secnd_term[[1]][1]))
                                 # 4DEF where D > 0
                                 if (as.numeric (secnd_term[[1]][2]) > 0) {
                                     # append "[0-(D-1)][0-9][0-9]_|*_4D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D"
+                                    output_object <- append (output_object, paste0 ("[0-", as.numeric (secnd_term[[1]][2]) - 1, "][0-9][0-9]_|*_", secnd_term[[1]][1], secnd_term[[1]][2]))
                                     # 4DEF where E > 0
                                     if (as.numeric (secnd_term[[1]][3]) > 0) {
                                         # append "[0-(E-1)][0-9]_|*_4DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE"
+                                        output_object <- append (output_object, paste0 ("[0-", as.numeric (secnd_term[[1]][3]) - 1, "][0-9]_|*_", secnd_term[[1]][1], secnd_term[[1]][2], secnd_term[[1]][3]))
                                         # 4DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
                                             # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE[0-F]_"
@@ -296,6 +299,7 @@ print_regex_num_range <- function (
                                     # 4DEF where E == 0
                                     } else if (as.numeric (secnd_term[[1]][3]) == 0) {
                                         # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D0"
+                                        output_object <- append (output_object, paste0 ("0"))
                                         # 4DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
@@ -307,9 +311,11 @@ print_regex_num_range <- function (
                                 # 4DEF where D == 0
                                 } else if (as.numeric (secnd_term[[1]][2]) == 0) {
                                     # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_40"
+                                    output_object <- append (output_object, paste0 ("0"))
                                     # 4DEF where E > 0
                                     if (as.numeric (secnd_term[[1]][3]) > 0) {
                                         # append "[0-(E-1)][0-9]_|*_40E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_40[0-(E-1)][0-9]_|*_40E"
+                                        output_object <- append (output_object, paste0 ("[0-", as.numeric (secnd_term[[1]][3]) - 1, "][0-9]_|*_", secnd_term[[1]][1], secnd_term[[1]][2], secnd_term[[1]][3]))
                                         # 4DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
@@ -320,6 +326,7 @@ print_regex_num_range <- function (
                                     # 4DEF where E == 0
                                     } else if (as.numeric (secnd_term[[1]][3]) == 0) {
                                         # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_400"
+                                        output_object <- append (output_object, paste0 ("0"))
                                         # 4DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
@@ -329,9 +336,9 @@ print_regex_num_range <- function (
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
+                    #         }
+                    #     }
+                    # }
 
 
 
@@ -341,444 +348,104 @@ print_regex_num_range <- function (
                 # 1XXX-2XXX
                 } else if (as.numeric (first_term[[1]][1]) + 1 == as.numeric (secnd_term[[1]][1])) {
                     # 1ABC where A < 9
-                    if (as.numeric (first_term[[1]][2]) < 9) {
-                        # 1ABC where B < 9
-                        if (as.numeric (first_term[[1]][3]) < 9) {
-                            # 1ABC where C < 9
-                            if (as.numeric (first_term[[1]][4]) < 9) {
+                    # if (as.numeric (first_term[[1]][2]) < 9) {
+                    #     # append "A" ### "*_1A"
+                    #     output_object <- append (output_object, paste0 (first_term[[1]][2]))
+                    #     # 1ABC where B < 9
+                    #     if (as.numeric (first_term[[1]][3]) < 9) {
+                    #         # append "B" ### "*_1AB"
+                    #         output_object <- append (output_object, paste0 (first_term[[1]][3]))
+                    #         # 1ABC where C < 9
+                    #         if (as.numeric (first_term[[1]][4]) < 9) {
+
+                                # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2"
+                                output_object <- append (output_object, paste0 (first_term[[1]][2], first_term[[1]][3], "[", first_term[[1]][4], "-9]_|*_", first_term[[1]][1], first_term[[1]][2], "[", first_term[[1]][3], "-9][0-9]_|*_", first_term[[1]][1], "[", first_term[[1]][2], "-9][0-9][0-9]_|*_", secnd_term[[1]][1]))
                                 # 2DEF where D > 0
                                 if (as.numeric (secnd_term[[1]][2]) > 0) {
+                                    # append "[0-(D-1)][0-9][0-9]_|*_2D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D"
+                                    output_object <- append (output_object, paste0 ()) ### HERE IS WHERE YOU STOPPED
                                     # 2DEF where E > 0
                                     if (as.numeric (secnd_term[[1]][3]) > 0) {
+                                        # append "[0-(E-1)][0-9]_|*_2DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D[0-(E-1)][0-9]_|*_2DE"
                                         # 2DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
+                                            # append "[0-F]_"
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
                                         # 2DEF where F == 0
                                         } else {
+                                            # append "0_"
                                             output_object <- append (output_object, paste0 ("0_"))
                                         }
                                     # 2DEF where E == 0
                                     } else if (as.numeric (secnd_term[[1]][3]) == 0) {
+                                        # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D0"
                                         # 2DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
+                                            # append "[0-F]_"
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
                                         # 2DEF where F == 0
                                         } else {
+                                            # append "0_"
                                             output_object <- append (output_object, paste0 ("0_"))
                                         }
                                     }
                                 # 2DEF where D == 0
                                 } else if (as.numeric (secnd_term[[1]][2]) == 0) {
+                                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20"
                                     # 2DEF where E > 0
                                     if (as.numeric (secnd_term[[1]][3]) > 0) {
+                                        # append "[0-(E-1)][0-9]_|*_20E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
                                         # 2DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
+                                            # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
                                         # 2DEF where F == 0
                                         } else {
+                                            # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
                                             output_object <- append (output_object, paste0 ("0_"))
                                         }
                                     # 2DEF where E == 0
                                     } else if (as.numeric (secnd_term[[1]][3]) == 0) {
+                                        # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_200"
                                         # 2DEF where F > 0
                                         if (as.numeric (secnd_term[[1]][4]) > 0) {
+                                            # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_200[0-F]_"
                                             output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
                                         # 2DEF where F == 0
                                         } else {
+                                            # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2000_"
                                             output_object <- append (output_object, paste0 ("0_"))
                                         }
                                     }
                                 }
-                            # 1ABC where C == 9
-                            } else if (as.numeric (first_term[[1]][4]) == 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            }
-                        # 1ABC where B == 9
-                        } else if (as.numeric (first_term[[1]][3]) == 9) {
-                            # 1ABC where C < 9
-                            if (as.numeric (first_term[[1]][4]) < 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            # 1ABC where C == 9
-                            } else if (as.numeric (first_term[[1]][4]) == 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    # 1ABC where A == 9
-                    } else if (as.numeric (first_term[[1]][2]) == 9) {
-                        # 1ABC where B < 9
-                        if (as.numeric (first_term[[1]][3]) < 9) {
-                            # 1ABC where C < 9
-                            if (as.numeric (first_term[[1]][4]) < 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            # 1ABC where C == 9
-                            } else if (as.numeric (first_term[[1]][4]) == 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            }
-                        # 1ABC where B == 9
-                        } else if (as.numeric (first_term[[1]][3]) == 9) {
-                            # 1ABC where C < 9
-                            if (as.numeric (first_term[[1]][4]) < 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            # 1ABC where C == 9
-                            } else if (as.numeric (first_term[[1]][4]) == 9) {
-                                # 2DEF where D > 0
-                                if (as.numeric (secnd_term[[1]][2]) > 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                # 2DEF where D == 0
-                                } else if (as.numeric (secnd_term[[1]][2]) == 0) {
-                                    # 2DEF where E > 0
-                                    if (as.numeric (secnd_term[[1]][3]) > 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    # 2DEF where E == 0
-                                    } else if (as.numeric (secnd_term[[1]][3]) == 0) {
-                                        # 2DEF where F > 0
-                                        if (as.numeric (secnd_term[[1]][4]) > 0) {
-                                            output_object <- append (output_object, paste0 ("[0-", secnd_term[[1]][4], "]_"))
-                                        # 2DEF where F == 0
-                                        } else {
-                                            output_object <- append (output_object, paste0 ("0_"))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                            # }
                 # 1XXX-1YYY
                 } else if (as.numeric (first_term[[1]][1]) == as.numeric (secnd_term[[1]][1])) {
                     # 12BC-15EF
                     if (as.numeric (first_term[[1]][2]) + 1 < as.numeric(secnd_term[[1]][2])) {
                         # 12BC where B < 9
                             # 12BC where C < 9
+                            # append "2B[C-9]_|*_12[B-9][0-9]_|*_1[(2+1)-(5-1)][0-9][0-9]_|*_15" ### "*_1"
+
+
+
+                            output_object <- append (output_object, )
                                 # 15EF where E > 0
+                                # append "[0-(E-1)][0-9]_|*_15E"
                                     # 15EF where F > 0
+                                    # append "[0-F]_"
                                     # 15EF where F == 0
+                                    # append "0_"
                                 # 15EF where E == 0
                                     # 15EF where F > 0
+                                    # append "[0-F]_"
                                     # 15EF where F == 0
-                            # 12BC where C == 9
-                                # 15EF where E > 0
-                                    # 15EF where F > 0
-                                    # 15EF where F == 0
-                                # 15EF where E == 0
-                                    # 15EF where F > 0
-                                    # 15EF where F == 0
-                        # 12BC where B == 9
-                            # 12BC where C < 9
-                                # 15EF where E > 0
-                                    # 15EF where F > 0
-                                    # 15EF where F == 0
-                                # 15EF where E == 0
-                                    # 15EF where F > 0
-                                    # 15EF where F == 0
-                            # 12BC where C == 9
-                                # 15EF where E > 0
-                                    # 15EF where F > 0
-                                    # 15EF where F == 0
-                                # 15EF where E == 0
-                                    # 15EF where F > 0
-                                    # 15EF where F == 0
+                                    # append "0_"
                     # 12BC-13EF
                     } else if (as.numeric (first_term[[1]][2]) + 1 == as.numeric (secnd_term[[1]][2])) {
                         # 12BC where B < 9
                             # 12BC where C < 9
-                                # 13EF where E > 0
-                                    # 13EF where F > 0
-                                    # 13EF where F == 0
-                                # 13EF where E == 0
-                                    # 13EF where F > 0
-                                    # 13EF where F == 0
-                            # 12BC where C == 9
-                                # 13EF where E > 0
-                                    # 13EF where F > 0
-                                    # 13EF where F == 0
-                                # 13EF where E == 0
-                                    # 13EF where F > 0
-                                    # 13EF where F == 0
-                        # 12BC where B == 9
-                            # 12BC where C < 9
-                                # 13EF where E > 0
-                                    # 13EF where F > 0
-                                    # 13EF where F == 0
-                                # 13EF where E == 0
-                                    # 13EF where F > 0
-                                    # 13EF where F == 0
-                            # 12BC where C == 9
+                            # append "2B[C-9]_|*_12[B-9][0-9]_|*_13"
                                 # 13EF where E > 0
                                     # 13EF where F > 0
                                     # 13EF where F == 0
@@ -796,7 +463,7 @@ print_regex_num_range <- function (
                         }
                     }
                 }
-            }
+            } # else if (bigger than 4 digits?) {craaaap.}
         } else {stop ("numbers need to be the same number of digits, because this function is ridiculous enough as is")}
     } else {stop ("first number needs to be smaller than the second number")}
 
