@@ -37,8 +37,6 @@ find_the_dir <- function (
   return (final_dir) # "results/five-by-five-vanilla_lowHigh_Background/191111_slices_-_maleinh_pop1Bias"
 }
 
-source()
-
 plot_that_spectrum <- function (file_name, colorPalette, legend_scale, theme) {
 
   # x <- array(c(1:100, rep(9.5,100), rep(9.7,100), rep(9.9,100), rep(10.1,100), rep(10.3,100), rep(10.5,100), rep(10.7,100), rep(10.9,100), rep(11.1,100), rep(11.3,100)), c(100, 11))

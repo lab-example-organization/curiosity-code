@@ -487,7 +487,7 @@ makeheatmapfile <- function (
 }
 
 individualfigures <- function (
-
+  output_foldername = FALSE,
   colorrange = 2, # c("relative", "absolute", "differences")
   colorpalette = 5, # Numbers correspond to specific color palettes
   foldername = heatmapoutput,
@@ -495,8 +495,8 @@ individualfigures <- function (
   var = FALSE
 ) {
 
-  # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint
-  #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,      19
+  # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint, midpoint_but_smooth, midpoint_but_smooshed
+  #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,       19,                  20,                    21
 
   # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourcefolder <- file.path("results")
@@ -628,25 +628,6 @@ individualfigures <- function (
     "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7"))
   )
 
-    # ("#ef8a62", "#f7f7f7", "#67a9cf"))
-    # ("#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061"))
-
-# eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[",
-#                            paste0(1:(number_of_repeats - 1),"]][i],curhistlist[[", collapse=''),
-#                            number_of_repeats, "]][i]))")))
-
-    # ("#ca0020", "#ca0020", "#f4a582", "#f4a582", "#f7f7f7", "#92c5de", "#92c5de", "#0571b0", "#0571b0"))
-                                  #  ("#67001f",
-                                  #   "#b2182b", "#b2182b", "#b2182b",
-                                  #   "#d6604d", "#d6604d", "#d6604d", "#d6604d",
-                                  #   "#fddbc7", "#fddbc7",
-                                  #   "#f7f7f7",
-                                  #   "#d1e5f0", "#d1e5f0",
-                                  #   "#4393c3", "#4393c3", "#4393c3", "#4393c3",
-                                  #   "#2166ac", "#2166ac", "#2166ac",
-                                  #   "#053061")) # 2-class divergent Red -> Blue Spectrum ### 19
-  # )
-
   regularnames <- c (
     "EndCurValP1M",
     "EndCurValP2M",
@@ -662,13 +643,37 @@ individualfigures <- function (
 
   # for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
 
-  if (! (dir.exists (file.path (
-    heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-  )))) {
-    dir.create (file.path (
+  if (output_foldername) {
+    if (! (dir.exists (file.path (
+      heatmap_sourcefolder, output_foldername
+    )))) {
+      dir.create (file.path (
+        heatmap_sourcefolder, output_foldername
+      ))
+      if (! (dir.exists (file.path (
+        heatmap_sourcefolder, output_foldername, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
+      )))) {
+        dir.create (file.path (
+          heatmap_sourcefolder, output_foldername, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
+        ))
+      }
+      heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
+    }
+  } else {
+    if (! (dir.exists (file.path (
       heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-    ))
+    )))) {
+      dir.create (file.path (
+        heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
+      ))
+    }
   }
+  # if (! (dir.exists (file.path ()))) {
+    # dir.create (file.path (
+    #   heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
+    # ))
+  # }
+
 
   otherpopsize <- foldername$othersize
   dat_array_doh <- array (c (
@@ -1049,13 +1054,13 @@ combineeditsingles <- function (
   heatmapfile = heatmapoutput
 ) {
 
-inheritancestyle <- paste0(heatmapfile$inheritance, "inh")
-bias <- paste0(heatmapfile$diffcurstartbias, "Bias")
-whichbias <- c("maleBias", "femaleBias", "pop1Bias")
-popbias <- c("FemalePop", "MalePop", "Popula2")[which(whichbias == bias)]
-#   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-# Access the same subdirectory where the individual images are stored
-#  heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
+  inheritancestyle <- paste0(heatmapfile$inheritance, "inh")
+  bias <- paste0(heatmapfile$diffcurstartbias, "Bias")
+  whichbias <- c("maleBias", "femaleBias", "pop1Bias")
+  popbias <- c("FemalePop", "MalePop", "Popula2")[which(whichbias == bias)]
+  #   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+  # Access the same subdirectory where the individual images are stored
+  #  heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourcefolder <- file.path("results")
 
   sxmtpopcontainer <- c("EndCurValP1M",
