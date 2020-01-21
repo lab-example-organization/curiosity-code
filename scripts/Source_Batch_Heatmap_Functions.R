@@ -150,64 +150,14 @@ heatmap_difference <- function (
   if (length (source_pattern) > 1) {
     stop ("Trying to compare things using a category? Then pick a category!")
   }
-  if (first_source_names[1] != secnd_source_names[1]) {
-    if (length (first_source_names) == 1) {
-      first_source_directory <- file.path(first_source_names[1])
-    } else if (length (first_source_names) == 2) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2])
-    } else if (length (first_source_names) == 3) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3])
-    } else if (length (first_source_names) == 4) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4])
-    } else if (length (first_source_names) == 5) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4], first_source_names[5])
-    } else if (length (first_source_names) == 6) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4], first_source_names[5], first_source_names[6])
-    } else if (length (first_source_names) == 7) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4], first_source_names[5], first_source_names[6], first_source_names[7])
-    } else if (length (first_source_names) == 8) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4], first_source_names[5], first_source_names[6], first_source_names[7], first_source_names[8])
-    } else if (length (first_source_names) == 9) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4], first_source_names[5], first_source_names[6], first_source_names[7], first_source_names[8], first_source_names[9])
-    } else if (length (first_source_names) == 10) {
-      first_source_directory <- file.path(first_source_names[1], first_source_names[2], first_source_names[3], first_source_names[4], first_source_names[5], first_source_names[6], first_source_names[7], first_source_names[8], first_source_names[9], first_source_names[10])
-    } else if (length (first_source_names) > UL) {
-      stop ("make more categories for first directory! Too much directory for this lil function!")
-    }
-
-    if (length (secnd_source_names) == 1) {
-      secnd_source_directory <- file.path(secnd_source_names[1])
-    } else if (length (secnd_source_names) == 2) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2])
-    } else if (length (secnd_source_names) == 3) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3])
-    } else if (length (secnd_source_names) == 4) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4])
-    } else if (length (secnd_source_names) == 5) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4], secnd_source_names[5])
-    } else if (length (secnd_source_names) == 6) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4], secnd_source_names[5], secnd_source_names[6])
-    } else if (length (secnd_source_names) == 7) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4], secnd_source_names[5], secnd_source_names[6], secnd_source_names[7])
-    } else if (length (secnd_source_names) == 8) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4], secnd_source_names[5], secnd_source_names[6], secnd_source_names[7], secnd_source_names[8])
-    } else if (length (secnd_source_names) == 9) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4], secnd_source_names[5], secnd_source_names[6], secnd_source_names[7], secnd_source_names[8], secnd_source_names[9])
-    } else if (length (secnd_source_names) == 10) {
-      secnd_source_directory <- file.path(secnd_source_names[1], secnd_source_names[2], secnd_source_names[3], secnd_source_names[4], secnd_source_names[5], secnd_source_names[6], secnd_source_names[7], secnd_source_names[8], secnd_source_names[9], secnd_source_names[10])
-    } else if (length (secnd_source_names) > UL) {
-      stop ("make more categories for second directory! Too much directory for this lil function!")
-    }
+  first_source_directory <- file.path (first_source_names[1])
+  secnd_source_directory <- file.path (secnd_source_names[1])
+  for (i in 2:length (first_source_names)) {
+      first_source_directory <- file.path (first_source_directory, first_source_names[i])
   }
-
-  # heatmap_array <- readRDS(file.path("results", "Heatmaps", "output_objects",
-  #   foldername, list.files(path = file.path("results", "Heatmaps", "output_objects",
-  #     foldername), pattern =
-  #       "heatmap_output_-_")
-  #   )
-  # )
-
-
+  for (j in 2:length (secnd_source_names)) {
+      secnd_source_directory <- file.path (secnd_source_directory, secnd_source_names[j])
+  }
 
   first_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = first_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = first_source_directory), pattern = ".RData")))
   second_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), pattern = ".RData")))
