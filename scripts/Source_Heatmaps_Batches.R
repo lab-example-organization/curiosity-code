@@ -95,17 +95,19 @@ source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
 
 thing <- c("male", "moth", "same", "FfFf")
 # das_dinge <- c(1,2,3,11)
-stuff <- c("five-by-five-Inv3k_lowHigh_Background",
-           "five-by-five-vanilla_lowHigh_Background",
-           "five-by-five-followUpVanilla_lowHigh_Background",
-           "five-by-five-followUpInvLow1k_lowHigh_Background",
-           "five-by-five-followUpInvHigh1k_lowHigh_Background",
-           "five-by-five-followUpFemInvLow1k_lowHigh_Background",
-           "five-by-five-followUpBothInvLow1k_lowHigh_Background",
-           "",
-          #  "tenKfiveByFive_child-lowFemInvtK/five-by-five-followUpFemHigh1k_lowHigh_Background",
-         #  "",)
-)
+# stuff <- c("five-by-five-Inv3k_lowHigh_Background",
+#            "five-by-five-vanilla_lowHigh_Background",
+#            "five-by-five-followUpVanilla_lowHigh_Background",
+#            "five-by-five-followUpInvLow1k_lowHigh_Background",
+#            "five-by-five-followUpInvHigh1k_lowHigh_Background",
+#            "five-by-five-followUpFemInvLow1k_lowHigh_Background",
+#            "five-by-five-followUpBothInvLow1k_lowHigh_Background",
+#            "",
+#           #  "tenKfiveByFive_child-lowFemInvtK/five-by-five-followUpFemHigh1k_lowHigh_Background",
+#          #  "",)
+# )
+
+stuff <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv", "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", "childF10NoInv")
 
 # stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
 stuff_n_things <- array (c (1, 2, 3, 4, 5, 6, 7, 7, 7, 7, 7, 7), c (6,2))
@@ -144,20 +146,7 @@ for (bs in 1:dim(stuff_n_things)[1]) {
     # visualization = "absolute"
     # replace = TRUE
 
-    output_heatmap <- heatmap_difference (
-                        source_pattern = thing[whaaat],
-                        first_source_names = stuff[stuff_n_things[bs, 2]],
-                        secnd_source_names = stuff[stuff_n_things[bs, 1]],
-                        visualization = "midpoint",
-                        replace = TRUE
-                        )
 
-    individualfigures(2,19,list(
-      foldername = output_heatmap$foldername,
-      biassize = 5,
-      othersize = 2,
-      diffcurstartbias = "pop1"
-    ))
 
   }
 }

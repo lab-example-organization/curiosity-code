@@ -639,9 +639,9 @@ print_regex_num_range <- function (
                 # 12BC-15EF
                 if (zv[1,2] + 1 < zv[2,2]) {
                     # 12BC where B < 9
-                # 12BC where C < 9
-                # append "2B[C-9]_|*_12[B-9][0-9]_|*_1[(2+1)-(5-1)][0-9][0-9]_|*_15" ### "*_1"
-                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,3], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    # 12BC where C < 9
+                    # append "2B[C-9]_|*_12[B-9][0-9]_|*_1[(2+1)-(5-1)][0-9][0-9]_|*_15" ### "*_1"
+                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
                     # 15EF where E > 0
                     if (zv[2,3] > 0) {
                     # append "[0-(E-1)][0-9]_|*_15E"
@@ -705,7 +705,7 @@ print_regex_num_range <- function (
                     # 123C-126F
                     if (zv[1,3] + 1 < zv[2,3]) {
                         # append "2B[C-9]_|*_12[(3+1)-(6-1)][0-9]_|*_126" ### "*_12B[C-9]_|*_12[(3+1)-(6-1)][0-9]_|*_126"
-                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,3], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
                         # 15EF where F > 0
                         if (zv[2,4] > 0) {
                             # append "[0-F]_" ### ""
@@ -718,7 +718,7 @@ print_regex_num_range <- function (
                     # 123C-124F
                     } else if (zv[1,3] + 1 == zv[2,3]) {
                         # append "23[C-9]_|*_124" ### "*_123[C-9]_|*_124"
-                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,3], "-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
                         # 124F where F > 0
                         if (zv[2,4] > 0) {
                             # append "[0-F]_" ### ""
