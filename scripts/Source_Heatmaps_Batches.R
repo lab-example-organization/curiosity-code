@@ -107,20 +107,20 @@ thing <- c("male", "moth", "same", "FfFf")
 #          #  "",)
 # )
 
-stuff <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", 
-           "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv", 
-           "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv", 
-           "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", 
-           "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", 
+stuff <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv",
+           "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv",
+           "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv",
+           "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv",
+           "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
            "childF10NoInv")
 
 # stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
-stuff_n_things <- array (c (1, 1, 1, 1, 1, 1, 2, 
-                            2, 2, 2, 2, 3, 3, 3, 
+stuff_n_things <- array (c (1, 1, 1, 1, 1, 1, 2,
+                            2, 2, 2, 2, 3, 3, 3,
                             3, 4, 4, 4, 5, 5, 6,
-                            
-                            2, 3, 4, 5, 6, 7, 3, 
-                            4, 5, 6, 7, 4, 5, 6, 
+
+                            2, 3, 4, 5, 6, 7, 3,
+                            4, 5, 6, 7, 4, 5, 6,
                             7, 5, 6, 7, 6, 7, 7), c (21,2))
 
 for (bs in 1:dim(stuff_n_things)[1]) {
@@ -128,8 +128,8 @@ for (bs in 1:dim(stuff_n_things)[1]) {
 
     output_heatmap <- heatmap_difference (
                         source_pattern = thing[whaaat],
-                        first_source_names = stuff[stuff_n_things[bs, 1]],
-                        secnd_source_names = stuff[stuff_n_things[bs, 2]],
+                        first_source_names = paste0 ("five-by-five-", stuff[stuff_n_things[bs, 1]]),
+                        secnd_source_names = paste0 ("five-by-five-", stuff[stuff_n_things[bs, 2]]),
                         visualization = "midpoint",
                         replace = TRUE
                         )
@@ -141,12 +141,17 @@ for (bs in 1:dim(stuff_n_things)[1]) {
     #### while, in contrast, Van - Inv(high) = Red
 
     # five-by-five-followUpInvLow1k_lowHigh_Background
-    individualfigures(2,19,list(
-      foldername = output_heatmap$foldername,
-      biassize = 5,
-      othersize = 2,
-      diffcurstartbias = "pop1"
-    ))
+    individualfigures(
+      output_foldername = "DifferenceHeatmaps",
+      colorrange = 2,
+      colorpalette = 19,
+      foldername = list(
+        foldername = output_heatmap$foldername,
+        biassize = 5,
+        othersize = 2,
+        diffcurstartbias = "pop1"
+      )
+    )
 
     # _source_names = "five-by-five-followUpVanilla_lowHigh_Background", ### 4101-4300
     # _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300

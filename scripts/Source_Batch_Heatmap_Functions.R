@@ -1,9 +1,10 @@
 find_the_dir <- function (
-  pattern, #male
+  patternz, #male
   source_dir # c("results", "five-by-five-vanilla_lowHigh_Background")
 ) {
 
   dirs_within_sourcedir <- list.dirs(file.path ("results", source_dir), recursive = FALSE)
+#   dirs_within_sourcedir <- list.dirs(file.path ("results", source_dir), pattern = patternz, recursive = FALSE)
 
   thing <- FALSE
 
@@ -33,6 +34,8 @@ find_the_dir <- function (
   # pattern_interrogation <- dirs_within_sourcedir[[1:length(dirs_within_sourcedir)]]
 
   final_dir <- file.path (dirs_within_sourcedir[[found_it]])
+
+#   final_dir <- file.path ("results", source_dir, dirs_within_sourcedir)
 
   return (final_dir) # "results/five-by-five-vanilla_lowHigh_Background/191111_slices_-_maleinh_pop1Bias"
 }
@@ -152,12 +155,17 @@ heatmap_difference <- function (
   }
   first_source_directory <- file.path (first_source_names[1])
   secnd_source_directory <- file.path (secnd_source_names[1])
-  for (i in 2:length (first_source_names)) {
+  if (length (first_source_names) > 1) {
+    for (i in 2:length (first_source_names)) {
       first_source_directory <- file.path (first_source_directory, first_source_names[i])
+    }
   }
-  for (j in 2:length (secnd_source_names)) {
+  if (length (secnd_source_names) > 1) {
+    for (j in 2:length (secnd_source_names)) {
       secnd_source_directory <- file.path (secnd_source_directory, secnd_source_names[j])
+    }
   }
+
 
   first_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = first_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = first_source_directory), pattern = ".RData")))
   second_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), pattern = ".RData")))
@@ -220,7 +228,7 @@ heatmap_difference <- function (
     # othersize = foldername$othersize,
     # diffcurstartbias = foldername$diffcurstartbias,
     # output_heatmap = output_heatmap,
-    foldername = file.path (paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
+    foldername = file.path ("DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
   )
 
   return (output_heatmap)
