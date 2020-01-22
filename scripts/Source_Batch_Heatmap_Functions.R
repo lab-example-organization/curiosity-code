@@ -194,19 +194,22 @@ heatmap_difference <- function (
   secnd_source_directory <- setdiff(strsplit(ssd, "-")[[1]], strsplit(fsd, "-")[[1]])
 
   # differences <-
-  if (! (dir.exists (file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory))))) {
-      dir.create(file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
+
+  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps"))))
+
+  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory))))) {
+      dir.create(file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
     }
 
-    if (! (dir.exists (file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))))) {
-      dir.create(file.path("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh")))
+    if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))))) {
+      dir.create(file.path("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh")))
     }
 
   if (replace) {
-    saveRDS(output_heatmap, file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
+    saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
   } else {
-    if (! (file.exists (file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData"))))) {
-      saveRDS(output_heatmap, file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
+    if (! (file.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData"))))) {
+      saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
     }
   }
 
