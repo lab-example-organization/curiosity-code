@@ -195,7 +195,7 @@ heatmap_difference <- function (
 
   # differences <-
 
-  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps"))))
+  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps")))) {dir.create (file.path ("results", "DifferenceHeatmaps"))}
 
   if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory))))) {
       dir.create(file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
