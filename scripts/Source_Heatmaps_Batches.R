@@ -107,10 +107,21 @@ thing <- c("male", "moth", "same", "FfFf")
 #          #  "",)
 # )
 
-stuff <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv", "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", "childF10NoInv")
+stuff <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", 
+           "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv", 
+           "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv", 
+           "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", 
+           "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", 
+           "childF10NoInv")
 
 # stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
-stuff_n_things <- array (c (1, 2, 3, 4, 5, 6, 7, 7, 7, 7, 7, 7), c (6,2))
+stuff_n_things <- array (c (1, 1, 1, 1, 1, 1, 2, 
+                            2, 2, 2, 2, 3, 3, 3, 
+                            3, 4, 4, 4, 5, 5, 6,
+                            
+                            2, 3, 4, 5, 6, 7, 3, 
+                            4, 5, 6, 7, 4, 5, 6, 
+                            7, 5, 6, 7, 6, 7, 7), c (21,2))
 
 for (bs in 1:dim(stuff_n_things)[1]) {
   for(whaaat in 1:4) {
