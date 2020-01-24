@@ -130,7 +130,7 @@ for (bs in 1:dim(stuff_n_things)[1]) {
                         source_pattern = thing[whaaat],
                         first_source_names = paste0 ("five-by-five-", stuff[stuff_n_things[bs, 1]]),
                         secnd_source_names = paste0 ("five-by-five-", stuff[stuff_n_things[bs, 2]]),
-                        visualization = "midpoint",
+                        visualization = "midpoint", # absolute, midpoint, and midpoint_but_high_res
                         replace = TRUE
                         )
 
@@ -143,6 +143,7 @@ for (bs in 1:dim(stuff_n_things)[1]) {
     # five-by-five-followUpInvLow1k_lowHigh_Background
     individualfigures(
       output_foldername = "DifferenceHeatmaps",
+      difference = TRUE,
       colorrange = 2,
       colorpalette = 19,
       foldername = list(

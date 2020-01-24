@@ -964,6 +964,7 @@ makeheatmapfile <- function (
 
 individualfigures <- function (
   output_foldername = FALSE,
+  difference = FALSE,
   colorrange = 2, # c("relative", "absolute", "differences")
   colorpalette = 5, # Numbers correspond to specific color palettes
   foldername = heatmapoutput,
@@ -973,13 +974,21 @@ individualfigures <- function (
 
   # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint, midpoint_but_smooth, midpoint_but_smooshed
   #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,       19,                  20,                    21
-
-  # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
-  if (output_foldername != F) {
-    heatmap_sourcefolder <- file.path ("results", output_foldername)
+  if (difference != FALSE) {
+    if (output_foldername != F) {
+      heatmap_sourcefolder <- file.path ("results", output_foldername)
+    } else {
+      heatmap_sourcefolder <- file.path("results")
+    }
   } else {
-    heatmap_sourcefolder <- file.path("results")
+      heatmap_sourcefolder <- file.path("results")
   }
+  # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
+  # if (output_foldername != F) {
+  #   heatmap_sourcefolder <- file.path ("results", output_foldername)
+  # } else {
+  #   heatmap_sourcefolder <- file.path("results")
+  # }
 
   # heatmap_sourcefolder <- file.path("sameSexFigResults", "results")
 

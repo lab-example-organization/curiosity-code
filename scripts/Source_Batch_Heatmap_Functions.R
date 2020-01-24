@@ -12,7 +12,7 @@ find_the_dir <- function (
     if (! (thing)) {
       stuff <- strsplit(strsplit(dirs_within_sourcedir, "inh")[[i]], "_")
       for (j in 1:length (stuff)) {
-        whatever <- which (stuff[[j]] == pattern)
+        whatever <- which (stuff[[j]] == patternz)
         if (length(whatever > 0)) {
           # print ("you found it!")
           # i <- append(i, j)
@@ -177,6 +177,10 @@ heatmap_difference <- function (
     output_curiosity <- ((first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) / 2) + 0.5
     output_sylreps <- ((first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / 2) + (155/2)
     output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
+  } else if (visualization == "midpoint_but_high_res") {
+    output_curiosity <- (first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) + 0.5
+    output_sylreps <- (first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) + (155/2)
+    output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
   }
 
 
@@ -205,19 +209,19 @@ heatmap_difference <- function (
 
   if (! (dir.exists (file.path ("results", "DifferenceHeatmaps")))) {dir.create (file.path ("results", "DifferenceHeatmaps"))}
 
-  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory))))) {
-      dir.create(file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
+  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory))))) {
+      dir.create(file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory)))
     }
 
-    if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))))) {
-      dir.create(file.path("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh")))
+    if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))))) {
+      dir.create(file.path("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh")))
     }
 
   if (replace) {
-    saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
+    saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
   } else {
-    if (! (file.exists (file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData"))))) {
-      saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
+    if (! (file.exists (file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData"))))) {
+      saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
     }
   }
 
@@ -228,7 +232,7 @@ heatmap_difference <- function (
     # othersize = foldername$othersize,
     # diffcurstartbias = foldername$diffcurstartbias,
     # output_heatmap = output_heatmap,
-    foldername = file.path ("DifferenceHeatmaps", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
+    foldername = file.path ("DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
   )
 
   return (output_heatmap)

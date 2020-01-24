@@ -41,7 +41,16 @@ heatmapland <- file.path("results")
 # )
 
 # THIS ARRAY IS THE FEEDER FOR THE FOR LOOP. EVERYTHING FOR ROWS 7 AND UNDER IS DONE; 8 IS READY TO FINISH
-somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv", "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", "childF10NoInv", 3901, 4101, 4301, 4501, 4701, 5101, 5301, 5501, 5701, 5901, 6101, 6301, 6501, 6701, 6901, 7101, 7301, 7501, 7701, 7901, 8101), c(21,2))
+somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", "childFemLowInv",
+                              "childBothLowInv", "childFemHihInv", "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
+                              "childSmolFemHihInv", "childSmolFemLowInv", "childF2NoInv", "childF3NoInv", "childF4NoInv",
+                              "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
+                              "childF10NoInv",
+                              3901, 4101, 4301, 4501, 4701,
+                              5101, 5301, 5501, 5701, 5901,
+                              6101, 6301, 6501, 6701, 6901,
+                              7101, 7301, 7501, 7701, 7901,
+                              8101), c(21,2))
 
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
@@ -111,6 +120,7 @@ for (run in 8:length (somethingSomething[,1])) {
 
     individualfigures(
       output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+      difference = FALSE,
       colorrange = 2,
       colorpalette = 5,
       foldername = heatmapoutput,
