@@ -115,13 +115,17 @@ stuff <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv",
            "childF10NoInv")
 
 # stuff_n_things <- array (c (1, 1, 1, 2, 3, 3, 4, 2, 3, 5, 3, 4, 5, 5), c (7,2))
-stuff_n_things <- array (c (1, 1, 1, 1, 1, 1, 2,
-                            2, 2, 2, 2, 3, 3, 3,
-                            3, 4, 4, 4, 5, 5, 6,
+stuff_n_things <- array (c (1, 1, 1, 1, 1, 1, 1,
+                            1, 2, 2, 2, 2, 2, 2,
+                            2, 3, 3, 3, 3, 3, 3,
+                            4, 4, 4, 4, 4, 5, 5,
+                            5, 5, 6, 6, 6, 7, 7, 8,
 
-                            2, 3, 4, 5, 6, 7, 3,
-                            4, 5, 6, 7, 4, 5, 6,
-                            7, 5, 6, 7, 6, 7, 7), c (21,2))
+                            2, 3, 4, 5, 6, 7, 8,
+                            9, 3, 4, 5, 6, 7, 8,
+                            9, 4, 5, 6, 7, 8, 9,
+                            5, 6, 7, 8, 9, 6, 7,
+                            8, 9, 7, 8, 9, 8, 9, 9), c (36,2))
 
 for (bs in 1:dim(stuff_n_things)[1]) {
   for(whaaat in 1:4) {
@@ -243,7 +247,11 @@ if (colorpalette == 19) {
                                                    stuff[2], "), rep(\"#0571b0\", ",
                                                    stuff[2], "), rep(\"#2166ac\", ",
                                                    stuff[2], "), rep(\"#053061\", ",
-                                                   stuff[2], ")))")))
+                                                   stuff[2], ")))"))),
+    midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
+    midpoint_but_smooshed = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7",
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7"))
   )
 
 plot_that_spectrum <- function (file_name) {
@@ -284,7 +292,7 @@ plot_that_spectrum <- function (file_name) {
   plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[19]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = "Legend
   (heatmap 1 minus heatmap 2)")
 
-  # legend(x = "bottomleft", legend = c("legend", "great", "this", "aw", "fuck", "now", "what", "goddammit", "cmon", "wat", "four", "score", "and", "seven", "years", "ago", "our", "forefathers", "arrived", "and", "threw", "a", "banger", "party", "sucks"), fill = "#efedf5", col = colorseqmultpalette[[19]](23), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)
+  # legend(x = "bottomleft", legend = c("legend", "great", "this", "aw", "crap", "now", "what", "gabflamit", "cmon", "wat", "four", "score", "and", "seven", "years", "ago", "our", "forefathers", "arrived", "and", "threw", "a", "banger", "party", "locks"), fill = "#efedf5", col = colorseqmultpalette[[19]](23), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)
   # legend(x = "bottomleft", legend = array(c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-.02", ".02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"), c(4,4)), fill = "#efedf5", col = colorseqmultpalette[[19]](16), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)
 
   # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 16, cex = 1, axes = F, xlab = "", ylab = "")
