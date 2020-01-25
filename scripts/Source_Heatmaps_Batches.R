@@ -127,6 +127,32 @@ stuff_n_things <- array (c (1, 1, 1, 1, 1, 1, 1,
                             5, 6, 7, 8, 9, 6, 7,
                             8, 9, 7, 8, 9, 8, 9, 9), c (36,2))
 
+newly_finished_run <- 10
+newly_finished_run <- c(10, 11, 12)
+# the bad one
+# c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12)
+  # stuff_n_things <- array (c (1:(newly_finished_run - 1), rep(newly_finished_run, newly_finished_run - 1)), c (newly_finished_run - 1, 2))
+# the good one - cutting down on the amount of repeated repetition commands...
+# c(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12)
+  # stuff_n_things <- array (c (rep(1:(newly_finished_run - 1), length (newly_finished_run)), rep(newly_finished_run, newly_finished_run - 1)), c (newly_finished_run - 1, 2))
+
+if (length(newly_finished_run) == 1) {
+  stuff_n_things <- array (c (1:(newly_finished_run - 1), rep(newly_finished_run, newly_finished_run - 1)), c (newly_finished_run - 1, 2))
+} else if (length (newly_finished_run) > 1) {
+
+  whatever <- length (newly_finished_run)
+  the_big_cheese <- vector("list", whatever)
+
+  stuff_n_things <- array (c (rep(1:(newly_finished_run[whatever] - 1), length (newly_finished_run)), rep(newly_finished_run, newly_finished_run[whatever] - 1)), c (newly_finished_run[whatever] - 1, 2))
+
+  for (i in 1:whatever) {
+    the_big_cheese[[i]] <- array (c (), c ())
+  }
+
+  # abind(all the pieces of the_big_cheese, stacking the rows on top of one another (so that it still ends with only two columns))
+
+}
+
 for (bs in 1:dim(stuff_n_things)[1]) {
   for(whaaat in 1:4) {
 

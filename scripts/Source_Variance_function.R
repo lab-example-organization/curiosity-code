@@ -14,7 +14,7 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     pop_size = 400,
     num_pop = 2,
     output_dims = c(5,5,4,2,2,4),
-    stack_directory = "child-lowMalInv"
+    stack_directory = file.path ("tenKfiveByFive_", "child-lowMalInv")
 ) {
 
     path_results <- file.path("results")
@@ -130,10 +130,15 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
                         # c("varBetween","varWithin"),
                         # c("curInhMale","curInhMoth","curInhSame","curInhFfFf"))
 
-things_need_doin <- c("parent-noInv", "child-noInv", "child-highMalInv", "child-lowMalInv", "child-lowFemInv", "child-highFemInv", "child-highMalSmolInv", "child-lowMalSmolInv", "child-highBothInv", "child-lowBothInv", "child-highFemSmolInv", "child-lowFemSmolInv")
+things_need_doin <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv",
+                      "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv",
+                      "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv",
+                      "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv",
+                      "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
+                      "childF10NoInv")
 
 for (thing in 1:length(things_need_doin)) {
-    finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = things_need_doin[thing])
+    finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = paste0 ("tenKfiveByFive_", things_need_doin[thing]))
 }
 
 
@@ -177,7 +182,12 @@ extract_subset <- function (
     return (gawd[[1]][4])
 }
 
-things_need_doin <- c("parent-noInv", "child-noInv", "child-highMalInv", "child-lowMalInv", "child-lowFemInv", "child-highFemInv", "child-highMalSmolInv", "child-lowMalSmolInv", "child-highBothInv", "child-lowBothInv", "child-highFemSmolInv", "child-lowFemSmolInv")
+things_need_doin <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv",
+                      "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv",
+                      "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv",
+                      "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv",
+                      "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
+                      "childF10NoInv")
 
 for (ordering in 1:length (things_need_doin)) {
     for (sake_of_pete in 1:2) {
