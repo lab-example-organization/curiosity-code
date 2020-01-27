@@ -40,42 +40,68 @@ find_the_dir <- function (
   return (final_dir) # "results/five-by-five-vanilla_lowHigh_Background/191111_slices_-_maleinh_pop1Bias"
 }
 
-plot_that_spectrum <- function (file_name, colorPalette, legend_scale, theme) {
+plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_scale, theme) {
 
-  # x <- array(c(1:100, rep(9.5,100), rep(9.7,100), rep(9.9,100), rep(10.1,100), rep(10.3,100), rep(10.5,100), rep(10.7,100), rep(10.9,100), rep(11.1,100), rep(11.3,100)), c(100, 11))
-  x <- array(c(1:100, rep(9.7,100), rep(10.1,100), rep(10.5,100), rep(10.9,100), rep(11.3,100), rep(11.7,100), rep(12.1,100), rep(12.5,100), rep(12.9,100), rep(13.3,100)), c(100, 11))
+  # colorPalette <- 19
+  # midpoint_size <- 1
 
-  # sink(file = file.path("source", "temp", paste0(
-  #       simnumber, "_console_copy.txt")), append = TRUE, split = TRUE)
-  #     print(paste0("Sim Number ", strsplit(docnamez,
-  #       "_")[[1]][2], " - storing data packet ",
-  #       thousand_timesteps, " at ", Sys.time()))
-  #     sink()
-  # sink (file = file.path (file_name, "difference_heatmap_spectrum."))
+  if (colorPalette == 19) {
+      midpoint_director <- array(c(2, 16, 30, 44, 58, 72, 86, 7, 6, 5, 4, 3, 2, 1), c(7,2))
+      stuff <- midpoint_director[midpoint_size,]
+    } else {
+      stuff <- c(2, 7)
+    }
+
+
+  colorseqmultpalette <- list (
+    reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds                                        ### 1
+    rdpu = colorRampPalette (c ("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class rdpu                                        ### 2
+    oranges = colorRampPalette (c ("#fee6ce", "#fdae6b", "#e6550d")), # 3-class oranges                                  ### 3
+    orrd = colorRampPalette (c ("#fee8c8", "#fdbb84", "#e34a33")), # 3-class orrd                                        ### 4
+    ylorrd = colorRampPalette (c ("#ffeda0", "#feb24c", "#f03b20")), # 3-class ylorrd                                    ### 5
+    ylorbr = colorRampPalette (c ("#fff7bc", "#fec44f", "#d95f0e")), # 3-class ylorbr                                    ### 6
+    ylgn = colorRampPalette (c ("#f7fcb9", "#addd8e", "#31a354")), # 3-class ylgn                                        ### 7
+    ylgnbu = colorRampPalette (c ("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class ylgnbu                                    ### 8
+    greens = colorRampPalette (c ("#e5f5e0", "#a1d99b", "#31a354")), # 3-class greens                                    ### 9
+    gnbu = colorRampPalette (c ("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class gnbu                                        ### 10
+    blues = colorRampPalette (c ("#deebf7", "#9ecae1", "#3182bd")), # 3-class blues                                      ### 11
+    bugn = colorRampPalette (c ("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class bugn                                        ### 12
+    bupu = colorRampPalette (c ("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class bupu                                        ### 13
+    purples = colorRampPalette (c ("#efedf5", "#bcbddc", "#756bb1")), # 3-class purples                                  ### 14
+    purd = colorRampPalette (c ("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class purd                                        ### 15
+    pubu = colorRampPalette (c ("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class pubu                                        ### 16
+    pubugn = colorRampPalette (c ("#ece2f0", "#a6bddb", "#1c9099")), # 3-class pubugn                                    ### 17
+    greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
+    # midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
+
+    eval (parse (text = paste0 ("midpoint = colorRampPalette (c (rep(\"#67001f\", ",
+                                                  stuff[2], "), rep(\"#b2182b\", ",
+                                                  stuff[2], "), rep(\"#ca0020\", ",
+                                                  stuff[2], "), rep(\"#d6604d\", ",
+                                                  stuff[2], "), rep(\"#ef8a62\", ",
+                                                  stuff[2], "), rep(\"#f4a582\", ",
+                                                  stuff[2], "), rep(\"#fddbc7\", ",
+                                                  stuff[2], "), rep(\"#f7f7f7\", ",
+                                                  stuff[1], "), rep(\"#d1e5f0\", ",
+                                                  stuff[2], "), rep(\"#92c5de\", ",
+                                                  stuff[2], "), rep(\"#67a9cf\", ",
+                                                  stuff[2], "), rep(\"#4393c3\", ",
+                                                  stuff[2], "), rep(\"#0571b0\", ",
+                                                  stuff[2], "), rep(\"#2166ac\", ",
+                                                  stuff[2], "), rep(\"#053061\", ",
+                                                  stuff[2], ")))"))),
+    midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
+    midpoint_but_smooshed = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7",
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7"))
+  )
+
+  x <- array(c(1:100, rep(9.5,100), rep(9.65,100), rep(9.8,100), rep(9.95,100), rep(10.1,100), rep(10.25,100), rep(10.4,100), rep(10.55,100), rep(10.7,100), rep(10.85,100)), c(100, 11))
 
   png (filename = file.path (
-            # heatmap_sourcefolder, foldername$foldername, #inhoptions[inhstyle + 2],
-            # paste0("slice_", slice), file_name),
-            # slicedpop[3], file_name
             file_name),
-          width = 554, height = 277, units = "px", pointsize = 12, bg = "white")
+          width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
-
-
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 1, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 2, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 3, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 4, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 5, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 6, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 7, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 8, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 9, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 10, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 11, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 12, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 13, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 14, cex = 1, axes = F, xlab = "", ylab = "")
   if (theme == "difference") {
     title_and_stuff <- c ("Legend
 (heatmap 1 minus heatmap 2)")
@@ -84,57 +110,25 @@ plot_that_spectrum <- function (file_name, colorPalette, legend_scale, theme) {
 (variance scale)")
   }
 
-  plot (rep (x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c (5,16), main = title_and_stuff)
+  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = title_and_stuff)
 
-  # legend(x = "bottomleft", legend = array(c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-.02", ".02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"), c(4,4)), fill = "#efedf5", col = colorseqmultpalette[[19]](16), border = "#bcbddc", lty = 5, lwd = 1, pch = 15)
-
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 16, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 17, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 18, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 19, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 20, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 21, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 22, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 23, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 24, cex = 1, axes = F, xlab = "", ylab = "")
-  # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 25, cex = 1, axes = F, xlab = "", ylab = "")
   if (legend_scale == "midpoint") {
-    # axis(1, c(-2.5, 4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5, 103.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-0.08", "-0.02", "0.02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-11.5,NA,F,cex.axis = 0.7, tck = 0.015)
-    axis (1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-4.1,NA,F,cex.axis = 0.7, tck = -0.02)
-    # axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 47.5, 53.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-1", "-0.86", "-0.72", "-0.58", "-0.44", "-0.3", "-0.16", "-.02", ".02", "0.16", "0.3", "0.44", "0.58", "0.72", "0.86", "1"),T,-12.5,NA,F,cex.axis = 0.7, tck = -0.015)
-    title (xlab = c("-1       -0.86     -0.72    -0.58     -0.44       -0.3      -0.16  -0.02  0.02    0.16       0.3        0.44        0.58       0.72     0.86           1 "), line = -3.7, cex.lab = 0.7)
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    title(xlab = c("-1     -0.86    -0.72   -0.58   -0.44     -0.3     -0.16  -0.02  0.02   0.16     0.3     0.44      0.58      0.72    0.86         1 "), line = -11.2, cex.lab = 0.7)
 
-    # axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("-155", "-133", "-111", "-89", "-67", "-45", "-23", "-3", "3", "23", "45", "67", "89", "111", "133", "155"),T,-14.5,NA,F,cex.axis = 0.7, tck = 0.015)
-    axis (1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-7.6,NA,F,cex.axis = 0.7, tck = 0.02)
-    title (xlab = c("-155       -133       -111        -89        -67         -45        -23          -3  3            23          45          67           89         111          133       155 "), line = -8.9, cex.lab = 0.7)
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-15.8,NA,F,cex.axis = 0.7, tck = 0.015)
+    title(xlab = c("-155     -133     -111      -89       -67      -45      -23        -3  3         23       45        67        89       111       133      155 "), line = -17.3, cex.lab = 0.7)
 
-    title (xlab = c("Syllable Repertoire Differences"), line = -10, cex.lab = 0.7)
-    title (xlab = c("Curiosity Level Differences"), line = -2.5, cex.lab = 0.7)
-
+    title(xlab = c("Syllable Repertoire Differences"), line = -18.3, cex.lab = 0.7)
+    title(xlab = c("Curiosity Level Differences"), line = -10.3, cex.lab = 0.7)
 
   } else if (legend_scale == "variance") {
-    # axis(1, c(0.5, 10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5, 100.5), c("0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1"),T,-7.6,NA,F,cex.axis = 0.7, tck = 0.015)
     axis (1, c (0.5, 10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", ""),T,-7.6,NA,F,cex.axis = 0.7, tck = 0.015)
     title (xlab = c("0                0.1                0.2                0.3                0.4                0.5                0.6                0.7                0.8                0.9                1"), line = -9.7, cex.lab = 0.7)
     axis (1, c (5.5, 15.5, 25.5, 35.5, 45.5, 55.5, 65.5, 75.5, 85.5, 95.5), c ("0.05", "0.15", "0.25", "0.35", "0.45", "0.55", "0.65", "0.75", "0.85", "0.95"),T,-4.1,NA,F,cex.axis = 0.7, tck = -0.015)
-    # title(xlab = c("-155       -133       -111        -89        -67         -45         -23          -3  3           23           45          67          89          111          133        155 "), line = -10.3, cex.lab = 0.7)
   }
-
-
-  # c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
-
-
-  # axis(1, c(50), c(""), )
-  # axis(1, c(1, 8, 15, 22, 29, 36, 43, 47.5, 52, 59, 66, 73, 80, 87, 94, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-10,NA,F,cex.axis = 0.8, tck = 0) # Curiosity Range
-  # axis(1, c(4.5, 11.5, 18.5, 25.5, 32.5, 39.5, 46.5, 48.5, 55.5, 62.5, 69.5, 76.5, 83.5, 90.5, 97.5), c("", "", "", "", "", "", "-1", "1", "", "", "", "", "", "", ""),T,-10,NA,F,cex.axis = 0.3, tck = 0) # Syllable Range
-  # saveRDS(output_heatmap, file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
-  # sink()
   dev.off()
 }
-
-# plot_that_spectrum (file.path ("spectra", "variance.png"), 21, "variance", "variance") ###
-
-# plot_that_spectrum (file.path ("spectra", "midpoint.png"), 19, "midpoint", "difference") ###
 
 heatmap_difference <- function (
   source_pattern = "male", # "moth", "same", "FfFf"
