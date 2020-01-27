@@ -179,7 +179,7 @@ individualfigures(2,5,heatmapoutput)
 # print("Stop here, Parker!")
 
 source(file.path("scripts", "Source_Heatmap_Functions.R"))
-source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
+source(file.path("scripts", "Source_Difference_Heatmap_Functions.R"))
 
 output_heatmap <- heatmap_difference (
                     source_pattern = "FfFf",

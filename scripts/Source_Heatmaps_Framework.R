@@ -29,7 +29,7 @@ source(file.path("scripts", "Source_Reference_Section.R"))
 referencesection("heatmaps")
 
 source(file.path("scripts", "Source_Heatmap_Functions.R"))
-source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
+source(file.path("scripts", "Source_Difference_Heatmap_Functions.R"))
 
 thing <- c("male", "moth", "same", "FfFf")
 # das_dinge <- c(1,2,3,11)

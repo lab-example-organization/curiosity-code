@@ -23,7 +23,8 @@ referencesection("heatmaps")
 # Source the Functions
 
 source(file.path("scripts", "Source_Heatmap_Functions.R"))
-source(file.path("scripts", "Source_Batch_Heatmap_Functions.R"))
+source(file.path("scripts", "Source_Difference_Heatmaps.R"))
+source(file.path("scripts", "Source_Variance_Heatmaps.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
@@ -55,7 +56,10 @@ somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
 # SEE? NUMBER 8.
-for (run in 8:length (somethingSomething[,1])) {
+for (run in 11:length (somethingSomething[,1])) {
+  if (!(dir.exists(file.path(heatmapland, paste0("tenKfiveByFive_", somethingSomething[run,1]))))) {
+    stop (paste0("Simulation ", somethingSomething[run,1], " is not in the directory. Stopping heatmap processing."))
+  }
   specific_folder <- which(whatevers == paste0 ("tenKfiveByFive_", somethingSomething[run,1]))
   placeholder <- as.numeric  (somethingSomething[run,2])
   object_converter <- c(paste0(as.character (placeholder), "-", as.character (placeholder + 49)),
@@ -153,42 +157,37 @@ for (run in 8:length (somethingSomething[,1])) {
 
   }
 
-
-
-
+  differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
+  varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
+# source(file.path("scripts", "Source_Reference_Section.R"))
+# referencesection("heatmaps")
+# source(file.path("scripts", "Source_Heatmap_Functions.R"))
+# heatmapland <- file.path("results")
 
+# all_the_runs <- extractvardirs(heatmapland,
+#   "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results ### Father Inheritance 5x5x2 lowHigh Background
 
+# extractedmeans <- extractmeans(
+#   allrundirs = all_the_runs,
+#   dirheatmap = heatmapland,
+#   # ordering = c(1, 3, 4, 2),
+#   source_of_params = "params.yaml")
+# all_the_names <- remakestring(all_the_runs, "_", ".")
 
+# names(extractedmeans) <- all_the_names
 
-source(file.path("scripts", "Source_Reference_Section.R"))
-referencesection("heatmaps")
-source(file.path("scripts", "Source_Heatmap_Functions.R"))
-heatmapland <- file.path("results")
+# heatmapoutput <- list()
 
-all_the_runs <- extractvardirs(heatmapland,
-  "*_360[8-9]_|*_36[1-4][0-9]_|*_365[0-7]_") ### oct3n8results ### Father Inheritance 5x5x2 lowHigh Background
+# heatmapoutput <- makeheatmapfile(
+#                 inheritance = 1, diffcurstartbias = "pop1",
+#                 biassize = 5, othersize = 2,
+#                 reversedruns = FALSE,
+#                 runstyle = "lowHigh", highres = FALSE,
+#                 extractedmeans = extractedmeans)
 
-extractedmeans <- extractmeans(
-  allrundirs = all_the_runs,
-  dirheatmap = heatmapland,
-  # ordering = c(1, 3, 4, 2),
-  source_of_params = "params.yaml")
-all_the_names <- remakestring(all_the_runs, "_", ".")
-
-names(extractedmeans) <- all_the_names
-
-heatmapoutput <- list()
-
-heatmapoutput <- makeheatmapfile(
-                inheritance = 1, diffcurstartbias = "pop1",
-                biassize = 5, othersize = 2,
-                reversedruns = FALSE,
-                runstyle = "lowHigh", highres = FALSE,
-                extractedmeans = extractedmeans)
-
-individualfigures(2,5,heatmapoutput)
+# individualfigures(2,5,heatmapoutput)
 
 # filename_range <- print_regex_num_range(
 

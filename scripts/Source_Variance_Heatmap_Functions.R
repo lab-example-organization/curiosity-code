@@ -1,12 +1,12 @@
-source(file.path("scripts", "Source_Reference_Section.R"))
-referencesection("heatmaps")
-source(file.path("scripts", "Source_Heatmap_Functions.R"))
+# source(file.path("scripts", "Source_Reference_Section.R"))
+# referencesection("heatmaps")
+# source(file.path("scripts", "Source_Heatmap_Functions.R"))
 
-# args for this function: curiosity_or_sylrep = "curiosity", heatmap_stack = TRUE, stack_directory = "tenKfiveByFive_[ET CETERA]" (only matters if heatmap_stack == TRUE)
+# # args for this function: curiosity_or_sylrep = "curiosity", heatmap_stack = TRUE, stack_directory = "tenKfiveByFive_[ET CETERA]" (only matters if heatmap_stack == TRUE)
 
-# stack_directory junk...
-    # parent-noInv, child-noInv, child-highMalInv, child-lowMalInv, child-lowFemInv, child-highFemInv,
-    # child-highMalSmolInv, child-lowMalSmolInv, child-highBothInv, child-lowBothInv, child-highFemSmolInv, child-lowFemSmolInv
+# # stack_directory junk...
+#     # parent-noInv, child-noInv, child-highMalInv, child-lowMalInv, child-lowFemInv, child-highFemInv,
+#     # child-highMalSmolInv, child-lowMalSmolInv, child-highBothInv, child-lowBothInv, child-highFemSmolInv, child-lowFemSmolInv
 
 finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     # curiosity_or_sylrep = "curiosity",
@@ -14,11 +14,11 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     pop_size = 400,
     num_pop = 2,
     output_dims = c(5,5,4,2,2,4),
-    stack_directory = file.path ("tenKfiveByFive_", "child-lowMalInv")
+    stack_directory = "child-lowMalInv"
 ) {
 
     path_results <- file.path("results")
-    dirStackDir <- list.files(path_results, pattern = stack_directory)
+    dirStackDir <- list.files(path_results, pattern = paste0("tenKfiveByFive_", stack_directory))
     twoHundyKdirs <- list.files(file.path(path_results, dirStackDir))
     # that_stacked_object <- array (0, c(400, 157, 2, 50))
     # dimnames(that_stacked_object) <- list("individuals", "traits", "population", "reps", "inheritance_pattern", "curstart_patterns")
@@ -110,37 +110,19 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
 
         }
 
-    } else {
-        stop ("find out if the output_dir or the output_dim is wrong; they're not equal so one of them is likely wrong")
-    }
-    if (! (dir.exists (file.path (path_results, "variance_heatmap_output")))) {dir.create (file.path (path_results, "variance_heatmap_output"))}
-    # if (! (dir.exists (file.path (path_results, "variance_heatmap_output", stack_directory)))) {dir.create (file.path (path_results, "variance_heatmap_output", stack_directory))}
-    saveRDS(output_object, file.path(path_results, "variance_heatmap_output", paste0(stack_directory, ".RData")))
+    } else {stop ("find out if output_dir or output_dim is wrong; they're not equal")}
 
-    return ("output_object is in folder")
+    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps")))) {dir.create (file.path (path_results, "VarianceHeatmaps"))}
+    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", "fullData")))) {dir.create (file.path (path_results, "VarianceHeatmaps", "fullData"))}
+
+    # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
+    saveRDS(output_object, file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
+
+    return (file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
 
 }
 
-# stuff <- readRDS(file.path("results", "variance_heatmap_output", "child-noInv.RData"))
-
-# dimnames(stuff) <- list(c("vLowMalC","lowMalC","midMalC","highMalC","vHighMalC"),
-                        # c("vLowFemC","lowFemC","midFemC","highFemC","vHighFemC"),
-                        # c("pop1Sex1","pop1Sex2","pop2Sex1","pop2Sex2"),
-                        # c("LowBG","HighBG"),
-                        # c("varBetween","varWithin"),
-                        # c("curInhMale","curInhMoth","curInhSame","curInhFfFf"))
-
-things_need_doin <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv",
-                      "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv",
-                      "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv",
-                      "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv",
-                      "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
-                      "childF10NoInv")
-
-for (thing in 1:length(things_need_doin)) {
-    finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = paste0 ("tenKfiveByFive_", things_need_doin[thing]))
-}
-
+# the_file_path = file.path(thing), subsetta = paste0 ("1:5,1:5,1:4,", sake_of_pete, ",", out_loud_crying, ",", pony)
 
 extract_subset <- function (
     the_file_path,
@@ -182,92 +164,4 @@ extract_subset <- function (
     return (gawd[[1]][4])
 }
 
-things_need_doin <- c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv",
-                      "childFemLowInv", "childBothLowInv", "childFemHihInv", "childBothHihInv",
-                      "childSmolMalHihInv", "childSmolMalLowInv", "childSmolFemHihInv", "childSmolFemLowInv",
-                      "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv",
-                      "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
-                      "childF10NoInv")
-
-for (ordering in 1:length (things_need_doin)) {
-    for (sake_of_pete in 1:2) {
-        for (out_loud_crying in 1:2) {
-            for (pony in 1:4) {
-                # ordering <- 1
-                # sake_of_pete <- 1
-                # out_loud_crying <- 1
-                # pony <- 1
-                thing <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering], "fullData", paste0 (things_need_doin[ordering], ".RData"))
-                subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = paste0 ("1:5,1:5,1:4,", sake_of_pete, ",", out_loud_crying, ",", pony))
-                stuff <- file.path ("variance_heatmap_output", things_need_doin[ordering], subsets_folder)
-
-                foldername <- list(
-                    foldername = stuff,
-                    inheritance = 1,
-                    diffcurstartbias = "pop1",
-                    biassize = 5,
-                    othersize = 1
-                )
-
-                individualfigures (2,21,foldername = foldername, var = TRUE)
-            }
-        }
-    }
-    # # ordering <- 1
-    # thing <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering], "fullData", paste0 (things_need_doin[ordering], ".RData"))
-
-    # # subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = c("5:1,5:1,1:4,1,1,1"))
-    # subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = paste0 ("5:1,5:1,1:4,", sake_of_pete, ",", out_loud_crying, ",", pony))
-
-    # stuff <- file.path ("results", "variance_heatmap_output", things_need_doin[ordering], subsets_folder)
-
-    # foldername <- list(
-    #     foldername <- stuff,
-    #     inheritance = 1,
-    #     diffcurstartbias = "pop1",
-    #     biassize = 5,
-    #     othersize = 1
-    # )
-
-    # individualfigures (2,5,foldername, var = TRUE)
-}
-
-
-# finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = "parent-noInv")
-
-
-# # input:
-
-# # output: 2 different matrices with variance info,
-#     # 1 with variance between the means of each dir in twoHundyVarStore,
-#     # 1 with mean of the variance within each twoHundyVarStore.
-
-# # output location:
-#     # New directory in results
-#     # variance_heatmaps
-#         # between sims (variance between run means)
-#         # within sims (between runs) (mean of run variances)
-# variance_output_dir <- file.path ("results", "variance_heatmaps")
-# if (! (dir.exists (variance_output_dir))) {dir.create (variance_output_dir)}
-
-# if (! (dir.exists (file.path (variance_output_dir, "between_sims")))) {
-#     dir.create(file.path (variance_output_dir, "between_sims"))
-# }
-
-# if (! (dir.exists (file.path (variance_output_dir, "within_sims")))) {
-#     dir.create(file.path (variance_output_dir, "within_sims"))
-# }
-
-# b_variance_heatmap <- variance_matrix_function ()
-# w_variance_heatmap <- variance_matrix_function ()
-
-# saveRDS(b_variance_heatmap, file.path (variance_output_dir, "between_sims", "blahblahblah.RData"))
-# saveRDS(w_variance_heatmap, file.path (variance_output_dir, "within_sims", "blahblahblah.RData"))
-
-# variance_matrix_function <- function (
-#     input_matrix_object,
-#     between_or_within
-# ) {
-
-#     return (output_matrix)
-# }
+print("finding_some_cross_sections_for_mean_and_variance_calculations and extract_subset loaded")
