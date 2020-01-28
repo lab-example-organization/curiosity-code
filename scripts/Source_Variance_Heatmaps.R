@@ -32,7 +32,7 @@ varianceheatmaps <- function (
                     )
 
                     foldername <- list(
-                        foldername = str_split(subsets_folder, "results/")[[1]][2],
+                        foldername = subsets_folder,
                         inheritance = 1,
                         diffcurstartbias = "pop1",
                         biassize = 5,
@@ -40,7 +40,6 @@ varianceheatmaps <- function (
                     )
 
                     individualfigures (
-                        output_foldername = FALSE,
                         difference = FALSE,
                         colorrange = 2,
                         colorpalette = 21,

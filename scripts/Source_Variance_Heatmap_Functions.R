@@ -157,13 +157,13 @@ extract_subset <- function (
 
     # subset_folder <- str_remove (subset_folder, golly[[1]][5])
     the_parent_path <- strsplit (str_split (the_file_path, "fullData/")[[1]][2], ".", fixed = T)[[1]][1]
-    sim_folder <- file.path (golly[[1]][1], golly[[1]][2], the_parent_path)
+    sim_folder <- file.path (golly[[1]][2], the_parent_path)
     subset_folder <- file.path (sim_folder, subset_of_interest)
 
-    if (! (dir.exists (sim_folder))) {dir.create(file.path (sim_folder))}
-    if (! (dir.exists (subset_folder))) {dir.create(subset_folder)}
+    if (! (dir.exists (file.path ("results", sim_folder)))) {dir.create(file.path ("results", sim_folder))}
+    if (! (dir.exists (file.path("results", subset_folder)))) {dir.create(file.path("results", subset_folder))}
 
-    saveRDS(output, file = file.path (subset_folder, paste0 (subset_of_interest, ".RData")))
+    saveRDS(output, file = file.path ("results", subset_folder, paste0 (subset_of_interest, ".RData")))
 
     return (subset_folder)
 }

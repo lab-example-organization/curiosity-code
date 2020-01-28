@@ -983,12 +983,12 @@ individualfigures <- function (
   } else {
       heatmap_sourcefolder <- file.path("results")
   }
-  # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
-  # if (output_foldername != F) {
-  #   heatmap_sourcefolder <- file.path ("results", output_foldername)
-  # } else {
-  #   heatmap_sourcefolder <- file.path("results")
-  # }
+  heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
+  if (output_foldername != F) {
+    heatmap_sourcefolder <- file.path ("results", output_foldername)
+  } else {
+    heatmap_sourcefolder <- file.path("results")
+  }
 
   # heatmap_sourcefolder <- file.path("sameSexFigResults", "results")
 
@@ -1133,7 +1133,7 @@ individualfigures <- function (
 
   # for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
 
-  if (exists (output_foldername)) {
+  if (output_foldername != FALSE) {
     if (! (dir.exists (file.path (
       heatmap_sourcefolder, output_foldername
     )))) {
