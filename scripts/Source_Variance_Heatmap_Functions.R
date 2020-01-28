@@ -142,26 +142,30 @@ extract_subset <- function (
         c("curInhMale","curInhMoth","curInhSame","curInhFfFf")
     )
 
-    # str_split(subsetta, ",")[[1]][4]
-    # str_split(subsetta, ",")[[1]][5]
-    # str_split(subsetta, ",")[[1]][6]
-
-    subset_folder <- str_replace_all (
-        the_file_path,"fullData", paste0 (
+    subset_of_interest <- paste0 (
             subset_categories[[1]][as.numeric(str_split(subsetta, ",")[[1]][4])],
             subset_categories[[2]][as.numeric(str_split(subsetta, ",")[[1]][5])],
             subset_categories[[3]][as.numeric(str_split(subsetta, ",")[[1]][6])]
         )
-    )
 
-    gawd <- str_split (subset_folder, "/")
-    subset_folder <- str_remove (subset_folder, gawd[[1]][5])
+    # golly <- c (str_split (the_file_path, "fullData/")[[1]][1], strsplit (str_split (the_file_path, "fullData/")[[1]][2], ".", fixed = T)[[1]][1])
+    golly <- str_split(the_file_path, "/")
 
+    # c (str_split (the_file_path, "fullData/")[[1]][1], strsplit (str_split (the_file_path, "fullData/")[[1]][2], ".", fixed = T)[[1]][1])
+
+    # golly <- paste(golly, collapse = "")
+
+    # subset_folder <- str_remove (subset_folder, golly[[1]][5])
+    the_parent_path <- strsplit (str_split (the_file_path, "fullData/")[[1]][2], ".", fixed = T)[[1]][1]
+    sim_folder <- file.path (golly[[1]][1], golly[[1]][2], the_parent_path)
+    subset_folder <- file.path (sim_folder, subset_of_interest)
+
+    if (! (dir.exists (sim_folder))) {dir.create(file.path (sim_folder))}
     if (! (dir.exists (subset_folder))) {dir.create(subset_folder)}
 
-    saveRDS(output, file = file.path (subset_folder, paste0 (gawd[[1]][4], ".RData")))
+    saveRDS(output, file = file.path (subset_folder, paste0 (subset_of_interest, ".RData")))
 
-    return (gawd[[1]][4])
+    return (subset_folder)
 }
 
 print("finding_some_cross_sections_for_mean_and_variance_calculations and extract_subset loaded")

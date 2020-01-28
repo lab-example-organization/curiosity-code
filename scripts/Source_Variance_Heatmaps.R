@@ -15,28 +15,39 @@ varianceheatmaps <- function (
 
     thing <- finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = list_of_sims[sim_in_question])
 
+# str_replace_all (the_file_path,"fullData", str_split(str_split(the_file_path, "/")[[1]][2], ".R")[[1]][1])
 
     # for (sim_in_question in 1:length (list_of_sims)) {
-        for (sake_of_pete in 1:2) {
-            for (out_loud_crying in 1:2) {
-                for (pony in 1:4) {
+        for (lowbg_vs_hihbg in 1:2) {
+            for (between_vs_within in 1:2) {
+                for (curinh_style in 1:4) {
                     # sim_in_question <- 1
-                    # sake_of_pete <- 1
-                    # out_loud_crying <- 1
-                    # pony <- 1
+                    # lowbg_vs_hihbg <- 1
+                    # between_vs_within <- 1
+                    # curinh_style <- 1
                     # thing <- file.path ("results", "VarianceHeatmaps", paste0 (list_of_sims[sim_in_question], ".RData"))
-                    subsets_folder <- extract_subset (the_file_path = file.path(thing), subsetta = paste0 ("1:5,1:5,1:4,", sake_of_pete, ",", out_loud_crying, ",", pony))
-                    stuff <- file.path ("VarianceHeatmaps", list_of_sims[sim_in_question], subsets_folder)
+                    subsets_folder <- extract_subset (
+                        the_file_path = file.path(thing),
+                        subsetta = paste0 ("1:5,1:5,1:4,", lowbg_vs_hihbg, ",", between_vs_within, ",", curinh_style)
+                    )
 
                     foldername <- list(
-                        foldername = stuff,
+                        foldername = str_split(subsets_folder, "results/")[[1]][2],
                         inheritance = 1,
                         diffcurstartbias = "pop1",
                         biassize = 5,
                         othersize = 1
                     )
 
-                    individualfigures (2,21,foldername = foldername, var = TRUE)
+                    individualfigures (
+                        output_foldername = FALSE,
+                        difference = FALSE,
+                        colorrange = 2,
+                        colorpalette = 21,
+                        foldername = foldername,
+                        midpoint_size = 1,
+                        var = TRUE
+                    )
                 }
             }
         }

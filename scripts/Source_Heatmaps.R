@@ -56,7 +56,7 @@ somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
 # SEE? NUMBER 8.
-for (run in 11:length (somethingSomething[,1])) {
+for (run in 1:length (somethingSomething[,1])) {
   if (!(dir.exists(file.path(heatmapland, paste0("tenKfiveByFive_", somethingSomething[run,1]))))) {
     stop (paste0("Simulation ", somethingSomething[run,1], " is not in the directory. Stopping heatmap processing."))
   }
@@ -68,96 +68,44 @@ for (run in 11:length (somethingSomething[,1])) {
                         paste0(as.character (placeholder + 150), "-", as.character (placeholder + 199))
                         )
   inheritance_converter <- c(1,2,3,11)
-  for (subset in 1:4) {
-    temp_heatmapland <- file.path(heatmapland, whatevers[specific_folder])
-    all_the_runs <- extractvardirs(temp_heatmapland, object_converter[subset])
+  # for (subset in 1:4) {
+  #   temp_heatmapland <- file.path(heatmapland, whatevers[specific_folder])
+  #   all_the_runs <- extractvardirs(temp_heatmapland, object_converter[subset])
 
+  #   extractedmeans <- extractmeans(allrundirs = all_the_runs,
+  #                                  dirheatmap = temp_heatmapland,
+  #                                  source_of_params = "params.yaml",
+  #                                  ordering = FALSE,
+  #                                  deeper = FALSE
+  #                                 )
 
+  #   all_the_names <- remakestring(all_the_runs, "_", ".")
 
-    # extractedMeans <- extractMeans(allRunDirs = all_the_runs, dirHeatMap = heatmapland, source_of_params = "params.yaml")
-    extractedmeans <- extractmeans(allrundirs = all_the_runs,
-                                   dirheatmap = temp_heatmapland,
-                                   source_of_params = "params.yaml",
-                                   ordering = FALSE,
-                                   deeper = FALSE
-                                  )
+  #   names(extractedmeans) <- all_the_names
 
-    all_the_names <- remakestring(all_the_runs, "_", ".")
+  #   heatmapoutput <- makeheatmapfile(
+  #                   output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+  #                   inheritance = inheritance_converter[subset],
+  #                   diffcurstartbias = "pop1",
+  #                   biassize = 5,
+  #                   othersize = 2,
+  #                   reversedruns = FALSE,
+  #                   runstyle = "lowHigh",
+  #                   highres = FALSE,
+  #                   extractedmeans = extractedmeans)
 
-    names(extractedmeans) <- all_the_names
+  #   individualfigures(
+  #     output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+  #     difference = FALSE,
+  #     colorrange = 2,
+  #     colorpalette = 5,
+  #     foldername = heatmapoutput,
+  #     midpoint_size = 1,
+  #     var = FALSE
+  #   )
+  # }
 
-
-    # heatmapland
-
-    # makeHeatmaps <- function (
-    #   inheritance = 1,
-    #   diffcurstartBias = 1
-    # )
-
-    #   whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
-
-    # whichBias <- c("male","female")
-
-    # makeHeatmapFile(inheritance = 3, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
-    heatmapoutput <- makeheatmapfile(
-                    output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
-                    inheritance = inheritance_converter[subset],
-                    diffcurstartbias = "pop1",
-                    biassize = 5,
-                    othersize = 2,
-                    reversedruns = FALSE,
-                    runstyle = "lowHigh",
-                    highres = FALSE,
-                    extractedmeans = extractedmeans)
-    # makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = TRUE, extractedMeans = extractedMeans)
-    # makeHeatmapFile(inheritance = 11, diffcurstartBias = 3, absolute = TRUE, specialFigs = TRUE, lmhVnw = FALSE, extractedMeans = extractedMeans)
-    # makeHeatmaps(inheritance = 1, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
-    # makeHeatmaps(inheritance = 2, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
-    # makeHeatmaps(inheritance = 1, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
-    # makeHeatmaps(inheritance = 2, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
-
-    # makeHeatmaps(inheritance = 3, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
-    # makeHeatmaps(inheritance = 3, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
-    # makeHeatmaps(inheritance = 4, diffcurstartBias = 1, absolute = TRUE, reDo = TRUE)
-    # makeHeatmaps(inheritance = 4, diffcurstartBias = 2, absolute = TRUE, reDo = TRUE)
-
-
-    individualfigures(
-      output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
-      difference = FALSE,
-      colorrange = 2,
-      colorpalette = 5,
-      foldername = heatmapoutput,
-      midpoint_size = 1,
-      var = FALSE
-    )
-
-      # output_foldername = paste0 ("five-by-five-", somethingSomething[run,1])
-      # colorrange = 2
-      # colorpalette = 5
-      # foldername = heatmapoutput
-      # midpoint_size = 1
-      # var = FALSE
-
-    # twohundyKruns <- c("tenKfiveByFive_parent", "tenKfiveByFive_childNoInv", "tenKfiveByFive_childMalHihInv", "tenKfiveByFive_childFemHihInv")
-
-
-      # "five-by-five-parent"
-      # "five-by-five-childF1NoInv"
-      # "five-by-five-childMalHihInv"
-      # "five-by-five-childMalLowInv"
-      # "five-by-five-childFemHihInv"
-      # "five-by-five-childFemLowInv"
-
-    # twohundyKrun <- c("tenKfiveByFive_child-lowFemSmolInv")
-    # inh_pattern_list <- c(1, 2, 3, 11)
-    # inh_pattern_list_names <- c("male", "moth", "same", "FfFf")
-
-      # whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
-
-  }
-
-  differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
+  # differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
   varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
