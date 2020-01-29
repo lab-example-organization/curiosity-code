@@ -1115,7 +1115,8 @@ individualfigures <- function (
     midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
     midpoint_but_smooshed = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
     "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7",
-    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7"))
+    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7")),
+    midpoint_detail = colorRampPalette (c ("#67001f", "#67001f", "#b2182b", "#b2182b", "#ca0020", "#ca0020", "#d6604d", "#d6604d", "#ef8a62", "#ef8a62", "#f4a582", "#f4a582", "#fddbc7", "#fddbc7", "#f7f7f7", "#f7f7f7", "#d1e5f0", "#d1e5f0", "#92c5de", "#92c5de", "#67a9cf", "#67a9cf", "#4393c3", "#4393c3", "#0571b0", "#0571b0", "#2166ac", "#2166ac", "#053061", "#053061"))
   )
 
   regularnames <- c (
@@ -1182,6 +1183,8 @@ individualfigures <- function (
   } else {
     sexPopMetrics <- 8
   }
+
+# png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
   for (sxmtpop in 1:sexPopMetrics) {
     for (slice in 1:otherpopsize) {

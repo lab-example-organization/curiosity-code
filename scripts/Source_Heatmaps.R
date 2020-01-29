@@ -68,48 +68,52 @@ for (run in 2:length (somethingSomething[,1])) {
                         paste0(as.character (placeholder + 150), "-", as.character (placeholder + 199))
                         )
   inheritance_converter <- c(1,2,3,11)
-  for (subset in 1:4) {
-    temp_heatmapland <- file.path(heatmapland, whatevers[specific_folder])
-    all_the_runs <- extractvardirs(temp_heatmapland, object_converter[subset])
+  # for (subset in 1:4) {
+  #   temp_heatmapland <- file.path(heatmapland, whatevers[specific_folder])
+  #   all_the_runs <- extractvardirs(temp_heatmapland, object_converter[subset])
 
-    extractedmeans <- extractmeans(allrundirs = all_the_runs,
-                                   dirheatmap = temp_heatmapland,
-                                   source_of_params = "params.yaml",
-                                   ordering = FALSE,
-                                   deeper = FALSE
-                                  )
+  #   extractedmeans <- extractmeans(allrundirs = all_the_runs,
+  #                                  dirheatmap = temp_heatmapland,
+  #                                  source_of_params = "params.yaml",
+  #                                  ordering = FALSE,
+  #                                  deeper = FALSE
+  #                                 )
 
-    all_the_names <- remakestring(all_the_runs, "_", ".")
+  #   all_the_names <- remakestring(all_the_runs, "_", ".")
 
-    names(extractedmeans) <- all_the_names
+  #   names(extractedmeans) <- all_the_names
 
-    heatmapoutput <- makeheatmapfile(
-                    output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
-                    inheritance = inheritance_converter[subset],
-                    diffcurstartbias = "pop1",
-                    biassize = 5,
-                    othersize = 2,
-                    reversedruns = FALSE,
-                    runstyle = "lowHigh",
-                    highres = FALSE,
-                    extractedmeans = extractedmeans)
+  #   heatmapoutput <- makeheatmapfile(
+  #                   output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+  #                   inheritance = inheritance_converter[subset],
+  #                   diffcurstartbias = "pop1",
+  #                   biassize = 5,
+  #                   othersize = 2,
+  #                   reversedruns = FALSE,
+  #                   runstyle = "lowHigh",
+  #                   highres = FALSE,
+  #                   extractedmeans = extractedmeans)
 
-    individualfigures(
-      output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
-      difference = FALSE,
-      colorrange = 2,
-      colorpalette = 5,
-      foldername = heatmapoutput,
-      midpoint_size = 1,
-      var = FALSE
-    )
-  }
+  #   individualfigures(
+  #     output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+  #     difference = FALSE,
+  #     colorrange = 2,
+  #     colorpalette = 5,
+  #     foldername = heatmapoutput,
+  #     midpoint_size = 1,
+  #     var = FALSE
+  #   )
+  # }
 
-  differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
+  # differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
   varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
-# plot_that_spectrum(file.path("results", "VarianceHeatmaps", "variance_spectrum"), 21,1,"variance", "variance")
+source(file.path("scripts", "Source_Difference_Heatmaps.R"))
+plot_that_spectrum(file.path("results", "VarianceHeatmaps", "variance_spectrum_new"), 20,1,"variance", "variance")
+
+# variance plot_that_spectrum will have an AXIS that is modified to include values at the appropriate position, but with a full spectrum instead of a smooshed one.
+# dev.off()
 
 # source(file.path("scripts", "Source_Reference_Section.R"))
 # referencesection("heatmaps")
