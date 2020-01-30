@@ -172,12 +172,41 @@ print("finding_some_cross_sections_for_mean_and_variance_calculations and extrac
 
 oh_shucks <- function (
     path = ,
+    lbhb = ,
+    cur_inh = ,
 ) {
+    placeholder = rep(1,200)
 
-    thing <- vector("list", 50)
-    for (stuff in 1:50) {
-        thing[[stuff]] <- readRDS(file.path(path, paste0()))
+    twohundruns <- list.files(file.path(path))
+
+    if (lbhb == 1) {
+        placeholder[c(26:50, 76:100, 126:150, 176:200)] = 0
+    } else {
+        placeholder[c(01:25, 51:75, 101:125, 151:175)] = 0
     }
+
+    if (cur_inh == 1) {placeholder[c(51:200)] = 0
+    } else if (cur_inh == 2) {placeholder[c(1:50,101:200)] = 0
+    } else if (cur_inh == 3) {placeholder[c(1:100,151:200)] = 0
+    } else if (cur_inh == 4) {placeholder[c(1:150)] = 0}
+
+    twohundruns <- twohundruns[which (placeholder == 1)]
+
+
+    replicates <- vector("list", length(twohundruns))
+    for(swanky in 1:length(twohundruns)) {
+        thing <- vector("list", 50)
+        for (stuff in 1:50) {
+            thing[[stuff]] <- readRDS(file.path(path, twohundruns[swanky], "multirun_output", paste0 ("Cursity", stuff, ".RData")))
+            thing[[stuff]] <- thing[[stuff]][c(1,2,13,14),,100]
+        }
+        replicates[[swanky]] <- thing
+    }
+
+    variance_between_replicates <- array (c (), c (5, 5, 2, 2)) # take the means (rows 1 and 2) of replicates
+    variance_within_replicate <- array (c (), c (5, 5, 2, 2))
+
+    pre_output_object <- array(c(), c(5, 5, 4, 2))
 }
 
 thingie <- "childF1NoInv"
