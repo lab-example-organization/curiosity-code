@@ -109,8 +109,8 @@ for (run in 2:length (somethingSomething[,1])) {
   varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
-source(file.path("scripts", "Source_Difference_Heatmaps.R"))
-plot_that_spectrum(file.path("results", "VarianceHeatmaps", "variance_spectrum_new"), 20,1,"variance", "variance")
+#                             source(file.path("scripts", "Source_Difference_Heatmaps.R"))
+#                             plot_that_spectrum(file.path("results", "VarianceHeatmaps", "variance_spectrum"), 22,1,"variance", "variance")
 
 # variance plot_that_spectrum will have an AXIS that is modified to include values at the appropriate position, but with a full spectrum instead of a smooshed one.
 # dev.off()

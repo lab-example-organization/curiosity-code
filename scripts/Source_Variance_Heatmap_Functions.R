@@ -169,3 +169,19 @@ extract_subset <- function (
 }
 
 print("finding_some_cross_sections_for_mean_and_variance_calculations and extract_subset loaded")
+
+oh_shucks <- function (
+    path = ,
+) {
+
+    thing <- vector("list", 50)
+    for (stuff in 1:50) {
+        thing[[stuff]] <- readRDS(file.path(path, paste0()))
+    }
+}
+
+thingie <- "childF1NoInv"
+
+oh_shucks(file.path("results", paste0("tenKfiveByFive_", thingie)))
+
+
