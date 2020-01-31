@@ -201,19 +201,40 @@ oh_shucks <- function (
             placeholder_two <- readRDS(file.path(path, subsetruns[swanky], "multirun_output", paste0 ("Cursity", stuff, ".RData")))
             thing[,,stuff] <- placeholder_two[c(1,2,13,14),,100]
         }
-        processed_thing <- c (
+        # arrays don't have a byrow = TRUE arg, so have to fill in this way.
+        processed_thing <- array (c (
+            var(thing[1,1,]),
+            var(thing[2,1,]),
+            mean(thing[3,1,]),
+            mean(thing[4,1,]),
+            var(thing[1,2,]),
+            var(thing[2,2,]),
+            mean(thing[3,2,]),
+            mean(thing[4,2,])#,
 
-        )
-        replicates[,,swanky] <- thing
+            # sapply(1:50, function(x) mean(that_stacked_object[(1 + ((sex - 1)*(pop_size/2))):(sex*(pop_size/2)),pop,x]))
+        ), c (4,2))
+        replicates[,,swanky] <- processed_thing
     }
 
-    variance_between_replicates <- array (c (), c (5, 5, 2, 2)) # take the means (rows 1 and 2) of replicates
-    variance_within_replicate <- array (c (), c (5, 5, 2, 2))
+    # variance_between_replicates <- array (c (), c (5, 5, 2, 2)) # take the means (rows 1 and 2) of replicates
+    # variance_within_replicate <- array (c (), c (5, 5, 2, 2))
 
     pre_output_object <- array(c(), c(5, 5, 4, 2))
+
+    # saveRDS, path,
+
+    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps")))) {dir.create (file.path (path_results, "VarianceHeatmaps"))}
+    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", )))) {dir.create (file.path (path_results, "VarianceHeatmaps", ))}
+    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", "fullData")))) {dir.create (file.path (path_results, "VarianceHeatmaps", "fullData"))}
+
+    # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
+    saveRDS(output_object, file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
+
+    return (file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
 }
 
-thingie <- "childF1NoInv"
+thingie <- "childNoInvF1"
 
 oh_shucks(file.path("results", paste0("tenKfiveByFive_", thingie)))
 
