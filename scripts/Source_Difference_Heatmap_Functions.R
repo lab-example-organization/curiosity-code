@@ -242,7 +242,7 @@ heatmap_difference <- function (
     # othersize = foldername$othersize,
     # diffcurstartbias = foldername$diffcurstartbias,
     # output_heatmap = output_heatmap,
-    foldername = file.path ("DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
+    foldername = file.path (paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
   )
 
   return (output_heatmap)

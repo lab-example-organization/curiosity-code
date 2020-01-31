@@ -182,7 +182,7 @@ oh_shucks <- function (
     if (lbhb == 1) {
         placeholder[c(26:50, 76:100, 126:150, 176:200)] = 0
     } else {
-        placeholder[c(01:25, 51:75, 101:125, 151:175)] = 0
+        placeholder[c(1:25, 51:75, 101:125, 151:175)] = 0
     }
 
     if (cur_inh == 1) {placeholder[c(51:200)] = 0
@@ -190,17 +190,21 @@ oh_shucks <- function (
     } else if (cur_inh == 3) {placeholder[c(1:100,151:200)] = 0
     } else if (cur_inh == 4) {placeholder[c(1:150)] = 0}
 
-    twohundruns <- twohundruns[which (placeholder == 1)]
+    subsetruns <- twohundruns[which (placeholder == 1)]
 
 
-    replicates <- vector("list", length(twohundruns))
-    for(swanky in 1:length(twohundruns)) {
-        thing <- vector("list", 50)
+    # replicates <- vector("list", length(subsetruns))
+    replicates <- array(0, c (4, 2, length(subsetruns)))
+    for(swanky in 1:length(subsetruns)) {
+        thing <- array (0, c (4, 2, 50))
         for (stuff in 1:50) {
-            thing[[stuff]] <- readRDS(file.path(path, twohundruns[swanky], "multirun_output", paste0 ("Cursity", stuff, ".RData")))
-            thing[[stuff]] <- thing[[stuff]][c(1,2,13,14),,100]
+            placeholder_two <- readRDS(file.path(path, subsetruns[swanky], "multirun_output", paste0 ("Cursity", stuff, ".RData")))
+            thing[,,stuff] <- placeholder_two[c(1,2,13,14),,100]
         }
-        replicates[[swanky]] <- thing
+        processed_thing <- c (
+
+        )
+        replicates[,,swanky] <- thing
     }
 
     variance_between_replicates <- array (c (), c (5, 5, 2, 2)) # take the means (rows 1 and 2) of replicates

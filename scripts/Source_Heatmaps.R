@@ -44,9 +44,9 @@ heatmapland <- file.path("results")
 # THIS ARRAY IS THE FEEDER FOR THE FOR LOOP. EVERYTHING FOR ROWS 7 AND UNDER IS DONE; 8 IS READY TO FINISH
 somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", "childFemLowInv",
                               "childBothLowInv", "childFemHihInv", "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
-                              "childSmolFemHihInv", "childSmolFemLowInv", "childF2NoInv", "childF3NoInv", "childF4NoInv",
-                              "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv",
-                              "childF10NoInv",
+                              "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2", "childNoInvF3", "childNoInvF4",
+                              "childNoInvF5", "childNoInvF6", "childNoInvF7", "childNoInvF8", "childNoInvF9",
+                              "childNoInvF10",
                               3901, 4101, 4301, 4501, 4701,
                               5101, 5301, 5501, 5701, 5901,
                               6101, 6301, 6501, 6701, 6901,
@@ -56,7 +56,7 @@ somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
 # SEE? NUMBER 8.
-for (run in 2:length (somethingSomething[,1])) {
+for (run in 13:length (somethingSomething[,1])) {
   if (!(dir.exists(file.path(heatmapland, paste0("tenKfiveByFive_", somethingSomething[run,1]))))) {
     stop (paste0("Simulation ", somethingSomething[run,1], " is not in the directory. Stopping heatmap processing."))
   }
@@ -68,45 +68,45 @@ for (run in 2:length (somethingSomething[,1])) {
                         paste0(as.character (placeholder + 150), "-", as.character (placeholder + 199))
                         )
   inheritance_converter <- c(1,2,3,11)
-  # for (subset in 1:4) {
-  #   temp_heatmapland <- file.path(heatmapland, whatevers[specific_folder])
-  #   all_the_runs <- extractvardirs(temp_heatmapland, object_converter[subset])
+  for (subset in 1:4) {
+    temp_heatmapland <- file.path(heatmapland, whatevers[specific_folder])
+    all_the_runs <- extractvardirs(temp_heatmapland, object_converter[subset])
 
-  #   extractedmeans <- extractmeans(allrundirs = all_the_runs,
-  #                                  dirheatmap = temp_heatmapland,
-  #                                  source_of_params = "params.yaml",
-  #                                  ordering = FALSE,
-  #                                  deeper = FALSE
-  #                                 )
+    extractedmeans <- extractmeans(allrundirs = all_the_runs,
+                                   dirheatmap = temp_heatmapland,
+                                   source_of_params = "params.yaml",
+                                   ordering = FALSE,
+                                   deeper = FALSE
+                                  )
 
-  #   all_the_names <- remakestring(all_the_runs, "_", ".")
+    all_the_names <- remakestring(all_the_runs, "_", ".")
 
-  #   names(extractedmeans) <- all_the_names
+    names(extractedmeans) <- all_the_names
 
-  #   heatmapoutput <- makeheatmapfile(
-  #                   output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
-  #                   inheritance = inheritance_converter[subset],
-  #                   diffcurstartbias = "pop1",
-  #                   biassize = 5,
-  #                   othersize = 2,
-  #                   reversedruns = FALSE,
-  #                   runstyle = "lowHigh",
-  #                   highres = FALSE,
-  #                   extractedmeans = extractedmeans)
+    heatmapoutput <- makeheatmapfile(
+                    output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+                    inheritance = inheritance_converter[subset],
+                    diffcurstartbias = "pop1",
+                    biassize = 5,
+                    othersize = 2,
+                    reversedruns = FALSE,
+                    runstyle = "lowHigh",
+                    highres = FALSE,
+                    extractedmeans = extractedmeans)
 
-  #   individualfigures(
-  #     output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
-  #     difference = FALSE,
-  #     colorrange = 2,
-  #     colorpalette = 5,
-  #     foldername = heatmapoutput,
-  #     midpoint_size = 1,
-  #     var = FALSE
-  #   )
-  # }
+    individualfigures(
+      output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
+      difference = FALSE,
+      colorrange = 2,
+      colorpalette = 5,
+      foldername = heatmapoutput,
+      midpoint_size = 1,
+      var = FALSE
+    )
+  }
 
-  # differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
-  varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
+  differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
+  # varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
 #                             source(file.path("scripts", "Source_Difference_Heatmaps.R"))
