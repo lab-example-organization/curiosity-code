@@ -224,9 +224,17 @@ oh_shucks <- function (
 
     # saveRDS, path,
 
-    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps")))) {dir.create (file.path (path_results, "VarianceHeatmaps"))}
-    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", )))) {dir.create (file.path (path_results, "VarianceHeatmaps", ))}
-    if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", "fullData")))) {dir.create (file.path (path_results, "VarianceHeatmaps", "fullData"))}
+    some_path <- file.path (path_results, "VarianceHeatmaps")
+
+    if (! (dir.exists (some_path))) {dir.create (some_path)}
+
+    next_path_down <- file.path (some_path, strsplit(path_results, "tenKfiveByFive_")[[1]][2]) # "childNoInvF1"
+
+    if (! (dir.exists (next_path_down))) {dir.create (next_path_down)}
+
+    curinh_container <- c("Male","Moth","Same","FfFf")
+
+    if (! (dir.exists (file.path (next_path_down, paste0())))) {dir.create (file.path (next_path_down, paste0()))}
 
     # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
     saveRDS(output_object, file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
