@@ -964,7 +964,7 @@ makeheatmapfile <- function (
 
 individualfigures <- function (
   output_foldername = FALSE,
-  difference = FALSE,
+  special_treatment = FALSE,
   colorrange = 2, # c("relative", "absolute", "differences")
   colorpalette = 5, # Numbers correspond to specific color palettes
   foldername = heatmapoutput,
@@ -1116,16 +1116,7 @@ individualfigures <- function (
     midpoint_detail = colorRampPalette (c ("#67001f", "#67001f", "#b2182b", "#b2182b", "#ca0020", "#ca0020", "#d6604d", "#d6604d", "#ef8a62", "#ef8a62", "#f4a582", "#f4a582", "#fddbc7", "#fddbc7", "#f7f7f7", "#f7f7f7", "#d1e5f0", "#d1e5f0", "#92c5de", "#92c5de", "#67a9cf", "#67a9cf", "#4393c3", "#4393c3", "#0571b0", "#0571b0", "#2166ac", "#2166ac", "#053061", "#053061"))
   )
 
-  regularnames <- c (
-    "EndCurValP1M",
-    "EndCurValP2M",
-    "EndCurValP1F",
-    "EndCurValP2F",
-    "EndSRpValP1M",
-    "EndSRpValP2M",
-    "EndSRpValP1F",
-    "EndSRpValP2F"
-  )
+
 
   # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
@@ -1138,7 +1129,7 @@ individualfigures <- function (
       dir.create (file.path (
         heatmap_sourcefolder, output_foldername
       ))
-      # heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
+      heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
     }
     # if (! (dir.exists (file.path (
     #   heatmap_sourcefolder, output_foldername, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
@@ -1148,12 +1139,13 @@ individualfigures <- function (
     #   ))
     # }
   } #else {
-    if (! (dir.exists (file.path (
-      heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-    )))) {
-      dir.create (file.path (
-        heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-      ))
+    figure_path <- file.path (heatmap_sourcefolder, foldername$foldername)
+    if (! (dir.exists (file.path (figure_path)))) {
+      dir.create (file.path (figure_path))
+    }
+    figure_path <- file.path (figure_path, slicedpop[3])
+    if (! (dir.exists (file.path (figure_path)))) {
+      dir.create (file.path (figure_path))
     }
   # }
   # if (! (dir.exists (file.path ()))) {
@@ -1183,15 +1175,23 @@ individualfigures <- function (
 
 # png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
+regularnames <- c (
+    "EndCurValP1M",
+    "EndCurValP2M",
+    "EndCurValP1F",
+    "EndCurValP2F",
+    "EndSRpValP1M",
+    "EndSRpValP2M",
+    "EndSRpValP1F",
+    "EndSRpValP2F"
+  )
+
   for (sxmtpop in 1:sexPopMetrics) {
     for (slice in 1:otherpopsize) {
 
       file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
       # rule of thumb: if we're splitting up htmpView _within_ slice and sxmtpop, then we need to save the output files according to the schema that will help pull back together the slices.
-      png (filename = file.path (
-          heatmap_sourcefolder, foldername$foldername, #inhoptions[inhstyle + 2],
-          # paste0("slice_", slice), file_name),
-          slicedpop[3], file_name),
+      png (filename = file.path (figure_path, file_name),
         width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
       if (colorrange == "absolute") {

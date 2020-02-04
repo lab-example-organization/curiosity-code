@@ -170,10 +170,10 @@ extract_subset <- function (
 
 print("finding_some_cross_sections_for_mean_and_variance_calculations and extract_subset loaded")
 
-oh_shucks <- function (
-    path = ,
-    lbhb = ,
-    cur_inh = ,
+var_calc_from_moran <- function (
+    path,
+    lbhb,
+    cur_inh
 ) {
     placeholder = rep(1,200)
 
@@ -220,30 +220,48 @@ oh_shucks <- function (
     # variance_between_replicates <- array (c (), c (5, 5, 2, 2)) # take the means (rows 1 and 2) of replicates
     # variance_within_replicate <- array (c (), c (5, 5, 2, 2))
 
-    pre_output_object <- array(c(), c(5, 5, 4, 2))
-
+    output_object <- array(0, c(5, 5, 4, 2)
+    for (i in 1:5) {
+        for (j in 1:5) {
+            output_object[i, j,,] <- replicates[,,j + 5(i - 1)]
+        }
+    }
     # saveRDS, path,
+    path_results <- file.path("results")
 
-    some_path <- file.path (path_results, "VarianceHeatmaps")
+    vh_path <- file.path (path_results, "VarianceHeatmaps")
+    if (! (dir.exists (vh_path))) {dir.create (vh_path)}
 
-    if (! (dir.exists (some_path))) {dir.create (some_path)}
+    sim_path <- file.path (vh_path, strsplit(path, "tenKfiveByFive_")[[1]][2]) # "childNoInvF1"
+    if (! (dir.exists (sim_path))) {dir.create (sim_path)}
 
-    next_path_down <- file.path (some_path, strsplit(path_results, "tenKfiveByFive_")[[1]][2]) # "childNoInvF1"
-
-    if (! (dir.exists (next_path_down))) {dir.create (next_path_down)}
+    fd_path <- file.path (sim_path, "fullData")
+    if (! (dir.exists (fd_path))) {dir.create (fd_path)}
 
     curinh_container <- c("Male","Moth","Same","FfFf")
+    curinh_path <- file.path (sim_path, paste0(curinh_container[cur_inh], "_curInh"))
+    fd_curinh_path <- file.path (fd_path, paste0(curinh_container[cur_inh], "_curInh"))
+    if (! (dir.exists (file.path (curinh_path)))) {dir.create (file.path (curinh_path))}
+    if (! (dir.exists (file.path (fd_curinh_path)))) {dir.create (file.path (fd_curinh_path))}
 
-    if (! (dir.exists (file.path (next_path_down, paste0())))) {dir.create (file.path (next_path_down, paste0()))}
+    bg_container <- c("low", "hih")
+    bg_path <- file.path (curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart")
+    fd_bg_path <- file.path (fd_curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart")
+    if (! (dir.exists (file.path (bg_path)))) {dir.create (file.path (bg_path))}
+    if (! (dir.exists (file.path (fd_bg_path)))) {dir.create (file.path (fd_bg_path))}
 
     # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
-    saveRDS(output_object, file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
+    saveRDS(output_object, file.path(fd_bg_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
 
-    return (file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
+    return (file.path(fd_bg_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
 }
 
-thingie <- "childNoInvF1"
+# thingie <- "childNoInvF1"
 
-oh_shucks(file.path("results", paste0("tenKfiveByFive_", thingie)))
+# var_calc_from_moran(
+#     path = file.path("results", "VarianceHeatmaps", paste0("tenKfiveByFive_", thingie)),
+#     lbhb = ,
+#     cur_inh =
+# )
 
 
