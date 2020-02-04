@@ -49,10 +49,9 @@ varianceheatmaps <- function (
 
                     individualfigures (
                         output_foldername = FALSE,
-                        special_treatment,
                         colorrange = 2,
                         colorpalette = "variance_spectrum",
-                        foldername = foldername,
+                        input_list = foldername,
                         midpoint_size = 1,
                         variance_treatment = TRUE
                     )

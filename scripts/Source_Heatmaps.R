@@ -101,7 +101,7 @@ for (run in 13:length (somethingSomething[,1])) {
       difference = FALSE,
       colorrange = 2,
       colorpalette = "five_by_five",
-      foldername = heatmapoutput,
+      input_list = heatmapoutput,
       midpoint_size = 1,
       var = FALSE
     )

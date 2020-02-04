@@ -964,10 +964,9 @@ makeheatmapfile <- function (
 
 individualfigures <- function (
   output_foldername = FALSE,
-  special_treatment = FALSE,
   colorrange = 2, # c("relative", "absolute", "differences")
   colorpalette = "five_by_five", # Numbers correspond to specific color palettes
-  foldername = heatmapoutput,
+  input_list = heatmapoutput,
   midpoint_size = 1, # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
   variance_treamtent = FALSE
 ) {
@@ -976,9 +975,16 @@ individualfigures <- function (
   #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,       19,                  20,                    21
   heatmap_sourcefolder <- file.path ("results")
   # if (difference == FALSE) {
-    if (output_foldername != F) {
-      heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
+
+
+  if (output_foldername) {
+    if (! (dir.exists (file.path (
+      heatmap_sourcefolder, output_foldername
+    )))) {
+      dir.create (file.path (heatmap_sourcefolder, output_foldername))
     }
+    heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
+  }
   # }
   # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
   # if (output_foldername != F) {
@@ -1002,7 +1008,7 @@ individualfigures <- function (
 
   whichbias <- c("malebias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
 
-  if (foldername$diffcurstartbias == "male" || foldername$diffcurstartbias == 1) {
+  if (input_list$diffcurstartbias == "male" || input_list$diffcurstartbias == 1) {
     heatmap_axes <- list(
       mp2vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2vfem
       mp1vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1vfem
@@ -1013,7 +1019,7 @@ individualfigures <- function (
       "MalPop2",
       "FemalePop"
     )
-  } else if (foldername$diffcurstartbias == "female" || foldername$diffcurstartbias == 2) {
+  } else if (input_list$diffcurstartbias == "female" || input_list$diffcurstartbias == 2) {
     heatmap_axes <- list(
       mf2vmal = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
       mf1vmal = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
@@ -1024,7 +1030,7 @@ individualfigures <- function (
       "FemPop2",
       "MalePop"
     )
-  } else if (foldername$diffcurstartbias == "pop1" || foldername$diffcurstartbias == 3) {
+  } else if (input_list$diffcurstartbias == "pop1" || input_list$diffcurstartbias == 3) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Starting Curiosity"),
       mp1Vpp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Starting Curiosity"),
@@ -1035,7 +1041,7 @@ individualfigures <- function (
       "FemPop1",
       "Popula2"
     )
-  } else if (foldername$diffcurstartbias == "pop2" || foldername$diffcurstartbias == 4) {
+  } else if (input_list$diffcurstartbias == "pop2" || input_list$diffcurstartbias == 4) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 2 Female Starting Curiosity", "Pop 1 Starting Curiosity"),
       mp1Vpp2 = c("Pop 2 Male Starting Curiosity", "Pop 1 Starting Curiosity"),
@@ -1053,14 +1059,14 @@ individualfigures <- function (
 
   # thisBias <- whichbias[thisBias]
 
-  # foldername <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
-  # foldername <-
+  # input_list <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
+  # input_list <-
 
-  # temphtmparray <- readRDS(file.path(heatmap_sourcefolder, foldername, list.files(file.path(heatmap_sourcefolder, foldername), pattern = ".RData")))
-  htmparrays <- list.files (file.path (heatmap_sourcefolder, foldername$foldername), pattern = ".RData")
+  # temphtmparray <- readRDS(file.path(heatmap_sourcefolder, input_list, list.files(file.path(heatmap_sourcefolder, input_list), pattern = ".RData")))
+  htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
 
   if (length (htmparrays) == 1) {
-    temphtmparray <- readRDS (file.path (heatmap_sourcefolder, foldername$foldername, htmparrays))
+    temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername, htmparrays))
   } else {stop ("there's either more or less than one .RData file in that directory!")}
 
   if (colorpalette == 19) {
@@ -1073,74 +1079,9 @@ individualfigures <- function (
 
   source (file.path ("scripts", "Source_colorseqmultpalette.R"))
   colorseqmultpalette <- make_colorpalettes (stuff)
-  # colorseqmultpalette <- list (
-  #   reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds                                        ### 1
-  #   rdpu = colorRampPalette (c ("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class rdpu                                        ### 2
-  #   oranges = colorRampPalette (c ("#fee6ce", "#fdae6b", "#e6550d")), # 3-class oranges                                  ### 3
-  #   orrd = colorRampPalette (c ("#fee8c8", "#fdbb84", "#e34a33")), # 3-class orrd                                        ### 4
-  #   five_by_five = colorRampPalette (c ("#ffeda0", "#feb24c", "#f03b20")), # 3-class ylorrd                              ### 5
-  #   ylorbr = colorRampPalette (c ("#fff7bc", "#fec44f", "#d95f0e")), # 3-class ylorbr                                    ### 6
-  #   ylgn = colorRampPalette (c ("#f7fcb9", "#addd8e", "#31a354")), # 3-class ylgn                                        ### 7
-  #   ylgnbu = colorRampPalette (c ("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class ylgnbu                                    ### 8
-  #   greens = colorRampPalette (c ("#e5f5e0", "#a1d99b", "#31a354")), # 3-class greens                                    ### 9
-  #   gnbu = colorRampPalette (c ("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class gnbu                                        ### 10
-  #   blues = colorRampPalette (c ("#deebf7", "#9ecae1", "#3182bd")), # 3-class blues                                      ### 11
-  #   bugn = colorRampPalette (c ("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class bugn                                        ### 12
-  #   bupu = colorRampPalette (c ("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class bupu                                        ### 13
-  #   purples = colorRampPalette (c ("#efedf5", "#bcbddc", "#756bb1")), # 3-class purples                                  ### 14
-  #   purd = colorRampPalette (c ("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class purd                                        ### 15
-  #   pubu = colorRampPalette (c ("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class pubu                                        ### 16
-  #   pubugn = colorRampPalette (c ("#ece2f0", "#a6bddb", "#1c9099")), # 3-class pubugn                                    ### 17
-  #   greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
-  #   # midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
-
-  #   difference_spectrum = eval (parse (text = paste0 ("midpoint = colorRampPalette (c (rep(\"#67001f\", ",
-  #                                                  stuff[2], "), rep(\"#b2182b\", ",
-  #                                                  stuff[2], "), rep(\"#ca0020\", ",
-  #                                                  stuff[2], "), rep(\"#d6604d\", ",
-  #                                                  stuff[2], "), rep(\"#ef8a62\", ",
-  #                                                  stuff[2], "), rep(\"#f4a582\", ",
-  #                                                  stuff[2], "), rep(\"#fddbc7\", ",
-  #                                                  stuff[2], "), rep(\"#f7f7f7\", ",
-  #                                                  stuff[1], "), rep(\"#d1e5f0\", ",
-  #                                                  stuff[2], "), rep(\"#92c5de\", ",
-  #                                                  stuff[2], "), rep(\"#67a9cf\", ",
-  #                                                  stuff[2], "), rep(\"#4393c3\", ",
-  #                                                  stuff[2], "), rep(\"#0571b0\", ",
-  #                                                  stuff[2], "), rep(\"#2166ac\", ",
-  #                                                  stuff[2], "), rep(\"#053061\", ",
-  #                                                  stuff[2], ")))"))),
-  #   midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
-  #   variance_spectrum = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
-  #   "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7",
-  #   "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7")),
-  #   midpoint_detail = colorRampPalette (c ("#67001f", "#67001f", "#b2182b", "#b2182b", "#ca0020", "#ca0020", "#d6604d", "#d6604d", "#ef8a62", "#ef8a62", "#f4a582", "#f4a582", "#fddbc7", "#fddbc7", "#f7f7f7", "#f7f7f7", "#d1e5f0", "#d1e5f0", "#92c5de", "#92c5de", "#67a9cf", "#67a9cf", "#4393c3", "#4393c3", "#0571b0", "#0571b0", "#2166ac", "#2166ac", "#053061", "#053061"))
-  # )
 
 
-
-  # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-
-  # for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
-
-  if (output_foldername != FALSE) {
-    if (! (dir.exists (file.path (
-      heatmap_sourcefolder, output_foldername
-    )))) {
-      dir.create (file.path (
-        heatmap_sourcefolder, output_foldername
-      ))
-      heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
-    }
-    # if (! (dir.exists (file.path (
-    #   heatmap_sourcefolder, output_foldername, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-    # )))) {
-    #   dir.create (file.path (
-    #     heatmap_sourcefolder, output_foldername, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-    #   ))
-    # }
-  } #else {
-    figure_path <- file.path (heatmap_sourcefolder, foldername$foldername)
+    figure_path <- file.path (heatmap_sourcefolder, input_list$foldername)
     if (! (dir.exists (file.path (figure_path)))) {
       dir.create (file.path (figure_path))
     }
@@ -1148,15 +1089,9 @@ individualfigures <- function (
     if (! (dir.exists (file.path (figure_path)))) {
       dir.create (file.path (figure_path))
     }
-  # }
-  # if (! (dir.exists (file.path ()))) {
-    # dir.create (file.path (
-    #   heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-    # ))
-  # }
 
 
-  otherpopsize <- foldername$othersize
+  otherpopsize <- input_list$othersize
   dat_array_doh <- array (c (
     1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
     2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, otherpopsize,otherpopsize,2,
@@ -1166,26 +1101,37 @@ individualfigures <- function (
     # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
   ), c (3, 3, otherpopsize, 3))
 
-  # saveRDS(foldername, file.path (heatmap_sourcefolder, foldername$foldername, "foldername.RData"))
+  # saveRDS(input_list, file.path (heatmap_sourcefolder, input_list$foldername, "input_list.RData"))
 
   if (variance_treamtent) {
-    sexPopMetrics <- 4
+    sexPopMetrics <- 8
+    regularnames <- c (
+      "BtwVarSimP1M",
+      "BtwVarSimP1F",
+      "WtnVarSimP1M",
+      "WtnVarSimP1F",
+      "BtwVarSimP2M",
+      "BtwVarSimP2F",
+      "WtnVarSimP2M",
+      "WtnVarSimP2F"
+    )
   } else {
     sexPopMetrics <- 8
+    regularnames <- c (
+      "CurEndValP1M",
+      "CurEndValP2M",
+      "CurEndValP1F",
+      "CurEndValP2F",
+      "SRpEndValP1M",
+      "SRpEndValP2M",
+      "SRpEndValP1F",
+      "SRpEndValP2F"
+    )
   }
 
 # png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
-regularnames <- c (
-    "EndCurValP1M",
-    "EndCurValP2M",
-    "EndCurValP1F",
-    "EndCurValP2F",
-    "EndSRpValP1M",
-    "EndSRpValP2M",
-    "EndSRpValP1F",
-    "EndSRpValP2F"
-  )
+
 
   for (sxmtpop in 1:sexPopMetrics) {
     for (slice in 1:otherpopsize) {
@@ -1226,35 +1172,44 @@ regularnames <- c (
       #   heatmaprange <- c (0,1)
       # }
 
-       # UNFINISHED - depreciated?
-      # findXLab <- heatmap_axes[[3]][1]
-      # findYLab <- heatmap_axes[[3]][2]
-
-      # if(inhstyle == 1) {
-        # dim_1 = 3
-        # dim_2 = 3
-        # dim_3 = 2
-
       if (typeof (colorpalette) == "character") {
         colorpalette <- which (names (colorseqmultpalette) == colorpalette)
       }
 
-      if (otherpopsize == 1) {
-        image(x = temphtmparray[,,sxmtpop],
-          col = colorseqmultpalette[[colorpalette]](100),
-          axes = F,
-          xlab = heatmap_axes[[3]][1],
-          ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
-        )
-      } else {
-        image(x = temphtmparray[,,slice,sxmtpop],
-          col = colorseqmultpalette[[colorpalette]](100),
-          axes = F,
-          xlab = heatmap_axes[[3]][1],
-          ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
-        )
-      }
+      if (variance_treamtent) {
+        if (sxmtpop > 4) {
+          image(x = temphtmparray[,,sxmtpop - 4, 2],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        } else {
+          image(x = temphtmparray[,,sxmtpop, 1],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        }
 
+      } else {
+        if (otherpopsize == 1) {
+          image(x = temphtmparray[,,sxmtpop],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        } else {
+          image(x = temphtmparray[,,slice,sxmtpop],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        }
+      }
 
       if (!(is.null(dimnames(temphtmparray)))) {
         temphtmpdimensions <- dimnames(temphtmparray)
@@ -1265,7 +1220,7 @@ regularnames <- c (
 
 
         # sets up the axes regardless of size, based on what they were labeled when they were originally run.
-        if (foldername$biassize == 2) {
+        if (input_list$biassize == 2) {
           axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
             c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1279,7 +1234,7 @@ regularnames <- c (
           axis(2,c(-0.495,0.5,1.495),
             c("","",""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 3) {
+        } else if (input_list$biassize == 3) {
           axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1293,7 +1248,7 @@ regularnames <- c (
           axis(2,c(-0.25, 0.25, 0.75, 1.25),
             c("", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize ==  4) {
+        } else if (input_list$biassize == 4) {
           axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1307,7 +1262,7 @@ regularnames <- c (
           axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
             c("", "", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 5) {
+        } else if (input_list$biassize == 5) {
           axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1321,7 +1276,7 @@ regularnames <- c (
           axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
             c("", "", "", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 6) {
+        } else if (input_list$biassize == 6) {
           axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1335,7 +1290,7 @@ regularnames <- c (
           axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
             c("", "", "", "", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 7) {
+        } else if (input_list$biassize == 7) {
           axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1349,7 +1304,7 @@ regularnames <- c (
           axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
             c("", "", "", "", "", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 8) {
+        } else if (input_list$biassize == 8) {
           axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1363,7 +1318,7 @@ regularnames <- c (
           axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
             c("", "", "", "", "", "", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 9) {
+        } else if (input_list$biassize == 9) {
           axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
             c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1377,7 +1332,7 @@ regularnames <- c (
           axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
             c("", "", "", "", "", "", "", "", "", ""),
             T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-        } else if (foldername$biassize == 10) {
+        } else if (input_list$biassize == 10) {
           axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
                 c(     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
             T,0,NA,F,cex.axis=0.8, tck = 0)
@@ -1402,7 +1357,7 @@ regularnames <- c (
     }
   }
   return(print("Done, in the specified folder"))
-  # return(foldername)
+  # return(input_list)
 }
 
 combineeditsingles <- function (

@@ -219,8 +219,16 @@ var_calc_from_moran <- function (
 
     # variance_between_replicates <- array (c (), c (5, 5, 2, 2)) # take the means (rows 1 and 2) of replicates
     # variance_within_replicate <- array (c (), c (5, 5, 2, 2))
+            # c ("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"),
+            # c ("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"),
+            # c ("0.2-0.3p2", "0.7-0.8p2"),
+    output_object <- array(0, c(5, 5, 4, 2), list(
+        c("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"),
+        c("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"),
+        c("VB_mal", "VB_fem", "VW_mal", "VW_fem"),
+        c("pop1", "pop2"))
+    )
 
-    output_object <- array(0, c(5, 5, 4, 2)
     for (i in 1:5) {
         for (j in 1:5) {
             output_object[i, j,,] <- replicates[,,j + 5(i - 1)]
@@ -242,23 +250,23 @@ var_calc_from_moran <- function (
     curinh_container <- c("Male","Moth","Same","FfFf")
 
     curinh_path <- file.path (sim_path, paste0(curinh_container[cur_inh], "_curInh"))
-    fd_curinh_path <- file.path (fd_path, paste0(curinh_container[cur_inh], "_curInh"))
+    curinh_fd_path <- file.path (fd_path, paste0(curinh_container[cur_inh], "_curInh"))
     if (! (dir.exists (file.path (curinh_path)))) {dir.create (file.path (curinh_path))}
-    if (! (dir.exists (file.path (fd_curinh_path)))) {dir.create (file.path (fd_curinh_path))}
+    if (! (dir.exists (file.path (curinh_fd_path)))) {dir.create (file.path (curinh_fd_path))}
 
 
     bg_container <- c("low", "hih")
 
-    bg_path <- file.path (curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart")
-    fd_bg_path <- file.path (fd_curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart")
+    bg_path <- file.path (curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart"))
+    bg_fd_path <- file.path (curinh_fd_path, paste0(bg_container[lbhb], "_bkgd_curstart"))
     if (! (dir.exists (file.path (bg_path)))) {dir.create (file.path (bg_path))}
-    if (! (dir.exists (file.path (fd_bg_path)))) {dir.create (file.path (fd_bg_path))}
+    if (! (dir.exists (file.path (bg_fd_path)))) {dir.create (file.path (bg_fd_path))}
 
 
     # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
-    saveRDS(output_object, file.path(fd_bg_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
+    saveRDS(output_object, file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
 
-    return (file.path(fd_bg_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
+    return (file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
 }
 
 # thingie <- "childNoInvF1"
