@@ -91,7 +91,7 @@ differenceheatmaps <- function (
         output_foldername = "DifferenceHeatmaps",
         difference = TRUE,
         colorrange = 2,
-        colorpalette = 19,
+        colorpalette = "difference_spectrum",
         foldername = list(
           foldername = output_heatmap$foldername,
           biassize = 5,

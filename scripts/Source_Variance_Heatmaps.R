@@ -34,7 +34,9 @@ varianceheatmaps <- function (
                     # )
 
                     subsets_folder <- var_calc_from_moran (
-
+                        path = file.path("results", "VarianceHeatmaps", paste0("tenKfiveByFive_", list_of_sims[sim_in_question])),
+                        lbhb = lowbg_vs_hihbg,
+                        cur_inh = curinh_style
                     )
 
                     foldername <- list(
@@ -46,12 +48,13 @@ varianceheatmaps <- function (
                     )
 
                     individualfigures (
-                        difference = FALSE,
+                        output_foldername = FALSE,
+                        special_treatment,
                         colorrange = 2,
-                        colorpalette = 21,
+                        colorpalette = "variance_spectrum",
                         foldername = foldername,
                         midpoint_size = 1,
-                        var = TRUE
+                        variance_treatment = TRUE
                     )
                 }
             # }

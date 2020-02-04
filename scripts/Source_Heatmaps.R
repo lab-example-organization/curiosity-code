@@ -42,16 +42,18 @@ heatmapland <- file.path("results")
 # )
 
 # THIS ARRAY IS THE FEEDER FOR THE FOR LOOP. EVERYTHING FOR ROWS 7 AND UNDER IS DONE; 8 IS READY TO FINISH
-somethingSomething <- array(c("parentNoInv", "childF1NoInv", "childMalHihInv", "childMalLowInv", "childFemLowInv",
-                              "childBothLowInv", "childFemHihInv", "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
-                              "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2", "childNoInvF3", "childNoInvF4",
-                              "childNoInvF5", "childNoInvF6", "childNoInvF7", "childNoInvF8", "childNoInvF9",
-                              "childNoInvF10",
-                              3901, 4101, 4301, 4501, 4701,
-                              5101, 5301, 5501, 5701, 5901,
-                              6101, 6301, 6501, 6701, 6901,
-                              7101, 7301, 7501, 7701, 7901,
-                              8101), c(21,2))
+somethingSomething <- array(c(
+  "parentNoInv",        "childF1NoInv",       "childMalHihInv",  "childMalLowInv",     "childFemLowInv",
+  "childBothLowInv",    "childFemHihInv",     "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
+  "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2",    "childNoInvF3",       "childNoInvF4",
+  "childNoInvF5",       "childNoInvF6",       "childNoInvF7",    "childNoInvF8",       "childNoInvF9",
+  "childNoInvF10",
+  3901, 4101, 4301, 4501, 4701,
+  5101, 5301, 5501, 5701, 5901,
+  6101, 6301, 6501, 6701, 6901,
+  7101, 7301, 7501, 7701, 7901,
+  8101), c(21,2)
+)
 
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
@@ -98,7 +100,7 @@ for (run in 13:length (somethingSomething[,1])) {
       output_foldername = paste0 ("five-by-five-", somethingSomething[run,1]),
       difference = FALSE,
       colorrange = 2,
-      colorpalette = 5,
+      colorpalette = "five_by_five",
       foldername = heatmapoutput,
       midpoint_size = 1,
       var = FALSE
@@ -109,7 +111,7 @@ for (run in 13:length (somethingSomething[,1])) {
   # varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
-#                             source(file.path("scripts", "Source_Difference_Heatmaps.R"))
+#                             source(file.path("scripts", "Source_Difference_Heatmap_Functions.R"))
 #                             plot_that_spectrum(file.path("results", "VarianceHeatmaps", "variance_spectrum"), 22,1,"variance", "variance")
 
 # variance plot_that_spectrum will have an AXIS that is modified to include values at the appropriate position, but with a full spectrum instead of a smooshed one.

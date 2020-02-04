@@ -238,17 +238,22 @@ var_calc_from_moran <- function (
     fd_path <- file.path (sim_path, "fullData")
     if (! (dir.exists (fd_path))) {dir.create (fd_path)}
 
+
     curinh_container <- c("Male","Moth","Same","FfFf")
+
     curinh_path <- file.path (sim_path, paste0(curinh_container[cur_inh], "_curInh"))
     fd_curinh_path <- file.path (fd_path, paste0(curinh_container[cur_inh], "_curInh"))
     if (! (dir.exists (file.path (curinh_path)))) {dir.create (file.path (curinh_path))}
     if (! (dir.exists (file.path (fd_curinh_path)))) {dir.create (file.path (fd_curinh_path))}
 
+
     bg_container <- c("low", "hih")
+
     bg_path <- file.path (curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart")
     fd_bg_path <- file.path (fd_curinh_path, paste0(bg_container[lbhb], "_bkgd_curstart")
     if (! (dir.exists (file.path (bg_path)))) {dir.create (file.path (bg_path))}
     if (! (dir.exists (file.path (fd_bg_path)))) {dir.create (file.path (fd_bg_path))}
+
 
     # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
     saveRDS(output_object, file.path(fd_bg_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
@@ -259,9 +264,9 @@ var_calc_from_moran <- function (
 # thingie <- "childNoInvF1"
 
 # var_calc_from_moran(
-#     path = file.path("results", "VarianceHeatmaps", paste0("tenKfiveByFive_", thingie)),
-#     lbhb = ,
-#     cur_inh =
+    # path = file.path("results", "VarianceHeatmaps", paste0("tenKfiveByFive_", thingie)),
+    # lbhb = ,
+    # cur_inh =
 # )
 
 

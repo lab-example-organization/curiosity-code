@@ -797,7 +797,7 @@ image(x = thing3,
 # plot(x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = F, xlab = "", ylab = "")
 # axis(1, c(0, 0.1, 1, 10, 100), c("0", "0.1", "1", "10", "100"),T,0,NA,F,cex.axis = 0.8, tck = 0)
 
-colorpalette = 19
+colorpalette = "difference_spectrum"
 midpoint_size <- 1
 
 if (colorpalette == 19) {
