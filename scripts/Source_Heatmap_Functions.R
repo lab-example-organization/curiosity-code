@@ -1,5 +1,59 @@
 # Heatmap Directory Creation and Referencing
 
+plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_scale, theme) {
+
+    source (file.path ("scripts", "Source_colorseqmultpalette.R"))
+    colorseqmultpalette <- make_colorpalettes ()
+    # colorPalette <- 19
+    # midpoint_size <- 1
+    if (typeof (colorPalette) == "character") {
+        colorPalette <- which (names (colorseqmultpalette) == colorPalette)
+    }
+
+    if (colorPalette == 19) {
+      midpoint_director <- array(c(2, 16, 30, 44, 58, 72, 86, 7, 6, 5, 4, 3, 2, 1), c(7,2))
+      stuff <- midpoint_director[midpoint_size,]
+      colorseqmultpalette <- make_colorpalettes (stuff)
+    }
+
+  x <- array(c(1:100, rep(9.5,100), rep(9.65,100), rep(9.8,100), rep(9.95,100), rep(10.1,100), rep(10.25,100), rep(10.4,100), rep(10.55,100), rep(10.7,100), rep(10.85,100)), c(100, 11))
+
+  png (filename = file.path (
+            file_name),
+          width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+
+  if (theme == "difference") {
+    title_and_stuff <- c ("Legend
+(heatmap 1 minus heatmap 2)")
+  } else if (theme == "variance") {
+    title_and_stuff <- c ("Legend
+(variance scale)")
+  }
+
+  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = title_and_stuff)
+
+  if (legend_scale == "midpoint") {
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    title(xlab = c("-1     -0.86    -0.72   -0.58   -0.44     -0.3     -0.16  -0.02  0.02   0.16     0.3     0.44      0.58      0.72    0.86         1 "), line = -11.2, cex.lab = 0.7)
+
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-15.8,NA,F,cex.axis = 0.7, tck = 0.015)
+    title(xlab = c("-155     -133     -111      -89       -67      -45      -23        -3  3         23       45        67        89       111       133      155 "), line = -17.3, cex.lab = 0.7)
+
+    title(xlab = c("Syllable Repertoire Differences"), line = -18.3, cex.lab = 0.7)
+    title(xlab = c("Curiosity Level Differences"), line = -10.3, cex.lab = 0.7)
+
+  } else if (legend_scale == "variance") {
+    #   c ("", "", "", "", "", "", "", "")
+    # c("0", "0.05", "0.1", "0.15", "0.2", "0.25", "0.3", "0.35")
+    # axis (1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = 0.015)
+    # title (xlab = c("0.02           0.04         0.06          0.08        0.1         0.125       0.145     0.165  0.185     0.205     0.225       0.245       0.265      0.285   0.315"), line = -17.8, cex.lab = 0.7)
+    # axis (1, c (5.5, 15.5, 25.5, 35.5), c ("0.05", "0.15", "0.25", "0.35"),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    axis (1, c(0.5, 3.5, 6.5, 9.5, 12.5, 15.5, 18.5, 21.5, 24.5, 27.5, 30.5, 33.5, 36.5, 39.5, 42.5, 45.5, 48.5, 51.5, 54.5, 57.5, 60.5, 63.5, 66.5, 69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 96.5), c("0", "0.01", "0.02", "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", "0.1", "0.11", "0.12", "0.13", "0.14", "0.15", "0.16", "0.17", "0.18", "0.19", "0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26", "0.27", "0.28", "0.29", "0.3", "0.31", "... 1"),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+  }
+
+  dev.off()
+}
+
 remakestring <- function(target, comp, out) {
   # tR stands for temporary retainer
   tR <- strsplit(target, comp)
@@ -1766,4 +1820,4 @@ stackmultiples <- function (
 
 }
 
-print("htmpdir, extractvardirs, remakestring, extractmeans, makeheatmapfile, individualfigures, combineeditsingles and stackmultiples loaded")
+print("plot_that_spectrum, remake_string, htmpdir, extractvardirs, remakestring, extractmeans, makeheatmapfile, individualfigures, combineeditsingles and stackmultiples loaded")
