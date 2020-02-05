@@ -34,10 +34,10 @@ varianceheatmaps <- function (
                     # )
 
                     subsets_folder <- var_calc_from_moran (
-                        path = file.path("results", "VarianceHeatmaps", paste0("tenKfiveByFive_", list_of_sims[sim_in_question])),
+                        path = file.path("results", paste0("tenKfiveByFive_", list_of_sims[sim_in_question])),
                         lbhb = lowbg_vs_hihbg,
                         cur_inh = curinh_style
-                    )
+                    ) # return (file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
 
                     foldername <- list(
                         foldername = subsets_folder,

@@ -231,7 +231,7 @@ var_calc_from_moran <- function (
 
     for (i in 1:5) {
         for (j in 1:5) {
-            output_object[i, j,,] <- replicates[,,j + 5(i - 1)]
+            output_object[i, j,,] <- replicates[,,j + 5*(i - 1)]
         }
     }
     # saveRDS, path,
@@ -264,9 +264,9 @@ var_calc_from_moran <- function (
 
 
     # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
-    saveRDS(output_object, file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
+    saveRDS(output_object, file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", curinh_container[cur_inh], "_cI_", bg_container[lbhb], "_bkgd.RData")))
 
-    return (file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
+    return (file.path(str_split(bg_fd_path, "results/")[[1]][2], paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", curinh_container[cur_inh], "_cI_", bg_container[lbhb], "_bkgd.RData")))
 }
 
 # thingie <- "childNoInvF1"

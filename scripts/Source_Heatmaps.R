@@ -58,7 +58,7 @@ somethingSomething <- array(c(
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
 # SEE? NUMBER 8.
-for (run in 13:length (somethingSomething[,1])) {
+for (run in 1:length (somethingSomething[,1])) {
   if (!(dir.exists(file.path(heatmapland, paste0("tenKfiveByFive_", somethingSomething[run,1]))))) {
     stop (paste0("Simulation ", somethingSomething[run,1], " is not in the directory. Stopping heatmap processing."))
   }
@@ -108,7 +108,7 @@ for (run in 13:length (somethingSomething[,1])) {
   }
 
   differenceheatmaps(new_runs_to_compare = somethingSomething[run,1], guide = somethingSomething)
-  # varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
+  varianceheatmaps(list_of_sims = somethingSomething[,1], sim_in_question = run)
 }
 
 #                             source(file.path("scripts", "Source_Difference_Heatmap_Functions.R"))

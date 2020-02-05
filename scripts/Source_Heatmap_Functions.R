@@ -659,7 +659,7 @@ makeheatmapfile <- function (
 
   # biassize = 5
 
-#  print("and a one")
+  #  print("and a one")
 
   if (redo) {
 
@@ -862,7 +862,7 @@ makeheatmapfile <- function (
       }
     }
 
-#     print("and a five")
+  #     print("and a five")
     # print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
     for (third_dimension in 1:othersize) { # femalez
       for (second_dimension in 1:biassize) { # malez1
@@ -964,11 +964,11 @@ makeheatmapfile <- function (
 
 individualfigures <- function (
   output_foldername = FALSE,
-  colorrange = 2, # c("relative", "absolute", "differences")
+  colorrange = 2, # c("relative", "absolute", "differences") ### absolute has been deprecated
   colorpalette = "five_by_five", # Numbers correspond to specific color palettes
   input_list = heatmapoutput,
   midpoint_size = 1, # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
-  variance_treamtent = FALSE
+  variance_treatment = FALSE
 ) {
 
   # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint, midpoint_but_smooth, midpoint_but_smooshed
@@ -1002,17 +1002,17 @@ individualfigures <- function (
 
   colorrange <- clrrngcontainer[colorrange]
 
-  inheritancecontainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
-                            "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
-                            "sTfSinh", "sTnNinh", "FfFfinh")
+  # inheritancecontainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
+  #                           "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
+  #                           "sTfSinh", "sTnNinh", "FfFfinh")
 
-  whichbias <- c("malebias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
+  # whichbias <- c("malebias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
 
   if (input_list$diffcurstartbias == "male" || input_list$diffcurstartbias == 1) {
     heatmap_axes <- list(
-      mp2vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2vfem
-      mp1vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1vfem
-      mp1vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity") # mp1vmp2
+      mp2vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),
+      mp1vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),
+      mp1vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity")
     )
     slicedpop <- list(
       "MalPop1",
@@ -1053,21 +1053,17 @@ individualfigures <- function (
       "Popula1"
     )
   }
+  if (variance_treatment) {
+    temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername))
+  } else {
+    htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
 
+    if (length (htmparrays) == 1) {
+      temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername, htmparrays))
+    } else {stop (paste0("there's either more or less than one .RData file in that directory!",
+    heatmap_sourcefolder, "then", input_list$foldername, "then", htmparrays, " was the path, if that helps..."))}
+  }
 
-  # inheritance <- inheritancecontainer[inheritance]
-
-  # thisBias <- whichbias[thisBias]
-
-  # input_list <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
-  # input_list <-
-
-  # temphtmparray <- readRDS(file.path(heatmap_sourcefolder, input_list, list.files(file.path(heatmap_sourcefolder, input_list), pattern = ".RData")))
-  htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
-
-  if (length (htmparrays) == 1) {
-    temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername, htmparrays))
-  } else {stop ("there's either more or less than one .RData file in that directory!")}
 
   if (colorpalette == 19) {
 
@@ -1080,15 +1076,16 @@ individualfigures <- function (
   source (file.path ("scripts", "Source_colorseqmultpalette.R"))
   colorseqmultpalette <- make_colorpalettes (stuff)
 
-
-    figure_path <- file.path (heatmap_sourcefolder, input_list$foldername)
-    if (! (dir.exists (file.path (figure_path)))) {
-      dir.create (file.path (figure_path))
-    }
-    figure_path <- file.path (figure_path, slicedpop[3])
-    if (! (dir.exists (file.path (figure_path)))) {
-      dir.create (file.path (figure_path))
-    }
+  if (variance_treatment)
+  figure_path <- file.path (heatmap_sourcefolder, str_remove(input_list$foldername, "fullData/"))
+  figure_path <- paste0(str_split (figure_path, "curstart/")[[1]][1], "curstart/")
+  if (! (dir.exists (file.path (figure_path)))) {
+    dir.create (file.path (figure_path))
+  }
+  figure_path <- file.path (figure_path, slicedpop[3])
+  if (! (dir.exists (file.path (figure_path)))) {
+    dir.create (file.path (figure_path))
+  }
 
 
   otherpopsize <- input_list$othersize
@@ -1096,14 +1093,9 @@ individualfigures <- function (
     1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
     2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, otherpopsize,otherpopsize,2,
     3,1,1, 1,3,1, 1,1,otherpopsize, 3,3,3, 3,3,3, otherpopsize,otherpopsize,otherpopsize
-    # rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
-    # rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
-    # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
   ), c (3, 3, otherpopsize, 3))
 
-  # saveRDS(input_list, file.path (heatmap_sourcefolder, input_list$foldername, "input_list.RData"))
-
-  if (variance_treamtent) {
+  if (variance_treatment) {
     sexPopMetrics <- 8
     regularnames <- c (
       "BtwVarSimP1M",
@@ -1147,36 +1139,36 @@ individualfigures <- function (
         } else {
           heatmaprange <- c (1,156)
         }
-      } else if (colorrange == "relative") {
+      }# else if (colorrange == "relative") {
 
-        heatmaprange <- inhoptions[[inhstyle]][
-          dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
-          dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
-          dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
-          sxmtpop]
-        heatmap_min <- c (
-          round(min(heatmaprangedatasetone), 2),
-          round(min(heatmaprangedatasettwo), 2),
-          round(min(heatmaprangedatasettre), 2)
-        )
-        heatmap_max <- c (
-          round(max(heatmaprangedatasetone), 2),
-          round(max(heatmaprangedatasettwo), 2),
-          round(max(heatmaprangedatasettre), 2)
-        )
+      #   heatmaprange <- inhoptions[[inhstyle]][
+      #     dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
+      #     dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
+      #     dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
+      #     sxmtpop]
+      #   heatmap_min <- c (
+      #     round(min(heatmaprangedatasetone), 2),
+      #     round(min(heatmaprangedatasettwo), 2),
+      #     round(min(heatmaprangedatasettre), 2)
+      #   )
+      #   heatmap_max <- c (
+      #     round(max(heatmaprangedatasetone), 2),
+      #     round(max(heatmaprangedatasettwo), 2),
+      #     round(max(heatmaprangedatasettre), 2)
+      #   )
 
-        heatmaprange <- c (heatmap_min[3] - 0.01, heatmap_max[3] + 0.01)
-        rm(heatmaprangedatasetone, heatmaprangedatasettwo, heatmaprangedatasettre,
-          heatmap_min, heatmap_max)
-      }# else if (colorrange == "differences") {
-      #   heatmaprange <- c (0,1)
-      # }
+      #   heatmaprange <- c (heatmap_min[3] - 0.01, heatmap_max[3] + 0.01)
+      #   rm(heatmaprangedatasetone, heatmaprangedatasettwo, heatmaprangedatasettre,
+      #     heatmap_min, heatmap_max)
+      # }# else if (colorrange == "differences") {
+      # #   heatmaprange <- c (0,1)
+      # # }
 
       if (typeof (colorpalette) == "character") {
         colorpalette <- which (names (colorseqmultpalette) == colorpalette)
       }
 
-      if (variance_treamtent) {
+      if (variance_treatment) {
         if (sxmtpop > 4) {
           image(x = temphtmparray[,,sxmtpop - 4, 2],
             col = colorseqmultpalette[[colorpalette]](100),
