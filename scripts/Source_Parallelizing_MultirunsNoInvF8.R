@@ -10,11 +10,6 @@
 
 
 
-# This is an Example of what you should NEVER have in your code,
-
-# presented here, "So that I can use it when I'm being a bad person :P"
-
-    ##### -> setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
 
 #____________________________________________________________________________________
 
