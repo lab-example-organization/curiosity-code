@@ -1,5 +1,8 @@
 # Heatmap Directory Creation and Referencing
 
+# source(file.path("scripts", "Source_Reference_Section.R"))
+# referencesection("heatmaps")
+
 plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_scale, theme) {
 
     source (file.path ("scripts", "Source_colorseqmultpalette.R"))
@@ -1107,8 +1110,15 @@ individualfigures <- function (
       "Popula1"
     )
   }
-  if (variance_treatment) {
+  if (variance_treatment == "var_calc_from_moran") { # "fscsfmavc" or "var_calc_from_moran"
     temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername))
+  } else if (variance_treatment == "fscsfmavc") {
+    htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
+
+    if (length (htmparrays) == 1) {
+      temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername, htmparrays))
+    } else {stop (paste0("there's either more or less than one .RData file in that directory!",
+    heatmap_sourcefolder, "then", input_list$foldername, "then", htmparrays, " was the path, if that helps..."))}
   } else {
     htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
 
@@ -1130,27 +1140,30 @@ individualfigures <- function (
   source (file.path ("scripts", "Source_colorseqmultpalette.R"))
   colorseqmultpalette <- make_colorpalettes (stuff)
 
-  if (variance_treatment)
-  figure_path <- file.path (heatmap_sourcefolder, str_remove(input_list$foldername, "fullData/"))
-  figure_path <- paste0(str_split (figure_path, "curstart/")[[1]][1], "curstart/")
+  if (variance_treatment == "var_calc_from_moran") {
+    figure_path <- file.path (heatmap_sourcefolder, str_remove(input_list$foldername, "fullData/"))
+    figure_path <- paste0(str_split (figure_path, "curstart/")[[1]][1], "curstart/")
+  }
+
   if (! (dir.exists (file.path (figure_path)))) {
     dir.create (file.path (figure_path))
   }
-  figure_path <- file.path (figure_path, slicedpop[3])
-  if (! (dir.exists (file.path (figure_path)))) {
-    dir.create (file.path (figure_path))
-  }
+
+  # figure_path <- file.path (figure_path, slicedpop[3])
+  # if (! (dir.exists (file.path (figure_path)))) {
+  #   dir.create (file.path (figure_path))
+  # }
 
 
   otherpopsize <- input_list$othersize
-  dat_array_doh <- array (c (
-    1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
-    2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, otherpopsize,otherpopsize,2,
-    3,1,1, 1,3,1, 1,1,otherpopsize, 3,3,3, 3,3,3, otherpopsize,otherpopsize,otherpopsize
-  ), c (3, 3, otherpopsize, 3))
+  # dat_array_doh <- array (c (
+  #   1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
+  #   2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, otherpopsize,otherpopsize,2,
+  #   3,1,1, 1,3,1, 1,1,otherpopsize, 3,3,3, 3,3,3, otherpopsize,otherpopsize,otherpopsize
+  # ), c (3, 3, otherpopsize, 3))
 
-  if (variance_treatment) {
-    sexPopMetrics <- 8
+  sexPopMetrics <- 8
+  if (variance_treatment == "var_calc_from_moran") {
     regularnames <- c (
       "BtwVarSimP1M",
       "BtwVarSimP1F",
@@ -1161,8 +1174,26 @@ individualfigures <- function (
       "WtnVarSimP2M",
       "WtnVarSimP2F"
     )
+  } else if (variance_treatment == "fscsfmavc") {
+    sexPopMetrics <- 4
+    if (foldername$between_vs_within == 1) {
+      regularnames <- c (
+      "BtwVarSimP1M",
+      "BtwVarSimP2M",
+      "BtwVarSimP1F",
+      "BtwVarSimP2F"
+    )
+    } else if (foldername$between_vs_within == 2) {
+      regularnames <- c (
+      "WtnVarSimP1M",
+      "WtnVarSimP2M",
+      "WtnVarSimP1F",
+      "WtnVarSimP2F"
+    )
+    }
+
   } else {
-    sexPopMetrics <- 8
+    # sexPopMetrics <- 8
     regularnames <- c (
       "CurEndValP1M",
       "CurEndValP2M",
@@ -1182,7 +1213,8 @@ individualfigures <- function (
   for (sxmtpop in 1:sexPopMetrics) {
     for (slice in 1:otherpopsize) {
 
-      file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
+      # file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
+      file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, ".png")
       # rule of thumb: if we're splitting up htmpView _within_ slice and sxmtpop, then we need to save the output files according to the schema that will help pull back together the slices.
       png (filename = file.path (figure_path, file_name),
         width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
@@ -1222,7 +1254,8 @@ individualfigures <- function (
         colorpalette <- which (names (colorseqmultpalette) == colorpalette)
       }
 
-      if (variance_treatment) {
+      if (variance_treatment == "var_calc_from_moran") {
+
         if (sxmtpop > 4) {
           image(x = temphtmparray[,,sxmtpop - 4, 2],
             col = colorseqmultpalette[[colorpalette]](100),
@@ -1238,6 +1271,14 @@ individualfigures <- function (
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
         }
+
+      } else if (variance_treatment == "fscsfmavc") {
+          image(x = temphtmparray[,,sxmtpop],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
 
       } else {
         if (otherpopsize == 1) {
@@ -1768,6 +1809,29 @@ combineeditsingles <- function (
   return(print("done"))
 }
 
+# compare_lineplots <- function (
+#   category = "difference" # "variance", "difference", "five-by-five"
+
+# ) {
+
+# }
+
+# combine_images <- function (
+#   big_sims = c ("parentNoInv", "childF1NoInv"),
+#   number_of_comparisons = 2,
+#   comp_categories = c("variance", "difference", "lineplots", "five-by-five"),
+#   source_paths = c(file.path ("results", ""), file.path ("results", "")) #
+# ) {
+#   if (length (comp_categories) != number_of_comparisons) {stop ("seems to be more or less comp_categories than number_of_comparisons")}
+#   # "variance" and "lineplots" for example
+#   # anything with lineplots:
+#   if ("variance" %in% comp_categories) {
+#     file_path <- file.path ("results", "VarianceHeatmaps")
+#   }
+#   if ("difference" %in% comp_categories) {
+#     if (length () != )
+#   }
+# }
 
 stackmultiples <- function (
   inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")

@@ -82,9 +82,13 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
             variance_witheen_sims <- array(0, c(2, 2, 50))
             variance_within_sims <- array(0, c(2, 2))
 
-            osd_p1mc <- if(oneSimsDir%%50 < 26) {floor((oneSimsDir%%50)/5)} else {floor(((oneSimsDir%%50) - 25)/5)}
-            osd_p1fc <- if(oneSimsDir %% 5 != 0) {oneSimsDir %% 5} else {5}
+            # osd_p1mc <- if(oneSimsDir%%50 < 26) {floor((oneSimsDir%%50)/5)} else {floor(((oneSimsDir%%50) - 25)/5)}
+            osd_p1mc <- rep(sapply(1:5, function(x) rep(c(1:5)[x], 5)), 8)[oneSimsDir]
+            # osd_p1fc <- if(oneSimsDir %% 5 != 0) {oneSimsDir %% 5} else {5}
+            osd_p1fc <- rep(c(1:5),40)[oneSimsDir]
+            # osd_lbhb <- ifelse(oneSimsDir %in% c(1:25,51:75,101:125,151:175),1,2)
             osd_lbhb <- ifelse(oneSimsDir %in% c(1:25,51:75,101:125,151:175),1,2)
+            # osd_curh <- ceiling(oneSimsDir/50)
             osd_curh <- ceiling(oneSimsDir/50)
 
             for (pop in 1:num_pop) {
@@ -118,7 +122,7 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     # if (! (dir.exists (file.path (path_results, "VarianceHeatmaps", stack_directory)))) {dir.create (file.path (path_results, "VarianceHeatmaps", stack_directory))}
     saveRDS(output_object, file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
 
-    return (file.path(path_results, "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
+    return (file.path(str_split(path_results, "results/")[[1]][2], "VarianceHeatmaps", "fullData", paste0(stack_directory, ".RData")))
 
 }
 
