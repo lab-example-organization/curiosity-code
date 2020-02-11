@@ -1,5 +1,62 @@
 # Heatmap Directory Creation and Referencing
 
+# source(file.path("scripts", "Source_Reference_Section.R"))
+# referencesection("heatmaps")
+
+plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_scale, theme) {
+
+    source (file.path ("scripts", "Source_colorseqmultpalette.R"))
+    colorseqmultpalette <- make_colorpalettes ()
+    # colorPalette <- 19
+    # midpoint_size <- 1
+    if (typeof (colorPalette) == "character") {
+        colorPalette <- which (names (colorseqmultpalette) == colorPalette)
+    }
+
+    if (colorPalette == 19) {
+      midpoint_director <- array(c(2, 16, 30, 44, 58, 72, 86, 7, 6, 5, 4, 3, 2, 1), c(7,2))
+      stuff <- midpoint_director[midpoint_size,]
+      colorseqmultpalette <- make_colorpalettes (stuff)
+    }
+
+  x <- array(c(1:100, rep(9.5,100), rep(9.65,100), rep(9.8,100), rep(9.95,100), rep(10.1,100), rep(10.25,100), rep(10.4,100), rep(10.55,100), rep(10.7,100), rep(10.85,100)), c(100, 11))
+
+  png (filename = file.path (
+            file_name),
+          width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+
+  if (theme == "difference") {
+    title_and_stuff <- c ("Legend
+(heatmap 1 minus heatmap 2)")
+  } else if (theme == "variance") {
+    title_and_stuff <- c ("Legend
+(variance scale)")
+  }
+
+  plot(rep(x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c(5,16), main = title_and_stuff)
+
+  if (legend_scale == "midpoint") {
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    title(xlab = c("-1     -0.86    -0.72   -0.58   -0.44     -0.3     -0.16  -0.02  0.02   0.16     0.3     0.44      0.58      0.72    0.86         1 "), line = -11.2, cex.lab = 0.7)
+
+    axis(1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-15.8,NA,F,cex.axis = 0.7, tck = 0.015)
+    title(xlab = c("-155     -133     -111      -89       -67      -45      -23        -3  3         23       45        67        89       111       133      155 "), line = -17.3, cex.lab = 0.7)
+
+    title(xlab = c("Syllable Repertoire Differences"), line = -18.3, cex.lab = 0.7)
+    title(xlab = c("Curiosity Level Differences"), line = -10.3, cex.lab = 0.7)
+
+  } else if (legend_scale == "variance") {
+    #   c ("", "", "", "", "", "", "", "")
+    # c("0", "0.05", "0.1", "0.15", "0.2", "0.25", "0.3", "0.35")
+    # axis (1, c(0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = 0.015)
+    # title (xlab = c("0.02           0.04         0.06          0.08        0.1         0.125       0.145     0.165  0.185     0.205     0.225       0.245       0.265      0.285   0.315"), line = -17.8, cex.lab = 0.7)
+    # axis (1, c (5.5, 15.5, 25.5, 35.5), c ("0.05", "0.15", "0.25", "0.35"),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    axis (1, c(0.5, 3.5, 6.5, 9.5, 12.5, 15.5, 18.5, 21.5, 24.5, 27.5, 30.5, 33.5, 36.5, 39.5, 42.5, 45.5, 48.5, 51.5, 54.5, 57.5, 60.5, 63.5, 66.5, 69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 96.5), c("0", "0.01", "0.02", "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", "0.1", "0.11", "0.12", "0.13", "0.14", "0.15", "0.16", "0.17", "0.18", "0.19", "0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26", "0.27", "0.28", "0.29", "0.3", "0.31", "... 1"),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+  }
+
+  dev.off()
+}
+
 remakestring <- function(target, comp, out) {
   # tR stands for temporary retainer
   tR <- strsplit(target, comp)
@@ -41,9 +98,480 @@ htmpdir <- function(extradir = "extraDirectory") {
 
 # heatmapLand <- htmpdir("extraDirectory")
 
+print_regex_num_range <- function (
+    num_range = "0000-0001",
+    ons_n_offs = "_"
+) {
+
+    if (ons_n_offs != "_") {
+      thing <- length (ons_n_offs)
+    }
+
+    # Beginning vars to sort out
+    first_term <- str_split(str_split(num_range, "-")[[1]][1], "")
+    secnd_term <- str_split(str_split(num_range, "-")[[1]][2], "")
+
+    # the first number is smaller than the second number.
+    if (as.numeric(paste(first_term[[1]], collapse = "")) >= as.numeric(paste(secnd_term[[1]], collapse = ""))) {
+        stop ("first number needs to be smaller than the second number")
+    }
+
+    # Fill in potentially smaller first number with sufficient leading zeroes
+    if (length (first_term[[1]]) < length (secnd_term[[1]])) {
+        difference_of_length <- length (secnd_term[[1]]) - length (first_term[[1]])
+        first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
+    }
+
+    # Working number data structure
+    # zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
+    zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), 2, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
+
+    # substitute list calls for matrix calls
+
+
+    ### This function lives and breathes on "append" as the builder function;
+    ### each step in the control flow below is slowly building the ending
+    ### character string depending on the relationship of the two terms.
+
+    # Opening up the variable that will returned
+    output_object <- vector (mode = "character", length = 1)
+
+    # start with "*_"
+    output_object <- paste0 ("*_")
+
+        # number of digits stops at 1
+        if (length (zv[2,]) == 1) {
+            # append "[1-2]_", where 1 is the first term and 2 is the second term ### "*_[1-2]_"
+            append (output_object, paste0 ("[", zv[1,1], "-", zv[2,1], "]_"))
+        # number of digits stops at 2
+        } else if (length (zv[2,]) == 2) {
+            # append "1" ### "*_1"
+            append (output_object, paste0(zv[1,1]))
+            # 1X-4X
+            if (zv[1,1] + 1 < zv[2,1]) {
+                # 1X where X < 9
+                if (as.numeric (zv[1,2]) < 9) {
+                    # append "[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4"
+                    append (output_object, paste0 ("[", zv[1,2], "-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
+                    # 2X where X > 0
+                    if (as.numeric (zv[2,2]) > 0) {
+                        # append "[0-X]_" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
+                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                    # otherwise 2X where X = 0
+                    } else {
+                        # append "0_" ###  ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_40_"
+                        append (output_object, "0_")
+                    }
+                # 1X where X = 9
+                } else {
+                    # append "X_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4"
+                    append (output_object, paste0 (zv[1,2], "_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
+                    # 2X where X > 0
+                    if (as.numeric (zv[2,2]) > 0) {
+                        # append "[0-X]_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
+                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                    # 2X where X = 0
+                    } else {
+                        # append "0_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_40_"
+                        append (output_object, "0_")
+                    }
+                }
+            # 1X-2X
+            } else if (zv[1,1] + 1 == zv[2,1]) {
+                # 1X where X < 9
+                if (as.numeric (zv[1,2]) < 9) {
+                    # append "[X-9]_|*_2" ### "*_1[X-9]_|*_2"
+                    append (output_object, paste0 ("[", zv[1,2], "-9]_|*_", zv[2,1]))
+                    # 2X where X > 0
+                    if (as.numeric (zv[2,2]) > 0) {
+                        # append "[0-X]_" ### "*_1[X-9]_|*_2[0-X]_"
+                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                    # otherwise 2X where X = 0
+                    } else {
+                        # append "0_" ###  ### "*_1[X-9]_|*_20_"
+                        append (output_object, "0_")
+                    }
+                # 1X where X = 9
+                } else {
+                    # append "9_|*_2" ### "*_19_|*_2"
+                    append (output_object, paste0 (zv[1,2], "_|*_", zv[2,1]))
+                    # 2X where X > 0
+                    if (as.numeric (zv[2,2]) > 0) {
+                        # append "[0-X]_" ### "*_19_|*_2[0-X]_"
+                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                    # 2X where X = 0
+                    } else {
+                        # append "0_" ### "*_19_|*_20_"
+                        append (output_object, paste0("0_"))
+                    }
+                }
+            # 1X -1Y
+            } else if (as.numeric (zv[1,1]) == as.numeric(zv[2,1])) {
+                # append "[X-Y]_" ### "*_1[X-Y]_"
+                append (output_object, paste0 ("[", zv[1,2], "-", zv[2,2], "]_"))
+            }
+        # number of digits stops at 3 ### at this point, we have output_object = "*_"
+        } else if (length (zv[2,]) == 3) {
+            # append "1" ### "*_1"
+            output_object <- append (output_object, paste0 (zv[1,1]))
+            # 1XY-4ZA
+            if (zv[1,1] + 1 < as.numeric(zv[2,1])) {
+                # 1X where X < 9
+                if (as.numeric (zv[1,2]) < 9) {
+                    # append "X" ### "*_1X"
+                    output_object <- append (output_object, paste0 (zv[1,2]))
+                    # 1XY where Y < 9
+                    if (as.numeric (zv[1,3]) < 9) {
+                        # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4"
+                        output_object <- append(output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", as.numeric(zv[1,2]) + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
+                        # 4Z where Z > 0
+                        if (as.numeric (zv[2,2]) > 0) {
+                            # append "[0-(Z-1)][0-9]_|*_4Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
+                            # 4ZA where A > 0
+                            if (as.numeric (zv[2,3]) > 0) {
+                                # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z[0-A]_"
+                                output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
+                            # 4ZA where A == 0
+                            } else {
+                                # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z0_"
+                                output_object <- append (output_object, paste0 ("0_"))
+                            }
+                        # 4Z where Z == 0
+                        } else {
+                            # append "0" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_40"
+                            output_object <- append (output_object, paste0 ("0"))
+                            # 4ZA where A > 0
+                            if (as.numeric (zv[2,3]) > 0) {
+                                # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_40[0-A]_"
+                                output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
+                            # 4ZA where A == 0
+                            } else {
+                                # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_400_"
+                                output_object <- append (output_object, paste0 ("0_"))
+                            }
+                        }
+                    # 1XY where Y == 9
+                    }
+
+                }
+            # 1XY-2ZA
+            } else if (zv[1,1] + 1 == zv[2,1]) {
+                # 1XY where X is less than 9
+                if (as.numeric (zv[1,2]) < 9) {
+                    # append "X" ### "*_1X"
+                    output_object <- append (output_object, paste0 (zv[1,2]))
+                    #1XY where Y is less than 9
+                    if (as.numeric (zv[1,3]) < 9) {
+                        # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_2" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_2"
+                        output_object <- append (output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_", zv[2,1]))
+                        # 2ZA where Z > 0
+                        if (as.numeric (zv[2,2]) > 0) {
+                            # append "0[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z"
+                            output_object <- append (output_object, paste0 ("0[0-9]_|*_", zv[2,1], "[1-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
+                            # 2ZA where A > 0
+                            if (as.numeric (zv[2,3]) > 0) {
+                                # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z[0-A]_"
+                                output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
+                            # 2ZA where A == 0
+                            } else {
+                                # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z0_"
+                                output_object <- append (output_object, paste0 ("0_"))
+                            }
+                        # 2ZA where Z == 0
+                        } else {
+                            # append "0" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20"
+                            output_object <- append (output_object, paste0 ("0"))
+                            # 2ZA where A > 0
+                            if (as.numeric (zv[2,3]) > 0) {
+                                # append "[0-A]_" ### *_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-A]_"
+                                output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
+                            # 2ZA where A == 0
+                            } else {
+                                # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_200_"
+                                output_object <- append (output_object, paste0 ("0_"))
+                            }
+                        }
+
+                    # 1XY where Y == 9
+                    }
+                }
+            # 1XY-1ZA
+            } else if (zv[1,1] == zv[2,1]) {
+                # 11X-14X
+                if (zv[1,2] + 1 < zv[2,2]) {
+                    # 11X where X < 9
+                    # append "1[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_14" ### "*_11[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_14"
+                    output_object <- append (output_object, paste0 (zv[1,2], "[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
+                    # 14X where X > 0
+                    if (zv[2,3] > 0) {
+                        # append "[0-X]_" ### "*_11[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_14[0-X]_"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
+                    # otherwise 14X where X = 0
+                    } else {
+                        # append "0_" ###  ### "*_11[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_140_"
+                        output_object <- append (output_object, "0_")
+                    }
+                    # 11X where X = 9
+                # 11X-12X
+                } else if (zv[1,2] + 1 == zv[2,2]) {
+                    # 11X where X < 9
+                    # append "1[X-9]_|*_12" ### "*_11[X-9]_|*_12"
+                    output_object <- append (output_object, paste0 (zv[1,2], "[", zv[1,3], "-9]_|*_", zv[2,1], zv[2,2]))
+                    # 12X where X > 0
+                    if (zv[2,3] > 0) {
+                        # append "[0-X]_" ### "*_11[X-9]_|*_12[0-X]_"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
+                    # otherwise 12X where X = 0
+                    } else {
+                        # append "0_" ###  ### "*_11[X-9]_|*_120_"
+                        output_object <- append (output_object, "0_")
+                    }
+                    #
+                # 11X -11Y
+                } else if (zv[1,2] == zv[2,2]) {
+                    # append "1[X-Y]_" ### "*_11[X-Y]_"
+                    output_object <- append (output_object, paste0 (zv[1,2], "[", zv[1,3], "-", zv[2,3], "]_"))
+                }
+            }
+        } else if (length (zv[2,]) == 4) {
+            # append "1" ### "*_1"
+            output_object <- append (output_object, paste0 (zv[1,1]))
+            # 1XXX-4XXX
+            if (zv[1,1] + 1 < zv[2,1]) {
+                # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4"
+                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9][0-9]_|*_", zv[2,1]))
+                # 4DEF where D > 0
+                if (zv[2,2] > 0) {
+                    # append "[0-(D-1)][0-9][0-9]_|*_4D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D"
+                    output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    # 4DEF where E > 0
+                    if (as.numeric (zv[2,3]) > 0) {
+                        # append "[0-(E-1)][0-9]_|*_4DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 4DEF where F > 0
+                        if (as.numeric (zv[2,4]) > 0) {
+                            # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE[0-F]_"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 4DEF where F == 0
+                        } else {
+                            # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE0_"
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 4DEF where E == 0
+                    } else if (zv[2,3] == 0) {
+                        # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D0"
+                        output_object <- append (output_object, paste0 ("0"))
+                        # 4DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 4DEF where F == 0
+                        } else {
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    }
+                # 4DEF where D == 0
+                } else if (zv[2,2] == 0) {
+                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_40"
+                    output_object <- append (output_object, paste0 ("0"))
+                    # 4DEF where E > 0
+                    if (zv[2,3] > 0) {
+                        # append "[0-(E-1)][0-9]_|*_40E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_40[0-(E-1)][0-9]_|*_40E"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 4DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 4DEF where F == 0
+                        } else {
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 4DEF where E == 0
+                    } else if (zv[2,3] == 0) {
+                        # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_400"
+                        output_object <- append (output_object, paste0 ("0"))
+                        # 4DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 4DEF where F == 0
+                        } else {
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    }
+                }
+            # 1XXX-2XXX
+            } else if (zv[1,1] + 1 == zv[2,1]) {
+                # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2"
+                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_", zv[2,1]))
+                # 2DEF where D > 0
+                if (zv[2,2] > 0) {
+                    # append "[0-(D-1)][0-9][0-9]_|*_2D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D"
+                    output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    # 2DEF where E > 0
+                    if (zv[2,3] > 0) {
+                        # append "[0-(E-1)][0-9]_|*_2DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D[0-(E-1)][0-9]_|*_2DE"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 2DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_"
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 2DEF where E == 0
+                    } else if (zv[2,3] == 0) {
+                        # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D0"
+                        output_object <- append (output_object, paste0 ("0"))
+                        # 2DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_"
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    }
+                # 2DEF where D == 0
+                } else if (zv[2,2] == 0) {
+                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20"
+                    # 2DEF where E > 0
+                    if (zv[2,3] > 0) {
+                        # append "[0-(E-1)][0-9]_|*_20E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 2DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 2DEF where E == 0
+                    } else if (zv[2,3] == 0) {
+                        # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_200"
+                        output_object <- append (output_object, paste0 ("0"))
+                        # 2DEF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_200[0-F]_"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2000_"
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    }
+                }
+            # 1XXX-1YYY
+            } else if (zv[1,1] == zv[2,1]) {
+                # 12BC-15EF
+                if (zv[1,2] + 1 < zv[2,2]) {
+                    # 12BC where B < 9
+                    # 12BC where C < 9
+                    # append "2B[C-9]_|*_12[B-9][0-9]_|*_1[(2+1)-(5-1)][0-9][0-9]_|*_15" ### "*_1"
+                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    # 15EF where E > 0
+                    if (zv[2,3] > 0) {
+                      # append "[0-(E-1)][0-9]_|*_15E"
+                      output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                      # 15EF where F > 0
+                      if (zv[2,4] > 0) {
+                        # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                      # 2DEF where F == 0
+                      } else {
+                        # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                        output_object <- append (output_object, paste0 ("0_"))
+                      }
+                    # 15EF where E == 0
+                    } else if (zv[2,3] == 0) {
+                      # append "0" ###
+                      output_object <- append (output_object, paste0 ("0"))
+                      # 15EF where F > 0
+                      if (zv[2,4] > 0) {
+                          # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E[0-F]_"
+                          output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                      # 2DEF where F == 0
+                      } else {
+                          # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E0_"
+                          output_object <- append (output_object, paste0 ("0_"))
+                      }
+                    }
+                # 12BC-13EF
+                } else if (zv[1,2] + 1 == zv[2,2]) {
+                    # append "2B[C-9]_|*_12[B-9][0-9]_|*_13"
+                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    # 13EF where E > 0
+                    if (zv[2,3] > 0) {
+                        # append "[0-(E-1)][0-9]_|*_15E"
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 15EF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 15EF where E == 0
+                    } else if (zv[2,3] == 0) {
+                        # append "0" ###
+                        output_object <- append (output_object, paste0 ("0"))
+                        # 15EF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_" ### ""
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_" ### ""
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    }
+                # 12BC-12EF
+                } else if (zv[1,2] == zv[2,2]) {
+                    # 123C-126F
+                    if (zv[1,3] + 1 < zv[2,3]) {
+                        # append "2B[C-9]_|*_12[(3+1)-(6-1)][0-9]_|*_126" ### "*_12B[C-9]_|*_12[(3+1)-(6-1)][0-9]_|*_126"
+                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 15EF where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_" ### ""
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 2DEF where F == 0
+                        } else {
+                            # append "0_" ### ""
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 123C-124F
+                    } else if (zv[1,3] + 1 == zv[2,3]) {
+                        # append "23[C-9]_|*_124" ### "*_123[C-9]_|*_124"
+                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
+                        # 124F where F > 0
+                        if (zv[2,4] > 0) {
+                            # append "[0-F]_" ### ""
+                            output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
+                        # 124F where F == 0
+                        } else {
+                            # append "0_" ### ""
+                            output_object <- append (output_object, paste0 ("0_"))
+                        }
+                    # 123C-123F
+                    } else if (zv[1,3] == zv[2,3]) {
+                        # append "23[C-F]_" ### "*_1"
+                        output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-", zv[2,4], "]_"))
+                    }
+                }
+            }
+        } # else if (bigger than 4 digits?) {craaaap.}
+    return (paste(output_object, collapse = ""))
+}
 
 extractvardirs <- function(home_path, filenamepattern) {
-  variablestore_folderlist <- list.files(file.path(home_path), pattern = filenamepattern)
+  thing <- print_regex_num_range(filenamepattern)
+  variablestore_folderlist <- list.files(file.path(home_path), pattern = thing)
   # list.files(file.path(home_path), pattern = filenamepattern)
 
   return(variablestore_folderlist)
@@ -121,7 +649,7 @@ extractmeans <- function(allrundirs,
 
     datanrepzlist <- array(0, c(2, dim_source$num_pop, timespanchunks, number_of_reps))
     datantbxnlist <- array(0, c((2 * dim_source$num_pop), dim_source$sylnum, timespanchunks, number_of_reps))
-    datansitylist <- array(0, c(12, dim_source$num_pop, timespanchunks, number_of_reps))
+    datansitylist <- array(0, c(14, dim_source$num_pop, timespanchunks, number_of_reps))
     datanhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timespanchunks, number_of_reps))
 
     for(i in 1:number_of_reps) {
@@ -154,6 +682,7 @@ extractmeans <- function(allrundirs,
 }
 
 makeheatmapfile <- function (
+  output_foldername = FALSE,
   inheritance,# = 3,
   diffcurstartbias,# = 1,
   biassize,# = 3,
@@ -187,7 +716,7 @@ makeheatmapfile <- function (
 
   # biassize = 5
 
-#  print("and a one")
+  #  print("and a one")
 
   if (redo) {
 
@@ -390,7 +919,7 @@ makeheatmapfile <- function (
       }
     }
 
-#     print("and a five")
+  #     print("and a five")
     # print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
     for (third_dimension in 1:othersize) { # femalez
       for (second_dimension in 1:biassize) { # malez1
@@ -438,18 +967,22 @@ makeheatmapfile <- function (
 
     # print("and a six")
 
-    if(!(dir.exists(file.path("results", foldername)))) {
+    if(!(dir.exists(file.path("results", output_foldername)))) {
 
-      dir.create(file.path("results", foldername))}
+      dir.create(file.path("results", output_foldername))}
+
+    if(!(dir.exists(file.path("results", output_foldername, foldername)))) {
+
+      dir.create(file.path("results", output_foldername, foldername))}
 
     # if (specialfigs) {
     if(!(file.exists(file.path(
-      "results", foldername, paste0("heatmap_output_-_", inheritance,
+      "results", output_foldername, foldername, paste0("heatmap_output_-_", inheritance,
       "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
     )))) {
 
     saveRDS(heatmap_array, file.path(
-      "results",foldername, paste0("heatmap_output_-_", inheritance,
+      "results", output_foldername, foldername, paste0("heatmap_output_-_", inheritance,
       "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
 
     ))}
@@ -487,19 +1020,36 @@ makeheatmapfile <- function (
 }
 
 individualfigures <- function (
-
-  colorrange = 2, # c("relative", "absolute", "differences")
-  colorpalette = 5, # Numbers correspond to specific color palettes
-  foldername = heatmapoutput,
+  output_foldername = FALSE,
+  colorrange = 2, # c("relative", "absolute", "differences") ### absolute has been deprecated
+  colorpalette = "five_by_five", # Numbers correspond to specific color palettes
+  input_list = heatmapoutput,
   midpoint_size = 1, # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
-  var = FALSE
+  variance_treatment = FALSE
 ) {
 
-  # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint
-  #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,      19
+  # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint, midpoint_but_smooth, midpoint_but_smooshed
+  #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,       19,                  20,                    21
+  heatmap_sourcefolder <- file.path ("results")
+  # if (difference == FALSE) {
 
+
+  if (output_foldername) {
+    if (! (dir.exists (file.path (
+      heatmap_sourcefolder, output_foldername
+    )))) {
+      dir.create (file.path (heatmap_sourcefolder, output_foldername))
+    }
+    heatmap_sourcefolder <- file.path(heatmap_sourcefolder, output_foldername)
+  }
+  # }
   # heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
-  heatmap_sourcefolder <- file.path("results")
+  # if (output_foldername != F) {
+  #   heatmap_sourcefolder <- file.path ("results", output_foldername)
+  # } else {
+  #   heatmap_sourcefolder <- file.path("results")
+  # }
+
   # heatmap_sourcefolder <- file.path("sameSexFigResults", "results")
 
 
@@ -509,24 +1059,24 @@ individualfigures <- function (
 
   colorrange <- clrrngcontainer[colorrange]
 
-  inheritancecontainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
-                            "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
-                            "sTfSinh", "sTnNinh", "FfFfinh")
+  # inheritancecontainer <- c("maleinh", "mothinh", "sameinh", "oppsinh",
+  #                           "sNTninh", "sSTfinh", "sSFrinh", "sFrSinh",
+  #                           "sTfSinh", "sTnNinh", "FfFfinh")
 
-  whichbias <- c("malebias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
+  # whichbias <- c("malebias", "femaleBias", "pop1Bias", "pop2Bias", "bothBias")
 
-  if (foldername$diffcurstartbias == "male" || foldername$diffcurstartbias == 1) {
+  if (input_list$diffcurstartbias == "male" || input_list$diffcurstartbias == 1) {
     heatmap_axes <- list(
-      mp2vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),    # mp2vfem
-      mp1vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),    # mp1vfem
-      mp1vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity") # mp1vmp2
+      mp2vfem = c("Pop 2 Male Starting Curiosity", "Female Starting Curiosity"),
+      mp1vfem = c("Pop 1 Male Starting Curiosity", "Female Starting Curiosity"),
+      mp1vmp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Male Starting Curiosity")
     )
     slicedpop <- list(
       "MalPop1",
       "MalPop2",
       "FemalePop"
     )
-  } else if (foldername$diffcurstartbias == "female" || foldername$diffcurstartbias == 2) {
+  } else if (input_list$diffcurstartbias == "female" || input_list$diffcurstartbias == 2) {
     heatmap_axes <- list(
       mf2vmal = c("Pop 2 Female Starting Curiosity", "Male Starting Curiosity"),
       mf1vmal = c("Pop 1 Female Starting Curiosity", "Male Starting Curiosity"),
@@ -537,7 +1087,7 @@ individualfigures <- function (
       "FemPop2",
       "MalePop"
     )
-  } else if (foldername$diffcurstartbias == "pop1" || foldername$diffcurstartbias == 3) {
+  } else if (input_list$diffcurstartbias == "pop1" || input_list$diffcurstartbias == 3) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 1 Female Starting Curiosity", "Pop 2 Starting Curiosity"),
       mp1Vpp2 = c("Pop 1 Male Starting Curiosity", "Pop 2 Starting Curiosity"),
@@ -548,7 +1098,7 @@ individualfigures <- function (
       "FemPop1",
       "Popula2"
     )
-  } else if (foldername$diffcurstartbias == "pop2" || foldername$diffcurstartbias == 4) {
+  } else if (input_list$diffcurstartbias == "pop2" || input_list$diffcurstartbias == 4) {
     heatmap_axes <- list(
       fp1Vpp2 = c("Pop 2 Female Starting Curiosity", "Pop 1 Starting Curiosity"),
       mp1Vpp2 = c("Pop 2 Male Starting Curiosity", "Pop 1 Starting Curiosity"),
@@ -560,21 +1110,24 @@ individualfigures <- function (
       "Popula1"
     )
   }
+  if (variance_treatment == "var_calc_from_moran") { # "fscsfmavc" or "var_calc_from_moran"
+    temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername))
+  } else if (variance_treatment == "fscsfmavc") {
+    htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
 
+    if (length (htmparrays) == 1) {
+      temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername, htmparrays))
+    } else {stop (paste0("there's either more or less than one .RData file in that directory!",
+    heatmap_sourcefolder, "then", input_list$foldername, "then", htmparrays, " was the path, if that helps..."))}
+  } else {
+    htmparrays <- list.files (file.path (heatmap_sourcefolder, input_list$foldername), pattern = ".RData")
 
-  # inheritance <- inheritancecontainer[inheritance]
+    if (length (htmparrays) == 1) {
+      temphtmparray <- readRDS (file.path (heatmap_sourcefolder, input_list$foldername, htmparrays))
+    } else {stop (paste0("there's either more or less than one .RData file in that directory!",
+    heatmap_sourcefolder, "then", input_list$foldername, "then", htmparrays, " was the path, if that helps..."))}
+  }
 
-  # thisBias <- whichbias[thisBias]
-
-  # foldername <- list.files(heatmap_sourcefolder)[which(sapply(list.files(heatmap_sourcefolder), function(x) (inheritance %in% str_split(x, "_")[[1]][4] && thisBias %in% str_split(x, "_")[[1]][5])))]
-  # foldername <-
-
-  # temphtmparray <- readRDS(file.path(heatmap_sourcefolder, foldername, list.files(file.path(heatmap_sourcefolder, foldername), pattern = ".RData")))
-  htmparrays <- list.files (file.path (heatmap_sourcefolder, foldername$foldername), pattern = ".RData")
-
-  if (length (htmparrays) == 1) {
-    temphtmparray <- readRDS (file.path (heatmap_sourcefolder, foldername$foldername, htmparrays))
-  } else {stop ("there's either more or less than one .RData file in that directory!")}
 
   if (colorpalette == 19) {
 
@@ -584,162 +1137,159 @@ individualfigures <- function (
     stuff <- c(2, 7)
   }
 
+  source (file.path ("scripts", "Source_colorseqmultpalette.R"))
+  colorseqmultpalette <- make_colorpalettes (stuff)
 
-  colorseqmultpalette <- list (
-    reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds                                        ### 1
-    rdpu = colorRampPalette (c ("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class rdpu                                        ### 2
-    oranges = colorRampPalette (c ("#fee6ce", "#fdae6b", "#e6550d")), # 3-class oranges                                  ### 3
-    orrd = colorRampPalette (c ("#fee8c8", "#fdbb84", "#e34a33")), # 3-class orrd                                        ### 4
-    ylorrd = colorRampPalette (c ("#ffeda0", "#feb24c", "#f03b20")), # 3-class ylorrd                                    ### 5
-    ylorbr = colorRampPalette (c ("#fff7bc", "#fec44f", "#d95f0e")), # 3-class ylorbr                                    ### 6
-    ylgn = colorRampPalette (c ("#f7fcb9", "#addd8e", "#31a354")), # 3-class ylgn                                        ### 7
-    ylgnbu = colorRampPalette (c ("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class ylgnbu                                    ### 8
-    greens = colorRampPalette (c ("#e5f5e0", "#a1d99b", "#31a354")), # 3-class greens                                    ### 9
-    gnbu = colorRampPalette (c ("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class gnbu                                        ### 10
-    blues = colorRampPalette (c ("#deebf7", "#9ecae1", "#3182bd")), # 3-class blues                                      ### 11
-    bugn = colorRampPalette (c ("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class bugn                                        ### 12
-    bupu = colorRampPalette (c ("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class bupu                                        ### 13
-    purples = colorRampPalette (c ("#efedf5", "#bcbddc", "#756bb1")), # 3-class purples                                  ### 14
-    purd = colorRampPalette (c ("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class purd                                        ### 15
-    pubu = colorRampPalette (c ("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class pubu                                        ### 16
-    pubugn = colorRampPalette (c ("#ece2f0", "#a6bddb", "#1c9099")), # 3-class pubugn                                    ### 17
-    greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
-    # midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
-
-    eval (parse (text = paste0 ("midpoint = colorRampPalette (c (rep(\"#67001f\", ",
-                                                   stuff[2], "), rep(\"#b2182b\", ",
-                                                   stuff[2], "), rep(\"#ca0020\", ",
-                                                   stuff[2], "), rep(\"#d6604d\", ",
-                                                   stuff[2], "), rep(\"#ef8a62\", ",
-                                                   stuff[2], "), rep(\"#f4a582\", ",
-                                                   stuff[2], "), rep(\"#fddbc7\", ",
-                                                   stuff[2], "), rep(\"#f7f7f7\", ",
-                                                   stuff[1], "), rep(\"#d1e5f0\", ",
-                                                   stuff[2], "), rep(\"#92c5de\", ",
-                                                   stuff[2], "), rep(\"#67a9cf\", ",
-                                                   stuff[2], "), rep(\"#4393c3\", ",
-                                                   stuff[2], "), rep(\"#0571b0\", ",
-                                                   stuff[2], "), rep(\"#2166ac\", ",
-                                                   stuff[2], "), rep(\"#053061\", ",
-                                                   stuff[2], ")))"))),
-    midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
-    midpoint_but_smooshed = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
-    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7",
-    "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7", "#f7f7f7"))
-  )
-
-    # ("#ef8a62", "#f7f7f7", "#67a9cf"))
-    # ("#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061"))
-
-# eval(parse(text=paste0("curhistlist[[number_of_repeats + 1]][i] <- mean(c(curhistlist[[",
-#                            paste0(1:(number_of_repeats - 1),"]][i],curhistlist[[", collapse=''),
-#                            number_of_repeats, "]][i]))")))
-
-    # ("#ca0020", "#ca0020", "#f4a582", "#f4a582", "#f7f7f7", "#92c5de", "#92c5de", "#0571b0", "#0571b0"))
-                                  #  ("#67001f",
-                                  #   "#b2182b", "#b2182b", "#b2182b",
-                                  #   "#d6604d", "#d6604d", "#d6604d", "#d6604d",
-                                  #   "#fddbc7", "#fddbc7",
-                                  #   "#f7f7f7",
-                                  #   "#d1e5f0", "#d1e5f0",
-                                  #   "#4393c3", "#4393c3", "#4393c3", "#4393c3",
-                                  #   "#2166ac", "#2166ac", "#2166ac",
-                                  #   "#053061")) # 2-class divergent Red -> Blue Spectrum ### 19
-  # )
-
-  regularnames <- c (
-    "EndCurValP1M",
-    "EndCurValP2M",
-    "EndCurValP1F",
-    "EndCurValP2F",
-    "EndSRpValP1M",
-    "EndSRpValP2M",
-    "EndSRpValP1F",
-    "EndSRpValP2F"
-  )
-
-  # source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-
-  # for (htmpView in 1:3) { # looking at the cubes from different angles (aka which population are we seeing one slice at a time, while the other populations are plotted on the axes?)
-
-  if (! (dir.exists (file.path (
-    heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-  )))) {
-    dir.create (file.path (
-      heatmap_sourcefolder, foldername$foldername, slicedpop[3] # paste0("slice_", slice)
-    ))
-  }
-
-  otherpopsize <- foldername$othersize
-  dat_array_doh <- array (c (
-    1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
-    2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, otherpopsize,otherpopsize,2,
-    3,1,1, 1,3,1, 1,1,otherpopsize, 3,3,3, 3,3,3, otherpopsize,otherpopsize,otherpopsize
-    # rep(c(1, 1, 1, 1), 2), 1, 1, rep(c(3, 3, 3, 1), 2),
-    # rep(c(2, 1, 1, 1), 2), 2, 2, rep(c(3, 3, 3, 2), 2),
-    # rep(c(3, 1, 1, 1), 2), 3, 3, rep(c(3, 3, 3, 3), 2)
-  ), c (3, 3, otherpopsize, 3))
-
-  # saveRDS(foldername, file.path (heatmap_sourcefolder, foldername$foldername, "foldername.RData"))
-
-  if (var) {
-    sexPopMetrics <- 4
+  if (variance_treatment == "var_calc_from_moran") {
+    figure_path <- file.path (heatmap_sourcefolder, str_remove(input_list$foldername, "fullData/"))
+    figure_path <- paste0(str_split (figure_path, "curstart/")[[1]][1], "curstart/")
+  } else if (variance_treatment == "fscsfmavc") {
+    figure_path <- file.path (heatmap_sourcefolder, input_list$foldername)
   } else {
-    sexPopMetrics <- 8
+    figure_path <- file.path (heatmap_sourcefolder, input_list$foldername)
   }
+
+  if (! (dir.exists (file.path (figure_path)))) {
+    dir.create (file.path (figure_path))
+  }
+
+  # figure_path <- file.path (figure_path, slicedpop[3])
+  # if (! (dir.exists (file.path (figure_path)))) {
+  #   dir.create (file.path (figure_path))
+  # }
+
+
+  otherpopsize <- input_list$othersize
+  # dat_array_doh <- array (c (
+  #   1,1,1, 1,1,1, 1,1,1, 1,3,3, 3,1,3, otherpopsize,otherpopsize,1,
+  #   2,1,1, 1,2,1, 1,1,2, 2,3,3, 3,2,3, otherpopsize,otherpopsize,2,
+  #   3,1,1, 1,3,1, 1,1,otherpopsize, 3,3,3, 3,3,3, otherpopsize,otherpopsize,otherpopsize
+  # ), c (3, 3, otherpopsize, 3))
+
+  sexPopMetrics <- 8
+  if (variance_treatment == "var_calc_from_moran") {
+    regularnames <- c (
+      "BtwVarSimP1M",
+      "BtwVarSimP1F",
+      "WtnVarSimP1M",
+      "WtnVarSimP1F",
+      "BtwVarSimP2M",
+      "BtwVarSimP2F",
+      "WtnVarSimP2M",
+      "WtnVarSimP2F"
+    )
+  } else if (variance_treatment == "fscsfmavc") {
+    sexPopMetrics <- 4
+    if (input_list$between_vs_within == 1) {
+      regularnames <- c (
+      "BtwVarSimP1M",
+      "BtwVarSimP2M",
+      "BtwVarSimP1F",
+      "BtwVarSimP2F"
+    )
+    } else if (input_list$between_vs_within == 2) {
+      regularnames <- c (
+      "WtnVarSimP1M",
+      "WtnVarSimP2M",
+      "WtnVarSimP1F",
+      "WtnVarSimP2F"
+    )
+    }
+
+  } else {
+    # sexPopMetrics <- 8
+    regularnames <- c (
+      "CurEndValP1M",
+      "CurEndValP2M",
+      "CurEndValP1F",
+      "CurEndValP2F",
+      "SRpEndValP1M",
+      "SRpEndValP2M",
+      "SRpEndValP1F",
+      "SRpEndValP2F"
+    )
+  }
+
+# png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+
+
 
   for (sxmtpop in 1:sexPopMetrics) {
     for (slice in 1:otherpopsize) {
 
-      file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
+      # file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, "_", slicedpop[3], ".png")
+      file_name <- paste0 (regularnames[sxmtpop], "_slice_", slice, ".png")
       # rule of thumb: if we're splitting up htmpView _within_ slice and sxmtpop, then we need to save the output files according to the schema that will help pull back together the slices.
-      png (filename = file.path (
-          heatmap_sourcefolder, foldername$foldername, #inhoptions[inhstyle + 2],
-          # paste0("slice_", slice), file_name),
-          slicedpop[3], file_name),
+      png (filename = file.path (figure_path, file_name),
         width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
       if (colorrange == "absolute") {
-        if (sxmtpop <= 4) {
-          heatmaprange <- c (0,1)
+        if (variance_treatment == "var_calc_from_moran") {
+          heatmaprange <- c (0, 1)
         } else {
-          heatmaprange <- c (1,156)
+          if (sxmtpop <= 4) {
+            heatmaprange <- c (0,1)
+          } else {
+            heatmaprange <- c (1,156)
+          }
         }
-      } else if (colorrange == "relative") {
+      }# else if (colorrange == "relative") {
 
-        heatmaprange <- inhoptions[[inhstyle]][
-          dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
-          dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
-          dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
-          sxmtpop]
-        heatmap_min <- c (
-          round(min(heatmaprangedatasetone), 2),
-          round(min(heatmaprangedatasettwo), 2),
-          round(min(heatmaprangedatasettre), 2)
-        )
-        heatmap_max <- c (
-          round(max(heatmaprangedatasetone), 2),
-          round(max(heatmaprangedatasettwo), 2),
-          round(max(heatmaprangedatasettre), 2)
-        )
+      #   heatmaprange <- inhoptions[[inhstyle]][
+      #     dat_array_doh[1,1,1,slice]:dat_array_doh[1,1,2,slice],
+      #     dat_array_doh[1,2,1,slice]:dat_array_doh[1,2,2,slice],
+      #     dat_array_doh[1,3,1,slice]:dat_array_doh[1,3,2,slice],
+      #     sxmtpop]
+      #   heatmap_min <- c (
+      #     round(min(heatmaprangedatasetone), 2),
+      #     round(min(heatmaprangedatasettwo), 2),
+      #     round(min(heatmaprangedatasettre), 2)
+      #   )
+      #   heatmap_max <- c (
+      #     round(max(heatmaprangedatasetone), 2),
+      #     round(max(heatmaprangedatasettwo), 2),
+      #     round(max(heatmaprangedatasettre), 2)
+      #   )
 
-        heatmaprange <- c (heatmap_min[3] - 0.01, heatmap_max[3] + 0.01)
-        rm(heatmaprangedatasetone, heatmaprangedatasettwo, heatmaprangedatasettre,
-          heatmap_min, heatmap_max)
-      }# else if (colorrange == "differences") {
-      #   heatmaprange <- c (0,1)
-      # }
+      #   heatmaprange <- c (heatmap_min[3] - 0.01, heatmap_max[3] + 0.01)
+      #   rm(heatmaprangedatasetone, heatmaprangedatasettwo, heatmaprangedatasettre,
+      #     heatmap_min, heatmap_max)
+      # }# else if (colorrange == "differences") {
+      # #   heatmaprange <- c (0,1)
+      # # }
 
-       # UNFINISHED - depreciated?
-      # findXLab <- heatmap_axes[[3]][1]
-      # findYLab <- heatmap_axes[[3]][2]
+      if (typeof (colorpalette) == "character") {
+        colorpalette <- which (names (colorseqmultpalette) == colorpalette)
+      }
 
-      # if(inhstyle == 1) {
-        # dim_1 = 3
-        # dim_2 = 3
-        # dim_3 = 2
+      if (variance_treatment == "var_calc_from_moran") {
 
-        if (slice == 1) {
+        if (sxmtpop > 4) {
+          image(x = temphtmparray[,,sxmtpop - 4, 2],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        } else {
+          image(x = temphtmparray[,,sxmtpop, 1],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+        }
+
+      } else if (variance_treatment == "fscsfmavc") {
+          image(x = temphtmparray[,,sxmtpop],
+            col = colorseqmultpalette[[colorpalette]](100),
+            axes = F,
+            xlab = heatmap_axes[[3]][1],
+            ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
+          )
+
+      } else {
+        if (otherpopsize == 1) {
           image(x = temphtmparray[,,sxmtpop],
             col = colorseqmultpalette[[colorpalette]](100),
             axes = F,
@@ -754,289 +1304,155 @@ individualfigures <- function (
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
         }
+      }
 
-
-        if (!(is.null(dimnames(temphtmparray)))) {
-          temphtmpdimensions <- dimnames(temphtmparray)
-          temptemp <- vector(mode = "character", length = length(temphtmpdimensions))
-          for (thething in 1:length(temphtmpdimensions[[1]])) {
-            temptemp[thething] <- str_extract_all(temphtmpdimensions[[1]][thething], "[0123456789|0123456789.0123456789]*-[0123456789|0123456789.0123456789]*")
-          }
-
-
-          # sets up the axes regardless of size, based on what they were labeled when they were originally run.
-          if (foldername$biassize == 2) {
-            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
-              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.495,0.5,1.495),
-              c("","",""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
-              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.495,0.5,1.495),
-              c("","",""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 3) {
-            axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.25, 0.25, 0.75, 1.25),
-              c("", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.25, 0.25, 0.75, 1.25),
-              c("", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize ==  4) {
-            axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
-              c("", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
-              c("", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 5) {
-            axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
-              c("", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
-              c("", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 6) {
-            axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
-              c("", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
-              c("", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 7) {
-            axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
-              c("", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
-              c("", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 8) {
-            axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
-              c("", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
-              c("", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 9) {
-            axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
-              c("", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
-              c("", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 10) {
-            axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c(     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
-              c("", "", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
-              c("", "", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          }
-
-        } else {
-
-          temptemp <- list (
-            "0-0.2",
-            "0.2-0.3",
-            "0.4-0.6",
-            "0.55-0.75",
-            "0.7-0.8"
-          )
-
-          if (foldername$biassize == 2) {
-            axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
-              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.495,0.5,1.495),
-              c("","",""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
-              c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.495,0.5,1.495),
-              c("","",""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 3) {
-            axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.25, 0.25, 0.75, 1.25),
-              c("", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.25, 0.25, 0.75, 1.25),
-              c("", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize ==  4) {
-            axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
-              c("", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
-              c("", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 5) {
-            axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
-              c("", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
-              c("", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 6) {
-            axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
-              c("", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
-              c("", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 7) {
-            axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
-              c("", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
-              c("", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 8) {
-            axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
-              c("", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
-              c("", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 9) {
-            axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-              c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
-              c("", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-                  c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
-              c("", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          } else if (foldername$biassize == 10) {
-            axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "0.54-0.72", "", "0.63-0.81", "", "0.72-0.9", "", "0.81-1", ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
-              c("", "", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-
-            axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
-                  c("", "0-0.18", "", "0.09-0.27", "", "0.18-0.36", "", "0.27-0.45", "", "0.36-0.54", "", "0.45-0.63", "", "0.54-0.72", "", "0.63-0.81", "", "0.72-0.9", "", "0.81-1", ""),
-              T,0,NA,F,cex.axis=0.8, tck = 0)
-            axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
-              c("", "", "", "", "", "", "", "", "", "", ""),
-              T,-0.03,NA,F,cex.axis=1, tck = -0.03)
-          }
+      if (!(is.null(dimnames(temphtmparray)))) {
+        temphtmpdimensions <- dimnames(temphtmparray)
+        temptemp <- vector(mode = "character", length = length(temphtmpdimensions))
+        for (thething in 1:length(temphtmpdimensions[[1]])) {
+          temptemp[thething] <- str_extract_all(temphtmpdimensions[[1]][thething], "[0123456789|0123456789.0123456789]*-[0123456789|0123456789.0123456789]*")
         }
+
+
+        # sets up the axes regardless of size, based on what they were labeled when they were originally run.
+        if (input_list$biassize == 2) {
+          axis(1,c(-0.495,  0  ,0.5,    1    ,1.495),
+            c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.495,0.5,1.495),
+            c("","",""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.495,  0  ,0.5,    1    ,1.495),
+            c(  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.495,0.5,1.495),
+            c("","",""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 3) {
+          axis(1,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.25, 0.25, 0.75, 1.25),
+            c("", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.25, 0.25, 0.75, 1.25),
+            c("", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 4) {
+          axis(1,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+            c("", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.165, 0.168, 0.5, 0.835, 1.1649),
+            c("", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 5) {
+          axis(1,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+            c("", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
+            c("", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 6) {
+          axis(1,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+            c("", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
+            c("", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 7) {
+          axis(1,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+            c("", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
+            c("", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 8) {
+          axis(1,c(-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
+            c("", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
+            c("", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 9) {
+          axis(1,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+            c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+            c("", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
+            c("", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        } else if (input_list$biassize == 10) {
+          axis(1,c(-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                c(     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(1,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+            c("", "", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+
+          axis(2,c(-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
+                c("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
+            T,0,NA,F,cex.axis=0.8, tck = 0)
+          axis(2,c(-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
+            c("", "", "", "", "", "", "", "", "", "", ""),
+            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+        }
+
+      } else {
+        stop ("put some dimensions on your temphtmparray object,
+        or write the code here better than it was written!
+        (search git for temphtmparray to see what code used to be here)")}
 
       dev.off()
     }
   }
   return(print("Done, in the specified folder"))
-  # return(foldername)
+  # return(input_list)
 }
 
 combineeditsingles <- function (
@@ -1049,13 +1465,13 @@ combineeditsingles <- function (
   heatmapfile = heatmapoutput
 ) {
 
-inheritancestyle <- paste0(heatmapfile$inheritance, "inh")
-bias <- paste0(heatmapfile$diffcurstartbias, "Bias")
-whichbias <- c("maleBias", "femaleBias", "pop1Bias")
-popbias <- c("FemalePop", "MalePop", "Popula2")[which(whichbias == bias)]
-#   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-# Access the same subdirectory where the individual images are stored
-#  heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
+  inheritancestyle <- paste0(heatmapfile$inheritance, "inh")
+  bias <- paste0(heatmapfile$diffcurstartbias, "Bias")
+  whichbias <- c("maleBias", "femaleBias", "pop1Bias")
+  popbias <- c("FemalePop", "MalePop", "Popula2")[which(whichbias == bias)]
+  #   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+  # Access the same subdirectory where the individual images are stored
+  #  heatmap_sourcefolder <- file.path("results", "Heatmaps", "output_objects")
   heatmap_sourcefolder <- file.path("results")
 
   sxmtpopcontainer <- c("EndCurValP1M",
@@ -1401,6 +1817,29 @@ popbias <- c("FemalePop", "MalePop", "Popula2")[which(whichbias == bias)]
   return(print("done"))
 }
 
+# compare_lineplots <- function (
+#   category = "difference" # "variance", "difference", "five-by-five"
+
+# ) {
+
+# }
+
+# combine_images <- function (
+#   big_sims = c ("parentNoInv", "childF1NoInv"),
+#   number_of_comparisons = 2,
+#   comp_categories = c("variance", "difference", "lineplots", "five-by-five"),
+#   source_paths = c(file.path ("results", ""), file.path ("results", "")) #
+# ) {
+#   if (length (comp_categories) != number_of_comparisons) {stop ("seems to be more or less comp_categories than number_of_comparisons")}
+#   # "variance" and "lineplots" for example
+#   # anything with lineplots:
+#   if ("variance" %in% comp_categories) {
+#     file_path <- file.path ("results", "VarianceHeatmaps")
+#   }
+#   if ("difference" %in% comp_categories) {
+#     if (length () != )
+#   }
+# }
 
 stackmultiples <- function (
   inheritance = 1, # c("sameinh", "oppsinh", "maleinh", "mothinh")
@@ -1453,4 +1892,4 @@ stackmultiples <- function (
 
 }
 
-print("htmpdir, extractvardirs, remakestring, extractmeans, makeheatmapfile, individualfigures, combineeditsingles and stackmultiples loaded")
+print("plot_that_spectrum, remake_string, htmpdir, extractvardirs, remakestring, extractmeans, makeheatmapfile, individualfigures, combineeditsingles and stackmultiples loaded")
