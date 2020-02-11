@@ -1143,6 +1143,10 @@ individualfigures <- function (
   if (variance_treatment == "var_calc_from_moran") {
     figure_path <- file.path (heatmap_sourcefolder, str_remove(input_list$foldername, "fullData/"))
     figure_path <- paste0(str_split (figure_path, "curstart/")[[1]][1], "curstart/")
+  } else if (variance_treatment == "fscsfmavc") {
+    figure_path <- file.path (heatmap_sourcefolder, input_list$foldername)
+  } else {
+    figure_path <- file.path (heatmap_sourcefolder, input_list$foldername)
   }
 
   if (! (dir.exists (file.path (figure_path)))) {
@@ -1176,14 +1180,14 @@ individualfigures <- function (
     )
   } else if (variance_treatment == "fscsfmavc") {
     sexPopMetrics <- 4
-    if (foldername$between_vs_within == 1) {
+    if (input_list$between_vs_within == 1) {
       regularnames <- c (
       "BtwVarSimP1M",
       "BtwVarSimP2M",
       "BtwVarSimP1F",
       "BtwVarSimP2F"
     )
-    } else if (foldername$between_vs_within == 2) {
+    } else if (input_list$between_vs_within == 2) {
       regularnames <- c (
       "WtnVarSimP1M",
       "WtnVarSimP2M",
@@ -1220,10 +1224,14 @@ individualfigures <- function (
         width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
       if (colorrange == "absolute") {
-        if (sxmtpop <= 4) {
-          heatmaprange <- c (0,1)
+        if (variance_treatment == "var_calc_from_moran") {
+          heatmaprange <- c (0, 1)
         } else {
-          heatmaprange <- c (1,156)
+          if (sxmtpop <= 4) {
+            heatmaprange <- c (0,1)
+          } else {
+            heatmaprange <- c (1,156)
+          }
         }
       }# else if (colorrange == "relative") {
 

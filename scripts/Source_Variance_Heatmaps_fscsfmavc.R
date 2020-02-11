@@ -39,7 +39,7 @@ varianceheatmaps <- function (
                     #     cur_inh = curinh_style
                     # ) # return (file.path(bg_fd_path, paste0(str_split (path, "tenKfiveByFive_")[[1]][2], "_", bg_container[lbhb], "_bkgd.RData")))
 
-                    foldername <- list(
+                    input_list <- list(
                         foldername = subsets_folder,
                         inheritance = 1,
                         diffcurstartbias = "pop1",
@@ -52,7 +52,7 @@ varianceheatmaps <- function (
                         output_foldername = FALSE,
                         colorrange = 2,
                         colorpalette = "variance_spectrum",
-                        input_list = foldername,
+                        input_list = input_list,
                         midpoint_size = 1,
                         variance_treatment = "fscsfmavc"
                     )
