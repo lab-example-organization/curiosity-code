@@ -1034,7 +1034,7 @@ individualfigures <- function (
   # if (difference == FALSE) {
 
 
-  if (output_foldername) {
+  if (output_foldername != FALSE) {
     if (! (dir.exists (file.path (
       heatmap_sourcefolder, output_foldername
     )))) {

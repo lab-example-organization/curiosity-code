@@ -44,7 +44,8 @@ varianceheatmaps <- function (
                         inheritance = 1,
                         diffcurstartbias = "pop1",
                         biassize = 5,
-                        othersize = 1
+                        othersize = 1,
+                        between_vs_within = between_vs_within
                     )
 
                     individualfigures (
@@ -53,7 +54,7 @@ varianceheatmaps <- function (
                         colorpalette = "variance_spectrum",
                         input_list = foldername,
                         midpoint_size = 1,
-                        variance_treatment = TRUE
+                        variance_treatment = "var_calc_from_moran"
                     )
                 }
             # }

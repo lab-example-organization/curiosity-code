@@ -89,7 +89,6 @@ differenceheatmaps <- function (
       # five-by-five-followUpInvLow1k_lowHigh_Background
       individualfigures(
         output_foldername = "DifferenceHeatmaps",
-        difference = TRUE,
         colorrange = 2,
         colorpalette = "difference_spectrum",
         input_list = list(

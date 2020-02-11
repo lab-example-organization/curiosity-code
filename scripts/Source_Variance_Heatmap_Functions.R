@@ -140,6 +140,12 @@ extract_subset <- function (
 
     eval(parse(text = paste0("output <- output[", subsetta, "]")))
 
+    dimnames(output) <- list(
+        c("0-0.2mp1", "0.2-0.3mp1", "0.4-0.6mp1", "0.55-0.75mp1", "0.7-0.8mp1"),
+        c("0-0.2fp1", "0.2-0.3fp1", "0.4-0.6fp1", "0.55-0.75fp1", "0.7-0.8fp1"),
+        c("p1m", "p2m", "p1f", "p2f")
+    )
+
     subset_categories <- list (
         c("LowBG","HighBG"),
         c("varBetween","varWithin"),
