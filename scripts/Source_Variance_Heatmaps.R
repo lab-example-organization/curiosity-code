@@ -45,7 +45,7 @@ varianceheatmaps <- function (
                         diffcurstartbias = "pop1",
                         biassize = 5,
                         othersize = 1,
-                        between_vs_within = between_vs_within
+                        between_vs_within = "var_calc_from_moran"
                     )
 
                     individualfigures (
