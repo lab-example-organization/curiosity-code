@@ -45,3 +45,15 @@ make_colorpalettes <- function (stuff = c(2,7)) {
     return (colorseqmultpalette)
 }
 
+make_singpalette <- function () {
+    colorseqsingpalette <- matrix (data = c (c ("#deebf7", "#9ecae1", "#3182bd"), # 3-class blues
+                                          c ("#e5f5e0", "#a1d99b", "#31a354"), # 3-class greens
+                                          c ("#f0f0f0", "#bdbdbd", "#636363"), # 3-class greys
+                                          c ("#fee6ce", "#fdae6b", "#e6550d"), # 3-class oranges
+                                          c ("#efedf5", "#bcbddc", "#756bb1"), # 3-class purples
+                                          c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds
+                                nrow = 6, ncol = 3,byrow = T,dimnames = list(
+                                  c ("blue", "green", "grey", "orange", "purple", "red"),
+                                  c ("Light first color", "Middle color", "Dark final color")))
+    return(colorseqsingpalette)
+}
