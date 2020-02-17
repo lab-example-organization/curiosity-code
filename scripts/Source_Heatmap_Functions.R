@@ -653,23 +653,23 @@ extractmeans <- function(allrundirs,
     datanhistlist <- array(0, c((2*dim_source$num_pop), (dim_source$num_pop * dim_source$one_pop_singers[1]), timespanchunks, number_of_reps))
 
     for(i in 1:number_of_reps) {
-      datanhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$histlist[i]))
-      datansitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$sitylist[i]))
-      datantbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$sdstlist[i]))
       datanrepzlist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$repzlist[i]))
+      datantbxnlist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$sdstlist[i]))
+      datansitylist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$sitylist[i]))
+      datanhistlist[,,,i] <- readRDS(paste0(multirun_directory, "/", namedrdatas$histlist[i]))
 
-      # curhistlist[,,,i] <- fread(file.path(multirun_directory, histlist[i]))
-      # cursitylist[,,,i] <- fread(file.path(multirun_directory, sitylist[i]))
-      # sdstbxnlist[,,,i] <- fread(file.path(multirun_directory, sdstlist[i]))
       # sylrepzlist[,,,i] <- fread(file.path(multirun_directory, repzlist[i]))
+      # sdstbxnlist[,,,i] <- fread(file.path(multirun_directory, sdstlist[i]))
+      # cursitylist[,,,i] <- fread(file.path(multirun_directory, sitylist[i]))
+      # curhistlist[,,,i] <- fread(file.path(multirun_directory, histlist[i]))
     }
 
     # These four lines calculate the mean value across all the replicates
 
-    curhstmeans <- colMeans(aperm(datanhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
-    curlvlmeans <- colMeans(aperm(datansitylist, c(4, 1, 2, 3)), na.rm = TRUE)
-    syldbnmeans <- colMeans(aperm(datantbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
     sylrepmeans <- colMeans(aperm(datanrepzlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    syldbnmeans <- colMeans(aperm(datantbxnlist, c(4, 1, 2, 3)), na.rm = TRUE)
+    curlvlmeans <- colMeans(aperm(datansitylist, c(4, 1, 2, 3)), na.rm = TRUE)
+    curhstmeans <- colMeans(aperm(datanhistlist, c(4, 1, 2, 3)), na.rm = TRUE)
 
     runmeans[[individual_run]] <- list(
       sylrepmeans = sylrepmeans,
