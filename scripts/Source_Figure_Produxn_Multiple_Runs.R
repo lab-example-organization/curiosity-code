@@ -197,7 +197,7 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
 #     print (mins_n_maxes)
 #     print ("length of cursitylist: ")
 #     print (dim (cursitylist[[number_of_repeats + 1]]))
-  simple_plots(parameters = params, plot_info = plot_info, converted_data = "converted_data", extra_lines = TRUE,
+  simple_plots(parameters = params, plot_info = plot_info, converted_data = "converted_data",# extra_lines = TRUE,
                number_of_runs = number_of_repeats, cursitylist = cursitylist,
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory)

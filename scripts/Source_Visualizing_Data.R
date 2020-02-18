@@ -283,7 +283,7 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
 }
 
 
-simple_plots <- function(parameters, plot_info = plot_info, converted_data = converted_data, extra_lines = FALSE,
+simple_plots <- function(parameters, plot_info = plot_info, converted_data = converted_data,# extra_lines = TRUE,
                          number_of_runs=number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory) {
