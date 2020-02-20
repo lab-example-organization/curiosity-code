@@ -282,28 +282,41 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
   }
 }
 
+# recolorized_simple_plots <- function (
+#   recolorize_style = "variance" # "clustering"
+# ) {
+#   if (recolorize_style == "variance") {
+#     #
+#     simple_plots()
+#   } else if (recolorize_style == "clustering") {
+#     #
+#     simple_plots()
+#   }
+# }
 
 simple_plots <- function(parameters, plot_info = plot_info, converted_data = converted_data,# extra_lines = TRUE,
-                         number_of_runs=number_of_runs, cursitylist = cursitylist,
+                         number_of_runs = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
-                         sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, recolorize = TRUE) {
+                         sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, recolorize = FALSE
+                         ) {
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
 
-  heres_that_spot_where_we_do_things_and_stuff <- list()
-  names_of_recolorizing_options <- list(
-    highest_variance = [which(max(variance_among_subpopulations))], # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
-    highest_clustering_score # two metrics: number that is highest when "many" reps are clustered, "very close" to each other; at least one value that is distinct from the cluster
-  )
-  if (recolorize != FALSE) {
-    # for(i in 1:length(names_of_recolorizing_options))
-    if (recolorize == "variance") {
-      thing <- which (max ())
-    } else if (recolorise == "clustering") {
+  # heres_that_spot_where_we_do_things_and_stuff <- list()
+  # names_of_recolorizing_options <- list(
+  #   highest_variance = [which(max(variance_among_subpopulations))], # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
+  #   highest_clustering_score # two metrics: number that is highest when "many" reps are clustered, "very close" to each other; at least one value that is distinct from the cluster
+  # )
+  # if (recolorize != FALSE) {
+  #   # # for(i in 1:length(names_of_recolorizing_options))
+  #   # if (recolorize == "variance") {
+  #   #   thing <- which (max (cursitylist[[1:50]][]))
+  #   # } else if (recolorise == "clustering") {
 
-    }
-  } else {
-    subset_output <- 1:50
-  }
+  #   # }
+  #   subset_output <- recolorize
+  # } else {
+  #   subset_output <- 1:50
+  # }
 
 
   for(population in 1:parameters$num_pop) {
