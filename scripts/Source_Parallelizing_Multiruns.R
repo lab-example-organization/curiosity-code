@@ -62,10 +62,10 @@ n_cores <- 3
   sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
   sourceCpp(file.path('cpp_source', 'sort.cpp'))
 
-source(file.path("scripts", "Source_Multiple_Runs.R"))
+source(file.path("scripts", "Source_debug_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:15
+shifting_curstart <- 1:6
 paramsfile <- c("params.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simdate <- gsub('-', '', substring(Sys.Date(), 3))
