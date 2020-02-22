@@ -304,6 +304,8 @@ recolorized_simple_plots <- function (
   } else if (recolorize_style == "clustering") {
     #
     subset_output <-
+  } else {
+    subset_output <- 1:50
   }
 
   simple_plots(parameters = parameters, plot_info = plot_info, converted_data = "converted_data",
