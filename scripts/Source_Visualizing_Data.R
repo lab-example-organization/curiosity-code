@@ -308,6 +308,21 @@ recolorized_simple_plots <- function (
     subset_output <- 1:50
   }
 
+# heres_that_spot_where_we_do_things_and_stuff <- list()
+#
+#   names_of_recolorizing_options <- list(
+#     highest_variance = [which(max(variance_among_subpopulations))],
+#     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
+#     highest_clustering_score
+#     # two metrics: number that is highest when "many" reps are clustered, "very close" to each other; at least one value that is distinct from the cluster
+#   )
+#
+#   if (recolorize != FALSE) {
+#     subset_output <- recolorize
+#   } else {
+#     subset_output <- 1:50
+#   }
+#
   simple_plots(parameters = parameters, plot_info = plot_info, converted_data = "converted_data",
                number_of_runs = number_of_repeats, cursitylist = cursitylist,
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
@@ -320,18 +335,6 @@ simple_plots <- function(parameters, plot_info = plot_info, converted_data = con
                          sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, recolorize = FALSE
                          ) {
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
-
-  heres_that_spot_where_we_do_things_and_stuff <- list()
-  names_of_recolorizing_options <- list(
-    highest_variance = [which(max(variance_among_subpopulations))], # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
-    highest_clustering_score # two metrics: number that is highest when "many" reps are clustered, "very close" to each other; at least one value that is distinct from the cluster
-  )
-  if (recolorize != FALSE) {
-    subset_output <- recolorize
-  } else {
-    subset_output <- 1:50
-  }
-
 
   for(population in 1:parameters$num_pop) {
 
