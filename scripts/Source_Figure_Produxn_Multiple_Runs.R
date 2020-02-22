@@ -1,6 +1,6 @@
 
 figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
-                           paramssource = paramssource) {
+                           paramssource = paramssource, redo = FALSE) {
 
 #     print("figprodmultrunStart")
 
@@ -203,6 +203,13 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
                mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory)
 #     print("simple_plots done")
 
+# if (redo != FALSE) {
+  recolorized_simple_plots (recolorize_style = "variance", # "clustering"
+                            parameters = params, plot_info = plot_info, converted_data = "converted_data",
+                            number_of_runs = number_of_repeats, cursitylist = cursitylist,
+                            sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+                            mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory)
+# }
   # srcdir = file.path("scripts")
   # file.names = dir(srcdir)[grep("Source", dir(srcdir))]
   # dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts"))

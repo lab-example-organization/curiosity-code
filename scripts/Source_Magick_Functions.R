@@ -15,3 +15,4 @@ mult_ImgAppend <- function(
     appendedImg <- image_append(c(arguments[[1]], arguments[[2]]))
     return(appendedImg)
 }
+
