@@ -172,15 +172,17 @@ recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
   }
   # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
   #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/simplificationFactor))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-  #                         curity_mean_t=array(0, c(12, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+  #                         curity_mean_t=array(0, c(14, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
   #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/simplificationFactor))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
   #                         )
-    # Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
-    # Row 3 covers the number of selections made by females from each population, per timestep.
-    # Rows 4-9 cover the individual curiosity values recorded, regarding the individuals that source the curiosity inheritance(father (row 4) and mother (row 5));
-    # The curiosity values inherited by the offspring (son (row 6) and daughter (row 7)); and the curiosity values of those killed off (dead male (row 8) and female (row 9)),
+    # 1 & 2: Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
+    # 3: Row 3 covers the number of selections made by females from each population, per timestep.
+    # 4 & 5: Rows 4-9 cover the individual curiosity values recorded, regarding the individuals that source the curiosity inheritance(father (row 4) and mother (row 5));
+    # 6, 7, 8, & 9: The curiosity values inherited by the offspring (son (row 6) and daughter (row 7)); and the curiosity values of those killed off (dead male (row 8) and female (row 9)),
     # per timestep.
     # Then the amount of times curiosity inheritance had to run (see while loop in curiosity_learn) is recorded here
+    #
+    # 13 & 14: variance values for each subpopulation, males (row 13) and females (row 14)
   return (record_variable)
 }
 

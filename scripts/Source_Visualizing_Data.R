@@ -300,9 +300,13 @@ recolorized_simple_plots <- function (
 ) {
   if (recolorize_style == "variance") {
     #
+    #     highest_variance = [which(max(variance_among_subpopulations))],
+    #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
     subset_output <-
   } else if (recolorize_style == "clustering") {
     #
+    #     highest_clustering_score
+    #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
     subset_output <-
   } else {
     subset_output <- 1:50
@@ -311,10 +315,8 @@ recolorized_simple_plots <- function (
 # heres_that_spot_where_we_do_things_and_stuff <- list()
 #
 #   names_of_recolorizing_options <- list(
-#     highest_variance = [which(max(variance_among_subpopulations))],
-#     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
-#     highest_clustering_score
-#     # two metrics: number that is highest when "many" reps are clustered, "very close" to each other; at least one value that is distinct from the cluster
+
+
 #   )
 #
 #   if (recolorize != FALSE) {
