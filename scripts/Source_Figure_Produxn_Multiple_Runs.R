@@ -209,43 +209,17 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
                             number_of_runs = number_of_repeats, cursitylist = cursitylist,
                             sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                             mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory)
-# }
-  # srcdir = file.path("scripts")
-  # file.names = dir(srcdir)[grep("Source", dir(srcdir))]
-  # dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts"))
-  # sapply(file.names, function(x) {
-  #   file.copy(from=file.path(srcdir, x),
-  #             to=file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts", x),
-  #             overwrite = FALSE) })
-
-  # parmdir = file.path("parameters")
-  # file.names = dir(parmdir)[grep("*.yaml", dir(parmdir))]
-  # dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params"))
-  # sapply(file.names, function(x) {
-  #   file.copy(from=file.path(parmdir, x),
-  #             to=file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", x),
-  #             overwrite = FALSE) })
-
-
 
   srcdir = file.path("scripts")
   file.names = dir(srcdir)[grep("Source", dir(srcdir))]
   dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts"))
-  # sapply(file.names, function(x) {
-  #   file.copy(from=file.path(srcdir, x),
-  #             to=file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts", x),
-  #             overwrite = FALSE) })
   zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path(srcdir), T, 9, T)
-
 
   parmdir = file.path("parameters")
   file.names = dir(parmdir)[grep("*.yaml", dir(parmdir))]
   dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params"))
-  # sapply(file.names, function(x) {
-  #   file.copy(from=file.path(parmdir, x),
-  #             to=file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", x),
-  #             overwrite = FALSE) })
   zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsFiles.zip"), file.path(parmdir), T, 9, T)
+
   saveRDS(params, file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsSource.RData"))
 
   return (print (paste0 (specificsimnumber," - Exit Status: 0")))

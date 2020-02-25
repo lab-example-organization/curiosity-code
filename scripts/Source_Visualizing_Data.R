@@ -298,11 +298,14 @@ recolorized_simple_plots <- function (
   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
   mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory
 ) {
+  subset_pool <- cursitylist[[]]
   if (recolorize_style == "variance") {
     #
     #     highest_variance = [which(max(variance_among_subpopulations))],
     #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
-    subset_output <-
+    subset_pool <- cursitylist[[1:50]]
+    cursity_mean <- cursitylist[[number_of_reps + 1]][sex, population, LAST_SLICE]
+    subset_output <- which (cursitylist[[1:50]][sex,population,LAST_SLICE] > cursity_mean)
   } else if (recolorize_style == "clustering") {
     #
     #     highest_clustering_score
