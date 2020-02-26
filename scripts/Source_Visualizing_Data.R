@@ -36,28 +36,15 @@ concatenate_data <- function(specific_run,
   converteddata[[specific_run]][[1]] <- sylrepz
   converteddata[[specific_run]][[2]] <- sdstbxn
   converteddata[[specific_run]][[3]] <- cursity
-  # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   converteddata[[specific_run]][[4]] <- curhist
-
-  # converteddata <- list(
-  #   sylrepz = sylrepz,
-  #   sdstbxn = sdstbxn,
-  #   cursity = cursity,
-  #   curhist = curhist
-  # )
 
   for(specificchunk in 1 : nts) {
       # specificchunk <- 1
       sc <- (1 + ((specificchunk - 1) * numslice)) # output_chunk_start
       ec <- specificchunk * numslice # output_chunk_end
-
       converteddata[[specific_run]][[1]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_rowcol.RData")))
-
       converteddata[[specific_run]][[2]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
-
       converteddata[[specific_run]][[3]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_mean_t.RData")))
-      # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
-
       converteddata[[specific_run]][[4]][,,sc:ec] <- readRDS(file.path(data_dir, paste0("variable-store-", specificchunk, "-curity_repert.RData")))
   }
   return(converteddata)
@@ -72,16 +59,18 @@ process_data <- function (data_conglomerate = converted_data, specificrepeat = r
       for (data_subset in 1:4) {
         modified_data <- data_conglomerate[[iteration]][[data_subset]]
         # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificrepeat, ".RData")))
-
-        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], iteration, ".RData")))
+        if (! (file.exists (file.path(path, paste0(datanames[data_subset], iteration, ".RData"))))) {
+          saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], iteration, ".RData")))
+        }
       }
     }
   } else {
     for (data_subset in 1:4) {
         modified_data <- data_conglomerate[[data_subset]]
         # saveRDS(object = modified_data, file = file.path(path, paste0(datanames[data_subset], specificrepeat, ".RData")))
-
-        saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], iteration, ".RData")))
+        if (! (file.exists (file.path(path, paste0(datanames[data_subset], iteration, ".RData"))))) {
+          saveRDS (modified_data, file.path(path, paste0(datanames[data_subset], iteration, ".RData")))
+        }
     }
   }
 }
@@ -126,97 +115,6 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
 
   return (plot_info)
 }
-
-# figure_maker <- function (parameters, converted_data, plot_info, population, q_subset, subset_number, filename, sex_dependent, simple, ylab1, ylab2, number_of_runs, saving_dir = multirun_directory, mean_not_var = TRUE) { # needs number_of_runs passed to it if simple ever == FALSE
-#   num_timesteps = as.numeric (strsplit (parameters$runlength, "k")[[1]][1])*1000
-#   if (simple == T) {
-#     if (sex_dependent == T) {
-#       for (sex in 1:2) {
-#         file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, filename, population, "_", plot_info$sexes_lc[sex], ".png")
-#         png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-#         if ((q_subset == "sdstbxn") | (q_subset == "curhist")) {
-#           thing <- paste0 ("objectz <- converted_data$", q_subset, "[", sex + ((population - 1) * 2), ",,]")
-#           eval (parse (text=thing))
-#           if (q_subset == "sdstbxn") {
-#             image (t (objectz), col = plot_info$sylnum_palette (100), xlab = "Timestep", ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc[sex], ylab2))} else {
-#             image (t (objectz), col = plot_info$sylsub_palette (100), xlab = "Timestep", ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc[sex], ylab2))}
-#         } else {
-#           thing <- paste0 ("objectz <- converted_data$", q_subset, "[", sex, ",population,]")
-#           eval (parse (text = thing))
-#           plot (objectz, xlab = paste0 ("Timestep"), ylab = paste0 (ylab1, population, " ", plot_info$sexes_uc [sex], ylab2))
-#         }
-#         dev.off()}
-#     } else {
-#       thing <- paste0("objectz <- converted_data$", q_subset, "[", subset_number, ",population,]")
-#       eval(parse(text=thing))
-#       file_name <- paste0(plot_info$datez, "_", plot_info$run_name, filename, population, ".png")
-#       png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-#       plot(objectz, xlab = "Timestep", ylab = paste0(ylab1, population, ylab2))
-#       dev.off()}
-#   } else {
-#     if(sex_dependent == T) {
-#       for(sex in 1:2) {}} else {}
-#     meanz <- cursitylist[[number_of_runs + 1]][10,population,]
-#     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
-#     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_tutor_selections_pop", population, ".png")
-#     miny <- mins_n_maxes[2,population,1]
-#     maxy <- mins_n_maxes[2,population,2]
-#     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-#     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
-#     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-#     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
-#                                   ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))),
-#         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
-#     eval(parse(text=stuff))
-#     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
-#     dev.off()
-
-#     meanz <- sylrepzlist[[number_of_runs + 1]][sex,population,]
-#     stuff <- paste0("points(sylrepzlist[[", 1:number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
-#     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_mean_repertoire_size_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
-#     miny <- mins_n_maxes[(sex + 10),population,1]
-#     maxy <- mins_n_maxes[(sex + 10),population,2]
-#     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-#     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
-#     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-#     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
-#                                   ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))),
-#         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
-#     eval(parse(text=stuff))
-#     lines(cursitylist[[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
-#     dev.off()
-
-#   }
-# }
-
-summary_statistics <- function(parameters, converted_data, plot_info, population, simplification_factor) {
-  num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
-  for(sex in 1:2) {
-    sink(file = paste0(plot_info$datez, plot_info$run_name, "_Summary_Statistics"), append = TRUE)
-    print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " rep size - avg over last 1% of timesteps"))
-    print(mean(converted_data$sylrepz[sex, population,
-    (num_timesteps / parameters$recordsimplifyfactor-1):num_timesteps / parameters$recordsimplifyfactor]))
-    print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " rep size - avg over last 5% of timesteps"))
-    print(mean(converted_data$sylrepz[sex, population,
-    (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
-    print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " curiosity - avg over last 1% of timesteps"))
-    print(mean(converted_data$cursity[sex, population,
-    (num_timesteps / parameters$recordsimplifyfactor-1):num_timesteps / parameters$recordsimplifyfactor]))
-    print(paste0("pop ", population, " ", plot_info$sexes_uc[sex], " curiosity - avg over last 5% of timesteps"))
-    print(mean(converted_data$cursity[sex, population,
-    (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
-    sink()
-  }
-}
-
-
-# parameters = params
-# number_of_runs = number_of_repeats
-# cursitylist = cursitylist
-# sdstbxnlist = sdstbxnlist
-# curhistlist = curhistlist
-# sylrepzlist = sylrepzlist
-
 
 min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
@@ -293,54 +191,89 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
 
 recolorized_simple_plots <- function (
   recolorize_style = "variance", # "clustering"
-  parameters = params, plot_info = plot_info, converted_data = "converted_data",
+  parameters = params, plot_info = plot_info,
   number_of_runs = number_of_repeats, cursitylist = cursitylist,
   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
   mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory
 ) {
-  subset_pool <- cursitylist[[]]
+  # subset_pool <- cursitylist[[]]
+  # if (typeof(cursitylist) == "list") {
+  #   thing <- length(cursitylist)
+  #   for (i in 1:thing) {
+  #     if (! (typeof(cursitylist[[i]]) == "list")) {
+  #       stuff <- dim(cursitylist[[i]])
+  #     } else {
+  #       stuff <- length(cursitylist[[i]])
+  #       recordings <- list()
+  #       for (j in 1:whatever) {
+  #         if (! (typeof (cursitylist[[i]][[j]]) == "list")) {
+  #           bemgcasrba <- dim(cursitylist[[i]][[j]])
+  #         }
+  #       }
+  #     }
+  #   }
+  #   output_from_this_monstrosity <- c(thing,stuff,)
+  # }
+
+  subset_pool <- array (0, c(4,2,length(cursitylist)))
+  # subset_pool <-
+  for (stuff in 1:length(cursitylist)) {
+    subset_pool[,,stuff] <- cursitylist[[stuff]][c(1,2,13,14),,(as.numeric(strsplit(parameters$runlength, "k")[[1]][1]) * (1000/parms$recordsimplifyfactor))]
+  }
+
   if (recolorize_style == "variance") {
     #
     #     highest_variance = [which(max(variance_among_subpopulations))],
     #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
-    subset_pool <- cursitylist[[1:50]]
-    cursity_mean <- cursitylist[[number_of_reps + 1]][sex, population, LAST_SLICE]
-    subset_output <- which (cursitylist[[1:50]][sex,population,LAST_SLICE] > cursity_mean)
+    variance_measures <- matrix(nrow = 2, ncol = 2, byrow = TRUE)
+    for (pop in 1:parameters$num_pop) {
+      for (sex in 1:2) {
+        variance_measures[sex,pop] <- var(subset_pool[sex,pop,1:parameters$number_of_reps])
+      }
+    }
+
+    thing <- which (variance_measures == max(variance_measures))
+    if (thing == 1) {thing <- c(1,1)} else if (thing == 2) {thing <- c(1,2)} else if (thing == 3) {thing <- c(2,1)} else if (thing == 4) {thing <- c(2,2)} else {stop("whoops")}
+    subset_output <- which(subset_pool[thing[1], thing[2], 1:parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
+
   } else if (recolorize_style == "clustering") {
-    #
-    #     highest_clustering_score
-    #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
-    subset_output <-
+    # #
+    # #     highest_clustering_score
+    # #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
+    # clustering_measures <- matrix(nrow = 4, ncol = 2, byrow = TRUE)
+    # for (pop in 1:parameters$num_pop) {
+    #   for (sex in 1:2) {
+    #     clustering_measures[sex,pop] <- max(hist(subset_pool[sex,pop,1:parameters$number_of_reps], breaks = seq(0, 1, 0.1), plot = F)$counts)
+    #     second_measure <- sort(hist(subset_pool[sex,pop,1:parameters$number_of_reps], breaks = seq(0, 1, 0.1), plot = F)$counts, index.return = TRUE)$ix
+    #     clustering_measures[sex + 2, pop] <-
+    #   }
+    # }
+
+    # thing <- which (clustering_measures == max(clustering_measures))
+    # if (thing == 1) {thing <- c(1,1)} else if (thing == 2) {thing <- c(1,2)} else if (thing == 3) {thing <- c(2,1)} else if (thing == 4) {thing <- c(2,2)} else {stop("whoops")}
+    # subset_output <- which(subset_pool[thing[1], thing[2], 1:parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
+    subset_output <- 1:50 # whatever... fix it only if it breaks
   } else {
     subset_output <- 1:50
   }
 
-# heres_that_spot_where_we_do_things_and_stuff <- list()
-#
-#   names_of_recolorizing_options <- list(
-
-
-#   )
-#
-#   if (recolorize != FALSE) {
-#     subset_output <- recolorize
-#   } else {
-#     subset_output <- 1:50
-#   }
-#
-  simple_plots(parameters = parameters, plot_info = plot_info, converted_data = "converted_data",
+  simple_plots(parameters = parameters, plot_info = plot_info,
                number_of_runs = number_of_repeats, cursitylist = cursitylist,
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, recolorize = subset_output)
 }
 
-simple_plots <- function(parameters, plot_info = plot_info, converted_data = converted_data,
+simple_plots <- function(parameters, plot_info = plot_info,
                          number_of_runs = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, recolorize = FALSE
                          ) {
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
 
+  if (recolorize != FALSE) {
+    saving_dir <- file.path(saving_dir, "recolorizedLineplots")
+    if (! (dir.exists (saving_dir))) {dir.create (saving_dir)}
+  }
   for(population in 1:parameters$num_pop) {
 
     if (recolorize != FALSE) {

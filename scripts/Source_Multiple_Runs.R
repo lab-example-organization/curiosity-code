@@ -639,12 +639,20 @@ archivesimfiles <- function (path, filename,
 }
 
 multi_runs <- function (shifting_curstart, paramssource,
-  dirdate, seednumber) {
+  dirdate, seednumber, redo = FALSE) {
+
 
   set.seed (seednumber + shifting_curstart)
 
   params <- yaml.load_file (file.path ("parameters", paramssource))
   number_of_reps <- as.numeric (params$number_of_reps)
+
+  if (redo != FALSE) {
+    source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+    return(figprodmultrun(specificsimnumber = subsetorsequence,
+      number_of_repeats = number_of_reps,
+      paramssource = paramssource, redo = TRUE))
+  }
 
   archivesimfiles (path = file.path ("source", "temp"),
     filename = paste0 (shifting_curstart,"_console_copy.txt"),
