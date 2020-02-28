@@ -42,18 +42,22 @@ somethingSomething <- array(c(
   "childBothLowInv",    "childFemHihInv",     "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
   "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2",    "childNoInvF3",       "childNoInvF4",
   "childNoInvF5",       "childNoInvF6",       "childNoInvF7",    "childNoInvF8",       "childNoInvF9",
-  "childNoInvF10",
+  "childNoInvF10", "childLateInvMalHih", "childLateInvMalLow", "childLateInvFemHih", "childLateInvFemLow",
+  "childLateInvBothHih", "childLateInvBothLow", "childLateSmolInvMalHih", "childLateSmolInvMalLow",  "childLateSmolInvFemHih",
+   "childLateSmolInvFemLow",
   3901, 4101, 4301, 4501, 4701,
   5101, 5301, 5501, 5701, 5901,
   6101, 6301, 6501, 6701, 6901,
   7101, 7301, 7501, 7701, 7901,
-  8101), c(21,2)
+  8101, 8301, 8501, 8701, 8901,
+  9101, 9301, 9501, 9701, 9901,
+  10101), c(31,2)
 )
 
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 
 # SEE? NUMBER 8.
-for (run in 1:length (somethingSomething[,1])) {
+for (run in 22:length (somethingSomething[,1])) {
   if (!(dir.exists(file.path(heatmapland, paste0("tenKfiveByFive_", somethingSomething[run,1]))))) {
     stop (paste0("Simulation ", somethingSomething[run,1], " is not in the directory. Stopping heatmap processing."))
   }

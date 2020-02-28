@@ -150,11 +150,11 @@ print_regex_num_range <- function (
             # 1X-4X
             if (zv[1,1] + 1 < zv[2,1]) {
                 # 1X where X < 9
-                if (as.numeric (zv[1,2]) < 9) {
+                if (zv[1,2] < 9) {
                     # append "[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4"
                     append (output_object, paste0 ("[", zv[1,2], "-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
                     # 2X where X > 0
-                    if (as.numeric (zv[2,2]) > 0) {
+                    if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
                         append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # otherwise 2X where X = 0
@@ -167,7 +167,7 @@ print_regex_num_range <- function (
                     # append "X_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4"
                     append (output_object, paste0 (zv[1,2], "_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
                     # 2X where X > 0
-                    if (as.numeric (zv[2,2]) > 0) {
+                    if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
                         append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # 2X where X = 0
@@ -179,11 +179,11 @@ print_regex_num_range <- function (
             # 1X-2X
             } else if (zv[1,1] + 1 == zv[2,1]) {
                 # 1X where X < 9
-                if (as.numeric (zv[1,2]) < 9) {
+                if (zv[1,2] < 9) {
                     # append "[X-9]_|*_2" ### "*_1[X-9]_|*_2"
                     append (output_object, paste0 ("[", zv[1,2], "-9]_|*_", zv[2,1]))
                     # 2X where X > 0
-                    if (as.numeric (zv[2,2]) > 0) {
+                    if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_1[X-9]_|*_2[0-X]_"
                         append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # otherwise 2X where X = 0
@@ -196,7 +196,7 @@ print_regex_num_range <- function (
                     # append "9_|*_2" ### "*_19_|*_2"
                     append (output_object, paste0 (zv[1,2], "_|*_", zv[2,1]))
                     # 2X where X > 0
-                    if (as.numeric (zv[2,2]) > 0) {
+                    if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_19_|*_2[0-X]_"
                         append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # 2X where X = 0
@@ -206,7 +206,7 @@ print_regex_num_range <- function (
                     }
                 }
             # 1X -1Y
-            } else if (as.numeric (zv[1,1]) == as.numeric(zv[2,1])) {
+            } else if (zv[1,1] == zv[2,1]) {
                 # append "[X-Y]_" ### "*_1[X-Y]_"
                 append (output_object, paste0 ("[", zv[1,2], "-", zv[2,2], "]_"))
             }
@@ -215,21 +215,21 @@ print_regex_num_range <- function (
             # append "1" ### "*_1"
             output_object <- append (output_object, paste0 (zv[1,1]))
             # 1XY-4ZA
-            if (zv[1,1] + 1 < as.numeric(zv[2,1])) {
+            if (zv[1,1] + 1 < zv[2,1]) {
                 # 1X where X < 9
-                if (as.numeric (zv[1,2]) < 9) {
+                if (zv[1,2] < 9) {
                     # append "X" ### "*_1X"
                     output_object <- append (output_object, paste0 (zv[1,2]))
                     # 1XY where Y < 9
-                    if (as.numeric (zv[1,3]) < 9) {
+                    if (zv[1,3] < 9) {
                         # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4"
-                        output_object <- append(output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", as.numeric(zv[1,2]) + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
+                        output_object <- append(output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
                         # 4Z where Z > 0
-                        if (as.numeric (zv[2,2]) > 0) {
+                        if (zv[2,2] > 0) {
                             # append "[0-(Z-1)][0-9]_|*_4Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z"
                             output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
                             # 4ZA where A > 0
-                            if (as.numeric (zv[2,3]) > 0) {
+                            if (zv[2,3] > 0) {
                                 # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z[0-A]_"
                                 output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
                             # 4ZA where A == 0
@@ -242,7 +242,7 @@ print_regex_num_range <- function (
                             # append "0" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_40"
                             output_object <- append (output_object, paste0 ("0"))
                             # 4ZA where A > 0
-                            if (as.numeric (zv[2,3]) > 0) {
+                            if (zv[2,3] > 0) {
                                 # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_40[0-A]_"
                                 output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
                             # 4ZA where A == 0
@@ -258,19 +258,19 @@ print_regex_num_range <- function (
             # 1XY-2ZA
             } else if (zv[1,1] + 1 == zv[2,1]) {
                 # 1XY where X is less than 9
-                if (as.numeric (zv[1,2]) < 9) {
+                if (zv[1,2] < 9) {
                     # append "X" ### "*_1X"
                     output_object <- append (output_object, paste0 (zv[1,2]))
                     #1XY where Y is less than 9
-                    if (as.numeric (zv[1,3]) < 9) {
+                    if (zv[1,3] < 9) {
                         # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_2" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_2"
                         output_object <- append (output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_", zv[2,1]))
                         # 2ZA where Z > 0
-                        if (as.numeric (zv[2,2]) > 0) {
+                        if (zv[2,2] > 0) {
                             # append "0[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z"
                             output_object <- append (output_object, paste0 ("0[0-9]_|*_", zv[2,1], "[1-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
                             # 2ZA where A > 0
-                            if (as.numeric (zv[2,3]) > 0) {
+                            if (zv[2,3] > 0) {
                                 # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z[0-A]_"
                                 output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
                             # 2ZA where A == 0
@@ -283,7 +283,7 @@ print_regex_num_range <- function (
                             # append "0" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20"
                             output_object <- append (output_object, paste0 ("0"))
                             # 2ZA where A > 0
-                            if (as.numeric (zv[2,3]) > 0) {
+                            if (zv[2,3] > 0) {
                                 # append "[0-A]_" ### *_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-A]_"
                                 output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
                             # 2ZA where A == 0
@@ -502,7 +502,7 @@ print_regex_num_range <- function (
                 # 12BC-13EF
                 } else if (zv[1,2] + 1 == zv[2,2]) {
                     # append "2B[C-9]_|*_12[B-9][0-9]_|*_13"
-                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[2,1], zv[2,2]))
                     # 13EF where E > 0
                     if (zv[2,3] > 0) {
                         # append "[0-(E-1)][0-9]_|*_15E"
@@ -565,7 +565,20 @@ print_regex_num_range <- function (
                     }
                 }
             }
-        } # else if (bigger than 4 digits?) {craaaap.}
+        } else if (length (zv[2,]) == 5) {
+          # append "1" ### "*_1"
+            output_object <- append (output_object, paste0 (zv[1,1]))
+            # 1XXXX-4XXXX
+            if (zv[1,1] + 1 < zv[2,1]) {
+
+            # 1XXXX-2XXXX
+            } else if (zv[1,1] + 1 == zv[2,1]) {
+
+            # 1XXXX-1YYYY
+            } else if (zv[1,1] == zv[2,1]) {
+
+            }
+        }
     return (paste(output_object, collapse = ""))
 }
 
@@ -678,7 +691,7 @@ extractmeans <- function(allrundirs,
       curhstmeans = curhstmeans
     )
   }
-  return(runmeans)
+  return(runmeans) # plugged into "extractedmeans" argument in makeheatmapfile function
 }
 
 makeheatmapfile <- function (
@@ -918,6 +931,12 @@ makeheatmapfile <- function (
         # }
       }
     }
+    # extractedmeans <- list(
+    #   1 - datanrepzlist <- array(0, c(2, 2, timespanchunks, number_of_reps))
+    #   datantbxnlist <- array(0, c((2 * 2), dim_source$sylnum, timespanchunks, number_of_reps))
+    #   3 - datansitylist <- array(0, c(14, 2, timespanchunks, number_of_reps))
+    #   datanhistlist <- array(0, c((2*2), (dim_source$num_pop * dim_source$one_pop_singers[1]), timespanchunks, number_of_reps))
+    # )
 
   #     print("and a five")
     # print(paste0("heatmap_array dimensions: ", dim(heatmap_array)))
