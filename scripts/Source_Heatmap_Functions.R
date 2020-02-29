@@ -142,38 +142,38 @@ print_regex_num_range <- function (
         # number of digits stops at 1
         if (length (zv[2,]) == 1) {
             # append "[1-2]_", where 1 is the first term and 2 is the second term ### "*_[1-2]_"
-            append (output_object, paste0 ("[", zv[1,1], "-", zv[2,1], "]_"))
+            output_object <- append (output_object, paste0 ("[", zv[1,1], "-", zv[2,1], "]_"))
         # number of digits stops at 2
         } else if (length (zv[2,]) == 2) {
             # append "1" ### "*_1"
-            append (output_object, paste0(zv[1,1]))
+            output_object <- append (output_object, paste0(zv[1,1]))
             # 1X-4X
             if (zv[1,1] + 1 < zv[2,1]) {
                 # 1X where X < 9
                 if (zv[1,2] < 9) {
                     # append "[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4"
-                    append (output_object, paste0 ("[", zv[1,2], "-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
+                    output_object <- append (output_object, paste0 ("[", zv[1,2], "-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
                     # 2X where X > 0
                     if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
-                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # otherwise 2X where X = 0
                     } else {
                         # append "0_" ###  ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_40_"
-                        append (output_object, "0_")
+                        output_object <- append (output_object, "0_")
                     }
                 # 1X where X = 9
                 } else {
                     # append "X_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4"
-                    append (output_object, paste0 (zv[1,2], "_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
+                    output_object <- append (output_object, paste0 (zv[1,2], "_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
                     # 2X where X > 0
                     if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
-                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # 2X where X = 0
                     } else {
                         # append "0_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_40_"
-                        append (output_object, "0_")
+                        output_object <- append (output_object, "0_")
                     }
                 }
             # 1X-2X
@@ -181,34 +181,34 @@ print_regex_num_range <- function (
                 # 1X where X < 9
                 if (zv[1,2] < 9) {
                     # append "[X-9]_|*_2" ### "*_1[X-9]_|*_2"
-                    append (output_object, paste0 ("[", zv[1,2], "-9]_|*_", zv[2,1]))
+                    output_object <- append (output_object, paste0 ("[", zv[1,2], "-9]_|*_", zv[2,1]))
                     # 2X where X > 0
                     if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_1[X-9]_|*_2[0-X]_"
-                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # otherwise 2X where X = 0
                     } else {
                         # append "0_" ###  ### "*_1[X-9]_|*_20_"
-                        append (output_object, "0_")
+                        output_object <- append (output_object, "0_")
                     }
                 # 1X where X = 9
                 } else {
                     # append "9_|*_2" ### "*_19_|*_2"
-                    append (output_object, paste0 (zv[1,2], "_|*_", zv[2,1]))
+                    output_object <- append (output_object, paste0 (zv[1,2], "_|*_", zv[2,1]))
                     # 2X where X > 0
                     if (zv[2,2] > 0) {
                         # append "[0-X]_" ### "*_19_|*_2[0-X]_"
-                        append (output_object, paste0 ("[0-", zv[2,2], "]_"))
+                        output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
                     # 2X where X = 0
                     } else {
                         # append "0_" ### "*_19_|*_20_"
-                        append (output_object, paste0("0_"))
+                        output_object <- append (output_object, paste0("0_"))
                     }
                 }
             # 1X -1Y
             } else if (zv[1,1] == zv[2,1]) {
                 # append "[X-Y]_" ### "*_1[X-Y]_"
-                append (output_object, paste0 ("[", zv[1,2], "-", zv[2,2], "]_"))
+                output_object <- append (output_object, paste0 ("[", zv[1,2], "-", zv[2,2], "]_"))
             }
         # number of digits stops at 3 ### at this point, we have output_object = "*_"
         } else if (length (zv[2,]) == 3) {
@@ -223,7 +223,7 @@ print_regex_num_range <- function (
                     # 1XY where Y < 9
                     if (zv[1,3] < 9) {
                         # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4"
-                        output_object <- append(output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
+                        output_object <- append (output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
                         # 4Z where Z > 0
                         if (zv[2,2] > 0) {
                             # append "[0-(Z-1)][0-9]_|*_4Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z"
@@ -340,7 +340,13 @@ print_regex_num_range <- function (
             # 1XXX-4XXX
             if (zv[1,1] + 1 < zv[2,1]) {
                 # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4"
-                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9][0-9]_|*_", zv[2,1]))
+                output_object # THIS IS WHERE YOU STOPPED
+                if (zv[1,2] == 9) {
+                  output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", "[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9][0-9]_|*_", zv[2,1]))
+                } else {
+                  output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9][0-9]_|*_", zv[2,1]))
+                }
+
                 # 4DEF where D > 0
                 if (zv[2,2] > 0) {
                     # append "[0-(D-1)][0-9][0-9]_|*_4D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D"
@@ -401,7 +407,11 @@ print_regex_num_range <- function (
             # 1XXX-2XXX
             } else if (zv[1,1] + 1 == zv[2,1]) {
                 # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2"
-                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_", zv[2,1]))
+                if (zv[1,2] == 9) {
+                  output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[2,1]))
+                } else {
+                  output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_", zv[2,1]))
+                }
                 # 2DEF where D > 0
                 if (zv[2,2] > 0) {
                     # append "[0-(D-1)][0-9][0-9]_|*_2D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D"
@@ -436,6 +446,7 @@ print_regex_num_range <- function (
                 # 2DEF where D == 0
                 } else if (zv[2,2] == 0) {
                     # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20"
+                    output_object <- append (output_object, "0")
                     # 2DEF where E > 0
                     if (zv[2,3] > 0) {
                         # append "[0-(E-1)][0-9]_|*_20E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
@@ -471,7 +482,12 @@ print_regex_num_range <- function (
                     # 12BC where B < 9
                     # 12BC where C < 9
                     # append "2B[C-9]_|*_12[B-9][0-9]_|*_1[(2+1)-(5-1)][0-9][0-9]_|*_15" ### "*_1"
-                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    if (zv[1,3] == 9) {
+                      output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    } else {
+                      output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
+                    }
+                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
                     # 15EF where E > 0
                     if (zv[2,3] > 0) {
                       # append "[0-(E-1)][0-9]_|*_15E"
@@ -570,7 +586,7 @@ print_regex_num_range <- function (
             output_object <- append (output_object, paste0 (zv[1,1]))
             # 1XXXX-4XXXX
             if (zv[1,1] + 1 < zv[2,1]) {
-
+              # 1
             # 1XXXX-2XXXX
             } else if (zv[1,1] + 1 == zv[2,1]) {
 
@@ -582,8 +598,13 @@ print_regex_num_range <- function (
     return (paste(output_object, collapse = ""))
 }
 
-extractvardirs <- function(home_path, filenamepattern) {
-  thing <- print_regex_num_range(filenamepattern)
+extractvardirs <- function(home_path, filenamepattern, prnr = TRUE) {
+  if (! (prnr == TRUE)) {
+    thing <- filenamepattern
+  } else {
+    thing <- print_regex_num_range(filenamepattern)
+  }
+
   variablestore_folderlist <- list.files(file.path(home_path), pattern = thing)
   # list.files(file.path(home_path), pattern = filenamepattern)
 

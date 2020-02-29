@@ -163,22 +163,23 @@ figprodmultrun <- function(specificsimnumber = 1, number_of_repeats,
                             sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                             mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory)
 
-  srcdir = file.path("scripts")
-  # file.names = dir(srcdir)[grep("Source", dir(srcdir))]
-  if (! (dir.exists (file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts")))) {
-    dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts"))
+  if (redo == FALSE) {
+    srcdir = file.path("scripts")
+    # file.names = dir(srcdir)[grep("Source", dir(srcdir))]
+    if (! (dir.exists (file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts")))) {
+      dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts"))
+    }
+    zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path(srcdir), T, 9, T)
+
+    parmdir = file.path("parameters")
+    # file.names = dir(parmdir)[grep("*.yaml", dir(parmdir))]
+    if (! (dir.exists (file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params")))) {
+      dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params"))
+    }
+    zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsFiles.zip"), file.path(parmdir), T, 9, T)
+
+    saveRDS(params, file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsSource.RData"))
   }
-  zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path(srcdir), T, 9, T)
-
-  parmdir = file.path("parameters")
-  # file.names = dir(parmdir)[grep("*.yaml", dir(parmdir))]
-  if (! (dir.exists (file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params")))) {
-    dir.create(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params"))
-  }
-  zipr(file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsFiles.zip"), file.path(parmdir), T, 9, T)
-
-  saveRDS(params, file.path(strsplit(multirun_folderlist[1], "/variable_store", )[[1]][1], "copy_of_params", "paramsSource.RData"))
-
   return (print (paste0 (specificsimnumber," - Exit Status: 0")))
 }
 
