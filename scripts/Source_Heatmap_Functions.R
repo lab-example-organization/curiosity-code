@@ -112,6 +112,8 @@ print_regex_num_range <- function (
 
     # Beginning vars to sort out
     first_term <- str_split(str_split(num_range, "-")[[1]][1], "")
+    copy_first_term <- first_term
+
     secnd_term <- str_split(str_split(num_range, "-")[[1]][2], "")
 
     # the first number is smaller than the second number.
@@ -125,6 +127,7 @@ print_regex_num_range <- function (
         first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
     }
 
+    if (first_term != copy_first_term) {}
     # Working number data structure
     # zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
     zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
@@ -157,7 +160,7 @@ print_regex_num_range <- function (
         digits <- digits - 1
         next
       } else {
-        output_object_start <- append (output_object_start, paste0 (paste0 (zv [1, c (1 : total_digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
+        output_object_start <- append (output_object_start, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
         output_object_start <- append (output_object_start, c (rep ("[0-9]", length_difference), "_|*_"))
       }
 
