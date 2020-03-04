@@ -103,7 +103,7 @@ print_regex_num_range <- function (
     ons_n_offs = "_"
 ) {
 
-    num_range = "9999-10300"
+    num_range = "000000000123456789-123456789000000000"
     ons_n_offs = "_"
 
     if (ons_n_offs != "_") {
@@ -127,15 +127,24 @@ print_regex_num_range <- function (
         first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
     }
 
-    if (first_term != copy_first_term) {}
+    if (paste(first_term[[1]], collapse = "") != paste(copy_first_term[[1]], collapse = "")) {leading_zeroes = TRUE}
     # Working number data structure
     # zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
     zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
 
     # substitute list calls for matrix calls
-    second_only <- which (zv [3, ] != zv [2, ])
-    the_nines <- which (zv [1, ] == 9)
-    the_zips <- which (zv [2, ] == 0)
+
+    # the_nines <- which (zv [1, ] == 9)
+    # the_zips <- which (zv [2, ] == 0)
+
+    thing
+
+    while (i < length(secnd_term[[1]])) {
+
+      i <- i + 1
+    }
+
+
 
     ### This function lives and breathes on "append" as the builder function;
     ### each step in the control flow below is slowly building the ending
@@ -146,31 +155,39 @@ print_regex_num_range <- function (
 
     # start with "*_"
     digits <- length (zv [2,])
-    output_object_start <- c ("*_")
-    output_object_split <- c ("*_")
+    output_object_stt <- c ("*_")
+    output_object_mid <- c ("*_")
     output_object_end <- c ("*_")
     total_digits <- digits
 
     while (digits > 0) {
-      # while_digits <- digits
+
       length_difference <- total_digits - digits
 
-      if (digits %in% the_nines) {
-        output_object_start <- append (output_object_start, paste0 (paste0 (zv [1, c (1 : digits)], collapse = ""),  "_|*_"))
-        digits <- digits - 1
-        next
+      if (zv [1, digits] == 9) {
+        if (leading_zeroes == TRUE) {
+          output_object_stt <- append (output_object_stt, paste0 (copy_first_term [[1]] [1 : digits], collapse = ""))
+          output_object_stt <- append (output_object_stt, c (rep ("[0-9]", length_difference), "_|*_"))
+        } else {
+          output_object_stt <- append (output_object_stt, paste0 (zv [1, c (1 : digits)], collapse = ""))
+          output_object_stt <- append (output_object_stt, c (rep ("[0-9]", length_difference), "_|*_"))
+        }
+
+        # digits <- digits - 1
+        # next # this is no longer how this function works
       } else {
-        output_object_start <- append (output_object_start, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
-        output_object_start <- append (output_object_start, c (rep ("[0-9]", length_difference), "_|*_"))
+        output_object_stt <- append (output_object_stt, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
+        output_object_stt <- append (output_object_stt, c (rep ("[0-9]", length_difference), "_|*_"))
       }
 
-      if (zv[2, digits] == 0) {
+      if () {}
+
+      if (zv [2, digits - 1] == 0) {
         output_object_end <- append (output_object_end, paste0 (zv [2, c (1 : )]))
       } else {
         output_object_end <- append (output_object_end, paste0 ())
       }
 
-      if () {}
 
       digits <- digits - 1
     }
