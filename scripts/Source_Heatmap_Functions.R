@@ -103,11 +103,11 @@ print_regex_num_range <- function (
     ons_n_offs = "_"
 ) {
 
-    num_range = "000000000123456789-123456789000000000"
+    num_range = "1111-12345"
     ons_n_offs = "_"
 
     if (ons_n_offs != "_") {
-      thing <- length (ons_n_offs)
+      bigIsSmallAt <- length (ons_n_offs)
     }
 
     # Beginning vars to sort out
@@ -127,7 +127,7 @@ print_regex_num_range <- function (
         first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
     }
 
-    if (paste(first_term[[1]], collapse = "") != paste(copy_first_term[[1]], collapse = "")) {leading_zeroes = TRUE}
+    if (paste(first_term[[1]], collapse = "") != paste(copy_first_term[[1]], collapse = "")) {leading_zeroes = TRUE} else {leading_zeroes = FALSE}
     # Working number data structure
     # zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
     zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
@@ -137,10 +137,13 @@ print_regex_num_range <- function (
     # the_nines <- which (zv [1, ] == 9)
     # the_zips <- which (zv [2, ] == 0)
 
-    thing
-
+    bigIsSmallAt <- c()
+    i <- 1
     while (i < length(secnd_term[[1]])) {
-
+      if (zv[1,i] < zv[2,i]) {
+        bigIsSmallAt <- i
+        break
+      }
       i <- i + 1
     }
 
@@ -155,12 +158,15 @@ print_regex_num_range <- function (
 
     # start with "*_"
     digits <- length (zv [2,])
-    output_object_stt <- c ("*_")
-    output_object_mid <- c ("*_")
-    output_object_end <- c ("*_")
+    # output_object_stt <- c ("*_")
+    # output_object_mid <- c ("*_")
+    # output_object_end <- c ("*_")
+    output_object_stt <- c ()
+    output_object_mid <- c ()
+    output_object_end <- c ()
     total_digits <- digits
 
-    while (digits > 0) {
+    while (digits >= bigIsSmallAt) {
 
       length_difference <- total_digits - digits
 
@@ -176,16 +182,53 @@ print_regex_num_range <- function (
         # digits <- digits - 1
         # next # this is no longer how this function works
       } else {
-        output_object_stt <- append (output_object_stt, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
-        output_object_stt <- append (output_object_stt, c (rep ("[0-9]", length_difference), "_|*_"))
+        if (length_difference < 1) {
+          output_object_stt <- append (output_object_stt, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
+          output_object_stt <- append (output_object_stt, paste0 (paste0 (rep ("[0-9]", length_difference), collapse = ""), "_|*_"))
+        } else {
+          output_object_stt <- append (output_object_stt, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits] + 1, "-9]"))
+          output_object_stt <- append (output_object_stt, paste0 (paste0 (rep ("[0-9]", length_difference), collapse = ""), "_|*_"))
+        }
       }
 
-      if () {}
+      if (zv [3, bigIsSmallAt] > 1) {
+        #
+      } else if (zv [3, bigIsSmallAt] == 1) {
+        #
+      } else if (zv [3, bigIsSmallAt] < 1) {
+        #
+      }
 
-      if (zv [2, digits - 1] == 0) {
-        output_object_end <- append (output_object_end, paste0 (zv [2, c (1 : )]))
-      } else {
-        output_object_end <- append (output_object_end, paste0 ())
+      if (zv [2, digits] == 0) {
+        output_object_end <- append (output_object_end, paste0 (zv [2, c (1 : digits)], collapse = ""))
+      } else if (zv [2, digits] == 1) {
+        if (length_difference < 1) {
+          output_object_end <- append (output_object_end, paste0 (paste0 (zv [2, c (1 : digits - 1)], collapse = ""), "[0-", zv[2,digits], "]"))
+        } else {
+          if (digits != bigIsSmallAt) {
+            output_object_end <- append (output_object_end, paste0 (paste0 (zv [2, c (1 : digits - 1)], collapse = ""), "0", rep ("[0-9]", length_difference)))
+          } else {
+            # if (zv[3,digits] < 1) {
+            #   # So... somehow even though the second number is bigger, and the digit currently being looked at is the position where the second number first shows itself to be bigger than the first,
+            #   # but there is less than a single digit of difference between the numbers...
+            #   digits <- digits - 1
+            #   next
+            # } else
+            if (zv[3,digits] == 1) {
+              #
+              output_object_end <- append (output_object_end, paste0 (paste0 (zv [2, c (1 : digits - 1)], collapse = ""), "0", rep ("[0-9]", length_difference)))
+            } else { # if (zv[3,digits] > 1)
+              #
+            }
+            output_object_end <- append (output_object_end, paste0 (paste0 (zv [2, c (1 : digits - 1)], collapse = ""), "0", rep ("[0-9]", length_difference)))
+          }
+        }
+      } else if (zv [2, digits] > 1) {
+        if (length_difference < 1) {
+          output_object_end <- append (output_object_end, paste0 (paste0 (zv [2, c (1 : digits - 1)], collapse = ""), "[0-", zv[2,digits], "]", rep("[0-9]", length_difference), collapse = ""))
+        } else if (length_difference < total_digits - 1) {
+          output_object_end <- append (output_object_end, paste0 (paste0 (zv [2, c (1 : digits - 1)], collapse = ""), "[0-", zv[2,digits] - 1, "]", rep("[0-9]", length_difference), collapse = ""))
+        }
       }
 
 
@@ -195,10 +238,7 @@ print_regex_num_range <- function (
     if (zv[3, 1] >= 0) {}
       #
     output_object <- append (output_object, paste0 ())
-    if (TRUE %in% c(zv[4,] == 1)) {}
-      #
-    if (TRUE %in% c(zv[5,] == 1)) {}
-      #
+
 
     # number of digits stops at 1
     if (length (zv[2,]) == 1) {
@@ -661,12 +701,12 @@ print_regex_num_range <- function (
 
 extractvardirs <- function(home_path, filenamepattern, prnr = TRUE) {
   if (! (prnr == TRUE)) {
-    thing <- filenamepattern
+    bigIsSmallAt <- filenamepattern
   } else {
-    thing <- print_regex_num_range(filenamepattern)
+    bigIsSmallAt <- print_regex_num_range(filenamepattern)
   }
 
-  variablestore_folderlist <- list.files(file.path(home_path), pattern = thing)
+  variablestore_folderlist <- list.files(file.path(home_path), pattern = bigIsSmallAt)
   # list.files(file.path(home_path), pattern = filenamepattern)
 
   return(variablestore_folderlist)
@@ -708,10 +748,10 @@ extractmeans <- function(allrundirs,
 
   # reordering the elements of the directory to line up right
   if (!(ordering)) {
-    thing <- sapply(1:number_of_runs, function(x)
+    bigIsSmallAt <- sapply(1:number_of_runs, function(x)
     str_split(allrundirs[x], "_")[[1]][2])
 
-    allrundirs <- allrundirs[str_order(thing)]
+    allrundirs <- allrundirs[str_order(bigIsSmallAt)]
   } else {
     allrundirs <- allrundirs[ordering]
   }
@@ -835,16 +875,16 @@ makeheatmapfile <- function (
         for(first_dimension in 1:biassize) { # malez2
           # placeholder <- array(rep(0,biassize * biassize * 8))
           # tally <- first_dimension + biassize*(second_dimension - 1) + biassize*biassize*(third_dimension - 1)
-          # thing <- length (extractedmeans [[1]][[1]][1,1,])
+          # bigIsSmallAt <- length (extractedmeans [[1]][[1]][1,1,])
           # sumstats <- c (
-            # extractedmeans [[tally]]$curlvlmeans [1,1,thing],
-            # extractedmeans [[tally]]$curlvlmeans [1,2,thing],
-            # extractedmeans [[tally]]$curlvlmeans [2,1,thing],
-            # extractedmeans [[tally]]$curlvlmeans [2,2,thing],
-            # extractedmeans [[tally]]$sylrepmeans [1,1,thing],
-            # extractedmeans [[tally]]$sylrepmeans [1,2,thing],
-            # extractedmeans [[tally]]$sylrepmeans [2,1,thing],
-            # extractedmeans [[tally]]$sylrepmeans [2,2,thing]
+            # extractedmeans [[tally]]$curlvlmeans [1,1,bigIsSmallAt],
+            # extractedmeans [[tally]]$curlvlmeans [1,2,bigIsSmallAt],
+            # extractedmeans [[tally]]$curlvlmeans [2,1,bigIsSmallAt],
+            # extractedmeans [[tally]]$curlvlmeans [2,2,bigIsSmallAt],
+            # extractedmeans [[tally]]$sylrepmeans [1,1,bigIsSmallAt],
+            # extractedmeans [[tally]]$sylrepmeans [1,2,bigIsSmallAt],
+            # extractedmeans [[tally]]$sylrepmeans [2,1,bigIsSmallAt],
+            # extractedmeans [[tally]]$sylrepmeans [2,2,bigIsSmallAt]
           # )
           # this part might not work if the population of
           # disinterest continues to be the final addition
@@ -1027,16 +1067,16 @@ makeheatmapfile <- function (
         for(first_dimension in 1:biassize) { # malez2
 
           tally <- first_dimension + biassize*(second_dimension - 1) + biassize*biassize*(third_dimension - 1)
-          thing <- length (extractedmeans [[1]][[1]][1,1,])
+          bigIsSmallAt <- length (extractedmeans [[1]][[1]][1,1,])
           sumstats <- c (
-            extractedmeans[[tally]][[3]][1,1,thing],
-            extractedmeans[[tally]][[3]][1,2,thing],
-            extractedmeans[[tally]][[3]][2,1,thing],
-            extractedmeans[[tally]][[3]][2,2,thing],
-            extractedmeans[[tally]][[1]][1,1,thing],
-            extractedmeans[[tally]][[1]][1,2,thing],
-            extractedmeans[[tally]][[1]][2,1,thing],
-            extractedmeans[[tally]][[1]][2,2,thing]
+            extractedmeans[[tally]][[3]][1,1,bigIsSmallAt],
+            extractedmeans[[tally]][[3]][1,2,bigIsSmallAt],
+            extractedmeans[[tally]][[3]][2,1,bigIsSmallAt],
+            extractedmeans[[tally]][[3]][2,2,bigIsSmallAt],
+            extractedmeans[[tally]][[1]][1,1,bigIsSmallAt],
+            extractedmeans[[tally]][[1]][1,2,bigIsSmallAt],
+            extractedmeans[[tally]][[1]][2,1,bigIsSmallAt],
+            extractedmeans[[tally]][[1]][2,2,bigIsSmallAt]
           )
           # print(paste(length(sumstats)))
           # this part might not work if the population of
@@ -1311,7 +1351,7 @@ individualfigures <- function (
     )
   }
 
-# png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+# png (filename = "somebigIsSmallAt.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
 
 
@@ -1410,8 +1450,8 @@ individualfigures <- function (
       if (!(is.null(dimnames(temphtmparray)))) {
         temphtmpdimensions <- dimnames(temphtmparray)
         temptemp <- vector(mode = "character", length = length(temphtmpdimensions))
-        for (thething in 1:length(temphtmpdimensions[[1]])) {
-          temptemp[thething] <- str_extract_all(temphtmpdimensions[[1]][thething], "[0123456789|0123456789.0123456789]*-[0123456789|0123456789.0123456789]*")
+        for (thebigIsSmallAt in 1:length(temphtmpdimensions[[1]])) {
+          temptemp[thebigIsSmallAt] <- str_extract_all(temphtmpdimensions[[1]][thebigIsSmallAt], "[0123456789|0123456789.0123456789]*-[0123456789|0123456789.0123456789]*")
         }
 
 
@@ -1718,7 +1758,7 @@ combineeditsingles <- function (
         #                 "_measure_", "low",
         #                 "_background.png")))
           # This is where we edit the stuff we worked on!
-          # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {stop("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
+          # There need to be ways to access the files made in the first half, and it should also contain everybigIsSmallAt within another control structure: "if(files exist in folder) {} else {stop("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
 
         image_write(final_set, path = file.path(heatmap_sourcefolder, folderbias[1], paste0("BothSexes_", subpopulation[metricssexpop], "_measure_", inheritancestyle, "_", stylesforotherpop[otherpopstyle], "_background.png")))
       }
@@ -1811,7 +1851,7 @@ combineeditsingles <- function (
         #                 "_measure_", "low",
         #                 "_background.png")))
           # This is where we edit the stuff we worked on!
-          # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
+          # There need to be ways to access the files made in the first half, and it should also contain everybigIsSmallAt within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
 
       } else {
 
@@ -1898,7 +1938,7 @@ combineeditsingles <- function (
       #                 "_measure_", "low",
       #                 "_background.png")))
         # This is where we edit the stuff we worked on!
-        # There need to be ways to access the files made in the first half, and it should also contain everything within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
+        # There need to be ways to access the files made in the first half, and it should also contain everybigIsSmallAt within another control structure: "if(files exist in folder) {} else {print("Great Job, oh wait this is an error message. Um, you should make sure the function is pointed at the right files. Are the right ones perhaps absent?")}"
 
     } else {
 
@@ -1933,7 +1973,7 @@ combineeditsingles <- function (
 # ) {
 #   if (length (comp_categories) != number_of_comparisons) {stop ("seems to be more or less comp_categories than number_of_comparisons")}
 #   # "variance" and "lineplots" for example
-#   # anything with lineplots:
+#   # anybigIsSmallAt with lineplots:
 #   if ("variance" %in% comp_categories) {
 #     file_path <- file.path ("results", "VarianceHeatmaps")
 #   }
@@ -1983,8 +2023,8 @@ stackmultiples <- function (
     stacktwo <- CombineSingles(inheritance, 2, metsxpop, pattern)
     # stackone <- image_read(file.path(heatmap_sourcefolder, malebias, curstartpatterncontainer[pattern]), paste0(sxmtpopcontainer[metsxpop], "_", whichpopbias[1], ".png"))
     # stacktwo <- image_read(file.path(heatmap_sourcefolder, femsbias, curstartpatterncontainer[pattern]), paste0(sxmtpopcontainer[metsxpop], "_", whichpopbias[2], ".png"))
-    thing <- image_append(c(stackone, stacktwo), stack = TRUE)
-    image_write(thing, path = file.path(output_folder, curstartpatterncontainer[pattern]))
+    bigIsSmallAt <- image_append(c(stackone, stacktwo), stack = TRUE)
+    image_write(bigIsSmallAt, path = file.path(output_folder, curstartpatterncontainer[pattern]))
   }
 
   # stackone <- image_read(file.path(heatmap_sourcefolder, malebias, curstartpatterncontainer[pattern]),)
