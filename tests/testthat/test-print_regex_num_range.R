@@ -7,7 +7,7 @@ context('curiosity')
 
 test_that('print_regex_num_range errors correctly thrown', {
   # This shouldn't throw any errors.
-  expect_silent(print_regex_num_range("0-1"))
+  expecct_equal(print_regex_num_range("0-1"))
 
   # This should throw an error since the second element is bigger than the first element.
   expect_error(print_regex_num_range("11-10"),

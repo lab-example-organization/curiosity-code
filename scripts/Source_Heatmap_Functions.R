@@ -102,9 +102,9 @@ print_regex_num_range <- function (
     num_range = "0000-0001",
     ons_n_offs = "_"
 ) {
-
-    num_range = "10101-10300"
-    ons_n_offs = "_"
+    print("debug 1")
+    # num_range = "10101-10150"
+    # ons_n_offs = "_"
 
     if (ons_n_offs != "_") {
       thing <- length (ons_n_offs)
@@ -127,7 +127,7 @@ print_regex_num_range <- function (
         first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
     }
 
-    if (paste(first_term[[1]], collapse = "") != paste(copy_first_term[[1]], collapse = "")) {leading_zeroes = TRUE} else {leading_zeroes = FALSE}
+    if (paste(first_term[[1]], collapse = "") != paste(copy_first_term[[1]], collapse = "")) {leading_zeroes = length(first_term[[1]]) - length (copy_first_term[[1]])} else {leading_zeroes = FALSE}
 
     zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
 
@@ -153,8 +153,8 @@ print_regex_num_range <- function (
       while (thing == 1) {
 
         if (zv [1, digits] == 9) {
-          if (leading_zeroes == TRUE) {
-            output_object_stt <- append (output_object_stt, c (copy_first_term [[1]] [1 : digits]))
+          if (leading_zeroes != FALSE) {
+            output_object_stt <- append (output_object_stt, c (as.numeric(copy_first_term [[1]] [1 : digits - leading_zeroes])))
             if (length_difference != 0) {
               output_object_stt <- append (output_object_stt, c (rep ("[0-9]", length_difference)))
             }
@@ -166,8 +166,12 @@ print_regex_num_range <- function (
           }
 
         } else {
-          if (length_difference < 1) {
-            output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits], "-9]"))
+          if (digits == total_digits) {
+            if (leading_zeroes != FALSE) {
+              output_object_stt <- append (output_object_stt, c (as.numeric(copy_first_term [[1]] [1 : (digits - leading_zeroes - 1)]), "[", zv [1, digits], "-9]"))
+            } else {
+              output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits], "-9]"))
+            }
             if (length_difference != 0) { # why is this even here
               output_object_stt <- append (output_object_stt, rep ("[0-9]", length_difference))
             }
@@ -180,7 +184,19 @@ print_regex_num_range <- function (
                 break
               }
             } else {
-              output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits] + 1, "-9]"))
+              if (leading_zeroes != FALSE) {
+                if ((digits - leading_zeroes - 1) > 0) {
+                  output_object_stt <- append (output_object_stt, c (as.numeric(copy_first_term [[1]] [1 : (digits - leading_zeroes - 1)]), "[", zv [1, digits] + 1, "-9]"))
+                } else {
+                  output_object_stt <- append (output_object_stt, c ("[", zv [1, digits] + 1, "-9]"))
+                }
+              } else {
+                if (digits == bigStartsAt) {
+                  output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits] + 1, "-", zv [2, digits] - 1, "]"))
+                } else {
+                  output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits] + 1, "-9]"))
+                }
+              }
             }
             if (length_difference != 0) {
               output_object_stt <- append (output_object_stt, rep ("[0-9]", length_difference))
@@ -190,6 +206,14 @@ print_regex_num_range <- function (
 
         thing <- thing + 2
       }
+
+
+
+
+
+
+
+
 
       stuff <- 1
       while (stuff == 1) {
@@ -253,14 +277,21 @@ print_regex_num_range <- function (
         }
       }
 
-      if (digits > 1) {
+
+
+      if (digits > 3) {
         output_object_stt <- append (output_object_stt, "_|*_")
+      } else {
+        output_object_stt <- append (output_object_stt, "_")
       }
 
       digits <- digits - 1
 
-      output_object <- paste(output_object_stt, output_object_end, collapse = "")
     }
+
+
+
+    output_object <- c(output_object_stt, output_object_end)
 
     return (paste(output_object, collapse = ""))
 }
