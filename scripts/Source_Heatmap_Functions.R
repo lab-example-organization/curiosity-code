@@ -215,22 +215,22 @@ print_regex_num_range <- function (
 
 
 
-      stuff <- 1
+      stuff <- zv[3,digits] > 0
       while (stuff == 1) {
         if (digits == 1) {break}
         if (zv [2, digits] == 0) {
-          # output_object_end <- append (output_object_end, c (zv [2, c (1 : digits)]))
-          # if (length_difference != 0) {
-          #   output_object_end <- append (output_object_end, c (rep ("0", length_difference)))
+          # if (digits == total_digits) {
+          #   output_object_end <- append (output_object_end, c (zv [2, c (1 : digits)]))
+            output_object_end <- append (output_object_end, rep ("0", length_difference))
           # }
-          break
+          # break
         } else if (zv [2, digits] == 1) {
-          if (length_difference < 1) {
+          if (digits == total_digits) {
             output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "[0-", zv[2,digits], "]"))
             if (length_difference != 0) {
                 output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
               }
-          } else {
+          } else { # if digit of second number is not in the ONES place, and Is Equal to 1
             if (digits != bigStartsAt) {
               output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "0"))
               if (length_difference != 0) {
@@ -253,24 +253,27 @@ print_regex_num_range <- function (
             }
           }
         } else if (zv [2, digits] > 1) {
-          if (length_difference < 1) {
+          if (digits == total_digits) {
             output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "[0-", zv[2,digits], "]"))
             if (length_difference != 0) {
               output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
             }
-          } else if (length_difference < total_digits - 1) { # if digits > 1
-            if (digits <= bigStartsAt) {
-              break
-            } else {
+          } else if (digits == 1) { # if digits > 1
+            if (digits < bigStartsAt) {
+              output_object_end <- append (output_object_end, c (zv [2, 1 : digits]))
+
+            } else if (digits == bigStartsAt) {
               output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "[0-", zv[2,digits] - 1, "]"))
-            }
+
+            } #else {
+            # }
             if (length_difference != 0) {
               output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
             }
           }
         }
         stuff <- stuff + 1
-        if (digits > 3) {
+        if (digits >= bigStartsAt) {
           output_object_end <- append (output_object_end, "_|*_")
         } else {
           output_object_end <- append (output_object_end, "_")
@@ -279,7 +282,7 @@ print_regex_num_range <- function (
 
 
 
-      if (digits > 3) {
+      if (digits >= bigStartsAt) {
         output_object_stt <- append (output_object_stt, "_|*_")
       } else {
         output_object_stt <- append (output_object_stt, "_")
