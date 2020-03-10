@@ -103,7 +103,7 @@ print_regex_num_range <- function (
     ons_n_offs = "_"
 ) {
 
-    num_range = "1917-2020"
+    # num_range = "1917-2020"
     # ons_n_offs = "_"
 
     if (ons_n_offs != "_") {
@@ -307,7 +307,7 @@ print_regex_num_range <- function (
 
     output_object <- c(output_object_stt, output_object_end)
 
-    print(paste(output_object, collapse = ""))
+    # print(paste(output_object, collapse = ""))
 
     return (paste(output_object, collapse = ""))
 }
