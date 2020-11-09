@@ -162,8 +162,7 @@ makedocnamez <- function (scmin, scmax, simnumber,
 
 restart_from_save <- function (
   parameters, # "params" in multi_runs
-  inputpattern
-) {
+  inputpattern) {
 
   if (typeof (inputpattern) != "character") {
     stop ("input pattern must be data type 'string'")
@@ -209,8 +208,7 @@ invasion_parameters_curiosity <- function (
   ips = invpopsize,
   itv = invtraitvalue,
   curiosity_container = curiosity_level,
-  someparameters = simparams
-) {
+  someparameters = simparams) {
 
   ifelse (ip == "focal", population <- 1, population <- 2)
 
@@ -258,8 +256,7 @@ invasion_parameters_sylrep <- function (
   ips = invpopsize,
   itv = invtraitvalue,
   sylrep_container = sylreps,
-  someparameters = simparams
-) {
+  someparameters = simparams) {
 
   ifelse (ip == 'focal', population <- 1, population <- 2)
 
@@ -385,7 +382,8 @@ life_cycle <- function (
   number_sylls_probability_level, standdev, curinh_style,
   recordingsimpfact, one_pop_singers = c(10,10), curinhproportion,
   directorydate, invasion, invpopsize, invstyle, invpop, invsex,
-  invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE) {
+  invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE,
+  mate_selection_type = FALSE) {
 
   docnamez <- makedocnamez (
     scmin = scmin, scmax = scmax, simnumber = simnumber, runlength = runlength,
@@ -403,7 +401,8 @@ life_cycle <- function (
     one_pop_singers = one_pop_singers, curlearnprob = curinh_value,
     learnprob = c (vertoblearn[2], vertoblearn[1]),
     randlearnprob = c (vertoblearn[4], vertoblearn[3]),
-    stand.dev = standdev, curinhproportion = curinhproportion
+    stand.dev = standdev, curinhproportion = curinhproportion,
+    mate_selection_type = mate_selection_type
   )
 
   ##### Timestep Data Object (TDO)
@@ -639,7 +638,7 @@ archivesimfiles <- function (path, filename,
 }
 
 multi_runs <- function (shifting_curstart, paramssource,
-  dirdate, seednumber, redo = FALSE) {
+  dirdate, seednumber, recolorize = FALSE) {
 
 
   set.seed (seednumber + shifting_curstart)
@@ -647,37 +646,7 @@ multi_runs <- function (shifting_curstart, paramssource,
   params <- yaml.load_file (file.path ("parameters", paramssource))
   number_of_reps <- as.numeric (params$number_of_reps)
 
-  if (redo != FALSE) {
-    source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-    return(figprodmultrun(specificsimnumber = subsetorsequence,
-      number_of_repeats = number_of_reps,
-      paramssource = paramssource, redo = TRUE))
-  }
-
-  archivesimfiles (path = file.path ("source", "temp"),
-    filename = paste0 (shifting_curstart,"_console_copy.txt"),
-    archive = TRUE, new_dir = F)
-  archivesimfiles (path = file.path ("source", "temp"),
-    filename = paste0 (shifting_curstart,"_sim_data.txt"),
-    archive = TRUE, new_dir = F)
-
-  # This wrapped up the restart_from_save function,
-  # so that life_cycle has last-run data as an accessible object
-  # lastrun_init <- array(0, c(1,1,1,number_of_reps))
-
-  lastrun_init <- list()
-
-  if (params$lastruninit) {
-    if (length (params$lastrunid) > 1) {
-      lastrun_init <- restart_from_save (parameters = params,
-        inputpattern = params$lastrunid [shifting_curstart])
-    } else {
-      lastrun_init <- restart_from_save (parameters = params,
-        inputpattern = params$lastrunid)
-    }
-  }
-
-  for (rep_number in 1 : number_of_reps) {
+  if (recolorize != FALSE) {
 
     if (params$indrunredo == T) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
@@ -686,75 +655,118 @@ multi_runs <- function (shifting_curstart, paramssource,
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
       singleormixture <- params$curinhdistribution
     }
+    print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file - provided that the multirun arg 'recolorize' == TRUE")
+    source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+    return(figprodmultrun(specificsimnumber = subsetorsequence,
+      number_of_repeats = number_of_reps,
+      paramssource = paramssource, recolorize = TRUE))
 
-    if (length(params$curinh_pattern) != 1) {
-      curinh_binary <- params$curinh_pattern[shifting_curstart]
-    } else {
-      curinh_binary <- params$curinh_pattern
+  } else {
+    archivesimfiles (path = file.path ("source", "temp"),
+      filename = paste0 (shifting_curstart,"_console_copy.txt"),
+      archive = TRUE, new_dir = F)
+    archivesimfiles (path = file.path ("source", "temp"),
+      filename = paste0 (shifting_curstart,"_sim_data.txt"),
+      archive = TRUE, new_dir = F)
+
+    # This wrapped up the restart_from_save function,
+    # so that life_cycle has last-run data as an accessible object
+    # lastrun_init <- array(0, c(1,1,1,number_of_reps))
+
+    lastrun_init <- list()
+
+    if (params$lastruninit) {
+      if (length (params$lastrunid) > 1) {
+        lastrun_init <- restart_from_save (parameters = params,
+          inputpattern = params$lastrunid [shifting_curstart])
+      } else {
+        lastrun_init <- restart_from_save (parameters = params,
+          inputpattern = params$lastrunid)
+      }
     }
 
-    if (rep_number == 1) {
+    for (rep_number in 1 : number_of_reps) {
 
-      sink(file = file.path(
-          "source", "temp", paste0(subsetorsequence,"_sim_data.txt")
-        ), append = FALSE)
-      print("/please/ignore/this/line/like/you/always/do")
-      sink()
+      if (params$indrunredo == T) {
+        subsetorsequence <- params$simnumberstart [shifting_curstart]
+        singleormixture <- params$curinhdistribution [shifting_curstart]
+      } else {
+        subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+        singleormixture <- params$curinhdistribution
+      }
 
-      # file.create (file.path ("source", "temp", paste0 (
-      #   shifting_curstart,"_sim_data.txt")))
+      if (length(params$curinh_pattern) != 1) {
+        curinh_binary <- params$curinh_pattern[shifting_curstart]
+      } else {
+        curinh_binary <- params$curinh_pattern
+      }
+
+      if (rep_number == 1) {
+
+        sink(file = file.path(
+            "source", "temp", paste0(subsetorsequence,"_sim_data.txt")
+          ), append = FALSE)
+        print("/please/ignore/this/line/like/you/always/do")
+        sink()
+
+        # file.create (file.path ("source", "temp", paste0 (
+        #   shifting_curstart,"_sim_data.txt")))
+      }
+
+      life_cycle(
+        scmin = c (
+          params$curstarts [[shifting_curstart]]$scmin [1],
+          params$curstarts [[shifting_curstart]]$scmin [2],
+          params$curstarts [[shifting_curstart]]$scmin [3],
+          params$curstarts [[shifting_curstart]]$scmin [4]),
+        scmax = c(
+          params$curstarts [[shifting_curstart]]$scmax [1],
+          params$curstarts [[shifting_curstart]]$scmax [2],
+          params$curstarts [[shifting_curstart]]$scmax [3],
+          params$curstarts [[shifting_curstart]]$scmax [4]),
+        simnumber = subsetorsequence,
+        # simnumber = params$simnumberstart + (shifting_curstart - 1),
+        runlength = params$runlength,
+        syllearnstyle = params$syllearnstyle,
+        vertoblearn = c(
+          params$vertoblearn$vertical$learn,
+          params$vertoblearn$vertical$invent,
+          params$vertoblearn$oblique$learn,
+          params$vertoblearn$oblique$invent),
+        syldist = params$syldist,
+        curinh_value = params$curinh_value,
+        number_populations = params$num_pop,
+        population_size = params$pop_size,
+        syllable_number = params$sylnum,
+        number_sylls_probability_level = params$num_sylls_per_prob_lvl,
+        standdev = as.numeric(params$standard_deviation),
+        curinh_style = curinh_binary,
+        recordingsimpfact = params$recordsimplifyfactor,
+        one_pop_singers = params$one_pop_singers,
+        curinhproportion = singleormixture, # only used if curinh_pattern = 5
+        directorydate = dirdate,
+        invasion = params$traitinvasion,
+        invktmstps = params$invasionthoutmstps,
+        invpopsize = params$invasionpopsize,
+        invstyle = params$invasionstyle,
+        invpop = params$invasionpop,
+        invsex = params$invasionsex,
+        invtraitvalue = params$invasiontraitvalue,
+        initfromlastrun = params$lastruninit,
+        lastrunobject = lastrun_init[[rep_number]],
+        mate_selection_type = params$mate_selection_type
+        # lastrunobject = lastrun_init[, , , rep_number]
+      )
+      print(paste0("Replicate Run # ",
+        rep_number, ", done at: ",
+        (format(Sys.time(), "%F-%H%M%S"))))
     }
 
-    life_cycle(
-      scmin = c (
-        params$curstarts [[shifting_curstart]]$scmin [1],
-        params$curstarts [[shifting_curstart]]$scmin [2],
-        params$curstarts [[shifting_curstart]]$scmin [3],
-        params$curstarts [[shifting_curstart]]$scmin [4]),
-      scmax = c(
-        params$curstarts [[shifting_curstart]]$scmax [1],
-        params$curstarts [[shifting_curstart]]$scmax [2],
-        params$curstarts [[shifting_curstart]]$scmax [3],
-        params$curstarts [[shifting_curstart]]$scmax [4]),
-      simnumber = subsetorsequence,
-      # simnumber = params$simnumberstart + (shifting_curstart - 1),
-      runlength = params$runlength,
-      syllearnstyle = params$syllearnstyle,
-      vertoblearn = c(
-        params$vertoblearn$vertical$learn,
-        params$vertoblearn$vertical$invent,
-        params$vertoblearn$oblique$learn,
-        params$vertoblearn$oblique$invent),
-      syldist = params$syldist,
-      curinh_value = params$curinh_value,
-      number_populations = params$num_pop,
-      population_size = params$pop_size,
-      syllable_number = params$sylnum,
-      number_sylls_probability_level = params$num_sylls_per_prob_lvl,
-      standdev = as.numeric(params$standard_deviation),
-      curinh_style = curinh_binary,
-      recordingsimpfact = params$recordsimplifyfactor,
-      one_pop_singers = params$one_pop_singers,
-      curinhproportion = singleormixture, # only used if curinh_pattern = 5
-      directorydate = dirdate,
-      invasion = params$traitinvasion,
-      invktmstps = params$invasionthoutmstps,
-      invpopsize = params$invasionpopsize,
-      invstyle = params$invasionstyle,
-      invpop = params$invasionpop,
-      invsex = params$invasionsex,
-      invtraitvalue = params$invasiontraitvalue,
-      initfromlastrun = params$lastruninit,
-      lastrunobject = lastrun_init[[rep_number]]
-      # lastrunobject = lastrun_init[, , , rep_number]
-    )
-    print(paste0("Replicate Run # ",
-      rep_number, ", done at: ",
-      (format(Sys.time(), "%F-%H%M%S"))))
+    source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+
+    figprodmultrun(specificsimnumber = subsetorsequence,
+                  number_of_repeats = number_of_reps,
+                  paramssource = paramssource)
   }
 
-  source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-  figprodmultrun(specificsimnumber = subsetorsequence,
-                 number_of_repeats = number_of_reps,
-                 paramssource = paramssource)
 }

@@ -100,11 +100,12 @@ htmpdir <- function(extradir = "extraDirectory") {
 
 print_regex_num_range <- function (
     num_range = "0000-0001",
+    debug = FALSE,
     ons_n_offs = "_"
 ) {
 
-    num_range = "9999-10300"
-    ons_n_offs = "_"
+    # num_range = "10151-20001"
+    # ons_n_offs = "_"
 
     if (ons_n_offs != "_") {
       thing <- length (ons_n_offs)
@@ -127,519 +128,284 @@ print_regex_num_range <- function (
         first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
     }
 
-    if (first_term != copy_first_term) {}
-    # Working number data structure
-    # zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
+    if (paste(first_term[[1]], collapse = "") != paste(copy_first_term[[1]], collapse = "")) {
+      leading_zeroes = length(first_term[[1]]) - length (copy_first_term[[1]])
+    } else {
+      leading_zeroes = FALSE
+    }
+
     zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
 
-    # substitute list calls for matrix calls
-    second_only <- which (zv [3, ] != zv [2, ])
-    the_nines <- which (zv [1, ] == 9)
-    the_zips <- which (zv [2, ] == 0)
+    bigStartsAt <- c()
+    i <- 1
+    while (i <= length(secnd_term[[1]])) {
+      if (zv[1,i] < zv[2,i]) {
+        bigStartsAt <- i
+        break
+      }
+      i <- i + 1
+    }
 
-    ### This function lives and breathes on "append" as the builder function;
-    ### each step in the control flow below is slowly building the ending
-    ### character string depending on the relationship of the two terms.
-
-    # Opening up the variable that will returned
-    # output_object <- vector (mode = "character", length = 1)
-
-    # start with "*_"
     digits <- length (zv [2,])
-    output_object_start <- c ("*_")
-    output_object_split <- c ("*_")
-    output_object_end <- c ("*_")
+    output_object_stt <- c ("*_")
+    output_object_end <- c ()
     total_digits <- digits
 
-    while (digits > 0) {
-      # while_digits <- digits
+    while (digits >= bigStartsAt) {
+
       length_difference <- total_digits - digits
+      # "thing": This happens for both the first and second term: a placeholder value lets the half of the term that is being built to break out on its own from the digit being iterated on the above level
+      thing <- 1
+      while (thing == 1) {
 
-      if (digits %in% the_nines) {
-        output_object_start <- append (output_object_start, paste0 (paste0 (zv [1, c (1 : digits)], collapse = ""),  "_|*_"))
-        digits <- digits - 1
-        next
-      } else {
-        output_object_start <- append (output_object_start, paste0 (paste0 (zv [1, c (1 : digits - 1)], collapse = ""), "[", zv [1, digits], "-9]"))
-        output_object_start <- append (output_object_start, c (rep ("[0-9]", length_difference), "_|*_"))
+        if (zv [1, digits] == 9) {
+          if (digits == bigStartsAt) {
+            # this should be impossible... can't have the smaller number be 9 AND have the bigger number be bigger at that position...
+          } else {
+            if (zv [1, digits + 1] == 0) {
+              thing <- thing + 1
+              break
+            } else {
+              if (leading_zeroes != FALSE) {
+                output_object_stt <- append (output_object_stt, c (as.numeric(copy_first_term [[1]] [1 : digits - leading_zeroes])))
+                if (length_difference != 0) {
+                  output_object_stt <- append (output_object_stt, c (rep ("[0-9]", length_difference)))
+                }
+              } else {
+                if (digits == total_digits) {
+                  output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits)]))
+                } else {
+                  thing <- thing + 1
+                  break
+                }
+              }
+            }
+          }
+        } else {
+          if (digits == total_digits) {
+            if (digits == bigStartsAt) {
+              # leading zeroes shouldn't be a problem here... if they're different numbers of digits, then the ones place can't be where bigStartsAt.
+              output_object_stt <- append (output_object_stt, c (zv [1, digits - 1], "[", zv [1, digits], "-", zv [2, digits], "]"))
+            } else {
+              if (leading_zeroes != FALSE) {
+                output_object_stt <- append (output_object_stt, c (as.numeric(copy_first_term [[1]] [1 : (digits - leading_zeroes - 1)]), "[", zv [1, digits], "-9]"))
+              } else {
+                output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits], "-9]"))
+              }
+            }
+
+          } else {
+            if (digits == 1) {
+              if (zv [3, digits] <= 1) {
+                # output_object_stt <- append (output_object_stt, c ("[", zv [1, digits], "-", zv [2, digits] - 1, "]"))
+                thing <- thing + 1
+                break
+              } else if (zv [3, digits] == 2) {
+                output_object_stt <- append (output_object_stt, zv [1, digits] + 1)
+              } else if (zv [3, digits] > 2) {
+                output_object_stt <- append (output_object_stt, c ("[", zv [1, digits] + 1, "-", zv [2, digits] - 1, "]"))
+              }
+            } else if (digits > 1) {
+              if (leading_zeroes != FALSE) {
+                if ((digits - leading_zeroes - 1) > 0) {
+                  output_object_stt <- append (output_object_stt, c (as.numeric(copy_first_term [[1]] [1 : (digits - leading_zeroes - 1)]), "[", zv [1, digits] + 1, "-9]"))
+                } else {
+                  output_object_stt <- append (output_object_stt, c ("[", zv [1, digits] + 1, "-9]"))
+                }
+              } else {
+                if (digits == bigStartsAt) {
+                  if (zv[3,digits] > 1) {
+                    output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits] + 1, "-", zv [2, digits] - 1, "]"))
+                  } else {
+                    thing <- thing + 1
+                    break
+                  }
+                } else {
+                  output_object_stt <- append (output_object_stt, c (zv [1, c (1 : digits - 1)], "[", zv [1, digits] + 1, "-9]"))
+                }
+              }
+            }
+            if (length_difference != 0) {
+              output_object_stt <- append (output_object_stt, rep ("[0-9]", length_difference))
+            }
+          }
+        }
+        # Here, the control flow informs whether the ons_n_offs for the first term are at the beginning or the middle of the overall regex
+        if (digits > bigStartsAt) {
+          # if (digits == total_digits) {
+          #   output_object_stt <- append (output_object_stt, ons_n_offs)
+          # } else {
+            output_object_stt <- append (output_object_stt, str_c(ons_n_offs, "|*", ons_n_offs))
+            # output_object_stt <- append (output_object_stt, "blah")
+            # output_object_stt <- append (output_object_stt, ons_n_offs)
+          # }
+        } else if (digits == bigStartsAt) {
+          if (length (zv[1,]) == 2 && digits == bigStartsAt) {
+            if (zv [3, digits] > 1) {
+              output_object_stt <- append (output_object_stt, str_c(ons_n_offs, "|*", ons_n_offs))
+            } else {
+              output_object_stt <- append (output_object_stt, ons_n_offs)
+            }
+          } else {
+            # output_object_stt <- append (output_object_stt, ons_n_offs)
+            # output_object_stt <- append (output_object_stt, "blah")
+            output_object_stt <- append (output_object_stt, str_c(ons_n_offs, "|*", ons_n_offs))
+          }
+        } else {
+          output_object_stt <- append (output_object_stt, str_c(ons_n_offs, "|*", ons_n_offs))
+          # output_object_stt <- append (output_object_stt, ons_n_offs)
+          # output_object_stt <- append (output_object_stt, "blah")
+        }
+        thing <- thing + 1
       }
 
-      if (zv[2, digits] == 0) {
-        output_object_end <- append (output_object_end, paste0 (zv [2, c (1 : )]))
-      } else {
-        output_object_end <- append (output_object_end, paste0 ())
-      }
 
-      if () {}
+      # "stuff": This happens for both the first and second term: a placeholder value lets the half of the term that is being built to break out on its own from the digit being iterated on the above level
+      stuff <- zv[2,digits] > 0
+      blahblah <- which (zv [2, ] > 0)
+      while (stuff == 1) {
+
+        if (zv [2, digits] == 0) { # digits here can't be equal to bigStartsAt
+          if (digits < bigStartsAt) {
+            stuff <- stuff + 1
+            break
+          } else if (digits > bigStartsAt) {
+            output_object_end <- append (output_object_end, zv [2, 1 : digits])
+          }
+        } else if (zv [2, digits] == 1) {
+          if (digits == total_digits) {
+            if (digits == bigStartsAt) {
+              stuff <- stuff + 1
+              break
+            } else {
+              output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "[0-", zv[2,digits], "]"))
+              if (length_difference != 0) {
+                output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
+              }
+            }
+          } else { # if given digit of second number is not in the ONES place, and Is Equal to 1
+            if (digits != bigStartsAt) {
+              output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "0"))
+              if (length_difference != 0) {
+                output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
+              }
+            } else {
+              if (zv[2, length (zv [2,])] != 0) {
+                # output_object_end <- append (output_object_end, zv [2, ])
+                stuff <- stuff + 1
+                break
+              } else { # if (zv[3,digits] < 1)
+                output_object_end <- append (output_object_end, zv [2, ])
+              }
+            }
+          }
+        } else if (zv [2, digits] > 1) {
+          if (digits == total_digits) {
+            if (digits == bigStartsAt) {
+              # stop("look! a hole in the code!")
+              stuff <- stuff + 1
+              break
+            } else if (digits < bigStartsAt) {
+              stuff <- stuff + 1
+              break
+            } else {
+              output_object_end <- append (output_object_end, c (zv [2, c (1 : digits - 1)], "[0-", zv[2,digits], "]"))
+            }
+            if (length_difference != 0) {
+              output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
+            }
+          } else {
+            if (digits == bigStartsAt) {
+              if (zv [2,length (zv [2,])] != 0) {
+                # output_object_end <- append (output_object_end, c (zv [2,]))
+                stuff <- stuff + 1
+                break
+              } else {
+                output_object_end <- append (output_object_end, zv [2,])
+              }
+            } else {
+              output_object_end <- append (output_object_end, c (zv [2, 1 : digits - 1], "[0-", zv[2,digits] - 1, "]"))
+              if (length_difference != 0) {
+                output_object_end <- append (output_object_end, c (rep ("[0-9]", length_difference)))
+              }
+            }
+          }
+        }
+
+        stuff <- stuff + 1
+
+        if (digits > bigStartsAt) {
+          if (digits <= bigStartsAt + 2) {
+            if (digits <= bigStartsAt + 1) {
+              output_object_end <- append (output_object_end, ons_n_offs)
+              # output_object_end <- append (output_object_end, "blah")
+            } else {
+              if (which(blahblah == digits) == 2 && blahblah[1] == bigStartsAt) {
+                # output_object_end <- append (output_object_end, "blah")
+                if (zv [2,length (zv [2,])] != 0) {
+                  output_object_end <- append (output_object_end, ons_n_offs)
+                  # output_object_end <- append (output_object_end, "blah")
+                } else {
+                  output_object_end <- append (output_object_end, str_c(ons_n_offs, "|*", ons_n_offs))
+                  # output_object_end <- append (output_object_end, "blah")
+                }
+              } else {
+                output_object_end <- append (output_object_end, str_c(ons_n_offs, "|*", ons_n_offs))
+                # output_object_end <- append (output_object_end, "blah")
+              }
+              # output_object_end <- append (output_object_end, ons_n_offs)
+              # output_object_end <- append (output_object_end, "blah")
+            }
+            # output_object_end <- append (output_object_end, "blah")
+          # } else if (digits <= bigStartsAt + 1) {
+          #   output_object_end <- append (output_object_end, str_c(ons_n_offs, "|*", ons_n_offs))
+            # output_object_end <- append (output_object_end, "blah")
+          } else {
+            if (blahblah[1] == bigStartsAt && length(blahblah) == 2 && blahblah[length (blahblah)] >= bigStartsAt + 2) {
+              # output_object_end <- append (output_object_end, "blah")
+              output_object_end <- append (output_object_end, ons_n_offs)
+              stuff <- stuff + 1
+              break
+              # output_object_end <- append (output_object_end, "blah")
+            # } else if () {
+              # else if (blahblah[1] == bigStartsAt && length(blahblah) == 2 && blahblah[length (blahblah)] == bigStartsAt + 1) {
+              # output_object_end <- append (output_object_end, "blah")
+
+              # }
+              # output_object_end <- append (output_object_end, str_c(ons_n_offs, "|*", ons_n_offs))
+              # output_object_end <- append (output_object_end, ons_n_offs)
+              # output_object_end <- append (output_object_end, "blah")
+            } else {
+              # stuff <- stuff + 1
+              # break
+              # output_object_end <- append (output_object_end, "blah")
+              output_object_end <- append (output_object_end, str_c(ons_n_offs, "|*", ons_n_offs))
+            }
+          }
+
+        # } else if (digits == bigStartsAt) {
+        #   output_object_end <- append (output_object_end, str_c(ons_n_offs, "|*", ons_n_offs))
+        } else {
+          output_object_end <- append (output_object_end, ons_n_offs)
+          # output_object_end <- append (output_object_end, "blah")
+        }
+      }
 
       digits <- digits - 1
+
     }
 
-    if (zv[3, 1] >= 0) {}
-      #
-    output_object <- append (output_object, paste0 ())
-    if (TRUE %in% c(zv[4,] == 1)) {}
-      #
-    if (TRUE %in% c(zv[5,] == 1)) {}
-      #
 
-    # number of digits stops at 1
-    if (length (zv[2,]) == 1) {
-        # append "[1-2]_", where 1 is the first term and 2 is the second term ### "*_[1-2]_"
-        output_object <- append (output_object, paste0 ("[", zv[1,1], "-", zv[2,1], "]_"))
-    # number of digits stops at 2
-    } else if (length (zv[2,]) == 2) {
-        # append "1" ### "*_1"
-        output_object <- append (output_object, paste0(zv[1,1]))
-        # 1X-4X
-        if (zv[1,1] + 1 < zv[2,1]) {
-            # 1X where X < 9
-            if (zv[1,2] < 9) {
-                # append "[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4"
-                output_object <- append (output_object, paste0 ("[", zv[1,2], "-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
-                # 2X where X > 0
-                if (zv[2,2] > 0) {
-                    # append "[0-X]_" ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
-                # otherwise 2X where X = 0
-                } else {
-                    # append "0_" ###  ### "*_1[X-9]_|*_[(1+1)-(4-1)][0-9]_|*_40_"
-                    output_object <- append (output_object, "0_")
-                }
-            # 1X where X = 9
-            } else {
-                # append "X_|*_[(1+1)-(4-1)][0-9]_|*_4" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4"
-                output_object <- append (output_object, paste0 (zv[1,2], "_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9]_|*_", zv[2,1]))
-                # 2X where X > 0
-                if (zv[2,2] > 0) {
-                    # append "[0-X]_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_4[0-X]_"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
-                # 2X where X = 0
-                } else {
-                    # append "0_" ### "*_1X_|*_[(1+1)-(4-1)][0-9]_|*_40_"
-                    output_object <- append (output_object, "0_")
-                }
-            }
-        # 1X-2X
-        } else if (zv[1,1] + 1 == zv[2,1]) {
-            # 1X where X < 9
-            if (zv[1,2] < 9) {
-                # append "[X-9]_|*_2" ### "*_1[X-9]_|*_2"
-                output_object <- append (output_object, paste0 ("[", zv[1,2], "-9]_|*_", zv[2,1]))
-                # 2X where X > 0
-                if (zv[2,2] > 0) {
-                    # append "[0-X]_" ### "*_1[X-9]_|*_2[0-X]_"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
-                # otherwise 2X where X = 0
-                } else {
-                    # append "0_" ###  ### "*_1[X-9]_|*_20_"
-                    output_object <- append (output_object, "0_")
-                }
-            # 1X where X = 9
-            } else {
-                # append "9_|*_2" ### "*_19_|*_2"
-                output_object <- append (output_object, paste0 (zv[1,2], "_|*_", zv[2,1]))
-                # 2X where X > 0
-                if (zv[2,2] > 0) {
-                    # append "[0-X]_" ### "*_19_|*_2[0-X]_"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,2], "]_"))
-                # 2X where X = 0
-                } else {
-                    # append "0_" ### "*_19_|*_20_"
-                    output_object <- append (output_object, paste0("0_"))
-                }
-            }
-        # 1X -1Y
-        } else if (zv[1,1] == zv[2,1]) {
-            # append "[X-Y]_" ### "*_1[X-Y]_"
-            output_object <- append (output_object, paste0 ("[", zv[1,2], "-", zv[2,2], "]_"))
-        }
-    # number of digits stops at 3 ### at this point, we have output_object = "*_"
-    } else if (length (zv[2,]) == 3) {
-        # append "1" ### "*_1"
-        output_object <- append (output_object, paste0 (zv[1,1]))
-        # 1XY-4ZA
-        if (zv[1,1] + 1 < zv[2,1]) {
-            # 1X where X < 9
-            if (zv[1,2] < 9) {
-                # append "X" ### "*_1X"
-                output_object <- append (output_object, paste0 (zv[1,2]))
-                # 1XY where Y < 9
-                if (zv[1,3] < 9) {
-                    # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4"
-                    output_object <- append (output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
-                    # 4Z where Z > 0
-                    if (zv[2,2] > 0) {
-                        # append "[0-(Z-1)][0-9]_|*_4Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
-                        # 4ZA where A > 0
-                        if (zv[2,3] > 0) {
-                            # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z[0-A]_"
-                            output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
-                        # 4ZA where A == 0
-                        } else {
-                            # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z0_"
-                            output_object <- append (output_object, paste0 ("0_"))
-                        }
-                    # 4Z where Z == 0
-                    } else {
-                        # append "0" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_40"
-                        output_object <- append (output_object, paste0 ("0"))
-                        # 4ZA where A > 0
-                        if (zv[2,3] > 0) {
-                            # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_40[0-A]_"
-                            output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
-                        # 4ZA where A == 0
-                        } else {
-                            # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_400_"
-                            output_object <- append (output_object, paste0 ("0_"))
-                        }
-                    }
-                # 1XY where Y == 9
-                }
 
-            }
-        # 1XY-2ZA
-        } else if (zv[1,1] + 1 == zv[2,1]) {
-            # 1XY where X is less than 9
-            if (zv[1,2] < 9) {
-                # append "X" ### "*_1X"
-                output_object <- append (output_object, paste0 (zv[1,2]))
-                #1XY where Y is less than 9
-                if (zv[1,3] < 9) {
-                    # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_2" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_2"
-                    output_object <- append (output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-9][0-9]_|*_", zv[2,1]))
-                    # 2ZA where Z > 0
-                    if (zv[2,2] > 0) {
-                        # append "0[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z"
-                        output_object <- append (output_object, paste0 ("0[0-9]_|*_", zv[2,1], "[1-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
-                        # 2ZA where A > 0
-                        if (zv[2,3] > 0) {
-                            # append "[0-A]_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z[0-A]_"
-                            output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
-                        # 2ZA where A == 0
-                        } else {
-                            # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-9]_|*_2[1-(Z-1)][0-9]_|*_2Z0_"
-                            output_object <- append (output_object, paste0 ("0_"))
-                        }
-                    # 2ZA where Z == 0
-                    } else {
-                        # append "0" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20"
-                        output_object <- append (output_object, paste0 ("0"))
-                        # 2ZA where A > 0
-                        if (zv[2,3] > 0) {
-                            # append "[0-A]_" ### *_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_20[0-A]_"
-                            output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
-                        # 2ZA where A == 0
-                        } else {
-                            # append "0_" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_200_"
-                            output_object <- append (output_object, paste0 ("0_"))
-                        }
-                    }
+    output_object <- c(output_object_stt, output_object_end)
 
-                # 1XY where Y == 9
-                }
-            }
-        # 1XY-1ZA
-        } else if (zv[1,1] == zv[2,1]) {
-            # 11X-14X
-            if (zv[1,2] + 1 < zv[2,2]) {
-                # 11X where X < 9
-                # append "1[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_14" ### "*_11[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_14"
-                output_object <- append (output_object, paste0 (zv[1,2], "[", zv[1,3], "-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9]_|*_", zv[2,1], zv[2,2]))
-                # 14X where X > 0
-                if (zv[2,3] > 0) {
-                    # append "[0-X]_" ### "*_11[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_14[0-X]_"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
-                # otherwise 14X where X = 0
-                } else {
-                    # append "0_" ###  ### "*_11[X-9]_|*_1[(1+1)-(4-1)][0-9]_|*_140_"
-                    output_object <- append (output_object, "0_")
-                }
-                # 11X where X = 9
-            # 11X-12X
-            } else if (zv[1,2] + 1 == zv[2,2]) {
-                # 11X where X < 9
-                # append "1[X-9]_|*_12" ### "*_11[X-9]_|*_12"
-                output_object <- append (output_object, paste0 (zv[1,2], "[", zv[1,3], "-9]_|*_", zv[2,1], zv[2,2]))
-                # 12X where X > 0
-                if (zv[2,3] > 0) {
-                    # append "[0-X]_" ### "*_11[X-9]_|*_12[0-X]_"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3], "]_"))
-                # otherwise 12X where X = 0
-                } else {
-                    # append "0_" ###  ### "*_11[X-9]_|*_120_"
-                    output_object <- append (output_object, "0_")
-                }
-                #
-            # 11X -11Y
-            } else if (zv[1,2] == zv[2,2]) {
-                # append "1[X-Y]_" ### "*_11[X-Y]_"
-                output_object <- append (output_object, paste0 (zv[1,2], "[", zv[1,3], "-", zv[2,3], "]_"))
-            }
-        }
-    } else if (length (zv[2,]) == 4) {
-        # append "1" ### "*_1"
-        output_object <- append (output_object, paste0 (zv[1,1]))
-        # 1XXX-4XXX
-        if (zv[1,1] + 1 < zv[2,1]) {
-            # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4"
-            output_object # THIS IS WHERE YOU STOPPED
-            if (zv[1,2] == 9) {
-              output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", "[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9][0-9]_|*_", zv[2,1]))
-            } else {
-              output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3], "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9][0-9]_|*_", zv[2,1]))
-            }
+    # print(paste(output_object, collapse = ""))
 
-            # 4DEF where D > 0
-            if (zv[2,2] > 0) {
-                # append "[0-(D-1)][0-9][0-9]_|*_4D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D"
-                output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
-                # 4DEF where E > 0
-                if (as.numeric (zv[2,3]) > 0) {
-                    # append "[0-(E-1)][0-9]_|*_4DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 4DEF where F > 0
-                    if (as.numeric (zv[2,4]) > 0) {
-                        # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE[0-F]_"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 4DEF where F == 0
-                    } else {
-                        # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D[0-(E-1)][0-9]_|*_4DE0_"
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 4DEF where E == 0
-                } else if (zv[2,3] == 0) {
-                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_4[0-(D-1)][0-9][0-9]_|*_4D0"
-                    output_object <- append (output_object, paste0 ("0"))
-                    # 4DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 4DEF where F == 0
-                    } else {
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                }
-            # 4DEF where D == 0
-            } else if (zv[2,2] == 0) {
-                # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_40"
-                output_object <- append (output_object, paste0 ("0"))
-                # 4DEF where E > 0
-                if (zv[2,3] > 0) {
-                    # append "[0-(E-1)][0-9]_|*_40E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_40[0-(E-1)][0-9]_|*_40E"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 4DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 4DEF where F == 0
-                    } else {
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 4DEF where E == 0
-                } else if (zv[2,3] == 0) {
-                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9][0-9]_|*_400"
-                    output_object <- append (output_object, paste0 ("0"))
-                    # 4DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 4DEF where F == 0
-                    } else {
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                }
-            }
-        # 1XXX-2XXX
-        } else if (zv[1,1] + 1 == zv[2,1]) {
-            # append "AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2"
-            if (zv[1,2] == 9) {
-              output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[2,1]))
-            } else {
-              output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2], "-9][0-9][0-9]_|*_", zv[2,1]))
-            }
-            # 2DEF where D > 0
-            if (zv[2,2] > 0) {
-                # append "[0-(D-1)][0-9][0-9]_|*_2D" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D"
-                output_object <- append (output_object, paste0 ("[0-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
-                # 2DEF where E > 0
-                if (zv[2,3] > 0) {
-                    # append "[0-(E-1)][0-9]_|*_2DE" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D[0-(E-1)][0-9]_|*_2DE"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 2DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_"
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 2DEF where E == 0
-                } else if (zv[2,3] == 0) {
-                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2[0-(D-1)][0-9][0-9]_|*_2D0"
-                    output_object <- append (output_object, paste0 ("0"))
-                    # 2DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_"
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                }
-            # 2DEF where D == 0
-            } else if (zv[2,2] == 0) {
-                # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20"
-                output_object <- append (output_object, "0")
-                # 2DEF where E > 0
-                if (zv[2,3] > 0) {
-                    # append "[0-(E-1)][0-9]_|*_20E" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 2DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 2DEF where E == 0
-                } else if (zv[2,3] == 0) {
-                    # append "0" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_200"
-                    output_object <- append (output_object, paste0 ("0"))
-                    # 2DEF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_200[0-F]_"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_2000_"
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                }
-            }
-        # 1XXX-1YYY
-        } else if (zv[1,1] == zv[2,1]) {
-            # 12BC-15EF
-            if (zv[1,2] + 1 < zv[2,2]) {
-                # 12BC where B < 9
-                # 12BC where C < 9
-                # append "2B[C-9]_|*_12[B-9][0-9]_|*_1[(2+1)-(5-1)][0-9][0-9]_|*_15" ### "*_1"
-                if (zv[1,3] == 9) {
-                  output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
-                } else {
-                  output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
-                }
-                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[1,1], "[", zv[1,2] + 1, "-", zv[2,2] - 1, "][0-9][0-9]_|*_", zv[2,1], zv[2,2]))
-                # 15EF where E > 0
-                if (zv[2,3] > 0) {
-                  # append "[0-(E-1)][0-9]_|*_15E"
-                  output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                  # 15EF where F > 0
-                  if (zv[2,4] > 0) {
-                    # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                  # 2DEF where F == 0
-                  } else {
-                    # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                    output_object <- append (output_object, paste0 ("0_"))
-                  }
-                # 15EF where E == 0
-                } else if (zv[2,3] == 0) {
-                  # append "0" ###
-                  output_object <- append (output_object, paste0 ("0"))
-                  # 15EF where F > 0
-                  if (zv[2,4] > 0) {
-                      # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E[0-F]_"
-                      output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                  # 2DEF where F == 0
-                  } else {
-                      # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E0_"
-                      output_object <- append (output_object, paste0 ("0_"))
-                  }
-                }
-            # 12BC-13EF
-            } else if (zv[1,2] + 1 == zv[2,2]) {
-                # append "2B[C-9]_|*_12[B-9][0-9]_|*_13"
-                output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-9][0-9]_|*_", zv[2,1], zv[2,2]))
-                # 13EF where E > 0
-                if (zv[2,3] > 0) {
-                    # append "[0-(E-1)][0-9]_|*_15E"
-                    output_object <- append (output_object, paste0 ("[0-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 15EF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_" ### "*_1AB[C-9]_|*_1A[B-9][0-9]_|*_1[A-9][0-9][0-9]_|*_20[0-(E-1)][0-9]_|*_20E"
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 15EF where E == 0
-                } else if (zv[2,3] == 0) {
-                    # append "0" ###
-                    output_object <- append (output_object, paste0 ("0"))
-                    # 15EF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_" ### ""
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_" ### ""
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                }
-            # 12BC-12EF
-            } else if (zv[1,2] == zv[2,2]) {
-                # 123C-126F
-                if (zv[1,3] + 1 < zv[2,3]) {
-                    # append "2B[C-9]_|*_12[(3+1)-(6-1)][0-9]_|*_126" ### "*_12B[C-9]_|*_12[(3+1)-(6-1)][0-9]_|*_126"
-                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[1,1], zv[1,2], "[", zv[1,3] + 1, "-", zv[2,3] - 1, "][0-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 15EF where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_" ### ""
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 2DEF where F == 0
-                    } else {
-                        # append "0_" ### ""
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 123C-124F
-                } else if (zv[1,3] + 1 == zv[2,3]) {
-                    # append "23[C-9]_|*_124" ### "*_123[C-9]_|*_124"
-                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-9]_|*_", zv[2,1], zv[2,2], zv[2,3]))
-                    # 124F where F > 0
-                    if (zv[2,4] > 0) {
-                        # append "[0-F]_" ### ""
-                        output_object <- append (output_object, paste0 ("[0-", zv[2,4], "]_"))
-                    # 124F where F == 0
-                    } else {
-                        # append "0_" ### ""
-                        output_object <- append (output_object, paste0 ("0_"))
-                    }
-                # 123C-123F
-                } else if (zv[1,3] == zv[2,3]) {
-                    # append "23[C-F]_" ### "*_1"
-                    output_object <- append (output_object, paste0 (zv[1,2], zv[1,3], "[", zv[1,4], "-", zv[2,4], "]_"))
-                }
-            }
-        }
-    } else if (length (zv[2,]) == 5) {
-      # append "1" ### "*_1"
-        output_object <- append (output_object, paste0 (zv[1,1]))
-        # 1XXXX-4XXXX
-        if (zv[1,1] + 1 < zv[2,1]) {
-          # 1
-        # 1XXXX-2XXXX
-        } else if (zv[1,1] + 1 == zv[2,1]) {
-
-        # 1XXXX-1YYYY
-        } else if (zv[1,1] == zv[2,1]) {
-
-        }
+    if (debug != FALSE) {
+      return (list (output = paste(output_object, collapse = ""), output_first_half = paste(output_object_stt, collapse = ""), output_second_half = paste(output_object_end, collapse = ""), working_object = zv))
+    } else {
+      return (paste(output_object, collapse = ""))
     }
-    return (paste(output_object, collapse = ""))
 }
 
 extractvardirs <- function(home_path, filenamepattern, prnr = TRUE) {

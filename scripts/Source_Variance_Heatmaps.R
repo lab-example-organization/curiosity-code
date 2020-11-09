@@ -15,7 +15,7 @@ varianceheatmaps <- function (
 
     # thing <- finding_some_cross_sections_for_mean_and_variance_calculations(stack_directory = list_of_sims[sim_in_question])
 
-# str_replace_all (the_file_path,"fullData", str_split(str_split(the_file_path, "/")[[1]][2], ".R")[[1]][1])
+    # str_replace_all (the_file_path,"fullData", str_split(str_split(the_file_path, "/")[[1]][2], ".R")[[1]][1])
 
     # for (sim_in_question in 1:length (list_of_sims)) {
         for (lowbg_vs_hihbg in 1:2) {

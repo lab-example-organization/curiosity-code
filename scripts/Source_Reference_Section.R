@@ -32,7 +32,8 @@ referencesection <- function (referencing_script) {
         'profvyaml',
         'pfvSrrYml',
         'profTest',
-        'testings'#,
+        'testings',
+        'parallelHeatmaps'#,
         # 'next_thing',
         # '',
         # '',
@@ -49,8 +50,8 @@ referencesection <- function (referencing_script) {
         profvyaml = c('profvis', 'yaml'),
         pfvSrrYml = c('profvis', 'stringr', 'yaml'),
         profTest = c('profvis'),
-        testings = c('testthat', 'dplyr', 'stringr')#,
-
+        testings = c('testthat', 'dplyr', 'stringr'),
+        parallelHeatmaps = c('doParallel', 'stringr', 'abind', 'yaml', 'magick', 'dplyr')#,
         # next_thing = c('') #,
 
 

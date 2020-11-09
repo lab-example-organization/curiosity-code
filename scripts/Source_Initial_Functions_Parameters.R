@@ -17,7 +17,8 @@ rpf <- function (numberofrepeats, divisions_per_repeat, zeroonevalue) {
 }
 
 define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, one_pop_singers,
-                              curlearnprob, learnprob, randlearnprob, stand.dev, curinhproportion) {
+                              curlearnprob, learnprob, randlearnprob, stand.dev, curinhproportion,
+                              mate_selection_type) {
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
   if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsl %% 1 != 0) {
     stop ("(num_pop, pop_size, nsl) need to be integers")}
@@ -114,7 +115,8 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
                      learnprob = learnprob,
                      randlearnprob = randlearnprob,
                      stand.dev = stand.dev,
-                     curinhproportion = curinhproportion
+                     curinhproportion = curinhproportion,
+                     mate_selection_type = mate_selection_type
                      )
 
   return (parameters)
@@ -273,11 +275,14 @@ initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
             sexes * parameters_ic$pop_size / 2
           )), pop.num
         ] <- runif (
-          parameters_ic$pop_size / 2, parameters_ic$zero_to_one_template [
+          parameters_ic$pop_size / 2,
+          parameters_ic$zero_to_one_template [
             cur.min [parameters_ic$curiosity_counter [sexes, pop.num]]
-          ], parameters_ic$zero_to_one_template [cur.max [parameters_ic$curiosity_counter [
-            sexes, pop.num
-        ]]])
+          ],
+          parameters_ic$zero_to_one_template [
+            cur.max [parameters_ic$curiosity_counter [sexes, pop.num]]
+          ]
+        )
       }
     }
   }

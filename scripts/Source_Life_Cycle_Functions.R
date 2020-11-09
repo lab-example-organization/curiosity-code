@@ -149,7 +149,7 @@ update_selexn_data <- function (
   main_parameters, temp_data_update_selexndata, suitor_choices, preferred_bird,
   selector_bird, curiosity_value, selector_population,
   selection_context, sylreps_choices, sylrep_selector,
-  selection_count) {#}), giving_up = FALSE) {
+  selection_count, selection_type = 1) {#}), giving_up = FALSE) {
 
   selected_pair <- c (suitor_choices [preferred_bird], # Bird being selected
                        selector_bird)          # Bird doing the selecting
@@ -157,8 +157,12 @@ update_selexn_data <- function (
   #if(!(giving_up)) {
     singer_population <- ceiling (
     preferred_bird / main_parameters$one_pop_singers [selection_context])
+    # if (selection_type == 1) {
+      sylrep_pairs <- rbind (sylreps_choices [preferred_bird,], sylrep_selector)
+    # } else if (selection_type == 2) {
+    #   sylrep_pairs <- rbind (sylreps_choices [preferred_bird], sylrep_selector)
+    # }
 
-    sylrep_pairs <- rbind (sylreps_choices [preferred_bird,], sylrep_selector)
   #}# else {
   #   singer_population <- selector_population
 
@@ -246,9 +250,21 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                            num_select_chances = c (16, 40),
                            sylrep_fill_chances = 10,
                            verbose_output = TRUE,
-                           interbreed = FALSE) {
+                           interbreed = FALSE
+                          #  selection_strategy = "similarity score",
+                           ) {
 
   if (select_type == "mate") {select_type <- 2} else if (select_type == "tutor") {select_type <- 1}
+
+  if (select_type == 2) {
+    if (parameters_sing_selection$mate_selection_type == "curiosity") {
+      selection_path <- 1
+    } else if (parameters_sing_selection$mate_selection_type == "repertoire_size") {
+      selection_path <- 2
+    }
+  } else if (select_type == 1) {
+    selection_path <- 1
+  }
 
   for (divisible in 1 : 2) {
     if (num_select_chances[divisible] %% 4 != 0) {
@@ -261,321 +277,333 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
   for (population in 1 : parameters_sing_selection$num_pop) { #population <- 1 rm(population)
     #print(paste("this is population",population,sep=" "))
     chance_for_selection = 1
-    while (chance_for_selection <= num_select_chances [select_type]) {
-      stop = FALSE
-      if (chance_for_selection == num_select_chances [select_type]) {
-        auto.teachers <- matrix (c (sample (parameters_sing_selection$pop_calls_matrix [1, ],
-          sylrep_fill_chances),sample (parameters_sing_selection$pop_calls_matrix [2, ],
-          sylrep_fill_chances)),2,sylrep_fill_chances,T)
-        for (MTsylrep_filter in 1:sylrep_fill_chances) {
-          #c((sample(parameters_sing_selection$pop_calls_matrix[1, ], 1)), (
-            #sample(parameters_sing_selection$pop_calls_matrix[2, ], 1)))
-          if ((
-            sum (sylrep_object [auto.teachers [1,MTsylrep_filter
-                ], , population]) != 0) && (
-            sum (sylrep_object [auto.teachers [2,MTsylrep_filter
-                ], , population]) != 0)) {
-            if (verbose_output == TRUE) {
-              context.name <- c ("Tutor", "Mate")
-              warning (print (paste0 ("Automatic Teacher(s) = ",
-                             auto.teachers [,MTsylrep_filter],
-                              " for Population ", population,
-                              " ", context.name [select_type],
-                              " Selection")))
+
+    if (selection_path == 1) {
+      while (chance_for_selection <= num_select_chances [select_type]) {
+        stop = FALSE
+        if (chance_for_selection == num_select_chances [select_type]) {
+          auto.teachers <- matrix (c (sample (parameters_sing_selection$pop_calls_matrix [1, ],
+            sylrep_fill_chances),sample (parameters_sing_selection$pop_calls_matrix [2, ],
+            sylrep_fill_chances)),2,sylrep_fill_chances,T)
+          for (MTsylrep_filter in 1:sylrep_fill_chances) {
+            #c((sample(parameters_sing_selection$pop_calls_matrix[1, ], 1)), (
+              #sample(parameters_sing_selection$pop_calls_matrix[2, ], 1)))
+            if ((
+              sum (sylrep_object [auto.teachers [1,MTsylrep_filter
+                  ], , population]) != 0) && (
+              sum (sylrep_object [auto.teachers [2,MTsylrep_filter
+                  ], , population]) != 0)) {
+              if (verbose_output == TRUE) {
+                context.name <- c ("Tutor", "Mate")
+                warning (print (paste0 ("Automatic Teacher(s) = ",
+                              auto.teachers [,MTsylrep_filter],
+                                " for Population ", population,
+                                " ", context.name [select_type],
+                                " Selection")))
+              }
+
+              temp_data_sing_selection = update_selexn_data (
+                parameters_sing_selection, temp_data_sing_selection, auto.teachers [1,], MTsylrep_filter,
+                auto.teachers [2,MTsylrep_filter], curiosity_level, population,
+                select_type, sylrep_object [auto.teachers [1,],,population],
+                sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
+                num_select_chances [select_type])#, T)
+
+              # if(MTsylrep_filter >= 1) {}
+              stop = TRUE
+              break
             }
+          }
+          if (stop) {break
+          }
+        }
 
-            temp_data_sing_selection = update_selexn_data (
-              parameters_sing_selection, temp_data_sing_selection, auto.teachers [1,], MTsylrep_filter,
-              auto.teachers [2,MTsylrep_filter], curiosity_level, population,
-              select_type, sylrep_object [auto.teachers [1,],,population],
-              sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
-              num_select_chances [select_type])#, T)
+        if (select_type == 1) {
+          #This statement separates specific mating and tutoring selection (resp.)
+          # manipulations: singsuccessfilter will inform the selection of a
+          # mate by restricting the successful mate to those individuals
+          # from the same population as the selector. Similarly, selector.index
+          # distinguishes between mating and tutoring, except here it uses
+          # a randomly-selected female for the mating context, and the
+          # offspring for tutoring.
 
-            # if(MTsylrep_filter >= 1) {}
-            stop = TRUE
+          # "1-20"
+          singsuccessfilter <- 1 : (
+            (parameters_sing_selection$one_pop_singers [select_type]) * (parameters_sing_selection$num_pop))
+          # male offspring from this timestep, lookin for a tutor
+          selector.index <- temp_data_sing_selection [3, parameters_sing_selection$sylnum + 1, population]
+
+        } else if (select_type == 2) {
+          singsuccessfilter <- (1 + ((population - 1) * (
+            parameters_sing_selection$one_pop_singers [select_type]))) : (
+              population * parameters_sing_selection$one_pop_singers [select_type])
+              # "1-10," or "11-20"
+          selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
+              # randomly sample a female from the population
+        }
+
+        selector.sylrep <- sylrep_object [selector.index, , population]
+        if (sum(selector.sylrep) == 0) {
+          stop ("selector didn't have any syllables in the sylrep")
+        }
+        #print("sapply")
+        selection.index <- (
+          # This creates sample calls for each population;
+          # each population has a sample size of parameters_sing_selection$one_pop_singers,
+          # which comes from the male half of the population. Probability
+          # defined by the fraction of syllable repertoires of each member of
+          # each population divided by the maximum syllrep of the population.
+          vapply(1:parameters_sing_selection$num_pop,
+            function(x) {
+              temp <- cpp_rowSums (sylrep_object[
+                parameters_sing_selection$pop_calls_matrix [1,],,x])
+              sample (x = parameters_sing_selection$pop_calls_matrix [1,],
+                      size = parameters_sing_selection$one_pop_singers [select_type],
+                      replace = FALSE,
+                      prob = temp / max (temp))
+              },
+            rep (0, parameters_sing_selection$one_pop_singers [select_type])
+          )
+        ) # probability = the number of times each individual's syllable
+          # repertoire has a 1 in it (sum(sylrep_object[
+          # parameters_sing_selection$pop_calls_matrix[1,]])),
+          # divided by the biggest repertoire's total.
+
+        # create a matrix of all the sylrep_object of the sample
+        # males from selection.index
+        selection.sylreps <- t (
+          cbind (
+            vapply (
+              1:parameters_sing_selection$one_pop_singers [select_type],
+              function (x) {sylrep_object [selection.index[x,1],,1]},
+              rep (0, dim (sylrep_object) [2])
+            ),
+            vapply (
+              1:parameters_sing_selection$one_pop_singers [select_type],
+              function (x) {sylrep_object [selection.index [x,2],,2]},
+              rep (0, dim (sylrep_object) [2])
+            )
+          )
+        )
+
+        # applies the standard deviation scoring to the males in
+        # selection.sylrep_object; larger score means greater
+        # difference between male sylrep and selector's sylrep.
+        # temp <- apply(X = selection.sylreps, MARGIN = 1,
+        #               FUN = score_similarity,
+        #               selector_vector = selector.sylrep)
+        # golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+        #               FUN = score_similarity,
+        #               selector_vector = selector.sylrep))$ix
+
+        # Golf Score: orders selection of males according to
+        # the value of their selection.sylreps[row] measured
+        # against the selector.sylrep vector, according to score_similarity,
+        # but spits out a vector of their indices within selection.sylreps and selection.index
+        golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+                            FUN = score_similarity,
+                            selector_vector = selector.sylrep))
+        # orders the scored list of suitors; subsets one suitor from the rest,
+        # according to the value of the selector's (auditory) curiosity.
+        singer <- golf_score [round (curiosity_level [
+          selector.index, population] *(parameters_sing_selection$one_pop_singers [
+          select_type] * parameters_sing_selection$num_pop) + 0.5)]
+        if (sum (selection.sylreps [singer,])==0) {
+          chance_for_selection = chance_for_selection + 1
+          next
+        }
+
+        #should_pick_neighbor <- function(index,lower,upper=Inf) {
+
+        if (!interbreed) {
+          should_continue <- TRUE
+          if (singer %in% singsuccessfilter) {
+
+            temp_data_sing_selection <- update_selexn_data (
+              main_parameters = parameters_sing_selection,
+              temp_data_update_selexndata = temp_data_sing_selection,
+              suitor_choices = selection.index,
+              preferred_bird = singer,
+              selector_bird = selector.index,
+              curiosity_value = curiosity_level,
+              selector_population = population,
+              selection_context = select_type,
+              sylreps_choices = selection.sylreps,
+              sylrep_selector = selector.sylrep,
+              selection_count = chance_for_selection
+            )#, F)
+
+            should_continue <- FALSE
+          }
+
+          if (should_continue == TRUE) {
+            if (between(chance_for_selection, num_select_chances[select_type] * 0.25, num_select_chances[select_type] * 0.5)) {
+              for (neighbor in c (1, -1, 2, -2)) {
+
+                if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
+                  if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
+
+                    singer <- golf_score [which (golf_score == singer) + neighbor]
+
+                    temp_data_sing_selection <- update_selexn_data (
+                      main_parameters = parameters_sing_selection,
+                      temp_data_update_selexndata = temp_data_sing_selection,
+                      suitor_choices = selection.index,
+                      preferred_bird = singer,
+                      selector_bird = selector.index,
+                      curiosity_value = curiosity_level,
+                      selector_population = population,
+                      selection_context = select_type,
+                      sylreps_choices = selection.sylreps,
+                      sylrep_selector = selector.sylrep,
+                      selection_count = chance_for_selection
+                    )#, F)
+
+                    should_continue <- FALSE
+
+                    break
+                  }
+                }
+                if (!(should_continue)) {
+                  break
+                }
+              }
+            }
+          }
+
+          if (should_continue == TRUE) {
+            if (between(chance_for_selection, num_select_chances[select_type] * 0.5, num_select_chances[select_type] * 0.75)) {
+              for (neighbor in c (1, -1, 2, -2, 3, -3, 4, -4, 5, -5)) {
+
+                if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
+                  if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
+
+                    singer <- golf_score [which (golf_score == singer) + neighbor]
+
+                    temp_data_sing_selection <- update_selexn_data (
+                      main_parameters = parameters_sing_selection,
+                      temp_data_update_selexndata = temp_data_sing_selection,
+                      suitor_choices = selection.index,
+                      preferred_bird = singer,
+                      selector_bird = selector.index,
+                      curiosity_value = curiosity_level,
+                      selector_population = population,
+                      selection_context = select_type,
+                      sylreps_choices = selection.sylreps,
+                      sylrep_selector = selector.sylrep,
+                      selection_count = chance_for_selection
+                    )#, F)
+
+                    should_continue <- FALSE
+
+                    break
+                  }
+                }
+                if (!(should_continue)) {
+                  break
+                }
+              }
+            }
+          }
+
+          if (should_continue == TRUE) {
+            if (between(chance_for_selection, num_select_chances[select_type] * 0.75, num_select_chances[select_type] * 1)) {
+              for (neighbor in c (1, -1, 2, -2, 3, -3, 4, -4, 5, -5,
+                                6, -6, 7, -7, 8, -8, 9, -9, 10, -10)) {
+
+                if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
+                  if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
+
+                    singer <- golf_score [which (golf_score == singer) + neighbor]
+
+                    temp_data_sing_selection <- update_selexn_data (
+                      main_parameters = parameters_sing_selection,
+                      temp_data_update_selexndata = temp_data_sing_selection,
+                      suitor_choices = selection.index,
+                      preferred_bird = singer,
+                      selector_bird = selector.index,
+                      curiosity_value = curiosity_level,
+                      selector_population = population,
+                      selection_context = select_type,
+                      sylreps_choices = selection.sylreps,
+                      sylrep_selector = selector.sylrep,
+                      selection_count = chance_for_selection
+                    )#, F)
+
+                    should_continue <- FALSE
+
+                    break
+                  }
+                }
+                if (!(should_continue)) {
+                  break
+                }
+              }
+            }
+          }
+
+          if (!should_continue) {
+            break
+          }
+        } else {
+          if (sum (sylrep_object [selection.index [singer], , population]) != 0) {
+
+            temp_data_sing_selection <- update_selexn_data (
+              main_parameters = parameters_sing_selection,
+              temp_data_update_selexndata = temp_data_sing_selection,
+              suitor_choices = selection.index,
+              preferred_bird = singer,
+              selector_bird = selector.index,
+              curiosity_value = curiosity_level,
+              selector_population = population,
+              selection_context = select_type,
+              sylreps_choices = selection.sylreps,
+              sylrep_selector = selector.sylrep,
+              selection_count = chance_for_selection
+            )#, F)
+
             break
           }
         }
-        if (stop) {break
-        }
+        chance_for_selection = chance_for_selection + 1
       }
+    } else if (selection_path == 2) {
+      # We need these variables to run update_selexn_data
 
-      if (select_type == 1) {
-        #This statement separates specific mating and tutoring selection
-        # manipulations: singsuccessfilter will inform the selection of a
-        # mate by restricting the successful mate to those individuals
-        # from the same population as the selector. Similarly, selector.index
-        # distinguishes between mating and tutoring, except here it uses
-        # a randomly-selected female for the mating context, and the
-        # offspring for tutoring.
+      selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
 
-        # "1-20"
-        singsuccessfilter <- 1 : (
-          (parameters_sing_selection$one_pop_singers [select_type]) * (parameters_sing_selection$num_pop))
-        # male offspring from this timestep, lookin for a tutor
-        selector.index <- temp_data_sing_selection [3, parameters_sing_selection$sylnum + 1, population]
-
-      } else {
-        singsuccessfilter <- (1 + ((population - 1) * (
-          parameters_sing_selection$one_pop_singers [select_type]))) : (
-            population * parameters_sing_selection$one_pop_singers [select_type])
-            # "1-10," or "11-20"
-        selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
-            # randomly sample a female from the population
-      }
+      selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+      selection.sylreps <- sylrep_object [selection.index,,1]
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index]
+      # bigSylrep <- max(cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index])
+      if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
+        singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
+      } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
+        singer <- which (selection.sylrepSums == max (selection.sylrepSums))
+      } else {stop ("max sylrep selection problem")}
 
       selector.sylrep <- sylrep_object [selector.index, , population]
-      if (sum(selector.sylrep) == 0) {
-        stop ("selector didn't have any syllables in the sylrep")
-      }
-      #print("sapply")
-      selection.index <- (
-        # This creates sample calls for each population;
-        # each population has a sample size of parameters_sing_selection$one_pop_singers,
-        # which comes from the male half of the population. probability
-        # defined by the fraction of syllable repertoires of each member of
-        # each population divided by the maximum syllrep of the population.
-        vapply(1:parameters_sing_selection$num_pop,
-               function(x) {
-                 temp <- cpp_rowSums (sylrep_object[
-                   parameters_sing_selection$pop_calls_matrix [1,],,x])
-                 sample (x = parameters_sing_selection$pop_calls_matrix [1,],
-                        size = parameters_sing_selection$one_pop_singers [select_type],
-                        replace = FALSE,
-                        prob = temp / max (temp))
-                },
-               rep (0, parameters_sing_selection$one_pop_singers [select_type])
-              )
-        ) # probability = the number of times each individual's syllable
-        # repertoire has a 1 in it (sum(sylrep_object[
-        # parameters_sing_selection$pop_calls_matrix[1,]])),
-        # divided by the biggest repertoire's total.
+        if (sum(selector.sylrep) == 0) {
+          stop ("selector didn't have any syllables in the sylrep")
+        }
 
-      # create a matrix of all the sylrep_object of the sample
-      # males from selection.index
-      selection.sylreps <- t (
-        cbind (
-          vapply (
-            1:parameters_sing_selection$one_pop_singers [select_type],
-            function (x) {sylrep_object [selection.index[x,1],,1]},
-            rep (0, dim (sylrep_object) [2])
-          ),
-          vapply (
-            1:parameters_sing_selection$one_pop_singers [select_type],
-            function (x) {sylrep_object [selection.index [x,2],,2]},
-            rep (0, dim (sylrep_object) [2])
-          )
-        )
+      temp_data_sing_selection <- update_selexn_data (
+        main_parameters = parameters_sing_selection,
+        temp_data_update_selexndata = temp_data_sing_selection,
+        suitor_choices = selection.index,
+        preferred_bird = singer,
+        selector_bird = selector.index,
+        curiosity_value = curiosity_level,
+        selector_population = population,
+        selection_context = select_type,
+        sylreps_choices = selection.sylreps,
+        sylrep_selector = selector.sylrep,
+        selection_count = chance_for_selection,
+        selection_type = selection_path
       )
 
-      # applies the standard deviation scoring to the males in
-      # selection.sylrep_object; larger score means greater
-      # difference between male sylrep and selector's sylrep.
-      # temp <- apply(X = selection.sylreps, MARGIN = 1,
-      #               FUN = score_similarity,
-      #               selector_vector = selector.sylrep)
-      # golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
-      #               FUN = score_similarity,
-      #               selector_vector = selector.sylrep))$ix
-
-      # Golf Score: orders selection of males according to
-      # the value of their selection.sylreps[row] measured
-      # against the selector.sylrep vector, according to score_similarity,
-      # but spits out a vector of their indices within selection.sylreps and selection.index
-      golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
-                          FUN = score_similarity,
-                          selector_vector = selector.sylrep))
-      # orders the scored list of suitors; subsets one suitor from the rest,
-      # according to the value of the selector's (auditory) curiosity.
-      singer <- golf_score [round (curiosity_level [
-        selector.index, population] *(parameters_sing_selection$one_pop_singers [
-        select_type] * parameters_sing_selection$num_pop) + 0.5)]
-      if (sum (selection.sylreps [singer,])==0) {
-        chance_for_selection = chance_for_selection + 1
-        next
-      }
-
-      #should_pick_neighbor <- function(index,lower,upper=Inf) {
-
-      if (!interbreed) {
-        should_continue <- TRUE
-        if (singer %in% singsuccessfilter) {
-
-          temp_data_sing_selection <- update_selexn_data (
-            main_parameters = parameters_sing_selection,
-            temp_data_update_selexndata = temp_data_sing_selection,
-            suitor_choices = selection.index,
-            preferred_bird = singer,
-            selector_bird = selector.index,
-            curiosity_value = curiosity_level,
-            selector_population = population,
-            selection_context = select_type,
-            sylreps_choices = selection.sylreps,
-            sylrep_selector = selector.sylrep,
-            selection_count = chance_for_selection
-          )#, F)
-
-          should_continue <- FALSE
-        }
-
-
-        # should_pick_neighbor(1, num_select_chances, select_type,
-        #                             chance_for_selection, golf_score,
-        #                             singsuccessfilter, singer, lower=0.5,
-        #                             upper=0.75)
-
-        if (should_continue == TRUE) {
-          if (between(chance_for_selection, num_select_chances[select_type] * 0.25, num_select_chances[select_type] * 0.5)) {
-            for (neighbor in c (1, -1, 2, -2)) {
-
-              # sink(file = "InvasionAnalysisInitTest1.txt", append = T)
-              # print("here is a print of the attempted object")
-              # print((golf_score[which(golf_score == singer) + neighbor]))
-              # print(paste0("or the individuals: singer = ", singer, ", neighbor = ", neighbor))
-              # print(golf_score)
-              # sink()
-
-              if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
-                if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
-
-                  singer <- golf_score [which (golf_score == singer) + neighbor]
-
-                  temp_data_sing_selection <- update_selexn_data (
-                    main_parameters = parameters_sing_selection,
-                    temp_data_update_selexndata = temp_data_sing_selection,
-                    suitor_choices = selection.index,
-                    preferred_bird = singer,
-                    selector_bird = selector.index,
-                    curiosity_value = curiosity_level,
-                    selector_population = population,
-                    selection_context = select_type,
-                    sylreps_choices = selection.sylreps,
-                    sylrep_selector = selector.sylrep,
-                    selection_count = chance_for_selection
-                  )#, F)
-
-                  should_continue <- FALSE
-
-                  break
-                }
-              }
-              if (!(should_continue)) {
-                break
-              }
-            }
-          }
-        }
-
-        if (should_continue == TRUE) {
-          if (between(chance_for_selection, num_select_chances[select_type] * 0.5, num_select_chances[select_type] * 0.75)) {
-            for (neighbor in c (1, -1, 2, -2, 3, -3, 4, -4, 5, -5)) {
-
-              # sink(file = "InvasionAnalysisInitTest1.txt", append = T)
-              # print("here is a print of the attempted object")
-              # print((golf_score[which(golf_score == singer) + neighbor]))
-              # print(paste0("or the individuals: singer = ", singer, ", neighbor = ", neighbor))
-              # print(golf_score)
-              # sink()
-
-              if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
-                if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
-
-                  singer <- golf_score [which (golf_score == singer) + neighbor]
-
-                  temp_data_sing_selection <- update_selexn_data (
-                    main_parameters = parameters_sing_selection,
-                    temp_data_update_selexndata = temp_data_sing_selection,
-                    suitor_choices = selection.index,
-                    preferred_bird = singer,
-                    selector_bird = selector.index,
-                    curiosity_value = curiosity_level,
-                    selector_population = population,
-                    selection_context = select_type,
-                    sylreps_choices = selection.sylreps,
-                    sylrep_selector = selector.sylrep,
-                    selection_count = chance_for_selection
-                  )#, F)
-
-                  should_continue <- FALSE
-
-                  break
-                }
-              }
-              if (!(should_continue)) {
-                break
-              }
-            }
-          }
-        }
-
-        if (should_continue == TRUE) {
-          if (between(chance_for_selection, num_select_chances[select_type] * 0.75, num_select_chances[select_type] * 1)) {
-            for (neighbor in c (1, -1, 2, -2, 3, -3, 4, -4, 5, -5,
-                              6, -6, 7, -7, 8, -8, 9, -9, 10, -10)) {
-
-              # sink(file = "InvasionAnalysisInitTest1.txt", append = T)
-              # print("here is a print of the attempted object")
-              # print((golf_score[which(golf_score == singer) + neighbor]))
-              # print(paste0("or the individuals: singer = ", singer, ", neighbor = ", neighbor))
-              # print(golf_score)
-              # sink()
-
-              if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
-                if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
-
-                  singer <- golf_score [which (golf_score == singer) + neighbor]
-
-                  temp_data_sing_selection <- update_selexn_data (
-                    main_parameters = parameters_sing_selection,
-                    temp_data_update_selexndata = temp_data_sing_selection,
-                    suitor_choices = selection.index,
-                    preferred_bird = singer,
-                    selector_bird = selector.index,
-                    curiosity_value = curiosity_level,
-                    selector_population = population,
-                    selection_context = select_type,
-                    sylreps_choices = selection.sylreps,
-                    sylrep_selector = selector.sylrep,
-                    selection_count = chance_for_selection
-                  )#, F)
-
-                  should_continue <- FALSE
-
-                  break
-                }
-              }
-              if (!(should_continue)) {
-                break
-              }
-            }
-          }
-        }
-
-        if (!should_continue) {
-          break
-        }
-      } else {
-        if (sum (sylrep_object [selection.index [singer], , population]) != 0) {
-
-          temp_data_sing_selection <- update_selexn_data (
-            main_parameters = parameters_sing_selection,
-            temp_data_update_selexndata = temp_data_sing_selection,
-            suitor_choices = selection.index,
-            preferred_bird = singer,
-            selector_bird = selector.index,
-            curiosity_value = curiosity_level,
-            selector_population = population,
-            selection_context = select_type,
-            sylreps_choices = selection.sylreps,
-            sylrep_selector = selector.sylrep,
-            selection_count = chance_for_selection
-          )#, F)
-
-          break
-        }
-      }
-      chance_for_selection = chance_for_selection + 1
     }
+
   }
   return (temp_data_sing_selection)
 }
