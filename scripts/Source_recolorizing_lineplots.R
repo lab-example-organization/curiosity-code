@@ -1,3 +1,5 @@
+rm(list=objects())
+
 
 source(file.path("scripts", "Source_Reference_Section.R"))
 referencesection("parallelHeatmaps")
@@ -11,14 +13,14 @@ somethingSomething <- array(c(
   "childNoInvF5",       "childNoInvF6",       "childNoInvF7",    "childNoInvF8",       "childNoInvF9",
   "childNoInvF10", "childLateInvMalHih", "childLateInvMalLow", "childLateInvFemHih", "childLateInvFemLow",
   "childLateInvBothHih", "childLateInvBothLow", "childLateSmolInvMalHih", "childLateSmolInvMalLow",  "childLateSmolInvFemHih",
-   "childLateSmolInvFemLow",
+   "childLateSmolInvFemLow", "parentNoInvSylRepSize",
   3901, 4101, 4301, 4501, 4701,
   5101, 5301, 5501, 5701, 5901,
   6101, 6301, 6501, 6701, 6901,
   7101, 7301, 7501, 7701, 7901,
   8101, 8301, 8501, 8701, 8901,
   9101, 9301, 9501, 9701, 9901,
-  10101,
+  10101, 10301,
   "paramsparentNoInv", "paramschildNoInvF1",
     "paramsInvMalHighHrTenK", "paramsInvMalLowHrTenK",
     "paramsInvFemLowHrTenK", "paramsInvBothLowHrTenK",
@@ -32,19 +34,20 @@ somethingSomething <- array(c(
     "paramsLateInvFemHighHrTenK", "paramsLateInvFemLowHrTenK",
     "paramsLateInvBothHighHrTenK", "paramsLateInvBothLowHrTenK",
     "paramsLateSmolInvMalHighHrTenK", "paramsLateSmolInvMalLowHrTenK",
-    "paramsLateSmolInvFemHighHrTenK", "paramsLateSmolInvFemLowHrTenK"), c(31,3)
+    "paramsLateSmolInvFemHighHrTenK", "paramsLateSmolInvFemLowHrTenK", "paramsparentNoInvSylRep"), c(32,3)
 )
 
 n_cores <- 4
-z_specificsimnumber <- 3901:4100
-new_folder <- "recolorizedCurMeans_rangeMedian"
-simple_setup <- function (z_specificsimnumber, somethingSomething, recolorize = TRUE, number_of_repeats = 50, fdsa = new_folder) {#, temp_something) {
-  if (z_specificsimnumber >= 4901 && z_specificsimnumber <= 5100) {return ("done")}
-  something_subset <- which(as.numeric(somethingSomething[,2]) <= z_specificsimnumber)[length(which(as.numeric(somethingSomething[,2]) <= z_specificsimnumber))]
-  folder_200_k <- somethingSomething[which(as.numeric(somethingSomething[,2]) <= z_specificsimnumber)[length(which(as.numeric(somethingSomething[,2]) <= z_specificsimnumber))]]
-  param_thing <- list.files (file.path ("parameters"), pattern = paste0(somethingSomething[something_subset,3], ".yaml"))
+z_specificsimnumber <- 10501:10900
+# z_specificsimnumber <- 4000
+new_multirunResults_folder <- "recolorizedCurMeans_rangeMedian"
+simple_setup <- function (z_sspecificsimnumber, ssomethingSomething, recolorize = TRUE, number_of_repeats = 50, fdsa = new_multirunResults_folder) {#, temp_something) {
+  if (z_sspecificsimnumber >= 4901 && z_sspecificsimnumber <= 5100) {return ("done")}
+  something_subset <- which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber)[length(which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber))]
+  folder_200_k <- ssomethingSomething[which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber)[length(which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber))]]
+  param_thing <- list.files (file.path ("parameters"), pattern = paste0(ssomethingSomething[something_subset,3], ".yaml"))
 
-  figprodmultrun(specificsimnumber = z_specificsimnumber, number_of_repeats = number_of_repeats,
+  figprodmultrun(specificsimnumber = z_sspecificsimnumber, number_of_repeats = number_of_repeats,
   paramssource = param_thing, redo = TRUE, recolorize = recolorize, results_dir = folder_200_k, lineplots = fdsa, curMeans_only = TRUE, recolorize_style = "range-median") # variance, variance-median, range-biased, ###NOTdoneYET### clustering
 
   return ("done")
@@ -52,25 +55,26 @@ simple_setup <- function (z_specificsimnumber, somethingSomething, recolorize = 
 
 mclapply(z_specificsimnumber,
          simple_setup,
-         somethingSomething = somethingSomething,
+         ssomethingSomething = somethingSomething,
          mc.cores = n_cores)
 
 
 tenKs <- list.files (file.path ("results"), pattern = "tenK")
-dir.create (file.path("results", new_folder))
+if (! (dir.exists(file.path ("results", new_multirunResults_folder)))) {dir.create (file.path ("results", new_multirunResults_folder))}
 
 
 for (twoHundies in 1 : length (tenKs)) {
   indSims <- list.files (file.path ("results", tenKs [twoHundies]))
   if (
-    ! (dir.exists (file.path ("results", new_folder, tenKs [twoHundies])))
-  ) {dir.create (file.path ("results", new_folder, tenKs [twoHundies]))}
+    ! (dir.exists (file.path ("results", new_multirunResults_folder, tenKs [twoHundies])))
+  ) {dir.create (file.path ("results", new_multirunResults_folder, tenKs [twoHundies]))}
   for (recolorized_figs in 1 : length (indSims)) {
-    recolorized_fig_list <- list.files (file.path ("results", tenKs [twoHundies], indSims [recolorized_figs], "multirun_output", new_folder), pattern = "mean_curiosity")
+    multirun_subfolder <- list.files (file.path ("results", tenKs [twoHundies], indSims [recolorized_figs], "multirun_output"))
+    recolorized_fig_list <- list.files (file.path ("results", tenKs [twoHundies], indSims [recolorized_figs], "multirun_output", multirun_subfolder, new_multirunResults_folder), pattern = "mean_curiosity")
     for (whatever in 1 : length (recolorized_fig_list)) {
       file.copy (
-        file.path ("results", tenKs [twoHundies], indSims [recolorized_figs], "multirun_output", new_folder, recolorized_fig_list [whatever]),
-        file.path ("results", new_folder, tenKs [twoHundies])
+        file.path ("results", tenKs [twoHundies], indSims [recolorized_figs], "multirun_output", multirun_subfolder, new_multirunResults_folder, recolorized_fig_list [whatever]),
+        file.path ("results", new_multirunResults_folder, tenKs [twoHundies])
       )
     }
   }

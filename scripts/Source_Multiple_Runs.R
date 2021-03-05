@@ -383,7 +383,7 @@ life_cycle <- function (
   recordingsimpfact, one_pop_singers = c(10,10), curinhproportion,
   directorydate, invasion, invpopsize, invstyle, invpop, invsex,
   invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE,
-  mate_selection_type = FALSE) {
+  mate_selection_type = FALSE, selection_round_up = FALSE) {
 
   docnamez <- makedocnamez (
     scmin = scmin, scmax = scmax, simnumber = simnumber, runlength = runlength,
@@ -402,7 +402,8 @@ life_cycle <- function (
     learnprob = c (vertoblearn[2], vertoblearn[1]),
     randlearnprob = c (vertoblearn[4], vertoblearn[3]),
     stand.dev = standdev, curinhproportion = curinhproportion,
-    mate_selection_type = mate_selection_type
+    mate_selection_type = mate_selection_type,
+    selection_round_up = selection_round_up
   )
 
   ##### Timestep Data Object (TDO)
@@ -754,7 +755,8 @@ multi_runs <- function (shifting_curstart, paramssource,
         invtraitvalue = params$invasiontraitvalue,
         initfromlastrun = params$lastruninit,
         lastrunobject = lastrun_init[[rep_number]],
-        mate_selection_type = params$mate_selection_type
+        mate_selection_type = params$mate_selection_type,
+        selection_round_up = params$selection_round_up
         # lastrunobject = lastrun_init[, , , rep_number]
       )
       print(paste0("Replicate Run # ",
@@ -766,7 +768,25 @@ multi_runs <- function (shifting_curstart, paramssource,
 
     figprodmultrun(specificsimnumber = subsetorsequence,
                   number_of_repeats = number_of_reps,
-                  paramssource = paramssource)
+                  paramssource = paramssource,
+                  redo = FALSE,
+                  recolorize = TRUE,
+                  results_dir = FALSE,
+                  lineplots = TRUE,
+                  curMeans_only = FALSE,
+                  absolute_y = params$absolute_y-axis,
+                  recolorize_style = "range-median")
   }
 
 }
+
+
+#   specificsimnumber = 1,
+#   number_of_repeats,
+#   paramssource = paramssource,
+#   redo = FALSE,
+#   recolorize = FALSE,
+#   results_dir = FALSE,
+#   lineplots = FALSE,
+#   curMeans_only = FALSE,
+#   recolorize_style = "variance"

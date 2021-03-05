@@ -540,7 +540,7 @@ IndividualFigures <- function (
     LMHtext = "lowMedHigh",
     NWtext = "narrowWide"
   )
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
   # DONE.
   # NOW WE NEED TO MAKE THE FIGURES AND SORT THEM INTO FOLDERS THAT WE'LL PULL THEM OUT OF TO MAKE THE STITCHED-TOGETHER FILES.
   # TITLES DON'T MATTER CURRENTLY, BUT WILL ONCE THEY GET STITCHED TOGETHER.
@@ -834,7 +834,7 @@ CombineSingles <- function (
 
   library(magick)
   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
-# Access the same subdirectory where the individual images are stored
+    # Access the same subdirectory where the individual images are stored
 
   heatmap_sourceFolder <- file.path("results", "Heatmaps", "output_objects")
 
@@ -1247,3 +1247,167 @@ for (inhPattern in 1:4) {
 # #     eval(parse(text=stuff))
 # #     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
 # #     dev.off()
+
+
+
+
+working_file <- function (
+
+    #
+    param_init = TRUE
+) {
+    #
+    params <- c()
+    #
+    if (
+        param_init == TRUE
+    ) {
+
+    } else if (
+        param_init == "update_selexn_data"
+    ) {
+        # initial arguments:
+        #   update_selexn_data
+        #   main_parameters = parameters_sing_selection
+        #   temp_data_update_selexndata = temp_data_sing_selection
+        #   suitor_choices = selection.index
+        #   preferred_bird = singer
+        #   selector_bird = selector.index
+        #   curiosity_value = curiosity_level
+        #   selector_population = population
+        #   selection_context = select_type
+        #   sylreps_choices = selection.sylreps
+        #   sylrep_selector = selector.sylrep
+        #   selection_count = chance_for_selection
+        #   selection_type = selection_path
+
+        # output: # temp_data_update_selexndata
+    } else if (
+        param_init == "sing.selection"
+    ) {
+        # initial arguments:
+        #   parameters_sing_selection
+        #   temp_data_sing_selection
+        #   curiosity_level
+        #   select_type
+        #   sylrep_object
+        #   num_select_chances = c (16, 40)
+        #   sylrep_fill_chances = 10
+        #   verbose_output = TRUE
+        #   interbreed = FALSE
+        #   round_up = TRUE
+
+        # output: temp_data_sing_selection
+    } else if (
+        param_init == "score_similarity"
+    ) {
+        # initial arguments:
+        #   suitor_vector
+        #   selector_vector
+
+        # output: sum (AbsVal_diffs)
+    } else if (
+        param_init == "make.offspring.calls"
+    ) {
+        # initial arguments:
+        #   parameters_offspring_calls
+        #   temp_data_offspring_calls
+
+        # output: temp_data_offspring_calls
+    } else if (
+        param_init == "syll_learn"
+    ) {
+        # initial arguments:
+        #   parameters_sylllearn
+        #   temp_data_sylllearn
+        #   select_type = "mate"
+        #   totally_new = FALSE
+        #   randlearn_context = 1
+        #   verbose = FALSE
+
+        # output: temp_data_sylllearn
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    } else if (
+        param_init == ""
+    ) {
+        # initial arguments:
+        #
+
+        # output:
+
+    }
+
+    #  else if (
+    #     param_init == ""
+    # ) {
+    #     # initial arguments:
+    #     #
+
+    #     # output:
+
+    # }
+}

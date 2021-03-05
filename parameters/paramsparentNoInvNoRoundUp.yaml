@@ -400,7 +400,7 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [10301]
+simnumberstart: [10701]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -418,8 +418,8 @@ sylnum: 156
 num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
-mate_selection_type: "repertoire_size"
-selection_round_up: TRUE
+mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
+selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
 
 # curinh_pattern - calling either the row number
 # or name of row for different curiosity inheritance patterns -

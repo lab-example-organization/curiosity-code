@@ -68,3 +68,7 @@ lastruninit: FALSE
 lastrunid: FALSE
 # want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it.
 # BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastrunid's, that won't propagate down to restart_from_save! Awesome!
+
+# figure settings
+
+absolute_y-axis: TRUE

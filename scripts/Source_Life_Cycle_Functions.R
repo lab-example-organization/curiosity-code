@@ -250,7 +250,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                            num_select_chances = c (16, 40),
                            sylrep_fill_chances = 10,
                            verbose_output = TRUE,
-                           interbreed = FALSE
+                           interbreed = FALSE,
+                           round_up = TRUE
                           #  selection_strategy = "similarity score",
                            ) {
 
@@ -261,6 +262,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
       selection_path <- 1
     } else if (parameters_sing_selection$mate_selection_type == "repertoire_size") {
       selection_path <- 2
+    } else if (parameters_sing_selection$mate_selection_type == "SRS_then_curiosity") {
+      selection_path <- 3
     }
   } else if (select_type == 1) {
     selection_path <- 1
@@ -347,27 +350,48 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           stop ("selector didn't have any syllables in the sylrep")
         }
         #print("sapply")
-        selection.index <- (
-          # This creates sample calls for each population;
-          # each population has a sample size of parameters_sing_selection$one_pop_singers,
-          # which comes from the male half of the population. Probability
-          # defined by the fraction of syllable repertoires of each member of
-          # each population divided by the maximum syllrep of the population.
-          vapply(1:parameters_sing_selection$num_pop,
-            function(x) {
-              temp <- cpp_rowSums (sylrep_object[
-                parameters_sing_selection$pop_calls_matrix [1,],,x])
-              sample (x = parameters_sing_selection$pop_calls_matrix [1,],
-                      size = parameters_sing_selection$one_pop_singers [select_type],
-                      replace = FALSE,
-                      prob = temp / max (temp))
-              },
-            rep (0, parameters_sing_selection$one_pop_singers [select_type])
-          )
-        ) # probability = the number of times each individual's syllable
-          # repertoire has a 1 in it (sum(sylrep_object[
-          # parameters_sing_selection$pop_calls_matrix[1,]])),
-          # divided by the biggest repertoire's total.
+        if (round_up == TRUE) {
+          selection.index <- (
+            # This creates sample calls for each population;
+            # each population has a sample size of parameters_sing_selection$one_pop_singers,
+            # which comes from the male half of the population. Probability
+            # defined by the fraction of syllable repertoires of each member of
+            # each population divided by the maximum syllrep of the population.
+            vapply(1:parameters_sing_selection$num_pop,
+              function(x) {
+                temp <- cpp_rowSums (sylrep_object[
+                  parameters_sing_selection$pop_calls_matrix [1,],,x])
+                sample (x = parameters_sing_selection$pop_calls_matrix [1,],
+                        size = parameters_sing_selection$one_pop_singers [select_type],
+                        replace = FALSE,
+                        prob = temp / max (temp))
+              }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+            )
+          ) # probability = the number of times each individual's syllable
+            # repertoire has a 1 in it (sum(sylrep_object[
+            # parameters_sing_selection$pop_calls_matrix[1,]])),
+            # divided by the biggest repertoire's total.
+        } else {
+          selection.index <- (
+            # This creates sample calls for each population;
+            # each population has a sample size of parameters_sing_selection$one_pop_singers,
+            # which comes from the male half of the population. Probability
+            # defined by the fraction of syllable repertoires of each member of
+            # each population divided by the maximum syllrep of the population.
+            vapply(1:parameters_sing_selection$num_pop,
+              function(x) {
+                temp <- cpp_rowSums (sylrep_object[
+                  parameters_sing_selection$pop_calls_matrix [1,],,x])
+                sample (x = parameters_sing_selection$pop_calls_matrix [1,],
+                        size = parameters_sing_selection$one_pop_singers [select_type],
+                        replace = FALSE)
+              }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+            )
+          ) # probability = the number of times each individual's syllable
+            # repertoire has a 1 in it (sum(sylrep_object[
+            # parameters_sing_selection$pop_calls_matrix[1,]])),
+            # divided by the biggest repertoire's total.
+        }
 
         # create a matrix of all the sylrep_object of the sample
         # males from selection.index
@@ -572,8 +596,25 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
       selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
 
+      if (round_up == TRUE) {
+        selection.index <- (
+          vapply(1:parameters_sing_selection$num_pop,
+            function(x) {
+              temp <- cpp_rowSums (sylrep_object[
+                parameters_sing_selection$pop_calls_matrix [1,],,x])
+              sample (x = parameters_sing_selection$pop_calls_matrix [1,],
+                      size = parameters_sing_selection$one_pop_singers [1],
+                      replace = FALSE,
+                      prob = temp / max (temp))
+            }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+          )
+        )
+      } else {
+        selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+      }
+
       selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
-      selection.sylreps <- sylrep_object [selection.index,,1]
+      selection.sylreps <- sylrep_object [selection.index,,population]
       selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index]
       # bigSylrep <- max(cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
@@ -602,6 +643,72 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         selection_type = selection_path
       )
 
+    } else if (selection_path == 3) {
+      selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
+      selector.sylrep <- sylrep_object [selector.index, , population]
+        if (sum(selector.sylrep) == 0) {
+          stop ("selector didn't have any syllables in the sylrep")
+        }
+      # if (round_up == TRUE) {
+      #   temp <- cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,x])
+      #   selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+      # }
+
+      if (round_up == TRUE) {
+          selection.index <- (
+            vapply(1:parameters_sing_selection$num_pop,
+              function(x) {
+                temp <- cpp_rowSums (sylrep_object[
+                  parameters_sing_selection$pop_calls_matrix [1,],,x])
+                sample (x = parameters_sing_selection$pop_calls_matrix [1,],
+                        size = parameters_sing_selection$one_pop_singers [1],
+                        replace = FALSE,
+                        prob = temp / max (temp))
+              }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+            )
+          )
+      } else {
+        selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+      }
+
+      selection.sylreps <- sylrep_object [selection.index,,population]
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index]
+      # bigSylrep <- max(cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index])
+      if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
+        THING <- which(selection.sylrepSums == max (selection.sylrepSums))
+        stuff <- array(as.numeric(paste0(selection.sylreps[THING[1:length(THING)],])), c(length(THING),length(selector.sylrep)))
+
+        golf_score <- cpp_sort_indices (apply (X = stuff, MARGIN = 1,
+                            FUN = score_similarity,
+                            selector_vector = selector.sylrep))
+        # orders the scored list of suitors; subsets one suitor from the rest,
+        # according to the value of the selector's (auditory) curiosity.
+        singer <- golf_score [round (curiosity_level [
+          selector.index, population] *length(golf_score) + 0.5)]
+        if (sum (selection.sylreps [singer,])==0) {
+          stop(paste0("singer ", singer, " doesn't have syllables"))
+        }
+        #
+        # singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [THING]
+      } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
+        singer <- which (selection.sylrepSums == max (selection.sylrepSums))
+      } else {stop ("max sylrep selection problem")}
+
+
+      temp_data_sing_selection <- update_selexn_data (
+        main_parameters = parameters_sing_selection,
+        temp_data_update_selexndata = temp_data_sing_selection,
+        suitor_choices = selection.index,
+        preferred_bird = singer,
+        selector_bird = selector.index,
+        curiosity_value = curiosity_level,
+        selector_population = population,
+        selection_context = select_type,
+        sylreps_choices = selection.sylreps,
+        sylrep_selector = selector.sylrep,
+        selection_count = chance_for_selection,
+        selection_type = selection_path
+      )
     }
 
   }

@@ -1,3 +1,37 @@
+par_plot <- function (
+  # plot_settings (meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(miny, maxy), xaxt="n")
+    data_pP,
+    xlab_pP,
+    ylab_pP,
+    cex_pP = 0.2,
+    ylim_pP = c(0,100),
+    xaxt_pP = "n",
+
+  #
+
+  # par_settings (cex.lab = 1.5, cex.main = 2)
+    cex.lab_Pp = 2,
+    cex.main_Pp = 1
+  #
+
+) {
+  par (
+    cex.lab_Pp,
+    cex.main_Pp
+  ) # par_settings
+
+  plot(
+    data_pP,
+    xlab_pP,
+    ylab_pP,
+    cex_pP,
+    ylim_pP,
+    xaxt_pP
+  ) # plot_settings
+
+  # dev.off()
+}
+
 concatenate_data <- function(specific_run,
                                 converteddata = converted_data,
                                 parms = params,
@@ -111,7 +145,7 @@ create_plot_info <- function(datez = "180803", run_name = "initial_test_1") {
   return (plot_info)
 }
 
-min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist = cursitylist,
+min_n_max <- function(parameters, number_of_runs_mnx = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
                          sylrepzlist = sylrepzlist) {
   nrowsminsmaxes <- 16
@@ -126,9 +160,9 @@ min_n_max <- function(parameters, number_of_runs = number_of_runs, cursitylist =
     for(k in 1:nrowsminsmaxes ) {
       for(L in 1:2) {
         # This is for min (1) and max (2)
-        container <- vector("numeric", number_of_runs)
+        container <- vector("numeric", number_of_runs_mnx)
 
-        for(i in 1:number_of_runs) {
+        for(i in 1:number_of_runs_mnx) {
           #container[i] <- min(eval(parse(text=paste0(objectnames, "list[[", i, "]][", subset, ", ", j, ",]"))))
           eval(parse(text=paste0("container[i] <- ", mn_mx_container[L], "(", paste0(objectnames[objectsubset[k]], "list[[", i, "]][", figuresubset[k], ", ", j, ",])"))))
         }
@@ -159,23 +193,25 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
     if (recolorize != FALSE) {
       if (lineplots != FALSE) {
+        # lines
         stuff <- paste0("lines(cursitylist[[", which(1:number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
         stuff2 <- paste0("lines(cursitylist[[", which(!(1:number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
       } else {
+        # points
         stuff <- paste0("points(cursitylist[[", which(1:number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
         stuff2 <- paste0("points(cursitylist[[", which(!(1:number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
       }
-
-
-      } else {
-        stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
-      }
+    } else {
+      stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+    }
     file_name <- paste0(plot_info$datez, "_", plot_info$run_name, filename_retainer[individual_figures], population, ".png")
     miny <- mins_n_maxes[just_curiosity[individual_figures],population,1]
     maxy <- mins_n_maxes[just_curiosity[individual_figures],population,2]
 
+    # par(cex.lab = 5, cex.main = 2)
     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-    plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex=0.2, ylim=c(miny, maxy), xaxt="n")
+    par_plot(data_pP = meanz, xlab_pP = "Timestep", ylab_pP = paste0("Pop ", population, plot_title_retainer[individual_figures]),cex_pP=0.2, ylim_pP=c(miny, maxy), xaxt_pP="n")
+
     axis(side = 1,
           at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]),
                                   ((length(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,]))/10))),
@@ -187,6 +223,7 @@ curiosity_figures <- function(parameters, number_of_runs, population, cursitylis
     }
     lines(cursitylist[[number_of_runs + 1]][figure_retainer[individual_figures],population,],col="black", cex=0.2)
     dev.off()
+    # dev.off()
 
   }
 }
@@ -196,7 +233,8 @@ recolorized_simple_plots <- function (
   parameters = params, plot_info = plot_info,
   number_of_runs = number_of_repeats, cursitylist = cursitylist,
   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-  mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = FALSE, curMeans_only = FALSE
+  mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = FALSE,
+  curMeans_only = FALSE, absolute_y = TRUE, compare_subsets = FALSE
 ) {
 
   # subset_pool <- cursitylist[[]]
@@ -293,17 +331,29 @@ recolorized_simple_plots <- function (
     subset_output <- 1:50
   }
 
+  if (compare_subsets == TRUE) {
+
+    subset_comparison_output <- list(subset_output, )
+
+
+    return (subset_comparison_output)
+  }
+
   simple_plots(parameters = parameters, plot_info = plot_info,
                number_of_runs = number_of_repeats, cursitylist = cursitylist,
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-               mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = subset_output, lineplots = lineplots, curMeans_only = curMeans_only)
+               mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = subset_output,
+               lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y,
+               compare_subsets = compare_subsets, )
 }
 
 simple_plots <- function(parameters, plot_info = plot_info,
                          number_of_runs = number_of_runs, cursitylist = cursitylist,
                          sdstbxnlist = sdstbxnlist, curhistlist = curhistlist,
-                         sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, recolorize = FALSE, lineplots = FALSE, curMeans_only = FALSE
-                         ) {
+                         sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes,
+                         saving_dir = multirun_directory, recolorize = TRUE,
+                         lineplots = TRUE, curMeans_only = FALSE,
+                         absolute_y = TRUE, compare_subsets = TRUE) {
   num_timesteps = as.numeric(strsplit(parameters$runlength, "k")[[1]][1])*1000
 
   if (recolorize != FALSE) {
@@ -317,14 +367,14 @@ simple_plots <- function(parameters, plot_info = plot_info,
   for(population in 1:parameters$num_pop) {
     if (curMeans_only == FALSE) {
       if (recolorize != FALSE) {
-      curiosity_figures(parameters = parameters, number_of_runs = number_of_runs,
-                      population = population, cursitylist = cursitylist, plot_info = plot_info,
-                      mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = recolorize, lineplots = lineplots)
-    } else {
-      curiosity_figures(parameters = parameters, number_of_runs = number_of_runs,
-                      population = population, cursitylist = cursitylist, plot_info = plot_info,
-                      mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = FALSE, lineplots = lineplots)
-    }
+        curiosity_figures(parameters = parameters, number_of_runs = number_of_runs,
+                        population = population, cursitylist = cursitylist, plot_info = plot_info,
+                        mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = recolorize, lineplots = lineplots)
+      } else {
+        curiosity_figures(parameters = parameters, number_of_runs = number_of_runs,
+                        population = population, cursitylist = cursitylist, plot_info = plot_info,
+                        mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = FALSE, lineplots = lineplots)
+      }
     }
 
 
@@ -346,10 +396,17 @@ simple_plots <- function(parameters, plot_info = plot_info,
         }
 
         file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_mean_repertoire_size_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
-        miny <- mins_n_maxes[(sex + 10),population,1]
-        maxy <- mins_n_maxes[(sex + 10),population,2]
+        if (absolute_y == TRUE) {
+          miny <- min(mins_n_maxes[(sex + 10),1:2,1:2])
+          maxy <- max(mins_n_maxes[(sex + 10),1:2,1:2])
+        } else {
+          miny <- mins_n_maxes[(sex + 10),population,1]
+          maxy <- mins_n_maxes[(sex + 10),population,2]
+        }
+
         png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-        plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s - Mean Repertoire Size"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
+
+        par_plot (data_pP = meanz, xlab_pP = "Timestep", ylab_pP = paste0 ("Pop ", population, " ", plot_info$sexes_uc [sex], "s - Mean Repertoire Size"), cex_pP = 0.2, ylim_pP = c(miny, maxy), xaxt_pP = "n")
         axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
                                       ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))),
               labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
@@ -380,7 +437,7 @@ simple_plots <- function(parameters, plot_info = plot_info,
       miny <- mins_n_maxes[(sex + 12),population,1]
       maxy <- mins_n_maxes[(sex + 12),population,2]
       png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-      plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s - Mean Curiosity"),cex=0.2, ylim=c(miny, maxy), xaxt="n")
+      par_plot (data_pP = meanz, xlab_pP = "Timestep", ylab_pP = paste0 ("Pop ", population, " ", plot_info$sexes_uc [sex], "s - Mean Curiosity"),cex_pP = 0.2, ylim_pP = c (miny, maxy), xaxt_pP = "n")
       axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][sex,population,]),
                                     ((length(cursitylist[[number_of_runs + 1]][sex,population,]))/10))),
             labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
@@ -393,6 +450,30 @@ simple_plots <- function(parameters, plot_info = plot_info,
 
       if (recolorize == FALSE) {
         if (curMeans_only == FALSE) {
+
+          if (compare_subsets == TRUE) {
+
+            sdstbxnlist[[i]] <- readRDS(paste0(multirun_directory, sdstlist[i]))
+
+            for(i in 1:length(sdstbxnlist[[1]])) {
+              eval(parse(text=paste0("sdstbxnlist[[number_of_repeats + 2]][i] <- mean(c(sdstbxnlist[[",
+                                    paste0(1:(number_of_repeats - 1),"]][i],sdstbxnlist[[", collapse=''),
+                                    number_of_repeats, "]][i]))")))
+            } # made object bigger using the code marked with  "#babaganoush"
+
+            #     print (paste0("dimensions of sdstbxnlist[[1]] - ", dim (sdstbxnlist[[1]])))
+            dim (sdstbxnlist[[number_of_repeats + 1]]) <- dim (sdstbxnlist[[1]])
+
+            meanz <- sdstbxnlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
+            file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
+            png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+            image(t(meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0("Pop ", population, " ", plot_info$sexes_uc[sex], "s Sylnum"), axes=F)
+            axis(1, tck=-0.05, at=c(seq.int(0,1,0.1)),labels=c(seq.int(0,1,0.1)*num_timesteps), col.axis="black", las=2)
+            axis(2, tck=-0.05, at=c(seq.int(0,1,(1/12))),labels=c(seq.int(0,1,(1/12))*156), col.axis="black", las=2)
+            minor.tick(nx=4, ny=4.8, tick.ratio=1, x.args = list(), y.args = list())
+            dev.off()
+          }
+
           meanz <- sdstbxnlist[[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
           file_name <- paste0(plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
           png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")

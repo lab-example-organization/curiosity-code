@@ -15,7 +15,9 @@ figprodmultrun <- function (
   results_dir = FALSE,
   lineplots = FALSE,
   curMeans_only = FALSE,
-  recolorize_style = "variance") { # example of text for results_dir is "childLateSmolInvFemLow"
+  absolute_y = TRUE,
+  recolorize_style = "variance",
+  compare_subsets = FALSE) { # example of text for results_dir is "childLateSmolInvFemLow"
 #     print("figprodmultrunStart")
   if (recolorize != FALSE) {
     if (results_dir != FALSE) {
@@ -138,18 +140,21 @@ figprodmultrun <- function (
 
   curhistlist <- vector (mode = "list", length = number_of_repeats + 1)
   sylrepzlist <- vector (mode = "list", length = number_of_repeats + 1)
-  sdstbxnlist <- vector (mode = "list", length = number_of_repeats + 1)
+  sdstbxnlist <- vector (mode = "list", length = number_of_repeats + 2)
   cursitylist <- vector (mode = "list", length = number_of_repeats + 1)
 
   multirun_directory <- paste0(strsplit(multirun_folderlist[1], "variable")[[1]][1],
                                 "multirun_output/")
 
 if (length(list.files(multirun_directory, pattern = "multirun-output")) != 0) {
-  multirun_directory <- paste0 (multirun_directory, list.files(multirun_directory, pattern = "multirun-output"), "/")
-} else if (length(list.files(multirun_directory, pattern = "multirun-output")) == 0) {
-  multirun_directory <- paste0(strsplit(multirun_directory[1], "multirun_output")[[1]][1],
-                              "multirun_output/")
+  if (length(list.files(file.path (multirun_directory, list.files(multirun_directory, pattern = "multirun-output")))) != 0) {
+    multirun_directory <- paste0 (multirun_directory, list.files(multirun_directory, pattern = "multirun-output"), "/")
+  }
 }
+# else if (length(list.files(multirun_directory, pattern = "multirun-output")) == 0) {
+#   multirun_directory <- paste0(strsplit(multirun_directory[1], "multirun_output")[[1]][1],
+#                               "multirun_output/")
+# }
 
 #     print("sourcing from lists")
   for(i in 1:number_of_repeats) {
@@ -218,7 +223,7 @@ if (length(list.files(multirun_directory, pattern = "multirun-output")) != 0) {
                      "sink()", sep = "\n")
   eval(parse(text=info_make))
  #     print("info made")
-  mins_n_maxes <- min_n_max(parameters = params, number_of_runs = number_of_repeats,
+  mins_n_maxes <- min_n_max(parameters = params, number_of_runs_mnx = number_of_repeats,
                             cursitylist = cursitylist, sdstbxnlist = sdstbxnlist,
                             curhistlist = curhistlist, sylrepzlist = sylrepzlist)
 #     print(paste0("mins_n_maxes: ", mins_n_maxes))
@@ -227,13 +232,24 @@ if (length(list.files(multirun_directory, pattern = "multirun-output")) != 0) {
     simple_plots(parameters = params, plot_info = plot_info,
                  number_of_runs = number_of_repeats, cursitylist = cursitylist,
                  sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-                 mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only)
+                 mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y)
   } else {
-    recolorized_simple_plots (recolorize_style = recolorize_style, # "clustering"
-                              parameters = params, plot_info = plot_info,
-                              number_of_runs = number_of_repeats, cursitylist = cursitylist,
-                              sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-                              mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only)
+    if (compare_subsets == TRUE) {
+      output_variable <- recolorized_simple_plots (recolorize_style = recolorize_style, # "clustering"
+                                                   parameters = params, plot_info = plot_info,
+                                                   number_of_runs = number_of_repeats, cursitylist = cursitylist,
+                                                   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+                                                   mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y, compare_subsets = TRUE)
+
+      return(output_variable)
+    } else {
+      recolorized_simple_plots (recolorize_style = recolorize_style, # "clustering"
+                                parameters = params, plot_info = plot_info,
+                                number_of_runs = number_of_repeats, cursitylist = cursitylist,
+                                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+                                mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y)
+    }
+
   }
   #     print("simple_plots done")
 
