@@ -795,8 +795,8 @@ curiosity_learn <- function (parameters_curiosity_learn,
     }
 
   } else {
-
-    curinh_patterns <- array (
+    # pupil (column) learns from either father (1) or mother (2), and several possible patterns are listed (rows)
+    curinh_teaching_patterns <- array (
       data = c (
         1, 2,
         1, 2,
@@ -806,8 +806,8 @@ curiosity_learn <- function (parameters_curiosity_learn,
       dim = c (
         4,2
       ),
-      dimnames = list (c ("father", "mother", "same", "opposite"),
-                      c ("male birb", "female birb")
+      dimnames = list (c ("father-only-(1)", "mother-only-(2)", "same-sex", "opposite-sex"),
+                      c ("male bird", "female bird")
                     )
     )
 
@@ -817,7 +817,7 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
       for (sex in 1:2) {
         if (temp_data_curiosity_learn [
-          curinh_patterns [inheritance_pattern,sex],
+          curinh_teaching_patterns [inheritance_pattern,sex],
           parameters_curiosity_learn$sylnum + 2,
           population
         ] == 0) {stop (
@@ -825,29 +825,29 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
         curinh_attempts <- 1
 
-        while ((temp_data_curiosity_learn [curinh_patterns[
+        while ((temp_data_curiosity_learn [curinh_teaching_patterns[
             inheritance_pattern,sex
           ], parameters_curiosity_learn$sylnum + 2, population] +
           ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
-          ]))) < 0) {
+          ]))) < 0) { # curiosity level below 0
 
           newcuriosity [2 * (population - 1) + sex] <- runif (1, 0, 1)
           curinh_attempts <- curinh_attempts + 1
 
         }
 
-        while ((temp_data_curiosity_learn [curinh_patterns[
-          inheritance_pattern,sex
-        ], parameters_curiosity_learn$sylnum + 2, population] +
-        ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
-        ]))) > 1) {
+        while ((temp_data_curiosity_learn [curinh_teaching_patterns[
+            inheritance_pattern,sex
+          ], parameters_curiosity_learn$sylnum + 2, population] +
+          ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+          ]))) > 1) { # curiosity level above 1
 
           newcuriosity [2 * (population - 1) + sex] <- runif (1, -1, 0)
           curinh_attempts <- curinh_attempts + 1
 
         }
 
-        new.curiosity <- temp_data_curiosity_learn [curinh_patterns [
+        new.curiosity <- temp_data_curiosity_learn [curinh_teaching_patterns [
             inheritance_pattern,sex
           ], parameters_curiosity_learn$sylnum + 2, population] +
           ((1 - parameters_curiosity_learn$curlearnprob) * (
