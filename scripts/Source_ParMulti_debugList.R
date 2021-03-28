@@ -65,7 +65,10 @@ n_cores <- 2
 source(file.path("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:8
+stop("shifting_curstart <- 1:8")
+
+shifting_curstart <- 1
+
 paramsfile <- c("paramsdebugList.yaml")
 # paramsFile <- c("diffZwischensTnN.yaml")
 simdate <- gsub('-', '', substring(Sys.Date(), 3))
@@ -101,6 +104,8 @@ set.seed (seednumber + shifting_curstart)
       paramssource = paramssource, recolorize = TRUE))
 
   } else {
+    stop("recolorize = false")
+    ### add a "first time" clause here, to keep the "yo, there aren't any old archive files" issue at bay
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),
       archive = TRUE, new_dir = F)
@@ -433,3 +438,5 @@ set.seed (seednumber + shifting_curstart)
                   curMeans_only = FALSE,
                   absolute_y = params$absolute_y-axis,
                   recolorize_style = "range-median")
+
+  }                  
