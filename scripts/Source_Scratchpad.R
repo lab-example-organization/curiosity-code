@@ -1,4 +1,10 @@
+# pass args when running a script:
 
+# Script structure:
+#  #!/usr/bin/env Rscript
+#  args = commandArgs(trailingOnly=TRUE)
+
+# 
 
 #install.packages("mailR")
 library(mailR)
