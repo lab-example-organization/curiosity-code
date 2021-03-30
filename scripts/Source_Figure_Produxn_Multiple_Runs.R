@@ -21,23 +21,41 @@ figprodmultrun <- function (
 #     print("figprodmultrunStart")
   if (recolorize != FALSE) {
     if (results_dir != FALSE) {
-      multirun_folderlist <- readRDS (file.path ("results", paste0("tenKfiveByFive_", results_dir), (
-        list.files(file.path("results", paste0("tenKfiveByFive_", results_dir)), pattern = paste0("*_", specificsimnumber, "*_"))[
-          length(list.files(file.path("results", paste0("tenKfiveByFive_", results_dir)), pattern = paste0("*_", specificsimnumber, "*_")))]# This selects the latest iteration of this sim number, so this is the line to change if that is no longer true
-      ), (paste0("Group_", specificsimnumber, "_folderList.RData"))))
+      if(!(file.exists(file.path("results", paste0("tenKfiveByFive_", results_dir), (
+          list.files(file.path("results", paste0("tenKfiveByFive_", results_dir)), pattern = paste0("*_", specificsimnumber, "*_"))[
+            length(list.files(file.path("results", paste0("tenKfiveByFive_", results_dir)), pattern = paste0("*_", specificsimnumber, "*_")))]# This selects the latest iteration of this sim number, so this is the line to change if that is no longer true
+        ), (paste0("Group_", specificsimnumber, "_folderList.RData")))))) {
+          # stop("results_dir doesn't know where to find Group_#_folderList.RData")
 
-      for (run_visual in 1:number_of_repeats) {
-        multirun_folderlist[run_visual] <- paste0 (
-          file.path ("results", paste0 ("tenKfiveByFive_", results_dir)),
-          strsplit (multirun_folderlist, "results")[[1]][2]
-        )
+          connection <- file(description = file.path("source","temp", paste0(specificsimnumber, "_sim_data.txt")), open = "rt")
+          multirun_folderlist <- as.vector(read.table(connection, -1L)[[2]])
+          close(connection)
+
+      } else {
+        multirun_folderlist <- readRDS (file.path ("results", paste0("tenKfiveByFive_", results_dir), (
+          list.files(file.path("results", paste0("tenKfiveByFive_", results_dir)), pattern = paste0("*_", specificsimnumber, "*_"))[
+            length(list.files(file.path("results", paste0("tenKfiveByFive_", results_dir)), pattern = paste0("*_", specificsimnumber, "*_")))]# This selects the latest iteration of this sim number, so this is the line to change if that is no longer true
+        ), (paste0("Group_", specificsimnumber, "_folderList.RData"))))
+
+        for (run_visual in 1:number_of_repeats) {
+          multirun_folderlist[run_visual] <- paste0 (
+            file.path ("results", paste0 ("tenKfiveByFive_", results_dir)),
+            strsplit (multirun_folderlist, "results")[[1]][2]
+          )
+        }
       }
-
     } else {
-      multirun_folderlist <- readRDS (file.path ("results", (
+       if(!(file.exists(file.path ("results", (
         list.files(file.path("results"), pattern = paste0("*_", specificsimnumber, "*_"))[
-          length(list.files(file.path("results"), pattern = paste0("*_", specificsimnumber, "*_")))]# This selects the latest iteration of this sim number, so this is the line to change if that is no longer true
-      ), (paste0("Group_", specificsimnumber, "_folderList.RData"))))
+          length(list.files(file.path("results"), pattern = paste0("*_", specificsimnumber, "*_")))]# this selects... (see above)
+      ), (paste0("Group_", specificsimnumber, "_folderList.RData")))))) {
+          stop("non results_dir doesn't know where to find Group_#_folderList.RData")
+      } else {
+        multirun_folderlist <- readRDS (file.path ("results", (
+          list.files(file.path("results"), pattern = paste0("*_", specificsimnumber, "*_"))[
+            length(list.files(file.path("results"), pattern = paste0("*_", specificsimnumber, "*_")))]# this selects... (see above)
+        ), (paste0("Group_", specificsimnumber, "_folderList.RData"))))
+      }
     }
   } else {
     connection <- file(description = file.path("source","temp", paste0(specificsimnumber, "_sim_data.txt")), open = "rt")
