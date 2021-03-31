@@ -1,18 +1,6 @@
 curstarts:
   - scmin: [ 8, 8, 8, 8]
     scmax: [11,11,11,11]
-  - scmin: [ 8, 8, 8, 8]
-    scmax: [11,11,11,11]
-  - scmin: [ 8, 8, 8, 8]
-    scmax: [11,11,11,11]
-  - scmin: [ 8, 8, 8, 8]
-    scmax: [11,11,11,11]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
   - scmin: [15,15,15,15]
     scmax: [20,20,20,20]
 
@@ -32,7 +20,7 @@ num_pop: 2
 pop_size: 400
 sylnum: 156
 num_sylls_per_prob_lvl: 8
-number_of_reps: 50
+number_of_reps: 1
 standard_deviation: 2
 mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
 selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
@@ -40,8 +28,7 @@ selection_round_up: FALSE # if there's a part of tutor selection involving the s
 # curinh_pattern - calling either the row number
 # or name of row for different curiosity inheritance patterns -
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
-curinh_pattern: [1, 2, 3, 5,
-                 1, 2, 3, 5]
+curinh_pattern: [2, 2]
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
 curinhdistribution: 0.5
