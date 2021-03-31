@@ -62,4 +62,4 @@ lastrunid: FALSE
 
 figure_redo_only: FALSE
 recolorize: TRUE
-absolute_y-axis: TRUE
+absolute_yAxis: TRUE

@@ -774,7 +774,7 @@ multi_runs <- function (shifting_curstart, paramssource,
                   results_dir = FALSE,
                   lineplots = TRUE,
                   curMeans_only = FALSE,
-                  absolute_y = params$absolute_y-axis,
+                  absolute_y = params$absolute_yAxis,
                   recolorize_style = "range-median")
   }
 
