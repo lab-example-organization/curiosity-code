@@ -71,4 +71,4 @@ lastrunid: FALSE
 
 # figure settings
 
-absolute_y-axis: TRUE
+absolute_yAxis: TRUE
