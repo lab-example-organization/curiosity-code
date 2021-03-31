@@ -1,10 +1,22 @@
 curstarts:
   - scmin: [ 8, 8, 8, 8]
     scmax: [11,11,11,11]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
   - scmin: [15,15,15,15]
     scmax: [20,20,20,20]
 
-simnumberstart: [4901]
+simnumberstart: [10901]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -28,7 +40,8 @@ selection_round_up: FALSE # if there's a part of tutor selection involving the s
 # curinh_pattern - calling either the row number
 # or name of row for different curiosity inheritance patterns -
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
-curinh_pattern: [2, 2]
+curinh_pattern: [1, 2, 3, 5,
+                 1, 2, 3, 5]
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
 curinhdistribution: 0.5
