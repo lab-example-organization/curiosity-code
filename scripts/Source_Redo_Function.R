@@ -108,3 +108,69 @@ mins_n_maxes = mins_n_maxes
 saving_dir = saving_dir
 recolorize = recolorize
 lineplots = lineplots
+
+
+
+multi_runs <- function (shifting_curstart, paramssource,
+  dirdate, seednumber, recolorize = FALSE) {
+
+
+  set.seed (seednumber + shifting_curstart)
+
+  params <- yaml.load_file (file.path ("parameters", paramssource))
+  number_of_reps <- as.numeric (params$number_of_reps)
+
+  if (recolorize != FALSE) {
+
+    if (params$indrunredo == T) {
+      subsetorsequence <- params$simnumberstart [shifting_curstart]
+      singleormixture <- params$curinhdistribution [shifting_curstart]
+    } else {
+      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+      singleormixture <- params$curinhdistribution
+    }
+    print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file - provided that the multirun arg 'recolorize' == TRUE")
+    source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+    return(figprodmultrun(specificsimnumber = subsetorsequence,
+      number_of_repeats = number_of_reps,
+      paramssource = paramssource, recolorize = TRUE))
+
+  } else {
+    archivesimfiles (path = file.path ("source", "temp"),
+      filename = paste0 (shifting_curstart,"_console_copy.txt"),
+      archive = TRUE, new_dir = F)
+    archivesimfiles (path = file.path ("source", "temp"),
+      filename = paste0 (shifting_curstart,"_sim_data.txt"),
+      archive = TRUE, new_dir = F)
+
+    # This wrapped up the restart_from_save function,
+    # so that life_cycle has last-run data as an accessible object
+    # lastrun_init <- array(0, c(1,1,1,number_of_reps))
+
+    lastrun_init <- list()
+
+    if (params$lastruninit) {
+      if (length (params$lastrunid) > 1) {
+        lastrun_init <- restart_from_save (parameters = params,
+          inputpattern = params$lastrunid [shifting_curstart])
+      } else {
+        lastrun_init <- restart_from_save (parameters = params,
+          inputpattern = params$lastrunid)
+      }
+    }
+
+source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+
+    figprodmultrun(specificsimnumber = subsetorsequence,
+                  number_of_repeats = number_of_reps,
+                  paramssource = paramssource,
+                  redo = FALSE,
+                  recolorize = TRUE,
+                  results_dir = FALSE,
+                  lineplots = TRUE,
+                  curMeans_only = FALSE,
+                  absolute_y = params$absolute_yAxis,
+                  recolorize_style = "range-median")
+  }
+
+}

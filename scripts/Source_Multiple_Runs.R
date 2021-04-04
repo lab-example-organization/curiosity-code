@@ -639,7 +639,7 @@ archivesimfiles <- function (path, filename,
 }
 
 multi_runs <- function (shifting_curstart, paramssource,
-  dirdate, seednumber, recolorize = FALSE) {
+  dirdate, seednumber, recolorize = FALSE, redo = FALSE) { # redo = "fpmr", "recolorize"q
 
 
   set.seed (seednumber + shifting_curstart)
@@ -774,7 +774,6 @@ multi_runs <- function (shifting_curstart, paramssource,
                   results_dir = FALSE,
                   lineplots = TRUE,
                   curMeans_only = FALSE,
-                  absolute_y = params$absolute_yAxis,
                   recolorize_style = "range-median")
   }
 
