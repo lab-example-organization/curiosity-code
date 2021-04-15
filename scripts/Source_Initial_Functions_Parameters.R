@@ -19,7 +19,7 @@ rpf <- function (numberofrepeats, divisions_per_repeat, zeroonevalue) {
 define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, one_pop_singers,
                               curlearnprob, learnprob, randlearnprob, stand.dev, curinhproportion,
                               mate_selection_type, selection_round_up) {
-  # Here the if-statements help organize and restrict the arguments such that the Weirdness Works(TM) :P
+  # Here the if-statements help organize and restrict the arguments such that the Weirdness Works (TM) :P
   if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsl %% 1 != 0) {
     stop ("(num_pop, pop_size, nsl) need to be integers")}
   if ((num_pop == 3 || num_pop == 4) &&
@@ -41,10 +41,10 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
   pop_calls_matrix <- matrix (data = c (1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
 
 
-  #new.curiosity <- array(0,c(2,num_pop))
+  #new.curiosity <- array (0,c (2,num_pop))
   curiositybreaks <- (0 : (num_pop * one_pop_singers [1])) * (1 / (num_pop * one_pop_singers [1]))
   curiosity_counter <- matrix (data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = F)
-  # zero_to_one_template <- c(0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
+  # zero_to_one_template <- c (0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
   # #                           #1,  #2, #3,  #4,  #5,  #6, #7,  #8, #9,#10,
   #                           0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
   # #                          #11, #12,#13, #14, #15, #16,#17, #18,#19, #20,
@@ -92,8 +92,8 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
                                   byrow = TRUE
   )
 
-  # population_syll_probs <- array(data = syllprob_vector,
-  #                                dim = c(length(syllprob_vector) / sylnum,
+  # population_syll_probs <- array (data = syllprob_vector,
+  #                                dim = c (length (syllprob_vector) / sylnum,
   #                                        sylnum,
 
   #                                ),
@@ -123,7 +123,7 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
   return (parameters)
 }
 #Results of Function:
-#Parameters <- list(
+#Parameters <- list (
   # 1 - num_timesteps,   # 8 - curiositybreaks,         # 15- stand.dev,
   # 2 - num_pop,         # 9 - curiosity_counter,      # 16- ,
   # 3 - pop_size,        # 10- zero_to_one_template,    # 17- ,
@@ -131,7 +131,7 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
   # 5 - nsl,           # 12- curlearnprob,# 19-
   # 6 - one_pop_singers, # 13- learnprob,
   # 7 - pop_calls_matrix,# 14- randlearnprob,
-#return(Parameters)
+#return (Parameters)
 
 define_temp_data <- function (universal_parameters) {
   # tempCatgry = 1 (learning.pool); tempCatgry = 2 (pairing.pool)
@@ -142,7 +142,7 @@ define_temp_data <- function (universal_parameters) {
     ######   The first params$sylnum columns are learning_pool;
     ######   the last 5 are pairing_pool
   # } else {
-    # temp_data <- array(0, c(5, 5, universal_parameters$num_pop))
+    # temp_data <- array (0, c (5, 5, universal_parameters$num_pop))
   # }
 
   # REALLY WANT TO HAVE:
@@ -173,10 +173,10 @@ recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
       0, c ((2 * parameters_rvi$num_pop), (parameters_rvi$num_pop * parameters_rvi$one_pop_singers [1]),
         timestepRecordLength))
   }
-  # record_variable <- list(sylrep_rowcol=array(0, c(2, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
-  #                         sylrep_dstbxn=array(0, c((2 * P$num_pop), P$sylnum, (P$num_timesteps/simplificationFactor))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
-  #                         curity_mean_t=array(0, c(14, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
-  #                         curity_repert=array(0, c((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/simplificationFactor))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
+  # record_variable <- list (sylrep_rowcol=array (0, c (2, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
+  #                         sylrep_dstbxn=array (0, c ((2 * P$num_pop), P$sylnum, (P$num_timesteps/simplificationFactor))), ### rows: num_pop, num_sexes ### cols: sylnum ### 3rd-dim: timesteps
+  #                         curity_mean_t=array (0, c (14, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes ### cols: num_pop ### 3rd-dim: timesteps
+  #                         curity_repert=array (0, c ((2 * P$num_pop), (P$num_pop * P$one_pop_singers[1]), (P$num_timesteps/simplificationFactor))) ### rows: num_sexes ### cols: num_pop, num_singers_sampled ### 3rd-dim: timesteps
   #                         )
     # 1 & 2: Rows 1 and 2 are curiosity values for the mean of the males (row 1) and females (row 2) from each population, per timestep.
     # 3: Row 3 covers the number of selections made by females from each population, per timestep.
@@ -209,7 +209,7 @@ initialize.sylrep <- function (parameters_is, population.pattern, pastrunobject_
   # hopefully to-be-assigned to specific variables for an
   # instantiation of the model ¯\_(ツ)_/¯
   if (pastruninit_is) {
-    # if (!(pastrunobject_is)) {
+    # if (! (pastrunobject_is)) {
     #   stop ("Both pastrunobject_is and pastruninit_is need to both
     #     be engaged together... if they aren't, it won't work!")
     #   }
@@ -290,7 +290,7 @@ initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
   return (curiosity_level)
 }
 
-# invasion_function <- function(sylreps, curiosity_level,
+# invasion_function <- function (sylreps, curiosity_level,
 # population_s_affected) { # for now, population_s_affected
 # will refer to subpopulations by their pop-sex number: if
 # two pops, the numbers are 1) pop1 male, 2) pop1 female,

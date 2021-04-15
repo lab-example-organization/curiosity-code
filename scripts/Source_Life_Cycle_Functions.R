@@ -1,5 +1,5 @@
 # Load the C++ functions
-#SourceCpp(file.path('cpp_source','should_pick_neighbor.cpp'))
+#SourceCpp (file.path ('cpp_source','should_pick_neighbor.cpp'))
 
 
 
@@ -51,8 +51,8 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
       # as often happens with super self-philes, the tutor may not have
       # anything new to give the pupil. If this is the case, this skips
       # to the next step in the for loop.
-      #source_of_ones <- which(moran$learning.pool[5, , population] == 1)[
-        #which(!(which(moran$learning.pool[5, , population] == 1) %in% which(
+      #source_of_ones <- which (moran$learning.pool[5, , population] == 1) [
+        #which (! (which (moran$learning.pool[5, , population] == 1) %in% which (
           #moran$learning.pool[3, , population] == 1)))]
       source_of_ones <- setdiff (source_of_ones, pupil_has_ONEs)
       if (length (source_of_ones) == 0) {
@@ -63,15 +63,15 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
       } # if curiosity is so low that tutor can teach nothing, just skip
               # this population's tutor learning step
     } # Oblique Learning parameters_sylllearn and considerations
-    #if(randlearn_context == 1) {
-    #  teacher.mean <- mean(source_of_ones)
+    #if (randlearn_context == 1) {
+    #  teacher.mean <- mean (source_of_ones)
     #}
 
 
-    #sink(file = paste("syll_learn pop", population, "probs.txt", sep = " "),
+    #sink (file = paste("syll_learn pop", population, "probs.txt", sep = " "),
     # append = T)
-    #print(probs)
-    #sink()
+    #print (probs)
+    #sink ()
 
     if (select_type == "mate") {
       loop_size <- 2
@@ -81,7 +81,7 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
 
     for (sex in 1 : loop_size) {
       average_rate_randlearn_overlap <- c ()
-      #print(source_of_ones)
+      #print (source_of_ones)
       probs <- runif (source_of_ones, 0, 1)
       for (sylls_to_learn in 1 : length (source_of_ones)) {
         # moran$learning.pool[(sex + 2),
@@ -154,7 +154,7 @@ update_selexn_data <- function (
   selected_pair <- c (suitor_choices [preferred_bird], # Bird being selected
                        selector_bird)          # Bird doing the selecting
 
-  #if(!(giving_up)) {
+  #if (! (giving_up)) {
     singer_population <- ceiling (
     preferred_bird / main_parameters$one_pop_singers [selection_context])
     # if (selection_type == 1) {
@@ -166,7 +166,7 @@ update_selexn_data <- function (
   #}# else {
   #   singer_population <- selector_population
 
-  #   sylrep_pairs <- rbind(sylreps_choices[preferred_bird,], sylrep_selector)
+  #   sylrep_pairs <- rbind (sylreps_choices[preferred_bird,], sylrep_selector)
   # } # This happens if giving_up == TRUE. Not ideal for tutor selection,
     # but I guess that's the point of giving up... also, this should
     # basically NEVER happen for tutor context anyway.
@@ -211,18 +211,18 @@ update_selexn_data <- function (
 #   lower_bound <- round (num_select_chances [select_type] * 0.25) # 50
 
 #   upper_bound <- round (total_chances [selection_context] * upper) # 75
-#   print(paste0("sortSimlr = ", sortSimlr, collapse = ""))
-#   print(paste0("chosenBird = ", chosenBird))
-#   print(paste0("index = ", index))
-#   print(paste0("current_chance = ", current_chance))
-#   print(paste0("upper_bound = ", upper_bound))
-#   print(paste0("lower_bound = ", lower_bound))
+#   print (paste0 ("sortSimlr = ", sortSimlr, collapse = ""))
+#   print (paste0 ("chosenBird = ", chosenBird))
+#   print (paste0 ("index = ", index))
+#   print (paste0 ("current_chance = ", current_chance))
+#   print (paste0 ("upper_bound = ", upper_bound))
+#   print (paste0 ("lower_bound = ", lower_bound))
 
-#   # is_desperate <- between(current_chance, lower_bound, upper_bound)
+#   # is_desperate <- between (current_chance, lower_bound, upper_bound)
 
 #   # is_neighbor_better <- sortSimlr[chosenBird+index] %in% repBarrier
 #   if (
-#     sortSimlr[which(sortSimlr == chosenBird) + index] %in% repBarrier
+#     sortSimlr[which (sortSimlr == chosenBird) + index] %in% repBarrier
 #   ) {
 #     stuff <- (dplyr::between (current_chance, lower_bound, upper_bound))
 #   }
@@ -276,9 +276,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           )
     }
   }
-  #print("sing.selection beginning")
-  for (population in 1 : parameters_sing_selection$num_pop) { #population <- 1 rm(population)
-    #print(paste("this is population",population,sep=" "))
+  #print ("sing.selection beginning")
+  for (population in 1 : parameters_sing_selection$num_pop) { #population <- 1 rm (population)
+    #print (paste("this is population",population,sep=" "))
     chance_for_selection = 1
 
     if (selection_path == 1) {
@@ -288,8 +288,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           auto.teachers <- matrix (c (sample (parameters_sing_selection$pop_calls_matrix [1, ],
             sylrep_fill_chances),sample (parameters_sing_selection$pop_calls_matrix [2, ],
             sylrep_fill_chances)),2,sylrep_fill_chances,T)
-          for (MTsylrep_filter in 1:sylrep_fill_chances) {
-            #c((sample(parameters_sing_selection$pop_calls_matrix[1, ], 1)), (
+          for (MTsylrep_filter in 1 : sylrep_fill_chances) {
+            #c ((sample(parameters_sing_selection$pop_calls_matrix[1, ], 1)), (
               #sample(parameters_sing_selection$pop_calls_matrix[2, ], 1)))
             if ((
               sum (sylrep_object [auto.teachers [1,MTsylrep_filter
@@ -298,7 +298,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                   ], , population]) != 0)) {
               if (verbose_output == TRUE) {
                 context.name <- c ("Tutor", "Mate")
-                warning (print (paste0 ("Automatic Teacher(s) = ",
+                warning (print (paste0 ("Automatic Teacher (s) = ",
                               auto.teachers [,MTsylrep_filter],
                                 " for Population ", population,
                                 " ", context.name [select_type],
@@ -312,7 +312,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                 sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
                 num_select_chances [select_type])#, T)
 
-              # if(MTsylrep_filter >= 1) {}
+              # if (MTsylrep_filter >= 1) {}
               stop = TRUE
               break
             }
@@ -346,10 +346,10 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         }
 
         selector.sylrep <- sylrep_object [selector.index, , population]
-        if (sum(selector.sylrep) == 0) {
+        if (sum (selector.sylrep) == 0) {
           stop ("selector didn't have any syllables in the sylrep")
         }
-        #print("sapply")
+        #print ("sapply")
         if (round_up == TRUE) {
           selection.index <- (
             # This creates sample calls for each population;
@@ -357,8 +357,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
             # which comes from the male half of the population. Probability
             # defined by the fraction of syllable repertoires of each member of
             # each population divided by the maximum syllrep of the population.
-            vapply(1:parameters_sing_selection$num_pop,
-              function(x) {
+            vapply (1 : parameters_sing_selection$num_pop,
+              function (x) {
                 temp <- cpp_rowSums (sylrep_object[
                   parameters_sing_selection$pop_calls_matrix [1,],,x])
                 sample (x = parameters_sing_selection$pop_calls_matrix [1,],
@@ -368,7 +368,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
               }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
             )
           ) # probability = the number of times each individual's syllable
-            # repertoire has a 1 in it (sum(sylrep_object[
+            # repertoire has a 1 in it (sum (sylrep_object[
             # parameters_sing_selection$pop_calls_matrix[1,]])),
             # divided by the biggest repertoire's total.
         } else {
@@ -378,8 +378,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
             # which comes from the male half of the population. Probability
             # defined by the fraction of syllable repertoires of each member of
             # each population divided by the maximum syllrep of the population.
-            vapply(1:parameters_sing_selection$num_pop,
-              function(x) {
+            vapply (1 : parameters_sing_selection$num_pop,
+              function (x) {
                 temp <- cpp_rowSums (sylrep_object[
                   parameters_sing_selection$pop_calls_matrix [1,],,x])
                 sample (x = parameters_sing_selection$pop_calls_matrix [1,],
@@ -388,7 +388,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
               }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
             )
           ) # probability = the number of times each individual's syllable
-            # repertoire has a 1 in it (sum(sylrep_object[
+            # repertoire has a 1 in it (sum (sylrep_object[
             # parameters_sing_selection$pop_calls_matrix[1,]])),
             # divided by the biggest repertoire's total.
         }
@@ -398,12 +398,12 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         selection.sylreps <- t (
           cbind (
             vapply (
-              1:parameters_sing_selection$one_pop_singers [select_type],
+              1 : parameters_sing_selection$one_pop_singers [select_type],
               function (x) {sylrep_object [selection.index[x,1],,1]},
               rep (0, dim (sylrep_object) [2])
             ),
             vapply (
-              1:parameters_sing_selection$one_pop_singers [select_type],
+              1 : parameters_sing_selection$one_pop_singers [select_type],
               function (x) {sylrep_object [selection.index [x,2],,2]},
               rep (0, dim (sylrep_object) [2])
             )
@@ -413,10 +413,10 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         # applies the standard deviation scoring to the males in
         # selection.sylrep_object; larger score means greater
         # difference between male sylrep and selector's sylrep.
-        # temp <- apply(X = selection.sylreps, MARGIN = 1,
+        # temp <- apply (X = selection.sylreps, MARGIN = 1,
         #               FUN = score_similarity,
         #               selector_vector = selector.sylrep)
-        # golf_score <- sort(apply(X = selection.sylreps, MARGIN = 1,
+        # golf_score <- sort (apply (X = selection.sylreps, MARGIN = 1,
         #               FUN = score_similarity,
         #               selector_vector = selector.sylrep))$ix
 
@@ -437,7 +437,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           next
         }
 
-        #should_pick_neighbor <- function(index,lower,upper=Inf) {
+        #should_pick_neighbor <- function (index,lower,upper=Inf) {
 
         if (!interbreed) {
           should_continue <- TRUE
@@ -461,11 +461,11 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           }
 
           if (should_continue == TRUE) {
-            if (between(chance_for_selection, num_select_chances[select_type] * 0.25, num_select_chances[select_type] * 0.5)) {
+            if (between (chance_for_selection, num_select_chances[select_type] * 0.25, num_select_chances[select_type] * 0.5)) {
               for (neighbor in c (1, -1, 2, -2)) {
 
-                if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
-                  if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
+                if (! (length (golf_score[which (golf_score == singer) + neighbor]) == 0)) {
+                  if (golf_score[which (golf_score == singer) + neighbor] %in% singsuccessfilter) {
 
                     singer <- golf_score [which (golf_score == singer) + neighbor]
 
@@ -488,7 +488,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                     break
                   }
                 }
-                if (!(should_continue)) {
+                if (! (should_continue)) {
                   break
                 }
               }
@@ -496,11 +496,11 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           }
 
           if (should_continue == TRUE) {
-            if (between(chance_for_selection, num_select_chances[select_type] * 0.5, num_select_chances[select_type] * 0.75)) {
+            if (between (chance_for_selection, num_select_chances[select_type] * 0.5, num_select_chances[select_type] * 0.75)) {
               for (neighbor in c (1, -1, 2, -2, 3, -3, 4, -4, 5, -5)) {
 
-                if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
-                  if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
+                if (! (length (golf_score[which (golf_score == singer) + neighbor]) == 0)) {
+                  if (golf_score[which (golf_score == singer) + neighbor] %in% singsuccessfilter) {
 
                     singer <- golf_score [which (golf_score == singer) + neighbor]
 
@@ -523,7 +523,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                     break
                   }
                 }
-                if (!(should_continue)) {
+                if (! (should_continue)) {
                   break
                 }
               }
@@ -531,12 +531,12 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           }
 
           if (should_continue == TRUE) {
-            if (between(chance_for_selection, num_select_chances[select_type] * 0.75, num_select_chances[select_type] * 1)) {
+            if (between (chance_for_selection, num_select_chances[select_type] * 0.75, num_select_chances[select_type] * 1)) {
               for (neighbor in c (1, -1, 2, -2, 3, -3, 4, -4, 5, -5,
                                 6, -6, 7, -7, 8, -8, 9, -9, 10, -10)) {
 
-                if (!(length(golf_score[which(golf_score == singer) + neighbor]) == 0)) {
-                  if (golf_score[which(golf_score == singer) + neighbor] %in% singsuccessfilter) {
+                if (! (length (golf_score[which (golf_score == singer) + neighbor]) == 0)) {
+                  if (golf_score[which (golf_score == singer) + neighbor] %in% singsuccessfilter) {
 
                     singer <- golf_score [which (golf_score == singer) + neighbor]
 
@@ -559,7 +559,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                     break
                   }
                 }
-                if (!(should_continue)) {
+                if (! (should_continue)) {
                   break
                 }
               }
@@ -598,8 +598,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
       if (round_up == TRUE) {
         selection.index <- (
-          vapply(1:parameters_sing_selection$num_pop,
-            function(x) {
+          vapply (1 : parameters_sing_selection$num_pop,
+            function (x) {
               temp <- cpp_rowSums (sylrep_object[
                 parameters_sing_selection$pop_calls_matrix [1,],,x])
               sample (x = parameters_sing_selection$pop_calls_matrix [1,],
@@ -615,8 +615,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
       selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index]
-      # bigSylrep <- max(cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index])
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
         singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
       } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
@@ -624,7 +624,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
       } else {stop ("max sylrep selection problem")}
 
       selector.sylrep <- sylrep_object [selector.index, , population]
-        if (sum(selector.sylrep) == 0) {
+        if (sum (selector.sylrep) == 0) {
           stop ("selector didn't have any syllables in the sylrep")
         }
 
@@ -646,7 +646,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
     } else if (selection_path == 3) {
       selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
       selector.sylrep <- sylrep_object [selector.index, , population]
-        if (sum(selector.sylrep) == 0) {
+        if (sum (selector.sylrep) == 0) {
           stop ("selector didn't have any syllables in the sylrep")
         }
       # if (round_up == TRUE) {
@@ -656,8 +656,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
       if (round_up == TRUE) {
           selection.index <- (
-            vapply(1:parameters_sing_selection$num_pop,
-              function(x) {
+            vapply (1 : parameters_sing_selection$num_pop,
+              function (x) {
                 temp <- cpp_rowSums (sylrep_object[
                   parameters_sing_selection$pop_calls_matrix [1,],,x])
                 sample (x = parameters_sing_selection$pop_calls_matrix [1,],
@@ -672,11 +672,11 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
       }
 
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index]
-      # bigSylrep <- max(cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index])
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
-        THING <- which(selection.sylrepSums == max (selection.sylrepSums))
-        stuff <- array(as.numeric(paste0(selection.sylreps[THING[1:length(THING)],])), c(length(THING),length(selector.sylrep)))
+        THING <- which (selection.sylrepSums == max (selection.sylrepSums))
+        stuff <- array (as.numeric (paste0 (selection.sylreps[THING[1 : length (THING)],])), c (length (THING),length (selector.sylrep)))
 
         golf_score <- cpp_sort_indices (apply (X = stuff, MARGIN = 1,
                             FUN = score_similarity,
@@ -684,9 +684,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         # orders the scored list of suitors; subsets one suitor from the rest,
         # according to the value of the selector's (auditory) curiosity.
         singer <- golf_score [round (curiosity_level [
-          selector.index, population] *length(golf_score) + 0.5)]
+          selector.index, population] *length (golf_score) + 0.5)]
         if (sum (selection.sylreps [singer,])==0) {
-          stop(paste0("singer ", singer, " doesn't have syllables"))
+          stop (paste0 ("singer ", singer, " doesn't have syllables"))
         }
         #
         # singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [THING]
@@ -731,7 +731,7 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
     for (population in 1 : (parameters_curiosity_learn$num_pop)) {
 
-      for (sex in 1:2) {
+      for (sex in 1 : 2) {
         if (
             temp_data_curiosity_learn [1,
               parameters_curiosity_learn$sylnum + 2,
@@ -815,7 +815,7 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
     for (population in 1 : (parameters_curiosity_learn$num_pop)) {
 
-      for (sex in 1:2) {
+      for (sex in 1 : 2) {
         if (temp_data_curiosity_learn [
           curinh_teaching_patterns [inheritance_pattern,sex],
           parameters_curiosity_learn$sylnum + 2,
@@ -964,7 +964,7 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
       # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
       # first, we need to make sure that everywhere else it's referenced, ALSO, gets accounted for and changed accordingly.
 
-      data_container [sex, population, timestep] <- mean(
+      data_container [sex, population, timestep] <- mean (
         curiosity_object [((1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
         ) : (sex * parameters_cmt_archive$pop_size / 2)), population])
 
@@ -989,7 +989,7 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
       # ] <- temp_data_cmt_archive [sex + 3, parameters_cmt_archive$sylnum + 3, population] # once curiosity variance is recorded, it'll be forwarded to the permanent data object
 
       data_container [(sex + 12), population, timestep
-      ] <- var(
+      ] <- var (
         curiosity_object [((1 + ((sex-1) * parameters_cmt_archive$pop_size / 2)
         ) : (sex * parameters_cmt_archive$pop_size / 2)), population]
         ) # once curiosity variance is recorded, it'll be forwarded to the permanent data object
@@ -1010,7 +1010,7 @@ curity_mean_t.archive <- function (parameters_cmt_archive,
 #       ] <- temp_data_cmt_archive[sex, parameters$sylnum + 5, population]
 #     }
 #   }
-#   return(data_container)
+#   return (data_container)
 # }
 
 curity_repert.archive <- function (parameters_crp_archive,
@@ -1040,10 +1040,10 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
   cur_container, run_timedate, foldername = foldername#,
   # simnumber = simnumber
   ) {
-   # # # #  #directory <- getwd()
+   # # # #  #directory <- getwd ()
   results_directory <- file.path ('results')
   if (filename == 1) {
-    # run_timedate <- format(Sys.time(), "%F-%H%M%S")
+    # run_timedate <- format (Sys.time(), "%F-%H%M%S")
     if (! (dir.exists (file.path (results_directory, saved_stuff$docnamez)))) {
       dir.create (file.path (results_directory, saved_stuff$docnamez))
       dir.create (file.path (results_directory, saved_stuff$docnamez,
@@ -1051,20 +1051,20 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
     }
     dir.create (file.path (results_directory, saved_stuff$docnamez,
       "variable_store", paste0 (run_timedate, "-GMT-variable-store")))
-    # foldername <- file.path(results_directory, saved_stuff$docnamez,
-    #   "variable_store", paste0(run_timedate, "-GMT-variable-store"))
+    # foldername <- file.path (results_directory, saved_stuff$docnamez,
+    #   "variable_store", paste0 (run_timedate, "-GMT-variable-store"))
     saveRDS (saved_stuff, file.path (foldername, "metadata.RData"))
   }
   # else {
-  #   foldername <- readRDS (file.path(
-  #       "source", "temp", paste0(
+  #   foldername <- readRDS (file.path (
+  #       "source", "temp", paste0 (
   #         "foldername_", parameters$simnumber, ".RData")
   # ))}
 
   thing <- c ("sylrep_rowcol", "sylrep_dstbxn",
               "curity_mean_t", "curity_repert")
 
-  for (data_categories in 1:4) {
+  for (data_categories in 1 : 4) {
 
     file.create (file.path (foldername, paste0 (
       "variable-store-", filename, "-", thing[data_categories], ".RData")))
@@ -1077,10 +1077,10 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
     } else if (data_categories == 4) {
       objekshun <- repert
     }
-    # print("tryna save")
+    # print ("tryna save")
     saveRDS (objekshun, file.path (foldername, paste0 (
       "variable-store-", filename, "-", thing[data_categories], ".RData")))
-    # print("saved")
+    # print ("saved")
   }
   saveRDS (parameters_storetimesteps, file.path (
     foldername, "defined_parameters.RData"))

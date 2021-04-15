@@ -1,10 +1,10 @@
-rm(list=objects())
+rm (list = objects ())
 # redo figures
-source(file.path("scripts", "Source_Reference_Section.R"))
-referencesection("multirun")
+source (file.path ("scripts", "Source_Reference_Section.R"))
+referencesection ("multirun")
 
 paramssource = "paramsparentNoInv"
-params <- yaml.load_file (file.path ("parameters", paste0(paramssource, ".yaml")))
+params <- yaml.load_file (file.path ("parameters", paste0 (paramssource, ".yaml")))
 number_of_reps <- as.numeric (params$number_of_reps)
 
     specificsimnumber = 4000
@@ -31,7 +31,7 @@ number_of_reps <- as.numeric (params$number_of_reps)
 #       absolute_y = TRUE,
 #       recolorize_style = "variance")
 
-results_table <- array(c(
+results_table <- array (c (
   "parentNoInv",        "childF1NoInv",       "childMalHihInv",  "childMalLowInv",     "childFemLowInv",
   "childBothLowInv",    "childFemHihInv",     "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
   "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2",    "childNoInvF3",       "childNoInvF4",
@@ -60,19 +60,19 @@ results_table <- array(c(
   "paramsLateInvBothHighHrTenK", "paramsLateInvBothLowHrTenK",
   "paramsLateSmolInvMalHighHrTenK", "paramsLateSmolInvMalLowHrTenK",
   "paramsLateSmolInvFemHighHrTenK", "paramsLateSmolInvFemLowHrTenK",
-  "paramsparentNoInvSylRep", "paramsparentNoInvSylRepNoRoundUp", "paramsparentNoInvNoRoundUp"), c(34,3)
+  "paramsparentNoInvSylRep", "paramsparentNoInvSylRepNoRoundUp", "paramsparentNoInvNoRoundUp"), c (34,3)
 )
 
 graph_settings <- par (no.readonly = TRUE)
-par_plot <- function() {
-  par(cex.lab = 1.5, cex.main = 2)
-  thing <- plot(1:5)
-  dev.off()
-  return(thing)
+par_plot <- function () {
+  par (cex.lab = 1.5, cex.main = 2)
+  thing <- plot (1 : 5)
+  dev.off ()
+  return (thing)
 }
-par(cex.lab = 1.5, cex.main = 2)
+par (cex.lab = 1.5, cex.main = 2)
 
-dev.off()
+dev.off ()
 
 load_sim_for_plots <- function (
     simnumber_lsfp = 3901,
@@ -130,8 +130,8 @@ multi_runs <- function (shifting_curstart, paramssource,
       singleormixture <- params$curinhdistribution
     }
     print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file - provided that the multirun arg 'recolorize' == TRUE")
-    source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-    return(figprodmultrun(specificsimnumber = subsetorsequence,
+    source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+    return (figprodmultrun (specificsimnumber = subsetorsequence,
       number_of_repeats = number_of_reps,
       paramssource = paramssource, recolorize = TRUE))
 
@@ -145,9 +145,9 @@ multi_runs <- function (shifting_curstart, paramssource,
 
     # This wrapped up the restart_from_save function,
     # so that life_cycle has last-run data as an accessible object
-    # lastrun_init <- array(0, c(1,1,1,number_of_reps))
+    # lastrun_init <- array (0, c (1,1,1,number_of_reps))
 
-    lastrun_init <- list()
+    lastrun_init <- list ()
 
     if (params$lastruninit) {
       if (length (params$lastrunid) > 1) {
@@ -159,9 +159,9 @@ multi_runs <- function (shifting_curstart, paramssource,
       }
     }
 
-source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
 
-    figprodmultrun(specificsimnumber = subsetorsequence,
+    figprodmultrun (specificsimnumber = subsetorsequence,
                   number_of_repeats = number_of_reps,
                   paramssource = paramssource,
                   redo = FALSE,

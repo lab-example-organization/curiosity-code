@@ -19,7 +19,7 @@ test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
                                      current_chance = 47,
                                      sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
                                                     3,11,19, 8, 4, 2,14,16,13,17),
-                                     repBarrier = c (1:10),
+                                     repBarrier = c (1 : 10),
                                      chosenBird = 1,
                                      lower = 0.46,
                                      upper = 0.75)
@@ -33,7 +33,7 @@ test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
                                      current_chance = 47,
                                      sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
                                                     3,11,19, 8, 4, 2,14,16,13,17),
-                                     repBarrier = c (1:10),
+                                     repBarrier = c (1 : 10),
                                      chosenBird = 1,
                                      lower = 0.46)
   ) #current_chance is between (lower * total_chances[selection_context]) and (upper * total_chances[selection_context])
@@ -49,7 +49,7 @@ test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
                                      current_chance = 47,
                                      sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
                                                     3,11,19, 8, 4, 2,14,16,13,17),
-                                     repBarrier = c (1:10),
+                                     repBarrier = c (1 : 10),
                                      chosenBird = 3,
                                      lower = 0.46,
                                      upper = 0.75)
@@ -63,7 +63,7 @@ test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
                                      current_chance = 45,
                                      sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
                                                     3,11,19, 8, 4, 2,14,16,13,17),
-                                     repBarrier = c (1:20),
+                                     repBarrier = c (1 : 20),
                                      chosenBird = 3,
                                      lower = 0.46,
                                      upper = 0.75)
@@ -77,7 +77,7 @@ test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
                                      current_chance = 45,
                                      sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
                                                     3,11,19, 8, 4, 2,14,16,13,17),
-                                     repBarrier = c (1:20),
+                                     repBarrier = c (1 : 20),
                                      chosenBird = 3,
                                      lower = 0.46)
   )
@@ -85,10 +85,10 @@ test_that ('curiosityLearn outputs TRUE or FALSE when working normally', {
 
 
   # # This should throw an error since 5 % 6 = 1.
-  # expect_error(rep.frac(5, 6, 1),
+  # expect_error (rep.frac (5, 6, 1),
   #   'first element must be divisible by the second element')
 
-  # # This should throw an error since 100 > length(zero_to_one_template).
-  # expect_error(rep.frac(10, 5, 100),
+  # # This should throw an error since 100 > length (zero_to_one_template).
+  # expect_error (rep.frac (10, 5, 100),
   #   'in order to work, value_entered must be contained within zero_to_one_template')
 })

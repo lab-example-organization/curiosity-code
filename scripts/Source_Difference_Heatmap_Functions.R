@@ -1,22 +1,22 @@
 find_the_dir <- function (
   patternz, #male
-  source_dir # c("results", "five-by-five-vanilla_lowHigh_Background")
+  source_dir # c ("results", "five-by-five-vanilla_lowHigh_Background")
 ) {
 
-  dirs_within_sourcedir <- list.dirs(file.path ("results", source_dir), recursive = FALSE)
-#   dirs_within_sourcedir <- list.dirs(file.path ("results", source_dir), pattern = patternz, recursive = FALSE)
+  dirs_within_sourcedir <- list.dirs (file.path ("results", source_dir), recursive = FALSE)
+#   dirs_within_sourcedir <- list.dirs (file.path ("results", source_dir), pattern = patternz, recursive = FALSE)
 
   thing <- FALSE
 
   for (i in 1 : length (dirs_within_sourcedir)) {
     if (! (thing)) {
-      stuff <- strsplit(strsplit(dirs_within_sourcedir, "inh")[[i]], "_")
-      for (j in 1:length (stuff)) {
+      stuff <- strsplit (strsplit (dirs_within_sourcedir, "inh") [[i]], "_")
+      for (j in 1 : length (stuff)) {
         whatever <- which (stuff[[j]] == patternz)
-        if (length(whatever > 0)) {
+        if (length (whatever > 0)) {
           # print ("you found it!")
-          # i <- append(i, j)
-          # whatever <- append(whatever, i)
+          # i <- append (i, j)
+          # whatever <- append (whatever, i)
           found_it <- i
           thing <- TRUE
           break
@@ -31,7 +31,7 @@ find_the_dir <- function (
     if (thing) {break}
     # print ("whatever")
   }
-  # pattern_interrogation <- dirs_within_sourcedir[[1:length(dirs_within_sourcedir)]]
+  # pattern_interrogation <- dirs_within_sourcedir[[1 : length (dirs_within_sourcedir)]]
 
   final_dir <- file.path (dirs_within_sourcedir[[found_it]])
 
@@ -49,7 +49,7 @@ heatmap_difference <- function (
   visualization = "absolute", # "absolute" - takes absolute value of differences between different conditions. "midpoint" - grades differences according to which of the two heatmaps has a greater value!
   replace = FALSE,
   special_source = FALSE,
-#   foldername = list(
+#   foldername = list (
     #   diffcurstartbias = ,
     #   biassize = ,
     #   othersize =
@@ -73,72 +73,72 @@ heatmap_difference <- function (
   }
 
 
-  first_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = first_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = first_source_directory), pattern = ".RData")))
-  second_heatmap <- readRDS (file.path(find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), pattern = ".RData")))
+  first_heatmap <- readRDS (file.path (find_the_dir (pattern = source_pattern, source_dir = first_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = first_source_directory), pattern = ".RData")))
+  second_heatmap <- readRDS (file.path (find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), list.files (find_the_dir (pattern = source_pattern, source_dir = secnd_source_directory), pattern = ".RData")))
   if (visualization == "absolute") {
-    output_curiosity <- abs(first_heatmap[,,,1:4] - second_heatmap[,,,1:4])
-    output_sylreps <- (abs(first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / (156 - 1))
-    output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
+    output_curiosity <- abs (first_heatmap[,,,1 : 4] - second_heatmap[,,,1 : 4])
+    output_sylreps <- (abs (first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / (156 - 1))
+    output_heatmap <- abind (output_curiosity, output_sylreps, along = 4)
   } else if (visualization == "midpoint") {
-    output_curiosity <- ((first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) / 2) + 0.5
+    output_curiosity <- ((first_heatmap[,,,1 : 4] - second_heatmap[,,,1 : 4]) / 2) + 0.5
     output_sylreps <- ((first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) / 2) + (155/2)
-    output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
+    output_heatmap <- abind (output_curiosity, output_sylreps, along = 4)
   } else if (visualization == "midpoint_but_high_res") {
-    output_curiosity <- (first_heatmap[,,,1:4] - second_heatmap[,,,1:4]) + 0.5
+    output_curiosity <- (first_heatmap[,,,1 : 4] - second_heatmap[,,,1 : 4]) + 0.5
     output_sylreps <- (first_heatmap[,,,5:8] - second_heatmap[,,,5:8]) + (155/2)
-    output_heatmap <- abind(output_curiosity, output_sylreps, along = 4)
+    output_heatmap <- abind (output_curiosity, output_sylreps, along = 4)
   }
 
 
-  # if(!(dir.exists(file.path("results", foldername)))) {
+  # if (! (dir.exists (file.path ("results", foldername)))) {
 
-  #     dir.create(file.path("results", foldername))}
+  #     dir.create (file.path ("results", foldername))}
 
-  # if(!(file.exists(file.path(
-  #   "results", foldername, paste0("heatmap_output_-_", inheritance,
+  # if (! (file.exists (file.path (
+  #   "results", foldername, paste0 ("heatmap_output_-_", inheritance,
   #   "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
   # )))) {
 
-  # saveRDS(heatmap_array, file.path(
-  #   "results",foldername, paste0("heatmap_output_-_", inheritance,
+  # saveRDS (heatmap_array, file.path (
+  #   "results",foldername, paste0 ("heatmap_output_-_", inheritance,
   #   "inh_", diffcurstartbias, "Bias_", runstyle, ".RData")
 
   # ))}
 
-  fsd <- setdiff(strsplit(first_source_directory, "_")[[1]], strsplit(secnd_source_directory, "_")[[1]])
-  ssd <- setdiff(strsplit(secnd_source_directory, "_")[[1]], strsplit(first_source_directory, "_")[[1]])
+  fsd <- setdiff (strsplit (first_source_directory, "_") [[1]], strsplit (secnd_source_directory, "_") [[1]])
+  ssd <- setdiff (strsplit (secnd_source_directory, "_") [[1]], strsplit (first_source_directory, "_") [[1]])
 
-  first_source_directory <- setdiff(strsplit(fsd, "-")[[1]], strsplit(ssd, "-")[[1]])
-  secnd_source_directory <- setdiff(strsplit(ssd, "-")[[1]], strsplit(fsd, "-")[[1]])
+  first_source_directory <- setdiff (strsplit (fsd, "-") [[1]], strsplit (ssd, "-") [[1]])
+  secnd_source_directory <- setdiff (strsplit (ssd, "-") [[1]], strsplit (fsd, "-") [[1]])
 
   # differences <-
 
   if (! (dir.exists (file.path ("results", "DifferenceHeatmaps")))) {dir.create (file.path ("results", "DifferenceHeatmaps"))}
 
-  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory))))) {
-      dir.create(file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory)))
+  if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory))))) {
+      dir.create (file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory)))
     }
 
-    if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))))) {
-      dir.create(file.path("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh")))
+    if (! (dir.exists (file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0 (source_pattern, "_inh"))))) {
+      dir.create (file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0 (source_pattern, "_inh")))
     }
 
   if (replace) {
-    saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
+    saveRDS (output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0 (source_pattern, "_inh"), paste0 ("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
   } else {
-    if (! (file.exists (file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData"))))) {
-      saveRDS(output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"), paste0("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
+    if (! (file.exists (file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0 (source_pattern, "_inh"), paste0 ("Difference_Heatmap_", source_pattern, "_inheritance.RData"))))) {
+      saveRDS (output_heatmap, file.path ("results", "DifferenceHeatmaps", paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0 (source_pattern, "_inh"), paste0 ("Difference_Heatmap_", source_pattern, "_inheritance.RData")))
     }
   }
 
-  # plot_that_spectrum(file_name = file.path ("results", paste0("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
+  # plot_that_spectrum (file_name = file.path ("results", paste0 ("Difference_Heatmaps_", first_source_directory, "_versus_", secnd_source_directory)))
 
-  output_heatmap <- list(
+  output_heatmap <- list (
     # biassize = foldername$biassize,
     # othersize = foldername$othersize,
     # diffcurstartbias = foldername$diffcurstartbias,
     # output_heatmap = output_heatmap,
-    foldername = file.path (paste0("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0(source_pattern, "_inh"))
+    foldername = file.path (paste0 ("dh_", first_source_directory, "_versus_", secnd_source_directory), paste0 (source_pattern, "_inh"))
   )
 
   return (output_heatmap)
@@ -149,23 +149,23 @@ print_regex_num_range <- function (
 ) {
 
     # Beginning vars to sort out
-    first_term <- str_split(str_split(num_range, "-")[[1]][1], "")
-    secnd_term <- str_split(str_split(num_range, "-")[[1]][2], "")
+    first_term <- str_split (str_split (num_range, "-") [[1]][1], "")
+    secnd_term <- str_split (str_split (num_range, "-") [[1]][2], "")
 
     # the first number is smaller than the second number.
-    if (as.numeric(paste(first_term[[1]], collapse = "")) >= as.numeric(paste(secnd_term[[1]], collapse = ""))) {
+    if (as.numeric (paste(first_term[[1]], collapse = "")) >= as.numeric (paste(secnd_term[[1]], collapse = ""))) {
         stop ("first number needs to be smaller than the second number")
     }
 
     # Fill in potentially smaller first number with sufficient leading zeroes
     if (length (first_term[[1]]) < length (secnd_term[[1]])) {
         difference_of_length <- length (secnd_term[[1]]) - length (first_term[[1]])
-        first_term[[1]] <- c(rep("0", difference_of_length), first_term[[1]])
+        first_term[[1]] <- c (rep ("0", difference_of_length), first_term[[1]])
     }
 
     # Working number data structure
-    # zv <- array (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), c(2, max (c(length(first_term[[1]]), length (secnd_term[[1]])))))
-    zv <- matrix (c(as.numeric(first_term[[1]]), as.numeric(secnd_term[[1]])), 2, max (c(length(first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
+    # zv <- array (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]])), c (2, max (c (length (first_term[[1]]), length (secnd_term[[1]])))))
+    zv <- matrix (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]])), 2, max (c (length (first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
 
     # substitute list calls for matrix calls
 
@@ -187,7 +187,7 @@ print_regex_num_range <- function (
         # number of digits stops at 2
         } else if (length (zv[2,]) == 2) {
             # append "1" ### "*_1"
-            append (output_object, paste0(zv[1,1]))
+            append (output_object, paste0 (zv[1,1]))
             # 1X-4X
             if (zv[1,1] + 1 < zv[2,1]) {
                 # 1X where X < 9
@@ -243,11 +243,11 @@ print_regex_num_range <- function (
                     # 2X where X = 0
                     } else {
                         # append "0_" ### "*_19_|*_20_"
-                        append (output_object, paste0("0_"))
+                        append (output_object, paste0 ("0_"))
                     }
                 }
             # 1X -1Y
-            } else if (as.numeric (zv[1,1]) == as.numeric(zv[2,1])) {
+            } else if (as.numeric (zv[1,1]) == as.numeric (zv[2,1])) {
                 # append "[X-Y]_" ### "*_1[X-Y]_"
                 append (output_object, paste0 ("[", zv[1,2], "-", zv[2,2], "]_"))
             }
@@ -256,7 +256,7 @@ print_regex_num_range <- function (
             # append "1" ### "*_1"
             output_object <- append (output_object, paste0 (zv[1,1]))
             # 1XY-4ZA
-            if (zv[1,1] + 1 < as.numeric(zv[2,1])) {
+            if (zv[1,1] + 1 < as.numeric (zv[2,1])) {
                 # 1X where X < 9
                 if (as.numeric (zv[1,2]) < 9) {
                     # append "X" ### "*_1X"
@@ -264,7 +264,7 @@ print_regex_num_range <- function (
                     # 1XY where Y < 9
                     if (as.numeric (zv[1,3]) < 9) {
                         # append "[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4"
-                        output_object <- append(output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", as.numeric(zv[1,2]) + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
+                        output_object <- append (output_object, paste0 ("[", zv[1,3], "-9]_|*_", zv[1,1], "[", as.numeric (zv[1,2]) + 1, "-9][0-9]_|*_[", zv[1,1] + 1, "-", zv[2,1] - 1, "][0-9][0-9]_|*_", zv[2,1]))
                         # 4Z where Z > 0
                         if (as.numeric (zv[2,2]) > 0) {
                             # append "[0-(Z-1)][0-9]_|*_4Z" ### "*_1X[Y-9]_|*_1[(X+1)-9][0-9]_|*_[(1+1)-(4-1)][0-9][0-9]_|*_4[0-(Z-1)][0-9]_|*_4Z"
@@ -610,4 +610,4 @@ print_regex_num_range <- function (
     return (paste(output_object, collapse = ""))
 }
 
-print("find_the_dir, plot_that_spectrum, print_regex_num_range and heatmap_difference loaded")
+print ("find_the_dir, plot_that_spectrum, print_regex_num_range and heatmap_difference loaded")

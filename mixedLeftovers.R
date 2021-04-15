@@ -1,4 +1,4 @@
-sFrS <- c(
+sFrS <- c (
     2068, 2254, 2175, 2168, 2125, 2194, 2238, 2222, 2116, 2245, 2090, 
     2064, 2262, 2263, 2173, 2042, 2231, 2149, 2188, 2131, 2112, 2228, 
     2197, 2247, 2133, 2219, 2067, 2069, 2187, 2273, 2271, 2119, 2113, 
@@ -21,30 +21,30 @@ sFrS <- c(
     2234, 2107, 2054, 2103, 2043, 2127, 2077, 2120, 2108, 2268, 2094, 
     2099, 2164, 2159, 2104, 2117, 2196, 2166, 2178, 2256, 2223
 )
-sFrS <- which(!(2036:2283 %in% sFrS))
-thing <- rep(2036:2283)[!(rep(2036:2283) %in%  unique(sFrS))]
+sFrS <- which (! (2036:2283 %in% sFrS))
+thing <- rep (2036:2283) [! (rep (2036:2283) %in%  unique(sFrS))]
 thing - 2036
 thing
 
-# sFrS <- rep(2036:2283)[!(2036:2283 %in% sFrS)] # find all the instances of sNTn that are not in this list
-total <- (sort(sFrS) - 2036)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
-total <- sort(c(total, (sFrS - 2036)*2 + 3))
-# total <- sort(total) # unnecessary but nice for my eyes
-stuff <- rep(2:497)[!(2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
+# sFrS <- rep (2036:2283) [! (2036:2283 %in% sFrS)] # find all the instances of sNTn that are not in this list
+total <- (sort (sFrS) - 2036)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
+total <- sort (c (total, (sFrS - 2036)*2 + 3))
+# total <- sort (total) # unnecessary but nice for my eyes
+stuff <- rep (2:497) [! (2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
 #stuff[]
-pairlength <- length(total)/2
-pairs <- matrix(total, c(pairlength, 2), byrow = TRUE)
+pairlength <- length (total)/2
+pairs <- matrix (total, c (pairlength, 2), byrow = TRUE)
 
-that_string <- paste0("'", pairs[pairlength,1], ",")
-for (fuckingHell in 1:(length(total)/2-1)) {
-    that_string <- paste0(that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
+that_string <- paste0 ("'", pairs[pairlength,1], ",")
+for (fuckingHell in 1 : (length (total)/2-1)) {
+    that_string <- paste0 (that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
 }
-that_string <- paste0(that_string, pairs[1, 2], "d'")
+that_string <- paste0 (that_string, pairs[1, 2], "d'")
 
 '496,497d; 494,495d; 490,491d; 488,489d; 486,487d; 484,485d; 482,483d; 480,481d; 478,479d; 476,477d; 474,475d; 472,473d; 466,467d; 464,465d; 462,463d; 458,459d; 456,457d; 454,455d; 452,453d; 450,451d; 448,449d; 446,447d; 444,445d; 442,443d; 440,441d; 438,439d; 434,435d; 432,433d; 430,431d; 426,427d; 424,425d; 422,423d; 420,421d; 418,419d; 416,417d; 414,415d; 412,413d; 410,411d; 408,409d; 406,407d; 402,403d; 400,401d; 398,399d; 394,395d; 392,393d; 390,391d; 388,389d; 386,387d; 384,385d; 382,383d; 380,381d; 378,379d; 376,377d; 374,375d; 370,371d; 368,369d; 366,367d; 362,363d; 360,361d; 358,359d; 356,357d; 354,355d; 352,353d; 350,351d; 348,349d; 346,347d; 344,345d; 342,343d; 340,341d; 338,339d; 336,337d; 334,335d; 330,331d; 328,329d; 326,327d; 324,325d; 322,323d; 320,321d; 318,319d; 316,317d; 314,315d; 312,313d; 310,311d; 308,309d; 306,307d; 304,305d; 302,303d; 298,299d; 296,297d; 294,295d; 292,293d; 290,291d; 288,289d; 286,287d; 284,285d; 282,283d; 280,281d; 278,279d; 276,277d; 274,275d; 272,273d; 270,271d; 266,267d; 264,265d; 262,263d; 260,261d; 258,259d; 256,257d; 254,255d; 252,253d; 250,251d; 248,249d; 246,247d; 244,245d; 242,243d; 240,241d; 238,239d; 234,235d; 232,233d; 230,231d; 228,229d; 226,227d; 224,225d; 222,223d; 220,221d; 218,219d; 216,217d; 214,215d; 212,213d; 210,211d; 208,209d; 206,207d; 202,203d; 200,201d; 198,199d; 196,197d; 194,195d; 192,193d; 190,191d; 188,189d; 186,187d; 184,185d; 182,183d; 180,181d; 178,179d; 176,177d; 174,175d; 170,171d; 168,169d; 166,167d; 164,165d; 162,163d; 160,161d; 158,159d; 156,157d; 154,155d; 152,153d; 150,151d; 148,149d; 146,147d; 144,145d; 142,143d; 138,139d; 136,137d; 134,135d; 132,133d; 130,131d; 128,129d; 126,127d; 124,125d; 122,123d; 120,121d; 118,119d; 116,117d; 114,115d; 112,113d; 110,111d; 106,107d; 104,105d; 102,103d; 100,101d; 98,99d; 96,97d; 94,95d; 92,93d; 90,91d; 88,89d; 86,87d; 84,85d; 82,83d; 80,81d; 78,79d; 76,77d; 74,75d; 72,73d; 70,71d; 68,69d; 66,67d; 64,65d; 62,63d; 60,61d; 58,59d; 56,57d; 54,55d; 52,53d; 50,51d; 48,49d; 46,47d; 44,45d; 42,43d; 40,41d; 38,39d; 36,37d; 34,35d; 32,33d; 30,31d; 28,29d; 26,27d; 24,25d; 22,23d; 20,21d; 18,19d; 16,17d; 14,15d; 12,13d; 10,11d; 8,9d; 6,7d; 4,5d; 2,3d'
 > 
 
-sNTn <- c(
+sNTn <- c (
     2858, 2971, 2918, 3019, 2889, 2808, 2802, 2835, 2813, 2843, 2893, 
     2791, 2905, 2853, 2884, 3005, 2799, 2867, 2891, 2902, 2836, 2801, 
     2933, 2797, 2821, 2794, 2934, 2915, 2809, 2827, 2955, 2916, 2845, 
@@ -61,25 +61,25 @@ sNTn <- c(
     2907, 2921, 2877, 2847, 2949, 2952, 2904, 2800, 2901, 2816, 2857, 
     2811, 2842, 2923, 2819, 2987, 2781, 2986, 2954, 2803
 )
-sNTn <- rep(2780:3027)[!(2780:3027 %in% sNTn)] # find all the instances of sNTn that are not in this list
+sNTn <- rep (2780:3027) [! (2780:3027 %in% sNTn)] # find all the instances of sNTn that are not in this list
 total <- (sNTn - 2780)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
-total <- c(total, (sNTn - 2780)*2 + 3)
-total <- sort(total) # unnecessary but nice for my eyes
-#stuff <- rep(2:497)[!(2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
+total <- c (total, (sNTn - 2780)*2 + 3)
+total <- sort (total) # unnecessary but nice for my eyes
+#stuff <- rep (2:497) [! (2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
 #stuff[]
-pairlength <- length(total)/2
-pairs <- matrix(total, c(pairlength, 2), byrow = TRUE)
+pairlength <- length (total)/2
+pairs <- matrix (total, c (pairlength, 2), byrow = TRUE)
 
-that_string <- paste0("'", pairs[pairlength,1], ",")
-for (fuckingHell in 1:(length(total)/2-1)) {
-    that_string <- paste0(that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
+that_string <- paste0 ("'", pairs[pairlength,1], ",")
+for (fuckingHell in 1 : (length (total)/2-1)) {
+    that_string <- paste0 (that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
 }
-that_string <- paste0(that_string, pairs[1, 2], "d'")
+that_string <- paste0 (that_string, pairs[1, 2], "d'")
 2782, 2798, 2807, 2814, 2823, 2830, 2832, 2839, 2844, 2846, 2848, 2849, 2855, 2860, 2862, 2864, 2865, 2871, 2876, 2878, 2880, 2881, 2882, 2887, 2892, 2894, 2896, 2897, 2898, 2903, 2908, 2910, 2912, 2913, 2914, 2919, 2924, 2926, 2928, 2929, 2930, 2935, 2940, 2942, 2944, 2945, 2946, 2951, 2956, 2958, 2960, 2961, 2962, 2964, 2965, 2967, 2972, 2974, 2976, 2977, 2978, 2980, 2981, 2983, 2988, 2990, 2992, 2993, 2994, 2996, 2997, 2999, 3004, 3006, 3008, 3009, 3010, 3012, 3013, 3015, 3020, 3022, 3024, 3025, 3026
 
 496,497d; 488,489d; 484,485d; 474,481d; 470,471d; 464,465d; 456,457d; 452,453d; 442,449d; 438,439d; 432,433d; 424,425d; 420,421d; 410,417d; 406,407d; 400,401d; 392,393d; 388,389d; 378,385d; 374,375d; 368,369d; 360,361d; 356,357d; 346,353d; 336,343d; 328,329d; 324,325d; 314,321d; 304,311d; 296,297d; 292,293d; 282,289d; 272,279d; 264,265d; 260,261d; 250,257d; 240,247d; 232,233d; 228,229d; 218,225d; 208,215d; 200,201d; 196,197d; 186,193d; 174,183d; 168,169d; 164,165d; 154,161d; 142,151d; 136,137d; 132,133d; 122,129d; 108,119d; 104,105d; 90,101d; 72,87d; 58,69d; 40,55d; 8,37d; 4,5d; 2,3d
 
-sSTf <- c(
+sSTf <- c (
     1496, 1446, 1482, 1465, 1454, 1631, 1470, 1642, 1430, 1444, 1474, 
     1566, 1658, 1491, 1635, 1582, 1487, 1441, 1415, 1459, 1422, 1458, 
     1553, 1527, 1587, 1439, 1436, 1583, 1559, 1484, 1548, 1516, 1429, 
@@ -99,24 +99,24 @@ sSTf <- c(
     1501
 )
 
-sSTf <- rep(1415:1662)[!(1415:1662 %in% sSTf)] # find all the instances of sNTn that are not in this list
+sSTf <- rep (1415:1662) [! (1415:1662 %in% sSTf)] # find all the instances of sNTn that are not in this list
 total <- (sSTf - 1415)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
-total <- c(total, (sSTf - 1415)*2 + 3)
-total <- sort(total) # unnecessary but nice for my eyes
-#stuff <- rep(2:497)[!(2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
+total <- c (total, (sSTf - 1415)*2 + 3)
+total <- sort (total) # unnecessary but nice for my eyes
+#stuff <- rep (2:497) [! (2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
 #stuff[]
-pairlength <- length(total)/2
-pairs <- matrix(total, c(pairlength, 2), byrow = TRUE)
+pairlength <- length (total)/2
+pairs <- matrix (total, c (pairlength, 2), byrow = TRUE)
 
-that_string <- paste0("'", pairs[pairlength,1], ",")
-for (fuckingHell in 1:(length(total)/2-1)) {
-    that_string <- paste0(that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
+that_string <- paste0 ("'", pairs[pairlength,1], ",")
+for (fuckingHell in 1 : (length (total)/2-1)) {
+    that_string <- paste0 (that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
 }
-that_string <- paste0(that_string, pairs[1, 2], "d'")
+that_string <- paste0 (that_string, pairs[1, 2], "d'")
 
 '496,497d; 492,493d; 488,489d; 486,487d; 484,485d; 482,483d; 474,475d; 466,467d; 464,465d; 460,461d; 456,457d; 454,455d; 452,453d; 450,451d; 442,443d; 434,435d; 432,433d; 428,429d; 424,425d; 422,423d; 420,421d; 418,419d; 410,411d; 402,403d; 400,401d; 396,397d; 392,393d; 390,391d; 388,389d; 386,387d; 378,379d; 370,371d; 368,369d; 364,365d; 360,361d; 358,359d; 356,357d; 354,355d; 346,347d; 344,345d; 342,343d; 340,341d; 338,339d; 336,337d; 332,333d; 328,329d; 326,327d; 324,325d; 322,323d; 314,315d; 312,313d; 310,311d; 308,309d; 306,307d; 304,305d; 300,301d; 296,297d; 294,295d; 292,293d; 290,291d; 282,283d; 280,281d; 278,279d; 276,277d; 274,275d; 272,273d; 268,269d; 264,265d; 262,263d; 260,261d; 258,259d; 250,251d; 248,249d; 246,247d; 244,245d; 242,243d; 240,241d; 236,237d; 232,233d; 230,231d; 228,229d; 226,227d; 218,219d; 216,217d; 214,215d; 212,213d; 210,211d; 208,209d; 204,205d; 200,201d; 198,199d; 196,197d; 194,195d; 186,187d; 184,185d; 182,183d; 180,181d; 178,179d; 176,177d; 174,175d; 172,173d; 168,169d; 166,167d; 164,165d; 162,163d; 154,155d; 152,153d; 150,151d; 148,149d; 146,147d; 144,145d; 142,143d; 140,141d; 136,137d; 134,135d; 132,133d; 130,131d; 122,123d; 120,121d; 118,119d; 116,117d; 114,115d; 112,113d; 110,111d; 108,109d; 104,105d; 102,103d; 100,101d; 98,99d; 96,97d; 94,95d; 92,93d; 90,91d; 88,89d; 86,87d; 84,85d; 82,83d; 80,81d; 78,79d; 76,77d; 74,75d; 72,73d; 70,71d; 68,69d; 66,67d; 64,65d; 62,63d; 60,61d; 58,59d; 56,57d; 54,55d; 52,53d; 50,51d; 48,49d; 46,47d; 44,45d; 42,43d; 40,41d; 38,39d; 36,37d; 34,35d; 32,33d; 30,31d; 28,29d; 26,27d; 24,25d; 22,23d; 20,21d; 18,19d; 16,17d; 14,15d; 12,13d; 10,11d; 8,9d; 6,7d; 4,5d; 2,3d'
 
-sSFr <- c(
+sSFr <- c (
     1818, 1869, 1695, 1680, 1663, 1733, 1835, 1737, 1784, 1690, 1750, 
     1802, 1885, 1779, 1810, 1819, 1831, 1780, 1892, 1675, 1883, 1910, 
     1679, 1730, 1682, 1909, 1765, 1789, 1907, 1794, 1728, 1714, 1880, 
@@ -139,22 +139,22 @@ sSFr <- c(
     1813, 1842, 1798, 1667, 1800, 1832, 1778
 )
 
-sSFr <- rep(1663:1910)[!(1663:1910 %in% sSFr)] # find all the instances of sNTn that are not in this list
+sSFr <- rep (1663:1910) [! (1663:1910 %in% sSFr)] # find all the instances of sNTn that are not in this list
 total <- (sSFr - 1663)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
-total <- c(total, (sSFr - 1663)*2 + 3)
-total <- sort(total) # unnecessary but nice for my eyes
-#stuff <- rep(2:497)[!(2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
+total <- c (total, (sSFr - 1663)*2 + 3)
+total <- sort (total) # unnecessary but nice for my eyes
+#stuff <- rep (2:497) [! (2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
 #stuff[]
-pairlength <- length(total)/2
-pairs <- matrix(total, c(pairlength, 2), byrow = TRUE)
+pairlength <- length (total)/2
+pairs <- matrix (total, c (pairlength, 2), byrow = TRUE)
 
-that_string <- paste0("'", pairs[pairlength,1], ",")
-for (fuckingHell in 1:(length(total)/2-1)) {
-    that_string <- paste0(that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
+that_string <- paste0 ("'", pairs[pairlength,1], ",")
+for (fuckingHell in 1 : (length (total)/2-1)) {
+    that_string <- paste0 (that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
 }
-that_string <- paste0(that_string, pairs[1, 2], "d'")
+that_string <- paste0 (that_string, pairs[1, 2], "d'")
 
-sTnN <- c(
+sTnN <- c (
     2560, 2607, 2606, 2643, 2640, 2634, 2760, 2627, 2737, 2568, 2605, 
     2742, 2647, 2691, 2598, 2573, 2536, 2721, 2537, 2712, 2778, 2702, 
     2747, 2651, 2736, 2765, 2708, 2567, 2599, 2715, 2744, 2584, 2631, 
@@ -179,22 +179,22 @@ sTnN <- c(
     2700, 2602, 2660, 2565, 2683
 )
 
-sTnN <- rep(2532:2779)[!(2532:2779 %in% sTnN)] # find all the instances of sNTn that are not in this list
+sTnN <- rep (2532:2779) [! (2532:2779 %in% sTnN)] # find all the instances of sNTn that are not in this list
 total <- (sTnN - 2532)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
-total <- c(total, (sTnN - 2532)*2 + 3)
-total <- sort(total) # unnecessary but nice for my eyes
-#stuff <- rep(2:497)[!(2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
+total <- c (total, (sTnN - 2532)*2 + 3)
+total <- sort (total) # unnecessary but nice for my eyes
+#stuff <- rep (2:497) [! (2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
 #stuff[]
-pairlength <- length(total)/2
-pairs <- matrix(total, c(pairlength, 2), byrow = TRUE)
+pairlength <- length (total)/2
+pairs <- matrix (total, c (pairlength, 2), byrow = TRUE)
 
-that_string <- paste0("'", pairs[pairlength,1], ",")
-for (fuckingHell in 1:(length(total)/2-1)) {
-    that_string <- paste0(that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
+that_string <- paste0 ("'", pairs[pairlength,1], ",")
+for (fuckingHell in 1 : (length (total)/2-1)) {
+    that_string <- paste0 (that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
 }
-that_string <- paste0(that_string, pairs[1, 2], "d'")
+that_string <- paste0 (that_string, pairs[1, 2], "d'")
 
-sTfS <- c(
+sTfS <- c (
     2447, 2531, 2344, 2324, 2319, 2441, 2456, 2453, 2455, 2389, 2502, 
     2495, 2341, 2496, 2479, 2509, 2425, 2290, 2526, 2428, 2349, 2446, 
     2321, 2432, 2514, 2370, 2378, 2417, 2305, 2382, 2371, 2340, 2524, 
@@ -218,19 +218,19 @@ sTfS <- c(
     2331, 2472, 2527, 2294, 2478, 2501, 2295, 2481, 2438, 2285, 2511
 )
 
-sTfS <- rep(2284:2531)[!(2284:2531 %in% sTfS)] # find all the instances of sNTn that are not in this list
+sTfS <- rep (2284:2531) [! (2284:2531 %in% sTfS)] # find all the instances of sNTn that are not in this list
 total <- (sTfS - 2284)*2 + 2 # find the rows of information unique to the missing runs (this and the next line)
-total <- c(total, (sTfS - 2284)*2 + 3)
-total <- sort(total) # unnecessary but nice for my eyes
-#stuff <- rep(2:497)[!(2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
+total <- c (total, (sTfS - 2284)*2 + 3)
+total <- sort (total) # unnecessary but nice for my eyes
+#stuff <- rep (2:497) [! (2:497 %in% total)] # return every line within the document that DOESN'T contain the unfinished run
 #stuff[]
-pairlength <- length(total)/2
-pairs <- matrix(total, c(pairlength, 2), byrow = TRUE)
+pairlength <- length (total)/2
+pairs <- matrix (total, c (pairlength, 2), byrow = TRUE)
 
-that_string <- paste0("'", pairs[pairlength,1], ",")
-for (fuckingHell in 1:(length(total)/2-1)) {
-    that_string <- paste0(that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
+that_string <- paste0 ("'", pairs[pairlength,1], ",")
+for (fuckingHell in 1 : (length (total)/2-1)) {
+    that_string <- paste0 (that_string, pairs[pairlength-(fuckingHell-1),2], "d; ", pairs[pairlength - fuckingHell,1], ",")
 }
-that_string <- paste0(that_string, pairs[1, 2], "d'")
+that_string <- paste0 (that_string, pairs[1, 2], "d'")
 # paste(sTfS, collapse=", ")
 

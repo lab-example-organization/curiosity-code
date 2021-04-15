@@ -16,13 +16,13 @@ savinstuff <- function (parameters, output_filename, moran) {
                        rep ("parameters$learnprob", 2),
                        rep ("parameters$randlearnprob", 2),
                        "parameters$stand.dev",
-                       rep ("dim(parameters$pop_calls_matrix)", 2),
-                       rep ("dim(moran)", 3),
-                       rep ("dim(parameters$curiosity_counter)", 2),
-                       rep ("dim(parameters$population_syll_probs)", 2),
-                       "length(parameters$curiositybreaks)",
-                      "length(parameters$zero_to_one_template)",
-                      rep ("dim(moran)", 3))
+                       rep ("dim (parameters$pop_calls_matrix)", 2),
+                       rep ("dim (moran)", 3),
+                       rep ("dim (parameters$curiosity_counter)", 2),
+                       rep ("dim (parameters$population_syll_probs)", 2),
+                       "length (parameters$curiositybreaks)",
+                      "length (parameters$zero_to_one_template)",
+                      rep ("dim (moran)", 3))
     stuff_to_save <- list (
       docnamez = output_filename,
       datez = datez,
@@ -30,7 +30,7 @@ savinstuff <- function (parameters, output_filename, moran) {
     )
     return (stuff_to_save)
 }
-print("line 33")
+print ("line 33")
 
 makedocnamez <- function (scmin, scmax, simnumber,
                          runlength, syllearnstyle, vertoblearn,
@@ -61,14 +61,14 @@ makedocnamez <- function (scmin, scmax, simnumber,
   if (votext == "1_1_V_1_1_O") {
     votext <- "normVO"
   }
-print("line 64")
+print ("line 64")
   if (scmin[1] == scmin[2] &&
       scmin[2] == scmin[3] &&
       scmin[3] == scmin[4] &&
       scmax[1] == scmax[2] &&
       scmax[2] == scmax[3] &&
       scmax[3] == scmax[4]) {
-    curstart_ranges = paste0(scmin[1], "-", scmax[1])
+    curstart_ranges = paste0 (scmin[1], "-", scmax[1])
   } else {
 
     if (scmin[1] == scmin[3] &&
@@ -78,7 +78,7 @@ print("line 64")
         scmin[2] == scmin[4] &&
         scmax[2] == scmax[4]) {
       # 1-7_f_7-13m
-      curstart_ranges <- paste0(scmin[2], "-", scmax[2], "f", "_",
+      curstart_ranges <- paste0 (scmin[2], "-", scmax[2], "f", "_",
                                 scmin[1], "-", scmax[1], "m")
 
     } else if (scmin[2] == scmin[4] &&
@@ -86,7 +86,7 @@ print("line 64")
               (scmin[1] != scmin[3] ||
                scmax[1] != scmax[3])) {
       # 1-7f_1-7mp1_7-13mp2
-      curstart_ranges <- paste0(scmin[2], "-", scmax[2], "f", "_",
+      curstart_ranges <- paste0 (scmin[2], "-", scmax[2], "f", "_",
                                 scmin[1], "-", scmax[1], "mp1", "_",
                                 scmin[3], "-", scmax[3], "mp2")
 
@@ -95,7 +95,7 @@ print("line 64")
               (scmin[2] != scmin[4] ||
                scmax[2] != scmax[4])) {
       # 1-7f_1-7mp1_7-13mp2
-      curstart_ranges <- paste0(scmin[2], "-", scmax[2], "fp1", "_",
+      curstart_ranges <- paste0 (scmin[2], "-", scmax[2], "fp1", "_",
                                 scmin[4], "-", scmax[4], "fp2", "_",
                                 scmin[3], "-", scmax[3], "m")
 
@@ -106,7 +106,7 @@ print("line 64")
                (scmin[1] != scmin[4] ||
                 scmax[1] != scmax[4])) {
       # 1-7p1_7-13p2
-      curstart_ranges <- paste0(scmin[1], "-", scmax[1], "p1", "_",
+      curstart_ranges <- paste0 (scmin[1], "-", scmax[1], "p1", "_",
                                 scmin[3], "-", scmax[3], "p2")
 
     } else if (scmin[3] == scmin[4] &&
@@ -116,7 +116,7 @@ print("line 64")
               (scmin[2] != scmin[1] ||
                scmax[2] != scmax[1])) {
       # 1-7p1_7-13p2
-      curstart_ranges <- paste0(scmin[1], "-", scmax[1], "mp1", "_",
+      curstart_ranges <- paste0 (scmin[1], "-", scmax[1], "mp1", "_",
                                 scmin[2], "-", scmax[2], "fp1", "_",
                                 scmin[4], "-", scmax[4], "p2")
 
@@ -159,7 +159,7 @@ print("line 64")
 
   return (documentname)
 }
-print("line 162")
+print ("line 162")
 restart_from_save <- function (
   parameters, # "params" in multi_runs
   inputpattern
@@ -168,11 +168,11 @@ restart_from_save <- function (
   if (typeof (inputpattern) != "character") {
     stop ("input pattern must be data type 'string'")
   }
-  if (length(inputpattern) > 1) {
+  if (length (inputpattern) > 1) {
     stop ("length of inputpattern should be 1. Right?")
   }
 
-  relevantpaths <- file.path ("results", list.files(
+  relevantpaths <- file.path ("results", list.files (
     file.path ("results"), pattern = inputpattern))
 
   pathlist <- list.files (
@@ -181,17 +181,17 @@ restart_from_save <- function (
   # somekindaoutput <- array (0, c (parameters[[8]],
   #   parameters[[9]], parameters[[10]] + 1, length (pathlist)))
 
-  somekindaoutput <- vector("list", length(pathlist))
+  somekindaoutput <- vector ("list", length (pathlist))
 
   # num_pop, pop_size,    sylnum
-  for (i in 1:length (pathlist)) {
+  for (i in 1 : length (pathlist)) {
 
-    somekindaoutput[[i]] <- vector("list", 2)
+    somekindaoutput[[i]] <- vector ("list", 2)
 
     endcur <- readRDS (file.path (relevantpaths, "variable_store",
-      paste0 (pathlist[i], "/end_cursty.RData")))
+      paste0 (pathlist [i], "/end_cursty.RData")))
     endrep <- readRDS (file.path (relevantpaths, "variable_store",
-      paste0 (pathlist[i], "/end_sylbls.RData")))
+      paste0 (pathlist [i], "/end_sylbls.RData")))
 
     # somekindaoutput[, , 1 : parameters[[10]], i] <- aperm (endrep, c (2, 1, 3))
     # somekindaoutput[, , parameters[[10]] + 1, i] <- aperm (endcur, c (2, 1))
@@ -202,7 +202,7 @@ restart_from_save <- function (
   }
   return (somekindaoutput)
 }
-print("line 205")
+print ("line 205")
 invasion_parameters_curiosity <- function (
   ip = invpop,
   isx = invsex,
@@ -242,16 +242,16 @@ invasion_parameters_curiosity <- function (
     curiosity_container [pop_subset [
       1 : ips], population] <- sample ( (
         100 * (itv [1] - (itv [2] / 2))) : (100 * (
-          itv [1] + (itv [2] / 2))), length(pop_subset), replace = TRUE) / 100
+          itv [1] + (itv [2] / 2))), length (pop_subset), replace = TRUE) / 100
 
     # return (curiosity_container)
 
   }
 
-  return(curiosity_container)
+  return (curiosity_container)
 
 }
-print("line 254")
+print ("line 254")
 invasion_parameters_sylrep <- function (
   ip = invpop,
   isx = invsex,
@@ -319,71 +319,71 @@ invasion_parameters_sylrep <- function (
               # other two subtracted from total = leftovers
         ))))
 
-        while (!(length(building_a_sylrep) %in% c(
+        while (! (length (building_a_sylrep) %in% c (
           sample_size - 10 : sample_size + 10))) {
 
-          if (length(building_a_sylrep) > (sample_size + 10)) {
+          if (length (building_a_sylrep) > (sample_size + 10)) {
 
             sample_size <- sample_size - 1
 
             building_a_sylrep = unique (
               sort (
-                sample(1:156,sample_size - 5,T,c(
-                  rep(0.001,(sylrep_mean - ( (sample_size - 5)/2))),
+                sample(1 : 156,sample_size - 5,T,c (
+                  rep (0.001,(sylrep_mean - ( (sample_size - 5)/2))),
 
-                  rep(0.75,(itv[2]*(1/0.75))),
+                  rep (0.75,(itv[2]*(1/0.75))),
 
-                  rep(0.001,someparameters$sylnum - (
+                  rep (0.001,someparameters$sylnum - (
                     itv[2]*(1/0.75)) - (
                       sylrep_mean - ( (sample_size - 5)/2)))
             ))))
 
-          } else if (length(building_a_sylrep) < (sample_size - 10)) {
+          } else if (length (building_a_sylrep) < (sample_size - 10)) {
 
             sample_size <- sample_size + 1
 
             building_a_sylrep = unique (
               sort (
-                sample(1:156,sample_size + 5,T,c(
-                  rep(0.001,(sylrep_mean - ( (sample_size + 5)/2))),
+                sample(1 : 156,sample_size + 5,T,c (
+                  rep (0.001,(sylrep_mean - ( (sample_size + 5)/2))),
 
-                  rep(0.75,(itv[2]*(1/0.75))),
+                  rep (0.75,(itv[2]*(1/0.75))),
 
-                  rep(0.001,someparameters$sylnum - (
+                  rep (0.001,someparameters$sylnum - (
                     itv[2]*(1/0.75)) - (
                       sylrep_mean - ( (sample_size + 5)/2)))
             ))))
           }
-          # building_a_sylrep <- unique(sort(sample(
-            # 1:156,50,T,c(rep(0.001,20),rep(0.75,80),rep(0.001,56)))))
+          # building_a_sylrep <- unique(sort (sample(
+            # 1 : 156,50,T,c (rep (0.001,20),rep (0.75,80),rep (0.001,56)))))
         }
-        # thing <- (someparameters$sylnum + 1) - which(
+        # thing <- (someparameters$sylnum + 1) - which (
           # sylrep_container [pop_subset [variable], , population] == 1)
         # stuff <- (someparameters$sylnum + 1) - thing
         sylrep_container [pop_subset [variable], building_a_sylrep[
-          1:length(building_a_sylrep)], population] <- 1
+          1 : length (building_a_sylrep)], population] <- 1
       }
 
     # return (sylrep_container)
       # sample(x, size, replace = FALSE, prob = NULL)
 
-      # > unique(sort(sample(1:156,50,T,c(
-        # rep(0.01,20),rep(0.5,80),rep(0.01,56)))))
+      # > unique(sort (sample(1 : 156,50,T,c (
+        # rep (0.01,20),rep (0.5,80),rep (0.01,56)))))
       #  [1]  21  24  25  26  27  29  31  37  39  48
       #       49  50  52  54  56  57  58  59  64
       # [20]  65  66  73  74  76  77  78  81  82  83
       #       85  86  90  93  94  95  96  99 100
     }
 
-  return(sylrep_container)
+  return (sylrep_container)
 
 }
-print("line 381")
+print ("line 381")
 life_cycle <- function (
   scmin, scmax, simnumber, runlength, syllearnstyle, vertoblearn, syldist,
   curinh_value, number_populations, population_size, syllable_number,
   number_sylls_probability_level, standdev, curinh_style,
-  recordingsimpfact, one_pop_singers = c(10,10), curinhproportion,
+  recordingsimpfact, one_pop_singers = c (10,10), curinhproportion,
   directorydate, invasion, invpopsize, invstyle, invpop, invsex,
   invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE) {
 
@@ -393,11 +393,11 @@ life_cycle <- function (
     syldist = syldist, curinh_value = curinh_value, standdev = standdev,
     simdate = directorydate)
 
-  #parent_directory <- getwd()
+  #parent_directory <- getwd ()
   source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
 
   simparams <- define_parameters (
-    num_timesteps = as.numeric (strsplit (runlength, "k")[[1]][1]) * 1000,
+    num_timesteps = as.numeric (strsplit (runlength, "k") [[1]][1]) * 1000,
     num_pop = number_populations, pop_size = population_size,
     sylnum = syllable_number, nsl = number_sylls_probability_level,
     one_pop_singers = one_pop_singers, curlearnprob = curinh_value,
@@ -409,7 +409,7 @@ life_cycle <- function (
   ##### Timestep Data Object (TDO)
 
   moranobjects <- define_temp_data (simparams)
-  # pairing_pool <- define_temp_data(simparams, 2)
+  # pairing_pool <- define_temp_data (simparams, 2)
   if (initfromlastrun) {
     sylreps <- initialize.sylrep (parameters_is = simparams,
       population.pattern = c (1,2), pastrunobject_is = lastrunobject,
@@ -424,7 +424,7 @@ life_cycle <- function (
       parameters_ic = simparams, cur.min = scmin, cur.max = scmax)
   }
 
-print("line 427")
+print ("line 427")
   sylrep_rowcol <- recordvariable.initialize (
       parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 1)
 
@@ -449,7 +449,7 @@ print("line 427")
 
 
 
-  for(thousand_timesteps in 1:(simparams$num_timesteps/1000)) {
+  for (thousand_timesteps in 1 : (simparams$num_timesteps/1000)) {
 
     if (invasion && (thousand_timesteps == invktmstps)) {
       if (invstyle == 'curiosity') {
@@ -473,57 +473,57 @@ print("line 427")
       }
     }
 
-    for(simplify in 1:(1000/recordingsimpfact)) {
-      for(single_timestep in 1:recordingsimpfact) {
+    for (simplify in 1 : (1000/recordingsimpfact)) {
+      for (single_timestep in 1 : recordingsimpfact) {
 
         # Mate selection based on song characteristics
-        moranobjects <- sing.selection(parameters_sing_selection = simparams,
+        moranobjects <- sing.selection (parameters_sing_selection = simparams,
                                       temp_data_sing_selection = moranobjects,
                                       curiosity_level = curiosity_level,
                                       select_type = "mate",
                                       sylrep_object = sylreps,
-                                      num_select_chances = c(40, 40),
+                                      num_select_chances = c (40, 40),
                                       verbose_output = F,
                                       interbreed = F)
 
         # Locate new birb positions in population data, store in TDO
-        moranobjects <- make.offspring.calls(parameters_offspring_calls = simparams,
+        moranobjects <- make.offspring.calls (parameters_offspring_calls = simparams,
                                             temp_data_offspring_calls = moranobjects)
 
         # Add noise to inherited curiosity trait, store temporarily
-        moranobjects <- curiosity_learn(parameters_curiosity_learn = simparams,
+        moranobjects <- curiosity_learn (parameters_curiosity_learn = simparams,
                                         temp_data_curiosity_learn = moranobjects,
                                         inheritance_pattern = curinh_style)
 
         #
-        moranobjects <- syll_learn(parameters_sylllearn = simparams,
+        moranobjects <- syll_learn (parameters_sylllearn = simparams,
                                   temp_data_sylllearn = moranobjects,
                                   select_type = "mate",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = F)
 
-        moranobjects <- sing.selection(parameters_sing_selection = simparams,
+        moranobjects <- sing.selection (parameters_sing_selection = simparams,
                                       temp_data_sing_selection = moranobjects,
                                       curiosity_level = curiosity_level,
                                       select_type = "tutor",
                                       sylrep_object = sylreps,
-                                      num_select_chances = c(40, 40),
+                                      num_select_chances = c (40, 40),
                                       verbose_output = F,
                                       interbreed = F)
 
-        moranobjects <- syll_learn(parameters_sylllearn = simparams,
+        moranobjects <- syll_learn (parameters_sylllearn = simparams,
                                   temp_data_sylllearn = moranobjects,
                                   select_type = "tutor",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = F)
 
-        curiosity_level <- recuriosity.offspring(parameters_recuriosity = simparams,
+        curiosity_level <- recuriosity.offspring (parameters_recuriosity = simparams,
                                             temp_data_recuriosity = moranobjects,
                                             curiosity_object = curiosity_level)
 
-        sylreps <- resylreps.offspring(parameters_resylreps = simparams,
+        sylreps <- resylreps.offspring (parameters_resylreps = simparams,
                                        temp_data_resylreps = moranobjects,
                                        sylrep_object = sylreps)
 
@@ -563,20 +563,20 @@ print("line 427")
 
 
 
-    # print("console_copy_sink")
-    sink(file = file.path("source", "temp", paste0(
+    # print ("console_copy_sink")
+    sink (file = file.path ("source", "temp", paste0 (
       simnumber, "_console_copy.txt")), append = TRUE, split = TRUE)
-    print(paste0("Sim Number ", strsplit(docnamez,
-      "_")[[1]][2], " - storing data packet ",
+    print (paste0 ("Sim Number ", strsplit (docnamez,
+      "_") [[1]][2], " - storing data packet ",
       thousand_timesteps, " at ", Sys.time()))
-    sink()
+    sink ()
 
     if (thousand_timesteps == 1) {
-      run_timedate <- format(Sys.time(), "%F-%H%M%S")
+      run_timedate <- format (Sys.time(), "%F-%H%M%S")
     }
 
 
-    foldername <- store_timesteps(
+    foldername <- store_timesteps (
                     parameters_storetimesteps = simparams,
                     filename = thousand_timesteps,
                     rowcol = sylrep_rowcol,
@@ -588,23 +588,23 @@ print("line 427")
                     syll_container = sylreps,
                     cur_container = curiosity_level,
                     run_timedate = run_timedate,
-                    foldername = file.path(
+                    foldername = file.path (
                       "results", stuff_to_save$docnamez, "variable_store",
-                      paste0(run_timedate, "-GMT-variable-store")))
+                      paste0 (run_timedate, "-GMT-variable-store")))
 
-    if( (thousand_timesteps==(simparams$num_timesteps/1000)
+    if ( (thousand_timesteps==(simparams$num_timesteps/1000)
       )&&(
         simplify==1000/recordingsimpfact
       )&&(single_timestep==recordingsimpfact)) {
-      sink(file = file.path("source", "temp",
-        paste0(simnumber, "_sim_data.txt")), append = TRUE)
-      print(foldername)
-      sink()
+      sink (file = file.path ("source", "temp",
+        paste0 (simnumber, "_sim_data.txt")), append = TRUE)
+      print (foldername)
+      sink ()
     }
   }
 }
 
-print("line 607")
+print ("line 607")
 
 archivesimfiles <- function (path, filename,
   archive = FALSE, new_dir = FALSE) {
@@ -615,32 +615,32 @@ archivesimfiles <- function (path, filename,
         file.copy (from = file.path (path, filename), to = file.path (
           "source", "archive", new_dir, filename))
         file.rename (from = file.path ("source", "archive", new_dir,
-          filename), to=file.path("source", "archive", new_dir,
-          paste0(archiveprefix, "_", filename)))
+          filename), to=file.path ("source", "archive", new_dir,
+          paste0 (archiveprefix, "_", filename)))
       } else {
-        file.copy(from=file.path(path, filename),
-          to=file.path("source", "archive", filename))
-        file.rename(from=file.path("source", "archive", filename),
-          to=file.path("source",
-          "archive", paste0(archiveprefix, "_", filename)))
+        file.copy (from=file.path (path, filename),
+          to=file.path ("source", "archive", filename))
+        file.rename(from=file.path ("source", "archive", filename),
+          to=file.path ("source",
+          "archive", paste0 (archiveprefix, "_", filename)))
       }
     } else {
-      if(new_dir) {
-        file.copy(from = file.path(path, filename),
-          to = file.path("source", "archive", new_dir, filename))
+      if (new_dir) {
+        file.copy (from = file.path (path, filename),
+          to = file.path ("source", "archive", new_dir, filename))
       } else {
-        file.copy(from = file.path(path, filename),
-          to = file.path("source", "archive", filename))
+        file.copy (from = file.path (path, filename),
+          to = file.path ("source", "archive", filename))
       }
     }
-    file.remove(file.path(path, filename))
+    file.remove(file.path (path, filename))
 
   }
 }
-print("line 640")
+print ("line 640")
 multi_runs <- function (shifting_curstart, paramssource,
   dirdate, seednumber) {
-print("line 643")
+print ("line 643")
   set.seed (seednumber + shifting_curstart)
 
   params <- yaml.load_file (file.path ("parameters", paramssource))
@@ -655,9 +655,9 @@ print("line 643")
 
   # This wrapped up the restart_from_save function,
   # so that life_cycle has last-run data as an accessible object
-  # lastrun_init <- array(0, c(1,1,1,number_of_reps))
+  # lastrun_init <- array (0, c (1,1,1,number_of_reps))
 
-  lastrun_init <- list()
+  lastrun_init <- list ()
 
   if (params$lastruninit) {
     if (length (params$lastrunid) > 1) {
@@ -679,7 +679,7 @@ print("line 643")
       singleormixture <- params$curinhdistribution
     }
 
-    if (length(params$curinh_pattern) != 1) {
+    if (length (params$curinh_pattern) != 1) {
       curinh_binary <- params$curinh_pattern[shifting_curstart]
     } else {
       curinh_binary <- params$curinh_pattern
@@ -687,11 +687,11 @@ print("line 643")
 
     if (rep_number == 1) {
 
-      sink(file = file.path(
-          "source", "temp", paste0(subsetorsequence,"_sim_data.txt")
+      sink (file = file.path (
+          "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
         ), append = FALSE)
-      print("/please/ignore/this/line/like/you/always/do")
-      sink()
+      print ("/please/ignore/this/line/like/you/always/do")
+      sink ()
 
       # file.create (file.path ("source", "temp", paste0 (
       #   shifting_curstart,"_sim_data.txt")))
@@ -703,7 +703,7 @@ print("line 643")
         params$curstarts [[shifting_curstart]]$scmin [2],
         params$curstarts [[shifting_curstart]]$scmin [3],
         params$curstarts [[shifting_curstart]]$scmin [4]),
-      scmax = c(
+      scmax = c (
         params$curstarts [[shifting_curstart]]$scmax [1],
         params$curstarts [[shifting_curstart]]$scmax [2],
         params$curstarts [[shifting_curstart]]$scmax [3],
@@ -712,7 +712,7 @@ print("line 643")
       # simnumber = params$simnumberstart + (shifting_curstart - 1),
       runlength = params$runlength,
       syllearnstyle = params$syllearnstyle,
-      vertoblearn = c(
+      vertoblearn = c (
         params$vertoblearn$vertical$learn,
         params$vertoblearn$vertical$invent,
         params$vertoblearn$oblique$learn,
@@ -723,7 +723,7 @@ print("line 643")
       population_size = params$pop_size,
       syllable_number = params$sylnum,
       number_sylls_probability_level = params$num_sylls_per_prob_lvl,
-      standdev = as.numeric(params$standard_deviation),
+      standdev = as.numeric (params$standard_deviation),
       curinh_style = curinh_binary,
       recordingsimpfact = params$recordsimplifyfactor,
       one_pop_singers = params$one_pop_singers,
@@ -740,14 +740,14 @@ print("line 643")
       lastrunobject = lastrun_init[[rep_number]]
       # lastrunobject = lastrun_init[, , , rep_number]
     )
-    print(paste0("Replicate Run # ",
+    print (paste0 ("Replicate Run # ",
       rep_number, ", done at: ",
-      (format(Sys.time(), "%F-%H%M%S"))))
+      (format (Sys.time(), "%F-%H%M%S"))))
   }
 
-  source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-  figprodmultrun(specificsimnumber = subsetorsequence,
+  source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+  figprodmultrun (specificsimnumber = subsetorsequence,
                  number_of_repeats = number_of_reps,
                  paramssource = paramssource)
 }
-print("line 753")
+print ("line 753")

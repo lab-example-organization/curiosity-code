@@ -1,12 +1,12 @@
-rm(list=objects())
+rm (list = objects ())
 
 
-source(file.path("scripts", "Source_Reference_Section.R"))
-referencesection("parallelHeatmaps")
+source (file.path ("scripts", "Source_Reference_Section.R"))
+referencesection ("parallelHeatmaps")
 
-source(file.path("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
 
-somethingSomething <- array(c(
+somethingSomething <- array (c (
   "parentNoInv",        "childF1NoInv",       "childMalHihInv",  "childMalLowInv",     "childFemLowInv",
   "childBothLowInv",    "childFemHihInv",     "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
   "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2",    "childNoInvF3",       "childNoInvF4",
@@ -34,33 +34,33 @@ somethingSomething <- array(c(
     "paramsLateInvFemHighHrTenK", "paramsLateInvFemLowHrTenK",
     "paramsLateInvBothHighHrTenK", "paramsLateInvBothLowHrTenK",
     "paramsLateSmolInvMalHighHrTenK", "paramsLateSmolInvMalLowHrTenK",
-    "paramsLateSmolInvFemHighHrTenK", "paramsLateSmolInvFemLowHrTenK", "paramsparentNoInvSylRep"), c(32,3)
+    "paramsLateSmolInvFemHighHrTenK", "paramsLateSmolInvFemLowHrTenK", "paramsparentNoInvSylRep"), c (32,3)
 )
 
 n_cores <- 4
-z_specificsimnumber <- 10501:10900
+z_specificsimnumber <- 10501 : 10900
 # z_specificsimnumber <- 4000
 new_multirunResults_folder <- "recolorizedCurMeans_rangeMedian"
 simple_setup <- function (z_sspecificsimnumber, ssomethingSomething, recolorize = TRUE, number_of_repeats = 50, fdsa = new_multirunResults_folder) {#, temp_something) {
   if (z_sspecificsimnumber >= 4901 && z_sspecificsimnumber <= 5100) {return ("done")}
-  something_subset <- which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber)[length(which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber))]
-  folder_200_k <- ssomethingSomething[which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber)[length(which(as.numeric(ssomethingSomething[,2]) <= z_sspecificsimnumber))]]
-  param_thing <- list.files (file.path ("parameters"), pattern = paste0(ssomethingSomething[something_subset,3], ".yaml"))
+  something_subset <- which (as.numeric (ssomethingSomething[,2]) <= z_sspecificsimnumber) [length (which (as.numeric (ssomethingSomething[,2]) <= z_sspecificsimnumber))]
+  folder_200_k <- ssomethingSomething[which (as.numeric (ssomethingSomething[,2]) <= z_sspecificsimnumber) [length (which (as.numeric (ssomethingSomething[,2]) <= z_sspecificsimnumber))]]
+  param_thing <- list.files (file.path ("parameters"), pattern = paste0 (ssomethingSomething[something_subset,3], ".yaml"))
 
-  figprodmultrun(specificsimnumber = z_sspecificsimnumber, number_of_repeats = number_of_repeats,
+  figprodmultrun (specificsimnumber = z_sspecificsimnumber, number_of_repeats = number_of_repeats,
   paramssource = param_thing, redo = TRUE, recolorize = recolorize, results_dir = folder_200_k, lineplots = fdsa, curMeans_only = TRUE, recolorize_style = "range-median") # variance, variance-median, range-biased, ###NOTdoneYET### clustering
 
   return ("done")
 }
 
-mclapply(z_specificsimnumber,
+mclapply (z_specificsimnumber,
          simple_setup,
          ssomethingSomething = somethingSomething,
          mc.cores = n_cores)
 
 
 tenKs <- list.files (file.path ("results"), pattern = "tenK")
-if (! (dir.exists(file.path ("results", new_multirunResults_folder)))) {dir.create (file.path ("results", new_multirunResults_folder))}
+if (! (dir.exists (file.path ("results", new_multirunResults_folder)))) {dir.create (file.path ("results", new_multirunResults_folder))}
 
 
 for (twoHundies in 1 : length (tenKs)) {
@@ -114,8 +114,8 @@ for (twoHundies in 1 : length (tenKs)) {
       selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
 
       selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
-      selection.sylreps <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index]
-      # bigSylrep <- max(cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1])[selection.index])
+      selection.sylreps <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index])
       if (length (which (selection.sylreps == max (selection.sylreps))) > 1) {
         singer <- selection.index [which (selection.sylreps == max (selection.sylreps)) [sample (c (1 : length (which (selection.sylreps == max (selection.sylreps)))), 1)]]
       } else if (length (which (selection.sylreps == max (selection.sylreps))) == 1) {

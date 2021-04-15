@@ -14,11 +14,11 @@
 
 # "So that I can use it when I'm being a bad person :P"
 
-    ##### -> setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
+    ##### -> setwd (file.path (strsplit (getwd (), "curiosity-code") [[1]][1], "curiosity-code"))
 
 #____________________________________________________________________________________
 
-rm(list=objects()) # Clear environment 
+rm (list = objects ()) # Clear environment 
 #
 
 
@@ -28,58 +28,58 @@ rm(list=objects()) # Clear environment
 #                                     - results/
 #                                     - source/temp/
 
-if(!(dir.exists(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "results")))) {
+if (! (dir.exists (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "results")))) {
           
-          dir.create(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "results"))}
+          dir.create (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "results"))}
 
-if(!(dir.exists(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "source", "temp")))) {
+if (! (dir.exists (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "source", "temp")))) {
           
-          dir.create(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "source", "temp"))}
+          dir.create (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "source", "temp"))}
 
-if(!(dir.exists(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "source", "RtempFiles")))) {
+if (! (dir.exists (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "source", "RtempFiles")))) {
           
-          dir.create(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "source", "RtempFiles"))
-          dir.create(file.path(strsplit(getwd(), 
-        "curiosity-code", )[[1]][1], "curiosity-code", "source", "archive", "RtempFiles"))
+          dir.create (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "source", "RtempFiles"))
+          dir.create (file.path (strsplit (getwd (), 
+        "curiosity-code", ) [[1]][1], "curiosity-code", "source", "archive", "RtempFiles"))
         }
 
 
 # This line will source packagaes, either:
     # by loading them from the computer, or 
     # by downloading them from the internet.
-source(file.path("scripts", "Source_Reference_Section.R"))
-referenceSection("multirun")
-# referenceSection("profiler")
+source (file.path ("scripts", "Source_Reference_Section.R"))
+referenceSection ("multirun")
+# referenceSection ("profiler")
 
 n_cores <- 16
 # Specify the number of cores/workers we want to use
-    # n_cores <- detectCores() - 3 # built around a maximum allowance
+    # n_cores <- detectCores () - 3 # built around a maximum allowance
 # n_cores <- 1
 
-  sourceCpp(file.path('cpp_source', 'median.cpp'))
-  sourceCpp(file.path('cpp_source', 'rowSums.cpp'))
-  sourceCpp(file.path('cpp_source', 'sort.cpp'))
+  sourceCpp (file.path ('cpp_source', 'median.cpp'))
+  sourceCpp (file.path ('cpp_source', 'rowSums.cpp'))
+  sourceCpp (file.path ('cpp_source', 'sort.cpp'))
 
-source(file.path("scripts", "Source_Multiple_Runs.R"))
+source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1:26
-paramsFile <- c("mix5050NotSameSexFigs.yaml")
-# paramsFile <- c("diffZwischensTnN.yaml")
-simDate <- gsub('-', '', substring(Sys.Date(), 3))
+shifting_curstart <- 1 : 26
+paramsFile <- c ("mix5050NotSameSexFigs.yaml")
+# paramsFile <- c ("diffZwischensTnN.yaml")
+simDate <- gsub ('-', '', substring (Sys.Date(), 3))
 secretCode <- 58418
-mclapply(shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = simDate, seedNumber = secretCode, mc.cores = n_cores)
+mclapply (shifting_curstart, multi_runs, paramsSource = paramsFile, dirDate = simDate, seedNumber = secretCode, mc.cores = n_cores)
 
 
-# paramsFile <- c("params.yaml")
-# profvis({
+# paramsFile <- c ("params.yaml")
+# profvis ({
 #   shifting_curstart <- 1
-#   multi_runs(shifting_curstart = shifting_curstart, paramsSource = paramsFile)
+#   multi_runs (shifting_curstart = shifting_curstart, paramsSource = paramsFile)
 # })
 

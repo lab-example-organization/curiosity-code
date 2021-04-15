@@ -1,5 +1,5 @@
-source(file.path("scripts", "Source_Reference_Section.R"))
-referencesection("heatmaps")
+source (file.path ("scripts", "Source_Reference_Section.R"))
+referencesection ("heatmaps")
 
 # You Should be Here To: Run some Heatmaps to compar a wide range of inherited traits!
 #
@@ -17,34 +17,34 @@ referencesection("heatmaps")
 
 # "So that I can use it when I'm being a bad person :P"
 
-######  setwd(file.path(strsplit(getwd(), "curiosity-code")[[1]][1], "curiosity-code"))
+######  setwd (file.path (strsplit (getwd (), "curiosity-code") [[1]][1], "curiosity-code"))
 
 
 # Source the Functions
 
-source(file.path("scripts", "Source_Heatmap_Functions.R"))
+source (file.path ("scripts", "Source_Heatmap_Functions.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-# heatmapland <- HtMpDir(extraDir = "sameInh")
-# heatmapland <- file.path("results", "Heatmaps", "sameInh")
-# heatmapland <- file.path("results", "Heatmaps", "maleInh_maleBias")
-# heatmapland <- file.path("results", "Heatmaps", "femInh_maleBias")
-# heatmapland <- file.path("results", "Heatmaps", "femInh_femBias")
-# heatmapland <- file.path("results")
-heatmapland <- file.path("results", "tenKfiveByFive_child-lowFemSmolInv")
+# heatmapland <- HtMpDir (extraDir = "sameInh")
+# heatmapland <- file.path ("results", "Heatmaps", "sameInh")
+# heatmapland <- file.path ("results", "Heatmaps", "maleInh_maleBias")
+# heatmapland <- file.path ("results", "Heatmaps", "femInh_maleBias")
+# heatmapland <- file.path ("results", "Heatmaps", "femInh_femBias")
+# heatmapland <- file.path ("results")
+heatmapland <- file.path ("results", "tenKfiveByFive_child-lowFemSmolInv")
 
-# heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF2")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF3")
-# heatmapland <- file.path("results", "tenKfiveByFive_child-noInvF4")
+# heatmapland <- file.path ("results", "tenKfiveByFive_child-noInvF2")
+# heatmapland <- file.path ("results", "tenKfiveByFive_child-noInvF3")
+# heatmapland <- file.path ("results", "tenKfiveByFive_child-noInvF4")
 
 
-# setwd("../../../../../../media/park/A443-E926/")
+# setwd ("../../../../../../media/park/A443-E926/")
 
-# heatmapland <- file.path("results", "Heatmaps")
+# heatmapland <- file.path ("results", "Heatmaps")
 
-# all_the_runs <- list.files(heatmapland,
-all_the_runs <- extractvardirs(heatmapland,
+# all_the_runs <- list.files (heatmapland,
+all_the_runs <- extractvardirs (heatmapland,
 
   ### No invasion, 10k highLow (biassize 5, othersize 2)
     ### Father Inheritance: 3901-3950
@@ -89,14 +89,14 @@ all_the_runs <- extractvardirs(heatmapland,
 
 
 
-#   connection <- file(description = file.path("source","temp", paste0(specificSimNumber, "_sim_data.txt")), open = "rt")
-#   multiRun_folderList <- as.vector(read.table(connection, -1L)[[2]])
+#   connection <- file(description = file.path ("source","temp", paste0 (specificSimNumber, "_sim_data.txt")), open = "rt")
+#   multiRun_folderList <- as.vector (read.table(connection, -1L) [[2]])
 #   close(connection)
 
 
-# profvis({
-# #   for(iteration in 1:10) {
-    # extractedmeans <- extractmeans(allrundirs = all_the_runs,
+# profvis ({
+# #   for (iteration in 1 : 10) {
+    # extractedmeans <- extractmeans (allrundirs = all_the_runs,
     #     dirheatmap = heatmapland, source_of_params = "params.yaml")
 # #   }
 # })
@@ -105,36 +105,36 @@ all_the_runs <- extractvardirs(heatmapland,
 # dirheatmap = heatmapland
 # source_of_params = "params.yaml"
 
-# extractedmeans <- extractmeans(
+# extractedmeans <- extractmeans (
 #   allrundirs = all_the_runs,
 #   dirheatmap = heatmapland,
 #   source_of_params = "params.yaml")
 
-extractedmeans <- extractmeans(
+extractedmeans <- extractmeans (
   allrundirs = all_the_runs,
   dirheatmap = heatmapland,
-  # ordering = c(1, 3, 4, 2),
-  # ordering = c(1, 3, 4, 2),
+  # ordering = c (1, 3, 4, 2),
+  # ordering = c (1, 3, 4, 2),
   source_of_params = "params.yaml")
-all_the_names <- remakestring(all_the_runs, "_", ".")
+all_the_names <- remakestring (all_the_runs, "_", ".")
 
 
-      # all_the_low_background <- c(all_the_runs[1:25])
-      # all_the_high_background <- c(all_the_runs[26:50])
+      # all_the_low_background <- c (all_the_runs[1 : 25])
+      # all_the_high_background <- c (all_the_runs[26:50])
 
-      # extractedmeans <- extractmeans(allrundirs = all_the_high_background,
+      # extractedmeans <- extractmeans (allrundirs = all_the_high_background,
                                     # dirheatmap = heatmapland,
                                     # source_of_params = "params.yaml",
                                     # deeper = FALSE)
-      # all_the_names <- remakestring(all_the_high_background, "_", ".")
+      # all_the_names <- remakestring (all_the_high_background, "_", ".")
 
-names(extractedmeans) <- all_the_names
-
-
+names (extractedmeans) <- all_the_names
 
 
 
-heatmapoutput <- list()
+
+
+heatmapoutput <- list ()
 ### the higher-res 10k fresh invasions ("11" for 50/50 MixedInh)
 # heatmapoutput <- makeheatmapfile(
 #                 inheritance = 11, diffcurstartbias = "pop1",
@@ -152,34 +152,34 @@ heatmapoutput <- makeheatmapfile(
 
 
 
-# whichInh <- c("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
+# whichInh <- c ("male","moth","same","opps","sNTn","sSTf","sSFr","sFrS","sTfS","sTnN", "FfFf")
 
 
-# individualfigures(5:10, 2, 1:2, 5)
+# individualfigures (5:10, 2, 1 : 2, 5)
 
 # inheritance = 5
 # colorrange = 2
 # thisBias = 1
 # numotherpopruns = 5
 
-# thing <- c(5, 6, 7, 8, 9, 10)
-# for (inhREtnce in 1:5) {
-#   for (sexBIAS in 1:2) {
+# thing <- c (5, 6, 7, 8, 9, 10)
+# for (inhREtnce in 1 : 5) {
+#   for (sexBIAS in 1 : 2) {
 
-#     individualfigures(10, 2, sexBIAS, 3)
+#     individualfigures (10, 2, sexBIAS, 3)
 
 #   }
 # }
 
 ##### ? WILL THIS WORK?
-individualfigures(2,5,heatmapoutput)
+individualfigures (2,5,heatmapoutput)
 #####
 
-# print("Stop here, Parker!")
-# print("Stop here, Parker!")
+# print ("Stop here, Parker!")
+# print ("Stop here, Parker!")
 
-source(file.path("scripts", "Source_Heatmap_Functions.R"))
-source(file.path("scripts", "Source_Difference_Heatmap_Functions.R"))
+source (file.path ("scripts", "Source_Heatmap_Functions.R"))
+source (file.path ("scripts", "Source_Difference_Heatmap_Functions.R"))
 
 output_heatmap <- heatmap_difference (
                     source_pattern = "FfFf",
@@ -190,7 +190,7 @@ output_heatmap <- heatmap_difference (
                     # foldername =
                     )
 
-individualfigures(2,5,list(
+individualfigures (2,5,list (
   foldername = output_heatmap$foldername,
   biassize = 5,
   othersize = 2,
@@ -210,11 +210,11 @@ output_heatmap <- heatmap_difference (
 #### Blue values = High Number,
 #### Red values = Low Number
 
-#### So, for example, Inv(high) - Vanilla = Blue,
-#### while, in contrast, Van - Inv(high) = Red
+#### So, for example, Inv (high) - Vanilla = Blue,
+#### while, in contrast, Van - Inv (high) = Red
 
 # five-by-five-followUpInvLow1k_lowHigh_Background
-individualfigures(2,19,list(
+individualfigures (2,19,list (
   foldername = output_heatmap$foldername,
   biassize = 5,
   othersize = 2,
@@ -225,8 +225,8 @@ individualfigures(2,19,list(
 # _source_names = "five-by-five-followUpInv1k_lowHigh_Background", ### 4101-4300
 
 # source_pattern = "male" # "moth", "same", "FfFf"
-# first_source_names = c("five-by-five-followUpInvHigh1k_lowHigh_Background")
-# secnd_source_names = c("five-by-five-followUpVanilla_lowHigh_Background")
+# first_source_names = c ("five-by-five-followUpInvHigh1k_lowHigh_Background")
+# secnd_source_names = c ("five-by-five-followUpVanilla_lowHigh_Background")
 # visualization = "midpoint"
 # replace = TRUE
 
@@ -244,20 +244,20 @@ secnd_source_names = "five-by-five-followUpInv1k_lowHigh_Background"
 first_source_names = "five-by-five-followUpInv1k_lowHigh_Background"
 secnd_source_names = "five-by-five-followUpVanilla_lowHigh_Background"
 
-# thing <- c(5, 6, 7, 8, 9, 10)
+# thing <- c (5, 6, 7, 8, 9, 10)
 # for (
-#   inhREtnce in 1:6
+#   inhREtnce in 1 : 6
 # ) {
 #   for (
-#     sexBIAS in 1:8
+#     sexBIAS in 1 : 8
 #   ) {
-#     combineeditsingles(inhREtnce[thing], 1, sexBIAS, 3, T, F)
+#     combineeditsingles (inhREtnce[thing], 1, sexBIAS, 3, T, F)
 #   }
 # }
 
-# combineeditsingles(5, 1, 1, 3, T, F)
+# combineeditsingles (5, 1, 1, 3, T, F)
 
-combineeditsingles(1, 3, 1, 2, T, F)
+combineeditsingles (1, 3, 1, 2, T, F)
 
 # inheritancestyle = 5
 # bias = 3
@@ -268,13 +268,13 @@ combineeditsingles(1, 3, 1, 2, T, F)
 
 
 
-# for (k in 1:2) {
-#     thing <- c(3, 11)
+# for (k in 1 : 2) {
+#     thing <- c (3, 11)
 
 
-#     for (i in 1:4) {
-#         for (j in 1:2) {
-#             combineeditsingles(thing[k],3,i,j, T)
+#     for (i in 1 : 4) {
+#         for (j in 1 : 2) {
+#             combineeditsingles (thing[k],3,i,j, T)
 #         }
 #     }
 # }
@@ -284,11 +284,11 @@ combineeditsingles(1, 3, 1, 2, T, F)
 
 
 
-# for (inhpattern in 1:4) {
-#   individualfigures(inhpattern, 2)
+# for (inhpattern in 1 : 4) {
+#   individualfigures (inhpattern, 2)
 
-#   for (spranges in 1:2) {
-#     stackmultiples(inhpattern, spranges)
+#   for (spranges in 1 : 2) {
+#     stackmultiples (inhpattern, spranges)
 #   }
 # }
 

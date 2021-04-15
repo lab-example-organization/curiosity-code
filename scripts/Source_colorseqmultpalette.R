@@ -1,4 +1,4 @@
-make_colorpalettes <- function (stuff = c(2,7)) {
+make_colorpalettes <- function (stuff = c (2,7)) {
     colorseqmultpalette <- list (
         reds = colorRampPalette (c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds                                        ### 1
         rdpu = colorRampPalette (c ("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class rdpu                                        ### 2
@@ -20,21 +20,21 @@ make_colorpalettes <- function (stuff = c(2,7)) {
         greys = colorRampPalette (c ("#f0f0f0", "#bdbdbd", "#636363")), # 3-class greys                                      ### 18
         # midpoint = colorRampPalette (c ("#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac"))
 
-        difference_spectrum = eval (parse (text = paste0 ("midpoint = colorRampPalette (c (rep(\"#67001f\", ",
-                                                    stuff[2], "), rep(\"#b2182b\", ",
-                                                    stuff[2], "), rep(\"#ca0020\", ",
-                                                    stuff[2], "), rep(\"#d6604d\", ",
-                                                    stuff[2], "), rep(\"#ef8a62\", ",
-                                                    stuff[2], "), rep(\"#f4a582\", ",
-                                                    stuff[2], "), rep(\"#fddbc7\", ",
-                                                    stuff[2], "), rep(\"#f7f7f7\", ",
-                                                    stuff[1], "), rep(\"#d1e5f0\", ",
-                                                    stuff[2], "), rep(\"#92c5de\", ",
-                                                    stuff[2], "), rep(\"#67a9cf\", ",
-                                                    stuff[2], "), rep(\"#4393c3\", ",
-                                                    stuff[2], "), rep(\"#0571b0\", ",
-                                                    stuff[2], "), rep(\"#2166ac\", ",
-                                                    stuff[2], "), rep(\"#053061\", ",
+        difference_spectrum = eval (parse (text = paste0 ("midpoint = colorRampPalette (c (rep (\"#67001f\", ",
+                                                    stuff[2], "), rep (\"#b2182b\", ",
+                                                    stuff[2], "), rep (\"#ca0020\", ",
+                                                    stuff[2], "), rep (\"#d6604d\", ",
+                                                    stuff[2], "), rep (\"#ef8a62\", ",
+                                                    stuff[2], "), rep (\"#f4a582\", ",
+                                                    stuff[2], "), rep (\"#fddbc7\", ",
+                                                    stuff[2], "), rep (\"#f7f7f7\", ",
+                                                    stuff[1], "), rep (\"#d1e5f0\", ",
+                                                    stuff[2], "), rep (\"#92c5de\", ",
+                                                    stuff[2], "), rep (\"#67a9cf\", ",
+                                                    stuff[2], "), rep (\"#4393c3\", ",
+                                                    stuff[2], "), rep (\"#0571b0\", ",
+                                                    stuff[2], "), rep (\"#2166ac\", ",
+                                                    stuff[2], "), rep (\"#053061\", ",
                                                     stuff[2], ")))"))),
         midpoint_but_smooth = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061")),
         variance_spectrum = colorRampPalette (c ("#67001f", "#b2182b", "#ca0020", "#d6604d", "#ef8a62", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#67a9cf", "#4393c3", "#0571b0", "#2166ac", "#053061",
@@ -52,8 +52,8 @@ make_singpalette <- function () {
                                           c ("#fee6ce", "#fdae6b", "#e6550d"), # 3-class oranges
                                           c ("#efedf5", "#bcbddc", "#756bb1"), # 3-class purples
                                           c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds
-                                nrow = 6, ncol = 3,byrow = T,dimnames = list(
+                                nrow = 6, ncol = 3,byrow = T,dimnames = list (
                                   c ("blue", "green", "grey", "orange", "purple", "red"),
                                   c ("Light first color", "Middle color", "Dark final color")))
-    return(colorseqsingpalette)
+    return (colorseqsingpalette)
 }
