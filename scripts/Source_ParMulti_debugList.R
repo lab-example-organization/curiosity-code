@@ -13,7 +13,7 @@
 
 #____________________________________________________________________________________
 
-rm(list=objects()) # Did you want to run me while you were doing other stuff? Sorry!
+rm(list=objects()) # Clear environment
 #
 
 
@@ -118,6 +118,7 @@ set.seed (seednumber + shifting_curstart)
     # lastrun_init <- array(0, c(1,1,1,number_of_reps))
 
     lastrun_init <- list()
+    length(lastrun_init) <- number_of_reps
 
     if (params$lastruninit) {
       if (length (params$lastrunid) > 1) {
@@ -436,7 +437,7 @@ set.seed (seednumber + shifting_curstart)
                   results_dir = FALSE,
                   lineplots = TRUE,
                   curMeans_only = FALSE,
-                  absolute_y = params$absolute_y-axis,
+                  absolute_y = params$absolute_yAxis,
                   recolorize_style = "range-median")
 
   }                  

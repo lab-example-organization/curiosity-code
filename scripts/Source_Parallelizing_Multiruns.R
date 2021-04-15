@@ -13,7 +13,7 @@
 
 #____________________________________________________________________________________
 
-rm(list=objects()) # Did you want to run me while you were doing other stuff? Sorry!
+rm(list=objects()) # Clear environment
 #
 
 
