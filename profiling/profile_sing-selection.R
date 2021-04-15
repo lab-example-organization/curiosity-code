@@ -31,13 +31,13 @@ scmax <- c (params$curstarts[[1]]$scmax[1],
            params$curstarts[[1]]$scmax[4])
 moranObjects <- define_temp_data (params)
 curiosity_level <- initialize.curiosity (simParams, scmin, scmax)
-sylreps <- initialize.sylrep (simParams, c (1,2), T, T)
+sylreps <- initialize.sylrep (simParams, c (1,2), TRUE, TRUE)
 
 profvis ({
   for (iteration in 1 : 100) {
     x <- sing.selection (parameters = simParams, moran = moranObjects,
                         curiosity_level = curiosity_level, select_type = "mate",
-                        sylrep_object = sylreps, verbose_output = F,
-                        num_select_chances = c (100, 100), interbreed = F)
+                        sylrep_object = sylreps, verbose_output = FALSE,
+                        num_select_chances = c (100, 100), interbreed = FALSE)
   }
 })

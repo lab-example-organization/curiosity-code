@@ -38,12 +38,12 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
     stop ("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
   }
 
-  pop_calls_matrix <- matrix (data = c (1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = T)
+  pop_calls_matrix <- matrix (data = c (1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = TRUE)
 
 
   #new.curiosity <- array (0,c (2,num_pop))
   curiositybreaks <- (0 : (num_pop * one_pop_singers [1])) * (1 / (num_pop * one_pop_singers [1]))
-  curiosity_counter <- matrix (data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = F)
+  curiosity_counter <- matrix (data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = FALSE)
   # zero_to_one_template <- c (0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
   # #                           #1,  #2, #3,  #4,  #5,  #6, #7,  #8, #9,#10,
   #                           0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,

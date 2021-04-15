@@ -317,8 +317,8 @@ recolorized_simple_plots <- function (
     # clustering_measures <- matrix (nrow = 4, ncol = 2, byrow = TRUE)
     # for (pop in 1 : parameters$num_pop) {
     #   for (sex in 1 : 2) {
-    #     clustering_measures[sex,pop] <- max (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = F)$counts)
-    #     second_measure <- sort (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = F)$counts, index.return = TRUE)$ix
+    #     clustering_measures[sex,pop] <- max (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = FALSE)$counts)
+    #     second_measure <- sort (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = FALSE)$counts, index.return = TRUE)$ix
     #     clustering_measures[sex + 2, pop] <-
     #   }
     # }
@@ -467,7 +467,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
             meanz <- sdstbxnlist [[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
             file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
             png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-            image(t (meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Sylnum"), axes=F)
+            image(t (meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Sylnum"), axes=FALSE)
             axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
             axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
             minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
@@ -477,7 +477,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
           meanz <- sdstbxnlist [[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
           file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
           png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-          image(t (meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Sylnum"), axes=F)
+          image(t (meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Sylnum"), axes=FALSE)
           axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
           axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
           minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
@@ -487,7 +487,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
           meanz <- curhistlist [[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
           file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_curiosity_bins_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
           png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-          image(t (meanz), col = plot_info$sylsub_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Curiosity Bin"), axes=F)
+          image(t (meanz), col = plot_info$sylsub_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Curiosity Bin"), axes=FALSE)
           axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=0)
           axis (2, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*20), col.axis="black", las=2)
           minor.tick (nx=4, ny=4, tick.ratio=1, x.args = list (), y.args = list ())

@@ -300,7 +300,7 @@ invasion_parameters_sylrep <- function (
 
         building_a_sylrep = unique (
           sort (
-            sample (1 : 156,sample_size,T,c (
+            sample (1 : 156,sample_size,TRUE,c (
               rep (0.001,(sylrep_mean - (sample_size/2))),
               # from point in sylnum where the target is
               # located (fraction * sylnum), with 1/2 the
@@ -328,7 +328,7 @@ invasion_parameters_sylrep <- function (
 
             building_a_sylrep = unique (
               sort (
-                sample(1 : 156,sample_size - 5,T,c (
+                sample(1 : 156,sample_size - 5,TRUE,c (
                   rep (0.001,(sylrep_mean - ( (sample_size - 5)/2))),
 
                   rep (0.75,(itv[2]*(1/0.75))),
@@ -344,7 +344,7 @@ invasion_parameters_sylrep <- function (
 
             building_a_sylrep = unique (
               sort (
-                sample(1 : 156,sample_size + 5,T,c (
+                sample(1 : 156,sample_size + 5,TRUE,c (
                   rep (0.001,(sylrep_mean - ( (sample_size + 5)/2))),
 
                   rep (0.75,(itv[2]*(1/0.75))),
@@ -355,7 +355,7 @@ invasion_parameters_sylrep <- function (
             ))))
           }
           # building_a_sylrep <- unique(sort (sample(
-            # 1 : 156,50,T,c (rep (0.001,20),rep (0.75,80),rep (0.001,56)))))
+            # 1 : 156,50,TRUE,c (rep (0.001,20),rep (0.75,80),rep (0.001,56)))))
         }
         # thing <- (someparameters$sylnum + 1) - which (
           # sylrep_container [pop_subset [variable], , population] == 1)
@@ -367,7 +367,7 @@ invasion_parameters_sylrep <- function (
     # return (sylrep_container)
       # sample(x, size, replace = FALSE, prob = NULL)
 
-      # > unique(sort (sample(1 : 156,50,T,c (
+      # > unique(sort (sample(1 : 156,50,TRUE,c (
         # rep (0.01,20),rep (0.5,80),rep (0.01,56)))))
       #  [1]  21  24  25  26  27  29  31  37  39  48
       #       49  50  52  54  56  57  58  59  64
@@ -413,13 +413,13 @@ life_cycle <- function (
   if (initfromlastrun) {
     sylreps <- initialize.sylrep (parameters_is = simparams,
       population.pattern = c (1,2), pastrunobject_is = lastrunobject,
-      eqpop = T, eqsex = T, pastruninit_is = T)
+      eqpop = TRUE, eqsex = TRUE, pastruninit_is = TRUE)
     curiosity_level <- initialize.curiosity (
       parameters_ic = simparams, cur.min = scmin, cur.max = scmax,
-      pastrunobject_ic = lastrunobject, pastruninit_ic = T)
+      pastrunobject_ic = lastrunobject, pastruninit_ic = TRUE)
   } else {
     sylreps <- initialize.sylrep (parameters_is = simparams,
-      population.pattern = c (1,2), eqpop = T, eqsex = T)
+      population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
     curiosity_level <- initialize.curiosity (
       parameters_ic = simparams, cur.min = scmin, cur.max = scmax)
   }
@@ -483,8 +483,8 @@ print ("line 427")
                                       select_type = "mate",
                                       sylrep_object = sylreps,
                                       num_select_chances = c (40, 40),
-                                      verbose_output = F,
-                                      interbreed = F)
+                                      verbose_output = FALSE,
+                                      interbreed = FALSE)
 
         # Locate new birb positions in population data, store in TDO
         moranobjects <- make.offspring.calls (parameters_offspring_calls = simparams,
@@ -501,7 +501,7 @@ print ("line 427")
                                   select_type = "mate",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
-                                  verbose = F)
+                                  verbose = FALSE)
 
         moranobjects <- sing.selection (parameters_sing_selection = simparams,
                                       temp_data_sing_selection = moranobjects,
@@ -509,15 +509,15 @@ print ("line 427")
                                       select_type = "tutor",
                                       sylrep_object = sylreps,
                                       num_select_chances = c (40, 40),
-                                      verbose_output = F,
-                                      interbreed = F)
+                                      verbose_output = FALSE,
+                                      interbreed = FALSE)
 
         moranobjects <- syll_learn (parameters_sylllearn = simparams,
                                   temp_data_sylllearn = moranobjects,
                                   select_type = "tutor",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
-                                  verbose = F)
+                                  verbose = FALSE)
 
         curiosity_level <- recuriosity.offspring (parameters_recuriosity = simparams,
                                             temp_data_recuriosity = moranobjects,
@@ -648,10 +648,10 @@ print ("line 643")
 
   archivesimfiles (path = file.path ("source", "temp"),
     filename = paste0 (shifting_curstart,"_console_copy.txt"),
-    archive = TRUE, new_dir = F)
+    archive = TRUE, new_dir = FALSE)
   archivesimfiles (path = file.path ("source", "temp"),
     filename = paste0 (shifting_curstart,"_sim_data.txt"),
-    archive = TRUE, new_dir = F)
+    archive = TRUE, new_dir = FALSE)
 
   # This wrapped up the restart_from_save function,
   # so that life_cycle has last-run data as an accessible object
@@ -671,7 +671,7 @@ print ("line 643")
 
   for (rep_number in 1 : number_of_reps) {
 
-    if (params$indrunredo == T) {
+    if (params$indrunredo == TRUE) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
       singleormixture <- params$curinhdistribution [shifting_curstart]
     } else {

@@ -33,13 +33,13 @@ plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_s
 (variance scale)")
   }
 
-  plot (rep (x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = F, xlab = "", ylab = "", ylim = c (5,16), main = title_and_stuff)
+  plot (rep (x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = FALSE, xlab = "", ylab = "", ylim = c (5,16), main = title_and_stuff)
 
   if (legend_scale == "midpoint") {
-    axis (1, c (0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    axis (1, c (0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),TRUE,-11.85,NA,FALSE,cex.axis = 0.7, tck = -0.015)
     title(xlab = c ("-1     -0.86    -0.72   -0.58   -0.44     -0.3     -0.16  -0.02  0.02   0.16     0.3     0.44      0.58      0.72    0.86         1 "), line = -11.2, cex.lab = 0.7)
 
-    axis (1, c (0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-15.8,NA,F,cex.axis = 0.7, tck = 0.015)
+    axis (1, c (0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),TRUE,-15.8,NA,FALSE,cex.axis = 0.7, tck = 0.015)
     title(xlab = c ("-155     -133     -111      -89       -67      -45      -23        -3  3         23       45        67        89       111       133      155 "), line = -17.3, cex.lab = 0.7)
 
     title(xlab = c ("Syllable Repertoire Differences"), line = -18.3, cex.lab = 0.7)
@@ -48,10 +48,10 @@ plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_s
   } else if (legend_scale == "variance") {
     #   c ("", "", "", "", "", "", "", "")
     # c ("0", "0.05", "0.1", "0.15", "0.2", "0.25", "0.3", "0.35")
-    # axis (1, c (0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),T,-11.85,NA,F,cex.axis = 0.7, tck = 0.015)
+    # axis (1, c (0.5, 7.5, 14.5, 21.5, 28.5, 35.5, 42.5, 49.5, 51.5, 58.5, 65.5, 72.5, 79.5, 86.5, 93.5, 100.5), c ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),TRUE,-11.85,NA,FALSE,cex.axis = 0.7, tck = 0.015)
     # title (xlab = c ("0.02           0.04         0.06          0.08        0.1         0.125       0.145     0.165  0.185     0.205     0.225       0.245       0.265      0.285   0.315"), line = -17.8, cex.lab = 0.7)
-    # axis (1, c (5.5, 15.5, 25.5, 35.5), c ("0.05", "0.15", "0.25", "0.35"),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
-    axis (1, c (0.5, 3.5, 6.5, 9.5, 12.5, 15.5, 18.5, 21.5, 24.5, 27.5, 30.5, 33.5, 36.5, 39.5, 42.5, 45.5, 48.5, 51.5, 54.5, 57.5, 60.5, 63.5, 66.5, 69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 96.5), c ("0", "0.01", "0.02", "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", "0.1", "0.11", "0.12", "0.13", "0.14", "0.15", "0.16", "0.17", "0.18", "0.19", "0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26", "0.27", "0.28", "0.29", "0.3", "0.31", "... 1"),T,-11.85,NA,F,cex.axis = 0.7, tck = -0.015)
+    # axis (1, c (5.5, 15.5, 25.5, 35.5), c ("0.05", "0.15", "0.25", "0.35"),TRUE,-11.85,NA,FALSE,cex.axis = 0.7, tck = -0.015)
+    axis (1, c (0.5, 3.5, 6.5, 9.5, 12.5, 15.5, 18.5, 21.5, 24.5, 27.5, 30.5, 33.5, 36.5, 39.5, 42.5, 45.5, 48.5, 51.5, 54.5, 57.5, 60.5, 63.5, 66.5, 69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 96.5), c ("0", "0.01", "0.02", "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", "0.1", "0.11", "0.12", "0.13", "0.14", "0.15", "0.16", "0.17", "0.18", "0.19", "0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26", "0.27", "0.28", "0.29", "0.3", "0.31", "... 1"),TRUE,-11.85,NA,FALSE,cex.axis = 0.7, tck = -0.015)
   }
 
   dev.off ()
@@ -134,7 +134,7 @@ print_regex_num_range <- function (
       leading_zeroes = FALSE
     }
 
-    zv <- matrix (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c (length (first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
+    zv <- matrix (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]]), (as.numeric (secnd_term[[1]]) - as.numeric (first_term[[1]]))), 3, max (c (length (first_term[[1]]), length (secnd_term[[1]]))), byrow = TRUE)
 
     bigStartsAt <- c ()
     i <- 1
@@ -894,7 +894,7 @@ individualfigures <- function (
   }
   # }
   # heatmap_sourcefolder <- file.path ("results", "Heatmaps", "output_objects")
-  # if (output_foldername != F) {
+  # if (output_foldername != FALSE) {
   #   heatmap_sourcefolder <- file.path ("results", output_foldername)
   # } else {
   #   heatmap_sourcefolder <- file.path ("results")
@@ -1117,14 +1117,14 @@ individualfigures <- function (
         if (sxmtpop > 4) {
           image(x = temphtmparray[,,sxmtpop - 4, 2],
             col = colorseqmultpalette[[colorpalette]](100),
-            axes = F,
+            axes = FALSE,
             xlab = heatmap_axes[[3]][1],
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
         } else {
           image(x = temphtmparray[,,sxmtpop, 1],
             col = colorseqmultpalette[[colorpalette]](100),
-            axes = F,
+            axes = FALSE,
             xlab = heatmap_axes[[3]][1],
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
@@ -1133,7 +1133,7 @@ individualfigures <- function (
       } else if (variance_treatment == "fscsfmavc") {
           image(x = temphtmparray[,,sxmtpop],
             col = colorseqmultpalette[[colorpalette]](100),
-            axes = F,
+            axes = FALSE,
             xlab = heatmap_axes[[3]][1],
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
@@ -1142,14 +1142,14 @@ individualfigures <- function (
         if (otherpopsize == 1) {
           image(x = temphtmparray[,,sxmtpop],
             col = colorseqmultpalette[[colorpalette]](100),
-            axes = F,
+            axes = FALSE,
             xlab = heatmap_axes[[3]][1],
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
         } else {
           image(x = temphtmparray[,,slice,sxmtpop],
             col = colorseqmultpalette[[colorpalette]](100),
-            axes = F,
+            axes = FALSE,
             xlab = heatmap_axes[[3]][1],
             ylab = heatmap_axes[[3]][2],cex.lab=1.4, zlim = heatmaprange
           )
@@ -1168,129 +1168,129 @@ individualfigures <- function (
         if (input_list$biassize == 2) {
           axis (1,c (-0.495,  0  ,0.5,    1    ,1.495),
             c (  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.495,0.5,1.495),
             c ("","",""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.495,  0  ,0.5,    1    ,1.495),
             c (  ""   ,temptemp[[1]][1],"" ,temptemp[[2]][1],"" ),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.495,0.5,1.495),
             c ("","",""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 3) {
           axis (1,c (-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.25, 0.25, 0.75, 1.25),
             c ("", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.25, 0, 0.25, 0.5, 0.75, 0.97, 1.25),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.25, 0.25, 0.75, 1.25),
             c ("", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 4) {
           axis (1,c (-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.165, 0.168, 0.5, 0.835, 1.1649),
             c ("", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.165, 0, 0.167, 0.334, 0.5, 0.667, 0.834, 1, 1.1649),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.165, 0.168, 0.5, 0.835, 1.1649),
             c ("", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 5) {
           axis (1,c (-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
             c ("", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.124, 0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.97, 1.124),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.124, 0.125, 0.375, 0.625, 0.875, 1.124),
             c ("", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 6) {
           axis (1,c (-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
             c ("", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
             c ("", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 7) {
           axis (1,c (-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
             c ("", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
                 c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
             c ("", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 8) {
           axis (1,c (-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
             c ("", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
                 c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
             c ("", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 9) {
           axis (1,c (-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
             c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
             c ("", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
                 c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
             c ("", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 10) {
           axis (1,c (-0.0555,                0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
                 c (     "", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
             c ("", "", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.0555,   0, 0.0555, 0.111, 0.1665, 0.222, 0.2775, 0.333, 0.3885, 0.444, 0.4995, 0.555, 0.611, 0.6665, 0.722, 0.7775, 0.833, 0.8885, 0.944, 0.9995, 1.055),
                 c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",    temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    "",   temptemp[[10]][1],    ""),
-            T,0,NA,F,cex.axis=0.8, tck = 0)
+            TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.0555, 0.0555, 0.1665, 0.2775, 0.3885, 0.5, 0.611, 0.722, 0.833, 0.944, 1.055),
             c ("", "", "", "", "", "", "", "", "", "", ""),
-            T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+            TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         }
 
       } else {

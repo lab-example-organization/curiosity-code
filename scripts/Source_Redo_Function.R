@@ -122,7 +122,7 @@ multi_runs <- function (shifting_curstart, paramssource,
 
   if (recolorize != FALSE) {
 
-    if (params$indrunredo == T) {
+    if (params$indrunredo == TRUE) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
       singleormixture <- params$curinhdistribution [shifting_curstart]
     } else {
@@ -138,10 +138,10 @@ multi_runs <- function (shifting_curstart, paramssource,
   } else {
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),
-      archive = TRUE, new_dir = F)
+      archive = TRUE, new_dir = FALSE)
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_sim_data.txt"),
-      archive = TRUE, new_dir = F)
+      archive = TRUE, new_dir = FALSE)
 
     # This wrapped up the restart_from_save function,
     # so that life_cycle has last-run data as an accessible object

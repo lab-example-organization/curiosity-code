@@ -54,7 +54,7 @@ if (params$lastruninit) {
 }
 rep_number = 1
 
-if (params$Indrunredo == T) {
+if (params$Indrunredo == TRUE) {
   subsetOrSequence <- params$simnumberstart [shifting_curstart]
   singleOrMixture <- params$curinhdistribution [shifting_curstart]
 } else {
@@ -127,13 +127,13 @@ simParams <- define_parameters (
   if (initFromLastRun) {
     sylreps <- initialize.sylrep (P = simParams, 
       population.pattern = c (1,2), pastRunObject = lastRunObject, 
-      eqpop = T, eqsex = T, pastRunInit = T)
+      eqpop = TRUE, eqsex = TRUE, pastRunInit = TRUE)
     curiosity_level <- initialize.curiosity (
       P = simParams, cur.min = scmin, cur.max = scmax, 
-      pastRunObject = lastRunObject, pastRunInit = T)
+      pastRunObject = lastRunObject, pastRunInit = TRUE)
   } else {
     sylreps <- initialize.sylrep (P = simParams, 
-      population.pattern = c (1,2), eqpop = T, eqsex = T)
+      population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
     curiosity_level <- initialize.curiosity (
       simParams, scmin, scmax)
   }

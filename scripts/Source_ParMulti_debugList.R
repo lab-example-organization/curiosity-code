@@ -90,7 +90,7 @@ set.seed (seednumber + shifting_curstart)
 
   if (recolorize != FALSE) {
 
-    if (params$indrunredo == T) {
+    if (params$indrunredo == TRUE) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
       singleormixture <- params$curinhdistribution [shifting_curstart]
     } else {
@@ -108,10 +108,10 @@ set.seed (seednumber + shifting_curstart)
     ### add a "first time" clause here, to keep the "yo, there aren't any old archive files" issue at bay
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),
-      archive = TRUE, new_dir = F)
+      archive = TRUE, new_dir = FALSE)
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_sim_data.txt"),
-      archive = TRUE, new_dir = F)
+      archive = TRUE, new_dir = FALSE)
 
     # This wrapped up the restart_from_save function,
     # so that life_cycle has last-run data as an accessible object
@@ -135,7 +135,7 @@ set.seed (seednumber + shifting_curstart)
 
         rep_number <- 1
 
-    if (params$indrunredo == T) {
+    if (params$indrunredo == TRUE) {
         subsetorsequence <- params$simnumberstart [shifting_curstart]
         singleormixture <- params$curinhdistribution [shifting_curstart]
       } else {
@@ -236,13 +236,13 @@ set.seed (seednumber + shifting_curstart)
   if (initfromlastrun) {
     sylreps <- initialize.sylrep (parameters_is = simparams,
       population.pattern = c (1,2), pastrunobject_is = lastrunobject,
-      eqpop = T, eqsex = T, pastruninit_is = T)
+      eqpop = TRUE, eqsex = TRUE, pastruninit_is = TRUE)
     curiosity_level <- initialize.curiosity (
       parameters_ic = simparams, cur.min = scmin, cur.max = scmax,
-      pastrunobject_ic = lastrunobject, pastruninit_ic = T)
+      pastrunobject_ic = lastrunobject, pastruninit_ic = TRUE)
   } else {
     sylreps <- initialize.sylrep (parameters_is = simparams,
-      population.pattern = c (1,2), eqpop = T, eqsex = T)
+      population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
     curiosity_level <- initialize.curiosity (
       parameters_ic = simparams, cur.min = scmin, cur.max = scmax)
   }
@@ -305,8 +305,8 @@ set.seed (seednumber + shifting_curstart)
                                       select_type = "mate",
                                       sylrep_object = sylreps,
                                       num_select_chances = c (40, 40),
-                                      verbose_output = F,
-                                      interbreed = F)
+                                      verbose_output = FALSE,
+                                      interbreed = FALSE)
 
   # Locate new birb positions in population data, store in TDO
   moranobjects <- make.offspring.calls (parameters_offspring_calls = simparams,
@@ -323,7 +323,7 @@ set.seed (seednumber + shifting_curstart)
                               select_type = "mate",
                               totally_new = FALSE,
                               randlearn_context = 2,
-                              verbose = F)
+                              verbose = FALSE)
 
   moranobjects <- sing.selection (parameters_sing_selection = simparams,
                                   temp_data_sing_selection = moranobjects,
@@ -331,15 +331,15 @@ set.seed (seednumber + shifting_curstart)
                                   select_type = "tutor",
                                   sylrep_object = sylreps,
                                   num_select_chances = c (40, 40),
-                                  verbose_output = F,
-                                  interbreed = F)
+                                  verbose_output = FALSE,
+                                  interbreed = FALSE)
 
   moranobjects <- syll_learn (parameters_sylllearn = simparams,
                               temp_data_sylllearn = moranobjects,
                               select_type = "tutor",
                               totally_new = FALSE,
                               randlearn_context = 2,
-                              verbose = F)
+                              verbose = FALSE)
 
   curiosity_level <- recuriosity.offspring (parameters_recuriosity = simparams,
                                       temp_data_recuriosity = moranobjects,

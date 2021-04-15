@@ -331,14 +331,14 @@ if (length (list.files (multirun_directory, pattern = "multirun-output")) != 0) 
     if (! (dir.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts")))) {
       dir.create (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts"))
     }
-    zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path (srcdir), T, 9, T)
+    zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path (srcdir), TRUE, 9, TRUE)
 
     parmdir = file.path ("parameters")
     # file.names = dir (parmdir) [grep ("*.yaml", dir (parmdir))]
     if (! (dir.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params")))) {
       dir.create (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params"))
     }
-    zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsFiles.zip"), file.path (parmdir), T, 9, T)
+    zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsFiles.zip"), file.path (parmdir), TRUE, 9, TRUE)
 
     saveRDS (params, file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsSource.RData"))
   }

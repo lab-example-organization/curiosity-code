@@ -12,7 +12,7 @@ attr (,"condition")
                                tempMoran = update_selexn_data (parameters, tempMoran, selection.index,         
                                  singer, selector.index, curiosity_level, 
                                  population, select_type, selection.sylreps, 
-                                 selector.sylrep, chance_for_selection, F)    
+                                 selector.sylrep, chance_for_selection, FALSE)    
                                should_continue <- FALSE    
                                break
                              }: missing value where TRUE/FALSE needed>
@@ -164,7 +164,7 @@ for (ricky in 1 : 2) {
 
 
 attr (,"condition")
-<simpleError in if (should_pick_neighbor (index = neighbor, total_chances = num_select_chances,     selection_context = select_type, current_chance = chance_for_selection,     sorted_selections = golf_score, selection_filter = singSuccessFilter,     preferred_bird = singer, lower = 0.5, upper = 0.75) == TRUE) {    singer <- golf_score[singer + neighbor]    tempMoran = update_selexn_data (parameters, tempMoran, selection.index,         singer, selector.index, curiosity_level, population,         select_type, selection.sylreps, selector.sylrep, chance_for_selection,         F)    should_continue <- FALSE    break}: missing value where TRUE/FALSE needed>
+<simpleError in if (should_pick_neighbor (index = neighbor, total_chances = num_select_chances,     selection_context = select_type, current_chance = chance_for_selection,     sorted_selections = golf_score, selection_filter = singSuccessFilter,     preferred_bird = singer, lower = 0.5, upper = 0.75) == TRUE) {    singer <- golf_score[singer + neighbor]    tempMoran = update_selexn_data (parameters, tempMoran, selection.index,         singer, selector.index, curiosity_level, population,         select_type, selection.sylreps, selector.sylrep, chance_for_selection,         FALSE)    should_continue <- FALSE    break}: missing value where TRUE/FALSE needed>
 
 
 
@@ -245,25 +245,25 @@ for (SxMtPop in 1 : 8) { # curiosity and sylrep data for each subpopulation
 
             image(x = t (t (matrix (c (tempHtMpArray[,,,SxMtPop]), 10, 10))),
                 col = colorSeqMultPalette$YlOrRd (100),
-                axes = F, 
+                axes = FALSE, 
                 xlab = findXLab, 
                 ylab = findYLab,cex.lab=1.4, zlim = heatmapRange)
 
             axis (1,c (-0.25, -0.175, -0.1, -0.025, 0.05, 0.125, 0.2, 0.275, 0.35, 0.425, 0.5, 0.575, 0.65, 0.725, 0.8, 0.875, 0.95, 1.025, 1.1, 1.175, 1.25),
                 c ("", "0-.18", "", ".09-.27", "", ".18-.36", "", ".27-.45", "", ".36-.54", "", ".45-.63", "", ".54-.72", "", ".63-.81", "", ".72-.9", "", ".81-1.0", ""),
                 # c ("", ".81-1.0", "", ".72-.9", "", ".63-.81", "", ".54-.72", "", ".45-.63", "", ".36-.54", "", ".27-.45", "", ".18-.36", "", ".09-.27", "", "0-.18", ""),
-                T,0,NA,F,cex.axis=1, tck = 0)
+                TRUE,0,NA,FALSE,cex.axis=1, tck = 0)
             axis (1,c (-0.25, -0.1, 0.05, 0.2, 0.35, 0.5, 0.65, 0.8, 0.95, 1.1,1.25),
                 c ("","","","","","","","","","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+                TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
             axis (2,c (-0.25, -0.175, -0.1, -0.025, 0.05, 0.125, 0.2, 0.275, 0.35, 0.425, 0.5, 0.575, 0.65, 0.725, 0.8, 0.875, 0.95, 1.025, 1.1, 1.175, 1.25),
                 c ("", "0-.18", "", ".09-.27", "", ".18-.36", "", ".27-.45", "", ".36-.54", "", ".45-.63", "", ".54-.72", "", ".63-.81", "", ".72-.9", "", ".81-1.0", ""),
                 # c ("", ".81-1.0", "", ".72-.9", "", ".63-.81", "", ".54-.72", "", ".45-.63", "", ".36-.54", "", ".27-.45", "", ".18-.36", "", ".09-.27", "", "0-.18", ""),
-                T,0,NA,F,cex.axis=0.9, tck = 0)
+                TRUE,0,NA,FALSE,cex.axis=0.9, tck = 0)
             axis (2,c (-0.25, -0.1, 0.05, 0.2, 0.35, 0.5, 0.65, 0.8, 0.95, 1.1,1.25),
                 c ("","","","","","","","","","",""),
-                T,-0.03,NA,F,cex.axis=1, tck = -0.03)
+                TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
           
           dev.off ()
         }

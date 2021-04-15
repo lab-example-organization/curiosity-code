@@ -158,15 +158,15 @@ extract_subset <- function (
             subset_categories[[3]][as.numeric (str_split (subsetta, ",") [[1]][6])]
         )
 
-    # golly <- c (str_split (the_file_path, "fullData/") [[1]][1], strsplit (str_split (the_file_path, "fullData/") [[1]][2], ".", fixed = T) [[1]][1])
+    # golly <- c (str_split (the_file_path, "fullData/") [[1]][1], strsplit (str_split (the_file_path, "fullData/") [[1]][2], ".", fixed = TRUE) [[1]][1])
     golly <- str_split (the_file_path, "/")
 
-    # c (str_split (the_file_path, "fullData/") [[1]][1], strsplit (str_split (the_file_path, "fullData/") [[1]][2], ".", fixed = T) [[1]][1])
+    # c (str_split (the_file_path, "fullData/") [[1]][1], strsplit (str_split (the_file_path, "fullData/") [[1]][2], ".", fixed = TRUE) [[1]][1])
 
     # golly <- paste(golly, collapse = "")
 
     # subset_folder <- str_remove (subset_folder, golly[[1]][5])
-    the_parent_path <- strsplit (str_split (the_file_path, "fullData/") [[1]][2], ".", fixed = T) [[1]][1]
+    the_parent_path <- strsplit (str_split (the_file_path, "fullData/") [[1]][2], ".", fixed = TRUE) [[1]][1]
     sim_folder <- file.path (golly[[1]][2], the_parent_path)
     subset_folder <- file.path (sim_folder, subset_of_interest)
 

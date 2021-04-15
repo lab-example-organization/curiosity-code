@@ -52,7 +52,7 @@ make_singpalette <- function () {
                                           c ("#fee6ce", "#fdae6b", "#e6550d"), # 3-class oranges
                                           c ("#efedf5", "#bcbddc", "#756bb1"), # 3-class purples
                                           c ("#fee0d2", "#fc9272", "#de2d26")), # 3-class reds
-                                nrow = 6, ncol = 3,byrow = T,dimnames = list (
+                                nrow = 6, ncol = 3,byrow = TRUE,dimnames = list (
                                   c ("blue", "green", "grey", "orange", "purple", "red"),
                                   c ("Light first color", "Middle color", "Dark final color")))
     return (colorseqsingpalette)

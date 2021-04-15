@@ -69,7 +69,7 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
 
 
     #sink (file = paste("syll_learn pop", population, "probs.txt", sep = " "),
-    # append = T)
+    # append = TRUE)
     #print (probs)
     #sink ()
 
@@ -138,7 +138,7 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
 
 make.offspring.calls <- function (parameters_offspring_calls, temp_data_offspring_calls) {
   for (sex in 1 : 2){
-    new_index <- c (sample (parameters_offspring_calls$pop_calls_matrix [sex, ], 2, replace = T))
+    new_index <- c (sample (parameters_offspring_calls$pop_calls_matrix [sex, ], 2, replace = TRUE))
     temp_data_offspring_calls [(sex + 2), parameters_offspring_calls$sylnum + 1, ] <-  new_index
   }
   return (temp_data_offspring_calls)
@@ -287,7 +287,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         if (chance_for_selection == num_select_chances [select_type]) {
           auto.teachers <- matrix (c (sample (parameters_sing_selection$pop_calls_matrix [1, ],
             sylrep_fill_chances),sample (parameters_sing_selection$pop_calls_matrix [2, ],
-            sylrep_fill_chances)),2,sylrep_fill_chances,T)
+            sylrep_fill_chances)),2,sylrep_fill_chances,TRUE)
           for (MTsylrep_filter in 1 : sylrep_fill_chances) {
             #c ((sample(parameters_sing_selection$pop_calls_matrix[1, ], 1)), (
               #sample(parameters_sing_selection$pop_calls_matrix[2, ], 1)))
@@ -310,7 +310,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                 auto.teachers [2,MTsylrep_filter], curiosity_level, population,
                 select_type, sylrep_object [auto.teachers [1,],,population],
                 sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
-                num_select_chances [select_type])#, T)
+                num_select_chances [select_type])#, TRUE)
 
               # if (MTsylrep_filter >= 1) {}
               stop = TRUE
@@ -455,7 +455,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
               sylreps_choices = selection.sylreps,
               sylrep_selector = selector.sylrep,
               selection_count = chance_for_selection
-            )#, F)
+            )#, FALSE)
 
             should_continue <- FALSE
           }
@@ -481,7 +481,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                       sylreps_choices = selection.sylreps,
                       sylrep_selector = selector.sylrep,
                       selection_count = chance_for_selection
-                    )#, F)
+                    )#, FALSE)
 
                     should_continue <- FALSE
 
@@ -516,7 +516,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                       sylreps_choices = selection.sylreps,
                       sylrep_selector = selector.sylrep,
                       selection_count = chance_for_selection
-                    )#, F)
+                    )#, FALSE)
 
                     should_continue <- FALSE
 
@@ -552,7 +552,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                       sylreps_choices = selection.sylreps,
                       sylrep_selector = selector.sylrep,
                       selection_count = chance_for_selection
-                    )#, F)
+                    )#, FALSE)
 
                     should_continue <- FALSE
 
@@ -584,7 +584,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
               sylreps_choices = selection.sylreps,
               sylrep_selector = selector.sylrep,
               selection_count = chance_for_selection
-            )#, F)
+            )#, FALSE)
 
             break
           }

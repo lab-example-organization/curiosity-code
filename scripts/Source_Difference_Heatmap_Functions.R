@@ -165,7 +165,7 @@ print_regex_num_range <- function (
 
     # Working number data structure
     # zv <- array (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]])), c (2, max (c (length (first_term[[1]]), length (secnd_term[[1]])))))
-    zv <- matrix (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]])), 2, max (c (length (first_term[[1]]), length (secnd_term[[1]]))), byrow = T)
+    zv <- matrix (c (as.numeric (first_term[[1]]), as.numeric (secnd_term[[1]])), 2, max (c (length (first_term[[1]]), length (secnd_term[[1]]))), byrow = TRUE)
 
     # substitute list calls for matrix calls
 

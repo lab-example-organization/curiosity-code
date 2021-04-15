@@ -28,12 +28,12 @@ scmax <- c (params$curstarts[[1]]$scmax[1],
            params$curstarts[[1]]$scmax[4])
 moranObjects <- define_temp_data (params)
 curiosity_level <- initialize.curiosity (simParams, scmin, scmax)
-sylreps <- initialize.sylrep (simParams, c (1,2), T, T)
+sylreps <- initialize.sylrep (simParams, c (1,2), TRUE, TRUE)
 moranObjects <- sing.selection (parameters = simParams, moran = moranObjects,
                                 curiosity_level = curiosity_level,
                                 select_type = "mate", sylrep_object = sylreps,
                                 num_select_chances = c (100, 100),
-                                verbose_output = F, interbreed = F)
+                                verbose_output = FALSE, interbreed = FALSE)
 
 moranObjects <- make.offspring.calls (parameters = simParams,
                                       moran = moranObjects)
@@ -46,6 +46,6 @@ profvis ({
   for (iteration in 1 : 10000) {
     x <- syll_learn (parameters = simParams, moran = moranObjects,
                     select_type = "mate", totally_new = FALSE,
-                    randlearn_context = 2, verbose = F)
+                    randlearn_context = 2, verbose = FALSE)
   }
 })

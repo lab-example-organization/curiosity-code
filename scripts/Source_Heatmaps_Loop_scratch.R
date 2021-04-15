@@ -779,7 +779,7 @@ thing3 <- output_heatmap[,,1,1]
 image(x = thing3,
 # image(x = array (c (39:63)/100, c (5,5)),
           col = colorseqmultpalette[[19]](100),
-          axes = F, zlim = c (0, 1))
+          axes = FALSE, zlim = c (0, 1))
 
 
 
@@ -793,9 +793,9 @@ image(x = thing3,
 # x <- array (c (1 : 100, rep (1,100)), c (100, 2))
 # x <- array (c (1 : 100, rep (9.5,100), rep (9.7,100), rep (9.9,100), rep (10.1,100), rep (10.3,100), rep (10.5,100), rep (10.7,100), rep (10.9,100), rep (11.1,100), rep (11.3,100)), c (100, 11))
 
-# plot (x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = F, xlab = "", ylab = "")
-# plot (x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = F, xlab = "", ylab = "")
-# axis (1, c (0, 0.1, 1, 10, 100), c ("0", "0.1", "1", "10", "100"),T,0,NA,F,cex.axis = 0.8, tck = 0)
+# plot (x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = FALSE, xlab = "", ylab = "")
+# plot (x[,1], x[,2], col = colorseqmultpalette[[19]](100), pch = 15, cex = 5, axes = FALSE, xlab = "", ylab = "")
+# axis (1, c (0, 0.1, 1, 10, 100), c ("0", "0.1", "1", "10", "100"),TRUE,0,NA,FALSE,cex.axis = 0.8, tck = 0)
 
 colorpalette = "difference_spectrum"
 midpoint_size <- 1

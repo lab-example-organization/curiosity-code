@@ -251,13 +251,13 @@ secnd_source_names = "five-by-five-followUpVanilla_lowHigh_Background"
 #   for (
 #     sexBIAS in 1 : 8
 #   ) {
-#     combineeditsingles (inhREtnce[thing], 1, sexBIAS, 3, T, F)
+#     combineeditsingles (inhREtnce[thing], 1, sexBIAS, 3, TRUE, FALSE)
 #   }
 # }
 
-# combineeditsingles (5, 1, 1, 3, T, F)
+# combineeditsingles (5, 1, 1, 3, TRUE, FALSE)
 
-combineeditsingles (1, 3, 1, 2, T, F)
+combineeditsingles (1, 3, 1, 2, TRUE, FALSE)
 
 # inheritancestyle = 5
 # bias = 3
@@ -274,7 +274,7 @@ combineeditsingles (1, 3, 1, 2, T, F)
 
 #     for (i in 1 : 4) {
 #         for (j in 1 : 2) {
-#             combineeditsingles (thing[k],3,i,j, T)
+#             combineeditsingles (thing[k],3,i,j, TRUE)
 #         }
 #     }
 # }
