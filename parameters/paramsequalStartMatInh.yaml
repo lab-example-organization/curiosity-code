@@ -16,7 +16,7 @@ curstarts:
   - scmin: [15,15,15,15]
     scmax: [20,20,20,20]
 
-simnumberstart: [10901]
+simnumberstart: [10901, 10902, 10903, 10904, 10905, 10906, 10907, 10908]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:

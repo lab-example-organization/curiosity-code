@@ -651,7 +651,7 @@ multi_runs <- function (shifting_curstart, paramssource,
     } else {
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
     }
-    #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file - provided that the multirun arg 'recolorize' == TRUE")
+    #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
     source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
     return (figprodmultrun (specificsimnumber = subsetorsequence,
       number_of_repeats = number_of_reps,
@@ -662,7 +662,7 @@ multi_runs <- function (shifting_curstart, paramssource,
     } else {
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
     }
-    #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file - provided that the multirun arg 'recolorize' == TRUE")
+    #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
     source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
     return (figprodmultrun (specificsimnumber = subsetorsequence,
       number_of_repeats = number_of_reps,
@@ -671,20 +671,20 @@ multi_runs <- function (shifting_curstart, paramssource,
     params <- yaml.load_file (file.path ("parameters", paramssource))
     number_of_reps <- as.numeric (params$number_of_reps)
 
-    if (recolorize != FALSE) {
+    # if (recolorize != FALSE) {
 
-      if (params$indrunredo == TRUE) {
-        subsetorsequence <- params$simnumberstart [shifting_curstart]
-      } else {
-        subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-      }
-      #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file - provided that the multirun arg 'recolorize' == TRUE")
-      source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-      return (figprodmultrun (specificsimnumber = subsetorsequence,
-        number_of_repeats = number_of_reps,
-        paramssource = paramssource, recolorize = TRUE))
+      # if (params$indrunredo == TRUE) {
+      #   subsetorsequence <- params$simnumberstart [shifting_curstart]
+      # } else {
+      #   subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+      # }
+      # #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
+      # source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+      # return (figprodmultrun (specificsimnumber = subsetorsequence,
+      #   number_of_repeats = number_of_reps,
+      #   paramssource = paramssource, recolorize = TRUE))
 
-    } else {
+    # } else {
       archivesimfiles (path = file.path ("source", "temp"),
         filename = paste0 (shifting_curstart,"_console_copy.txt"),
         archive = TRUE, new_dir = FALSE)
@@ -798,7 +798,7 @@ multi_runs <- function (shifting_curstart, paramssource,
                     lineplots = TRUE,
                     curMeans_only = FALSE,
                     recolorize_style = "range-median")
-    }
+    # }
   }
 
 
