@@ -644,7 +644,8 @@ multi_runs <- function (shifting_curstart, paramssource,
   dirdate, seednumber, recolorize = FALSE, redo = FALSE) { # redo = "fpmr", "recolorize"q
   
   set.seed (seednumber + shifting_curstart)
-
+  params <- yaml.load_file (file.path ("parameters", paramssource))
+  number_of_reps <- as.numeric (params$number_of_reps)
   if (redo == "fpmr") {
     if (params$indrunredo == TRUE) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
