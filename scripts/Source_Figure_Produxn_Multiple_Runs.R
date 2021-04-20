@@ -19,6 +19,8 @@ figprodmultrun <- function (
   compare_subsets = FALSE) { 
     # example of text for results_dir is "childLateSmolInvFemLow"
     #     print ("figprodmultrunStart")
+    source (file.path ("scripts", "Source_Visualizing_Data.R"))
+    
     if (redo != FALSE) {
       if (results_dir != FALSE) {
         if (! (file.exists (file.path ("results", paste0 ("tenKfiveByFive_", results_dir), (
@@ -132,7 +134,7 @@ figprodmultrun <- function (
     converted_data <- vector ("list", number_of_repeats)
   
     #  print (paste0 ("source SVD"))
-    source (file.path ("scripts", "Source_Visualizing_Data.R"))
+    # source (file.path ("scripts", "Source_Visualizing_Data.R"))
   
     # if (recolorize == FALSE) {
     #   for (run_visual in 1 : number_of_repeats) {
