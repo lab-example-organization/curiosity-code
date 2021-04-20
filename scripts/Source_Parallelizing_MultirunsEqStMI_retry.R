@@ -76,7 +76,7 @@ mclapply (shifting_curstart,
          dirdate = simdate,
          seednumber = secretcode,
          recolorize = TRUE,
-         redo = "fpmr",
+         redo = FALSE,
          mc.cores = n_cores)
 
 
