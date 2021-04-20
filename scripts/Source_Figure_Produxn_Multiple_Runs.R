@@ -20,7 +20,11 @@ figprodmultrun <- function (
     # example of text for results_dir is "childLateSmolInvFemLow"
     #     print ("figprodmultrunStart")
     source (file.path ("scripts", "Source_Visualizing_Data.R"))
-    
+
+    params = yaml.load_file (file.path ("parameters", paramssource))
+    #     print ("params load")
+    converted_data <- vector ("list", number_of_repeats)
+
     if (redo != FALSE) {
       if (results_dir != FALSE) {
         if (! (file.exists (file.path ("results", paste0 ("tenKfiveByFive_", results_dir), (
@@ -129,9 +133,9 @@ figprodmultrun <- function (
   
   
   
-    params = yaml.load_file (file.path ("parameters", paramssource))
-    #     print ("params load")
-    converted_data <- vector ("list", number_of_repeats)
+    # params = yaml.load_file (file.path ("parameters", paramssource))
+    # #     print ("params load")
+    # converted_data <- vector ("list", number_of_repeats)
   
     #  print (paste0 ("source SVD"))
     # source (file.path ("scripts", "Source_Visualizing_Data.R"))
