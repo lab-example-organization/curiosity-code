@@ -25,6 +25,10 @@ figprodmultrun <- function (
     #     print ("params load")
     converted_data <- vector ("list", number_of_repeats)
 
+
+    ### Control flow giving us back the object pointing us to simulation folders:
+    ###   "redo" allows us to skip doing some stuff that would be redundant - make Group_###_folderList.RData, saving a backup copy of all scripts and params files at the time that the code runs
+    ###   "results_dir" has been used once, for the "redo function" - 'results_dir = "parentNoInv"' - 
     if (redo != FALSE) {
       if (results_dir != FALSE) {
         if (! (file.exists (file.path ("results", paste0 ("tenKfiveByFive_", results_dir), (
@@ -332,23 +336,31 @@ figprodmultrun <- function (
   
     # if (redo != FALSE) {
     
-    if (redo == FALSE) {
+    # if (redo == FALSE) {
       srcdir = file.path ("scripts")
       # file.names = dir (srcdir) [grep ("Source", dir (srcdir))]
       if (! (dir.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts")))) {
         dir.create (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts"))
       }
-      zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path (srcdir), TRUE, 9, TRUE)
+      if (! (file.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts", "scriptsFiles.zip")))) {
+        zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_scripts", "scriptsFiles.zip"), file.path (srcdir), TRUE, 9, TRUE)
+      }
+      
   
       parmdir = file.path ("parameters")
       # file.names = dir (parmdir) [grep ("*.yaml", dir (parmdir))]
       if (! (dir.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params")))) {
         dir.create (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params"))
       }
-      zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsFiles.zip"), file.path (parmdir), TRUE, 9, TRUE)
+      if (! (file.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsFiles.zip")))) {
+        zipr (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsFiles.zip"), file.path (parmdir), TRUE, 9, TRUE)
+      }
+      
   
-      saveRDS (params, file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsSource.RData"))
-    }
+      if (! (file.exists (file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsSource.RData")))) {
+        saveRDS (params, file.path (strsplit (multirun_folderlist [1], "/variable_store", ) [[1]][1], "copy_of_params", "paramsSource.RData"))
+      }
+    # }
     return (print (paste0 (specificsimnumber," - Exit Status: 0")))
 }
 

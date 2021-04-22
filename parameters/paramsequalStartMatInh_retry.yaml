@@ -16,7 +16,7 @@ curstarts:
   - scmin: [15,15,15,15]
     scmax: [20,20,20,20]
 
-simnumberstart: [10909]
+simnumberstart: [10909, 10910, 10911, 10912, 10913, 10914, 10915, 10916]
 runlength: '10k'
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -61,7 +61,7 @@ invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation'
 
 
                           # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
-indrunredo: FALSE
+indrunredo: TRUE
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 # lastruninit: TRUE

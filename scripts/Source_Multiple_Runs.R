@@ -647,7 +647,7 @@ multi_runs <- function (shifting_curstart, paramssource,
   params <- yaml.load_file (file.path ("parameters", paramssource))
   number_of_reps <- as.numeric (params$number_of_reps)
   if (redo == "fpmr") {
-    if (params$indrunredo == TRUE) {
+    if (params$indrunredo != FALSE) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
     } else {
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
@@ -658,7 +658,7 @@ multi_runs <- function (shifting_curstart, paramssource,
       number_of_repeats = number_of_reps,
       paramssource = paramssource, recolorize = FALSE))
   } else if (redo == "recolorize") {
-    if (params$indrunredo == TRUE) {
+    if (params$indrunredo != FALSE) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]
     } else {
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
@@ -712,7 +712,7 @@ multi_runs <- function (shifting_curstart, paramssource,
 
       for (rep_number in 1 : number_of_reps) {
 
-        if (params$indrunredo == TRUE) {
+        if (params$indrunredo != FALSE) {
           subsetorsequence <- params$simnumberstart [shifting_curstart]
           singleormixture <- params$curinhdistribution [shifting_curstart]
         } else {
@@ -793,7 +793,7 @@ multi_runs <- function (shifting_curstart, paramssource,
       figprodmultrun (specificsimnumber = subsetorsequence,
                     number_of_repeats = number_of_reps,
                     paramssource = paramssource,
-                    redo = FALSE,
+                    redo = params$indrunredo,
                     recolorize = FALSE,
                     results_dir = FALSE,
                     lineplots = TRUE,
