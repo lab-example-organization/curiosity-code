@@ -690,7 +690,7 @@ print ("line 643")
       sink (file = file.path (
           "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
         ), append = FALSE)
-      print ("/please/ignore/this/line/like/you/always/do")
+      print ("empty line that helps the code work - figure it out later, if it's worth it")
       sink ()
 
       # file.create (file.path ("source", "temp", paste0 (

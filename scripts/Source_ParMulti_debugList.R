@@ -136,83 +136,83 @@ set.seed (seednumber + shifting_curstart)
         rep_number <- 1
 
     if (params$indrunredo == TRUE) {
-        subsetorsequence <- params$simnumberstart [shifting_curstart]
-        singleormixture <- params$curinhdistribution [shifting_curstart]
-      } else {
-        subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-        singleormixture <- params$curinhdistribution
-      }
+      subsetorsequence <- params$simnumberstart [shifting_curstart]
+      singleormixture <- params$curinhdistribution [shifting_curstart]
+    } else {
+      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+      singleormixture <- params$curinhdistribution
+    }
 
-      if (length (params$curinh_pattern) != 1) {
-        curinh_binary <- params$curinh_pattern[shifting_curstart]
-      } else {
-        curinh_binary <- params$curinh_pattern
-      }
+    if (length (params$curinh_pattern) != 1) {
+      curinh_binary <- params$curinh_pattern[shifting_curstart]
+    } else {
+      curinh_binary <- params$curinh_pattern
+    }
 
-      if (rep_number == 1) {
+    if (rep_number == 1) {
 
-        sink (file = file.path (
-            "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
-          ), append = FALSE)
-        print ("/please/ignore/this/line/like/you/always/do")
-        sink ()
+      sink (file = file.path (
+          "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
+        ), append = FALSE)
+      print ("empty line that helps the code work - figure it out later, if it's worth it")
+      sink ()
 
-        # file.create (file.path ("source", "temp", paste0 (
-        #   shifting_curstart,"_sim_data.txt")))
-      }
+      # file.create (file.path ("source", "temp", paste0 (
+      #   shifting_curstart,"_sim_data.txt")))
+    }
 
-      stop ("invoking life_cycle: args")
+    stop ("invoking life_cycle: args")
 
-      scmin = c (
-        params$curstarts [[shifting_curstart]]$scmin [1],
-        params$curstarts [[shifting_curstart]]$scmin [2],
-        params$curstarts [[shifting_curstart]]$scmin [3],
-        params$curstarts [[shifting_curstart]]$scmin [4])
-      scmax = c (
-        params$curstarts [[shifting_curstart]]$scmax [1],
-        params$curstarts [[shifting_curstart]]$scmax [2],
-        params$curstarts [[shifting_curstart]]$scmax [3],
-        params$curstarts [[shifting_curstart]]$scmax [4])
-      simnumber = subsetorsequence
-      # simnumber = params$simnumberstart + (shifting_curstart - 1),
-      runlength = params$runlength
-      syllearnstyle = params$syllearnstyle
-      vertoblearn = c (
-        params$vertoblearn$vertical$learn,
-        params$vertoblearn$vertical$invent,
-        params$vertoblearn$oblique$learn,
-        params$vertoblearn$oblique$invent)
-      syldist = params$syldist
-      curinh_value = params$curinh_value
-      number_populations = params$num_pop
-      population_size = params$pop_size
-      syllable_number = params$sylnum
-      number_sylls_probability_level = params$num_sylls_per_prob_lvl
-      standdev = as.numeric (params$standard_deviation)
-      curinh_style = curinh_binary
-      recordingsimpfact = params$recordsimplifyfactor
-      one_pop_singers = params$one_pop_singers
-      curinhproportion = singleormixture # only used if curinh_pattern = 5
-      directorydate = dirdate
-      invasion = params$traitinvasion
-      invktmstps = params$invasionthoutmstps
-      invpopsize = params$invasionpopsize
-      invstyle = params$invasionstyle
-      invpop = params$invasionpop
-      invsex = params$invasionsex
-      invtraitvalue = params$invasiontraitvalue
-      initfromlastrun = params$lastruninit
-      lastrunobject = lastrun_init[[rep_number]]
-      mate_selection_type = params$mate_selection_type
-      selection_round_up = params$selection_round_up
+    scmin = c (
+      params$curstarts [[shifting_curstart]]$scmin [1],
+      params$curstarts [[shifting_curstart]]$scmin [2],
+      params$curstarts [[shifting_curstart]]$scmin [3],
+      params$curstarts [[shifting_curstart]]$scmin [4])
+    scmax = c (
+      params$curstarts [[shifting_curstart]]$scmax [1],
+      params$curstarts [[shifting_curstart]]$scmax [2],
+      params$curstarts [[shifting_curstart]]$scmax [3],
+      params$curstarts [[shifting_curstart]]$scmax [4])
+    simnumber = subsetorsequence
+    # simnumber = params$simnumberstart + (shifting_curstart - 1),
+    runlength = params$runlength
+    syllearnstyle = params$syllearnstyle
+    vertoblearn = c (
+      params$vertoblearn$vertical$learn,
+      params$vertoblearn$vertical$invent,
+      params$vertoblearn$oblique$learn,
+      params$vertoblearn$oblique$invent)
+    syldist = params$syldist
+    curinh_value = params$curinh_value
+    number_populations = params$num_pop
+    population_size = params$pop_size
+    syllable_number = params$sylnum
+    number_sylls_probability_level = params$num_sylls_per_prob_lvl
+    standdev = as.numeric (params$standard_deviation)
+    curinh_style = curinh_binary
+    recordingsimpfact = params$recordsimplifyfactor
+    one_pop_singers = params$one_pop_singers
+    curinhproportion = singleormixture # only used if curinh_pattern = 5
+    directorydate = dirdate
+    invasion = params$traitinvasion
+    invktmstps = params$invasionthoutmstps
+    invpopsize = params$invasionpopsize
+    invstyle = params$invasionstyle
+    invpop = params$invasionpop
+    invsex = params$invasionsex
+    invtraitvalue = params$invasiontraitvalue
+    initfromlastrun = params$lastruninit
+    lastrunobject = lastrun_init[[rep_number]]
+    mate_selection_type = params$mate_selection_type
+    selection_round_up = params$selection_round_up
 
-      stop ("life_cycle start")
+    stop ("life_cycle start")
 
-      docnamez <- makedocnamez (
-    scmin = scmin, scmax = scmax, simnumber = simnumber, runlength = runlength,
-    syllearnstyle = syllearnstyle, vertoblearn = vertoblearn,
-    syldist = syldist, curinh_value = curinh_value, standdev = standdev,
-    simdate = directorydate)
+    docnamez <- makedocnamez (
+      scmin = scmin, scmax = scmax, simnumber = simnumber, runlength = runlength,
+      syllearnstyle = syllearnstyle, vertoblearn = vertoblearn,
+      syldist = syldist, curinh_value = curinh_value, standdev = standdev,
+      simdate = directorydate)
 
   #parent_directory <- getwd ()
   source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
@@ -434,11 +434,11 @@ set.seed (seednumber + shifting_curstart)
     #               paramssource = paramssource,
     #               redo = FALSE,
     #               recolorize = TRUE,
-    #               results_dir = FALSE,
+    #               results_tenK_dir = FALSE,
     #               lineplots = TRUE,
     #               curMeans_only = FALSE,
     #               absolute_y = params$absolute_yAxis,
-    #               recolorize_style = "range-median")
+    #               recolorize_lineplots = "range-median")
 
     stop ("invoke figprodmultrun args")
     specificsimnumber = subsetorsequence
@@ -446,11 +446,11 @@ set.seed (seednumber + shifting_curstart)
     paramssource = paramssource
     redo = FALSE
     recolorize = TRUE
-    results_dir = FALSE
+    results_tenK_dir = FALSE
     lineplots = TRUE
     curMeans_only = FALSE
     absolute_y = params$absolute_yAxis
-    recolorize_style = "range-median"
+    recolorize_lineplots = "range-median"
 
     stop("figprodmultrun START")
 
@@ -461,26 +461,26 @@ set.seed (seednumber + shifting_curstart)
     converted_data <- vector ("list", number_of_repeats)
 
     if (redo != FALSE) {
-      if (results_dir != FALSE) {
-        if (! (file.exists (file.path ("results", paste0 ("tenKfiveByFive_", results_dir), (
-            list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")) [
-              length (list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")))
+      if (results_tenK_dir != FALSE) {
+        if (! (file.exists (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir), (
+            list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")) [
+              length (list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")))
             ] # This selects the latest iteration of this sim number, so this is the line to change if that is no longer true
           ), (paste0 ("Group_", specificsimnumber, "_folderList.RData")))))) {
-            # stop ("results_dir doesn't know where to find Group_#_folderList.RData")
+            # stop ("results_tenK_dir doesn't know where to find Group_#_folderList.RData")
             connection <- file (description = file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")), open = "rt")
             multirun_folderlist <- as.vector (read.table (connection, -1L) [[2]])
             close (connection)
         } else {
-          multirun_folderlist <- readRDS (file.path ("results", paste0 ("tenKfiveByFive_", results_dir), (
-            list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")) [
-              length (list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")))
+          multirun_folderlist <- readRDS (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir), (
+            list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")) [
+              length (list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")))
             ] # This selects the latest iteration of this sim number, so this is the line to change if that is no longer true
           ), (paste0 ("Group_", specificsimnumber, "_folderList.RData"))))
   
           for (run_visual in 1 : number_of_repeats) {
             multirun_folderlist [run_visual] <- paste0 (
-              file.path ("results", paste0 ("tenKfiveByFive_", results_dir)),
+              file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)),
               strsplit (multirun_folderlist, "results") [[1]][2]
             )
           }
@@ -491,7 +491,7 @@ set.seed (seednumber + shifting_curstart)
             length (list.files (file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_")))
           ] # this selects... (see above)
         ), (paste0 ("Group_", specificsimnumber, "_folderList.RData")))))) {
-            stop ("non results_dir doesn't know where to find Group_#_folderList.RData")
+            stop ("non results_tenK_dir doesn't know where to find Group_#_folderList.RData")
         } else {
           multirun_folderlist <- readRDS (file.path ("results", (
             list.files (file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_")) [
@@ -508,9 +508,9 @@ set.seed (seednumber + shifting_curstart)
       # for (run_visual in 1 : number_of_repeats) {
         stop("start of run_visual loop")
         run_visual <- 1
-        if (results_dir != FALSE) {
+        if (results_tenK_dir != FALSE) {
           multirun_folderlist [run_visual] <- paste0 (
-            file.path ("results", paste0 ("tenKfiveByFive_", results_dir)),
+            file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)),
             strsplit (multirun_folderlist, "results") [[1]][2]
           )
         }
@@ -579,15 +579,15 @@ set.seed (seednumber + shifting_curstart)
   
     # if (recolorize == FALSE) {
     #   for (run_visual in 1 : number_of_repeats) {
-    #     if (results_dir != FALSE) {
+    #     if (results_tenK_dir != FALSE) {
     #       multirun_folderlist [run_visual] <- paste0 (
-    #         file.path ("results", paste0 ("tenKfiveByFive_", results_dir)),
+    #         file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)),
     #         strsplit (multirun_folderlist, "results") [[1]][2]
     #       )
     #     }
     #     # str_split (multirun_folderlist [1], "/") [[1]][1]
     #     # tenKfiveByFive_
-    #     # paste0 (str_split (multirun_folderlist [run_visual], "/") [[1]][1], "tenKfiveByFive_", results_dir[run_visual])
+    #     # paste0 (str_split (multirun_folderlist [run_visual], "/") [[1]][1], "tenKfiveByFive_", results_tenK_dir[run_visual])
     #     # run_visual=1
     #     if (run_visual == 1) {
     #       multiRunTime <- format (Sys.time (), "%F-%H%M%S")
@@ -749,7 +749,7 @@ set.seed (seednumber + shifting_curstart)
                    mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis)
     } else {
       if (compare_subsets == TRUE) {
-        output_variable <- recolorized_simple_plots (recolorize_style = recolorize_style, # "clustering"
+        output_variable <- recolorized_simple_plots (recolorize_lineplots = recolorize_lineplots, # "clustering"
                                                      parameters = params, plot_info = plot_info,
                                                      number_of_runs = number_of_repeats, cursitylist = cursitylist,
                                                      sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
@@ -757,7 +757,7 @@ set.seed (seednumber + shifting_curstart)
   
         return (output_variable)
       } else {
-        recolorized_simple_plots (recolorize_style = recolorize_style, # "clustering"
+        recolorized_simple_plots (recolorize_lineplots = recolorize_lineplots, # "clustering"
                                   parameters = params, plot_info = plot_info,
                                   number_of_runs = number_of_repeats, cursitylist = cursitylist,
                                   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,

@@ -12,11 +12,11 @@ number_of_reps <- as.numeric (params$number_of_reps)
     paramssource = paramssource
     redo = FALSE
     recolorize = TRUE
-    results_dir = "parentNoInv"
+    results_tenK_dir = "parentNoInv"
     lineplots = TRUE
     curMeans_only = FALSE
     absolute_y = TRUE
-    recolorize_style = "range-median"
+    recolorize_lineplots = "range-median"
 
 
 #   figprodmultrun <- function (
@@ -25,11 +25,11 @@ number_of_reps <- as.numeric (params$number_of_reps)
 #       paramssource = paramssource,
 #       redo = FALSE,
 #       recolorize = FALSE,
-#       results_dir = FALSE,
+#       results_tenK_dir = FALSE,
 #       lineplots = FALSE,
 #       curMeans_only = FALSE,
 #       absolute_y = TRUE,
-#       recolorize_style = "variance")
+#       recolorize_lineplots = "variance")
 
 results_table <- array (c (
   "parentNoInv",        "childF1NoInv",       "childMalHihInv",  "childMalLowInv",     "childFemLowInv",
@@ -83,7 +83,7 @@ load_sim_for_plots <- function (
 
 }
 
-recolorize_style = recolorize_style
+recolorize_lineplots = recolorize_lineplots
 parameters = params
 plot_info = plot_info
 number_of_runs = number_of_repeats
@@ -166,11 +166,11 @@ source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
                   paramssource = paramssource,
                   redo = FALSE,
                   recolorize = TRUE,
-                  results_dir = FALSE,
+                  results_tenK_dir = FALSE,
                   lineplots = TRUE,
                   curMeans_only = FALSE,
                   absolute_y = params$absolute_yAxis,
-                  recolorize_style = "range-median")
+                  recolorize_lineplots = "range-median")
   }
 
 }

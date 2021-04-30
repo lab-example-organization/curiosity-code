@@ -48,7 +48,7 @@ simple_setup <- function (z_sspecificsimnumber, ssomethingSomething, recolorize 
   param_thing <- list.files (file.path ("parameters"), pattern = paste0 (ssomethingSomething[something_subset,3], ".yaml"))
 
   figprodmultrun (specificsimnumber = z_sspecificsimnumber, number_of_repeats = number_of_repeats,
-  paramssource = param_thing, redo = TRUE, recolorize = recolorize, results_dir = folder_200_k, lineplots = fdsa, curMeans_only = TRUE, recolorize_style = "range-median") # variance, variance-median, range-biased, ###NOTdoneYET### clustering
+  paramssource = param_thing, redo = TRUE, recolorize = recolorize, results_tenK_dir = folder_200_k, lineplots = fdsa, curMeans_only = TRUE, recolorize_lineplots = "range-median") # variance, variance-median, range-biased, ###NOTdoneYET### clustering
 
   return ("done")
 }

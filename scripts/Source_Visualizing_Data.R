@@ -11,10 +11,7 @@ par_plot <- function (
 
   # par_settings (cex.lab = 1.5, cex.main = 2)
     cex.lab_Pp = 2,
-    cex.main_Pp = 1
-  #
-
-) {
+    cex.main_Pp = 1) {
   par (
     cex.lab_Pp,
     cex.main_Pp
@@ -32,6 +29,8 @@ par_plot <- function (
   # dev.off ()
 }
 
+
+# stitch together output files from simulations ("variable-store" files), 
 concatenate_data <- function (specific_run,
                                 converteddata = converted_data,
                                 parms = params,
@@ -102,6 +101,14 @@ process_data <- function (data_conglomerate = converted_data, specificrepeat = r
         }
     }
   }
+}
+
+concat_and_move_simData <- function (
+  # args that concatenate_data and process_data need
+) {
+  # concatenate_data ()
+  # process_data ()
+  # if (!(obsessively_save_all_files)) {delete files from variable_store}
 }
 
 paste_split_data_runs <- function (data_subset, num_runs = 10, also_mean = TRUE) {
@@ -229,13 +236,12 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
 }
 
 recolorized_simple_plots <- function (
-  recolorize_style = "variance", # "clustering"
+  recolorize_lineplots = "variance", # "clustering"
   parameters = params, plot_info = plot_info,
   number_of_runs = number_of_repeats, cursitylist = cursitylist,
   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
   mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = FALSE,
-  curMeans_only = FALSE, absolute_y = TRUE, compare_subsets = FALSE
-) {
+  curMeans_only = FALSE, absolute_y = TRUE, compare_subsets = FALSE) {
 
   # subset_pool <- cursitylist [[]]
   # if (typeof (cursitylist) == "list") {
@@ -264,7 +270,7 @@ recolorized_simple_plots <- function (
 
   subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
 
-  if (recolorize_style == "variance") {
+  if (recolorize_lineplots == "variance") {
     #
     #     highest_variance = [which (max (variance_among_subpopulations))],
     #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
@@ -278,7 +284,7 @@ recolorized_simple_plots <- function (
     if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
     subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
 
-  } else if (recolorize_style == "variance-median") {
+  } else if (recolorize_lineplots == "variance-median") {
 
     # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
     for (pop in 1 : parameters$num_pop) {
@@ -292,7 +298,7 @@ recolorized_simple_plots <- function (
     whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
     subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
 
-  } else if (recolorize_style == "range-median") {
+  } else if (recolorize_lineplots == "range-median") {
 
     # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
     for (pop in 1 : parameters$num_pop) {
@@ -310,7 +316,7 @@ recolorized_simple_plots <- function (
 
     # just var, but with a subcluster far below "varX#" so we see how the very edge cases line up with other subpopulations
     # subset_output <- 1 : 50 # whatever... fix it only if it breaks
-  } else if (recolorize_style == "clustering") {
+  } else if (recolorize_lineplots == "clustering") {
     # #
     # #     highest_clustering_score
     # #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
@@ -344,7 +350,7 @@ recolorized_simple_plots <- function (
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = subset_output,
                lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y,
-               compare_subsets = compare_subsets, )
+               compare_subsets = compare_subsets)
 }
 
 simple_plots <- function (parameters, plot_info = plot_info,

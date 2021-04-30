@@ -669,137 +669,118 @@ multi_runs <- function (shifting_curstart, paramssource,
       number_of_repeats = number_of_reps,
       paramssource = paramssource, recolorize = TRUE))
   } else {
-    params <- yaml.load_file (file.path ("parameters", paramssource))
-    number_of_reps <- as.numeric (params$number_of_reps)
+    archivesimfiles (path = file.path ("source", "temp"),
+      filename = paste0 (shifting_curstart,"_console_copy.txt"),
+      archive = TRUE, new_dir = FALSE)
+    archivesimfiles (path = file.path ("source", "temp"),
+      filename = paste0 (shifting_curstart,"_sim_data.txt"),
+      archive = TRUE, new_dir = FALSE)
 
-    # if (recolorize != FALSE) {
+    # This wrapped up the restart_from_save function,
+    # so that life_cycle has last-run data as an accessible object
+    # lastrun_init <- array (0, c (1,1,1,number_of_reps))
 
-      # if (params$indrunredo == TRUE) {
-      #   subsetorsequence <- params$simnumberstart [shifting_curstart]
-      # } else {
-      #   subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-      # }
-      # #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
-      # source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-      # return (figprodmultrun (specificsimnumber = subsetorsequence,
-      #   number_of_repeats = number_of_reps,
-      #   paramssource = paramssource, recolorize = TRUE))
+    lastrun_init <- list ()
+    length (lastrun_init) <- number_of_reps
 
-    # } else {
-      archivesimfiles (path = file.path ("source", "temp"),
-        filename = paste0 (shifting_curstart,"_console_copy.txt"),
-        archive = TRUE, new_dir = FALSE)
-      archivesimfiles (path = file.path ("source", "temp"),
-        filename = paste0 (shifting_curstart,"_sim_data.txt"),
-        archive = TRUE, new_dir = FALSE)
+    if (params$lastruninit) {
+      if (length (params$lastrunid) > 1) {
+        lastrun_init <- restart_from_save (parameters = params,
+          inputpattern = params$lastrunid [shifting_curstart])
+      } else {
+        lastrun_init <- restart_from_save (parameters = params,
+          inputpattern = params$lastrunid)
+      }
+    }
 
-      # This wrapped up the restart_from_save function,
-      # so that life_cycle has last-run data as an accessible object
-      # lastrun_init <- array (0, c (1,1,1,number_of_reps))
+    for (rep_number in 1 : number_of_reps) {
 
-      lastrun_init <- list ()
-      length (lastrun_init) <- number_of_reps
-
-      if (params$lastruninit) {
-        if (length (params$lastrunid) > 1) {
-          lastrun_init <- restart_from_save (parameters = params,
-            inputpattern = params$lastrunid [shifting_curstart])
-        } else {
-          lastrun_init <- restart_from_save (parameters = params,
-            inputpattern = params$lastrunid)
-        }
+      if (params$indrunredo != FALSE) {
+        subsetorsequence <- params$simnumberstart [shifting_curstart]
+        singleormixture <- params$curinhdistribution [shifting_curstart]
+      } else {
+        subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+        singleormixture <- params$curinhdistribution
       }
 
-      for (rep_number in 1 : number_of_reps) {
-
-        if (params$indrunredo != FALSE) {
-          subsetorsequence <- params$simnumberstart [shifting_curstart]
-          singleormixture <- params$curinhdistribution [shifting_curstart]
-        } else {
-          subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-          singleormixture <- params$curinhdistribution
-        }
-
-        if (length (params$curinh_pattern) != 1) {
-          curinh_binary <- params$curinh_pattern[shifting_curstart]
-        } else {
-          curinh_binary <- params$curinh_pattern
-        }
-
-        if (rep_number == 1) {
-
-          sink (file = file.path (
-              "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
-            ), append = FALSE)
-          print ("empty line that helps the code work - figure it out later, if it's worth it")
-          sink ()
-
-          # file.create (file.path ("source", "temp", paste0 (
-          #   shifting_curstart,"_sim_data.txt")))
-        }
-
-        life_cycle(
-          scmin = c (
-            params$curstarts [[shifting_curstart]]$scmin [1],
-            params$curstarts [[shifting_curstart]]$scmin [2],
-            params$curstarts [[shifting_curstart]]$scmin [3],
-            params$curstarts [[shifting_curstart]]$scmin [4]),
-          scmax = c (
-            params$curstarts [[shifting_curstart]]$scmax [1],
-            params$curstarts [[shifting_curstart]]$scmax [2],
-            params$curstarts [[shifting_curstart]]$scmax [3],
-            params$curstarts [[shifting_curstart]]$scmax [4]),
-          simnumber = subsetorsequence,
-          # simnumber = params$simnumberstart + (shifting_curstart - 1),
-          runlength = params$runlength,
-          syllearnstyle = params$syllearnstyle,
-          vertoblearn = c (
-            params$vertoblearn$vertical$learn,
-            params$vertoblearn$vertical$invent,
-            params$vertoblearn$oblique$learn,
-            params$vertoblearn$oblique$invent),
-          syldist = params$syldist,
-          curinh_value = params$curinh_value,
-          number_populations = params$num_pop,
-          population_size = params$pop_size,
-          syllable_number = params$sylnum,
-          number_sylls_probability_level = params$num_sylls_per_prob_lvl,
-          standdev = as.numeric (params$standard_deviation),
-          curinh_style = curinh_binary,
-          recordingsimpfact = params$recordsimplifyfactor,
-          one_pop_singers = params$one_pop_singers,
-          curinhproportion = singleormixture, # only used if curinh_pattern = 5
-          directorydate = dirdate,
-          invasion = params$traitinvasion,
-          invktmstps = params$invasionthoutmstps,
-          invpopsize = params$invasionpopsize,
-          invstyle = params$invasionstyle,
-          invpop = params$invasionpop,
-          invsex = params$invasionsex,
-          invtraitvalue = params$invasiontraitvalue,
-          initfromlastrun = params$lastruninit,
-          lastrunobject = lastrun_init[[rep_number]],
-          mate_selection_type = params$mate_selection_type,
-          selection_round_up = params$selection_round_up
-          # lastrunobject = lastrun_init[, , , rep_number]
-        )
-        print (paste0 ("Replicate Run # ",
-          rep_number, ", done at: ",
-          (format (Sys.time(), "%F-%H%M%S"))))
+      if (length (params$curinh_pattern) != 1) {
+        curinh_binary <- params$curinh_pattern[shifting_curstart]
+      } else {
+        curinh_binary <- params$curinh_pattern
       }
 
-      source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+      if (rep_number == 1) {
 
-      figprodmultrun (specificsimnumber = subsetorsequence,
-                    number_of_repeats = number_of_reps,
-                    paramssource = paramssource,
-                    redo = params$indrunredo,
-                    recolorize = FALSE,
-                    results_dir = FALSE,
-                    lineplots = TRUE,
-                    curMeans_only = FALSE,
-                    recolorize_style = "range-median")
-    # }
+        sink (file = file.path (
+            "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
+          ), append = FALSE)
+        print ("empty line that helps the code work - figure it out later, if it's worth it")
+        sink ()
+
+        # file.create (file.path ("source", "temp", paste0 (
+        #   shifting_curstart,"_sim_data.txt")))
+      }
+
+      life_cycle(
+        scmin = c (
+          params$curstarts [[shifting_curstart]]$scmin [1],
+          params$curstarts [[shifting_curstart]]$scmin [2],
+          params$curstarts [[shifting_curstart]]$scmin [3],
+          params$curstarts [[shifting_curstart]]$scmin [4]),
+        scmax = c (
+          params$curstarts [[shifting_curstart]]$scmax [1],
+          params$curstarts [[shifting_curstart]]$scmax [2],
+          params$curstarts [[shifting_curstart]]$scmax [3],
+          params$curstarts [[shifting_curstart]]$scmax [4]),
+        simnumber = subsetorsequence,
+        runlength = params$runlength,
+        syllearnstyle = params$syllearnstyle,
+        vertoblearn = c (
+          params$vertoblearn$vertical$learn,
+          params$vertoblearn$vertical$invent,
+          params$vertoblearn$oblique$learn,
+          params$vertoblearn$oblique$invent),
+        syldist = params$syldist,
+        curinh_value = params$curinh_value,
+        number_populations = params$num_pop,
+        population_size = params$pop_size,
+        syllable_number = params$sylnum,
+        number_sylls_probability_level = params$num_sylls_per_prob_lvl,
+        standdev = as.numeric (params$standard_deviation),
+        curinh_style = curinh_binary,
+        recordingsimpfact = params$recordsimplifyfactor,
+        one_pop_singers = params$one_pop_singers,
+        curinhproportion = singleormixture, # only used if curinh_pattern = 5
+        directorydate = dirdate,
+        invasion = params$traitinvasion,
+        invktmstps = params$invasionthoutmstps,
+        invpopsize = params$invasionpopsize,
+        invstyle = params$invasionstyle,
+        invpop = params$invasionpop,
+        invsex = params$invasionsex,
+        invtraitvalue = params$invasiontraitvalue,
+        initfromlastrun = params$lastruninit,
+        lastrunobject = lastrun_init[[rep_number]],
+        mate_selection_type = params$mate_selection_type,
+        selection_round_up = params$selection_round_up
+        # lastrunobject = lastrun_init[, , , rep_number]
+      )
+      print (paste0 ("Replicate Run # ",
+        rep_number, ", done at: ",
+        (format (Sys.time(), "%F-%H%M%S"))))
+    }
+
+    source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+
+    figprodmultrun (specificsimnumber = subsetorsequence,
+                  number_of_repeats = number_of_reps,
+                  paramssource = paramssource,
+                  redo = params$indrunredo,
+                  recolorize = FALSE,
+                  results_tenK_dir = FALSE,
+                  lineplots = TRUE,
+                  curMeans_only = FALSE,
+                  recolorize_lineplots = "range-median")
   }
 
 
@@ -813,7 +794,7 @@ multi_runs <- function (shifting_curstart, paramssource,
 #   paramssource = paramssource,
 #   redo = FALSE,
 #   recolorize = FALSE,
-#   results_dir = FALSE,
+#   results_tenK_dir = FALSE,
 #   lineplots = FALSE,
 #   curMeans_only = FALSE,
-#   recolorize_style = "variance"
+#   recolorize_lineplots = "variance"
