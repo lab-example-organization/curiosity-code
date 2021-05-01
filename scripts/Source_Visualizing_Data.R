@@ -269,8 +269,8 @@ recolorized_simple_plots <- function (
   }
 
   subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
-
-  if (recolorize_lineplots == "variance") {
+  if (compare_subsets == TRUE) {subset_output_pool <- vector("list", 4)} # change size of list as number of recolorize options changes
+  if (recolorize_lineplots == "variance" || compare_subsets == TRUE) {
     #
     #     highest_variance = [which (max (variance_among_subpopulations))],
     #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
@@ -283,8 +283,10 @@ recolorized_simple_plots <- function (
     thing <- which (subpop_measures == max (subpop_measures))
     if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
     subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
-
-  } else if (recolorize_lineplots == "variance-median") {
+    if (compare_subsets == TRUE) {subset_output_pool[1] <- subset_output}
+  } 
+  
+  if (recolorize_lineplots == "variance-median" || compare_subsets == TRUE) {
 
     # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
     for (pop in 1 : parameters$num_pop) {
@@ -297,8 +299,10 @@ recolorized_simple_plots <- function (
     if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
     whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
     subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
-
-  } else if (recolorize_lineplots == "range-median") {
+    if (compare_subsets == TRUE) {subset_output_pool[2] <- subset_output}
+  }
+  
+  if (recolorize_lineplots == "range-median" || compare_subsets == TRUE) {
 
     # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
     for (pop in 1 : parameters$num_pop) {
@@ -313,10 +317,12 @@ recolorized_simple_plots <- function (
     if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
     whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
     subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
-
+    if (compare_subsets == TRUE) {subset_output_pool[3] <- subset_output}
     # just var, but with a subcluster far below "varX#" so we see how the very edge cases line up with other subpopulations
     # subset_output <- 1 : 50 # whatever... fix it only if it breaks
-  } else if (recolorize_lineplots == "clustering") {
+  }
+  
+  if (recolorize_lineplots == "clustering" || compare_subsets == TRUE) {
     # #
     # #     highest_clustering_score
     # #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
@@ -333,16 +339,19 @@ recolorized_simple_plots <- function (
     # if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
     # subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
     subset_output <- 1 : 50 # whatever... fix it only if it breaks
-  } else {
-    subset_output <- 1 : 50
-  }
+    if (compare_subsets == TRUE) {subset_output_pool[4] <- subset_output}
+  } 
+  # else {
+  #   subset_output <- 1 : 50
+  # }
 
   if (compare_subsets == TRUE) {
+    # whatever this used to be for, for now it'll be used to compare the output of different subset_output methods.
+    # this was probably its intended purpose, but better to keep a record of the record being lost.
+    subset_comparison_output <- subset_output_pool
 
-    subset_comparison_output <- list (subset_output, )
 
-
-    return (subset_comparison_output)
+    saveRDS (subset_comparison_output, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
   }
 
   simple_plots (parameters = parameters, plot_info = plot_info,
