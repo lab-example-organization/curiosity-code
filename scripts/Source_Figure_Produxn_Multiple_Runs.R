@@ -268,21 +268,24 @@ figprodmultrun <- function (
                    sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                    mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis)
     } else {
-      if (compare_subsets == TRUE) {
-        output_variable <- recolorized_simple_plots (recolorize_lineplots = recolorize_lineplots, # "clustering"
-                                                     parameters = params, plot_info = plot_info,
-                                                     number_of_runs = number_of_repeats, cursitylist = cursitylist,
-                                                     sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-                                                     mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis, compare_subsets = TRUE)
-  
-        return (output_variable)
-      } else {
-        recolorized_simple_plots (recolorize_lineplots = recolorize_lineplots, # "clustering"
-                                  parameters = params, plot_info = plot_info,
-                                  number_of_runs = number_of_repeats, cursitylist = cursitylist,
-                                  sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-                                  mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis)
-      }
+      # if (compare_subsets == TRUE) {
+      output_variable <- recolorized_simple_plots (
+        recolorize_lineplots = recolorize_lineplots, # "clustering"
+        parameters = params, plot_info = plot_info, 
+        number_of_runs = number_of_repeats, cursitylist = cursitylist,
+        sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+        mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, 
+        curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis, compare_subsets = compare_subsets)
+
+      # if (compare_subsets == TRUE) {return (output_variable)}
+      # } else {
+      #   recolorized_simple_plots (recolorize_lineplots = recolorize_lineplots, # "clustering"
+      #                             parameters = params, plot_info = plot_info,
+      #                             number_of_runs = number_of_repeats, cursitylist = cursitylist,
+      #                             sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+      #                             mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, 
+      #                             curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis)
+      # }
   
     }
     #     print ("simple_plots done")

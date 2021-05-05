@@ -341,17 +341,9 @@ recolorized_simple_plots <- function (
     subset_output <- 1 : 50 # whatever... fix it only if it breaks
     if (compare_subsets == TRUE) {subset_output_pool[4] <- subset_output}
   } 
-  # else {
-  #   subset_output <- 1 : 50
-  # }
-
+  
   if (compare_subsets == TRUE) {
-    # whatever this used to be for, for now it'll be used to compare the output of different subset_output methods.
-    # this was probably its intended purpose, but better to keep a record of the record being lost.
-    subset_comparison_output <- subset_output_pool
-
-
-    saveRDS (subset_comparison_output, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
+    saveRDS (subset_output_pool, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
   }
 
   simple_plots (parameters = parameters, plot_info = plot_info,
@@ -468,9 +460,10 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
           if (compare_subsets == TRUE) {
 
-            sdstbxnlist [[i]] <- readRDS (paste0 (multirun_directory, sdstlist [i]))
 
             for (i in 1 : length (sdstbxnlist [[1]])) {
+              sdstbxnlist [[i]] <- readRDS (paste0 (multirun_directory, sdstlist [i]))
+              
               eval (parse (text = paste0 ("sdstbxnlist [[number_of_repeats + 2]][i] <- mean (c (sdstbxnlist [[",
                                     paste0 (1 : (number_of_repeats - 1),"]][i],sdstbxnlist [[", collapse=''),
                                     number_of_repeats, "]][i]))")))
