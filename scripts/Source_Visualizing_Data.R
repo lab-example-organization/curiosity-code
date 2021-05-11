@@ -13,22 +13,21 @@ par_plot <- function (
     cex.lab_Pp = 2,
     cex.main_Pp = 1) {
   par (
-    cex.lab_Pp,
-    cex.main_Pp
+    cex.lab = cex.lab_Pp,
+    cex.main = cex.main_Pp
   ) # par_settings
 
   plot (
-    data_pP,
-    xlab_pP,
-    ylab_pP,
-    cex_pP,
-    ylim_pP,
-    xaxt_pP
+    x = data_pP,
+    xlab = xlab_pP,
+    ylab = ylab_pP,
+    cex = cex_pP,
+    ylim = ylim_pP,
+    xaxt = xaxt_pP
   ) # plot_settings
 
   # dev.off ()
 }
-
 
 # stitch together output files from simulations ("variable-store" files), 
 concatenate_data <- function (specific_run,
@@ -197,19 +196,19 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
   for (individual_figures in 1 : length (figure_retainer)) {
 
     meanz <- cursitylist [[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
-    stuff <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+    direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
     if (recolorize != FALSE) {
       if (lineplots != FALSE) {
         # lines
-        stuff <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
-        stuff2 <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
+        direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
+        indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
       } else {
         # points
-        stuff <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
-        stuff2 <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
+        direct_object <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
+        indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
       }
     } else {
-      stuff <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+      direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
     }
     file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, filename_retainer[individual_figures], population, ".png")
     miny <- mins_n_maxes[just_curiosity[individual_figures],population,1]
@@ -224,9 +223,9 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
                                   ((length (cursitylist [[number_of_runs + 1]][figure_retainer[individual_figures],population,]))/10))),
           labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
 
-    eval (parse (text = stuff))
+    eval (parse (text = direct_object))
     if (recolorize != FALSE) {
-      eval (parse (text = stuff2))
+      eval (parse (text = indirect_object))
     }
     lines (cursitylist [[number_of_runs + 1]][figure_retainer[individual_figures],population,],col="black", cex=0.2)
     dev.off ()
@@ -248,9 +247,9 @@ recolorized_simple_plots <- function (
   #   thing <- length (cursitylist)
   #   for (i in 1 : thing) {
   #     if (! (typeof (cursitylist [[i]]) == "list")) {
-  #       stuff <- dim (cursitylist [[i]])
+  #       direct_object <- dim (cursitylist [[i]])
   #     } else {
-  #       stuff <- length (cursitylist [[i]])
+  #       direct_object <- length (cursitylist [[i]])
   #       recordings <- list ()
   #       for (j in 1 : whatever) {
   #         if (! (typeof (cursitylist [[i]][[j]]) == "list")) {
@@ -259,13 +258,13 @@ recolorized_simple_plots <- function (
   #       }
   #     }
   #   }
-  #   output_from_this_monstrosity <- c (thing,stuff,)
+  #   output_from_this_monstrosity <- c (thing,direct_object,)
   # }
 
   subset_pool <- array (0, c (4,2,length (cursitylist)))
   # subset_pool <-
-  for (stuff in 1 : length (cursitylist)) {
-    subset_pool[,,stuff] <- cursitylist [[stuff]][c (1,2,3,4),,(as.numeric (strsplit (parameters$runlength, "k") [[1]][1]) * (1000/parameters$recordsimplifyfactor))]
+  for (direct_object in 1 : length (cursitylist)) {
+    subset_pool[,,direct_object] <- cursitylist [[direct_object]][c (1,2,3,4),,(as.numeric (strsplit (parameters$runlength, "k") [[1]][1]) * (1000/parameters$recordsimplifyfactor))]
   }
 
   subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
@@ -347,7 +346,7 @@ recolorized_simple_plots <- function (
   }
 
   simple_plots (parameters = parameters, plot_info = plot_info,
-               number_of_runs = number_of_repeats, cursitylist = cursitylist,
+               number_of_runs = number_of_runs, cursitylist = cursitylist,
                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
                mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = subset_output,
                lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y,
@@ -360,28 +359,18 @@ simple_plots <- function (parameters, plot_info = plot_info,
                          sylrepzlist = sylrepzlist, mins_n_maxes = mins_n_maxes,
                          saving_dir = multirun_directory, recolorize = TRUE,
                          lineplots = TRUE, curMeans_only = FALSE,
-                         absolute_y = TRUE, compare_subsets = TRUE) {
+                         absolute_y = TRUE, compare_subsets = FALSE) {
   num_timesteps = as.numeric (strsplit (parameters$runlength, "k") [[1]][1])*1000
 
   if (recolorize != FALSE) {
-    if (lineplots != FALSE) {
-      saving_dir <- file.path (saving_dir, lineplots)
-    } else {
-      saving_dir <- file.path (saving_dir, "recolorizedLineplots")
-    }
+    saving_dir <- file.path (saving_dir, "recolorizedLineplots")
     if (! (dir.exists (saving_dir))) {dir.create (saving_dir)}
   }
   for (population in 1 : parameters$num_pop) {
     if (curMeans_only == FALSE) {
-      if (recolorize != FALSE) {
-        curiosity_figures (parameters = parameters, number_of_runs = number_of_runs,
-                        population = population, cursitylist = cursitylist, plot_info = plot_info,
-                        mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = recolorize, lineplots = lineplots)
-      } else {
-        curiosity_figures (parameters = parameters, number_of_runs = number_of_runs,
-                        population = population, cursitylist = cursitylist, plot_info = plot_info,
-                        mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = FALSE, lineplots = lineplots)
-      }
+      curiosity_figures (parameters = parameters, number_of_runs = number_of_runs,
+                         population = population, cursitylist = cursitylist, plot_info = plot_info,
+                         mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = recolorize, lineplots = lineplots)
     }
 
 
@@ -391,24 +380,24 @@ simple_plots <- function (parameters, plot_info = plot_info,
         meanz <- sylrepzlist [[number_of_runs + 1]][sex,population,]
         if (recolorize != FALSE) {
           if (lineplots != FALSE) {
-            stuff <- paste0 ("lines (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-            stuff2 <- paste0 ("lines (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+            direct_object <- paste0 ("lines (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+            indirect_object <- paste0 ("lines (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
           } else {
-            stuff <- paste0 ("points (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-            stuff2 <- paste0 ("points (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+            direct_object <- paste0 ("points (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+            indirect_object <- paste0 ("points (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
           }
 
         } else {
-          stuff <- paste0 ("points (sylrepzlist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
+          direct_object <- paste0 ("points (sylrepzlist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         }
 
         file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_mean_repertoire_size_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
         if (absolute_y == TRUE) {
-          miny <- min (mins_n_maxes[(sex + 10),1 : 2,1 : 2])
-          maxy <- max (mins_n_maxes[(sex + 10),1 : 2,1 : 2])
+          miny <- min (mins_n_maxes [(sex + 10), 1 : 2, 1 : 2])
+          maxy <- max (mins_n_maxes [(sex + 10), 1 : 2, 1 : 2])
         } else {
-          miny <- mins_n_maxes[(sex + 10),population,1]
-          maxy <- mins_n_maxes[(sex + 10),population,2]
+          miny <- mins_n_maxes [(sex + 10), population, 1]
+          maxy <- mins_n_maxes [(sex + 10), population, 2]
         }
 
         png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
@@ -417,9 +406,9 @@ simple_plots <- function (parameters, plot_info = plot_info,
         axis (side = 1, at = c (seq.int (0,length (cursitylist [[number_of_runs + 1]][sex,population,]),
                                       ((length (cursitylist [[number_of_runs + 1]][sex,population,]))/10))),
               labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
-        eval (parse (text = stuff))
+        eval (parse (text = direct_object))
         if (recolorize != FALSE) {
-          eval (parse (text = stuff2))
+          eval (parse (text = indirect_object))
         }
         lines (sylrepzlist [[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off ()
@@ -429,17 +418,17 @@ simple_plots <- function (parameters, plot_info = plot_info,
       meanz <- cursitylist [[number_of_runs + 1]][sex,population,]
       if (recolorize != FALSE) {
         if (lineplots != FALSE) {
-          stuff <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-          stuff2 <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+          direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+          indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
         } else {
-          stuff <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-          stuff2 <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+          direct_object <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+          indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
         }
 
       } else {
-        stuff <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
+        direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
       }
-      # stuff <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
+      # direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
       file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_mean_curiosity_-_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
       miny <- mins_n_maxes[(sex + 12),population,1]
       maxy <- mins_n_maxes[(sex + 12),population,2]
@@ -448,29 +437,29 @@ simple_plots <- function (parameters, plot_info = plot_info,
       axis (side = 1, at = c (seq.int (0,length (cursitylist [[number_of_runs + 1]][sex,population,]),
                                     ((length (cursitylist [[number_of_runs + 1]][sex,population,]))/10))),
             labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
-      eval (parse (text = stuff))
+      eval (parse (text = direct_object))
       if (recolorize != FALSE) {
-        eval (parse (text = stuff2))
+        eval (parse (text = indirect_object))
       }
       lines (cursitylist [[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
       dev.off ()
 
-      if (recolorize == FALSE) {
+      # if (recolorize == FALSE) {
         if (curMeans_only == FALSE) {
 
           if (compare_subsets == TRUE) {
 
 
             for (i in 1 : length (sdstbxnlist [[1]])) {
-              sdstbxnlist [[i]] <- readRDS (paste0 (multirun_directory, sdstlist [i]))
+              sdstbxnlist [[i]] <- readRDS (paste0 (saving_dir, sdstlist [i]))
               
-              eval (parse (text = paste0 ("sdstbxnlist [[number_of_repeats + 2]][i] <- mean (c (sdstbxnlist [[",
-                                    paste0 (1 : (number_of_repeats - 1),"]][i],sdstbxnlist [[", collapse=''),
-                                    number_of_repeats, "]][i]))")))
+              eval (parse (text = paste0 ("sdstbxnlist [[number_of_runs + 2]][i] <- mean (c (sdstbxnlist [[",
+                                    paste0 (1 : (number_of_runs - 1),"]][i],sdstbxnlist [[", collapse=''),
+                                    number_of_runs, "]][i]))")))
             } # made object bigger using the code marked with  "#babaganoush"
 
             #     print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
-            dim (sdstbxnlist [[number_of_repeats + 1]]) <- dim (sdstbxnlist [[1]])
+            dim (sdstbxnlist [[number_of_runs + 1]]) <- dim (sdstbxnlist [[1]])
 
             meanz <- sdstbxnlist [[number_of_runs + 1]][(sex + ((population - 1) * 2)), ,]
             file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
@@ -516,7 +505,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
             (num_timesteps / parameters$recordsimplifyfactor-5):num_timesteps / parameters$recordsimplifyfactor]))
           sink ()
         }
-      }
+      # }
     }
   }
 }

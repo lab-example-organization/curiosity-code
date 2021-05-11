@@ -3,34 +3,34 @@
 
 
 
-syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type = "mate",
+syll_learn <- function (params_SL, temp_data_SL, select_type = "mate",
                        totally_new = FALSE, randlearn_context = 1,
                        verbose = FALSE) {
 
   # select_type decides whether the learning is vertical (2) or oblique (1)
 
-  for (population in 1 : parameters_sylllearn$num_pop) {
+  for (population in 1 : params_SL$num_pop) {
     # Make the reference objects for the teacher - the indices for the
     # syllables unique to the teacher's repertoire, and a set of
     # probabilities for each syllable to be learned
 
-    #Vertical Learning;  parameters_sylllearn (set up source_of_ones), and considerations
+    #Vertical Learning;  params_SL (set up source_of_ones), and considerations
 
     if (select_type == "mate") {
 
-      #parameters_sylllearn and considerations for VERTICAL LEARNING
+      #params_SL and considerations for VERTICAL LEARNING
       source_of_ones <- which (
-        temp_data_sylllearn [1, 1 : parameters_sylllearn$sylnum, population] == 1)
+        temp_data_SL [1, 1 : params_SL$sylnum, population] == 1)
         # calls for sylls vertical tutor (father) has
 
       if (length (source_of_ones) == 0) {
-        saveRDS (parameters_sylllearn,"parent with no sylls.RData")
-        print (temp_data_sylllearn [1, 1 : parameters_sylllearn$sylnum, population])
+        saveRDS (params_SL,"parent with no sylls.RData")
+        print (temp_data_SL [1, 1 : params_SL$sylnum, population])
         stop ("wot? parent has no syllables?!")
       } #address syll loss by stopping script if parent has no sylls
 
       for (sex in 1 : 2) {
-        temp_data_sylllearn [(sex + 2), 1 : parameters_sylllearn$sylnum, population] <- 0
+        temp_data_SL [(sex + 2), 1 : params_SL$sylnum, population] <- 0
       } # clear the sylreps rows about to be filled in :D
 
 
@@ -40,9 +40,9 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
       # double-check that the tutor isn't out
       # of sylls before comparing repertoire to pupil.
       source_of_ones <- which (
-        temp_data_sylllearn [5, 1 : parameters_sylllearn$sylnum, population] == 1)
+        temp_data_SL [5, 1 : params_SL$sylnum, population] == 1)
       pupil_has_ONEs <- which (
-        temp_data_sylllearn [3, 1 : parameters_sylllearn$sylnum, population] == 1)
+        temp_data_SL [3, 1 : params_SL$sylnum, population] == 1)
 
       if (length (source_of_ones) == 0) {
         stop ("wot? tutor has no syllables?!")
@@ -62,7 +62,7 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
         next
       } # if curiosity is so low that tutor can teach nothing, just skip
               # this population's tutor learning step
-    } # Oblique Learning parameters_sylllearn and considerations
+    } # Oblique Learning params_SL and considerations
     #if (randlearn_context == 1) {
     #  teacher.mean <- mean (source_of_ones)
     #}
@@ -86,17 +86,17 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
       for (sylls_to_learn in 1 : length (source_of_ones)) {
         # moran$learning.pool[(sex + 2),
         # source_of_ones[sylls_to_learn], population] <- 0
-        if (probs [sylls_to_learn] <= (parameters_sylllearn$learnprob [loop_size])) {
-          temp_data_sylllearn [(sex + 2), source_of_ones [sylls_to_learn], population] <- 1
+        if (probs [sylls_to_learn] <= (params_SL$learnprob [loop_size])) {
+          temp_data_SL [(sex + 2), source_of_ones [sylls_to_learn], population] <- 1
         }
         if (probs [sylls_to_learn] > (
-          1 - parameters_sylllearn$randlearnprob [loop_size])) {
+          1 - params_SL$randlearnprob [loop_size])) {
           r_norm <- rnorm (1, mean = ifelse (randlearn_context == 1,
                                            mean (source_of_ones),
                                            source_of_ones [sylls_to_learn]),
-                          sd = parameters_sylllearn$stand.dev)
-          if (r_norm > parameters_sylllearn$sylnum) {
-            r_norm <- parameters_sylllearn$sylnum
+                          sd = params_SL$stand.dev)
+          if (r_norm > params_SL$sylnum) {
+            r_norm <- params_SL$sylnum
           } else if (r_norm < 1) {
             r_norm <- 1
           }
@@ -106,47 +106,47 @@ syll_learn <- function (parameters_sylllearn, temp_data_sylllearn, select_type =
             r_norm_pool <- rnorm (100, mean = ifelse (randlearn_context == 1,
                                            mean (source_of_ones),
                                            source_of_ones [sylls_to_learn]),
-                                 sd = parameters_sylllearn$stand.dev)
+                                 sd = params_SL$stand.dev)
 
-            while (temp_data_sylllearn [(sex + 2), floor (r_norm), population] == 1) {
+            while (temp_data_SL [(sex + 2), floor (r_norm), population] == 1) {
 
               r_norm <- r_norm_pool [counter]
-              if (r_norm > parameters_sylllearn$sylnum) {
-                r_norm <- parameters_sylllearn$sylnum
+              if (r_norm > params_SL$sylnum) {
+                r_norm <- params_SL$sylnum
               } else if (r_norm < 1) {
                 r_norm <- 1
               }
               counter = counter + 1
             }
-            temp_data_sylllearn [(sex + 2), floor (r_norm), population] <- 1
+            temp_data_SL [(sex + 2), floor (r_norm), population] <- 1
             average_rate_randlearn_overlap <- append (
               average_rate_randlearn_overlap, counter)
           } else {
-            temp_data_sylllearn [(sex + 2), floor (r_norm), population] <- 1
+            temp_data_SL [(sex + 2), floor (r_norm), population] <- 1
           }
         }
       }
       if (totally_new == TRUE) {
-        temp_data_sylllearn [
-          sex, parameters_sylllearn$sylnum + 5, population
+        temp_data_SL [
+          sex, params_SL$sylnum + 5, population
         ] <- mean (average_rate_randlearn_overlap)}
     }
   }
-  return (temp_data_sylllearn)
+  return (temp_data_SL)
 }
 
 
-make.offspring.calls <- function (parameters_offspring_calls, temp_data_offspring_calls) {
+make.offspring.calls <- function (params_OC, temp_data_OC) {
   for (sex in 1 : 2){
-    new_index <- c (sample (parameters_offspring_calls$pop_calls_matrix [sex, ], 2, replace = TRUE))
-    temp_data_offspring_calls [(sex + 2), parameters_offspring_calls$sylnum + 1, ] <-  new_index
+    new_index <- c (sample (params_OC$pop_calls_matrix [sex, ], 2, replace = TRUE))
+    temp_data_OC [(sex + 2), params_OC$sylnum + 1, ] <-  new_index
   }
-  return (temp_data_offspring_calls)
+  return (temp_data_OC)
 }
 
 
 update_selexn_data <- function (
-  main_parameters, temp_data_update_selexndata, suitor_choices, preferred_bird,
+  main_parameters, temp_data_US, suitor_choices, preferred_bird,
   selector_bird, curiosity_value, selector_population,
   selection_context, sylreps_choices, sylrep_selector,
   selection_count, selection_type = 1) {#}), giving_up = FALSE) {
@@ -182,24 +182,24 @@ update_selexn_data <- function (
   for (bird in 1 : selection_context) {
     pool.row <- pool.row * bird
 
-    temp_data_update_selexndata [
+    temp_data_US [
       pool.row, main_parameters$sylnum + 1, selector_population
     ] <- selected_pair [bird]
 
-    temp_data_update_selexndata [
+    temp_data_US [
       pool.row, 1 : main_parameters$sylnum, selector_population
     ] <- sylrep_pairs [bird,]
 
-    temp_data_update_selexndata [
+    temp_data_US [
       pool.row, main_parameters$sylnum + 2, selector_population
     ] <- curiosities [bird]
   }
 
-  temp_data_update_selexndata [
+  temp_data_US [
     (4 - selection_context), main_parameters$sylnum + 3, selector_population
   ] <- selection_count
 
-  return (temp_data_update_selexndata)
+  return (temp_data_US)
 }
 
 # should_pick_neighbor <- function (index,total_chances,selection_context,
@@ -244,7 +244,7 @@ score_similarity <- function (suitor_vector, selector_vector) {
   # sylrep of suitors and selector.
 }
 
-sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
+sing.selection <- function (params_SS, temp_data_SS,
                            curiosity_level, select_type,
                            sylrep_object,
                            num_select_chances = c (16, 40),
@@ -258,11 +258,11 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
   if (select_type == "mate") {select_type <- 2} else if (select_type == "tutor") {select_type <- 1}
 
   if (select_type == 2) {
-    if (parameters_sing_selection$mate_selection_type == "curiosity") {
+    if (params_SS$mate_selection_type == "curiosity") {
       selection_path <- 1
-    } else if (parameters_sing_selection$mate_selection_type == "repertoire_size") {
+    } else if (params_SS$mate_selection_type == "repertoire_size") {
       selection_path <- 2
-    } else if (parameters_sing_selection$mate_selection_type == "SRS_then_curiosity") {
+    } else if (params_SS$mate_selection_type == "SRS_then_curiosity") {
       selection_path <- 3
     }
   } else if (select_type == 1) {
@@ -277,7 +277,7 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
     }
   }
   #print ("sing.selection beginning")
-  for (population in 1 : parameters_sing_selection$num_pop) { #population <- 1 rm (population)
+  for (population in 1 : params_SS$num_pop) { #population <- 1 rm (population)
     #print (paste("this is population",population,sep=" "))
     chance_for_selection = 1
 
@@ -285,12 +285,12 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
       while (chance_for_selection <= num_select_chances [select_type]) {
         stop = FALSE
         if (chance_for_selection == num_select_chances [select_type]) {
-          auto.teachers <- matrix (c (sample (parameters_sing_selection$pop_calls_matrix [1, ],
-            sylrep_fill_chances),sample (parameters_sing_selection$pop_calls_matrix [2, ],
+          auto.teachers <- matrix (c (sample (params_SS$pop_calls_matrix [1, ],
+            sylrep_fill_chances),sample (params_SS$pop_calls_matrix [2, ],
             sylrep_fill_chances)),2,sylrep_fill_chances,TRUE)
           for (MTsylrep_filter in 1 : sylrep_fill_chances) {
-            #c ((sample(parameters_sing_selection$pop_calls_matrix[1, ], 1)), (
-              #sample(parameters_sing_selection$pop_calls_matrix[2, ], 1)))
+            #c ((sample(params_SS$pop_calls_matrix[1, ], 1)), (
+              #sample(params_SS$pop_calls_matrix[2, ], 1)))
             if ((
               sum (sylrep_object [auto.teachers [1,MTsylrep_filter
                   ], , population]) != 0) && (
@@ -305,8 +305,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
                                 " Selection")))
               }
 
-              temp_data_sing_selection = update_selexn_data (
-                parameters_sing_selection, temp_data_sing_selection, auto.teachers [1,], MTsylrep_filter,
+              temp_data_SS = update_selexn_data (
+                params_SS, temp_data_SS, auto.teachers [1,], MTsylrep_filter,
                 auto.teachers [2,MTsylrep_filter], curiosity_level, population,
                 select_type, sylrep_object [auto.teachers [1,],,population],
                 sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
@@ -332,16 +332,16 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
           # "1-20"
           singsuccessfilter <- 1 : (
-            (parameters_sing_selection$one_pop_singers [select_type]) * (parameters_sing_selection$num_pop))
+            (params_SS$one_pop_singers [select_type]) * (params_SS$num_pop))
           # male offspring from this timestep, lookin for a tutor
-          selector.index <- temp_data_sing_selection [3, parameters_sing_selection$sylnum + 1, population]
+          selector.index <- temp_data_SS [3, params_SS$sylnum + 1, population]
 
         } else if (select_type == 2) {
           singsuccessfilter <- (1 + ((population - 1) * (
-            parameters_sing_selection$one_pop_singers [select_type]))) : (
-              population * parameters_sing_selection$one_pop_singers [select_type])
+            params_SS$one_pop_singers [select_type]))) : (
+              population * params_SS$one_pop_singers [select_type])
               # "1-10," or "11-20"
-          selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
+          selector.index <- sample (params_SS$pop_calls_matrix [2, ], 1)
               # randomly sample a female from the population
         }
 
@@ -353,43 +353,43 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         if (round_up == TRUE) {
           selection.index <- (
             # This creates sample calls for each population;
-            # each population has a sample size of parameters_sing_selection$one_pop_singers,
+            # each population has a sample size of params_SS$one_pop_singers,
             # which comes from the male half of the population. Probability
             # defined by the fraction of syllable repertoires of each member of
             # each population divided by the maximum syllrep of the population.
-            vapply (1 : parameters_sing_selection$num_pop,
+            vapply (1 : params_SS$num_pop,
               function (x) {
                 temp <- cpp_rowSums (sylrep_object[
-                  parameters_sing_selection$pop_calls_matrix [1,],,x])
-                sample (x = parameters_sing_selection$pop_calls_matrix [1,],
-                        size = parameters_sing_selection$one_pop_singers [select_type],
+                  params_SS$pop_calls_matrix [1,],,x])
+                sample (x = params_SS$pop_calls_matrix [1,],
+                        size = params_SS$one_pop_singers [select_type],
                         replace = FALSE,
                         prob = temp / max (temp))
-              }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+              }, rep (0, params_SS$one_pop_singers [select_type])
             )
           ) # probability = the number of times each individual's syllable
             # repertoire has a 1 in it (sum (sylrep_object[
-            # parameters_sing_selection$pop_calls_matrix[1,]])),
+            # params_SS$pop_calls_matrix[1,]])),
             # divided by the biggest repertoire's total.
         } else {
           selection.index <- (
             # This creates sample calls for each population;
-            # each population has a sample size of parameters_sing_selection$one_pop_singers,
+            # each population has a sample size of params_SS$one_pop_singers,
             # which comes from the male half of the population. Probability
             # defined by the fraction of syllable repertoires of each member of
             # each population divided by the maximum syllrep of the population.
-            vapply (1 : parameters_sing_selection$num_pop,
+            vapply (1 : params_SS$num_pop,
               function (x) {
                 temp <- cpp_rowSums (sylrep_object[
-                  parameters_sing_selection$pop_calls_matrix [1,],,x])
-                sample (x = parameters_sing_selection$pop_calls_matrix [1,],
-                        size = parameters_sing_selection$one_pop_singers [select_type],
+                  params_SS$pop_calls_matrix [1,],,x])
+                sample (x = params_SS$pop_calls_matrix [1,],
+                        size = params_SS$one_pop_singers [select_type],
                         replace = FALSE)
-              }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+              }, rep (0, params_SS$one_pop_singers [select_type])
             )
           ) # probability = the number of times each individual's syllable
             # repertoire has a 1 in it (sum (sylrep_object[
-            # parameters_sing_selection$pop_calls_matrix[1,]])),
+            # params_SS$pop_calls_matrix[1,]])),
             # divided by the biggest repertoire's total.
         }
 
@@ -398,12 +398,12 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         selection.sylreps <- t (
           cbind (
             vapply (
-              1 : parameters_sing_selection$one_pop_singers [select_type],
+              1 : params_SS$one_pop_singers [select_type],
               function (x) {sylrep_object [selection.index[x,1],,1]},
               rep (0, dim (sylrep_object) [2])
             ),
             vapply (
-              1 : parameters_sing_selection$one_pop_singers [select_type],
+              1 : params_SS$one_pop_singers [select_type],
               function (x) {sylrep_object [selection.index [x,2],,2]},
               rep (0, dim (sylrep_object) [2])
             )
@@ -430,8 +430,8 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         # orders the scored list of suitors; subsets one suitor from the rest,
         # according to the value of the selector's (auditory) curiosity.
         singer <- golf_score [round (curiosity_level [
-          selector.index, population] *(parameters_sing_selection$one_pop_singers [
-          select_type] * parameters_sing_selection$num_pop) + 0.5)]
+          selector.index, population] *(params_SS$one_pop_singers [
+          select_type] * params_SS$num_pop) + 0.5)]
         if (sum (selection.sylreps [singer,])==0) {
           chance_for_selection = chance_for_selection + 1
           next
@@ -443,9 +443,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           should_continue <- TRUE
           if (singer %in% singsuccessfilter) {
 
-            temp_data_sing_selection <- update_selexn_data (
-              main_parameters = parameters_sing_selection,
-              temp_data_update_selexndata = temp_data_sing_selection,
+            temp_data_SS <- update_selexn_data (
+              main_parameters = params_SS,
+              temp_data_US = temp_data_SS,
               suitor_choices = selection.index,
               preferred_bird = singer,
               selector_bird = selector.index,
@@ -469,9 +469,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
                     singer <- golf_score [which (golf_score == singer) + neighbor]
 
-                    temp_data_sing_selection <- update_selexn_data (
-                      main_parameters = parameters_sing_selection,
-                      temp_data_update_selexndata = temp_data_sing_selection,
+                    temp_data_SS <- update_selexn_data (
+                      main_parameters = params_SS,
+                      temp_data_US = temp_data_SS,
                       suitor_choices = selection.index,
                       preferred_bird = singer,
                       selector_bird = selector.index,
@@ -504,9 +504,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
                     singer <- golf_score [which (golf_score == singer) + neighbor]
 
-                    temp_data_sing_selection <- update_selexn_data (
-                      main_parameters = parameters_sing_selection,
-                      temp_data_update_selexndata = temp_data_sing_selection,
+                    temp_data_SS <- update_selexn_data (
+                      main_parameters = params_SS,
+                      temp_data_US = temp_data_SS,
                       suitor_choices = selection.index,
                       preferred_bird = singer,
                       selector_bird = selector.index,
@@ -540,9 +540,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
 
                     singer <- golf_score [which (golf_score == singer) + neighbor]
 
-                    temp_data_sing_selection <- update_selexn_data (
-                      main_parameters = parameters_sing_selection,
-                      temp_data_update_selexndata = temp_data_sing_selection,
+                    temp_data_SS <- update_selexn_data (
+                      main_parameters = params_SS,
+                      temp_data_US = temp_data_SS,
                       suitor_choices = selection.index,
                       preferred_bird = singer,
                       selector_bird = selector.index,
@@ -572,9 +572,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
         } else {
           if (sum (sylrep_object [selection.index [singer], , population]) != 0) {
 
-            temp_data_sing_selection <- update_selexn_data (
-              main_parameters = parameters_sing_selection,
-              temp_data_update_selexndata = temp_data_sing_selection,
+            temp_data_SS <- update_selexn_data (
+              main_parameters = params_SS,
+              temp_data_US = temp_data_SS,
               suitor_choices = selection.index,
               preferred_bird = singer,
               selector_bird = selector.index,
@@ -594,29 +594,29 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
     } else if (selection_path == 2) {
       # We need these variables to run update_selexn_data
 
-      selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
+      selector.index <- sample (params_SS$pop_calls_matrix [2, ], 1)
 
       if (round_up == TRUE) {
         selection.index <- (
-          vapply (1 : parameters_sing_selection$num_pop,
+          vapply (1 : params_SS$num_pop,
             function (x) {
               temp <- cpp_rowSums (sylrep_object[
-                parameters_sing_selection$pop_calls_matrix [1,],,x])
-              sample (x = parameters_sing_selection$pop_calls_matrix [1,],
-                      size = parameters_sing_selection$one_pop_singers [1],
+                params_SS$pop_calls_matrix [1,],,x])
+              sample (x = params_SS$pop_calls_matrix [1,],
+                      size = params_SS$one_pop_singers [1],
                       replace = FALSE,
                       prob = temp / max (temp))
-            }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+            }, rep (0, params_SS$one_pop_singers [select_type])
           )
         )
       } else {
-        selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+        selection.index <- sample (params_SS$pop_calls_matrix [1,], params_SS$one_pop_singers [1])
       }
 
-      selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+      selection.index <- sample (params_SS$pop_calls_matrix [1,], params_SS$one_pop_singers [1])
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index])
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [params_SS$pop_calls_matrix [1,],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[params_SS$pop_calls_matrix [1,],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
         singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
       } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
@@ -628,9 +628,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
           stop ("selector didn't have any syllables in the sylrep")
         }
 
-      temp_data_sing_selection <- update_selexn_data (
-        main_parameters = parameters_sing_selection,
-        temp_data_update_selexndata = temp_data_sing_selection,
+      temp_data_SS <- update_selexn_data (
+        main_parameters = params_SS,
+        temp_data_US = temp_data_SS,
         suitor_choices = selection.index,
         preferred_bird = singer,
         selector_bird = selector.index,
@@ -644,36 +644,36 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
       )
 
     } else if (selection_path == 3) {
-      selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
+      selector.index <- sample (params_SS$pop_calls_matrix [2, ], 1)
       selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
           stop ("selector didn't have any syllables in the sylrep")
         }
       # if (round_up == TRUE) {
-      #   temp <- cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,x])
-      #   selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+      #   temp <- cpp_rowSums (sylrep_object[params_SS$pop_calls_matrix [1,],,x])
+      #   selection.index <- sample (params_SS$pop_calls_matrix [1,], params_SS$one_pop_singers [1])
       # }
 
       if (round_up == TRUE) {
           selection.index <- (
-            vapply (1 : parameters_sing_selection$num_pop,
+            vapply (1 : params_SS$num_pop,
               function (x) {
                 temp <- cpp_rowSums (sylrep_object[
-                  parameters_sing_selection$pop_calls_matrix [1,],,x])
-                sample (x = parameters_sing_selection$pop_calls_matrix [1,],
-                        size = parameters_sing_selection$one_pop_singers [1],
+                  params_SS$pop_calls_matrix [1,],,x])
+                sample (x = params_SS$pop_calls_matrix [1,],
+                        size = params_SS$one_pop_singers [1],
                         replace = FALSE,
                         prob = temp / max (temp))
-              }, rep (0, parameters_sing_selection$one_pop_singers [select_type])
+              }, rep (0, params_SS$one_pop_singers [select_type])
             )
           )
       } else {
-        selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
+        selection.index <- sample (params_SS$pop_calls_matrix [1,], params_SS$one_pop_singers [1])
       }
 
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index])
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [params_SS$pop_calls_matrix [1,],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[params_SS$pop_calls_matrix [1,],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
         THING <- which (selection.sylrepSums == max (selection.sylrepSums))
         stuff <- array (as.numeric (paste0 (selection.sylreps[THING[1 : length (THING)],])), c (length (THING),length (selector.sylrep)))
@@ -695,9 +695,9 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
       } else {stop ("max sylrep selection problem")}
 
 
-      temp_data_sing_selection <- update_selexn_data (
-        main_parameters = parameters_sing_selection,
-        temp_data_update_selexndata = temp_data_sing_selection,
+      temp_data_SS <- update_selexn_data (
+        main_parameters = params_SS,
+        temp_data_US = temp_data_SS,
         suitor_choices = selection.index,
         preferred_bird = singer,
         selector_bird = selector.index,
@@ -712,33 +712,33 @@ sing.selection <- function (parameters_sing_selection, temp_data_sing_selection,
     }
 
   }
-  return (temp_data_sing_selection)
+  return (temp_data_SS)
 }
 
 
-curiosity_learn <- function (parameters_curiosity_learn,
-                             temp_data_curiosity_learn,
-                             inheritance_pattern = 1#,
+curiosity_learn <- function (params_CL,
+                             temp_data_CL,
+                             curinh_pattern = 1#,
                             #  invasion = FALSE,
                             #  invPopSize = 5
                             ) {
 
-  if (inheritance_pattern == 5) {
+  if (curinh_pattern == 5) {
 
-    malecurinh <- parameters_curiosity_learn$curinhproportion
+    paternalCurInh <- params_CL$curinhproportion
+    maternalCurInh <- 1 - paternalCurInh
+    newcuriosity <- c (runif ((params_CL$num_pop * 2), -1, 1))
 
-    newcuriosity <- c (runif ((parameters_curiosity_learn$num_pop * 2), -1, 1))
-
-    for (population in 1 : (parameters_curiosity_learn$num_pop)) {
+    for (population in 1 : (params_CL$num_pop)) {
 
       for (sex in 1 : 2) {
         if (
-            temp_data_curiosity_learn [1,
-              parameters_curiosity_learn$sylnum + 2,
+            temp_data_CL [1,
+              params_CL$sylnum + 2,
               population
             ] == 0 ||
-            temp_data_curiosity_learn [2,
-              parameters_curiosity_learn$sylnum + 2,
+            temp_data_CL [2,
+              params_CL$sylnum + 2,
               population
             ] == 0
            ) {stop (
@@ -748,25 +748,25 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
         curinh_attempts <- 1
 
+        tryCatch({while (((
+              paternalCurInh * temp_data_CL [1, params_CL$sylnum + 2, population] +
+
+              maternalCurInh * temp_data_CL [2, params_CL$sylnum + 2, population]
+            ) +
+            ((1 - params_CL$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+            ]))) < 0) {
+
+            newcuriosity [2 * (population - 1) + sex] <- runif (1, 0, 1)
+            curinh_attempts <- curinh_attempts + 1
+
+          }}, error = function(e) {stop(print(c(paternalCurInh, temp_data_CL [1, params_CL$sylnum + 2, population], maternalCurInh, temp_data_CL [2, params_CL$sylnum + 2, population], params_CL$curlearnprob, newcuriosity)))})
+
         while (((
-            (malecurinh) * temp_data_curiosity_learn [1, parameters_curiosity_learn$sylnum + 2, population] +
+            (paternalCurInh) * temp_data_CL [1, params_CL$sylnum + 2, population] +
 
-            (1 - malecurinh) * temp_data_curiosity_learn [2, parameters_curiosity_learn$sylnum + 2, population]
-          ) +
-          ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
-          ]))) < 0) {
-
-          newcuriosity [2 * (population - 1) + sex] <- runif (1, 0, 1)
-          curinh_attempts <- curinh_attempts + 1
-
-        }
-
-        while (((
-            (malecurinh) * temp_data_curiosity_learn [1, parameters_curiosity_learn$sylnum + 2, population] +
-
-            (1 - malecurinh) * temp_data_curiosity_learn [2, parameters_curiosity_learn$sylnum + 2, population]
+            (maternalCurInh) * temp_data_CL [2, params_CL$sylnum + 2, population]
         ) +
-        ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+        ((1 - params_CL$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
         ]))) > 1) {
 
           newcuriosity [2 * (population - 1) + sex] <- runif (1, -1, 0)
@@ -775,21 +775,21 @@ curiosity_learn <- function (parameters_curiosity_learn,
         }
 
         new.curiosity <- (
-            (malecurinh) * temp_data_curiosity_learn [1, parameters_curiosity_learn$sylnum + 2, population] +
+            (paternalCurInh) * temp_data_CL [1, params_CL$sylnum + 2, population] +
 
-            (1-malecurinh) * temp_data_curiosity_learn [2, parameters_curiosity_learn$sylnum + 2, population]
+            (1-paternalCurInh) * temp_data_CL [2, params_CL$sylnum + 2, population]
           ) +
-          ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+          ((1 - params_CL$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
           ])) # Adding small proportion of noise
 
-        temp_data_curiosity_learn [
-          (sex + 2), parameters_curiosity_learn$sylnum + 4, population
-        ] <- temp_data_curiosity_learn [(sex + 2), parameters_curiosity_learn$sylnum + 2, population]
-        temp_data_curiosity_learn [
-          (sex + 2), parameters_curiosity_learn$sylnum + 2, population
+        temp_data_CL [
+          (sex + 2), params_CL$sylnum + 4, population
+        ] <- temp_data_CL [(sex + 2), params_CL$sylnum + 2, population]
+        temp_data_CL [
+          (sex + 2), params_CL$sylnum + 2, population
         ] <- new.curiosity
-        temp_data_curiosity_learn [
-          (sex + 2), parameters_curiosity_learn$sylnum + 5, population
+        temp_data_CL [
+          (sex + 2), params_CL$sylnum + 5, population
         ] <- curinh_attempts
       }
     }
@@ -811,24 +811,24 @@ curiosity_learn <- function (parameters_curiosity_learn,
                     )
     )
 
-    newcuriosity <- c (runif ((parameters_curiosity_learn$num_pop * 2), -1, 1))
+    newcuriosity <- c (runif ((params_CL$num_pop * 2), -1, 1))
 
-    for (population in 1 : (parameters_curiosity_learn$num_pop)) {
+    for (population in 1 : (params_CL$num_pop)) {
 
       for (sex in 1 : 2) {
-        if (temp_data_curiosity_learn [
-          curinh_teaching_patterns [inheritance_pattern,sex],
-          parameters_curiosity_learn$sylnum + 2,
+        if (temp_data_CL [
+          curinh_teaching_patterns [curinh_pattern,sex],
+          params_CL$sylnum + 2,
           population
         ] == 0) {stop (
           "not the time for learning curiosity from parents right now...")}
 
         curinh_attempts <- 1
 
-        while ((temp_data_curiosity_learn [curinh_teaching_patterns[
-            inheritance_pattern,sex
-          ], parameters_curiosity_learn$sylnum + 2, population] +
-          ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+        while ((temp_data_CL [curinh_teaching_patterns[
+            curinh_pattern,sex
+          ], params_CL$sylnum + 2, population] +
+          ((1 - params_CL$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
           ]))) < 0) { # curiosity level below 0
 
           newcuriosity [2 * (population - 1) + sex] <- runif (1, 0, 1)
@@ -836,10 +836,10 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
         }
 
-        while ((temp_data_curiosity_learn [curinh_teaching_patterns[
-            inheritance_pattern,sex
-          ], parameters_curiosity_learn$sylnum + 2, population] +
-          ((1 - parameters_curiosity_learn$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
+        while ((temp_data_CL [curinh_teaching_patterns[
+            curinh_pattern,sex
+          ], params_CL$sylnum + 2, population] +
+          ((1 - params_CL$curlearnprob) * (newcuriosity [2 * (population - 1) + sex
           ]))) > 1) { # curiosity level above 1
 
           newcuriosity [2 * (population - 1) + sex] <- runif (1, -1, 0)
@@ -847,21 +847,21 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
         }
 
-        new.curiosity <- temp_data_curiosity_learn [curinh_teaching_patterns [
-            inheritance_pattern,sex
-          ], parameters_curiosity_learn$sylnum + 2, population] +
-          ((1 - parameters_curiosity_learn$curlearnprob) * (
+        new.curiosity <- temp_data_CL [curinh_teaching_patterns [
+            curinh_pattern,sex
+          ], params_CL$sylnum + 2, population] +
+          ((1 - params_CL$curlearnprob) * (
             newcuriosity [2 * (population - 1) + sex
           ])) # Adding small proportion of noise
 
-        temp_data_curiosity_learn [
-          (sex + 2), parameters_curiosity_learn$sylnum + 4, population
-        ] <- temp_data_curiosity_learn [(sex + 2), parameters_curiosity_learn$sylnum + 2, population]
-        temp_data_curiosity_learn [
-          (sex + 2), parameters_curiosity_learn$sylnum + 2, population
+        temp_data_CL [
+          (sex + 2), params_CL$sylnum + 4, population
+        ] <- temp_data_CL [(sex + 2), params_CL$sylnum + 2, population]
+        temp_data_CL [
+          (sex + 2), params_CL$sylnum + 2, population
         ] <- new.curiosity
-        temp_data_curiosity_learn [
-          (sex + 2), parameters_curiosity_learn$sylnum + 5, population
+        temp_data_CL [
+          (sex + 2), params_CL$sylnum + 5, population
         ] <- curinh_attempts
       }
     }
@@ -872,32 +872,32 @@ curiosity_learn <- function (parameters_curiosity_learn,
 
   # }
 
-  return (temp_data_curiosity_learn)
+  return (temp_data_CL)
 }
 
-recuriosity.offspring <- function (parameters_recuriosity, temp_data_recuriosity, curiosity_object) {
-  for (population in 1 : parameters_recuriosity$num_pop) {
+recuriosity.offspring <- function (params_RC, temp_data_RC, curiosity_object) {
+  for (population in 1 : params_RC$num_pop) {
     for (sex in 1 : 2) {
 
       curiosity_object [
-        temp_data_recuriosity [
-          (sex + 2), parameters_recuriosity$sylnum + 1, population
-        ], population] <- temp_data_recuriosity [
-          (sex + 2), parameters_recuriosity$sylnum + 2, population]
+        temp_data_RC [
+          (sex + 2), params_RC$sylnum + 1, population
+        ], population] <- temp_data_RC [
+          (sex + 2), params_RC$sylnum + 2, population]
     }
   }
   return (curiosity_object)
 }
 
 
-resylreps.offspring <- function (parameters_resylreps, temp_data_resylreps, sylrep_object) {
-  for (population in 1 : parameters_resylreps$num_pop) {
+resylreps.offspring <- function (params_RS, temp_data_RS, sylrep_object) {
+  for (population in 1 : params_RS$num_pop) {
     for (sex in 1 : 2) {
 
-      sylrep_object [temp_data_resylreps[
-        (sex + 2), parameters_resylreps$sylnum + 1, population
-        ], , population] <- temp_data_resylreps [
-          (sex + 2), 1 : parameters_resylreps$sylnum, population
+      sylrep_object [temp_data_RS[
+        (sex + 2), params_RS$sylnum + 1, population
+        ], , population] <- temp_data_RS [
+          (sex + 2), 1 : params_RS$sylnum, population
         ]
     }
   }

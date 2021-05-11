@@ -89,7 +89,7 @@ for (twoHundies in 1 : length (tenKs)) {
 
 # temp_data_sing_selection <- update_selexn_data (
 #               main_parameters = parameters_sing_selection,
-#               temp_data_update_selexndata = temp_data_sing_selection,
+#               temp_data_US = temp_data_sing_selection,
 #       ###     suitor_choices = selection.index,
 #       ###     preferred_bird = singer,
 #       ###     selector_bird = selector.index,

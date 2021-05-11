@@ -40,7 +40,7 @@ moranObjects <- make.offspring.calls (parameters = simParams,
 
 moranObjects <- curiosity_learn (parameters = simParams, moran = moranObjects,
                                 timestep = single_timestep,
-                                inheritance_pattern = params$curinh_pattern)
+                                curinh_pattern = params$curinh_pattern)
 
 profvis ({
   for (iteration in 1 : 10000) {

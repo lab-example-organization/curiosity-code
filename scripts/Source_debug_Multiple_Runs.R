@@ -487,17 +487,17 @@ print ("line 427")
                                       interbreed = FALSE)
 
         # Locate new birb positions in population data, store in TDO
-        moranobjects <- make.offspring.calls (parameters_offspring_calls = simparams,
-                                            temp_data_offspring_calls = moranobjects)
+        moranobjects <- make.offspring.calls (params_OC = simparams,
+                                            temp_data_OC = moranobjects)
 
         # Add noise to inherited curiosity trait, store temporarily
         moranobjects <- curiosity_learn (parameters_curiosity_learn = simparams,
                                         temp_data_curiosity_learn = moranobjects,
-                                        inheritance_pattern = curinh_style)
+                                        curinh_pattern = curinh_style)
 
         #
-        moranobjects <- syll_learn (parameters_sylllearn = simparams,
-                                  temp_data_sylllearn = moranobjects,
+        moranobjects <- syll_learn (params_SL = simparams,
+                                  temp_data_SL = moranobjects,
                                   select_type = "mate",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
@@ -512,19 +512,19 @@ print ("line 427")
                                       verbose_output = FALSE,
                                       interbreed = FALSE)
 
-        moranobjects <- syll_learn (parameters_sylllearn = simparams,
-                                  temp_data_sylllearn = moranobjects,
+        moranobjects <- syll_learn (params_SL = simparams,
+                                  temp_data_SL = moranobjects,
                                   select_type = "tutor",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = FALSE)
 
-        curiosity_level <- recuriosity.offspring (parameters_recuriosity = simparams,
-                                            temp_data_recuriosity = moranobjects,
+        curiosity_level <- recuriosity.offspring (params_RC = simparams,
+                                            temp_data_RC = moranobjects,
                                             curiosity_object = curiosity_level)
 
-        sylreps <- resylreps.offspring (parameters_resylreps = simparams,
-                                       temp_data_resylreps = moranobjects,
+        sylreps <- resylreps.offspring (params_RS = simparams,
+                                       temp_data_RS = moranobjects,
                                        sylrep_object = sylreps)
 
         # recordvariable archiving

@@ -41,7 +41,7 @@ moranObjects <- make.offspring.calls (parameters = simParams,
 
 moranObjects <- curiosity_learn (parameters = simParams, moran = moranObjects,
                                 timestep = single_timestep,
-                                inheritance_pattern = params$curinh_pattern)
+                                curinh_pattern = params$curinh_pattern)
 
 moranObjects <- syll_learn (parameters = simParams, moran = moranObjects,
                            select_type = "mate", totally_new = FALSE,

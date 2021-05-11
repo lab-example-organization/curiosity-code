@@ -65,8 +65,8 @@ n_cores <- 4
 source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1 : 8
-paramsfile <- c ("paramsequalStartMatInh_retry.yaml")
+shifting_curstart <- 1 : 4
+paramsfile <- c ("paramsequalStartMatInh_midMayRedo.yaml")
 params = yaml.load_file (file.path ("parameters", paramsfile))
 simdate <- gsub ('-', '', substring (Sys.Date(), 3))
 secretcode <- 58418

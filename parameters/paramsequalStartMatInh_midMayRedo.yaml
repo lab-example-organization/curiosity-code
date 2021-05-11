@@ -7,17 +7,9 @@ curstarts:
     scmax: [11,11,11,11]
   - scmin: [ 8, 8, 8, 8]
     scmax: [11,11,11,11]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
-  - scmin: [15,15,15,15]
-    scmax: [20,20,20,20]
 
-simnumberstart: [10909, 10910, 10911, 10912, 10913, 10914, 10915, 10916]
-runlength: '10k'
+simnumberstart: 10917
+runlength: '2k'
 syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
@@ -32,7 +24,7 @@ num_pop: 2
 pop_size: 400
 sylnum: 156
 num_sylls_per_prob_lvl: 8
-number_of_reps: 50
+number_of_reps: 5
 standard_deviation: 2
 mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
 selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
@@ -61,8 +53,8 @@ invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation'
 
 
                           # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
-indrunredo: TRUE # "fpmr"
-# figure_redo_only: FALSE
+indrunredo: FALSE # "fpmr"
+figure_redo_only: FALSE
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 # lastruninit: TRUE

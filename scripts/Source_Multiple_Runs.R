@@ -1,14 +1,14 @@
-savinstuff <- function (parameters, output_filename, moran) {
+savinstuff <- function (parameters, output_filename, temp_timestep_data) {
     datez <- Sys.Date ()
     deetz <- c (parameters$num_timesteps, parameters$num_pop,
                parameters$pop_size, parameters$sylnum, parameters$nsl,
                parameters$one_pop_singers, parameters$curlearnprob,
                parameters$learnprob, parameters$randlearnprob,
                parameters$stand.dev, dim (parameters$pop_calls_matrix),
-               dim (moran), dim (parameters$curiosity_counter),
+               dim (temp_timestep_data), dim (parameters$curiosity_counter),
                dim (parameters$population_syll_probs),
                length (parameters$curiositybreaks),
-               length (parameters$zero_to_one_template), dim (moran))
+               length (parameters$zero_to_one_template), dim (temp_timestep_data))
     names (deetz) <- c ("parameters$num_timesteps", "parameters$num_pop",
                       "parameters$pop_size", "parameters$sylnum",
                       "parameters$nsl", rep ("parameters$one_pop_singers",
@@ -17,12 +17,12 @@ savinstuff <- function (parameters, output_filename, moran) {
                        rep ("parameters$randlearnprob", 2),
                        "parameters$stand.dev",
                        rep ("dim (parameters$pop_calls_matrix)", 2),
-                       rep ("dim (moran)", 3),
+                       rep ("dim (temp_timestep_data)", 3),
                        rep ("dim (parameters$curiosity_counter)", 2),
                        rep ("dim (parameters$population_syll_probs)", 2),
                        "length (parameters$curiositybreaks)",
                       "length (parameters$zero_to_one_template)",
-                      rep ("dim (moran)", 3))
+                      rep ("dim (temp_timestep_data)", 3))
     stuff_to_save <- list (
       docnamez = output_filename,
       datez = datez,
@@ -177,29 +177,29 @@ restart_from_save <- function (
   pathlist <- list.files (
     file.path (relevantpaths, "variable_store"))
 
-  # somekindaoutput <- array (0, c (parameters[[8]],
+  # output <- array (0, c (parameters[[8]],
   #   parameters[[9]], parameters[[10]] + 1, length (pathlist)))
 
-  somekindaoutput <- vector ("list", length (pathlist))
+  output <- vector ("list", length (pathlist))
 
   # num_pop, pop_size,    sylnum
   for (i in 1 : length (pathlist)) {
 
-    somekindaoutput[[i]] <- vector ("list", 2)
+    output[[i]] <- vector ("list", 2)
 
     endcur <- readRDS (file.path (relevantpaths, "variable_store",
       paste0 (pathlist [i], "/end_cursty.RData")))
     endrep <- readRDS (file.path (relevantpaths, "variable_store",
       paste0 (pathlist [i], "/end_sylbls.RData")))
 
-    # somekindaoutput[, , 1 : parameters[[10]], i] <- aperm (endrep, c (2, 1, 3))
-    # somekindaoutput[, , parameters[[10]] + 1, i] <- aperm (endcur, c (2, 1))
+    # output[, , 1 : parameters[[10]], i] <- aperm (endrep, c (2, 1, 3))
+    # output[, , parameters[[10]] + 1, i] <- aperm (endcur, c (2, 1))
 
-    somekindaoutput[[i]][[1]] <- endrep
-    somekindaoutput[[i]][[2]] <- endcur
+    output[[i]][[1]] <- endrep
+    output[[i]][[2]] <- endcur
 
   }
-  return (somekindaoutput)
+  return (output)
 }
 
 invasion_parameters_curiosity <- function (
@@ -408,7 +408,7 @@ life_cycle <- function (
 
   ##### Timestep Data Object (TDO)
 
-  moranobjects <- define_temp_data (simparams)
+  timestepData <- define_temp_data (simparams)
   # pairing_pool <- define_temp_data (simparams, 2)
   if (initfromlastrun) {
     sylreps <- initialize.sylrep (parameters_is = simparams,
@@ -445,7 +445,7 @@ life_cycle <- function (
 
   stuff_to_save <- savinstuff (parameters = simparams,
                               output_filename = docnamez,
-                              moran = moranobjects)
+                              temp_timestep_data = timestepData)
 
 
 
@@ -477,8 +477,8 @@ life_cycle <- function (
       for (single_timestep in 1 : recordingsimpfact) {
 
         # Mate selection based on song characteristics
-        moranobjects <- sing.selection (parameters_sing_selection = simparams,
-                                      temp_data_sing_selection = moranobjects,
+        timestepData <- sing.selection (params_SS = simparams,
+                                      temp_data_SS = timestepData,
                                       curiosity_level = curiosity_level,
                                       select_type = "mate",
                                       sylrep_object = sylreps,
@@ -487,24 +487,24 @@ life_cycle <- function (
                                       interbreed = FALSE)
 
         # Locate new birb positions in population data, store in TDO
-        moranobjects <- make.offspring.calls (parameters_offspring_calls = simparams,
-                                            temp_data_offspring_calls = moranobjects)
+        timestepData <- make.offspring.calls (params_OC = simparams,
+                                            temp_data_OC = timestepData)
 
         # Add noise to inherited curiosity trait, store temporarily
-        moranobjects <- curiosity_learn (parameters_curiosity_learn = simparams,
-                                        temp_data_curiosity_learn = moranobjects,
-                                        inheritance_pattern = curinh_style)
+        timestepData <- curiosity_learn (params_CL = simparams,
+                                        temp_data_CL = timestepData,
+                                        curinh_pattern = curinh_style)
 
         #
-        moranobjects <- syll_learn (parameters_sylllearn = simparams,
-                                  temp_data_sylllearn = moranobjects,
+        timestepData <- syll_learn (params_SL = simparams,
+                                  temp_data_SL = timestepData,
                                   select_type = "mate",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = FALSE)
 
-        moranobjects <- sing.selection (parameters_sing_selection = simparams,
-                                      temp_data_sing_selection = moranobjects,
+        timestepData <- sing.selection (params_SS = simparams,
+                                      temp_data_SS = timestepData,
                                       curiosity_level = curiosity_level,
                                       select_type = "tutor",
                                       sylrep_object = sylreps,
@@ -512,19 +512,19 @@ life_cycle <- function (
                                       verbose_output = FALSE,
                                       interbreed = FALSE)
 
-        moranobjects <- syll_learn (parameters_sylllearn = simparams,
-                                  temp_data_sylllearn = moranobjects,
+        timestepData <- syll_learn (params_SL = simparams,
+                                  temp_data_SL = timestepData,
                                   select_type = "tutor",
                                   totally_new = FALSE,
                                   randlearn_context = 2,
                                   verbose = FALSE)
 
-        curiosity_level <- recuriosity.offspring (parameters_recuriosity = simparams,
-                                            temp_data_recuriosity = moranobjects,
+        curiosity_level <- recuriosity.offspring (params_RC = simparams,
+                                            temp_data_RC = timestepData,
                                             curiosity_object = curiosity_level)
 
-        sylreps <- resylreps.offspring (parameters_resylreps = simparams,
-                                       temp_data_resylreps = moranobjects,
+        sylreps <- resylreps.offspring (params_RS = simparams,
+                                       temp_data_RS = timestepData,
                                        sylrep_object = sylreps)
 
         # recordvariable archiving
@@ -545,7 +545,7 @@ life_cycle <- function (
 
       curity_mean_t <- curity_mean_t.archive(
         parameters_cmt_archive = simparams,
-        temp_data_cmt_archive = moranobjects,
+        temp_data_cmt_archive = timestepData,
         data_container = curity_mean_t,
         curiosity_object = curiosity_level,
         timestep = simplify)
@@ -641,34 +641,45 @@ archivesimfiles <- function (path, filename,
 }
 
 multi_runs <- function (shifting_curstart, paramssource,
-  dirdate, seednumber, recolorize = FALSE, redo = FALSE) { # redo = "fpmr", "recolorize"q
+  dirdate, seednumber, recolorize = FALSE) {
   
   set.seed (seednumber + shifting_curstart)
   params <- yaml.load_file (file.path ("parameters", paramssource))
   number_of_reps <- as.numeric (params$number_of_reps)
-  if (redo == "fpmr") {
-    if (params$indrunredo != FALSE) {
-      subsetorsequence <- params$simnumberstart [shifting_curstart]
-    } else {
-      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-    }
-    #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
+  # if (redo != FALSE) {
+  #   if (params$indrunredo != FALSE) {
+  #     subsetorsequence <- params$simnumberstart [shifting_curstart]
+  #   } else {
+  #     subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+  #   }
+  #   #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
+  #   source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+  #   return (figprodmultrun (specificsimnumber = subsetorsequence,
+  #     number_of_repeats = number_of_reps,
+  #     paramssource = paramssource, recolorize = params$recolorize))
+  # } else if (redo == "recolorize") {
+    # if (params$indrunredo != FALSE) {
+    #   subsetorsequence <- params$simnumberstart [shifting_curstart]
+    # } else {
+    #   subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+    # }
+    # #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
+    # source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+    # return (figprodmultrun (specificsimnumber = subsetorsequence,
+    #   number_of_repeats = number_of_reps,
+    #   paramssource = paramssource, recolorize = params$recolorize))
+  # } else {
+  if (params$indrunredo != FALSE) {
+    subsetorsequence <- params$simnumberstart [shifting_curstart]
+    singleormixture <- params$curinhdistribution [shifting_curstart]
     source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
     return (figprodmultrun (specificsimnumber = subsetorsequence,
       number_of_repeats = number_of_reps,
-      paramssource = paramssource, recolorize = FALSE))
-  } else if (redo == "recolorize") {
-    if (params$indrunredo != FALSE) {
-      subsetorsequence <- params$simnumberstart [shifting_curstart]
-    } else {
-      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-    }
-    #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
-    source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-    return (figprodmultrun (specificsimnumber = subsetorsequence,
-      number_of_repeats = number_of_reps,
-      paramssource = paramssource, recolorize = TRUE))
+      paramssource = paramssource, recolorize = params$recolorize))
   } else {
+      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+      singleormixture <- params$curinhdistribution
+    
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),
       archive = TRUE, new_dir = FALSE)
@@ -680,8 +691,7 @@ multi_runs <- function (shifting_curstart, paramssource,
     # so that life_cycle has last-run data as an accessible object
     # lastrun_init <- array (0, c (1,1,1,number_of_reps))
 
-    lastrun_init <- list ()
-    length (lastrun_init) <- number_of_reps
+    lastrun_init <- vector("list", length = number_of_reps)
 
     if (params$lastruninit) {
       if (length (params$lastrunid) > 1) {
@@ -695,18 +705,11 @@ multi_runs <- function (shifting_curstart, paramssource,
 
     for (rep_number in 1 : number_of_reps) {
 
-      if (params$indrunredo != FALSE) {
-        subsetorsequence <- params$simnumberstart [shifting_curstart]
-        singleormixture <- params$curinhdistribution [shifting_curstart]
-      } else {
-        subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-        singleormixture <- params$curinhdistribution
-      }
 
       if (length (params$curinh_pattern) != 1) {
-        curinh_binary <- params$curinh_pattern[shifting_curstart]
+        curinh_style <- params$curinh_pattern[shifting_curstart]
       } else {
-        curinh_binary <- params$curinh_pattern
+        curinh_style <- params$curinh_pattern
       }
 
       if (rep_number == 1) {
@@ -747,7 +750,7 @@ multi_runs <- function (shifting_curstart, paramssource,
         syllable_number = params$sylnum,
         number_sylls_probability_level = params$num_sylls_per_prob_lvl,
         standdev = as.numeric (params$standard_deviation),
-        curinh_style = curinh_binary,
+        curinh_style = curinh_style,
         recordingsimpfact = params$recordsimplifyfactor,
         one_pop_singers = params$one_pop_singers,
         curinhproportion = singleormixture, # only used if curinh_pattern = 5
@@ -771,23 +774,22 @@ multi_runs <- function (shifting_curstart, paramssource,
     }
 
     source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-
-    figprodmultrun (specificsimnumber = subsetorsequence,
+    
+    return(figprodmultrun (specificsimnumber = subsetorsequence,
                   number_of_repeats = number_of_reps,
                   paramssource = paramssource,
-                  redo = params$indrunredo,
-                  recolorize = FALSE,
+                  recolorize = params$recolorize,
                   results_tenK_dir = FALSE,
                   lineplots = TRUE,
-                  curMeans_only = FALSE,
-                  recolorize_lineplots = "range-median")
+                  curMeans_only = FALSE))
   }
 
 
   
 
 }
-
+# curMeans_only = FALSE,
+# recolorize_lineplots = "range-median")
 
 #   specificsimnumber = 1,
 #   number_of_repeats,

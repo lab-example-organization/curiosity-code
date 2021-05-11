@@ -10,12 +10,11 @@ figprodmultrun <- function (
   specificsimnumber = 1,
   number_of_repeats,
   paramssource = paramssource,
-  redo = FALSE,
   recolorize = FALSE,
   results_tenK_dir = FALSE,
   lineplots = FALSE,
   curMeans_only = FALSE,
-  recolorize_lineplots = "variance",
+  # recolorize_lineplots = "variance",
   compare_subsets = FALSE) { 
     # example of text for results_tenK_dir is "childLateSmolInvFemLow"
     #     print ("figprodmultrunStart")
@@ -25,12 +24,12 @@ figprodmultrun <- function (
     #     print ("params load")
     converted_data <- vector ("list", number_of_repeats)
 
-
+    
     ### Control flow directing script to simulation files:
     ###   "redo" skips making Group_###_folderList.RData, and finds it instead
     ###   "redo" also skips concatenating and copying simulation data into the multirun_output folder.
     ###   "results_tenK_dir" has been used once, for the "redo function" - 'results_tenK_dir = "parentNoInv"' - 
-    if (redo != FALSE) {
+    if (params$indrunredo != FALSE) {
       if (results_tenK_dir != FALSE) {
         relative_tenK_filepath <- file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir), (
             list.files (file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)), pattern = paste0 ("*_", specificsimnumber, "*_")) [
@@ -51,46 +50,80 @@ figprodmultrun <- function (
               ))
             }
         } else {
-          multirun_folderlist <- readRDS (relative_tenK_filepath)
+          tryCatch({multirun_folderlist <- readRDS (relative_tenK_filepath)},
+            error = function(e) {stop("multirun_folderlist <- readRDS (relative_tenK_filepath)")})
   
-          for (run_visual in 1 : number_of_repeats) {
-            multirun_folderlist [run_visual] <- paste0 (
+          for (runs_visual in 1 : number_of_repeats) {
+            multirun_folderlist [runs_visual] <- paste0 (
               file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)),
               strsplit (multirun_folderlist, "results") [[1]][2]
             )
           }
         }
       } else {
-        relative_filepath <- file.path ("results", (
-          list.files (file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_")) [
-            length (list.files (file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_")))
-          ] # this selects the latest... (see above)
-        ), (paste0 ("Group_", specificsimnumber, "_folderList.RData")))
-        if (! (file.exists (relative_filepath))) {
-          connection <- file (description = file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")), open = "rt")
-          multirun_folderlist <- as.vector (read.table (connection, -1L) [[2]])
-          close (connection)
-          if(length(multirun_folderlist) < 1) {
-            specSimNumber_folder <- list.files(file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_"))
-            
-            multirun_folderlist <- file.path(
-              file.path("results", specSimNumber_folder, "variable_store"),
-              list.files(
-                file.path("results", specSimNumber_folder, "variable_store")
-            ))
-          }
-        } else {
-          multirun_folderlist <- readRDS (relative_filepath)
-        }
+        # relative_filepath <- file.path ("results", (
+        #   list.files (file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_")) [
+        #     length (list.files (file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_")))
+        #   ] # this selects the latest... (see above)
+        # ), (paste0 ("Group_", specificsimnumber, "_folderList.RData")))
+        # if (! (file.exists (relative_filepath))) {
+        #   if(file.exists(file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")))) {
+        #     connection <- file (description = file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")), open = "rt")
+        #     multirun_folderlist <- as.vector (read.table (connection, -1L) [[2]])
+        #     close (connection)
+        #     if(length(multirun_folderlist) < 1) {
+              specSimNumber_folder <- list.files(file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_"))
+              
+              multirun_folderlist <- file.path(
+                file.path("results", specSimNumber_folder, "variable_store"),
+                list.files(
+                  file.path("results", specSimNumber_folder, "variable_store")
+              ))
+              if (length(multirun_folderlist) < 1) {
+                interim_object <- list.files(file.path (getwd(), "results"))
+                for (i in 1:length(interim_object)) {
+                  if (sum(as.vector(strsplit(interim_object[i], "_")[[1]]) == specificsimnumber)>0) {
+                    # specSimNumber_folder <- interim_object[i]
+                    break
+                  }
+                }
+                multirun_folderlist <- file.path(
+                  file.path("results", interim_object[i], "variable_store"),
+                  list.files(
+                    file.path("results", interim_object[i], "variable_store")
+                ))
+
+                if (length(multirun_folderlist) < 1) {stop(interim_object[i])}
+
+              }
+          #   }
+          # } else {
+          #   specSimNumber_folder <- list.files(file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_"))
+          #   multirun_folderlist <- file.path(
+          #     file.path("results", specSimNumber_folder, "variable_store"),
+          #     list.files(
+          #       file.path("results", specSimNumber_folder, "variable_store")
+          #   ))
+          # }
+        # } else {
+        #   multirun_folderlist <- readRDS (relative_filepath)
+        # }
       }
     } else {
-      
-      connection <- file (description = file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")), open = "rt")
-      multirun_folderlist <- as.vector (read.table (connection, -1L) [[2]])
-      close (connection)
-
-
-      if(length(multirun_folderlist) < 1) {
+      if(file.exists(file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")))) {
+        connection <- file (description = file.path ("source","temp", paste0 (specificsimnumber, "_sim_data.txt")), open = "rt")
+        multirun_folderlist <- as.vector (read.table (connection, -1L) [[2]])
+        close (connection)
+        if(length(multirun_folderlist) < 1) {
+          specSimNumber_folder <- list.files(file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_"))
+          
+          multirun_folderlist <- file.path(
+            file.path("results", specSimNumber_folder, "variable_store"),
+            list.files(
+              file.path("results", specSimNumber_folder, "variable_store")
+          ))
+        }
+      } else {
         specSimNumber_folder <- list.files(file.path ("results"), pattern = paste0 ("*_", specificsimnumber, "*_"))
         
         multirun_folderlist <- file.path(
@@ -99,38 +132,40 @@ figprodmultrun <- function (
             file.path("results", specSimNumber_folder, "variable_store")
         ))
       }
+
+
   
-      for (run_visual in 1 : number_of_repeats) {
+      for (runs_visual in 1 : number_of_repeats) {
         if (results_tenK_dir != FALSE) {
-          multirun_folderlist [run_visual] <- paste0 (
+          multirun_folderlist [runs_visual] <- paste0 (
             file.path ("results", paste0 ("tenKfiveByFive_", results_tenK_dir)),
-            strsplit (multirun_folderlist, "results") [[1]][2]
+            strsplit (multirun_folderlist[runs_visual], "results") [[1]][2]
           )
         }
         
-        if (run_visual == 1) {
+        if (runs_visual == 1) {
           multiRunTime <- format (Sys.time (), "%F-%H%M%S")
-      #     print ("run_visual == 1")
+      #     print ("runs_visual == 1")
           if (! (dir.exists (file.path (strsplit (
-            multirun_folderlist [run_visual], "/variable_store") [[1]][1],
+            multirun_folderlist [runs_visual], "/variable_store") [[1]][1],
             "multirun_output")))) {
       #     print ("makin multirun_output")
             dir.create (file.path (strsplit (
-              multirun_folderlist [run_visual], "/variable_store") [[1]][1],
+              multirun_folderlist [runs_visual], "/variable_store") [[1]][1],
               "multirun_output"))
       #     print ("makin specific multirun_output folder")
             dir.create (file.path (strsplit (
-              multirun_folderlist [run_visual], "/variable_store") [[1]][1],
+              multirun_folderlist [runs_visual], "/variable_store") [[1]][1],
               "multirun_output", paste0 (multiRunTime,
               "-GMT-multirun-output")))
           }
       #     print ("Do we need to record the list of folders?")
           if (! (file.exists (file.path (strsplit (
-            multirun_folderlist [run_visual], "variable_store") [[1]][1],
+            multirun_folderlist [runs_visual], "/variable_store") [[1]][1],
             paste0 ("Group_", specificsimnumber, "_folderList.RData"))))) {
               # print ("yes we do.")
               saveRDS (multirun_folderlist, file.path (strsplit (
-                  multirun_folderlist [run_visual], "variable_store",
+                  multirun_folderlist [runs_visual], "/variable_store",
                 ) [[1]][1], paste0 (
                   "Group_", specificsimnumber, "_folderList.RData")))
           }
@@ -138,7 +173,7 @@ figprodmultrun <- function (
       
       #     print ("converted_data time")
         converted_data <- concatenate_data (
-          specific_run = run_visual,
+          specific_run = runs_visual,
           converteddata = converted_data,
           parms = params,
           data_dir = multirun_folderlist)
@@ -161,8 +196,12 @@ figprodmultrun <- function (
         path = multirun_directory)
     }
     
-    info <- readRDS (file = file.path (
-      multirun_folderlist [1], "metadata.RData"))
+    tryCatch({
+        info <- readRDS (file = file.path (multirun_folderlist [1], list.files(multirun_folderlist [1], pattern = "metadata.RData")))
+      }, error = function(e) {
+        # stop("info <- readRDS (file = file.path (multirun_folderlist [1], 'metadata.RData'))")
+        stop(print(multirun_folderlist[1]))
+      })
     #     print ("makin' lists")
     datanames <- c ("CurHist","Cursity","SylDist","SylReps")
     listnames <- c ("hist","sity","sdst","repz")
@@ -193,13 +232,13 @@ figprodmultrun <- function (
     #     print ("sourcing from lists")
     for (i in 1 : number_of_repeats) {
       # print (paste0 (multirun_directory, "/", histlist [i]))
-      curhistlist [[i]] <- readRDS (paste0 (multirun_directory, histlist [i]))
+      tryCatch({curhistlist [[i]] <- readRDS (paste0 (multirun_directory, histlist [i]))}, error = function(e) {stop(paste0 (multirun_directory, histlist [i]))})
       # print (paste0 (multirun_directory, "/", sitylist [i]))
-      cursitylist [[i]] <- readRDS (paste0 (multirun_directory, sitylist [i]))
+      tryCatch({cursitylist [[i]] <- readRDS (paste0 (multirun_directory, sitylist [i]))}, error = function(e) {stop(paste0 (multirun_directory, sitylist [i]))})
       # print (paste0 (multirun_directory, "/", sdstlist [i]))
-      sdstbxnlist [[i]] <- readRDS (paste0 (multirun_directory, sdstlist [i]))
+      tryCatch({sdstbxnlist [[i]] <- readRDS (paste0 (multirun_directory, sdstlist [i]))}, error = function(e) {stop(paste0 (multirun_directory, sdstlist [i]))})
       # print (paste0 (multirun_directory, "/", repzlist [i]))
-      sylrepzlist [[i]] <- readRDS (paste0 (multirun_directory, repzlist [i]))
+      tryCatch({sylrepzlist [[i]] <- readRDS (paste0 (multirun_directory, repzlist [i]))}, error = function(e) {stop(paste0 (multirun_directory, repzlist [i]))})
     }
     #     print ("histlist")
     for (i in 1 : length (curhistlist [[1]])) {
@@ -251,7 +290,11 @@ figprodmultrun <- function (
   
     eval (parse (text = last_stats))
   
-    plot_info <- create_plot_info (info[[2]], info[[1]])
+    tryCatch({plot_info <- create_plot_info (info[[2]], info[[1]])
+      }, error = function(e) {plot_info <- create_plot_info (
+        paste(strsplit(strsplit(multirun_folderlist[1], "/")[[1]][4], "-")[[1]][1:3], collapse="-"),
+        strsplit(multirun_folderlist[1], "/")[[1]][2]
+      )})
     info_make <- paste(paste0 ("sink (file = paste0 (multirun_directory, \"Multirun - Parameters and Info\"))"),
                        "cat (paste0 (\"Number of Timesteps: \", info[[3]][1], \"\nNumber of Populations: \", info[[3]][2], \"\nPopulation Size: \", info[[3]][3], \"\nNumber of Syllables: \", info[[3]][4], \"\nNumber of Syllable Positions Assigned to Specific Probability Levels: \", info[[3]][5], \"\nNumber of Singers Sampled from One Population for Mating: \", info[[3]][7], \"\nNumber of Singers Sampled from One Population for Tutoring: \", info[[3]][6], \"\nProbability of Inheriting Curiosity Accurately: \", info[[3]][8], \"\nProbability of Learning Syllables Accurately from Parent: \", info[[3]][10], \"\nProbability of Learning Syllables Accurately from Tutor: \", info[[3]][9], \"\nProbability of Picking up Random Extra Syllables from Parent: \", info[[3]][12], \"\nProbability of Picking up Random Extra Syllables from Tutor: \", info[[3]][11], \"\nStandard Deviation of Randomly-picked-up Sylls from Established Mean: \", info[[3]][13], \"\nNumber of Rows in Population Calls Matrix: \", info[[3]][14], \"\nNumber of Columns in Pop Calls Matrix: \", info[[3]][15], \"\nPairing Pool Rows: \", info[[3]][16], \"\nPairing Pool Columns: \", info[[3]][17], \"\nPairing Pool Slices: \", info[[3]][18], \"\nCuriosity Counter Rows: \", info[[3]][19], \"\nCuriosity Counter Columns: \", info[[3]][20], \"\nPopulation Syllable Probability Rows: \", info[[3]][21], \"\nPopulation Probability Columns: \", info[[3]][22], \"\nLength of Curiosity Breaks Vector: \", info[[3]][23], \"\nLength of Zero to One Template: \", info[[3]][24], \"\nLearning Pool Rows: \", info[[3]][25], \"\nLearning Pool Columns: \", info[[3]][26], \"\nLearning Pool Slices: \", info[[3]][27]))",
                        "sink ()", sep = "\n")
@@ -269,8 +312,8 @@ figprodmultrun <- function (
                    mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = params$absolute_yAxis)
     } else {
       # if (compare_subsets == TRUE) {
-      output_variable <- recolorized_simple_plots (
-        recolorize_lineplots = recolorize_lineplots, # "clustering"
+      recolorized_simple_plots (
+        recolorize_lineplots = recolorize, # "clustering"
         parameters = params, plot_info = plot_info, 
         number_of_runs = number_of_repeats, cursitylist = cursitylist,
         sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,

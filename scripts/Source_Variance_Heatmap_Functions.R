@@ -21,7 +21,7 @@ finding_some_cross_sections_for_mean_and_variance_calculations <- function (
     dirStackDir <- list.files (path_results, pattern = paste0 ("tenKfiveByFive_", stack_directory))
     twoHundyKdirs <- list.files (file.path (path_results, dirStackDir))
     # that_stacked_object <- array (0, c (400, 157, 2, 50))
-    # dimnames (that_stacked_object) <- list ("individuals", "traits", "population", "reps", "inheritance_pattern", "curstart_patterns")
+    # dimnames (that_stacked_object) <- list ("individuals", "traits", "population", "reps", "curinh_pattern", "curstart_patterns")
 
     that_stacked_object <- array (0, c (pop_size, num_pop, 50))
 
