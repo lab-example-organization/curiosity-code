@@ -140,5 +140,5 @@ lastrunid: FALSE
 # figure settings
 
 figure_redo_only: FALSE
-recolorize: TRUE
+recolorize: "range-median"
 absolute_yAxis: TRUE
