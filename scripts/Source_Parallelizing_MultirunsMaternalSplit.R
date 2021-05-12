@@ -67,7 +67,7 @@ source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 shifting_curstart <- 1 : 40
 paramsfile <- c ("paramsMaternalSplit.yaml")
-params = yaml.load_file (file.path ("parameters", paramssource))
+params = yaml.load_file (file.path ("parameters", paramsfile))
 simdate <- gsub ('-', '', substring (Sys.Date(), 3))
 secretcode <- 58418
 mclapply (shifting_curstart,
