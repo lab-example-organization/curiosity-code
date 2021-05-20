@@ -1,14 +1,16 @@
 savinstuff <- function (parameters, output_filename, temp_timestep_data) {
     datez <- Sys.Date ()
     deetz <- c (parameters$num_timesteps, parameters$num_pop,
-               parameters$pop_size, parameters$sylnum, parameters$nsl,
-               parameters$one_pop_singers, parameters$curlearnprob,
-               parameters$learnprob, parameters$randlearnprob,
-               parameters$stand.dev, dim (parameters$pop_calls_matrix),
-               dim (temp_timestep_data), dim (parameters$curiosity_counter),
-               dim (parameters$population_syll_probs),
-               length (parameters$curiositybreaks),
-               length (parameters$zero_to_one_template), dim (temp_timestep_data))
+                parameters$pop_size, parameters$sylnum, parameters$nsl,
+                parameters$one_pop_singers, parameters$curlearnprob,
+                parameters$learnprob, parameters$randlearnprob,
+                parameters$stand.dev, dim (parameters$pop_calls_matrix),
+                dim (temp_timestep_data), dim (parameters$curiosity_counter),
+                dim (parameters$population_syll_probs),
+                length (parameters$curiositybreaks),
+                length (parameters$zero_to_one_template), dim (temp_timestep_data)
+                # add more params elements to help fill out more of the metadata file - and downstream, the "Multirun - Parameters and Info" file
+             )
     names (deetz) <- c ("parameters$num_timesteps", "parameters$num_pop",
                       "parameters$pop_size", "parameters$sylnum",
                       "parameters$nsl", rep ("parameters$one_pop_singers",
@@ -21,12 +23,14 @@ savinstuff <- function (parameters, output_filename, temp_timestep_data) {
                        rep ("dim (parameters$curiosity_counter)", 2),
                        rep ("dim (parameters$population_syll_probs)", 2),
                        "length (parameters$curiositybreaks)",
-                      "length (parameters$zero_to_one_template)",
-                      rep ("dim (temp_timestep_data)", 3))
+                       "length (parameters$zero_to_one_template)",
+                       rep ("dim (temp_timestep_data)", 3)
+                      )
     stuff_to_save <- list (
       docnamez = output_filename,
       datez = datez,
-      deetz = deetz
+      deetz = deetz,
+      params = parameters
     )
     return (stuff_to_save)
 }
@@ -208,7 +212,7 @@ invasion_parameters_curiosity <- function (
   ips = invpopsize,
   itv = invtraitvalue,
   curiosity_container = curiosity_level,
-  someparameters = simparams) {
+  params_IPC = simparams) {
 
   ifelse (ip == "focal", population <- 1, population <- 2)
 
@@ -221,7 +225,7 @@ invasion_parameters_curiosity <- function (
     ips <- ips / 2
   }
 
-  pop_subset <- sample (someparameters$pop_calls_matrix [thesex,], ips)
+  pop_subset <- sample (params_IPC$pop_calls_matrix [thesex,], ips)
 
   if (! (itv)) {
 
@@ -256,7 +260,7 @@ invasion_parameters_sylrep <- function (
   ips = invpopsize,
   itv = invtraitvalue,
   sylrep_container = sylreps,
-  someparameters = simparams) {
+  params_IPS = simparams) {
 
   ifelse (ip == 'focal', population <- 1, population <- 2)
 
@@ -269,15 +273,15 @@ invasion_parameters_sylrep <- function (
     ips <- ips / 2
   }
 
-  pop_subset <- sample (someparameters$pop_calls_matrix [thesex,], ips)
+  pop_subset <- sample (params_IPS$pop_calls_matrix [thesex,], ips)
 
   # if (ifocus == 'sylrep') {
 
     if (! (itv)) {
       for (variable in 1 : ips) {
-        thing <- (someparameters$sylnum + 1) - which (
+        thing <- (params_IPS$sylnum + 1) - which (
           sylrep_container [pop_subset [variable], , population] == 1)
-        # stuff <- (someparameters$sylnum + 1) - thing
+        # stuff <- (params_IPS$sylnum + 1) - thing
         sylrep_container [pop_subset [variable], thing [
           1 : length (thing)], population] <- 1
 
@@ -292,7 +296,7 @@ invasion_parameters_sylrep <- function (
       for (variable in 1 : ips) {
         sylrep_size <- length (which (sylrep_container [
           pop_subset [variable], , population] == 1))
-        sylrep_mean <- round (itv [1] * someparameters$sylnum)
+        sylrep_mean <- round (itv [1] * params_IPS$sylnum)
         sample_size <- itv [2]
 
         building_a_sylrep = unique (
@@ -311,7 +315,7 @@ invasion_parameters_sylrep <- function (
               # being selected, so hopefully the number evens out to
               # the same range of the target sylrep size
 
-              rep (0.001,someparameters$sylnum - (
+              rep (0.001,params_IPS$sylnum - (
                 itv[2]*(1/0.75)) - (sylrep_mean - (sample_size/2)))
               # other two subtracted from total = leftovers
         ))))
@@ -330,7 +334,7 @@ invasion_parameters_sylrep <- function (
 
                   rep (0.75,(itv[2]*(1/0.75))),
 
-                  rep (0.001,someparameters$sylnum - (
+                  rep (0.001,params_IPS$sylnum - (
                     itv[2]*(1/0.75)) - (
                       sylrep_mean - ( (sample_size - 5)/2)))
             ))))
@@ -346,7 +350,7 @@ invasion_parameters_sylrep <- function (
 
                   rep (0.75,(itv[2]*(1/0.75))),
 
-                  rep (0.001,someparameters$sylnum - (
+                  rep (0.001,params_IPS$sylnum - (
                     itv[2]*(1/0.75)) - (
                       sylrep_mean - ( (sample_size + 5)/2)))
             ))))
@@ -354,9 +358,9 @@ invasion_parameters_sylrep <- function (
           # building_a_sylrep <- unique(sort (sample(
             # 1 : 156,50,TRUE,c (rep (0.001,20),rep (0.75,80),rep (0.001,56)))))
         }
-        # thing <- (someparameters$sylnum + 1) - which (
+        # thing <- (params_IPS$sylnum + 1) - which (
           # sylrep_container [pop_subset [variable], , population] == 1)
-        # stuff <- (someparameters$sylnum + 1) - thing
+        # stuff <- (params_IPS$sylnum + 1) - thing
         sylrep_container [pop_subset [variable], building_a_sylrep[
           1 : length (building_a_sylrep)], population] <- 1
       }
@@ -376,47 +380,86 @@ invasion_parameters_sylrep <- function (
 
 }
 
-life_cycle <- function (
-  scmin, scmax, simnumber, runlength, syllearnstyle, vertoblearn, syldist,
-  curinh_value, number_populations, population_size, syllable_number,
-  number_sylls_probability_level, standdev, curinh_style,
-  recordingsimpfact, one_pop_singers = c (10,10), curinhproportion,
-  directorydate, invasion, invpopsize, invstyle, invpop, invsex,
-  invtraitvalue, invktmstps, initfromlastrun = FALSE, lastrunobject = FALSE,
-  mate_selection_type = FALSE, selection_round_up = FALSE) {
+life_cycle <- function (params, shifting_curstart, 
+                        subsetorsequence, curinh_style, 
+                        singleormixture, dirdate, 
+                        lastruninit, rep_number) {
+  if (! (is.list (params))) {stop("params error!")}
+  scmin = c (
+    params$curstarts [[shifting_curstart]]$scmin [1],
+    params$curstarts [[shifting_curstart]]$scmin [2],
+    params$curstarts [[shifting_curstart]]$scmin [3],
+    params$curstarts [[shifting_curstart]]$scmin [4])
+  scmax = c (
+    params$curstarts [[shifting_curstart]]$scmax [1],
+    params$curstarts [[shifting_curstart]]$scmax [2],
+    params$curstarts [[shifting_curstart]]$scmax [3],
+    params$curstarts [[shifting_curstart]]$scmax [4])
+  # simnumber = subsetorsequence ###
+  # runlength = params$runlength
+  # syllearnstyle = params$syllearnstyle
+  vertoblearn = c (
+    params$vertoblearn$vertical$learn,
+    params$vertoblearn$vertical$invent,
+    params$vertoblearn$oblique$learn,
+    params$vertoblearn$oblique$invent)
+  # syldist = params$syldist
+  # curinh_value = params$curinh_value
+  # number_populations = params$num_pop
+  # population_size = params$pop_size
+  # syllable_number = params$sylnum
+  # number_sylls_probability_level = params$num_sylls_per_prob_lvl
+  # standdev = as.numeric (params$standard_deviation)
+  # curinh_style = curinh_style ###
+  # recordingsimpfact = params$recordsimplifyfactor
+  # one_pop_singers = params$one_pop_singers
+  # curinhproportion = singleormixture ### # only used if curinh_pattern = 5
+  # directorydate = dirdate ###
+  # invasion = params$traitinvasion
+  # invktmstps = params$invasionthoutmstps
+  # invpopsize = params$invasionpopsize
+  # invstyle = params$invasionstyle
+  # invpop = params$invasionpop
+  # invsex = params$invasionsex
+  # invtraitvalue = params$invasiontraitvalue
+  # initfromlastrun = params$lastruninit
+  # lastrunobject = lastrun_init[[rep_number]] ###
+  # mate_selection_type = params$mate_selection_type
+  # selection_round_up = params$selection_round_up
+  # lastrunobject = lastrun_init[, , , rep_number]
 
   docnamez <- makedocnamez (
-    scmin = scmin, scmax = scmax, simnumber = simnumber, runlength = runlength,
-    syllearnstyle = syllearnstyle, vertoblearn = vertoblearn,
-    syldist = syldist, curinh_value = curinh_value, standdev = standdev,
-    simdate = directorydate)
+    scmin = scmin, scmax = scmax, simnumber = subsetorsequence, runlength = params$runlength,
+    syllearnstyle = params$syllearnstyle, vertoblearn = vertoblearn,
+    syldist = params$syldist, curinh_value = params$curinh_value, standdev = as.numeric (params$standard_deviation),
+    simdate = dirdate)
 
   #parent_directory <- getwd ()
   source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
 
   simparams <- define_parameters (
-    num_timesteps = as.numeric (strsplit (runlength, "k") [[1]][1]) * 1000,
-    num_pop = number_populations, pop_size = population_size,
-    sylnum = syllable_number, nsl = number_sylls_probability_level,
-    one_pop_singers = one_pop_singers, curlearnprob = curinh_value,
+    num_timesteps = as.numeric (strsplit (params$runlength, "k") [[1]][1]) * 1000,
+    num_pop = params$num_pop, pop_size = params$pop_size,
+    sylnum = params$sylnum, nsl = params$num_sylls_per_prob_lvl,
+    one_pop_singers = params$one_pop_singers, curlearnprob = params$curinh_value,
     learnprob = c (vertoblearn[2], vertoblearn[1]),
     randlearnprob = c (vertoblearn[4], vertoblearn[3]),
-    stand.dev = standdev, curinhproportion = curinhproportion,
-    mate_selection_type = mate_selection_type,
-    selection_round_up = selection_round_up
+    stand.dev = as.numeric (params$standard_deviation), curinhproportion = singleormixture,
+    mate_selection_type = params$mate_selection_type,
+    selection_round_up = params$selection_round_up
   )
 
   ##### Timestep Data Object (TDO)
 
   timestepData <- define_temp_data (simparams)
   # pairing_pool <- define_temp_data (simparams, 2)
-  if (initfromlastrun) {
+  if (params$lastruninit) {
     sylreps <- initialize.sylrep (parameters_is = simparams,
-      population.pattern = c (1,2), pastrunobject_is = lastrunobject,
+      population.pattern = c (1,2), pastrunobject_is = lastrun_init[[rep_number]],
       eqpop = TRUE, eqsex = TRUE, pastruninit_is = TRUE)
     curiosity_level <- initialize.curiosity (
       parameters_ic = simparams, cur.min = scmin, cur.max = scmax,
-      pastrunobject_ic = lastrunobject, pastruninit_ic = TRUE)
+      pastrunobject_ic = lastrun_init[[rep_number]], pastruninit_ic = TRUE)
   } else {
     sylreps <- initialize.sylrep (parameters_is = simparams,
       population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
@@ -426,18 +469,18 @@ life_cycle <- function (
 
 
   sylrep_rowcol <- recordvariable.initialize (
-      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 1)
+      parameters_rvi = simparams, recsimfct = params$recordsimplifyfactor, variableid = 1)
 
   sylrep_dstbxn <- recordvariable.initialize (
-      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 2)
+      parameters_rvi = simparams, recsimfct = params$recordsimplifyfactor, variableid = 2)
 
   curity_mean_t <- recordvariable.initialize (
-      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 3)
+      parameters_rvi = simparams, recsimfct = params$recordsimplifyfactor, variableid = 3)
 
   # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
 
   curity_repert <- recordvariable.initialize (
-      parameters_rvi = simparams, recsimfct = recordingsimpfact, variableid = 4)
+      parameters_rvi = simparams, recsimfct = params$recordsimplifyfactor, variableid = 4)
 
   source (file.path ("scripts", "Source_Life_Cycle_Functions.R"))
 
@@ -451,30 +494,30 @@ life_cycle <- function (
 
   for (thousand_timesteps in 1 : (simparams$num_timesteps/1000)) {
 
-    if (invasion && (thousand_timesteps == invktmstps)) {
-      if (invstyle == 'curiosity') {
+    if (params$traitinvasion && (thousand_timesteps == params$invasionthoutmstps)) {
+      if (params$invasionstyle == 'curiosity') {
         curiosity_level <- invasion_parameters_curiosity (
-          ip = invpop,
-          isx = invsex,
-          ips = invpopsize,
-          itv = invtraitvalue,
+          ip = params$invasionpop,
+          isx = params$invasionsex,
+          ips = params$invasionpopsize,
+          itv = params$invasiontraitvalue,
           curiosity_container = curiosity_level,
-          someparameters = simparams
+          params_IPC = simparams
         )
       } else {
         sylreps <- invasion_parameters_sylrep (
-          ip = invpop,
-          isx = invsex,
-          ips = invpopsize,
-          itv = invtraitvalue,
+          ip = params$invasionpop,
+          isx = params$invasionsex,
+          ips = params$invasionpopsize,
+          itv = params$invasiontraitvalue,
           sylrep_container = sylreps,
-          someparameters = simparams
+          params_IPS = simparams
         )
       }
     }
 
-    for (simplify in 1 : (1000/recordingsimpfact)) {
-      for (single_timestep in 1 : recordingsimpfact) {
+    for (simplify in 1 : (1000/params$recordsimplifyfactor)) {
+      for (single_timestep in 1 : params$recordsimplifyfactor) {
 
         # Mate selection based on song characteristics
         timestepData <- sing.selection (params_SS = simparams,
@@ -594,8 +637,8 @@ life_cycle <- function (
 
     if ( (thousand_timesteps==(simparams$num_timesteps/1000)
       )&&(
-        simplify==1000/recordingsimpfact
-      )&&(single_timestep==recordingsimpfact)) {
+        simplify==1000/params$recordsimplifyfactor
+      )&&(single_timestep==params$recordsimplifyfactor)) {
       sink (file = file.path ("source", "temp",
         paste0 (simnumber, "_sim_data.txt")), append = TRUE)
       print (foldername)
@@ -725,48 +768,14 @@ multi_runs <- function (shifting_curstart, paramssource,
       }
 
       life_cycle(
-        scmin = c (
-          params$curstarts [[shifting_curstart]]$scmin [1],
-          params$curstarts [[shifting_curstart]]$scmin [2],
-          params$curstarts [[shifting_curstart]]$scmin [3],
-          params$curstarts [[shifting_curstart]]$scmin [4]),
-        scmax = c (
-          params$curstarts [[shifting_curstart]]$scmax [1],
-          params$curstarts [[shifting_curstart]]$scmax [2],
-          params$curstarts [[shifting_curstart]]$scmax [3],
-          params$curstarts [[shifting_curstart]]$scmax [4]),
-        simnumber = subsetorsequence,
-        runlength = params$runlength,
-        syllearnstyle = params$syllearnstyle,
-        vertoblearn = c (
-          params$vertoblearn$vertical$learn,
-          params$vertoblearn$vertical$invent,
-          params$vertoblearn$oblique$learn,
-          params$vertoblearn$oblique$invent),
-        syldist = params$syldist,
-        curinh_value = params$curinh_value,
-        number_populations = params$num_pop,
-        population_size = params$pop_size,
-        syllable_number = params$sylnum,
-        number_sylls_probability_level = params$num_sylls_per_prob_lvl,
-        standdev = as.numeric (params$standard_deviation),
-        curinh_style = curinh_style,
-        recordingsimpfact = params$recordsimplifyfactor,
-        one_pop_singers = params$one_pop_singers,
-        curinhproportion = singleormixture, # only used if curinh_pattern = 5
-        directorydate = dirdate,
-        invasion = params$traitinvasion,
-        invktmstps = params$invasionthoutmstps,
-        invpopsize = params$invasionpopsize,
-        invstyle = params$invasionstyle,
-        invpop = params$invasionpop,
-        invsex = params$invasionsex,
-        invtraitvalue = params$invasiontraitvalue,
-        initfromlastrun = params$lastruninit,
-        lastrunobject = lastrun_init[[rep_number]],
-        mate_selection_type = params$mate_selection_type,
-        selection_round_up = params$selection_round_up
-        # lastrunobject = lastrun_init[, , , rep_number]
+        params = params, 
+        shifting_curstart = shifting_curstart, 
+        subsetorsequence = subsetorsequence, 
+        curinh_style = curinh_style, 
+        singleormixture = singleormixture, 
+        dirdate = dirdate, 
+        lastruninit = lastruninit, 
+        rep_number = rep_number
       )
       print (paste0 ("Replicate Run # ",
         rep_number, ", done at: ",

@@ -282,7 +282,7 @@ set.seed (seednumber + shifting_curstart)
           ips = invpopsize,
           itv = invtraitvalue,
           curiosity_container = curiosity_level,
-          someparameters = simparams
+          params_IPC = simparams
         )
       } else {
         sylreps <- invasion_parameters_sylrep (
@@ -291,7 +291,7 @@ set.seed (seednumber + shifting_curstart)
           ips = invpopsize,
           itv = invtraitvalue,
           sylrep_container = sylreps,
-          someparameters = simparams
+          params_IPS = simparams
         )
       }
     }

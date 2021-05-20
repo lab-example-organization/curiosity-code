@@ -209,7 +209,7 @@ invasion_parameters_curiosity <- function (
   ips = invpopsize,
   itv = invtraitvalue,
   curiosity_container = curiosity_level,
-  someparameters = simparams
+  params_IPC = simparams
 ) {
 
   ifelse (ip == "focal", population <- 1, population <- 2)
@@ -223,7 +223,7 @@ invasion_parameters_curiosity <- function (
     ips <- ips / 2
   }
 
-  pop_subset <- sample (someparameters$pop_calls_matrix [thesex,], ips)
+  pop_subset <- sample (params_IPC$pop_calls_matrix [thesex,], ips)
 
   if (! (itv)) {
 
@@ -258,7 +258,7 @@ invasion_parameters_sylrep <- function (
   ips = invpopsize,
   itv = invtraitvalue,
   sylrep_container = sylreps,
-  someparameters = simparams
+  params_IPS = simparams
 ) {
 
   ifelse (ip == 'focal', population <- 1, population <- 2)
@@ -272,15 +272,15 @@ invasion_parameters_sylrep <- function (
     ips <- ips / 2
   }
 
-  pop_subset <- sample (someparameters$pop_calls_matrix [thesex,], ips)
+  pop_subset <- sample (params_IPS$pop_calls_matrix [thesex,], ips)
 
   # if (ifocus == 'sylrep') {
 
     if (! (itv)) {
       for (variable in 1 : ips) {
-        thing <- (someparameters$sylnum + 1) - which (
+        thing <- (params_IPS$sylnum + 1) - which (
           sylrep_container [pop_subset [variable], , population] == 1)
-        # stuff <- (someparameters$sylnum + 1) - thing
+        # stuff <- (params_IPS$sylnum + 1) - thing
         sylrep_container [pop_subset [variable], thing [
           1 : length (thing)], population] <- 1
 
@@ -295,7 +295,7 @@ invasion_parameters_sylrep <- function (
       for (variable in 1 : ips) {
         sylrep_size <- length (which (sylrep_container [
           pop_subset [variable], , population] == 1))
-        sylrep_mean <- round (itv [1] * someparameters$sylnum)
+        sylrep_mean <- round (itv [1] * params_IPS$sylnum)
         sample_size <- itv [2]
 
         building_a_sylrep = unique (
@@ -314,7 +314,7 @@ invasion_parameters_sylrep <- function (
               # being selected, so hopefully the number evens out to
               # the same range of the target sylrep size
 
-              rep (0.001,someparameters$sylnum - (
+              rep (0.001,params_IPS$sylnum - (
                 itv[2]*(1/0.75)) - (sylrep_mean - (sample_size/2)))
               # other two subtracted from total = leftovers
         ))))
@@ -333,7 +333,7 @@ invasion_parameters_sylrep <- function (
 
                   rep (0.75,(itv[2]*(1/0.75))),
 
-                  rep (0.001,someparameters$sylnum - (
+                  rep (0.001,params_IPS$sylnum - (
                     itv[2]*(1/0.75)) - (
                       sylrep_mean - ( (sample_size - 5)/2)))
             ))))
@@ -349,7 +349,7 @@ invasion_parameters_sylrep <- function (
 
                   rep (0.75,(itv[2]*(1/0.75))),
 
-                  rep (0.001,someparameters$sylnum - (
+                  rep (0.001,params_IPS$sylnum - (
                     itv[2]*(1/0.75)) - (
                       sylrep_mean - ( (sample_size + 5)/2)))
             ))))
@@ -357,9 +357,9 @@ invasion_parameters_sylrep <- function (
           # building_a_sylrep <- unique(sort (sample(
             # 1 : 156,50,TRUE,c (rep (0.001,20),rep (0.75,80),rep (0.001,56)))))
         }
-        # thing <- (someparameters$sylnum + 1) - which (
+        # thing <- (params_IPS$sylnum + 1) - which (
           # sylrep_container [pop_subset [variable], , population] == 1)
-        # stuff <- (someparameters$sylnum + 1) - thing
+        # stuff <- (params_IPS$sylnum + 1) - thing
         sylrep_container [pop_subset [variable], building_a_sylrep[
           1 : length (building_a_sylrep)], population] <- 1
       }
@@ -459,7 +459,7 @@ print ("line 427")
           ips = invpopsize,
           itv = invtraitvalue,
           curiosity_container = curiosity_level,
-          someparameters = simparams
+          params_IPC = simparams
         )
       } else {
         sylreps <- invasion_parameters_sylrep (
@@ -468,7 +468,7 @@ print ("line 427")
           ips = invpopsize,
           itv = invtraitvalue,
           sylrep_container = sylreps,
-          someparameters = simparams
+          params_IPS = simparams
         )
       }
     }

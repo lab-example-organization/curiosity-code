@@ -197,7 +197,7 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
 
     meanz <- cursitylist [[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
     direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
-    if (recolorize != FALSE) {
+    if (length(recolorize) > 1) {
       if (lineplots != FALSE) {
         # lines
         direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
@@ -263,8 +263,8 @@ recolorized_simple_plots <- function (
 
   subset_pool <- array (0, c (4,2,length (cursitylist)))
   # subset_pool <-
-  for (direct_object in 1 : length (cursitylist)) {
-    subset_pool[,,direct_object] <- cursitylist [[direct_object]][c (1,2,3,4),,(as.numeric (strsplit (parameters$runlength, "k") [[1]][1]) * (1000/parameters$recordsimplifyfactor))]
+  for (lengthCursityList in 1 : length (cursitylist)) {
+    subset_pool[,,lengthCursityList] <- cursitylist [[lengthCursityList]][c (1,2,3,4),,(as.numeric (strsplit (parameters$runlength, "k") [[1]][1]) * (1000/parameters$recordsimplifyfactor))]
   }
 
   subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
@@ -361,8 +361,8 @@ simple_plots <- function (parameters, plot_info = plot_info,
                          lineplots = TRUE, curMeans_only = FALSE,
                          absolute_y = TRUE, compare_subsets = FALSE) {
   num_timesteps = as.numeric (strsplit (parameters$runlength, "k") [[1]][1])*1000
-
-  if (recolorize != FALSE) {
+  
+  if (length(recolorize) > 1) {
     saving_dir <- file.path (saving_dir, "recolorizedLineplots")
     if (! (dir.exists (saving_dir))) {dir.create (saving_dir)}
   }
@@ -378,7 +378,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
     for (sex in 1 : 2) {
       if (curMeans_only == FALSE) {
         meanz <- sylrepzlist [[number_of_runs + 1]][sex,population,]
-        if (recolorize != FALSE) {
+        if (length(recolorize) > 1) {
           if (lineplots != FALSE) {
             direct_object <- paste0 ("lines (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
             indirect_object <- paste0 ("lines (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
@@ -407,7 +407,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
                                       ((length (cursitylist [[number_of_runs + 1]][sex,population,]))/10))),
               labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
         eval (parse (text = direct_object))
-        if (recolorize != FALSE) {
+        if (length(recolorize) > 1) {
           eval (parse (text = indirect_object))
         }
         lines (sylrepzlist [[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
@@ -416,7 +416,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
 
       meanz <- cursitylist [[number_of_runs + 1]][sex,population,]
-      if (recolorize != FALSE) {
+      if (length(recolorize) > 1) {
         if (lineplots != FALSE) {
           direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
           indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
@@ -438,7 +438,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
                                     ((length (cursitylist [[number_of_runs + 1]][sex,population,]))/10))),
             labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
       eval (parse (text = direct_object))
-      if (recolorize != FALSE) {
+      if (length(recolorize) > 1) {
         eval (parse (text = indirect_object))
       }
       lines (cursitylist [[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
@@ -465,6 +465,53 @@ simple_plots <- function (parameters, plot_info = plot_info,
             file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
             png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
             image(t (meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s Sylnum"), axes=FALSE)
+            axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
+            axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
+            minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
+            dev.off ()
+          }
+
+          if (length(recolorize) > 1) {
+            # 
+            DOsdstbxnlist <- vector (mode = "list", length = length(recolorize) + 1)
+            # 
+            IOsdstbxnlist <- vector (mode = "list", length = number_of_runs - length(recolorize) + 1)
+
+            for (k in 1: length(DOsdstbxnlist)) {
+              dim (DOsdstbxnlist [[k]]) <- dim (sdstbxnlist [[1]])
+            }
+
+            for (k in 1: length(IOsdstbxnlist)) {
+              dim (IOsdstbxnlist [[k]]) <- dim (sdstbxnlist [[1]])
+            }
+            
+
+            for (j in 1 : length (sdstbxnlist [[1]])) {
+              eval (parse (text = paste0 ("DOsdstbxnlist [[length(DOsdstbxnlist)]][j] <- mean (c (DOsdstbxnlist [[",
+                                    paste0 (1 : (length(DOsdstbxnlist) - 2),"]][j],DOsdstbxnlist [[", collapse=''),
+                                    length(DOsdstbxnlist) - 1, "]][j]))")))
+              eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][j] <- mean (c (IOsdstbxnlist [[",
+                                    paste0 (1 : (length(IOsdstbxnlist) - 2),"]][j],IOsdstbxnlist [[", collapse=''),
+                                    length(IOsdstbxnlist) - 1, "]][j]))")))
+            }
+          
+            #     print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
+
+            # direct_object - which (1 : number_of_runs %in% recolorize)
+            DO_meanz <- DOsdstbxnlist [[length(DOsdstbxnlist)]][(sex + ((population - 1) * 2)), ,]
+            file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_DO_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
+            png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+            image(t (DO_meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s DO Sylnum"), axes=FALSE)
+            axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
+            axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
+            minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
+            dev.off ()
+
+            # indirect_object - which (! (1 : number_of_runs %in% recolorize))
+            IO_meanz <- IOsdstbxnlist [[length(IOsdstbxnlist)]][(sex + ((population - 1) * 2)), ,]
+            file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_IO_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
+            png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+            image(t (IO_meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s IO Sylnum"), axes=FALSE)
             axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
             axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
             minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())

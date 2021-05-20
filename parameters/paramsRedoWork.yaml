@@ -1,0 +1,69 @@
+curstarts:
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+
+  
+# distribution between 0.25 and 0.5 (width uniform 0.1): 8-11 (0.2-0.3), 9-12 (0.25-0.35), 11-14 (0.3-0.4), 12-15 (0.35-0.45), 14-17 (0.4-0.5), 15-20 (0.45-0.55)
+# width around 0.5: 11-25 (0.3-0.7), 12-24 (0.35-0.65), 14-22 (0.4-0.6), 15-20 (0.45-0.55), 16-18 (0.49-0.51)
+# 8-11, 9-12, 11-14, 12-15, 14-17, 15-20, 11-25, 12-24, 14-22, 16-18
+simnumberstart: [10917, 10918, 10919, 10920]
+runlength: '2k'
+Syllearnstyle: 'nsL'
+vertoblearn:
+  vertical:
+    learn: 0.95
+    invent: 0.1
+  oblique:
+    learn: 0.1
+    invent: 0.01
+syldist: 'oppsyl'
+curinh_value: 0.95
+num_pop: 2
+pop_size: 400
+sylnum: 156
+num_sylls_per_prob_lvl: 8
+number_of_reps: 5
+standard_deviation: 2
+mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
+selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
+
+# curinh.pattern - calling either the row number
+# or name of row for different curiosity inheritance patterns -
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
+curinh_pattern: [1, 2, 3, 5]
+one_pop_singers: [10, 10]
+recordsimplifyfactor: 100
+curinhdistribution: 0.5 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+traitinvasion: FALSE
+invasionthoutmstps: 1
+invasionpopsize: 5
+invasionstyle: # need: curiosity, sylrep,
+invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
+invasionsex: 'female' # male or female (or, perhaps, both?)
+invasiontraitvalue: [0.85, 0.1]
+
+indrunredo: TRUE
+
+lastruninit: FALSE
+
+# If this is being used, use an unique pattern from the run whose last timestep you would like to use.
+# lastrunid: '190820_3481'
+# lastrunid: ['8101', '8102', '8103', '8104', '8105', '8106', '8107', '8108', '8109', '8110', '8111', '8112', '8113', '8114', '8115', '8116', '8117', '8118', '8119', '8120', '8121', '8122', '8123', '8124', '8125', '8126', '8127', '8128', '8129', '8130', '8131', '8132', '8133', '8134', '8135', '8136', '8137', '8138', '8139', '8140', '8141', '8142', '8143', '8144', '8145', '8146', '8147', '8148', '8149', '8150',
+#             '8151', '8152', '8153', '8154', '8155', '8156', '8157', '8158', '8159', '8160', '8161', '8162', '8163', '8164', '8165', '8166', '8167', '8168', '8169', '8170', '8171', '8172', '8173', '8174', '8175', '8176', '8177', '8178', '8179', '8180', '8181', '8182', '8183', '8184', '8185', '8186', '8187', '8188', '8189', '8190', '8191', '8192', '8193', '8194', '8195', '8196', '8197', '8198', '8199', '8200',
+#             '8201', '8202', '8203', '8204', '8205', '8206', '8207', '8208', '8209', '8210', '8211', '8212', '8213', '8214', '8215', '8216', '8217', '8218', '8219', '8220', '8221', '8222', '8223', '8224', '8225', '8226', '8227', '8228', '8229', '8230', '8231', '8232', '8233', '8234', '8235', '8236', '8237', '8238', '8239', '8240', '8241', '8242', '8243', '8244', '8245', '8246', '8247', '8248', '8249', '8250',
+#             '8251', '8252', '8253', '8254', '8255', '8256', '8257', '8258', '8259', '8260', '8261', '8262', '8263', '8264', '8265', '8266', '8267', '8268', '8269', '8270', '8271', '8272', '8273', '8274', '8275', '8276', '8277', '8278', '8279', '8280', '8281', '8282', '8283', '8284', '8285', '8286', '8287', '8288', '8289', '8290', '8291', '8292', '8293', '8294', '8295', '8296', '8297', '8298', '8299', '8300']
+lastrunid: FALSE
+
+# screwedUp: FALSE
+
+# figure settings
+
+figure_redo_only: FALSE
+recolorize: "range-median"
+absolute_yAxis: TRUE
