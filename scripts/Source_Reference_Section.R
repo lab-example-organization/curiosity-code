@@ -74,7 +74,7 @@ referencesection <- function (referencing_script) {
     # library (yaml)
     # library (R.utils)
     # library (dplyr)
-    return (print (paste0 ('See You Space Cowhand')))
+    return (print (paste0 (referencing_script, ' packages are loaded')))
     # return (sessionInfo (package = NULL))
 
 }

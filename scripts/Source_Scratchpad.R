@@ -954,28 +954,29 @@ for (inhPattern in 1:4) {
   }
 }
 
+(
 
-# Triple 'for' loop, or triple 'sapply'?
+    # Triple 'for' loop, or triple 'sapply'?
 
-# duh, triple 'sapply'
+    # duh, triple 'sapply'
 
-# sapply()
+    # sapply()
 
-# CombineSingles(1,1,1,1)
-# CombineSingles(1,1,2,1)
-# CombineSingles(1,1,3,1)
-# CombineSingles(1,1,4,1)
-# CombineSingles(1,1,5,1)
-# CombineSingles(1,1,6,1)
-# CombineSingles(1,1,7,1)
-# CombineSingles(1,1,8,1)
-# CombineSingles(1,2,1,1)
-# CombineSingles(1,2,2,1)
-# CombineSingles(1,2,3,1)
-# .
-# .
-# .
-# CombineSingles(1,1,1,2)
+    # CombineSingles(1,1,1,1)
+    # CombineSingles(1,1,2,1)
+    # CombineSingles(1,1,3,1)
+    # CombineSingles(1,1,4,1)
+    # CombineSingles(1,1,5,1)
+    # CombineSingles(1,1,6,1)
+    # CombineSingles(1,1,7,1)
+    # CombineSingles(1,1,8,1)
+    # CombineSingles(1,2,1,1)
+    # CombineSingles(1,2,2,1)
+    # CombineSingles(1,2,3,1)
+    # .
+    # .
+    # .
+    # CombineSingles(1,1,1,2)
 
 
 
@@ -992,76 +993,76 @@ for (inhPattern in 1:4) {
 
 
 
-#   library(magick)
-#   library(stringr)
+    #   library(magick)
+    #   library(stringr)
 
-#   regularNames <- c("EndCurValP1F",
-#                     "EndCurValP1M",
-#                     "EndCurValP2F",
-#                     "EndCurValP2M",
-#                     "EndSRpValP1F",
-#                     "EndSRpValP1M",
-#                     "EndSRpValP2F",
-#                     "EndSRpValP2M"
-#   )
+    #   regularNames <- c("EndCurValP1F",
+    #                     "EndCurValP1M",
+    #                     "EndCurValP2F",
+    #                     "EndCurValP2M",
+    #                     "EndSRpValP1F",
+    #                     "EndSRpValP1M",
+    #                     "EndSRpValP2F",
+    #                     "EndSRpValP2M"
+    #   )
 
-#   SxMtPop_list <- c(
-#     "Ending Curiosity Values - Pop 1 Females_slice_",
-#     "Ending Curiosity Values - Pop 1 Males_slice_",
-#     "Ending Curiosity Values - Pop 2 Females_slice_",
-#     "Ending Curiosity Values - Pop 2 Males_slice_",
-#     "Ending Sylrep Values - Pop 1 Females_slice_",
-#     "Ending Sylrep Values - Pop 1 Males_slice_",
-#     "Ending Sylrep Values - Pop 2 Females_slice_",
-#     "Ending Sylrep Values - Pop 2 Males_slice_"
-#   )
+    #   SxMtPop_list <- c(
+    #     "Ending Curiosity Values - Pop 1 Females_slice_",
+    #     "Ending Curiosity Values - Pop 1 Males_slice_",
+    #     "Ending Curiosity Values - Pop 2 Females_slice_",
+    #     "Ending Curiosity Values - Pop 2 Males_slice_",
+    #     "Ending Sylrep Values - Pop 1 Females_slice_",
+    #     "Ending Sylrep Values - Pop 1 Males_slice_",
+    #     "Ending Sylrep Values - Pop 2 Females_slice_",
+    #     "Ending Sylrep Values - Pop 2 Males_slice_"
+    #   )
 
-#   slice_names <- c(
-#     "slice_1",
-#     "slice_2",
-#     "slice_3",
-#     "slice_4",
-#     "slice_5"
-#   )
+    #   slice_names <- c(
+    #     "slice_1",
+    #     "slice_2",
+    #     "slice_3",
+    #     "slice_4",
+    #     "slice_5"
+    #   )
 
-#   UpperDir <- file.path("results", "Heatmaps", "output_objects")
+    #   UpperDir <- file.path("results", "Heatmaps", "output_objects")
 
-#   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
+    #   source("/home/parker/Documents/projects/curmodel_pcomp1/Code/curiosity-code/scripts/Source_Magick_Functions.R")
 
-#     slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
-#       slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
-#     slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
-#       slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
-#     slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
-#       slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
-#     slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
-#       slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
-#     slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
-#       slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
-#   hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
-#   image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
+    #     slice_1 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
+    #       slice_names[1], paste0(SxMtPop_list[metrics_num], "1.png")))
+    #     slice_2 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
+    #       slice_names[2], paste0(SxMtPop_list[metrics_num], "2.png")))
+    #     slice_3 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
+    #       slice_names[3], paste0(SxMtPop_list[metrics_num], "3.png")))
+    #     slice_4 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
+    #       slice_names[4], paste0(SxMtPop_list[metrics_num], "4.png")))
+    #     slice_5 <- image_read(file.path(UpperDir, heatmapSource_folderList[heatmap_num],
+    #       slice_names[5], paste0(SxMtPop_list[metrics_num], "5.png")))
+    #   hashtagOutput <- mult_ImgAppend(slice_1, slice_2, slice_3, slice_4, slice_5)
+    #   image_write(hashtagOutput, path = file.path(UpperDir, heatmapSource_folderList[heatmap_num], str_split(SxMtPop_list[metrics_num], "_slice_")[[1]][1]))
 
 
 
-#   # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
-#   # output.list  <- input.list[list.condition]
+    #   # list.condition <- sapply(arguments, function(x) class(x)=="desired.class")
+    #   # output.list  <- input.list[list.condition]
 
 
-#   for (
-#     slice in 1:5
-#   ) {
-#     tempFigs[slice] <- image_read(file.path(
-#       UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], paste0(SxMtPop_list[metrics_num], slice, ".png")
-#       )
-#     )
-#   }
-#   hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
-#   image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
+    #   for (
+    #     slice in 1:5
+    #   ) {
+    #     tempFigs[slice] <- image_read(file.path(
+    #       UpperDir, heatmap_folderList[heatmap_num], slice_names[slice], paste0(SxMtPop_list[metrics_num], slice, ".png")
+    #       )
+    #     )
+    #   }
+    #   hashtagOutput <- image_append(c(tempFigs[1], tempFigs[2], tempFigs[3], tempFigs[4], tempFigs[5]))
+    #   image_write(hashtagOutput, path = file.path(UpperDir, heatmap_folderList[heatmap_num]))
 
 
 
 
-# }
+    # }
 
 
 
@@ -1082,28 +1083,28 @@ for (inhPattern in 1:4) {
 
 
 
-# source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
+    # source(file.path("scripts", "Source_AssignMultVar_BinaryMode.R"))
 
-#   UpperDir <- file.path("results", "Heatmaps", "output_objects")
+    #   UpperDir <- file.path("results", "Heatmaps", "output_objects")
 
-#   for (
-#     slice in 1:5
-#   ) {
-#     c("temp1", "temp2", "temp3", "temp4", "temp5") %=% c(
-#       image_read(file.path(UpperDir, heatmap_folderList[heatmap_num], ))
-#     )
-#   }
+    #   for (
+    #     slice in 1:5
+    #   ) {
+    #     c("temp1", "temp2", "temp3", "temp4", "temp5") %=% c(
+    #       image_read(file.path(UpperDir, heatmap_folderList[heatmap_num], ))
+    #     )
+    #   }
 
-# }
+    # }
 
 
 
-# importMe <- file.path("home", "parker", "Downloads", "crowAndLorikeets1.jpg")
-# image_read(importMe)
+    # importMe <- file.path("home", "parker", "Downloads", "crowAndLorikeets1.jpg")
+    # image_read(importMe)
 
-# importMe <- image_read(file.path("results", "Heatmaps", "output_objects", "190421_slices_-_sameinh_maleBias", "slice_1", "Ending Curiosity Values - Pop 1 Females.png"))
+    # importMe <- image_read(file.path("results", "Heatmaps", "output_objects", "190421_slices_-_sameinh_maleBias", "slice_1", "Ending Curiosity Values - Pop 1 Females.png"))
 
-# image_write(CrLk5, path = "CrowAndLorikeetsFinal.png", format = "png")
+    # image_write(CrLk5, path = "CrowAndLorikeetsFinal.png", format = "png")
 
 
 
@@ -1115,144 +1116,145 @@ for (inhPattern in 1:4) {
 
 
 
-# # Make max-and-min values in an object,
-# # plot five of those objects for each slice set going
-# # through the 3d-array of heatmap data, along each dimension
-# maxAndMinPlot <- function (
+    # # Make max-and-min values in an object,
+    # # plot five of those objects for each slice set going
+    # # through the 3d-array of heatmap data, along each dimension
+    # maxAndMinPlot <- function (
 
-# ) {
+    # ) {
 
-#   # Read in the RDS file with the data array for the heatmaps
+    #   # Read in the RDS file with the data array for the heatmaps
 
-#   #   List folders that contain the .RData file (should be the only one in that dir contained in this list)
+    #   #   List folders that contain the .RData file (should be the only one in that dir contained in this list)
 
-  # heatmapDB <- c(
-  #   "190419_slices_-_oppsinh_femaleBias",
-  #   "190419_slices_-_oppsinh_maleBias",
-  #   "190421_slices_-_sameinh_femaleBias",
-  #   "190421_slices_-_sameinh_maleBias"
-  # )
-#
-  # tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[1], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[1])), pattern = ".RData")))
+    # heatmapDB <- c(
+    #   "190419_slices_-_oppsinh_femaleBias",
+    #   "190419_slices_-_oppsinh_maleBias",
+    #   "190421_slices_-_sameinh_femaleBias",
+    #   "190421_slices_-_sameinh_maleBias"
+    # )
+    #
+    # tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[1], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[1])), pattern = ".RData")))
 
 
 
-#   # opps = 2, 1 same = 4, 3 <-- fileOrder for making the figure!
+    #   # opps = 2, 1 same = 4, 3 <-- fileOrder for making the figure!
 
-#   maxNMinArray <- array(c(rep(0, 240)),
-#                       c(6,8,5),
-#                       list(
-#                         # c("p2mVfem", "p1mVfem", "p1mVp2m", "p2fVmal", "p1fVmal", "p1fVp2f"),
-#                         c("p1m", "p2m", "fem", "p1f", "p2f", "mal"),
-#                         c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal", "ES pop1fem", "ES pop1mal", "ES pop2fem", "ES pop2mal"),
-#                         c("slice 1", "slice 2", "slice 3", "slice 4", "slice 5")))
-#   #   Read files from folderlist database
-#   for (filechunk in 1:2) {
-#     fileOrder <- c(2, 1)
-#     tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]])), pattern = ".RData")))
+    #   maxNMinArray <- array(c(rep(0, 240)),
+    #                       c(6,8,5),
+    #                       list(
+    #                         # c("p2mVfem", "p1mVfem", "p1mVp2m", "p2fVmal", "p1fVmal", "p1fVp2f"),
+    #                         c("p1m", "p2m", "fem", "p1f", "p2f", "mal"),
+    #                         c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal", "ES pop1fem", "ES pop1mal", "ES pop2fem", "ES pop2mal"),
+    #                         c("slice 1", "slice 2", "slice 3", "slice 4", "slice 5")))
+    #   #   Read files from folderlist database
+    #   for (filechunk in 1:2) {
+    #     fileOrder <- c(2, 1)
+    #     tempHtMpArray <- readRDS(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]], list.files(file.path(file.path("results", "Heatmaps", "output_objects", heatmapDB[fileOrder[filechunk]])), pattern = ".RData")))
 
-#     for (SxMtPop in 1:8) {
-#       for (slice in 1:5) {
-        # dat_array_doh <- array(c(
-        #   rep(c(slice, 1, 1, 1), 2),
-        #   slice,
-        #   slice,
-        #   rep(c(5, 5, 5, slice), 2)
-        # ), c(3,3,2))
+    #     for (SxMtPop in 1:8) {
+    #       for (slice in 1:5) {
+            # dat_array_doh <- array(c(
+            #   rep(c(slice, 1, 1, 1), 2),
+            #   slice,
+            #   slice,
+            #   rep(c(5, 5, 5, slice), 2)
+            # ), c(3,3,2))
 
-#         heatmapRangeDatasetOne <- tempHtMpArray[
-#           dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
-#           dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
-#           dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
-#           SxMtPop]
-#         heatmapRangeDatasetTwo <- tempHtMpArray[
-#           dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
-#           dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
-#           dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
-#           SxMtPop]
-#         heatmapRangeDatasetTre <- tempHtMpArray[
-#           dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
-#           dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
-#           dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
-#           SxMtPop]
-#         heatmap_min <- c(
-#           round(min(heatmapRangeDatasetOne), 2),
-#           round(min(heatmapRangeDatasetTwo), 2),
-#           round(min(heatmapRangeDatasetTre), 2)
-#         )
-#         heatmap_max <- c(
-#           round(max(heatmapRangeDatasetOne), 2),
-#           round(max(heatmapRangeDatasetTwo), 2),
-#           round(max(heatmapRangeDatasetTre), 2)
-#         )
+    #         heatmapRangeDatasetOne <- tempHtMpArray[
+    #           dat_array_doh[1,1,1]:dat_array_doh[1,1,2],
+    #           dat_array_doh[1,2,1]:dat_array_doh[1,2,2],
+    #           dat_array_doh[1,3,1]:dat_array_doh[1,3,2],
+    #           SxMtPop]
+    #         heatmapRangeDatasetTwo <- tempHtMpArray[
+    #           dat_array_doh[2,1,1]:dat_array_doh[2,1,2],
+    #           dat_array_doh[2,2,1]:dat_array_doh[2,2,2],
+    #           dat_array_doh[2,3,1]:dat_array_doh[2,3,2],
+    #           SxMtPop]
+    #         heatmapRangeDatasetTre <- tempHtMpArray[
+    #           dat_array_doh[3,1,1]:dat_array_doh[3,1,2],
+    #           dat_array_doh[3,2,1]:dat_array_doh[3,2,2],
+    #           dat_array_doh[3,3,1]:dat_array_doh[3,3,2],
+    #           SxMtPop]
+    #         heatmap_min <- c(
+    #           round(min(heatmapRangeDatasetOne), 2),
+    #           round(min(heatmapRangeDatasetTwo), 2),
+    #           round(min(heatmapRangeDatasetTre), 2)
+    #         )
+    #         heatmap_max <- c(
+    #           round(max(heatmapRangeDatasetOne), 2),
+    #           round(max(heatmapRangeDatasetTwo), 2),
+    #           round(max(heatmapRangeDatasetTre), 2)
+    #         )
 
-#         maxNMinArray[((1 + 3 * (filechunk - 1)):(3 + 3 * (filechunk - 1))), SxMtPop, slice] <- heatmap_max - heatmap_min
+    #         maxNMinArray[((1 + 3 * (filechunk - 1)):(3 + 3 * (filechunk - 1))), SxMtPop, slice] <- heatmap_max - heatmap_min
 
-#       }
-#     }
+    #       }
+    #     }
 
-#   }
+    #   }
 
-#   return (maxNMinArray)
-# }
+    #   return (maxNMinArray)
+    # }
 
-# plot <- maxAndMinPlot()
-# ECplot <- plot[,1:4,]
-# ESplot <- plot[,5:8,]
+    # plot <- maxAndMinPlot()
+    # ECplot <- plot[,1:4,]
+    # ESplot <- plot[,5:8,]
 
-# colorSeqMultPalette <- list(
-#     BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
-#     BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
-#     GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
-#     OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
-#     PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
-#     PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
-#     PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
-#     RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
-#     YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
-#     YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
-#     YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
-#     YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
-# ECorES <- c("EC", "ES") # split = variable name
+    # colorSeqMultPalette <- list(
+    #     BuGn = colorRampPalette(c("#e5f5f9", "#99d8c9", "#2ca25f")), # 3-class BuGn
+    #     BuPu = colorRampPalette(c("#e0ecf4", "#9ebcda", "#8856a7")), # 3-class BuPu
+    #     GnBu = colorRampPalette(c("#e0f3db", "#a8ddb5", "#43a2ca")), # 3-class GnBu
+    #     OrRd = colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33")), # 3-class OrRd
+    #     PuBu = colorRampPalette(c("#ece7f2", "#a6bddb", "#2b8cbe")), # 3-class PuBu
+    #     PuBuGn = colorRampPalette(c("#ece2f0", "#a6bddb", "#1c9099")), # 3-class PuBuGn
+    #     PuRd = colorRampPalette(c("#e7e1ef", "#c994c7", "#dd1c77")), # 3-class PuRd
+    #     RdPu = colorRampPalette(c("#fde0dd", "#fa9fb5", "#c51b8a")), # 3-class RdPu
+    #     YlGn = colorRampPalette(c("#f7fcb9", "#addd8e", "#31a354")), # 3-class YlGn
+    #     YlGnBu = colorRampPalette(c("#edf8b1", "#7fcdbb", "#2c7fb8")), # 3-class YlGnBu
+    #     YlOrBr = colorRampPalette(c("#fff7bc", "#fec44f", "#d95f0e")), # 3-class YlOrBr
+    #     YlOrRd = colorRampPalette(c("#ffeda0", "#feb24c", "#f03b20")))
+    # ECorES <- c("EC", "ES") # split = variable name
 
-# png(filename = paste0(ECorES[split],"_slice", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-# par(mfrow=c(2,5))
+    # png(filename = paste0(ECorES[split],"_slice", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+    # par(mfrow=c(2,5))
 
-# for (split in 1:2) {
-#   for (slice in 1:5) {
-#     ECplot <- apply(ECplot[,,slice], 2, rev)
-#     image(t(ECplot[,,slice]), col = colorSeqMultPalette$PuBuGn(100),
-#       ylab = c("p1m", "p2m", "fem", "p1f", "p2f", "mal"),
-#       xlab = c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal"))
-#   }
-# }
+    # for (split in 1:2) {
+    #   for (slice in 1:5) {
+    #     ECplot <- apply(ECplot[,,slice], 2, rev)
+    #     image(t(ECplot[,,slice]), col = colorSeqMultPalette$PuBuGn(100),
+    #       ylab = c("p1m", "p2m", "fem", "p1f", "p2f", "mal"),
+    #       xlab = c("EC pop1fem", "EC pop1mal", "EC pop2fem", "EC pop2mal"))
+    #   }
+    # }
 
 
 
-# image(ECplot[,,1])
-# image(t(ECplot[,,1]))
+    # image(ECplot[,,1])
+    # image(t(ECplot[,,1]))
 
-# # image(x, y, z, zlim, xlim, ylim, col = heat.colors(12),
-# #       add = FALSE, xaxs = "i", yaxs = "i", xlab, ylab,
-# #       breaks, oldstyle = FALSE, useRaster, …)
+    # # image(x, y, z, zlim, xlim, ylim, col = heat.colors(12),
+    # #       add = FALSE, xaxs = "i", yaxs = "i", xlab, ylab,
+    # #       breaks, oldstyle = FALSE, useRaster, …)
 
-# # mat1 <- apply(mat1, 2, rev)
-# # image(1:3, 1:3, t(mat1))
+    # # mat1 <- apply(mat1, 2, rev)
+    # # image(1:3, 1:3, t(mat1))
 
-# # meanz <- cursitylist[[number_of_runs + 1]][10,population,]
-# #     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
-# #     file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".png")
-# #     minY <- mins_n_maxes[2,population,1]
-# #     maxY <- mins_n_maxes[2,population,2]
-# #     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-# #     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
-# #     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
-# #     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
-# #                                   ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))),
-# #         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
-# #     eval(parse(text=stuff))
-# #     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
-# #     dev.off()
+    # # meanz <- cursitylist[[number_of_runs + 1]][10,population,]
+    # #     stuff <- paste0("points(cursitylist[[", 1:number_of_runs, "]][10,population,],col=\"grey\", cex=0.2)")
+    # #     file_name <- paste0(R$datez, "_", R$run_name, "_tutor_selections_pop", population, ".png")
+    # #     minY <- mins_n_maxes[2,population,1]
+    # #     maxY <- mins_n_maxes[2,population,2]
+    # #     png(filename = paste0(saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+    # #     plot(meanz, xlab = "Timestep", ylab = paste0("Pop ", population, " Tutor Selection Chances"),cex=0.2, ylim=c(minY, maxY), xaxt="n")
+    # #     #axis(side = 1, at = c(which((1:P$num_timesteps)%%(P$num_timesteps/10)==0)), labels = which((1:P$num_timesteps)%%(P$num_timesteps/10)==0))
+    # #     axis(side = 1, at = c(seq.int(0,length(cursitylist[[number_of_runs + 1]][10,population,]),
+    # #                                   ((length(cursitylist[[number_of_runs + 1]][10,population,]))/10))),
+    # #         labels = c(seq.int(0,num_timesteps,(num_timesteps/10))))
+    # #     eval(parse(text=stuff))
+    # #     lines(cursitylist[[number_of_runs + 1]][10,population,],col="black", cex=0.2)
+    # #     dev.off()
+)
 
 
 
@@ -1417,3 +1419,22 @@ working_file <- function (
 
     # }
 }
+
+
+
+
+
+
+
+
+par(mfrow = c(2,3))
+
+path_1 <- image_read(file.path(), )
+path_2 <- image_read(file.path(), )
+path_3 <- image_read(file.path(), )
+path_4 <- image_read(file.path(), )
+path_5 <- image_read(file.path(), )
+path_6 <- image_read(file.path(), )
+
+
+

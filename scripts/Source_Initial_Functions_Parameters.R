@@ -18,7 +18,7 @@ rpf <- function (numberofrepeats, divisions_per_repeat, zeroonevalue) {
 
 define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, one_pop_singers,
                               curlearnprob, learnprob, randlearnprob, stand.dev, curinhproportion,
-                              mate_selection_type, selection_round_up) {
+                              mate_selection_type, tutor_selection_type, selection_round_up) {
   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works (TM) :P
   if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsl %% 1 != 0) {
     stop ("(num_pop, pop_size, nsl) need to be integers")}
@@ -117,6 +117,7 @@ define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, on
                      stand.dev = stand.dev,
                      curinhproportion = curinhproportion,
                      mate_selection_type = mate_selection_type,
+                     tutor_selection_type = tutor_selection_type,
                      selection_round_up = selection_round_up
                      )
 

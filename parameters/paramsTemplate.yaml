@@ -27,6 +27,7 @@ num_sylls_per_prob_lvl: 8
 number_of_reps: 10
 standard_deviation: 2
 mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
+tutor_selection_type: "curiosity"
 selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
 
 # curinh.pattern - calling either the row number
@@ -45,7 +46,9 @@ invasionsex: 'female' # male or female (or, perhaps, both?)
 invasiontraitvalue: [0.85, 0.1]
 
 indrunredo: FALSE
+redodir: FALSE # if not false, needs to be an absolute path to the working directory that contains the original files ### list.files(file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv"), pattern = "_4098")
 
+# Last Run Arguments - if lastruninit is TRUE, lastrunid gives the unique marker (simnumber) for the run being referenced (if more than one run, then the relevant source marker needs to occur in a list at the same position as the current sim)
 lastruninit: FALSE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
@@ -61,5 +64,6 @@ lastrunid: FALSE
 # figure settings
 
 figure_redo_only: FALSE
-recolorize: TRUE
+compare_subsets: FALSE
+recolorize: "range-median"
 absolute_yAxis: TRUE

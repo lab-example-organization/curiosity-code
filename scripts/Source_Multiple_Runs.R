@@ -395,38 +395,11 @@ life_cycle <- function (params, shifting_curstart,
     params$curstarts [[shifting_curstart]]$scmax [2],
     params$curstarts [[shifting_curstart]]$scmax [3],
     params$curstarts [[shifting_curstart]]$scmax [4])
-  # simnumber = subsetorsequence ###
-  # runlength = params$runlength
-  # syllearnstyle = params$syllearnstyle
   vertoblearn = c (
     params$vertoblearn$vertical$learn,
     params$vertoblearn$vertical$invent,
     params$vertoblearn$oblique$learn,
     params$vertoblearn$oblique$invent)
-  # syldist = params$syldist
-  # curinh_value = params$curinh_value
-  # number_populations = params$num_pop
-  # population_size = params$pop_size
-  # syllable_number = params$sylnum
-  # number_sylls_probability_level = params$num_sylls_per_prob_lvl
-  # standdev = as.numeric (params$standard_deviation)
-  # curinh_style = curinh_style ###
-  # recordingsimpfact = params$recordsimplifyfactor
-  # one_pop_singers = params$one_pop_singers
-  # curinhproportion = singleormixture ### # only used if curinh_pattern = 5
-  # directorydate = dirdate ###
-  # invasion = params$traitinvasion
-  # invktmstps = params$invasionthoutmstps
-  # invpopsize = params$invasionpopsize
-  # invstyle = params$invasionstyle
-  # invpop = params$invasionpop
-  # invsex = params$invasionsex
-  # invtraitvalue = params$invasiontraitvalue
-  # initfromlastrun = params$lastruninit
-  # lastrunobject = lastrun_init[[rep_number]] ###
-  # mate_selection_type = params$mate_selection_type
-  # selection_round_up = params$selection_round_up
-  # lastrunobject = lastrun_init[, , , rep_number]
 
   docnamez <- makedocnamez (
     scmin = scmin, scmax = scmax, simnumber = subsetorsequence, runlength = params$runlength,
@@ -446,6 +419,7 @@ life_cycle <- function (params, shifting_curstart,
     randlearnprob = c (vertoblearn[4], vertoblearn[3]),
     stand.dev = as.numeric (params$standard_deviation), curinhproportion = singleormixture,
     mate_selection_type = params$mate_selection_type,
+    tutor_selection_type = params$tutor_selection_type,
     selection_round_up = params$selection_round_up
   )
 
@@ -608,7 +582,7 @@ life_cycle <- function (params, shifting_curstart,
 
     # print ("console_copy_sink")
     sink (file = file.path ("source", "temp", paste0 (
-      simnumber, "_console_copy.txt")), append = TRUE, split = TRUE)
+      subsetorsequence, "_console_copy.txt")), append = TRUE, split = TRUE)
     print (paste0 ("Sim Number ", strsplit (docnamez,
       "_") [[1]][2], " - storing data packet ",
       thousand_timesteps, " at ", Sys.time()))
@@ -640,7 +614,7 @@ life_cycle <- function (params, shifting_curstart,
         simplify==1000/params$recordsimplifyfactor
       )&&(single_timestep==params$recordsimplifyfactor)) {
       sink (file = file.path ("source", "temp",
-        paste0 (simnumber, "_sim_data.txt")), append = TRUE)
+        paste0 (subsetorsequence, "_sim_data.txt")), append = TRUE)
       print (foldername)
       sink ()
     }
@@ -712,13 +686,12 @@ multi_runs <- function (shifting_curstart, paramssource,
     #   number_of_repeats = number_of_reps,
     #   paramssource = paramssource, recolorize = params$recolorize))
   # } else {
+    thing <- c()
+ for(i in 1:length(params$redodir)) {thing <- append(thing, params$redodir[i])}
+
   if (params$indrunredo != FALSE) {
     subsetorsequence <- params$simnumberstart [shifting_curstart]
     singleormixture <- params$curinhdistribution [shifting_curstart]
-    source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-    return (figprodmultrun (specificsimnumber = subsetorsequence,
-      number_of_repeats = number_of_reps,
-      paramssource = paramssource, recolorize = params$recolorize))
   } else {
       subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
       singleormixture <- params$curinhdistribution
@@ -782,16 +755,19 @@ multi_runs <- function (shifting_curstart, paramssource,
         (format (Sys.time(), "%F-%H%M%S"))))
     }
 
-    source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-    
-    return(figprodmultrun (specificsimnumber = subsetorsequence,
-                  number_of_repeats = number_of_reps,
-                  paramssource = paramssource,
-                  recolorize = params$recolorize,
-                  results_tenK_dir = FALSE,
-                  lineplots = TRUE,
-                  curMeans_only = FALSE))
   }
+
+  source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
+  
+  return(figprodmultrun (specificsimnumber = subsetorsequence,
+                          #number_of_repeats = number_of_reps,
+                          paramssource = paramssource,
+                          # recolorize = params$recolorize,
+                          # results_tenK_dir = FALSE,
+                          lineplots = TRUE,
+                          curMeans_only = FALSE#,
+                          # compare_subsets = params$compare_subsets
+                          ))
 
 
   

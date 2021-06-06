@@ -266,7 +266,13 @@ sing.selection <- function (params_SS, temp_data_SS,
       selection_path <- 3
     }
   } else if (select_type == 1) {
-    selection_path <- 1
+    if (params_SS$tutor_selection_type == "curiosity") {
+      selection_path <- 1
+    } else if (params_SS$tutor_selection_type == "repertoire_size") {
+      selection_path <- 2
+    } else if (params_SS$tutor_selection_type == "SRS_then_curiosity") {
+      selection_path <- 3
+    }#selection_path <- 1
   }
 
   for (divisible in 1 : 2) {

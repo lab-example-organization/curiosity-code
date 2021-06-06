@@ -7,13 +7,21 @@ curstarts:
     scmax: [11,11,11,11]
   - scmin: [ 8, 8, 8, 8]
     scmax: [11,11,11,11]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
+  - scmin: [15,15,15,15]
+    scmax: [20,20,20,20]
 
   
 # distribution between 0.25 and 0.5 (width uniform 0.1): 8-11 (0.2-0.3), 9-12 (0.25-0.35), 11-14 (0.3-0.4), 12-15 (0.35-0.45), 14-17 (0.4-0.5), 15-20 (0.45-0.55)
 # width around 0.5: 11-25 (0.3-0.7), 12-24 (0.35-0.65), 14-22 (0.4-0.6), 15-20 (0.45-0.55), 16-18 (0.49-0.51)
 # 8-11, 9-12, 11-14, 12-15, 14-17, 15-20, 11-25, 12-24, 14-22, 16-18
-simnumberstart: [10917, 10918, 10919, 10920]
-runlength: '2k'
+simnumberstart: [10909, 10910, 10911, 10912, 10913, 10914, 10915, 10916]
+runlength: '10k'
 Syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
@@ -28,7 +36,7 @@ num_pop: 2
 pop_size: 400
 sylnum: 156
 num_sylls_per_prob_lvl: 8
-number_of_reps: 5
+number_of_reps: 50
 standard_deviation: 2
 mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
 selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
@@ -36,7 +44,8 @@ selection_round_up: FALSE # if there's a part of tutor selection involving the s
 # curinh.pattern - calling either the row number
 # or name of row for different curiosity inheritance patterns -
 # 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
-curinh_pattern: [1, 2, 3, 5]
+curinh_pattern: [1, 2, 3, 5, 
+                 1, 2, 3, 5]
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
 curinhdistribution: 0.5 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
@@ -50,6 +59,7 @@ invasiontraitvalue: [0.85, 0.1]
 
 indrunredo: TRUE
 
+# Last Run Arguments - if lastruninit is TRUE, lastrunid gives the unique marker (simnumber) for the run being referenced (if more than one run, then the relevant source marker needs to occur in a list at the same position as the current sim)
 lastruninit: FALSE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
@@ -64,6 +74,7 @@ lastrunid: FALSE
 
 # figure settings
 
-figure_redo_only: FALSE
+figure_redo_only: TRUE
+compare_subsets: FALSE
 recolorize: "range-median"
 absolute_yAxis: TRUE

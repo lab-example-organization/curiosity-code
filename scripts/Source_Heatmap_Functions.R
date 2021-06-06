@@ -1223,56 +1223,56 @@ individualfigures <- function (
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 6) {
           axis (1,c (-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-            c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+            c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
             c ("", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.1, 0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
-            c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
+            c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1),
             c ("", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 7) {
           axis (1,c (-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-            c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+            c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
             c ("", "", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.083,   0, 0.083, 0.167, 0.25, 0.334, 0.416, 0.5, 0.583, 0.667, 0.75, 0.833, 0.916, 1.0, 1.083),
-                c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
+                c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.083, 0.083, 0.25, 0.416, 0.583, 0.75, 0.916, 1.083),
             c ("", "", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 8) {
           axis (1,c (-0.071,   0, 0.071, 0.145, 0.216, 0.287, 0.358, 0.429, 0.5, 0.571, 0.645, 0.716, 0.787, 0.858, 0.929, 1.0, 1.071),
-            c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+            c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",   temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.0714, 0.071, 0.216, 0.358, 0.5, 0.645, 0.787, 0.929, 1.071),
             c ("", "", "", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.071,   0, 0.071, 0.142, 0.213, 0.284, 0.356, 0.427, 0.5, 0.571, 0.642, 0.713, 0.784, 0.855, 0.93, 1.0, 1.071),
-                c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
+                c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "", temptemp[[7]][1],    "",    temptemp[[8]][1],    ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.071, 0.071, 0.213, 0.356, 0.498, 0.64, 0.782, 0.93, 1.071),
             c ("", "", "", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
         } else if (input_list$biassize == 9) {
           axis (1,c (-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-            c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+            c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (1,c (-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
             c ("", "", "", "", "", "", "", "", "", ""),
             TRUE,-0.03,NA,FALSE,cex.axis=1, tck = -0.03)
 
           axis (2,c (-0.0625,   0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625),
-                c ("", temptemp[[1]][1], "", temptemp[[2]][1], temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
+                c ("", temptemp[[1]][1], "", temptemp[[2]][1], "", temptemp[[3]][1], "", temptemp[[4]][1], "", temptemp[[5]][1], "", temptemp[[6]][1], "",  temptemp[[7]][1],    "",    temptemp[[8]][1],    "",    temptemp[[9]][1],    ""),
             TRUE,0,NA,FALSE,cex.axis=0.8, tck = 0)
           axis (2,c (-0.0625, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 1.0625),
             c ("", "", "", "", "", "", "", "", "", ""),
