@@ -686,15 +686,15 @@ multi_runs <- function (shifting_curstart, paramssource,
     #   number_of_repeats = number_of_reps,
     #   paramssource = paramssource, recolorize = params$recolorize))
   # } else {
-    thing <- c()
- for(i in 1:length(params$redodir)) {thing <- append(thing, params$redodir[i])}
+ #  thing <- c()
+ #  for(i in 1:length(params$redodir)) {thing <- append(thing, params$redodir[i])}
 
   if (params$indrunredo != FALSE) {
     subsetorsequence <- params$simnumberstart [shifting_curstart]
     singleormixture <- params$curinhdistribution [shifting_curstart]
   } else {
-      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-      singleormixture <- params$curinhdistribution
+    subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+    singleormixture <- params$curinhdistribution
     
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),

@@ -22,10 +22,10 @@ figprodmultrun <- function (
   number_of_repeats <- as.numeric (params$number_of_reps)
 
   # example of text for results_tenK_dir is "childLateSmolInvFemLow"
-  #     print ("figprodmultrunStart")
+  # print ("figprodmultrunStart")
   source (file.path ("scripts", "Source_Visualizing_Data.R"))
 
-  #     print ("params load")
+  # print ("params load")
   converted_data <- vector ("list", number_of_repeats)
 
   if (params$redodir != FALSE) {
@@ -41,10 +41,10 @@ figprodmultrun <- function (
 
   individual_simnumber_folder <- list.files(file.path (simnumber_host_folder), pattern = paste0 ("*_", specificsimnumber, "*_"))
       
-  variable_dir <- file.path(simnumber_host_folder, individual_simnumber_folder, "variable_store")
+  variable_dir <- file.path(simnumber_host_folder, individual_simnumber_folder, "variable_store")[length(file.path(simnumber_host_folder, individual_simnumber_folder, "variable_store"))]
   if (! (dir.exists (variable_dir))) {stop("variable_dir does not exist")}
   
-  multirun_dir <- file.path(simnumber_host_folder, individual_simnumber_folder, "multirun_output")
+  multirun_dir <- file.path(simnumber_host_folder, individual_simnumber_folder, "multirun_output")[length(file.path(simnumber_host_folder, individual_simnumber_folder, "multirun_output"))]
   
   if (! (dir.exists (multirun_dir))) {dir.create (file.path (multirun_dir))}
 
@@ -88,14 +88,20 @@ figprodmultrun <- function (
       
       if (runs_visual == 1) {
         multiRunTime <- format (Sys.time (), "%F-%H%M%S")
-    #     print ("runs_visual == 1")
-        if (! (dir.exists (file.path (multirun_dir, paste0 (multiRunTime,
-            "-GMT-multirun-output"))))) {
-    #     print ("makin specific multirun_output folder")
+    # print ("runs_visual == 1")
+        if (length(list.files (file.path (multirun_dir))) == 0) {
           dir.create (file.path (multirun_dir, paste0 (multiRunTime,
             "-GMT-multirun-output")))
+        } else {
+          
+          if (! (dir.exists (file.path (multirun_dir, list.files (file.path (multirun_dir), pattern = "-GMT-multirun-output"))[length(file.path (multirun_dir, list.files (file.path (multirun_dir), pattern = "-GMT-multirun-output")))]))) {
+    # print ("makin specific multirun_output folder")
+            dir.create (file.path (multirun_dir, paste0 (multiRunTime,
+              "-GMT-multirun-output")))
+          }
+
         }
-    #     print ("Do we need to record the list of folders?")
+    # print ("Do we need to record the list of folders?")
         if (! (file.exists (file.path (simnumber_host_folder, individual_simnumber_folder,
           paste0 ("Group_", specificsimnumber, "_folderList.RData"))))) {
             # print ("yes we do.")
@@ -104,16 +110,16 @@ figprodmultrun <- function (
         }
       }
     
-    #     print ("converted_data time")
+    # print ("converted_data time")
       converted_data <- concatenate_data (
         specific_run = runs_visual,
         converteddata = converted_data,
         parms = params,
         data_dir = multirun_folderlist)
-    #     print ("process_data time")
+    # print ("process_data time")
     }
 
-    #     print ("multirun_directory")
+    # print ("multirun_directory")
     multirun_directory <- paste0 (
       strsplit (multirun_folderlist [length(multirun_folderlist)],
       "variable") [[1]][1], "multirun_output/",
@@ -160,7 +166,7 @@ figprodmultrun <- function (
   #   #stop("readRDS (file = file.path (multirun_folderlist [1], 'metadata.RData'))")
   # }
   
-  #     print ("makin' lists")
+  # print ("makin' lists")
   datanames <- c ("CurHist","Cursity","SylDist","SylReps")
   listnames <- c ("hist","sity","sdst","repz")
   for (i in 1 : 4) {
@@ -175,11 +181,12 @@ figprodmultrun <- function (
   cursitylist <- vector (mode = "list", length = number_of_repeats + 1)
 
   multirun_directory <- paste0 (strsplit (multirun_folderlist [1], "variable") [[1]][1],
-                                "multirun_output/")
+                                "multirun_output")
 
   if (length (list.files (multirun_directory, pattern = "multirun-output")) != 0) {
     if (length (list.files (file.path (multirun_directory, list.files (multirun_directory, pattern = "multirun-output")))) != 0) {
-      multirun_directory <- paste0 (multirun_directory, list.files (multirun_directory, pattern = "multirun-output"), "/")
+      multirun_directory <- file.path (multirun_directory, list.files (multirun_directory, pattern = "multirun-output"))[
+                     length(file.path (multirun_directory, list.files (multirun_directory, pattern = "multirun-output")))]
     }
   }
   # else if (length (list.files (multirun_directory, pattern = "multirun-output")) == 0) {
@@ -187,38 +194,38 @@ figprodmultrun <- function (
   #                               "multirun_output/")
   # }
 
-  #     print ("sourcing from lists")
+  # print ("sourcing from lists")
   for (i in 1 : number_of_repeats) {
     # print (paste0 (multirun_directory, "/", histlist [i]))
-    tryCatch({curhistlist [[i]] <- readRDS (paste0 (multirun_directory, histlist [i]))}, error = function(e) {stop(paste0 (multirun_directory, histlist [i]))})
+    tryCatch({curhistlist [[i]] <- readRDS (file.path (multirun_directory, histlist [i]))}, error = function(e) {stop(file.path (multirun_directory, histlist [i]))})
     # print (paste0 (multirun_directory, "/", sitylist [i]))
-    tryCatch({cursitylist [[i]] <- readRDS (paste0 (multirun_directory, sitylist [i]))}, error = function(e) {stop(paste0 (multirun_directory, sitylist [i]))})
+    tryCatch({cursitylist [[i]] <- readRDS (file.path (multirun_directory, sitylist [i]))}, error = function(e) {stop(file.path (multirun_directory, sitylist [i]))})
     # print (paste0 (multirun_directory, "/", sdstlist [i]))
-    tryCatch({sdstbxnlist [[i]] <- readRDS (paste0 (multirun_directory, sdstlist [i]))}, error = function(e) {stop(paste0 (multirun_directory, sdstlist [i]))})
+    tryCatch({sdstbxnlist [[i]] <- readRDS (file.path (multirun_directory, sdstlist [i]))}, error = function(e) {stop(file.path (multirun_directory, sdstlist [i]))})
     # print (paste0 (multirun_directory, "/", repzlist [i]))
-    tryCatch({sylrepzlist [[i]] <- readRDS (paste0 (multirun_directory, repzlist [i]))}, error = function(e) {stop(paste0 (multirun_directory, repzlist [i]))})
+    tryCatch({sylrepzlist [[i]] <- readRDS (file.path (multirun_directory, repzlist [i]))}, error = function(e) {stop(file.path (multirun_directory, repzlist [i]))})
   }
-  #     print ("histlist")
+  # print ("histlist")
   for (i in 1 : length (curhistlist [[1]])) {
     eval (parse (text = paste0 ("curhistlist [[number_of_repeats + 1]][i] <- mean (c (curhistlist [[",
                             paste0 (1 : (number_of_repeats - 1),"]][i],curhistlist [[", collapse=''),
                             number_of_repeats, "]][i]))")))
   }
 
-  #     print (paste0 ("dimensions of curhistlist [[1]] - ", dim (curhistlist [[1]])))
+  # print (paste0 ("dimensions of curhistlist [[1]] - ", dim (curhistlist [[1]])))
   dim (curhistlist [[number_of_repeats + 1]]) <- dim (curhistlist [[1]])
 
-  #     print ("sitylist")
+  # print ("sitylist")
   for (i in 1 : length (cursitylist [[1]])) {
     eval (parse (text = paste0 ("cursitylist [[number_of_repeats + 1]][i] <- mean (c (cursitylist [[",
                             paste0 (1 : (number_of_repeats - 1),"]][i],cursitylist [[", collapse=''),
                             number_of_repeats, "]][i]))")))
   }
 
-  #     print (paste0 ("dimensions of cursitylist [[1]] - ", dim (cursitylist [[1]])))
+  # print (paste0 ("dimensions of cursitylist [[1]] - ", dim (cursitylist [[1]])))
   dim (cursitylist [[number_of_repeats + 1]]) <- dim (cursitylist [[1]])
 
-  #     print ("sdstlist")
+  # print ("sdstlist")
 
   for (i in 1 : length (sdstbxnlist [[1]])) {
     eval (parse (text = paste0 ("sdstbxnlist [[number_of_repeats + 1]][i] <- mean (c (sdstbxnlist [[",
@@ -226,10 +233,10 @@ figprodmultrun <- function (
                             number_of_repeats, "]][i]))")))
   }
 
-  #     print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
+  # print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
   dim (sdstbxnlist [[number_of_repeats + 1]]) <- dim (sdstbxnlist [[1]])
 
-  #     print ("repzlist")
+  # print ("repzlist")
 
   for (i in 1 : length (sylrepzlist [[1]])) {
     eval (parse (text = paste0 ("sylrepzlist [[number_of_repeats + 1]][i] <- mean (c (sylrepzlist [[",
@@ -237,10 +244,10 @@ figprodmultrun <- function (
                             number_of_repeats, "]][i]))")))
   }
 
-  #     print (paste0 ("dimensions of sylrepzlist [[1]] - ", dim (sylrepzlist [[1]])))
+  # print (paste0 ("dimensions of sylrepzlist [[1]] - ", dim (sylrepzlist [[1]])))
   dim (sylrepzlist [[number_of_repeats + 1]]) <- dim (sylrepzlist [[1]])
 
-  #     print ("last_stats")
+  # print ("last_stats")
   last_stats <- paste0 ("rm (sylrepz", number_of_repeats, ", sdstbxn", number_of_repeats,
                         ", cursity", number_of_repeats, ", curhist", number_of_repeats,
                         ", last_stats, histlist, sitylist, sdstlist, repzlist",
@@ -254,19 +261,19 @@ figprodmultrun <- function (
       strsplit(multirun_folderlist[1], "/")[[1]][2]
   )})
   # info now has all params info in list item [[4]] - change these out for item [[3]] for info_make
-  info_make <- paste(paste0 ("sink (file = paste0 (multirun_directory, \"Multirun - Parameters and Info\"))"),
+  info_make <- paste(paste0 ("sink (file = file.path (multirun_directory, \"Multirun - Parameters and Info\"))"),
                       "cat (paste0 (\"Number of Timesteps: \", info[[3]][1], \"\nNumber of Populations: \", info[[3]][2], \"\nPopulation Size: \", info[[3]][3], \"\nNumber of Syllables: \", info[[3]][4], \"\nNumber of Syllable Positions Assigned to Specific Probability Levels: \", info[[3]][5], \"\nNumber of Singers Sampled from One Population for Mating: \", info[[3]][7], \"\nNumber of Singers Sampled from One Population for Tutoring: \", info[[3]][6], \"\nProbability of Inheriting Curiosity Accurately: \", info[[3]][8], \"\nProbability of Learning Syllables Accurately from Parent: \", info[[3]][10], \"\nProbability of Learning Syllables Accurately from Tutor: \", info[[3]][9], \"\nProbability of Picking up Random Extra Syllables from Parent: \", info[[3]][12], \"\nProbability of Picking up Random Extra Syllables from Tutor: \", info[[3]][11], \"\nStandard Deviation of Randomly-picked-up Sylls from Established Mean: \", info[[3]][13], \"\nNumber of Rows in Population Calls Matrix: \", info[[3]][14], \"\nNumber of Columns in Pop Calls Matrix: \", info[[3]][15], \"\nPairing Pool Rows: \", info[[3]][16], \"\nPairing Pool Columns: \", info[[3]][17], \"\nPairing Pool Slices: \", info[[3]][18], \"\nCuriosity Counter Rows: \", info[[3]][19], \"\nCuriosity Counter Columns: \", info[[3]][20], \"\nPopulation Syllable Probability Rows: \", info[[3]][21], \"\nPopulation Probability Columns: \", info[[3]][22], \"\nLength of Curiosity Breaks Vector: \", info[[3]][23], \"\nLength of Zero to One Template: \", info[[3]][24], \"\nLearning Pool Rows: \", info[[3]][25], \"\nLearning Pool Columns: \", info[[3]][26], \"\nLearning Pool Slices: \", info[[3]][27]))",
                       "sink ()", sep = "\n")
   # info_make <- paste(paste0 ("sink (file = paste0 (multirun_directory, \"Multirun - Parameters and Info\"))"),
   #                    "cat (paste0 (\"Number of Timesteps: \", info[[4]][1], \"\nNumber of Populations: \", info[[4]][2], \"\nPopulation Size: \", info[[4]][3], \"\nNumber of Syllables: \", info[[4]][4], \"\nNumber of Syllable Positions Assigned to Specific Probability Levels: \", info[[4]][5], \"\nNumber of Singers Sampled from One Population for Mating: \", info[[4]][7], \"\nNumber of Singers Sampled from One Population for Tutoring: \", info[[4]][6], \"\nProbability of Inheriting Curiosity Accurately: \", info[[4]][8], \"\nProbability of Learning Syllables Accurately from Parent: \", info[[4]][10], \"\nProbability of Learning Syllables Accurately from Tutor: \", info[[4]][9], \"\nProbability of Picking up Random Extra Syllables from Parent: \", info[[4]][12], \"\nProbability of Picking up Random Extra Syllables from Tutor: \", info[[4]][11], \"\nStandard Deviation of Randomly-picked-up Sylls from Established Mean: \", info[[4]][13], \"\nNumber of Rows in Population Calls Matrix: \", info[[4]][14], \"\nNumber of Columns in Pop Calls Matrix: \", info[[4]][15], \"\nPairing Pool Rows: \", info[[4]][16], \"\nPairing Pool Columns: \", info[[4]][17], \"\nPairing Pool Slices: \", info[[4]][18], \"\nCuriosity Counter Rows: \", info[[4]][19], \"\nCuriosity Counter Columns: \", info[[4]][20], \"\nPopulation Syllable Probability Rows: \", info[[4]][21], \"\nPopulation Probability Columns: \", info[[4]][22], \"\nLength of Curiosity Breaks Vector: \", info[[4]][23], \"\nLength of Zero to One Template: \", info[[4]][24], \"\nLearning Pool Rows: \", info[[4]][25], \"\nLearning Pool Columns: \", info[[4]][26], \"\nLearning Pool Slices: \", info[[4]][27]))",
   #                    "sink ()", sep = "\n")
   eval (parse (text = info_make))
-  #     print ("info made")
+  # print ("info made")
   mins_n_maxes <- min_n_max (parameters = params, number_of_runs_mnx = number_of_repeats,
                             cursitylist = cursitylist, sdstbxnlist = sdstbxnlist,
                             curhistlist = curhistlist, sylrepzlist = sylrepzlist)
-  #     print (paste0 ("mins_n_maxes: ", mins_n_maxes))
-  #     print (paste0 ("length of cursitylist: ", dim (cursitylist [[number_of_repeats + 1]])))
+  # print (paste0 ("mins_n_maxes: ", mins_n_maxes))
+  # print (paste0 ("length of cursitylist: ", dim (cursitylist [[number_of_repeats + 1]])))
   recolorize <- params$recolorize
   compare_subsets <- params$compare_subsets
   if (recolorize == FALSE) {
@@ -282,7 +289,7 @@ figprodmultrun <- function (
     for (lengthCursityList_minusMean in 1 : number_of_repeats) {
       subset_pool[,,lengthCursityList_minusMean] <- cursitylist [[lengthCursityList_minusMean]][c (1,2,3,4),,(as.numeric (strsplit (params$runlength, "k") [[1]][1]) * (1000/params$recordsimplifyfactor))]
     }
-
+# print ("subpop_measures")
     subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
     if (compare_subsets == TRUE) {subset_output_pool <- vector("list", 4)} # change size of list as number of recolorize options changes
     if (recolorize == "variance" || compare_subsets == TRUE) {
@@ -318,7 +325,7 @@ figprodmultrun <- function (
     }
     
     if (recolorize == "range-median" || compare_subsets == TRUE) {
-
+# print ("range-median")
       # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
       for (pop in 1 : params$num_pop) {
         for (sex in 1 : 2) {
@@ -382,6 +389,7 @@ figprodmultrun <- function (
     if (compare_subsets == TRUE) {
       saveRDS (subset_output_pool, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
     }
+# print ("simple_plots start")
 
     simple_plots (parameters = params, plot_info = plot_info,
                 number_of_runs = number_of_repeats, cursitylist = cursitylist,
@@ -391,7 +399,7 @@ figprodmultrun <- function (
                 compare_subsets = compare_subsets)
 
   }
-  #     print ("simple_plots done")
+  # print ("simple_plots done")
 
   # if (redo != FALSE) {
   
