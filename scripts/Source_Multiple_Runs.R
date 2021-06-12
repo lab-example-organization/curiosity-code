@@ -410,8 +410,10 @@ life_cycle <- function (params, shifting_curstart,
   #parent_directory <- getwd ()
   source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
 
+  simparams <- params
+
   simparams <- define_parameters (
-    num_timesteps = as.numeric (strsplit (params$runlength, "k") [[1]][1]) * 1000,
+    num_timesteps = params$runlength,
     num_pop = params$num_pop, pop_size = params$pop_size,
     sylnum = params$sylnum, nsl = params$num_sylls_per_prob_lvl,
     one_pop_singers = params$one_pop_singers, curlearnprob = params$curinh_value,

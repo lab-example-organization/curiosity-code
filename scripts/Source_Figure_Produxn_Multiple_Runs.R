@@ -287,7 +287,7 @@ figprodmultrun <- function (
     subset_pool <- array (0, c (4,2,number_of_repeats))
     # subset_pool <-
     for (lengthCursityList_minusMean in 1 : number_of_repeats) {
-      subset_pool[,,lengthCursityList_minusMean] <- cursitylist [[lengthCursityList_minusMean]][c (1,2,3,4),,(as.numeric (strsplit (params$runlength, "k") [[1]][1]) * (1000/params$recordsimplifyfactor))]
+      subset_pool[,,lengthCursityList_minusMean] <- cursitylist [[lengthCursityList_minusMean]][c (1,2,3,4),,(params$runlength/params$recordsimplifyfactor)]
     }
 # print ("subpop_measures")
     subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)

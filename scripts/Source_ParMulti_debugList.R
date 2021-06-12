@@ -218,7 +218,7 @@ set.seed (seednumber + shifting_curstart)
   source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
 
   simparams <- define_parameters (
-    num_timesteps = as.numeric (strsplit (runlength, "k") [[1]][1]) * 1000,
+    num_timesteps = params$runlength,
     num_pop = number_populations, pop_size = population_size,
     sylnum = syllable_number, nsl = number_sylls_probability_level,
     one_pop_singers = one_pop_singers, curlearnprob = curinh_value,

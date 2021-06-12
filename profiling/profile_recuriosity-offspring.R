@@ -7,7 +7,7 @@ source (file.path ('scripts', 'Source_Life_Cycle_Functions.R'))
 
 params <- yaml.load_file(file.path ("parameters", "params.yaml"))
 simParams <- define_parameters (
-  num_timesteps = as.numeric (strsplit (params$runlength, "k") [[1]][1]) * 1000,
+  num_timesteps = params$runlength,
   num_pop = params$num_pop,
   pop_size = params$pop_size,
   sylnum = params$sylnum,

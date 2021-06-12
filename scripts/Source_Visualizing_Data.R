@@ -42,7 +42,7 @@ concatenate_data <- function (specific_run,
                                 data_dir = multirun_folderlist) {
   # This function takes
   data_dir <- data_dir[specific_run]
-  nts = as.numeric (strsplit (parms$runlength, "k") [[1]][1]) # number of 1k timesteps
+  nts = parms$runlength # number of 1k timesteps
   # knts = nts*1000
   # cnts = nts*100
   # dnts = nts*10
@@ -198,7 +198,7 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
                           "_AC_replaced_f_pop", "_cur_inh_attempts", "_AC_var_m_pop", "_AC_var_f_pop")
   plot_title_retainer <- c (" Mate Selection Chances", " Tutor Selection Chances", " Father AC", " Mother AC",
                             " Son AC", " Daughter AC", " Dead Man AC", " Dead Woman AC", " Cur Inh Attempts", " AC Variance Mal", " AC Variance Fem")
-  num_timesteps = as.numeric (strsplit (parameters$runlength, "k") [[1]][1])*1000
+  num_timesteps = parameters$runlength
   for (individual_figures in 1 : length (figure_retainer)) {
 
     meanz <- cursitylist [[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
@@ -270,7 +270,7 @@ recolorized_simple_plots <- function (
   # subset_pool <- array (0, c (4,2,length (cursitylist)))
   # # subset_pool <-
   # for (lengthCursityList in 1 : length (cursitylist)) {
-  #   subset_pool[,,lengthCursityList] <- cursitylist [[lengthCursityList]][c (1,2,3,4),,(as.numeric (strsplit (parameters$runlength, "k") [[1]][1]) * (1000/parameters$recordsimplifyfactor))]
+  #   subset_pool[,,lengthCursityList] <- cursitylist [[lengthCursityList]][c (1,2,3,4),,(parameters$runlength/parameters$recordsimplifyfactor)]
   # }
 
   # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
@@ -366,7 +366,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
                          saving_dir = multirun_directory, recolorize = TRUE,
                          lineplots = TRUE, curMeans_only = FALSE,
                          absolute_y = TRUE, compare_subsets = FALSE) {
-  num_timesteps = as.numeric (strsplit (parameters$runlength, "k") [[1]][1])*1000
+  num_timesteps = params$runlength
   
   if (length(recolorize) > 1) {
     saving_dir <- file.path (saving_dir, "recolorizedLineplots")
@@ -814,4 +814,4 @@ simple_plots <- function (parameters, plot_info = plot_info,
 }
 
 
-# as.numeric (strsplit (parameters$runlength, "k") [[1]][1])  * 1000/(parameters$recordsimplifyfactor)
+# params$runlength/parameters$recordsimplifyfactor

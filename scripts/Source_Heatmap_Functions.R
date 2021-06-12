@@ -466,7 +466,7 @@ extractmeans <- function (allrundirs,
   }
   runmeans <- list ()
 
-  timespanchunks <- as.numeric (str_split (str_split (allrundirs[1], "_") [[1]][4], "k") [[1]][1]) * (1000 / dim_source$recordsimplifyfactor)
+  timespanchunks <- dim_source$runlength / dim_source$recordsimplifyfactor
 
   for (individual_run in 1 : number_of_runs) {
 

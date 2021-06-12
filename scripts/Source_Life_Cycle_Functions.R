@@ -3,9 +3,13 @@
 
 
 
-syll_learn <- function (params_SL, temp_data_SL, select_type = "mate",
-                       totally_new = FALSE, randlearn_context = 1,
-                       verbose = FALSE) {
+syll_learn <- function (params_SL, 
+                        temp_data_SL, 
+                        select_type = "mate",
+                        totally_new = FALSE, 
+                        randlearn_context = 1,
+                        verbose = FALSE,
+                        innate_bias_SL = FALSE) {
 
   # select_type decides whether the learning is vertical (2) or oblique (1)
 
@@ -244,14 +248,17 @@ score_similarity <- function (suitor_vector, selector_vector) {
   # sylrep of suitors and selector.
 }
 
-sing.selection <- function (params_SS, temp_data_SS,
-                           curiosity_level, select_type,
-                           sylrep_object,
-                           num_select_chances = c (16, 40),
-                           sylrep_fill_chances = 10,
-                           verbose_output = TRUE,
-                           interbreed = FALSE,
-                           round_up = TRUE
+sing.selection <- function (params_SS, 
+                            temp_data_SS,
+                            curiosity_level, 
+                            select_type,
+                            sylrep_object,
+                            num_select_chances = c (16, 40),
+                            sylrep_fill_chances = 10,
+                            verbose_output = TRUE,
+                            interbreed = FALSE,
+                            round_up = TRUE,
+                            innate_bias = FALSE
                           #  selection_strategy = "similarity score",
                            ) {
 
@@ -277,8 +284,8 @@ sing.selection <- function (params_SS, temp_data_SS,
 
   for (divisible in 1 : 2) {
     if (num_select_chances[divisible] %% 4 != 0) {
-    stop ("Error management system needs to split num_select_chances into 4
-          equal integer values. Make it mod4=0 to address this MIGHTY NEED."
+    stop ("Need to be able to split num_select_chances into 4
+          equal integer values. Make it mod4=0."
           )
     }
   }
@@ -1067,25 +1074,25 @@ store_timesteps <- function (parameters_storetimesteps, filename = thousand_time
   #         "foldername_", parameters$simnumber, ".RData")
   # ))}
 
-  thing <- c ("sylrep_rowcol", "sylrep_dstbxn",
+  data_categories <- c ("sylrep_rowcol", "sylrep_dstbxn",
               "curity_mean_t", "curity_repert")
 
-  for (data_categories in 1 : 4) {
+  for (data_record in 1 : length(data_categories)) {
 
     file.create (file.path (foldername, paste0 (
-      "variable-store-", filename, "-", thing[data_categories], ".RData")))
-    if (data_categories == 1) {
+      "variable-store-", filename, "-", data_categories[data_record], ".RData")))
+    if (data_record == 1) {
       objekshun <- rowcol
-    } else if (data_categories == 2) {
+    } else if (data_record == 2) {
       objekshun <- dstbxn
-    } else if (data_categories == 3) {
+    } else if (data_record == 3) {
       objekshun <- mean_t
-    } else if (data_categories == 4) {
+    } else if (data_record == 4) {
       objekshun <- repert
     }
     # print ("tryna save")
     saveRDS (objekshun, file.path (foldername, paste0 (
-      "variable-store-", filename, "-", thing[data_categories], ".RData")))
+      "variable-store-", filename, "-", data_categories[data_record], ".RData")))
     # print ("saved")
   }
   saveRDS (parameters_storetimesteps, file.path (

@@ -5,7 +5,7 @@ curstarts:
     scmax: [28,28,28,28]
 
 simnumberstart: [99798]
-runlength: '3k'
+runlength: 3000
 syllearnstyle: 'nsL'
 vertoblearn:
   vertical:

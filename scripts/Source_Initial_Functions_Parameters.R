@@ -139,7 +139,7 @@ define_temp_data <- function (universal_parameters) {
   # if (tempCatgry ==1) {
     temp_data <- array (
       0, c (
-        5, universal_parameters$sylnum + 5, universal_parameters$num_pop))
+        5, universal_parameters$sylnum + 6, universal_parameters$num_pop))
     ######   The first params$sylnum columns are learning_pool;
     ######   the last 5 are pairing_pool
   # } else {
@@ -167,7 +167,7 @@ recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
       0, c ((2 * parameters_rvi$num_pop), parameters_rvi$sylnum, timestepRecordLength))
   } else if (variableid == 3) {
     record_variable <- array (
-      0, c (14, parameters_rvi$num_pop, timestepRecordLength))
+      0, c (16, parameters_rvi$num_pop, timestepRecordLength))
       # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   } else if (variableid == 4) {
     record_variable <- array (

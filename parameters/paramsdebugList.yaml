@@ -5,7 +5,7 @@ curstarts:
     scmax: [20,20,20,20]
 
 simnumberstart: [4901] # is this the empty space? 4901-5100 appears to still be unused.
-runlength: '10k'
+runlength: 10000
 syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
