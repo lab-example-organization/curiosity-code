@@ -13,29 +13,22 @@ test_that ('syll learn outputs TRUE or FALSE when working normally', {
   ##### These shouldn't throw any errors.
 
   # upper specified
-  expect_true (syll_learn (index = 1,
-                           total_chances = c (100, 100),
-                           selection_context = 1,
-                           current_chance = 47,
-                           sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
-                                         3,11,19, 8, 4, 2,14,16,13,17),
-                           repBarrier = c (1 : 10),
-                           chosenBird = 1,
-                           lower = 0.46,
-                           upper = 0.75)
+  expect_true (syll_learn (params_SL, 
+                           temp_data_SL, 
+                           select_type = "mate",
+                           totally_new = FALSE, 
+                           randlearn_context = 1,
+                           verbose = FALSE)
   ) #current_chance is between (lower * total_chances[selection_context]) and (upper * total_chances[selection_context])
     #sortSimlr[chosenBird + index] is found within repBarrier
 
   # unspecified upper limit
-  expect_true (syll_learn (index = 1,
-                           total_chances = c (100, 100),
-                           selection_context = 1,
-                           current_chance = 47,
-                           sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
-                                         3,11,19, 8, 4, 2,14,16,13,17),
-                           repBarrier = c (1 : 10),
-                           chosenBird = 1,
-                           lower = 0.46)
+  expect_true (syll_learn (params_SL, 
+                           temp_data_SL, 
+                           select_type = "mate",
+                           totally_new = FALSE, 
+                           randlearn_context = 1,
+                           verbose = FALSE)
   ) #current_chance is between (lower * total_chances[selection_context]) and (upper * total_chances[selection_context])
     #sortSimlr[chosenBird + index] is found within repBarrier
   
@@ -43,43 +36,32 @@ test_that ('syll learn outputs TRUE or FALSE when working normally', {
   ##### FALSE Results - 
   
   # neighbor is not in repBarrier
-  expect_false (syll_learn (index = 1,
-                            total_chances = c (100, 100),
-                            selection_context = 1,
-                            current_chance = 47,
-                            sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
-                                          3,11,19, 8, 4, 2,14,16,13,17),
-                            repBarrier = c (1 : 10),
-                            chosenBird = 3,
-                            lower = 0.46,
-                            upper = 0.75)
+  expect_false (syll_learn (params_SL, 
+                           temp_data_SL, 
+                           select_type = "mate",
+                           totally_new = FALSE, 
+                           randlearn_context = 1,
+                           verbose = FALSE)
   )
 
   # current chance is not within the lower and upper bounds - upper specified 
   # (the ones that let you know you've reached the appropriate level of desperation.)
-  expect_false (syll_learn (index = 1,
-                            total_chances = c (100, 100),
-                            selection_context = 1,
-                            current_chance = 45,
-                            sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
-                                          3,11,19, 8, 4, 2,14,16,13,17),
-                            repBarrier = c (1 : 20),
-                            chosenBird = 3,
-                            lower = 0.46,
-                            upper = 0.75)
+  expect_false (syll_learn (params_SL, 
+                           temp_data_SL, 
+                           select_type = "mate",
+                           totally_new = FALSE, 
+                           randlearn_context = 1,
+                           verbose = FALSE)
   )
   
   # current chance is not within the lower and upper bounds - upper specified 
   # (the ones that let you know you've reached the appropriate level of desperation.)
-  expect_false (syll_learn (index = 1,
-                            total_chances = c (100, 100),
-                            selection_context = 1,
-                            current_chance = 45,
-                            sortSimlr = c (7,10,15,20,18, 6, 1, 5, 9,12, 
-                                          3,11,19, 8, 4, 2,14,16,13,17),
-                            repBarrier = c (1 : 20),
-                            chosenBird = 3,
-                            lower = 0.46)
+  expect_false (syll_learn (params_SL, 
+                           temp_data_SL, 
+                           select_type = "mate",
+                           totally_new = FALSE, 
+                           randlearn_context = 1,
+                           verbose = FALSE)
   )
   
 
