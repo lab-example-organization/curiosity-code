@@ -20,8 +20,8 @@ curstarts:
 # distribution between 0.25 and 0.5 (width uniform 0.1): 8-11 (0.2-0.3), 9-12 (0.25-0.35), 11-14 (0.3-0.4), 12-15 (0.35-0.45), 14-17 (0.4-0.5), 15-20 (0.45-0.55)
 # width around 0.5: 11-25 (0.3-0.7), 12-24 (0.35-0.65), 14-22 (0.4-0.6), 15-20 (0.45-0.55), 16-18 (0.49-0.51)
 # 8-11, 9-12, 11-14, 12-15, 14-17, 15-20, 11-25, 12-24, 14-22, 16-18
-simnumberstart: [10909, 10910, 10911, 10912, 10913, 10914, 10915, 10916]
-runlength: 10000
+simnumberstart: 10901
+runlength: 2000
 Syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
@@ -36,7 +36,7 @@ num_pop: 2
 pop_size: 400
 sylnum: 156
 num_sylls_per_prob_lvl: 8
-number_of_reps: 50
+number_of_reps: 2
 standard_deviation: 2
 mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
 tutor_selection_type: 'curiosity'
@@ -58,7 +58,7 @@ invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background pop
 invasionsex: 'female' # male or female (or, perhaps, both?)
 invasiontraitvalue: [0.85, 0.1]
 
-indrunredo: TRUE
+indrunredo: FALSE
 redodir: FALSE # if not false, needs to be an absolute path to the working directory that contains the original files ### list.files(file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv"), pattern = "_4098")
 
 # Last Run Arguments - if lastruninit is TRUE, lastrunid gives the unique marker (simnumber) for the run being referenced (if more than one run, then the relevant source marker needs to occur in a list at the same position as the current sim)
@@ -76,7 +76,7 @@ lastrunid: FALSE
 
 # figure settings
 
-figure_redo_only: TRUE
+figure_redo_only: FALSE
 compare_subsets: FALSE
 recolorize: "range-median"
 absolute_yAxis: TRUE

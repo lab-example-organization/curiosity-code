@@ -111,11 +111,11 @@ for (twoHundies in 1 : length (tenKs)) {
 
 
 
-      selector.index <- sample (parameters_sing_selection$pop_calls_matrix [2, ], 1)
+      selector.index <- sample (parameters_sing_selection [2, ], 1)
 
-      selection.index <- sample (parameters_sing_selection$pop_calls_matrix [1,], parameters_sing_selection$one_pop_singers [1])
-      selection.sylreps <- cpp_rowSums (sylrep_object [parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection$pop_calls_matrix [1,],,1]) [selection.index])
+      selection.index <- sample (parameters_sing_selection [1,], parameters_sing_selection$one_pop_singers [1])
+      selection.sylreps <- cpp_rowSums (sylrep_object [parameters_sing_selection [1,],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[parameters_sing_selection [1,],,1]) [selection.index])
       if (length (which (selection.sylreps == max (selection.sylreps))) > 1) {
         singer <- selection.index [which (selection.sylreps == max (selection.sylreps)) [sample (c (1 : length (which (selection.sylreps == max (selection.sylreps)))), 1)]]
       } else if (length (which (selection.sylreps == max (selection.sylreps))) == 1) {

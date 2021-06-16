@@ -19,6 +19,7 @@ figprodmultrun <- function (
 ) {
 
   params = yaml.load_file (file.path ("parameters", paramssource))
+  # params <- paramssource
   number_of_repeats <- as.numeric (params$number_of_reps)
 
   # example of text for results_tenK_dir is "childLateSmolInvFemLow"

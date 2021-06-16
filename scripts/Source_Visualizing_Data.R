@@ -366,7 +366,8 @@ simple_plots <- function (parameters, plot_info = plot_info,
                          saving_dir = multirun_directory, recolorize = TRUE,
                          lineplots = TRUE, curMeans_only = FALSE,
                          absolute_y = TRUE, compare_subsets = FALSE) {
-  num_timesteps = params$runlength
+  # params = yaml.load_file (file.path ("parameters", parameters))
+  num_timesteps = parameters$runlength
   
   if (length(recolorize) > 1) {
     saving_dir <- file.path (saving_dir, "recolorizedLineplots")
@@ -561,13 +562,13 @@ simple_plots <- function (parameters, plot_info = plot_info,
           doANDio_names <- c("DO", "IO")
           for (doORio in 1:2) {
             red_to_yellow_to_blue <- colorRampPalette(c("#DE2D26", "#C7D34D", "#3182BD"))
-            range_1 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[1]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[1]))(10)[10]))
-            range_2 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[2]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[2]))(10)[10]))
-            range_3 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[3]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[3]))(10)[10]))
-            range_4 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[4]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[4]))(10)[10]))
-            range_5 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[5]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[5]))(10)[10]))
-            range_6 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[6]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[6]))(10)[10]))
-            range_7 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[7]))(10)[2], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[7]))(10)[10]))
+            range_1 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[1]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[1]))(10)[10]))
+            range_2 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[2]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[2]))(10)[10]))
+            range_3 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[3]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[3]))(10)[10]))
+            range_4 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[4]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[4]))(10)[10]))
+            range_5 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[5]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[5]))(10)[10]))
+            range_6 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[6]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[6]))(10)[10]))
+            range_7 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[7]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[7]))(10)[10]))
 
             full_colors <- colorRampPalette(c(
               colorRampPalette(c(range_1(50)[50 - (7:1)^2]))(7),

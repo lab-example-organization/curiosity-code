@@ -1,138 +1,76 @@
 
-rpf <- function (numberofrepeats, divisions_per_repeat, zeroonevalue) {
-  zero_to_one_template <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
-  #                             #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
-                               0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
-  #                            #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
-                              0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
-  #                            #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
-                               0.9,0.95,0.99,1.0)
-  #                            #31, #32, #33,#34
-  if (numberofrepeats %% divisions_per_repeat > 1e-10) {
-    stop ("first element must be divisible by the second element")}
-  if (! (zeroonevalue %in% c (1 : length (zero_to_one_template)))) {
-    stop ("in order to work, zeroonevalue must be contained within zero_to_one_template")}
-  return (replicate (
-    c (length = numberofrepeats / divisions_per_repeat), zero_to_one_template [zeroonevalue]))
-}
+#
 
-define_parameters <- function (num_timesteps, num_pop, pop_size, sylnum, nsl, one_pop_singers,
-                              curlearnprob, learnprob, randlearnprob, stand.dev, curinhproportion,
-                              mate_selection_type, tutor_selection_type, selection_round_up) {
-  # Here the if-statements help organize and restrict the arguments such that the Weirdness Works (TM) :P
-  if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsl %% 1 != 0) {
-    stop ("(num_pop, pop_size, nsl) need to be integers")}
-  if ((num_pop == 3 || num_pop == 4) &&
-      ((sylnum - 4 * nsl) %% 2 != 0 || (nsl) %% 2 != 0)) {
-    stop ("Don't be a fool; check error log #_0001")}
-  if ((num_pop == 5 || num_pop == 6) &&
-      ((sylnum - 4 * nsl) %% 6 != 0 || (nsl) %% 4 != 0)) {
-    stop ("Don't be a fool; check error log #_0001")}
-  if ((num_pop == 7 || num_pop == 8) &&
-      ((sylnum - 4 * nsl) %% 12 != 0 || (nsl) %% 12 != 0)) {
-    stop ("Don't be a fool; check error log #_0001")}
-  if ((num_pop == 9 || num_pop == 10) &&
-      ((sylnum - 4 * nsl) %% 60 != 0 || (nsl) %% 24 != 0)) {
-    stop ("Don't be a fool; check error log #_0001")}
-  if (num_timesteps %% 1000 != 0) {
-    stop ("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
-  }
+# define_parameters <- function (
+#                                #num_timesteps, 
+#                                num_pop, 
+#                                pop_size#, 
+#                               #  sylnum#, 
+#                               #  nsl#, ### only used for this function
+#                               #  one_pop_singers,
+#                                #curlearnprob, 
+#                               #  learnprob, 
+#                               #  randlearnprob, 
+#                               #  stand.dev#, 
+#                                #curinhproportion,
+#                               #  mate_selection_type, 
+#                               #  tutor_selection_type, 
+#                               #  selection_round_up
+#                               ) {
+#   # Here the if-statements help organize and restrict the arguments such that the Weirdness Works (TM) :P
+#   if (num_pop %% 1 != 0 || pop_size %% 1 != 0 || nsl %% 1 != 0) {
+#     stop ("(num_pop, pop_size, nsl) need to be integers")}
+#   if ((num_pop == 3 || num_pop == 4) &&
+#       ((sylnum - 4 * nsl) %% 2 != 0 || (nsl) %% 2 != 0)) {
+#     stop ("sylnum and popnum incompat w NSL value")}
+#   if ((num_pop == 5 || num_pop == 6) &&
+#       ((sylnum - 4 * nsl) %% 6 != 0 || (nsl) %% 4 != 0)) {
+#     stop ("sylnum and popnum incompat w NSL value")}
+#   if ((num_pop == 7 || num_pop == 8) &&
+#       ((sylnum - 4 * nsl) %% 12 != 0 || (nsl) %% 12 != 0)) {
+#     stop ("sylnum and popnum incompat w NSL value")}
+#   if ((num_pop == 9 || num_pop == 10) &&
+#       ((sylnum - 4 * nsl) %% 60 != 0 || (nsl) %% 24 != 0)) {
+#     stop ("sylnum and popnum incompat w NSL value")}
+#   if (num_timesteps %% 1000 != 0) {
+#     stop ("num_timesteps needs to be divisible by 1000. It's for recording purposes.")
+#   }
 
-  pop_calls_matrix <- matrix (data = c (1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = TRUE)
+#   pop_calls_matrix <- matrix (data = c (1 : pop_size), nrow = 2, ncol = (pop_size / 2), byrow = TRUE)
 
+#   # zero_to_one_template <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
+#   # #                             #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
+#   #                              0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
+#   # #                            #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
+#   #                             0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
+#   # #                            #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
+#   #                              0.9,0.95,0.99,1.0)
+#   # #                            #31, #32, #33,#34
 
-  #new.curiosity <- array (0,c (2,num_pop))
-  curiositybreaks <- (0 : (num_pop * one_pop_singers [1])) * (1 / (num_pop * one_pop_singers [1]))
-  curiosity_counter <- matrix (data = 1 : (num_pop * 2), nrow = 2, ncol = num_pop, byrow = FALSE)
-  # zero_to_one_template <- c (0.00,0.01,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,
-  # #                           #1,  #2, #3,  #4,  #5,  #6, #7,  #8, #9,#10,
-  #                           0.45,0.49,0.5,0.51,0.55,0.59,0.6,0.65,0.7,0.75,
-  # #                          #11, #12,#13, #14, #15, #16,#17, #18,#19, #20,
-  #                            0.8,0.85,0.9,0.95,0.99,1.0,0.09,0.18,0.27,0.36,
-  # #                          #21, #22,#23, #24, #25,#26, #27, #28, #29, #30,
-  #                            0.45,0.54,0.63,0.72,0.81)
-  # #                           #31, #32, #33, #34, #35
+#   parameters <- list (
+#                     #  num_timesteps = num_timesteps, ###
+#                     #  num_pop = num_pop, ###
+#                     #  pop_size = pop_size, ###
+#                     #  sylnum = sylnum, ###
+#                     #  nsl = nsl, ###
+#                     #  one_pop_singers = one_pop_singers, ###
+#                      pop_calls_matrix = pop_calls_matrix#,
+#                      #curiositybreaks = curiositybreaks,
+#                     #  curiosity_counter = curiosity_counter,
+#                     #  zero_to_one_template = zero_to_one_template#,
+#                     #  population_syll_probs = population_syll_probs, ### 
+#                      #curlearnprob = curlearnprob, ###
+#                     #  learnprob = learnprob, ###
+#                     #  randlearnprob = randlearnprob, ###
+#                     #  stand.dev = stand.dev#, ###
+#                      #curinhproportion = curinhproportion,
+#                     #  mate_selection_type = mate_selection_type, ###
+#                     #  tutor_selection_type = tutor_selection_type, ###
+#                     #  selection_round_up = selection_round_up ###
+#                      )
 
-  zero_to_one_template <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
-  #                             #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
-                               0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
-  #                            #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
-                              0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
-  #                            #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
-                               0.9,0.95,0.99,1.0)
-  #                            #31, #32, #33,#34
-
-  # Syllable probability distribution stuff; ends with reference matrix where each row defines a different pattern of syllable probability distributions
-  if (num_pop == 1) {
-    syllprob_vector <- c (
-      c (rpf (sylnum - 4 * nsl,2,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,2,1))
-    )
-  } else if (num_pop > 1) {
-    syllprob_vector <- c (
-      c (rpf (sylnum - 7 * nsl,(4/3),1),rpf (nsl,1,2),rpf (nsl,1,5),rpf (nsl,1,9),rpf (nsl,1,27),rpf (nsl,1,31),rpf (nsl,1,33),rpf (nsl,1,34),rpf (sylnum - 7 * nsl,4,1)),
-      c (rpf (sylnum - 7 * nsl,4,1),rpf (nsl,1,34),rpf (nsl,1,33),rpf (nsl,1,31),rpf (nsl,1,27),rpf (nsl,1,9),rpf (nsl,1,5),rpf (nsl,1,2),rpf (sylnum - 7 * nsl,(4/3),1)),
-      c (rpf (sylnum - 4 * nsl,2,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,2,1)),
-      c (rpf (sylnum - 4 * nsl,4,1),rpf (nsl,2,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,2,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,2,33),rpf (sylnum - 4 * nsl,4,1))
-      #c (rpf (sylnum - 4 * nsl,3,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,2,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,2,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,3,1))
-      #c (rpf (nsl,4,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,2,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,2,33),rpf (nsl,4,31),rpf (nsl,4,5),rpf (nsl,4,2),rpf (sylnum - 4 * nsl,2,1),rpf (nsl,4,2),rpf (nsl,4,5),rpf (nsl,4,31),rpf (nsl,4,33)),
-      #c (rpf (sylnum - 4 * nsl,4,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,4,1)),
-      #c (rpf (nsl,6,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,3,33),rpf (nsl,6,31),rpf (nsl,6,5),rpf (nsl,6,2),rpf (sylnum - 4 * nsl,3,1),rpf (nsl,6,2),rpf (nsl,6,5),rpf (nsl,6,31),rpf (nsl,6,33)),
-      #c (rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,5,1)),
-      #c (rpf (nsl,8,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,4,33),rpf (nsl,8,31),rpf (nsl,8,5),rpf (nsl,8,2),rpf (sylnum - 4 * nsl,4,1),rpf (nsl,8,2),rpf (nsl,8,5),rpf (nsl,8,31),rpf (nsl,8,33))
-      #c (rpf (sylnum - 4 * nsl,3,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,(3/2),1)),
-      #c (rpf (sylnum - 4 * nsl,(3/2),1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,3,1))
-      #c (rpf (sylnum - 4 * nsl,4,1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,(4/3),1)),
-      #c (rpf (sylnum - 4 * nsl,(4/3),1),rpf (nsl,2,2),rpf (nsl,2,5),rpf (nsl,2,31),rpf (nsl,1,33),rpf (nsl,2,31),rpf (nsl,2,5),rpf (nsl,2,2),rpf (sylnum - 4 * nsl,4,1))
-    )
-  }
-
-  population_syll_probs <- matrix (data = syllprob_vector,
-                                  nrow = length (syllprob_vector) / sylnum, #number of rows to complement the number of combinations I've come up with; so if I come up with more, fix it.
-                                  ncol = sylnum,
-                                  byrow = TRUE
-  )
-
-  # population_syll_probs <- array (data = syllprob_vector,
-  #                                dim = c (length (syllprob_vector) / sylnum,
-  #                                        sylnum,
-
-  #                                ),
-  #                                dimnames =
-  # )
-
-  parameters <- list (num_timesteps = num_timesteps,
-                     num_pop = num_pop,
-                     pop_size = pop_size,
-                     sylnum = sylnum,
-                     nsl = nsl,
-                     one_pop_singers = one_pop_singers,
-                     pop_calls_matrix = pop_calls_matrix,
-                     curiositybreaks = curiositybreaks,
-                     curiosity_counter = curiosity_counter,
-                     zero_to_one_template = zero_to_one_template,
-                     population_syll_probs = population_syll_probs,
-                     curlearnprob = curlearnprob,
-                     learnprob = learnprob,
-                     randlearnprob = randlearnprob,
-                     stand.dev = stand.dev,
-                     curinhproportion = curinhproportion,
-                     mate_selection_type = mate_selection_type,
-                     tutor_selection_type = tutor_selection_type,
-                     selection_round_up = selection_round_up
-                     )
-
-  return (parameters)
-}
-#Results of Function:
-#Parameters <- list (
-  # 1 - num_timesteps,   # 8 - curiositybreaks,         # 15- stand.dev,
-  # 2 - num_pop,         # 9 - curiosity_counter,      # 16- ,
-  # 3 - pop_size,        # 10- zero_to_one_template,    # 17- ,
-  # 4 - sylnum,          # 11- population_syll_probs, # 18- ,
-  # 5 - nsl,           # 12- curlearnprob,# 19-
-  # 6 - one_pop_singers, # 13- learnprob,
-  # 7 - pop_calls_matrix,# 14- randlearnprob,
-#return (Parameters)
+#   return (parameters)
+# }
 
 define_temp_data <- function (universal_parameters) {
   # tempCatgry = 1 (learning.pool); tempCatgry = 2 (pairing.pool)
@@ -155,23 +93,23 @@ define_temp_data <- function (universal_parameters) {
 
 # INITIALIZING FUNCTIONS ##################################
 
-recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
+recordvariable.initialize <- function (p_rvi, recsimfct, variableid) {
 
   timestepRecordLength <- 1000 / recsimfct
 
   if (variableid == 1) {
     record_variable <- array (
-      0, c (2, parameters_rvi$num_pop, timestepRecordLength))
+      0, c (2, p_rvi$num_pop, timestepRecordLength))
   } else if (variableid == 2) {
     record_variable <- array (
-      0, c ((2 * parameters_rvi$num_pop), parameters_rvi$sylnum, timestepRecordLength))
+      0, c ((2 * p_rvi$num_pop), p_rvi$sylnum, timestepRecordLength))
   } else if (variableid == 3) {
     record_variable <- array (
-      0, c (16, parameters_rvi$num_pop, timestepRecordLength))
+      0, c (16, p_rvi$num_pop, timestepRecordLength))
       # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   } else if (variableid == 4) {
     record_variable <- array (
-      0, c ((2 * parameters_rvi$num_pop), (parameters_rvi$num_pop * parameters_rvi$one_pop_singers [1]),
+      0, c ((2 * p_rvi$num_pop), (p_rvi$num_pop * p_rvi$one_pop_singers [1]),
         timestepRecordLength))
   }
   # record_variable <- list (sylrep_rowcol=array (0, c (2, P$num_pop, (P$num_timesteps/simplificationFactor))), ### rows: num_sexes, num_measurements: rowSums and colSums ### cols: num_pop ### 3rd-dim: timesteps
@@ -192,14 +130,17 @@ recordvariable.initialize <- function (parameters_rvi, recsimfct, variableid) {
 
 #day.tuh <- recordvariable.initialize
 
-initialize.sylrep <- function (parameters_is, population.pattern, pastrunobject_is = FALSE,
+initialize.sylrep <- function (p_is = params, population.pattern, pastrunobject_is = FALSE,
                             eqpop = TRUE, eqsex = TRUE, pastruninit_is = FALSE) {
+  
+  # print(p_is$num_pop)
 
-  if (length (population.pattern) != parameters_is$num_pop) {
+  if (length (population.pattern) != p_is$num_pop) {
     stop ("This determines the initial syllable distributions of each
            subpopulation. It is a vector of row calls for
            population_syll_probs, so it must match the number of populations")
   }
+
 
   # if (xor ((pastrunobject_is == FALSE), (pastruninit_is == FALSE))) {
   #   stop ("Both pastrunobject_is and pastruninit_is need to both
@@ -214,24 +155,105 @@ initialize.sylrep <- function (parameters_is, population.pattern, pastrunobject_
     #   stop ("Both pastrunobject_is and pastruninit_is need to both
     #     be engaged together... if they aren't, it won't work!")
     #   }
-    # sylreps <- aperm (pastrunobject_is [, , 1 : parameters_is$sylnum], c (2, 3, 1),
-    #             na.rm = TRUE) # pop_size (2), sylnum (3), num_pop (1)
+    # sylreps <- aperm (pastrunobject_is [, , 1 : p_is$sylnum], c (2, 3, 1),
+    #             na.rm = TRUE) # pop_size (2), p_is$sylnum (3), num_pop (1)
 
     sylreps <- pastrunobject_is[[1]]
 
   } else {
-    sylreps <- array (0, c (parameters_is$pop_size, parameters_is$sylnum, parameters_is$num_pop))
+    p_z <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
+    #            #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
+                0.3,0.35,0.36, 0.4,0.45,0.49, 0.5,0.51,0.54,0.55,
+    #           #11, #12, #13, #14, #15, #16, #17, #18, #19, #20,
+              0.59, 0.6,0.63,0.65, 0.7,0.72,0.75, 0.8,0.81,0.85,
+    #           #21, #22, #23, #24, #25, #26, #27, #28, #29, #30,
+                0.9,0.95,0.99,1.0)
+    #           #31, #32, #33,#34
+    # Syllable probability distribution stuff; ends with reference matrix where each row defines a different pattern of syllable probability distributions
+    if (p_is$num_pop == 1) {
+      syllprob_vector <- c (
+        c (rep (p_z[1], (p_is$sylnum - 4 * p_is$num_sylls_per_prob_lvl)/2),rep (p_is$num_sylls_per_prob_lvl,2,2),rep (p_is$num_sylls_per_prob_lvl,2,5),rep (p_is$num_sylls_per_prob_lvl,2,31),rep (p_is$num_sylls_per_prob_lvl,1,33),rep (p_is$num_sylls_per_prob_lvl,2,31),rep (p_is$num_sylls_per_prob_lvl,2,5),rep (p_is$num_sylls_per_prob_lvl,2,2),rep (p_is$sylnum - 4 * p_is$num_sylls_per_prob_lvl,2,1))
+      )###### rep (p_is$sylnum - 4 * p_is$num_sylls_per_prob_lvl,2,1)
+    } else if (p_is$num_pop == 2) {
 
-    for (i in 1 : parameters_is$num_pop) {
-      sylreps [, , i] <- t (replicate (parameters_is$pop_size, rbinom (
-        length (parameters_is$population_syll_probs [population.pattern [i], ]),
-        size = 1, prob = parameters_is$population_syll_probs [population.pattern [i], ])))
+      p_s <- p_is$sylnum
+      p_n <- p_is$num_sylls_per_prob_lvl
+
+      # syllprob_vector <- c (
+        r_1 <- list(
+          c(0,0.01, 0.1,0.25,0.75,0.9,0.99,   1,0),
+          c(0,   1,0.99,0.9,0.75,0.25, 0.1,0.01,0),
+          c(75,8,8,8,8,8,8,8,25),
+          c(25,8,8,8,8,8,8,8,75))
+
+        r_2 <- list(
+          c(0,   0.01,0.1, 0.9,0.99, 0.9,0.1,0.01,   0),
+          c(0,0.99, 0.9,0.1,0.01,   0,0.01,0.1, 0.9,0.99,0),
+          c(62,4,4,4,8,4,4,4,62),
+          c(31,4,4,4,4,62,4,4,4,4,31))
+
+        r_3 <- list(
+          c(0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0), 
+          c(0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99),
+          c(42,2,2,2,2,2,2,2,44,2,2,2,2,2,2,2,42),
+          c(2,2,2,2,63,2,2,2,2,2,2,2,63,2,2,2,2))
+
+        r_4 <- list(
+          c(0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0), 
+          c(0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99),
+          c(33,1,1,1,2,1,1,1,33,1,1,1,2,1,1,1,33,1,1,1,2,1,1,1,33),
+          c(3,1,1,1,42,1,1,1,3,1,1,1,42,1,1,1,3,1,1,1,42,1,1,1,3))
+
+        r_5 <- list(
+          c(0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0), 
+          c(0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99,0.9,0.1,0.01,0,0.01,0.1,0.9,0.99),
+          c(24,1,1,1,3,1,1,1,24,1,1,1,3,1,1,1,24,1,1,1,3,1,1,1,24,1,1,1,3,1,1,1,24),
+          c(4,1,1,1,28,1,1,1,4,1,1,1,28,1,1,1,4,1,1,1,28,1,1,1,4,1,1,1,28,1,1,1,4))
+
+        # r_6 <- list(
+        #   c(), 
+        #   c())
+
+        # r_7 <- list(
+        #   c(), 
+        #   c())
+        r1_vector <- c()
+        r2_vector <- c()
+        r3_vector <- c()
+        r4_vector <- c()
+        r5_vector <- c()
+        
+        for (i in 1:length(r_1[[1]])) {r1_vector <- append(r1_vector, rep (r_1[[1]][i], r_1[[3]][i]))}
+        for (ii in 1:length(r_1[[2]])) {r1_vector <- append(r1_vector, rep (r_1[[2]][ii], r_1[[4]][ii]))}
+        for (iii in 1:length(r_2[[1]])) {r2_vector <- append(r2_vector, rep (r_2[[1]][iii], r_2[[3]][iii]))}
+        for (iv in 1:length(r_2[[2]])) {r2_vector <- append(r2_vector, rep (r_2[[2]][iv], r_2[[4]][iv]))}
+        for (v in 1:length(r_3[[2]])) {r3_vector <- append(r3_vector, rep (r_3[[1]][v], r_3[[3]][v]))}
+        for (vi in 1:length(r_3[[2]])) {r3_vector <- append(r3_vector, rep (r_3[[2]][vi], r_3[[4]][vi]))}
+        for (vii in 1:length(r_4[[2]])) {r4_vector <- append(r4_vector, rep (r_4[[1]][vii], r_4[[3]][vii]))}
+        for (viii in 1:length(r_4[[2]])) {r4_vector <- append(r4_vector, rep (r_4[[2]][viii], r_4[[4]][viii]))}
+        for (ix in 1:length(r_5[[2]])) {r5_vector <- append(r5_vector, rep (r_5[[1]][ix], r_5[[3]][ix]))}
+        for (x in 1:length(r_5[[2]])) {r5_vector <- append(r5_vector, rep (r_5[[2]][x], r_5[[4]][x]))}
+        syllprob_vector <- c(r1_vector, r2_vector, r3_vector, r4_vector, r5_vector)
+    }
+
+    population_syll_probs <- matrix (data = syllprob_vector,
+                                    nrow = length (syllprob_vector) / p_s, #number of rows to complement the number of combinations I've come up with; so if I come up with more, fix it.
+                                    ncol = p_s,
+                                    byrow = TRUE
+    )
+
+    sylreps <- array (0, c (p_is$pop_size, p_is$sylnum, p_is$num_pop))
+
+    for (i in 1 : p_is$num_pop) {
+      sylreps [, , i] <- t (replicate (p_is$pop_size, rbinom (
+        length (population_syll_probs [population.pattern [i], ]),
+        size = 1, prob = population_syll_probs [population.pattern [i], ])))
     }
   }
   return (sylreps)
 }
 
-initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
+initialize.curiosity <- function (p_ic, ro_ic, cur.min, cur.max,
             pastrunobject_ic = FALSE, pastruninit_ic = FALSE) {
 
   # if (xor ((pastrunobject_ic == FALSE), (pastruninit_ic == FALSE))) {
@@ -242,7 +264,7 @@ initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
   warning ("These arguments must be ordered - highest level
             population, then role- singers before choosers")
   if (length (cur.min) != length (cur.max) ||
-     length (cur.min) != (parameters_ic$num_pop * 2)) {
+     length (cur.min) != (p_ic$num_pop * 2)) {
     print ("Error Log #0003: each argument needs to be a
            vector that matches the number of populations
            AND the number of sexes - Make sure the number
@@ -250,9 +272,14 @@ initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
            curiosity values.")
     stop ("cur.max and cur.min have to be the same length.")
   }
+
+  p_z <- c (0.00,0.01,0.05,0.09,0.1,0.15,0.18,0.2,0.25,0.27,0.3,
+            0.35,0.36,0.4,0.45,0.49,0.5,0.51,0.54,0.55,0.59,0.6,
+            0.63,0.65,0.7,0.72,0.75,0.8,0.81,0.85,0.9,0.95,0.99,1.0)
+
   for (i in 1 : length (cur.min)) {
-    if (parameters_ic$zero_to_one_template [cur.max [i]
-    ] <= parameters_ic$zero_to_one_template [cur.min [i]] # ||
+    if (p_z [cur.max [i]
+    ] <= p_z [cur.min [i]] # ||
       #  cur.max[i] %% 1 != 0 ||
       #  cur.min[i] %% 1 != 0
        ) {
@@ -261,29 +288,26 @@ initialize.curiosity <- function (parameters_ic, cur.min, cur.max,
             calls to zero_to_one_template- check out the values")
     }
   }
-  curiosity_level <- array (0, c (parameters_ic$pop_size, parameters_ic$num_pop))
+  curiosity_level <- array (0, c (p_ic$pop_size, p_ic$num_pop))
   if (pastruninit_ic) {
-    # curiosity_object <- pastrunobject_ic [, , parameters_ic$sylnum + 1]
+    # curiosity_object <- pastrunobject_ic [, , p_ic$sylnum + 1]
     # curiosity_level <- aperm (curiosity_object, c (2, 1), na.rm = TRUE)
 
     curiosity_level <- pastrunobject_ic[[2]]
 
   } else {
-    for (pop.num in 1 : parameters_ic$num_pop) {
+    curiosity_counter <- matrix (data = 1 : (p_ic$num_pop * 2), nrow = 2, ncol = p_ic$num_pop, byrow = FALSE)
+    for (pop.num in 1 : p_ic$num_pop) {
       for (sexes in 1 : 2) {
         curiosity_level [((
-            1 + ((sexes - 1) * (parameters_ic$pop_size / 2))
+            1 + ((sexes - 1) * (p_ic$pop_size / 2))
           ) : (
-            sexes * parameters_ic$pop_size / 2
+            sexes * p_ic$pop_size / 2
           )), pop.num
         ] <- runif (
-          parameters_ic$pop_size / 2,
-          parameters_ic$zero_to_one_template [
-            cur.min [parameters_ic$curiosity_counter [sexes, pop.num]]
-          ],
-          parameters_ic$zero_to_one_template [
-            cur.max [parameters_ic$curiosity_counter [sexes, pop.num]]
-          ]
+          p_ic$pop_size / 2,
+          p_z [cur.min [curiosity_counter [sexes, pop.num]]],
+          p_z [cur.max [curiosity_counter [sexes, pop.num]]]
         )
       }
     }

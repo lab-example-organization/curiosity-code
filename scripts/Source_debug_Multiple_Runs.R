@@ -4,7 +4,7 @@ savinstuff <- function (parameters, output_filename, moran) {
                parameters$pop_size, parameters$sylnum, parameters$nsl,
                parameters$one_pop_singers, parameters$curlearnprob,
                parameters$learnprob, parameters$randlearnprob,
-               parameters$stand.dev, dim (parameters$pop_calls_matrix),
+               parameters$stand.dev, dim (parameters),
                dim (moran), dim (parameters$curiosity_counter),
                dim (parameters$population_syll_probs),
                length (parameters$curiositybreaks),
@@ -16,7 +16,7 @@ savinstuff <- function (parameters, output_filename, moran) {
                        rep ("parameters$learnprob", 2),
                        rep ("parameters$randlearnprob", 2),
                        "parameters$stand.dev",
-                       rep ("dim (parameters$pop_calls_matrix)", 2),
+                       rep ("dim (parameters)", 2),
                        rep ("dim (moran)", 3),
                        rep ("dim (parameters$curiosity_counter)", 2),
                        rep ("dim (parameters$population_syll_probs)", 2),
@@ -223,7 +223,7 @@ invasion_parameters_curiosity <- function (
     ips <- ips / 2
   }
 
-  pop_subset <- sample (params_IPC$pop_calls_matrix [thesex,], ips)
+  pop_subset <- sample (params_IPC [thesex,], ips)
 
   if (! (itv)) {
 
@@ -272,7 +272,7 @@ invasion_parameters_sylrep <- function (
     ips <- ips / 2
   }
 
-  pop_subset <- sample (params_IPS$pop_calls_matrix [thesex,], ips)
+  pop_subset <- sample (params_IPS [thesex,], ips)
 
   # if (ifocus == 'sylrep') {
 

@@ -13,7 +13,7 @@
 
 #____________________________________________________________________________________
 
-rm (list = objects ()) # Clear environment
+
 #
 
 
@@ -65,7 +65,7 @@ n_cores <- 4
 source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1 : 4
+shifting_curstart <- 1 : 200
 paramsfile <- c ("paramsparentNoInv.yaml")
 # paramsFile <- c ("diffZwischensTnN.yaml")
 simdate <- gsub ('-', '', substring (Sys.Date(), 3))
