@@ -674,40 +674,40 @@ multi_runs <- function (shifting_curstart, paramssource,
   dirdate, seednumber, recolorize = FALSE) {
   
   set.seed (seednumber + shifting_curstart)
-  params <- yaml.load_file (file.path ("parameters", paramssource))
-  number_of_reps <- as.numeric (params$number_of_reps)
+  parameters <- yaml.load_file (file.path ("parameters", paramssource))
+  number_of_reps <- as.numeric (parameters$number_of_reps)
   # if (redo != FALSE) {
-  #   if (params$indrunredo != FALSE) {
-  #     subsetorsequence <- params$simnumberstart [shifting_curstart]
+  #   if (parameters$indrunredo != FALSE) {
+  #     subsetorsequence <- parameters$simnumberstart [shifting_curstart]
   #   } else {
-  #     subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+  #     subsetorsequence <- parameters$simnumberstart + (shifting_curstart - 1)
   #   }
-  #   #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
+  #   #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'parameters.yaml' type file
   #   source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   #   return (figprodmultrun (specificsimnumber = subsetorsequence,
   #     number_of_repeats = number_of_reps,
-  #     paramssource = paramssource, recolorize = params$recolorize))
+  #     paramssource = paramssource, recolorize = parameters$recolorize))
   # } else if (redo == "recolorize") {
-    # if (params$indrunredo != FALSE) {
-    #   subsetorsequence <- params$simnumberstart [shifting_curstart]
+    # if (parameters$indrunredo != FALSE) {
+    #   subsetorsequence <- parameters$simnumberstart [shifting_curstart]
     # } else {
-    #   subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+    #   subsetorsequence <- parameters$simnumberstart + (shifting_curstart - 1)
     # }
-    # #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
+    # #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'parameters.yaml' type file
     # source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
     # return (figprodmultrun (specificsimnumber = subsetorsequence,
     #   number_of_repeats = number_of_reps,
-    #   paramssource = paramssource, recolorize = params$recolorize))
+    #   paramssource = paramssource, recolorize = parameters$recolorize))
   # } else {
  #  thing <- c()
- #  for(i in 1:length(params$redodir)) {thing <- append(thing, params$redodir[i])}
+ #  for(i in 1:length(parameters$redodir)) {thing <- append(thing, parameters$redodir[i])}
 
-  if (params$indrunredo != FALSE) {
-    subsetorsequence <- params$simnumberstart [shifting_curstart]
-    singleormixture <- params$curinhdistribution [shifting_curstart]
+  if (parameters$indrunredo != FALSE) {
+    subsetorsequence <- parameters$simnumberstart [shifting_curstart]
+    singleormixture <- parameters$curinhdistribution [shifting_curstart]
   } else {
-    subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-    singleormixture <- params$curinhdistribution
+    subsetorsequence <- parameters$simnumberstart + (shifting_curstart - 1)
+    singleormixture <- parameters$curinhdistribution
     
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),
@@ -722,23 +722,23 @@ multi_runs <- function (shifting_curstart, paramssource,
 
     lastrun_init <- vector("list", length = number_of_reps)
 
-    if (params$lastruninit) {
-      if (length (params$lastrunid) > 1) {
-        lastrun_init <- restart_from_save (parameters = params,
-          inputpattern = params$lastrunid [shifting_curstart])
+    if (parameters$lastruninit) {
+      if (length (parameters$lastrunid) > 1) {
+        lastrun_init <- restart_from_save (parameters = parameters,
+          inputpattern = parameters$lastrunid [shifting_curstart])
       } else {
-        lastrun_init <- restart_from_save (parameters = params,
-          inputpattern = params$lastrunid)
+        lastrun_init <- restart_from_save (parameters = parameters,
+          inputpattern = parameters$lastrunid)
       }
     }
 
     for (rep_number in 1 : number_of_reps) {
 
 
-      if (length (params$curinh_pattern) != 1) {
-        curinh_style <- params$curinh_pattern[shifting_curstart]
+      if (length (parameters$curinh_pattern) != 1) {
+        curinh_style <- parameters$curinh_pattern[shifting_curstart]
       } else {
-        curinh_style <- params$curinh_pattern
+        curinh_style <- parameters$curinh_pattern
       }
 
       if (rep_number == 1) {
@@ -754,7 +754,7 @@ multi_runs <- function (shifting_curstart, paramssource,
       }
 
       life_cycle(
-        params = params, 
+        params = parameters, 
         shifting_curstart = shifting_curstart, 
         subsetorsequence = subsetorsequence, 
         curinh_style = curinh_style, 
@@ -771,15 +771,15 @@ multi_runs <- function (shifting_curstart, paramssource,
   }
 
   source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-  # params <- yaml.load_file (file.path ("parameters", paramssource))
+  # parameters <- yaml.load_file (file.path ("parameters", paramssource))
   return(figprodmultrun (specificsimnumber = subsetorsequence,
                           #number_of_repeats = number_of_reps,
                           paramssource = paramssource,
-                          # recolorize = params$recolorize,
+                          # recolorize = parameters$recolorize,
                           # results_tenK_dir = FALSE,
                           lineplots = TRUE,
                           curMeans_only = FALSE#,
-                          # compare_subsets = params$compare_subsets
+                          # compare_subsets = parameters$compare_subsets
                           ))
 
 

@@ -50,9 +50,7 @@ if (! (dir.exists (file.path (strsplit (getwd (),
         }
 
 
-# This line will source packagaes, either:
-    # by loading them from the computer, or
-    # by downloading them from the internet.
+
 source (file.path ("scripts", "Source_Reference_Section.R"))
 referencesection ("multirun")
 # referenceSection ("profiler")

@@ -147,6 +147,7 @@ syll_learn <- function (p_SL,
 
 
 make.offspring.calls <- function (p_OC, temp_data_OC, ro_OC) {
+  if (length (ro_OC) < 1) {ro_OC <- matrix (data = c (1 : p_OC$pop_size), nrow = 2, ncol = (p_OC$pop_size / 2), byrow = TRUE)}
   for (sex in 1 : 2){
     new_index <- c (sample (ro_OC [sex, ], 2, replace = TRUE))
     temp_data_OC [(sex + 2), p_OC$sylnum + 1, ] <-  new_index
@@ -269,6 +270,11 @@ sing.selection <- function (p_SS,
                           #  selection_strategy = "similarity score",
                            ) {
 
+  # if (length (ro_SS) < 1) {ro_SS <- matrix (data = c (1 : p_SS$pop_size), nrow = 2, ncol = (p_SS$pop_size / 2), byrow = TRUE)}
+
+  ro_SS <- list(c(1:(p_SS$pop_size/2)), c(p_SS$pop_size/2+(1:(p_SS$pop_size/2))))
+  tryCatch ({sample (ro_SS [[1]], sylrep_fill_chances)}, error = function(e) {stop(print(ro_SS[[1]]))})
+  # ro_SS[[1]] <- as.numeric()
   if (select_type == "mate") {select_type <- 2} else if (select_type == "tutor") {select_type <- 1}
 
   if (select_type == 2) {
@@ -305,8 +311,8 @@ sing.selection <- function (p_SS,
       while (chance_for_selection <= num_select_chances [select_type]) {
         stop = FALSE
         if (chance_for_selection == num_select_chances [select_type]) {
-          auto.teachers <- matrix (c (sample (ro_SS [1, ],
-            sylrep_fill_chances),sample (ro_SS [2, ],
+          auto.teachers <- matrix (c (sample (ro_SS [[1]],
+            sylrep_fill_chances),sample (ro_SS [[2]],
             sylrep_fill_chances)),2,sylrep_fill_chances,TRUE)
           for (MTsylrep_filter in 1 : sylrep_fill_chances) {
             #c ((sample(ro_SS[1, ], 1)), (
@@ -361,13 +367,14 @@ sing.selection <- function (p_SS,
             p_SS$one_pop_singers [select_type]))) : (
               population * p_SS$one_pop_singers [select_type])
               # "1-10," or "11-20"
-          selector.index <- sample (ro_SS [2, ], 1)
+          selector.index <- sample (ro_SS [[2]], 1)
               # randomly sample a female from the population
         }
 
         selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
-          stop (print("selector didn't have any syllables in the sylrep", ro_SS))
+          #tryCatch ({})# stop (print("selector didn't have any syllables in the sylrep", ro_SS)) # selector didn't have any syllables in the sylrep>     ### looks like logical(0) output
+          stop (print("problem here, 377"))
         }
         #print ("vapply")
         if (round_up == TRUE) {
@@ -380,8 +387,8 @@ sing.selection <- function (p_SS,
             vapply (1 : p_SS$num_pop,
               function (x) {
                 temp <- cpp_rowSums (sylrep_object[
-                  ro_SS [1,],,x])
-                sample (x = ro_SS [1,],
+                  ro_SS [[1]],,x])
+                sample (x = ro_SS [[1]],
                         size = p_SS$one_pop_singers [select_type],
                         replace = FALSE,
                         prob = temp / max (temp))
@@ -401,8 +408,8 @@ sing.selection <- function (p_SS,
             vapply (1 : p_SS$num_pop,
               function (x) {
                 temp <- cpp_rowSums (sylrep_object[
-                  ro_SS [1,],,x])
-                sample (x = ro_SS [1,],
+                  ro_SS [[1]],,x])
+                sample (x = ro_SS [[1]],
                         size = p_SS$one_pop_singers [select_type],
                         replace = FALSE)
               }, rep (0, p_SS$one_pop_singers [select_type])
@@ -614,15 +621,15 @@ sing.selection <- function (p_SS,
     } else if (selection_path == 2) {
       # We need these variables to run update_selexn_data
 
-      selector.index <- sample (ro_SS [2, ], 1)
+      selector.index <- sample (ro_SS [[2]], 1)
 
       if (round_up == TRUE) {
         selection.index <- (
           vapply (1 : p_SS$num_pop,
             function (x) {
               temp <- cpp_rowSums (sylrep_object[
-                ro_SS [1,],,x])
-              sample (x = ro_SS [1,],
+                ro_SS [[1]],,x])
+              sample (x = ro_SS [[1]],
                       size = p_SS$one_pop_singers [1],
                       replace = FALSE,
                       prob = temp / max (temp))
@@ -630,13 +637,13 @@ sing.selection <- function (p_SS,
           )
         )
       } else {
-        selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+        selection.index <- sample (ro_SS [[1]], p_SS$one_pop_singers [1])
       }
 
-      selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      selection.index <- sample (ro_SS [[1]], p_SS$one_pop_singers [1])
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,1]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [[1]],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [[1]],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
         singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
       } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
@@ -664,14 +671,14 @@ sing.selection <- function (p_SS,
       )
 
     } else if (selection_path == 3) {
-      selector.index <- sample (ro_SS [2, ], 1)
+      selector.index <- sample (ro_SS [[2]], 1)
       selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
           stop ("selector didn't have any syllables in the sylrep")
         }
       # if (round_up == TRUE) {
-      #   temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
-      #   selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   temp <- cpp_rowSums (sylrep_object[ro_SS [[1]],,x])
+      #   selection.index <- sample (ro_SS [[1]], p_SS$one_pop_singers [1])
       # }
 
       if (round_up == TRUE) {
@@ -679,8 +686,8 @@ sing.selection <- function (p_SS,
             vapply (1 : p_SS$num_pop,
               function (x) {
                 temp <- cpp_rowSums (sylrep_object[
-                  ro_SS [1,],,x])
-                sample (x = ro_SS [1,],
+                  ro_SS [[1]],,x])
+                sample (x = ro_SS [[1]],
                         size = p_SS$one_pop_singers [1],
                         replace = FALSE,
                         prob = temp / max (temp))
@@ -688,12 +695,12 @@ sing.selection <- function (p_SS,
             )
           )
       } else {
-        selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+        selection.index <- sample (ro_SS [[1]], p_SS$one_pop_singers [1])
       }
 
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,1]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [[1]],,1]) [selection.index]
+      # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [[1]],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
         THING <- which (selection.sylrepSums == max (selection.sylrepSums))
         stuff <- array (as.numeric (paste0 (selection.sylreps[THING[1 : length (THING)],])), c (length (THING),length (selector.sylrep)))
