@@ -52,7 +52,7 @@ source (file.path ("scripts", "Source_Reference_Section.R"))
 referencesection ("multirun")
 # referenceSection ("profiler")
 
-n_cores <- 8
+n_cores <- 20
 # Specify the number of cores/workers we want to use
     # n_cores <- detectCores () - 3 # built around a maximum allowance
 # n_cores <- 2
@@ -66,7 +66,7 @@ source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 
 shifting_curstart <- 1 : 200
-paramsfile <- c ("paramsparentNoInv.yaml")
+paramsfile <- c ("paramsSmolInvBothLowHrTenK.yaml")
 # paramsFile <- c ("diffZwischensTnN.yaml")
 simdate <- gsub ('-', '', substring (Sys.Date(), 3))
 secretcode <- 58418
