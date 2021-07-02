@@ -438,11 +438,11 @@ life_cycle <- function (params, shifting_curstart,
   # pairing_pool <- define_temp_data (params, 2)
   if (params$lastruninit) {
     sylreps <- initialize.sylrep (p_is = params,
-      population.pattern = c (1,2), pastrunobject_is = lastrun_init[[rep_number]],
+      population.pattern = c (1,2), pastrunobject_is = params$lastrun_init[[rep_number]],
       eqpop = TRUE, eqsex = TRUE, pastruninit_is = TRUE)
     curiosity_level <- initialize.curiosity (
       p_ic = params, cur.min = scmin, cur.max = scmax,
-      pastrunobject_ic = lastrun_init[[rep_number]], pastruninit_ic = TRUE)
+      pastrunobject_ic = params$lastrun_init[[rep_number]], pastruninit_ic = TRUE)
   } else {
     sylreps <- initialize.sylrep (p_is = params,
       population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
