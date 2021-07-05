@@ -485,7 +485,8 @@ life_cycle <- function (params, shifting_curstart,
           ips = params$invasionpopsize,
           itv = params$invasiontraitvalue,
           curiosity_container = curiosity_level,
-          p_IPC = params
+          p_IPC = params,
+          ro_IPC = ref_objects
         )
       } else {
         sylreps <- invasion_p_sylrep (
@@ -494,7 +495,8 @@ life_cycle <- function (params, shifting_curstart,
           ips = params$invasionpopsize,
           itv = params$invasiontraitvalue,
           sylrep_container = sylreps,
-          p_IPS = params
+          p_IPS = params,
+          ro_IPS = ref_objects
         )
       }
     }
