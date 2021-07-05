@@ -80,11 +80,15 @@ syll_learn <- function (p_SL,
     #sink ()
 
     if (select_type == "mate") {
-      # loop_size <- 2
-      loop_size <- 1
-    } else if (select_type == "tutor") {
-      # loop_size <- 1
       loop_size <- 2
+      # loop_size <- 1
+
+      vertoblearn_subset <- as.numeric(c(p_SL$vertoblearn[[1]][2], p_SL$vertoblearn[[1]][1]))
+    } else if (select_type == "tutor") {
+      loop_size <- 1
+      # loop_size <- 2
+
+      vertoblearn_subset <- as.numeric(c(p_SL$vertoblearn[[2]][2], p_SL$vertoblearn[[2]][1]))
     }
 
     for (sex in 1 : loop_size) {
@@ -95,12 +99,12 @@ syll_learn <- function (p_SL,
         # moran$learning.pool[(sex + 2),
         # source_of_ones[sylls_to_learn], population] <- 0
         # if (probs [sylls_to_learn] <= (p_SL$learnprob [loop_size])) {
-        if (probs [sylls_to_learn] <= (as.numeric(p_SL$vertoblearn[[loop_size]]))) {
+        if (probs [sylls_to_learn] <= vertoblearn_subset[loop_size]) {
           temp_data_SL [(sex + 2), source_of_ones [sylls_to_learn], population] <- 1
         }
         if (probs [sylls_to_learn] > (
           # 1 - p_SL$randlearnprob [loop_size])) {
-          1 - as.numeric(p_SL$vertoblearn [[loop_size]]))) {
+          vertoblearn_subset[loop_size])) {
           r_norm <- rnorm (1, mean = ifelse (randlearn_context == 1,
                                            mean (source_of_ones),
                                            source_of_ones [sylls_to_learn]),
@@ -367,7 +371,7 @@ sing.selection <- function (p_SS,
 
         selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
-          stop (print("selector didn't have any syllables in the sylrep", ro_SS))
+          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
         }
         #print ("vapply")
         if (round_up == TRUE) {
@@ -645,7 +649,7 @@ sing.selection <- function (p_SS,
 
       selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
-          stop ("selector didn't have any syllables in the sylrep")
+          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
         }
 
       temp_data_SS <- update_selexn_data (
@@ -667,7 +671,7 @@ sing.selection <- function (p_SS,
       selector.index <- sample (ro_SS [2, ], 1)
       selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
-          stop ("selector didn't have any syllables in the sylrep")
+          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
         }
       # if (round_up == TRUE) {
       #   temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])

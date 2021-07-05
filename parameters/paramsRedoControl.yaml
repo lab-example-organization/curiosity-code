@@ -36,7 +36,7 @@ num_pop: 2
 pop_size: 400
 sylnum: 156
 num_sylls_per_prob_lvl: 8
-number_of_reps: 2
+number_of_reps: 5
 standard_deviation: 2
 mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
 tutor_selection_type: 'curiosity'

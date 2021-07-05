@@ -42,7 +42,7 @@ concatenate_data <- function (specific_run,
                                 data_dir = multirun_folderlist) {
   # This function takes
   data_dir <- data_dir[specific_run]
-  nts = parms$runlength # number of 1k timesteps
+  nts = parms$runlength/1000 # number of 1k timesteps
   # knts = nts*1000
   # cnts = nts*100
   # dnts = nts*10
@@ -58,7 +58,7 @@ concatenate_data <- function (specific_run,
 
   sylrepz = array (0, c (2, npp,  nts * numslice))
   sdstbxn = array (0, c ((2 * npp), snm,  nts * numslice))
-  cursity = array (0, c (14, npp,  nts * numslice))
+  cursity = array (0, c (16, npp,  nts * numslice))
   # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
   curhist = array (0, c ((2 * npp), (npp * ops[1]),  nts * numslice))
 
@@ -203,15 +203,20 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
 
     meanz <- cursitylist [[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
     direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
-    if (length(recolorize) > 1) {
-      if (lineplots != FALSE) {
-        # lines
-        direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
-        indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
+    if (recolorize != FALSE) {
+      if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+        if (lineplots != FALSE) {
+          # lines
+          direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
+          indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
+        } else {
+          # points
+          direct_object <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
+          indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
+        }
       } else {
-        # points
-        direct_object <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
-        indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
+        direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+        # recolorize <- FALSE
       }
     } else {
       direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
@@ -231,7 +236,9 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
 
     eval (parse (text = direct_object))
     if (recolorize != FALSE) {
-      eval (parse (text = indirect_object))
+      if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+        tryCatch({eval (parse (text = indirect_object))}, error = function(e) {stop(recolorize)})
+      }
     }
     lines (cursitylist [[number_of_runs + 1]][figure_retainer[individual_figures],population,],col="black", cex=0.2)
     dev.off ()
@@ -369,7 +376,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
   # params = yaml.load_file (file.path ("parameters", parameters))
   num_timesteps = parameters$runlength
   
-  if (length(recolorize) > 1) {
+  if (recolorize != FALSE) {
     saving_dir <- file.path (saving_dir, "recolorizedLineplots")
     if (! (dir.exists (saving_dir))) {dir.create (saving_dir)}
   }
@@ -385,15 +392,20 @@ simple_plots <- function (parameters, plot_info = plot_info,
     for (sex in 1 : 2) {
       if (curMeans_only == FALSE) {
         meanz <- sylrepzlist [[number_of_runs + 1]][sex,population,]
-        if (length(recolorize) > 1) {
-          if (lineplots != FALSE) {
-            # print("lineplots")
-            direct_object <- paste0 ("lines (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-            indirect_object <- paste0 ("lines (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+        if (recolorize != FALSE) {
+          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+            if (lineplots != FALSE) {
+              # print("lineplots")
+              direct_object <- paste0 ("lines (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+              indirect_object <- paste0 ("lines (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+            } else {
+              # print("points on plots")
+              direct_object <- paste0 ("points (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+              indirect_object <- paste0 ("points (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+            }
           } else {
-            # print("points on plots")
-            direct_object <- paste0 ("points (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-            indirect_object <- paste0 ("points (sylrepzlist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+            direct_object <- paste0 ("points (sylrepzlist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
+            # recolorize <- FALSE
           }
 
         } else {
@@ -421,8 +433,10 @@ simple_plots <- function (parameters, plot_info = plot_info,
                                       ((length (cursitylist [[number_of_runs + 1]][sex,population,]))/10))),
               labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
         eval (parse (text = direct_object))
-        if (length(recolorize) > 1) {
-          eval (parse (text = indirect_object))
+        if (recolorize != FALSE) {
+          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+            tryCatch({eval (parse (text = indirect_object))}, error = function(e) {stop(recolorize)})
+          }
         }
         lines (sylrepzlist [[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
         dev.off ()
@@ -430,15 +444,19 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
 
       meanz <- cursitylist [[number_of_runs + 1]][sex,population,]
-      if (length(recolorize) > 1) {
-        if (lineplots != FALSE) {
-          # print("lines on plot")
-          direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-          indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+      if (recolorize != FALSE) {
+        if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          if (lineplots != FALSE) {
+            # print("lines on plot")
+            direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+            indirect_object <- paste0 ("lines (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+          } else {
+            # print("pointss on plots")
+            direct_object <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
+            indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+          }
         } else {
-          # print("pointss on plots")
-          direct_object <- paste0 ("points (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
-          indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][sex,population,],col=\"blue\", cex=0.5)")
+          direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][sex,population,],col=\"grey\", cex=0.2)")
         }
 
       } else {
@@ -466,8 +484,10 @@ simple_plots <- function (parameters, plot_info = plot_info,
                                     ((length (cursitylist [[number_of_runs + 1]][sex,population,]))/10))),
             labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
       eval (parse (text = direct_object))
-      if (length(recolorize) > 1) {
-        eval (parse (text = indirect_object))
+      if (recolorize != FALSE) {
+        if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          tryCatch({eval (parse (text = indirect_object))}, error = function(e) {stop(recolorize)})
+        }
       }
       lines (cursitylist [[number_of_runs + 1]][sex,population,],col="black", cex=0.2)
       dev.off ()
@@ -499,34 +519,26 @@ simple_plots <- function (parameters, plot_info = plot_info,
           dev.off ()
         }
 
-        if (length(recolorize) > 1) {
+        if (length(recolorize) > 0) {
           # print("DOsdstbxnlist")
           DOsdstbxnlist <- vector (mode = "list", length = length(recolorize) + 1)
           # print("IOsdstbxnlist")
-          IOsdstbxnlist <- vector (mode = "list", length = number_of_runs - length(recolorize) + 1)
+          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+            IOsdstbxnlist <- vector (mode = "list", length = number_of_runs - length(recolorize) + 1)
+          }
           # save.image("210519_workspace.RData")
           # print("fill DO chunks")
           for (DO_chunks in 1: length(recolorize)) {
             DOsdstbxnlist [[DO_chunks]] <- array(sdstbxnlist[[recolorize[DO_chunks]]], dim(sdstbxnlist[[1]]))
           }
-# print("fill IO chunks")
-          for (IO_chunks in 1: (number_of_runs - length(recolorize))) {
-            IOsdstbxnlist [[IO_chunks]] <- array(sdstbxnlist[[which (! (1:number_of_runs %in% recolorize))[IO_chunks]]], dim(sdstbxnlist[[1]]))
-          }
           
           DOsdstbxnlist[[length(DOsdstbxnlist)]] <- array(rep(0, length(sdstbxnlist[[1]])), dim(sdstbxnlist[[1]]))
-          IOsdstbxnlist[[length(IOsdstbxnlist)]] <- array(rep(0, length(sdstbxnlist[[1]])), dim(sdstbxnlist[[1]]))
-
+          
           for (j in 1 : length (sdstbxnlist [[1]])) {
             eval (parse (text = paste0 ("DOsdstbxnlist [[length(DOsdstbxnlist)]][j] <- mean (c (DOsdstbxnlist [[",
                                   paste0 (1 : (length(DOsdstbxnlist) - 2),"]][j],DOsdstbxnlist [[", collapse=''),
                                   length(DOsdstbxnlist) - 1, "]][j]))")))
-            eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][j] <- mean (c (IOsdstbxnlist [[",
-                                  paste0 (1 : (length(IOsdstbxnlist) - 2),"]][j],IOsdstbxnlist [[", collapse=''),
-                                  length(IOsdstbxnlist) - 1, "]][j]))")))
           }
-        
-          #     print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
 
           # direct_object - which (1 : number_of_runs %in% recolorize)
           DO_meanz <- DOsdstbxnlist [[length(DOsdstbxnlist)]][(sex + ((population - 1) * 2)), ,]
@@ -538,15 +550,33 @@ simple_plots <- function (parameters, plot_info = plot_info,
           minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
           dev.off ()
 
-          # indirect_object - which (! (1 : number_of_runs %in% recolorize))
-          IO_meanz <- IOsdstbxnlist [[length(IOsdstbxnlist)]][(sex + ((population - 1) * 2)), ,]
-          file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_IO_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
-          png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
-          image(t (IO_meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s IO Sylnum"), axes=FALSE)
-          axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
-          axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
-          minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
-          dev.off ()
+# print("fill IO chunks")
+          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+            for (IO_chunks in 1: (number_of_runs - length(recolorize))) {
+              IOsdstbxnlist [[IO_chunks]] <- array(sdstbxnlist[[which (! (1:number_of_runs %in% recolorize))[IO_chunks]]], dim(sdstbxnlist[[1]]))
+            }
+            
+            IOsdstbxnlist[[length(IOsdstbxnlist)]] <- array(rep(0, length(sdstbxnlist[[1]])), dim(sdstbxnlist[[1]]))
+            
+            for (k in 1 : length (sdstbxnlist [[1]])) {
+              eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][k] <- mean (c (IOsdstbxnlist [[",
+                                    paste0 (1 : (length(IOsdstbxnlist) - 2),"]][k],IOsdstbxnlist [[", collapse=''),
+                                    length(IOsdstbxnlist) - 1, "]][k]))")))
+            }
+
+            # indirect_object - which (! (1 : number_of_runs %in% recolorize))
+            IO_meanz <- IOsdstbxnlist [[length(IOsdstbxnlist)]][(sex + ((population - 1) * 2)), ,]
+            file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_sylnum_IO_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
+            png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+            image(t (IO_meanz), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s IO Sylnum"), axes=FALSE)
+            axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
+            axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
+            minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
+            dev.off ()
+          }
+
+        
+          #     print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
 # print("is this where the problem is? 555")
           #______________________________________________________
           #__________________________________________________
@@ -558,9 +588,17 @@ simple_plots <- function (parameters, plot_info = plot_info,
           #
           #
           #
-          DO_and_IO <- list(DOsdstbxnlist[[length(DOsdstbxnlist)]], IOsdstbxnlist[[length(IOsdstbxnlist)]])
-          doANDio_names <- c("DO", "IO")
-          for (doORio in 1:2) {
+          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+            doANDio <- 2
+            DO_and_IO <- list(DOsdstbxnlist[[length(DOsdstbxnlist)]], IOsdstbxnlist[[length(IOsdstbxnlist)]])
+            doANDio_names <- c("DO", "IO")
+          } else {
+            doANDio <- 1
+            DO_and_IO <- list(DOsdstbxnlist[[length(DOsdstbxnlist)]])
+            doANDio_names <- c("DO")
+          }
+
+          for (doORio in 1:doANDio) {
             red_to_yellow_to_blue <- colorRampPalette(c("#DE2D26", "#C7D34D", "#3182BD"))
             range_1 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[1]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[1]))(10)[10]))
             range_2 <- colorRampPalette(c(colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[2]))(10)[3], colorRampPalette(c("#F7F7F7", red_to_yellow_to_blue(7)[2]))(10)[10]))
