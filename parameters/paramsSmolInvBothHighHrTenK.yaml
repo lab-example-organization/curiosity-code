@@ -449,6 +449,8 @@ invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation'
 
                           # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
 indrunredo: FALSE
+redodir: FALSE # if not false, needs to be an absolute path to the working directory that contains the original files ### list.files(file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv"), pattern = "_4098")
+
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 lastruninit: TRUE
