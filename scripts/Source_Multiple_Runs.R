@@ -236,10 +236,10 @@ invasion_p_curiosity <- function (
 
     # this substitutes the current curiosity value
     # for the population subset, with "1 - current curiosity value"
-    curiosity_container [pop_subset [
+    tryCatch({curiosity_container [pop_subset [
       1 : ips], population] <- sample ( (
         100 * (itv [1] - (itv [2] / 2))) : (100 * (
-          itv [1] + (itv [2] / 2))), length (pop_subset), replace = TRUE) / 100
+          itv [1] + (itv [2] / 2))), length (pop_subset), replace = TRUE) / 100}, error = function(e) {stop(dim(curiosity_container))})
 
     # return (curiosity_container)
 
@@ -438,11 +438,11 @@ life_cycle <- function (params, shifting_curstart,
   # pairing_pool <- define_temp_data (params, 2)
   if (params$lastruninit) {
     sylreps <- initialize.sylrep (p_is = params,
-      population.pattern = c (1,2), pastrunobject_is = params$lastrun_init[[rep_number]],
+      population.pattern = c (1,2), pastrunobject_is = lastruninit[[rep_number]],
       eqpop = TRUE, eqsex = TRUE, pastruninit_is = TRUE)
     curiosity_level <- initialize.curiosity (
       p_ic = params, cur.min = scmin, cur.max = scmax,
-      pastrunobject_ic = params$lastrun_init[[rep_number]], pastruninit_ic = TRUE)
+      pastrunobject_ic = lastruninit[[rep_number]], pastruninit_ic = TRUE)
   } else {
     sylreps <- initialize.sylrep (p_is = params,
       population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
@@ -762,7 +762,7 @@ multi_runs <- function (shifting_curstart, paramssource,
         curinh_style = curinh_style, 
         singleormixture = singleormixture, 
         dirdate = dirdate, 
-        lastruninit = lastruninit, 
+        lastruninit = lastrun_init, 
         rep_number = rep_number
       )
       print (paste0 ("Replicate Run # ",
