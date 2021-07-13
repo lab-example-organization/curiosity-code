@@ -37,7 +37,7 @@ curstarts:
     scmax: [15,15,15,26]
 simnumberstart: [2089, 2105, 2121, 2137, 2153, 2169, 2185, 2201, 2217, 2221, 2233, 2237, 2249, 2253, 2265, 2269, 2270, 2281]
 runlength: 10000
-Syllearnstyle: 'nsL'
+syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
     learn: 0.95

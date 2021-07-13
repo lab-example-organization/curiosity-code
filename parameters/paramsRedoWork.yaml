@@ -22,7 +22,7 @@ curstarts:
 # 8-11, 9-12, 11-14, 12-15, 14-17, 15-20, 11-25, 12-24, 14-22, 16-18
 simnumberstart: [10909, 10910, 10911, 10912, 10913, 10914, 10915, 10916]
 runlength: 10000
-Syllearnstyle: 'nsL'
+syllearnstyle: 'nsL'
 vertoblearn:
   vertical:
     learn: 0.95

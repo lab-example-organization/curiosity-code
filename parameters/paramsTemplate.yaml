@@ -10,7 +10,7 @@ curstarts:
 
 simnumberstart: 3481
 runlength: 2000
-Syllearnstyle: 'nsL'
+syllearnstyle: 'nsL' # unnecessary; to be removed
 vertoblearn:
   vertical:
     learn: 0.95
@@ -36,7 +36,7 @@ selection_round_up: FALSE # if there's a part of tutor selection involving the s
 curinh_pattern: 3
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
-curinhdistribution: 0.75 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
+curinhdistribution: 0.5 # must be between 0 and 1 - value displayed == male; 1 - value == female - distribution of curinh between parents
 traitinvasion: FALSE
 invasionthoutmstps: 1
 invasionpopsize: 5
