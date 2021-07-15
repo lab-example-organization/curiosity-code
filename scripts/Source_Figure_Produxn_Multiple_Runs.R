@@ -305,8 +305,8 @@ figprodmultrun <- function (
 
       thing <- which (subpop_measures == max (subpop_measures))
       if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
-      subset_output <- which (subset_pool[thing[1], thing[2], 1 : params$number_of_reps] > subset_pool[thing[1], thing[2], params$number_of_reps + 1])
-      if (compare_subsets == TRUE) {subset_output_pool[1] <- subset_output}
+      tryCatch ({subset_output <- which (subset_pool[thing[1], thing[2], 1 : params$number_of_reps] > mean(subset_pool[thing[1], thing[2], params$number_of_reps]))}, error = function(e) {stop(print(paste0(paste0(dim(subset_pool), collapse = ", "), "; ", params$number_of_reps)))})
+      if (compare_subsets == TRUE) {tryCatch({subset_output_pool[[1]] <- subset_output}, error = function (e) {stop(print(subset_output))})}
     } 
     
     if (recolorize == "variance-median" || compare_subsets == TRUE) {
@@ -322,7 +322,7 @@ figprodmultrun <- function (
       if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
       whatever <- median (subset_pool[thing[1], thing[2], 1 : params$number_of_reps])
       subset_output <- which (subset_pool[thing[1], thing[2], 1 : params$number_of_reps] > whatever)
-      if (compare_subsets == TRUE) {subset_output_pool[2] <- subset_output}
+      if (compare_subsets == TRUE) {subset_output_pool[[2]] <- subset_output}
     }
     
     if (recolorize == "range-median" || compare_subsets == TRUE) {
@@ -340,7 +340,7 @@ figprodmultrun <- function (
       if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
       whatever <- median (subset_pool[thing[1], thing[2], 1 : params$number_of_reps])
       subset_output <- which (subset_pool[thing[1], thing[2], 1 : params$number_of_reps] > whatever)
-      if (compare_subsets == TRUE) {subset_output_pool[3] <- subset_output}
+      if (compare_subsets == TRUE) {subset_output_pool[[3]] <- subset_output}
       # just var, but with a subcluster far below "varX#" so we see how the very edge cases line up with other subpopulations
       # subset_output <- 1 : 50 # whatever... fix it only if it breaks
     }
@@ -361,8 +361,15 @@ figprodmultrun <- function (
       # thing <- which (clustering_measures == max (clustering_measures))
       # if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
       # subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
-      subset_output <- 1 : 50 # whatever... fix it only if it breaks
-      if (compare_subsets == TRUE) {subset_output_pool[4] <- subset_output}
+      
+      subset_output <- 1 : params$number_of_reps # whatever... fix it only if it breaks
+      
+      # subset_output <- c(1,2,3,4)
+
+      if (compare_subsets == TRUE) {
+        # subset_output_pool[[4]] <- vector ("numeric", length(subset_output))
+        subset_output_pool[[4]] <- subset_output
+      }
     } 
     
     # if (compare_subsets == TRUE) {
@@ -388,7 +395,7 @@ figprodmultrun <- function (
     # # }
 
     if (compare_subsets == TRUE) {
-      saveRDS (subset_output_pool, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
+      saveRDS (subset_output_pool, file.path(multirun_directory, "list_-_subset_comparison_output.RData"))
     }
 # print ("simple_plots start")
 

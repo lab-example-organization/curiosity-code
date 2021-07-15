@@ -437,6 +437,9 @@ sylnum: 156
 num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
+mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
+tutor_selection_type: "curiosity"
+selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
 
 # curinh_pattern - calling either the row number
 # or name of row for different curiosity inheritance patterns -
@@ -464,9 +467,12 @@ invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation'
 
 
                           # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
+# indrunredo: FALSE
 indrunredo: TRUE
 # redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childFemHihInv")' # 'file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv")' ### this will replace the tenK_dir args within fpmr
-redodir: 'file.path("results", "tenKfiveByFive_childF1NoInv")'
+redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childF1NoInv")'
+# 
+# redodir: 'file.path("results", "tenKfiveByFive_childF1NoInv")'
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 # lastruninit: TRUE
@@ -486,7 +492,7 @@ lastrunid: FALSE
 
 # figure settings
 
-figure_redo_only: FALSE
+figure_redo_only: TRUE
 compare_subsets: FALSE
 recolorize: "range-median"
 absolute_yAxis: TRUE

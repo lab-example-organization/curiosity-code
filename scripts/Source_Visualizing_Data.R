@@ -202,9 +202,9 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
   for (individual_figures in 1 : length (figure_retainer)) {
 
     meanz <- cursitylist [[number_of_runs + 1]][(figure_retainer[individual_figures]),population,]
-    direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+    # direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
     if (recolorize != FALSE) {
-      if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+      if (number_of_runs - length(recolorize) > 0) {
         if (lineplots != FALSE) {
           # lines
           direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][", (figure_retainer[individual_figures]), ",population,],col=\"red\", cex=0.5)")
@@ -215,7 +215,11 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
           indirect_object <- paste0 ("points (cursitylist [[", which (! (1 : number_of_runs %in% recolorize)), "]][", (figure_retainer[individual_figures]), ",population,],col=\"blue\", cex=0.5)")
         }
       } else {
-        direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+        if (lineplots != FALSE) {
+          direct_object <- paste0 ("lines (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+        } else {
+          direct_object <- paste0 ("points (cursitylist [[", 1 : number_of_runs, "]][", (figure_retainer[individual_figures]), ",population,],col=\"grey\", cex=0.2)")
+        }
         # recolorize <- FALSE
       }
     } else {
@@ -236,7 +240,7 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
 
     eval (parse (text = direct_object))
     if (recolorize != FALSE) {
-      if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+      if (number_of_runs - length(recolorize) > 0) {
         tryCatch({eval (parse (text = indirect_object))}, error = function(e) {stop(recolorize)})
       }
     }
@@ -393,7 +397,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
       if (curMeans_only == FALSE) {
         meanz <- sylrepzlist [[number_of_runs + 1]][sex,population,]
         if (recolorize != FALSE) {
-          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          if (number_of_runs - length(recolorize) > 0) {
             if (lineplots != FALSE) {
               # print("lineplots")
               direct_object <- paste0 ("lines (sylrepzlist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
@@ -434,7 +438,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
               labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
         eval (parse (text = direct_object))
         if (recolorize != FALSE) {
-          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          if (number_of_runs - length(recolorize) > 0) {
             tryCatch({eval (parse (text = indirect_object))}, error = function(e) {stop(recolorize)})
           }
         }
@@ -445,7 +449,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
       meanz <- cursitylist [[number_of_runs + 1]][sex,population,]
       if (recolorize != FALSE) {
-        if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+        if (number_of_runs - length(recolorize) > 0) {
           if (lineplots != FALSE) {
             # print("lines on plot")
             direct_object <- paste0 ("lines (cursitylist [[", which (1 : number_of_runs %in% recolorize), "]][sex,population,],col=\"red\", cex=0.5)")
@@ -485,7 +489,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
             labels = c (seq.int (0,num_timesteps,(num_timesteps/10))))
       eval (parse (text = direct_object))
       if (recolorize != FALSE) {
-        if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+        if (number_of_runs - length(recolorize) > 0) {
           tryCatch({eval (parse (text = indirect_object))}, error = function(e) {stop(recolorize)})
         }
       }
@@ -499,7 +503,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
 # print("compare_subsets stuff")
           for (i in 1 : length (sdstbxnlist [[1]])) {
-            sdstbxnlist [[i]] <- readRDS (paste0 (saving_dir, sdstlist [i]))
+            # sdstbxnlist [[i]] <- readRDS (paste0 (saving_dir, sdstlist [i]))
             
             eval (parse (text = paste0 ("sdstbxnlist [[number_of_runs + 2]][i] <- mean (c (sdstbxnlist [[",
                                   paste0 (1 : (number_of_runs - 1),"]][i],sdstbxnlist [[", collapse=''),
@@ -523,14 +527,21 @@ simple_plots <- function (parameters, plot_info = plot_info,
           # print("DOsdstbxnlist")
           DOsdstbxnlist <- vector (mode = "list", length = length(recolorize) + 1)
           # print("IOsdstbxnlist")
-          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          if (number_of_runs - length(recolorize) > 0) {
             IOsdstbxnlist <- vector (mode = "list", length = number_of_runs - length(recolorize) + 1)
           }
           # save.image("210519_workspace.RData")
           # print("fill DO chunks")
+          
           for (DO_chunks in 1: length(recolorize)) {
+            # DOsdstbxnlist [[DO_chunks]] <- array(c(0), dim(sdstbxnlist[[1]]))
+            # dim(DOsdstbxnlist [[DO_chunks]]) <- dim(sdstbxnlist[[1]])
             DOsdstbxnlist [[DO_chunks]] <- array(sdstbxnlist[[recolorize[DO_chunks]]], dim(sdstbxnlist[[1]]))
           }
+          
+          # for (DO_chunks in 1: length(recolorize)) {
+          #   tryCatch({DOsdstbxnlist [[DO_chunks]] <- sdstbxnlist[[recolorize[DO_chunks]]]}, error = function(e) {stop (print (paste0 (length(sdstbxnlist), recolorize, DO_chunks)))})
+          # }
           
           DOsdstbxnlist[[length(DOsdstbxnlist)]] <- array(rep(0, length(sdstbxnlist[[1]])), dim(sdstbxnlist[[1]]))
           
@@ -551,17 +562,30 @@ simple_plots <- function (parameters, plot_info = plot_info,
           dev.off ()
 
 # print("fill IO chunks")
-          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          if (number_of_runs - length(recolorize) > 0) {
             for (IO_chunks in 1: (number_of_runs - length(recolorize))) {
               IOsdstbxnlist [[IO_chunks]] <- array(sdstbxnlist[[which (! (1:number_of_runs %in% recolorize))[IO_chunks]]], dim(sdstbxnlist[[1]]))
             }
             
             IOsdstbxnlist[[length(IOsdstbxnlist)]] <- array(rep(0, length(sdstbxnlist[[1]])), dim(sdstbxnlist[[1]]))
             
-            for (k in 1 : length (sdstbxnlist [[1]])) {
-              eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][k] <- mean (c (IOsdstbxnlist [[",
-                                    paste0 (1 : (length(IOsdstbxnlist) - 2),"]][k],IOsdstbxnlist [[", collapse=''),
-                                    length(IOsdstbxnlist) - 1, "]][k]))")))
+            if (number_of_runs - length(recolorize) > 2) {
+              for (k in 1 : length (sdstbxnlist [[1]])) {
+                eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][k] <- mean (c (IOsdstbxnlist [[",
+                                      paste0 (1 : (length(IOsdstbxnlist) - 2),"]][k],IOsdstbxnlist [[", collapse=''),
+                                      length(IOsdstbxnlist) - 1, "]][k]))")))
+              }
+            } else if (number_of_runs - length(recolorize) == 2) {
+              for (k in 1 : length (sdstbxnlist [[1]])) {
+                eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][k] <- mean (c (IOsdstbxnlist [[",
+                                      paste0 (1 : (length(IOsdstbxnlist) - 2),"]][k],IOsdstbxnlist [[", collapse=''),
+                                      length(IOsdstbxnlist) - 1, "]][k]))")))
+              }
+            } else {
+              for (k in 1 : length (sdstbxnlist [[1]])) {
+                eval (parse (text = paste0 ("IOsdstbxnlist [[length(IOsdstbxnlist)]][k] <- mean (c (IOsdstbxnlist [[",
+                                      length(IOsdstbxnlist) - 1, "]][k]))")))
+              }
             }
 
             # indirect_object - which (! (1 : number_of_runs %in% recolorize))
@@ -588,14 +612,14 @@ simple_plots <- function (parameters, plot_info = plot_info,
           #
           #
           #
-          if (length (which (! (1 : number_of_runs %in% recolorize))) > 0) {
+          if (number_of_runs - length(recolorize) > 0) {
             doANDio <- 2
             DO_and_IO <- list(DOsdstbxnlist[[length(DOsdstbxnlist)]], IOsdstbxnlist[[length(IOsdstbxnlist)]])
             doANDio_names <- c("DO", "IO")
           } else {
             doANDio <- 1
             DO_and_IO <- list(DOsdstbxnlist[[length(DOsdstbxnlist)]])
-            doANDio_names <- c("DO")
+            doANDio_names <- c("NA")
           }
 
           for (doORio in 1:doANDio) {
@@ -662,13 +686,15 @@ simple_plots <- function (parameters, plot_info = plot_info,
               color_6 <- ind_rcc[which(ccv > col_cat[4])]
               color_7 <- pop_2_only
 # print("is this where the problem is? 634")
-              category_1 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_1]*(1/7)
-              category_2 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_2]*(1/7)+(1/7)
-              category_3 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_3]*(1/7)+(2/7)
-              category_4 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_4]*(1/7)+(3/7)
-              category_5 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_5]*(1/7)+(4/7)
-              category_6 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_6]*(1/7)+(5/7)
-              category_7 <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))[color_7]*(1/7)+(6/7)
+              category_container <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))
+
+              category_1 <- category_container[color_1]*(1/7)
+              category_2 <- category_container[color_2]*(1/7)+(1/7)
+              category_3 <- category_container[color_3]*(1/7)+(2/7)
+              category_4 <- category_container[color_4]*(1/7)+(3/7)
+              category_5 <- category_container[color_5]*(1/7)+(4/7)
+              category_6 <- category_container[color_6]*(1/7)+(5/7)
+              category_7 <- category_container[color_7]*(1/7)+(6/7)
               # print("is this where the problem is? 643")
               temp_object <- array(c(c(
                 category_1, category_2, category_3, category_4, category_5, category_6, category_7, rep(0, length(nanana_s))
@@ -780,14 +806,14 @@ simple_plots <- function (parameters, plot_info = plot_info,
           color_7 <- pop_2_only
           
           #(sdstbxnlist[[7]][1,,i]+sdstbxnlist[[7]][3,,i])/max(sdstbxnlist[[7]][1,,i]+sdstbxnlist[[7]][3,,i])
-          
-          category_1 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_1]*(1/7)
-          category_2 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_2]*(1/7)+(1/7)
-          category_3 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_3]*(1/7)+(2/7)
-          category_4 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_4]*(1/7)+(3/7)
-          category_5 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_5]*(1/7)+(4/7)
-          category_6 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_6]*(1/7)+(5/7)
-          category_7 <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))[color_7]*(1/7)+(6/7)
+          category_container <- ((sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i])/max(sdstbxnlist[[number_of_runs + 1]][1,,i]+sdstbxnlist[[number_of_runs + 1]][3,,i]))
+          category_1 <- category_container[color_1]*(1/7)
+          category_2 <- category_container[color_2]*(1/7)+(1/7)
+          category_3 <- category_container[color_3]*(1/7)+(2/7)
+          category_4 <- category_container[color_4]*(1/7)+(3/7)
+          category_5 <- category_container[color_5]*(1/7)+(4/7)
+          category_6 <- category_container[color_6]*(1/7)+(5/7)
+          category_7 <- category_container[color_7]*(1/7)+(6/7)
           
           temp_object <- array(c(c(
             category_1, category_2, category_3, category_4, category_5, category_6, category_7, rep(0, length(nanana_s))

@@ -77,6 +77,6 @@ lastrunid: FALSE
 # figure settings
 
 figure_redo_only: FALSE
-compare_subsets: FALSE
+compare_subsets: TRUE
 recolorize: "range-median"
 absolute_yAxis: TRUE
