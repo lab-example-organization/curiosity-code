@@ -1,3 +1,4 @@
+source (file.path ("scripts", "Source_colorseqmultpalette.R"))
 # Heatmap Directory Creation and Referencing
 
 # source (file.path ("scripts", "Source_Reference_Section.R"))
@@ -5,7 +6,7 @@
 
 plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_scale, theme) {
 
-    source (file.path ("scripts", "Source_colorseqmultpalette.R"))
+    # source (file.path ("scripts", "Source_colorseqmultpalette.R"))
     colorseqmultpalette <- make_colorpalettes ()
     # colorPalette <- 19
     # midpoint_size <- 1
@@ -987,7 +988,7 @@ individualfigures <- function (
     stuff <- c (2, 7)
   }
 
-  source (file.path ("scripts", "Source_colorseqmultpalette.R"))
+  # source (file.path ("scripts", "Source_colorseqmultpalette.R"))
   colorseqmultpalette <- make_colorpalettes (stuff)
 
   if (variance_treatment == "var_calc_from_moran") {

@@ -57,7 +57,7 @@ source (file.path ("scripts", "Source_Reference_Section.R"))
 referencesection ("multirun")
 # referenceSection ("profiler")
 
-n_cores <- 20
+n_cores <- 2
 # Specify the number of cores/workers we want to use
     # n_cores <- detectCores () - 3 # built around a maximum allowance
 # n_cores <- 2
