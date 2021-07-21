@@ -708,8 +708,13 @@ multi_runs <- function (shifting_curstart, paramssource,
     subsetorsequence <- params$simnumberstart [shifting_curstart]
     singleormixture <- params$curinhdistribution [shifting_curstart]
   } else {
-    subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-    singleormixture <- params$curinhdistribution
+    if (length (params$simnumberstart) > 1) {
+      subsetorsequence <- params$simnumberstart [shifting_curstart]
+      singleormixture <- params$curinhdistribution [shifting_curstart]
+    } else {
+      subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
+      singleormixture <- params$curinhdistribution
+    }
     
     archivesimfiles (path = file.path ("source", "temp"),
       filename = paste0 (shifting_curstart,"_console_copy.txt"),
