@@ -64,10 +64,10 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [12707, 12710, 12722, 12725, 12732, 12735, 12747, 12750,
-                 12757, 12760, 12772, 12775, 12782, 12785, 12797, 12800,
-                 12807, 12810, 12822, 12825, 12832, 12835, 12847, 12850,
-                 12857, 12860, 12872, 12875, 12882, 12885, 12897, 12900] #
+simnumberstart: [14507, 14510, 14522, 14525, 14532, 14535, 14547, 14550,
+                 14557, 14560, 14572, 14575, 14582, 14585, 14597, 14600,
+                 14607, 14610, 14622, 14625, 14632, 14635, 14647, 14650,
+                 14657, 14660, 14672, 14675, 14682, 14685, 14697, 14700] #14501]
 runlength: 10000
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -85,9 +85,9 @@ sylnum: 156
 num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
-mate_selection_type: "curiosity"
+mate_selection_type: 'curiosity' # "curiosity", "repertoire_size", "SRS_then_curiosity"
 tutor_selection_type: "curiosity"
-selection_round_up: TRUE
+selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
 
 # curinh_pattern - calling either the row number
 # or name of row for different curiosity inheritance patterns -
@@ -105,24 +105,23 @@ curinhdistribution: 0.5
 
 traitinvasion: TRUE
 invasionthoutmstps: 1
-invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
+invasionpopsize: 50 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale,
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionsex: 'both' # male or female (or, perhaps, both?)
-invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
 
                           # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
-# indrunredo: TRUE
 indrunredo: FALSE
-# redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childFemHihInv")' # 'file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv")' ### this will replace the tenK_dir args within fpmr
-redodir: FALSE
+redodir: FALSE # if not false, needs to be an absolute path to the working directory that contains the original files ### list.files(file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv"), pattern = "_4098")
+
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 lastruninit: TRUE
-# lastruninit: FALSE # this was changed for figure redo; variable-store files already done
+# lastruninit: FALSE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
 # lastrunid: '190820_3481'

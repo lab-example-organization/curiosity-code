@@ -1,0 +1,433 @@
+curstarts:
+  - scmin: [ 1, 1, 8, 8]
+    scmax: [ 8, 8,11,11]
+  - scmin: [ 1, 8, 8, 8]
+    scmax: [ 8,11,11,11]
+  - scmin: [ 1,14, 8, 8]
+    scmax: [ 8,22,11,11]
+  - scmin: [ 1,20, 8, 8]
+    scmax: [ 8,27,11,11]
+  - scmin: [ 1,25, 8, 8]
+    scmax: [ 8,28,11,11]
+  - scmin: [ 8, 1, 8, 8]
+    scmax: [11, 8,11,11]
+  - scmin: [ 8,14, 8, 8]
+    scmax: [11,22,11,11]
+  - scmin: [ 8,20, 8, 8]
+    scmax: [11,27,11,11]
+  - scmin: [14, 1, 8, 8]
+    scmax: [22, 8,11,11]
+  - scmin: [14, 8, 8, 8]
+    scmax: [22,11,11,11]
+  - scmin: [14,14, 8, 8]
+    scmax: [22,22,11,11]
+  - scmin: [14,20, 8, 8]
+    scmax: [22,27,11,11]
+  - scmin: [14,25, 8, 8]
+    scmax: [22,28,11,11]
+  - scmin: [20, 1, 8, 8]
+    scmax: [27, 8,11,11]
+  - scmin: [20, 8, 8, 8]
+    scmax: [27,11,11,11]
+  - scmin: [20,14, 8, 8]
+    scmax: [27,22,11,11]
+  - scmin: [20,20, 8, 8]
+    scmax: [27,27,11,11]
+  - scmin: [20,25, 8, 8]
+    scmax: [27,28,11,11]
+  - scmin: [25, 1, 8, 8]
+    scmax: [28, 8,11,11]
+  - scmin: [25,14, 8, 8]
+    scmax: [28,22,11,11]
+  - scmin: [25,20, 8, 8]
+    scmax: [28,27,11,11]
+  - scmin: [ 1, 1,25,25]
+    scmax: [ 8, 8,28,28]
+  - scmin: [ 1, 8,25,25]
+    scmax: [ 8,11,28,28]
+  - scmin: [ 1,14,25,25]
+    scmax: [ 8,22,28,28]
+  - scmin: [ 1,20,25,25]
+    scmax: [ 8,27,28,28]
+  - scmin: [ 1,25,25,25]
+    scmax: [ 8,28,28,28]
+  - scmin: [ 8, 1,25,25]
+    scmax: [11, 8,28,28]
+  - scmin: [ 8,14,25,25]
+    scmax: [11,22,28,28]
+  - scmin: [ 8,20,25,25]
+    scmax: [11,27,28,28]
+  - scmin: [14, 1,25,25]
+    scmax: [22, 8,28,28]
+  - scmin: [14, 8,25,25]
+    scmax: [22,11,28,28]
+  - scmin: [14,14,25,25]
+    scmax: [22,22,28,28]
+  - scmin: [14,20,25,25]
+    scmax: [22,27,28,28]
+  - scmin: [14,25,25,25]
+    scmax: [22,28,28,28]
+  - scmin: [20, 1,25,25]
+    scmax: [27, 8,28,28]
+  - scmin: [20, 8,25,25]
+    scmax: [27,11,28,28]
+  - scmin: [20,14,25,25]
+    scmax: [27,22,28,28]
+  - scmin: [20,20,25,25]
+    scmax: [27,27,28,28]
+  - scmin: [20,25,25,25]
+    scmax: [27,28,28,28]
+  - scmin: [25, 1,25,25]
+    scmax: [28, 8,28,28]
+  - scmin: [25,14,25,25]
+    scmax: [28,22,28,28]
+  - scmin: [25,20,25,25]
+    scmax: [28,27,28,28]
+  - scmin: [ 1, 1, 8, 8]
+    scmax: [ 8, 8,11,11]
+  - scmin: [ 1, 8, 8, 8]
+    scmax: [ 8,11,11,11]
+  - scmin: [ 1,14, 8, 8]
+    scmax: [ 8,22,11,11]
+  - scmin: [ 1,20, 8, 8]
+    scmax: [ 8,27,11,11]
+  - scmin: [ 1,25, 8, 8]
+    scmax: [ 8,28,11,11]
+  - scmin: [ 8, 1, 8, 8]
+    scmax: [11, 8,11,11]
+  - scmin: [ 8,14, 8, 8]
+    scmax: [11,22,11,11]
+  - scmin: [ 8,20, 8, 8]
+    scmax: [11,27,11,11]
+  - scmin: [14, 1, 8, 8]
+    scmax: [22, 8,11,11]
+  - scmin: [14, 8, 8, 8]
+    scmax: [22,11,11,11]
+  - scmin: [14,14, 8, 8]
+    scmax: [22,22,11,11]
+  - scmin: [14,20, 8, 8]
+    scmax: [22,27,11,11]
+  - scmin: [14,25, 8, 8]
+    scmax: [22,28,11,11]
+  - scmin: [20, 1, 8, 8]
+    scmax: [27, 8,11,11]
+  - scmin: [20, 8, 8, 8]
+    scmax: [27,11,11,11]
+  - scmin: [20,14, 8, 8]
+    scmax: [27,22,11,11]
+  - scmin: [20,20, 8, 8]
+    scmax: [27,27,11,11]
+  - scmin: [20,25, 8, 8]
+    scmax: [27,28,11,11]
+  - scmin: [25, 1, 8, 8]
+    scmax: [28, 8,11,11]
+  - scmin: [25,14, 8, 8]
+    scmax: [28,22,11,11]
+  - scmin: [25,20, 8, 8]
+    scmax: [28,27,11,11]
+  - scmin: [ 1, 1,25,25]
+    scmax: [ 8, 8,28,28]
+  - scmin: [ 1, 8,25,25]
+    scmax: [ 8,11,28,28]
+  - scmin: [ 1,14,25,25]
+    scmax: [ 8,22,28,28]
+  - scmin: [ 1,20,25,25]
+    scmax: [ 8,27,28,28]
+  - scmin: [ 1,25,25,25]
+    scmax: [ 8,28,28,28]
+  - scmin: [ 8, 1,25,25]
+    scmax: [11, 8,28,28]
+  - scmin: [ 8,14,25,25]
+    scmax: [11,22,28,28]
+  - scmin: [ 8,20,25,25]
+    scmax: [11,27,28,28]
+  - scmin: [14, 1,25,25]
+    scmax: [22, 8,28,28]
+  - scmin: [14, 8,25,25]
+    scmax: [22,11,28,28]
+  - scmin: [14,14,25,25]
+    scmax: [22,22,28,28]
+  - scmin: [14,20,25,25]
+    scmax: [22,27,28,28]
+  - scmin: [14,25,25,25]
+    scmax: [22,28,28,28]
+  - scmin: [20, 1,25,25]
+    scmax: [27, 8,28,28]
+  - scmin: [20, 8,25,25]
+    scmax: [27,11,28,28]
+  - scmin: [20,14,25,25]
+    scmax: [27,22,28,28]
+  - scmin: [20,20,25,25]
+    scmax: [27,27,28,28]
+  - scmin: [20,25,25,25]
+    scmax: [27,28,28,28]
+  - scmin: [25, 1,25,25]
+    scmax: [28, 8,28,28]
+  - scmin: [25,14,25,25]
+    scmax: [28,22,28,28]
+  - scmin: [25,20,25,25]
+    scmax: [28,27,28,28]
+  - scmin: [ 1, 1, 8, 8]
+    scmax: [ 8, 8,11,11]
+  - scmin: [ 1, 8, 8, 8]
+    scmax: [ 8,11,11,11]
+  - scmin: [ 1,14, 8, 8]
+    scmax: [ 8,22,11,11]
+  - scmin: [ 1,20, 8, 8]
+    scmax: [ 8,27,11,11]
+  - scmin: [ 1,25, 8, 8]
+    scmax: [ 8,28,11,11]
+  - scmin: [ 8, 1, 8, 8]
+    scmax: [11, 8,11,11]
+  - scmin: [ 8,14, 8, 8]
+    scmax: [11,22,11,11]
+  - scmin: [ 8,20, 8, 8]
+    scmax: [11,27,11,11]
+  - scmin: [14, 1, 8, 8]
+    scmax: [22, 8,11,11]
+  - scmin: [14, 8, 8, 8]
+    scmax: [22,11,11,11]
+  - scmin: [14,14, 8, 8]
+    scmax: [22,22,11,11]
+  - scmin: [14,20, 8, 8]
+    scmax: [22,27,11,11]
+  - scmin: [14,25, 8, 8]
+    scmax: [22,28,11,11]
+  - scmin: [20, 1, 8, 8]
+    scmax: [27, 8,11,11]
+  - scmin: [20, 8, 8, 8]
+    scmax: [27,11,11,11]
+  - scmin: [20,14, 8, 8]
+    scmax: [27,22,11,11]
+  - scmin: [20,20, 8, 8]
+    scmax: [27,27,11,11]
+  - scmin: [20,25, 8, 8]
+    scmax: [27,28,11,11]
+  - scmin: [25, 1, 8, 8]
+    scmax: [28, 8,11,11]
+  - scmin: [25,14, 8, 8]
+    scmax: [28,22,11,11]
+  - scmin: [25,20, 8, 8]
+    scmax: [28,27,11,11]
+  - scmin: [ 1, 1,25,25]
+    scmax: [ 8, 8,28,28]
+  - scmin: [ 1, 8,25,25]
+    scmax: [ 8,11,28,28]
+  - scmin: [ 1,14,25,25]
+    scmax: [ 8,22,28,28]
+  - scmin: [ 1,20,25,25]
+    scmax: [ 8,27,28,28]
+  - scmin: [ 1,25,25,25]
+    scmax: [ 8,28,28,28]
+  - scmin: [ 8, 1,25,25]
+    scmax: [11, 8,28,28]
+  - scmin: [ 8,14,25,25]
+    scmax: [11,22,28,28]
+  - scmin: [ 8,20,25,25]
+    scmax: [11,27,28,28]
+  - scmin: [14, 1,25,25]
+    scmax: [22, 8,28,28]
+  - scmin: [14, 8,25,25]
+    scmax: [22,11,28,28]
+  - scmin: [14,14,25,25]
+    scmax: [22,22,28,28]
+  - scmin: [14,20,25,25]
+    scmax: [22,27,28,28]
+  - scmin: [14,25,25,25]
+    scmax: [22,28,28,28]
+  - scmin: [20, 1,25,25]
+    scmax: [27, 8,28,28]
+  - scmin: [20, 8,25,25]
+    scmax: [27,11,28,28]
+  - scmin: [20,14,25,25]
+    scmax: [27,22,28,28]
+  - scmin: [20,20,25,25]
+    scmax: [27,27,28,28]
+  - scmin: [20,25,25,25]
+    scmax: [27,28,28,28]
+  - scmin: [25, 1,25,25]
+    scmax: [28, 8,28,28]
+  - scmin: [25,14,25,25]
+    scmax: [28,22,28,28]
+  - scmin: [25,20,25,25]
+    scmax: [28,27,28,28]
+  - scmin: [ 1, 1, 8, 8]
+    scmax: [ 8, 8,11,11]
+  - scmin: [ 1, 8, 8, 8]
+    scmax: [ 8,11,11,11]
+  - scmin: [ 1,14, 8, 8]
+    scmax: [ 8,22,11,11]
+  - scmin: [ 1,20, 8, 8]
+    scmax: [ 8,27,11,11]
+  - scmin: [ 1,25, 8, 8]
+    scmax: [ 8,28,11,11]
+  - scmin: [ 8, 1, 8, 8]
+    scmax: [11, 8,11,11]
+  - scmin: [ 8,14, 8, 8]
+    scmax: [11,22,11,11]
+  - scmin: [ 8,20, 8, 8]
+    scmax: [11,27,11,11]
+  - scmin: [14, 1, 8, 8]
+    scmax: [22, 8,11,11]
+  - scmin: [14, 8, 8, 8]
+    scmax: [22,11,11,11]
+  - scmin: [14,14, 8, 8]
+    scmax: [22,22,11,11]
+  - scmin: [14,20, 8, 8]
+    scmax: [22,27,11,11]
+  - scmin: [14,25, 8, 8]
+    scmax: [22,28,11,11]
+  - scmin: [20, 1, 8, 8]
+    scmax: [27, 8,11,11]
+  - scmin: [20, 8, 8, 8]
+    scmax: [27,11,11,11]
+  - scmin: [20,14, 8, 8]
+    scmax: [27,22,11,11]
+  - scmin: [20,20, 8, 8]
+    scmax: [27,27,11,11]
+  - scmin: [20,25, 8, 8]
+    scmax: [27,28,11,11]
+  - scmin: [25, 1, 8, 8]
+    scmax: [28, 8,11,11]
+  - scmin: [25,14, 8, 8]
+    scmax: [28,22,11,11]
+  - scmin: [25,20, 8, 8]
+    scmax: [28,27,11,11]
+  - scmin: [ 1, 1,25,25]
+    scmax: [ 8, 8,28,28]
+  - scmin: [ 1, 8,25,25]
+    scmax: [ 8,11,28,28]
+  - scmin: [ 1,14,25,25]
+    scmax: [ 8,22,28,28]
+  - scmin: [ 1,20,25,25]
+    scmax: [ 8,27,28,28]
+  - scmin: [ 1,25,25,25]
+    scmax: [ 8,28,28,28]
+  - scmin: [ 8, 1,25,25]
+    scmax: [11, 8,28,28]
+  - scmin: [ 8,14,25,25]
+    scmax: [11,22,28,28]
+  - scmin: [ 8,20,25,25]
+    scmax: [11,27,28,28]
+  - scmin: [14, 1,25,25]
+    scmax: [22, 8,28,28]
+  - scmin: [14, 8,25,25]
+    scmax: [22,11,28,28]
+  - scmin: [14,14,25,25]
+    scmax: [22,22,28,28]
+  - scmin: [14,20,25,25]
+    scmax: [22,27,28,28]
+  - scmin: [14,25,25,25]
+    scmax: [22,28,28,28]
+  - scmin: [20, 1,25,25]
+    scmax: [27, 8,28,28]
+  - scmin: [20, 8,25,25]
+    scmax: [27,11,28,28]
+  - scmin: [20,14,25,25]
+    scmax: [27,22,28,28]
+  - scmin: [20,20,25,25]
+    scmax: [27,27,28,28]
+  - scmin: [20,25,25,25]
+    scmax: [27,28,28,28]
+  - scmin: [25, 1,25,25]
+    scmax: [28, 8,28,28]
+  - scmin: [25,14,25,25]
+    scmax: [28,22,28,28]
+  - scmin: [25,20,25,25]
+    scmax: [28,27,28,28]
+
+simnumberstart: [12901, 12902, 12903, 12904, 12905, 12906, 12908, 12909,
+                 12911, 12912, 12913, 12914, 12915, 12916, 12917, 12918, 
+                 12919, 12920, 12921, 12923, 12924, 12926, 12927, 12928, 
+                 12929, 12930, 12931, 12933, 12934, 12936, 12937, 12938, 
+                 12939, 12940, 12941, 12942, 12943, 12944, 12945, 12946, 
+                 12948, 12949, 12951, 12952, 12953, 12954, 12955, 12956, 
+                 12958, 12959, 12961, 12962, 12963, 12964, 12965, 12966, 
+                 12967, 12968, 12969, 12970, 12971, 12973, 12974, 12976, 
+                 12977, 12978, 12979, 12980, 12981, 12983, 12984, 12986, 
+                 12987, 12988, 12989, 12990, 12991, 12992, 12993, 12994, 
+                 12995, 12996, 12998, 12999, 13001, 13002, 13003, 13004, 
+                 13005, 13006, 13008, 13009, 13011, 13012, 13013, 13014, 
+                 13015, 13016, 13017, 13018, 13019, 13020, 13021, 13023, 
+                 13024, 13026, 13027, 13028, 13029, 13030, 13031, 13033, 
+                 13034, 13036, 13037, 13038, 13039, 13040, 13041, 13042, 
+                 13043, 13044, 13045, 13046, 13048, 13049, 13051, 13052, 
+                 13053, 13054, 13055, 13056, 13058, 13059, 13061, 13062, 
+                 13063, 13064, 13065, 13066, 13067, 13068, 13069, 13070,
+                 13071, 13073, 13074, 13076, 13077, 13078, 13079, 13080,
+                 13081, 13083, 13084, 13086, 13087, 13088, 13089, 13090,
+                 13091, 13092, 13093, 13094, 13095, 13096, 13098, 13099] #12901]
+runlength: 10000
+syllearnstyle: 'nsL'
+vertoblearn:
+  vertical:
+    learn: 0.95
+    invent: 0.1
+  oblique:
+    learn: 0.1
+    invent: 0.01
+syldist: 'oppsyl'
+curinh_value: 0.95
+num_pop: 2
+pop_size: 400
+sylnum: 156
+num_sylls_per_prob_lvl: 8
+number_of_reps: 50
+standard_deviation: 2
+mate_selection_type: "curiosity"
+tutor_selection_type: "curiosity"
+selection_round_up: TRUE
+
+# curinh_pattern - calling either the row number
+# or name of row for different curiosity inheritance patterns -
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
+curinh_pattern: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+one_pop_singers: [10, 10]
+recordsimplifyfactor: 100
+curinhdistribution: 0.5
+# must be between 0 and 1; [value displayed] == male; [1 - value] == female
+# distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
+
+
+traitinvasion: TRUE
+invasionthoutmstps: 1
+invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
+# invasionstyle: 'offspring' # need: offspring, wholesale,
+invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
+invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
+invasionsex: 'both' # male or female (or, perhaps, both?)
+invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+                          # If it's not FALSE, then it's a string of two values (target value, size of range)
+
+
+                          # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
+# indrunredo: TRUE
+indrunredo: FALSE
+# redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childFemHihInv")' # 'file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv")' ### this will replace the tenK_dir args within fpmr
+redodir: FALSE
+
+# This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
+lastruninit: TRUE
+# lastruninit: FALSE # this was changed for figure redo; variable-store files already done
+
+# If this is being used, use an unique pattern from the run whose last timestep you would like to use.
+# lastrunid: '190820_3481'
+lastrunid: ['11701', '11702', '11703', '11704', '11705', '11706', '11708', '11709', '11711', '11712', '11713', '11714', '11715', '11716', '11717', '11718', '11719', '11720', '11721', '11723', '11724', '11726', '11727', '11728', '11729', '11730', '11731', '11733', '11734', '11736', '11737', '11738', '11739', '11740', '11741', '11742', '11743', '11744', '11745', '11746', '11748', '11749',
+            '11751', '11752', '11753', '11754', '11755', '11756', '11758', '11759', '11761', '11762', '11763', '11764', '11765', '11766', '11767', '11768', '11769', '11770', '11771', '11773', '11774', '11776', '11777', '11778', '11779', '11780', '11781', '11783', '11784', '11786', '11787', '11788', '11789', '11790', '11791', '11792', '11793', '11794', '11795', '11796', '11798', '11799',
+            '11801', '11802', '11803', '11804', '11805', '11806', '11808', '11809', '11811', '11812', '11813', '11814', '11815', '11816', '11817', '11818', '11819', '11820', '11821', '11823', '11824', '11826', '11827', '11828', '11829', '11830', '11831', '11833', '11834', '11836', '11837', '11838', '11839', '11840', '11841', '11842', '11843', '11844', '11845', '11846', '11848', '11849',
+            '11851', '11852', '11853', '11854', '11855', '11856', '11858', '11859', '11861', '11862', '11863', '11864', '11865', '11866', '11867', '11868', '11869', '11870', '11871', '11873', '11874', '11876', '11877', '11878', '11879', '11880', '11881', '11883', '11884', '11886', '11887', '11888', '11889', '11890', '11891', '11892', '11893', '11894', '11895', '11896', '11898', '11899']
+# lastrunid: FALSE
+# want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it.
+# BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastrunid's, that won't propagate down to restart_from_save! Awesome!
+
+# screwedUp: FALSE
+
+# figure settings
+
+figure_redo_only: FALSE
+compare_subsets: FALSE
+recolorize: "range-median"
+absolute_yAxis: TRUE

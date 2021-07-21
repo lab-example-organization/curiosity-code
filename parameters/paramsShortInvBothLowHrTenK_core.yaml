@@ -64,10 +64,10 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [12707, 12710, 12722, 12725, 12732, 12735, 12747, 12750,
-                 12757, 12760, 12772, 12775, 12782, 12785, 12797, 12800,
-                 12807, 12810, 12822, 12825, 12832, 12835, 12847, 12850,
-                 12857, 12860, 12872, 12875, 12882, 12885, 12897, 12900] #
+simnumberstart: [12907, 12910, 12922, 12925, 12932, 12935, 12947, 12950,
+                 12957, 12960, 12972, 12975, 12982, 12985, 12997, 13000,
+                 13007, 13010, 13022, 13025, 13032, 13035, 13047, 13050,
+                 13057, 13060, 13072, 13075, 13082, 13085, 13097, 13100] #[12901]
 runlength: 10000
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -110,7 +110,7 @@ invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
 invasionsex: 'both' # male or female (or, perhaps, both?)
-invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
 

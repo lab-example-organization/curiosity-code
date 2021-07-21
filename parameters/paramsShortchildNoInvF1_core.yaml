@@ -64,10 +64,10 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [12707, 12710, 12722, 12725, 12732, 12735, 12747, 12750,
-                 12757, 12760, 12772, 12775, 12782, 12785, 12797, 12800,
-                 12807, 12810, 12822, 12825, 12832, 12835, 12847, 12850,
-                 12857, 12860, 12872, 12875, 12882, 12885, 12897, 12900] #
+simnumberstart: [14907, 14910, 14922, 14925, 14932, 14935, 14947, 14950,
+                 14957, 14960, 14972, 14975, 14982, 14985, 14997, 15000,
+                 15007, 15010, 15022, 15025, 15032, 15035, 15047, 15050,
+                 15057, 15060, 15072, 15075, 15082, 15085, 15097, 15100] #14901]
 runlength: 10000
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -103,7 +103,7 @@ curinhdistribution: 0.5
 # distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
 
 
-traitinvasion: TRUE
+traitinvasion: FALSE
 invasionthoutmstps: 1
 invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale,
