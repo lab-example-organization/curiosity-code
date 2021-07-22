@@ -98,7 +98,10 @@ curinh_pattern: [1, 1, 1, 1, 1, 1, 1, 1,
                  5, 5, 5, 5, 5, 5, 5, 5]
 one_pop_singers: [10, 10]
 recordsimplifyfactor: 100
-curinhdistribution: 0.5
+curinhdistribution: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
+                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
+                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
+                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
 # must be between 0 and 1; [value displayed] == male; [1 - value] == female
 # distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
 
