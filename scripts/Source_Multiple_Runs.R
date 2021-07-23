@@ -160,7 +160,8 @@ makedocnamez <- function (scmin, scmax, simnumber,
 
 restart_from_save <- function (
   parameters, # "params" in multi_runs
-  inputpattern) {
+  inputpattern,
+  inputdir = FALSE) {
 
   if (typeof (inputpattern) != "character") {
     stop ("input pattern must be data type 'string'")
@@ -168,9 +169,27 @@ restart_from_save <- function (
   if (length (inputpattern) > 1) {
     stop ("length of inputpattern should be 1. Right?")
   }
-
-  relevantpaths <- file.path ("results", list.files (
-    file.path ("results"), pattern = inputpattern))
+  
+  
+  if (inputdir != FALSE) {
+    if (length(inputdir) > 1) {
+      if (length (inputdir) == 2) {
+        inputdir <- file.path(inputdir[1], inputdir[2])
+      } else if (length (inputdir) > 2) {
+        thing <- length(inputdir)
+        for (i in 1:thing) {
+          eval (parse (text = paste0("inputdir <- file.path(inputdir[", 
+            paste0(1:(thing - 1),"], inputdir[", collapse=''), thing, "])"))
+          )
+        }
+      }
+    }
+    relevantpaths <- file.path ("results", inputdir, list.files (
+      file.path ("results", inputdir), pattern = inputpattern))
+  } else {
+    relevantpaths <- file.path ("results", list.files (
+      file.path ("results"), pattern = inputpattern))
+  }
 
   pathlist <- list.files (
     file.path (relevantpaths, "variable_store"))
@@ -732,10 +751,12 @@ multi_runs <- function (shifting_curstart, paramssource,
     if (params$lastruninit) {
       if (length (params$lastrunid) > 1) {
         lastrun_init <- restart_from_save (parameters = params,
-          inputpattern = params$lastrunid [shifting_curstart])
+          inputpattern = params$lastrunid [shifting_curstart],
+          inputdir = params$inputdir)
       } else {
         lastrun_init <- restart_from_save (parameters = params,
-          inputpattern = params$lastrunid)
+          inputpattern = params$lastrunid,
+          inputdir = params$inputdir)
       }
     }
 
