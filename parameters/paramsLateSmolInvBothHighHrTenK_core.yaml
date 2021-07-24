@@ -121,6 +121,7 @@ invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation'
 indrunredo: FALSE
 # indrunredo: TRUE
 # redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childLateSmolInvFemHih")'
+redodir: FALSE
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 lastruninit: TRUE
