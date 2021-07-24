@@ -133,6 +133,7 @@ lastrunid: ['11707', '11710', '11722', '11725', '11732', '11735', '11747', '1175
             '11757', '11760', '11772', '11775', '11782', '11785', '11797', '11800',
             '11807', '11810', '11822', '11825', '11832', '11835', '11847', '11850',
             '11857', '11860', '11872', '11875', '11882', '11885', '11897', '11900']
+inputdir: "tenKfiveByFive_shortParentNoInv"
 # lastrunid: FALSE
 # want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it.
 # BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastrunid's, that won't propagate down to restart_from_save! Awesome!
