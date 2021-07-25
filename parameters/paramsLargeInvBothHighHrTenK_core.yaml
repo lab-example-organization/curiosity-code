@@ -1,0 +1,148 @@
+curstarts:
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8,25, 8, 8]
+    scmax: [11,28,11,11]
+  - scmin: [25, 8, 8, 8]
+    scmax: [28,11,11,11]
+  - scmin: [25,25, 8, 8]
+    scmax: [28,28,11,11]
+  - scmin: [ 8, 8,25,25]
+    scmax: [11,11,28,28]
+  - scmin: [ 8,25,25,25]
+    scmax: [11,28,28,28]
+  - scmin: [25, 8,25,25]
+    scmax: [28,11,28,28]
+  - scmin: [25,25,25,25]
+    scmax: [28,28,28,28]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8,25, 8, 8]
+    scmax: [11,28,11,11]
+  - scmin: [25, 8, 8, 8]
+    scmax: [28,11,11,11]
+  - scmin: [25,25, 8, 8]
+    scmax: [28,28,11,11]
+  - scmin: [ 8, 8,25,25]
+    scmax: [11,11,28,28]
+  - scmin: [ 8,25,25,25]
+    scmax: [11,28,28,28]
+  - scmin: [25, 8,25,25]
+    scmax: [28,11,28,28]
+  - scmin: [25,25,25,25]
+    scmax: [28,28,28,28]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8,25, 8, 8]
+    scmax: [11,28,11,11]
+  - scmin: [25, 8, 8, 8]
+    scmax: [28,11,11,11]
+  - scmin: [25,25, 8, 8]
+    scmax: [28,28,11,11]
+  - scmin: [ 8, 8,25,25]
+    scmax: [11,11,28,28]
+  - scmin: [ 8,25,25,25]
+    scmax: [11,28,28,28]
+  - scmin: [25, 8,25,25]
+    scmax: [28,11,28,28]
+  - scmin: [25,25,25,25]
+    scmax: [28,28,28,28]
+  - scmin: [ 8, 8, 8, 8]
+    scmax: [11,11,11,11]
+  - scmin: [ 8,25, 8, 8]
+    scmax: [11,28,11,11]
+  - scmin: [25, 8, 8, 8]
+    scmax: [28,11,11,11]
+  - scmin: [25,25, 8, 8]
+    scmax: [28,28,11,11]
+  - scmin: [ 8, 8,25,25]
+    scmax: [11,11,28,28]
+  - scmin: [ 8,25,25,25]
+    scmax: [11,28,28,28]
+  - scmin: [25, 8,25,25]
+    scmax: [28,11,28,28]
+  - scmin: [25,25,25,25]
+    scmax: [28,28,28,28]
+
+simnumberstart: [15507, 15510, 15522, 15525, 15532, 15535, 15547, 15550,
+                 15557, 15560, 15572, 15575, 15582, 15585, 15597, 15600,
+                 15607, 15610, 15622, 15625, 15632, 15635, 15647, 15650,
+                 15657, 15660, 15672, 15675, 15682, 15685, 15697, 15700] #15500] # ended up being 4901-5100, 5301-5500 ended up being invFemHigh
+runlength: 10000
+syllearnstyle: 'nsL'
+vertoblearn:
+  vertical:
+    learn: 0.95
+    invent: 0.1
+  oblique:
+    learn: 0.1
+    invent: 0.01
+syldist: 'oppsyl'
+curinh_value: 0.95
+num_pop: 2
+pop_size: 400
+sylnum: 156
+num_sylls_per_prob_lvl: 8
+number_of_reps: 50
+standard_deviation: 2
+mate_selection_type: "curiosity"
+tutor_selection_type: "curiosity"
+selection_round_up: TRUE
+
+# curinh_pattern - calling either the row number
+# or name of row for different curiosity inheritance patterns -
+# 1: father; 2: mother; 3: same; 4: opposite; 5: curinhdistribution
+curinh_pattern: [1, 1, 1, 1, 1, 1, 1, 1,
+                 2, 2, 2, 2, 2, 2, 2, 2,
+                 3, 3, 3, 3, 3, 3, 3, 3,
+                 5, 5, 5, 5, 5, 5, 5, 5]
+one_pop_singers: [10, 10]
+recordsimplifyfactor: 100
+curinhdistribution: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
+                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
+                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
+                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+# must be between 0 and 1; [value displayed] == male; [1 - value] == female
+# distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
+
+
+traitinvasion: TRUE
+invasionthoutmstps: 1
+invasionpopsize: 200 # max 200... it pulls from "pop_calls_matrix"
+# invasionstyle: 'offspring' # need: offspring, wholesale,
+invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
+invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
+invasionsex: 'both' # male or female (or, perhaps, both?)
+invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+                          # If it's not FALSE, then it's a string of two values (target value, size of range)
+
+
+                          # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
+indrunredo: FALSE
+# indrunredo: TRUE
+# redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childBothHihInv")' # 'file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv")' ### this will replace the tenK_dir args within fpmr
+redodir: FALSE
+
+# This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
+lastruninit: TRUE
+# lastruninit: FALSE # this was changed for figure redo; variable-store files already done
+
+# If this is being used, use an unique pattern from the run whose last timestep you would like to use.
+# lastrunid: '190820_3481'
+lastrunid: ['3907', '3910', '3922', '3925', '3932', '3935', '3947',  '3950',
+            '3957', '3960', '3972', '3975', '3982', '3985', '3997',  '4000',
+            '4007', '4010', '4022', '4025', '4032', '4035', '4047',  '4050',
+            '4057', '4060', '4072', '4075', '4082', '4085', '4097',  '4100']
+# lastrunid: FALSE
+inputdir: "tenKfiveByFive_parentNoInv"
+# want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it.
+# BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastrunid's, that won't propagate down to restart_from_save! Awesome!
+
+# screwedUp: FALSE
+
+# figure settings
+
+figure_redo_only: FALSE
+compare_subsets: FALSE
+recolorize: "range-median"
+absolute_yAxis: TRUE
