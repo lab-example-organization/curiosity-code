@@ -10,15 +10,10 @@
 
 
 
-# This is an Example of what you should NEVER have in your code,
-
-# presented here, "So that I can use it when I'm being a bad person :P"
-
-    ##### -> setwd (file.path (strsplit (getwd (), "curiosity-code") [[1]][1], "curiosity-code"))
 
 #____________________________________________________________________________________
 
-
+rm (list = objects ()) # Clear environment
 #
 
 
@@ -71,7 +66,7 @@ source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 
 shifting_curstart <- 1 : 200
-paramsfile <- c ("paramsLateInvBothHighHrTenK.yaml")
+paramsfile <- c ("paramsLargeInvBothLowHrTenK.yaml")
 # paramsFile <- c ("diffZwischensTnN.yaml")
 simdate <- gsub ('-', '', substring (Sys.Date(), 3))
 secretcode <- 58418
