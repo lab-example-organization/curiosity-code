@@ -130,10 +130,28 @@ figprodmultrun <- function (
       "variable") [[1]][1], "multirun_output/"),
       pattern = "multirun-output$"))
 
-    process_data (
+    output <- process_data (
       data_conglomerate = converted_data,
       specificrepeat = number_of_repeats,
       path = multirun_directory)
+
+    if (output == TRUE) { # you can never be too careful!
+      datanames <- c ("SylReps", "SylDist", "Cursity", "CurHist")
+      for (i in 1:number_of_repeats) {
+        for (data_subset in 1:4) {
+          if (file.exists (file.path (multirun_directory, paste0 (datanames[data_subset], i, ".RData")))) { # see? never can be too careful!
+            for (specificchunk in 1 : params$runlength / 1000) {
+              unlink(file.path (multirun_folderlist[runs_visual], paste0 ("variable-store-", specificchunk, "-sylrep_rowcol.RData")))
+              unlink(file.path (multirun_folderlist[runs_visual], paste0 ("variable-store-", specificchunk, "-sylrep_dstbxn.RData")))
+              unlink(file.path (multirun_folderlist[runs_visual], paste0 ("variable-store-", specificchunk, "-curity_mean_t.RData")))
+              unlink(file.path (multirun_folderlist[runs_visual], paste0 ("variable-store-", specificchunk, "-curity_repert.RData")))
+            }
+          } else {
+            next
+          }
+        }
+      }
+    }
   }
   
   # if (params$redodir != FALSE) {

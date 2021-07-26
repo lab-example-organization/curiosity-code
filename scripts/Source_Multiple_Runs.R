@@ -425,32 +425,8 @@ life_cycle <- function (params, shifting_curstart,
   #parent_directory <- getwd ()
   source (file.path ("scripts", "Source_Initial_Functions_Parameters.R"))
 
-  # simparams <- params
-
   ref_objects <- matrix (data = c (1 : params$pop_size), nrow = 2, ncol = (params$pop_size / 2), byrow = TRUE)
   
-
-  # ref_objects <- define_parameters (
-    #num_timesteps = params$runlength, # done
-    # num_pop = params$num_pop, # 
-    # pop_size = params$pop_size, #
-    # sylnum = params$sylnum, #
-    # nsl = params$num_sylls_per_prob_lvl, #
-    # one_pop_singers = params$one_pop_singers, #
-    #curlearnprob = params$curinh_value, #
-    # learnprob = c (params$vertoblearn$vertical$invent, params$vertoblearn$vertical$learn),
-    # randlearnprob = c (params$vertoblearn$oblique$invent, params$vertoblearn$oblique$learn),
-    # stand.dev = as.numeric (params$standard_deviation), #
-    # mate_selection_type = params$mate_selection_type, #
-    # tutor_selection_type = params$tutor_selection_type, #
-    # selection_round_up = params$selection_round_up #
-  # )
-
-  # simparams output that will happen:
-  
-    # pop_calls_matrix
-    # zero_to_one_template
-
   ##### Timestep Data Object (TDO)
 
   timestepData <- define_temp_data (params)
@@ -697,31 +673,6 @@ multi_runs <- function (shifting_curstart, paramssource,
   set.seed (seednumber + shifting_curstart)
   params <- yaml.load_file (file.path ("parameters", paramssource))
   number_of_reps <- as.numeric (params$number_of_reps)
-  # if (redo != FALSE) {
-  #   if (params$indrunredo != FALSE) {
-  #     subsetorsequence <- params$simnumberstart [shifting_curstart]
-  #   } else {
-  #     subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-  #   }
-  #   #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
-  #   source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-  #   return (figprodmultrun (specificsimnumber = subsetorsequence,
-  #     number_of_repeats = number_of_reps,
-  #     paramssource = paramssource, recolorize = params$recolorize))
-  # } else if (redo == "recolorize") {
-    # if (params$indrunredo != FALSE) {
-    #   subsetorsequence <- params$simnumberstart [shifting_curstart]
-    # } else {
-    #   subsetorsequence <- params$simnumberstart + (shifting_curstart - 1)
-    # }
-    # #print ("Note for Parker: only simnumberstart, curinhdistribution and number_of_reps are needed from a 'params.yaml' type file
-    # source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
-    # return (figprodmultrun (specificsimnumber = subsetorsequence,
-    #   number_of_repeats = number_of_reps,
-    #   paramssource = paramssource, recolorize = params$recolorize))
-  # } else {
- #  thing <- c()
- #  for(i in 1:length(params$redodir)) {thing <- append(thing, params$redodir[i])}
 
   if (params$indrunredo != FALSE) {
     subsetorsequence <- params$simnumberstart [shifting_curstart]

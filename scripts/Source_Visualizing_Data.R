@@ -98,14 +98,16 @@ process_data <- function (data_conglomerate = converted_data, specificrepeat = r
       }
     }
   } else {
-    for (data_subset in 1 : 4) {
-        modified_data <- data_conglomerate[[data_subset]]
-        # saveRDS (object = modified_data, file = file.path (path, paste0 (datanames[data_subset], specificrepeat, ".RData")))
-        if (! (file.exists (file.path (path, paste0 (datanames[data_subset], iteration, ".RData"))))) {
-          saveRDS (modified_data, file.path (path, paste0 (datanames[data_subset], iteration, ".RData")))
-        }
-    }
+    # for (data_subset in 1 : 4) {
+    #     modified_data <- data_conglomerate[[data_subset]]
+    #     # saveRDS (object = modified_data, file = file.path (path, paste0 (datanames[data_subset], specificrepeat, ".RData")))
+    #     if (! (file.exists (file.path (path, paste0 (datanames[data_subset], iteration, ".RData"))))) { ### "iteration" is still here
+    #       saveRDS (modified_data, file.path (path, paste0 (datanames[data_subset], iteration, ".RData")))
+    #     }
+    # }
+    stop (print("process_data error: data_conglomerate[[1]] is not a list. "))
   }
+  return (TRUE)
 }
 
 concat_and_move_simData <- function (
