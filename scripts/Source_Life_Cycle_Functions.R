@@ -188,21 +188,24 @@ update_selexn_data <- function (
   curiosities <- c (curiosity_value [selected_pair [1],singer_population],
                      curiosity_value [selected_pair [2],selector_population])
 
-  if (selection_context == 1) {
+  if (selection_context == 1) { # tutor select_type
     pool.row <- 5
-  } else if (selection_context == 2) {
+  } else if (selection_context == 2) { # mate select_type
     pool.row <- 1
   }
   for (bird in 1 : selection_context) {
-    pool.row <- pool.row * bird
+    pool.row <- pool.row * bird # mating: 1, then 2; tutor: 5, never 10.
 
     temp_data_US [
       pool.row, p_US$sylnum + 1, selector_population
     ] <- selected_pair [bird]
 
-    temp_data_US [
+    tryCatch({temp_data_US [
       pool.row, 1 : p_US$sylnum, selector_population
-    ] <- sylrep_pairs [bird,]
+    ] <- sylrep_pairs [bird,]}, error = function (e) {stop(
+      print (dim (temp_data_US))
+      print (sylrep_pairs [bird,])
+    )})
 
     temp_data_US [
       pool.row, p_US$sylnum + 2, selector_population
