@@ -203,8 +203,7 @@ update_selexn_data <- function (
     tryCatch({temp_data_US [
       pool.row, 1 : p_US$sylnum, selector_population
     ] <- sylrep_pairs [bird,]}, error = function (e) {stop(
-      print (dim (temp_data_US))
-      print (sylrep_pairs [bird,])
+      paste0(dim (temp_data_US), sylrep_pairs [bird,])
     )})
 
     temp_data_US [
