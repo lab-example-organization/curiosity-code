@@ -432,41 +432,62 @@ life_cycle <- function (params, shifting_curstart,
   timestepData <- define_temp_data (params)
   # pairing_pool <- define_temp_data (params, 2)
   if (params$lastruninit) {
-    sylreps <- initialize.sylrep (p_is = params,
-      population.pattern = c (1,2), pastrunobject_is = lastruninit[[rep_number]],
-      eqpop = TRUE, eqsex = TRUE, pastruninit_is = TRUE)
+    sylreps <- initialize.sylrep (
+      p_is = params,
+      population.pattern = c (1,2), 
+      pastrunobject_is = lastruninit[[rep_number]],
+      eqpop = TRUE, 
+      eqsex = TRUE, 
+      pastruninit_is = TRUE)
     curiosity_level <- initialize.curiosity (
-      p_ic = params, cur.min = scmin, cur.max = scmax,
-      pastrunobject_ic = lastruninit[[rep_number]], pastruninit_ic = TRUE)
+      p_ic = params, 
+      cur.min = scmin, 
+      cur.max = scmax,
+      pastrunobject_ic = lastruninit[[rep_number]], 
+      pastruninit_ic = TRUE)
   } else {
-    sylreps <- initialize.sylrep (p_is = params,
-      population.pattern = c (1,2), eqpop = TRUE, eqsex = TRUE)
+    sylreps <- initialize.sylrep (
+      p_is = params,
+      population.pattern = c (1,2), 
+      eqpop = TRUE, 
+      eqsex = TRUE)
     curiosity_level <- initialize.curiosity (
-      p_ic = params, cur.min = scmin, cur.max = scmax)
+      p_ic = params, 
+      cur.min = scmin, 
+      cur.max = scmax)
   }
 
 
   sylrep_rowcol <- recordvariable.initialize (
-      p_rvi = params, recsimfct = params$recordsimplifyfactor, variableid = 1)
+    p_rvi = params, 
+    recsimfct = params$recordsimplifyfactor, 
+    variableid = 1)
 
   sylrep_dstbxn <- recordvariable.initialize (
-      p_rvi = params, recsimfct = params$recordsimplifyfactor, variableid = 2)
+    p_rvi = params, 
+    recsimfct = params$recordsimplifyfactor, 
+    variableid = 2)
 
   curity_mean_t <- recordvariable.initialize (
-      p_rvi = params, recsimfct = params$recordsimplifyfactor, variableid = 3)
+    p_rvi = params, 
+    recsimfct = params$recordsimplifyfactor, 
+    variableid = 3)
 
   # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
 
   curity_repert <- recordvariable.initialize (
-      p_rvi = params, recsimfct = params$recordsimplifyfactor, variableid = 4)
+    p_rvi = params, 
+    recsimfct = params$recordsimplifyfactor, 
+    variableid = 4)
 
   source (file.path ("scripts", "Source_Life_Cycle_Functions.R"))
 
 
 
-  stuff_to_save <- savinstuff (parameters = params, ### currently, it needs to have curiositybreaks, num_timesteps and curlearnprob in it
-                              output_filename = docnamez,
-                              temp_timestep_data = timestepData)
+  stuff_to_save <- savinstuff (
+    parameters = params, ### currently, it needs to have curiositybreaks, num_timesteps and curlearnprob in it
+    output_filename = docnamez,
+    temp_timestep_data = timestepData)
 
 
 
@@ -500,59 +521,67 @@ life_cycle <- function (params, shifting_curstart,
       for (single_timestep in 1 : params$recordsimplifyfactor) {
 
         # Mate selection based on song characteristics
-        timestepData <- sing.selection (p_SS = params,
-                                      ro_SS = ref_objects,
-                                      temp_data_SS = timestepData,
-                                      curiosity_level = curiosity_level,
-                                      select_type = "mate",
-                                      sylrep_object = sylreps,
-                                      num_select_chances = c (40, 40),
-                                      verbose_output = FALSE,
-                                      interbreed = FALSE)
+        timestepData <- sing.selection (
+          p_SS = params,
+          ro_SS = ref_objects,
+          temp_data_SS = timestepData,
+          curiosity_level = curiosity_level,
+          select_type = "mate",
+          sylrep_object = sylreps,
+          num_select_chances = c (40, 40),
+          verbose_output = FALSE,
+          interbreed = FALSE)
 
         # Locate new birb positions in population data, store in TDO
-        timestepData <- make.offspring.calls (p_OC = params,
-                                            temp_data_OC = timestepData,
-                                            ro_OC = ref_objects)
+        timestepData <- make.offspring.calls (
+          p_OC = params,
+          temp_data_OC = timestepData,
+          ro_OC = ref_objects)
 
         # Add noise to inherited curiosity trait, store temporarily
-        timestepData <- curiosity_learn (p_CL = params,
-                                        temp_data_CL = timestepData,
-                                        curinh_pattern = curinh_style,
-                                        curinhproportion = singleormixture)
+        timestepData <- curiosity_learn (
+          p_CL = params,
+          temp_data_CL = timestepData,
+          curinh_pattern = curinh_style,
+          curinhproportion = singleormixture)
 
         #
-        timestepData <- syll_learn (p_SL = params,
-                                  temp_data_SL = timestepData,
-                                  select_type = "mate",
-                                  totally_new = FALSE,
-                                  randlearn_context = 2,
-                                  verbose = FALSE)
+        timestepData <- syll_learn (
+          p_SL = params,
+          temp_data_SL = timestepData,
+          select_type = "mate",
+          totally_new = FALSE,
+          randlearn_context = 2,
+          verbose = FALSE)
 
-        timestepData <- sing.selection (p_SS = params,
-                                      ro_SS = ref_objects,
-                                      temp_data_SS = timestepData,
-                                      curiosity_level = curiosity_level,
-                                      select_type = "tutor",
-                                      sylrep_object = sylreps,
-                                      num_select_chances = c (40, 40),
-                                      verbose_output = FALSE,
-                                      interbreed = FALSE)
+        timestepData <- sing.selection (
+          p_SS = params,
+          ro_SS = ref_objects,
+          temp_data_SS = timestepData,
+          curiosity_level = curiosity_level,
+          select_type = "tutor",
+          sylrep_object = sylreps,
+          num_select_chances = c (40, 40),
+          verbose_output = FALSE,
+          interbreed = FALSE)
 
-        timestepData <- syll_learn (p_SL = params,
-                                  temp_data_SL = timestepData,
-                                  select_type = "tutor",
-                                  totally_new = FALSE,
-                                  randlearn_context = 2,
-                                  verbose = FALSE)
+        timestepData <- syll_learn (
+          p_SL = params,
+          temp_data_SL = timestepData,
+          select_type = "tutor",
+          totally_new = FALSE,
+          randlearn_context = 2,
+          verbose = FALSE)
 
-        curiosity_level <- recuriosity.offspring (p_RC = params,
-                                            temp_data_RC = timestepData,
-                                            curiosity_object = curiosity_level)
+        curiosity_level <- recuriosity.offspring (
+          p_RC = params,
+          temp_data_RC = timestepData,
+          curiosity_object = curiosity_level)
 
-        sylreps <- resylreps.offspring (p_RS = params,
-                                       temp_data_RS = timestepData,
-                                       sylrep_object = sylreps)
+        sylreps <- resylreps.offspring (
+          p_RS = params,
+          temp_data_RS = timestepData,
+          sylrep_object = sylreps)
 
         # recordvariable archiving
 
@@ -604,20 +633,20 @@ life_cycle <- function (params, shifting_curstart,
 
 
     foldername <- store_timesteps (
-                    p_storetimesteps = params,
-                    filename = thousand_timesteps,
-                    rowcol = sylrep_rowcol,
-                    dstbxn = sylrep_dstbxn,
-                    mean_t = curity_mean_t,
-                    # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
-                    repert = curity_repert,
-                    saved_stuff = stuff_to_save,
-                    syll_container = sylreps,
-                    cur_container = curiosity_level,
-                    run_timedate = run_timedate,
-                    foldername = file.path (
-                      "results", stuff_to_save$docnamez, "variable_store",
-                      paste0 (run_timedate, "-GMT-variable-store")))
+      p_storetimesteps = params,
+      filename = thousand_timesteps,
+      rowcol = sylrep_rowcol,
+      dstbxn = sylrep_dstbxn,
+      mean_t = curity_mean_t,
+      # let's make indices 13 and 14 on dimension 1... these are the measures of variance in curiosity level in both male and female subpopulations
+      repert = curity_repert,
+      saved_stuff = stuff_to_save,
+      syll_container = sylreps,
+      cur_container = curiosity_level,
+      run_timedate = run_timedate,
+      foldername = file.path (
+        "results", stuff_to_save$docnamez, "variable_store",
+        paste0 (run_timedate, "-GMT-variable-store")))
 
     if ( (thousand_timesteps==(params$runlength/1000)
       )&&(
@@ -701,19 +730,19 @@ multi_runs <- function (shifting_curstart, paramssource,
 
     if (params$lastruninit) {
       if (length (params$lastrunid) > 1) {
-        lastrun_init <- restart_from_save (parameters = params,
+        lastrun_init <- restart_from_save (
+          parameters = params,
           inputpattern = params$lastrunid [shifting_curstart],
           inputdir = params$inputdir)
       } else {
-        lastrun_init <- restart_from_save (parameters = params,
+        lastrun_init <- restart_from_save (
+          parameters = params,
           inputpattern = params$lastrunid,
           inputdir = params$inputdir)
       }
     }
 
     for (rep_number in 1 : number_of_reps) {
-
-
       if (length (params$curinh_pattern) != 1) {
         curinh_style <- params$curinh_pattern[shifting_curstart]
       } else {
@@ -721,13 +750,11 @@ multi_runs <- function (shifting_curstart, paramssource,
       }
 
       if (rep_number == 1) {
-
         sink (file = file.path (
             "source", "temp", paste0 (subsetorsequence,"_sim_data.txt")
           ), append = FALSE)
         print ("empty line that helps the code work - figure it out later, if it's worth it")
         sink ()
-
         # file.create (file.path ("source", "temp", paste0 (
         #   shifting_curstart,"_sim_data.txt")))
       }
@@ -751,15 +778,16 @@ multi_runs <- function (shifting_curstart, paramssource,
 
   source (file.path ("scripts", "Source_Figure_Produxn_Multiple_Runs.R"))
   # params <- yaml.load_file (file.path ("parameters", paramssource))
-  return(figprodmultrun (specificsimnumber = subsetorsequence,
-                          #number_of_repeats = number_of_reps,
-                          paramssource = paramssource,
-                          # recolorize = params$recolorize,
-                          # results_tenK_dir = FALSE,
-                          lineplots = TRUE,
-                          curMeans_only = FALSE#,
-                          # compare_subsets = params$compare_subsets
-                          ))
+  return(figprodmultrun (
+    specificsimnumber = subsetorsequence,
+    # number_of_repeats = number_of_reps,
+    paramssource = paramssource,
+    # recolorize = params$recolorize,
+    # results_tenK_dir = FALSE,
+    lineplots = TRUE,
+    curMeans_only = FALSE#,
+    # compare_subsets = params$compare_subsets
+    ))
 
 
   
