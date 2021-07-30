@@ -78,17 +78,18 @@ syll_learn <- function (p_SL,
     # append = TRUE)
     #print (probs)
     #sink ()
+    vertoblearn_subset <- as.numeric(c(p_SL$vertoblearn[[1]][2], p_SL$vertoblearn[[1]][1]))
+    vertobrand_subset <- as.numeric(c(p_SL$vertoblearn[[2]][2], p_SL$vertoblearn[[2]][1]))
 
     if (select_type == "mate") {
       loop_size <- 2
       # loop_size <- 1
 
-      vertoblearn_subset <- as.numeric(c(p_SL$vertoblearn[[1]][2], p_SL$vertoblearn[[1]][1]))
     } else if (select_type == "tutor") {
       loop_size <- 1
       # loop_size <- 2
 
-      vertoblearn_subset <- as.numeric(c(p_SL$vertoblearn[[2]][2], p_SL$vertoblearn[[2]][1]))
+      #vertoblearn_subset <- as.numeric(c(p_SL$vertoblearn[[2]][2], p_SL$vertoblearn[[2]][1]))
     }
 
     for (sex in 1 : loop_size) {
@@ -104,7 +105,7 @@ syll_learn <- function (p_SL,
         }
         if (probs [sylls_to_learn] > (
           # 1 - p_SL$randlearnprob [loop_size])) {
-          vertoblearn_subset[loop_size])) {
+          1 - vertobrand_subset[loop_size])) {
           r_norm <- rnorm (1, mean = ifelse (randlearn_context == 1,
                                            mean (source_of_ones),
                                            source_of_ones [sylls_to_learn]),
@@ -263,7 +264,7 @@ score_similarity <- function (suitor_vector, selector_vector) {
 sing.selection <- function (p_SS, 
                             ro_SS,
                             temp_data_SS,
-                            curiosity_level, 
+                            curiosity_level_SS, 
                             select_type,
                             sylrep_object,
                             num_select_chances = c (16, 40),
@@ -333,7 +334,7 @@ sing.selection <- function (p_SS,
 
               temp_data_SS = update_selexn_data (
                 p_SS, temp_data_SS, auto.teachers [1,], MTsylrep_filter,
-                auto.teachers [2,MTsylrep_filter], curiosity_level, population,
+                auto.teachers [2,MTsylrep_filter], curiosity_level_SS, population,
                 select_type, sylrep_object [auto.teachers [1,],,population],
                 sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
                 num_select_chances [select_type])#, TRUE)
@@ -455,7 +456,7 @@ sing.selection <- function (p_SS,
                             selector_vector = selector.sylrep))
         # orders the scored list of suitors; subsets one suitor from the rest,
         # according to the value of the selector's (auditory) curiosity.
-        singer <- golf_score [round (curiosity_level [
+        singer <- golf_score [round (curiosity_level_SS [
           selector.index, population] *(p_SS$one_pop_singers [
           select_type] * p_SS$num_pop) + 0.5)]
         if (sum (selection.sylreps [singer,])==0) {
@@ -475,7 +476,7 @@ sing.selection <- function (p_SS,
               suitor_choices = selection.index,
               preferred_bird = singer,
               selector_bird = selector.index,
-              curiosity_value = curiosity_level,
+              curiosity_value = curiosity_level_SS,
               selector_population = population,
               selection_context = select_type,
               sylreps_choices = selection.sylreps,
@@ -501,7 +502,7 @@ sing.selection <- function (p_SS,
                       suitor_choices = selection.index,
                       preferred_bird = singer,
                       selector_bird = selector.index,
-                      curiosity_value = curiosity_level,
+                      curiosity_value = curiosity_level_SS,
                       selector_population = population,
                       selection_context = select_type,
                       sylreps_choices = selection.sylreps,
@@ -536,7 +537,7 @@ sing.selection <- function (p_SS,
                       suitor_choices = selection.index,
                       preferred_bird = singer,
                       selector_bird = selector.index,
-                      curiosity_value = curiosity_level,
+                      curiosity_value = curiosity_level_SS,
                       selector_population = population,
                       selection_context = select_type,
                       sylreps_choices = selection.sylreps,
@@ -572,7 +573,7 @@ sing.selection <- function (p_SS,
                       suitor_choices = selection.index,
                       preferred_bird = singer,
                       selector_bird = selector.index,
-                      curiosity_value = curiosity_level,
+                      curiosity_value = curiosity_level_SS,
                       selector_population = population,
                       selection_context = select_type,
                       sylreps_choices = selection.sylreps,
@@ -604,7 +605,7 @@ sing.selection <- function (p_SS,
               suitor_choices = selection.index,
               preferred_bird = singer,
               selector_bird = selector.index,
-              curiosity_value = curiosity_level,
+              curiosity_value = curiosity_level_SS,
               selector_population = population,
               selection_context = select_type,
               sylreps_choices = selection.sylreps,
@@ -660,7 +661,7 @@ sing.selection <- function (p_SS,
         suitor_choices = selection.index,
         preferred_bird = singer,
         selector_bird = selector.index,
-        curiosity_value = curiosity_level,
+        curiosity_value = curiosity_level_SS,
         selector_population = population,
         selection_context = select_type,
         sylreps_choices = selection.sylreps,
@@ -709,7 +710,7 @@ sing.selection <- function (p_SS,
                             selector_vector = selector.sylrep))
         # orders the scored list of suitors; subsets one suitor from the rest,
         # according to the value of the selector's (auditory) curiosity.
-        singer <- golf_score [round (curiosity_level [
+        singer <- golf_score [round (curiosity_level_SS [
           selector.index, population] *length (golf_score) + 0.5)]
         if (sum (selection.sylreps [singer,])==0) {
           stop (paste0 ("singer ", singer, " doesn't have syllables"))
@@ -727,7 +728,7 @@ sing.selection <- function (p_SS,
         suitor_choices = selection.index,
         preferred_bird = singer,
         selector_bird = selector.index,
-        curiosity_value = curiosity_level,
+        curiosity_value = curiosity_level_SS,
         selector_population = population,
         selection_context = select_type,
         sylreps_choices = selection.sylreps,

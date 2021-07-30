@@ -65,7 +65,7 @@ n_cores <- 2
 source (file.path ("scripts", "Source_Multiple_Runs.R"))
 
 
-shifting_curstart <- 1 : 8
+shifting_curstart <- 1 : 2
 paramsfile <- c ("paramsRedoControl.yaml")
 params = yaml.load_file (file.path ("parameters", paramsfile))
 simdate <- gsub ('-', '', substring (Sys.Date(), 3))
