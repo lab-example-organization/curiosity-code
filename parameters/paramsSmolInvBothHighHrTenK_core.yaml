@@ -64,10 +64,10 @@ curstarts:
   - scmin: [25,25,25,25]
     scmax: [28,28,28,28]
 
-simnumberstart: [14707, 14710, 14722, 14725, 14732, 14735, 14747, 14750,
-                 14757, 14760, 14772, 14775, 14782, 14785, 14797, 14800,
-                 14807, 14810, 14822, 14825, 14832, 14835, 14847, 14850,
-                 14857, 14860, 14872, 14875, 14882, 14885, 14897, 14900] #[14701] #8101]
+simnumberstart: [11307, 11310, 11322, 11325, 11332, 11335, 11347, 11350,
+                 11357, 11360, 11372, 11375, 11382, 11385, 11397, 11400,
+                 11407, 11410, 11422, 11425, 11432, 11435, 11447, 11450,
+                 11457, 11460, 11472, 11475, 11482, 11485, 11497, 11500] #11301] # ended up being 4901-5100, 5301-5500 ended up being invFemHigh
 runlength: 10000
 syllearnstyle: 'nsL'
 vertoblearn:
@@ -106,24 +106,21 @@ curinhdistribution: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
 # distribution of curinh between parents. Only need more than one value here IF 1)Indrunredo == T AND 2) curinh_pattern == 5
 
 
-traitinvasion: FALSE
+traitinvasion: TRUE
 invasionthoutmstps: 1
-invasionpopsize: 100 # max 200... it pulls from "pop_calls_matrix"
+invasionpopsize: 50 # max 200... it pulls from "pop_calls_matrix"
 # invasionstyle: 'offspring' # need: offspring, wholesale,
 invasionstyle: 'curiosity' # need: curiosity, sylrep, both!
 invasionpop: 'focal' # either pop 1 (focal population), or pop 2 (background population)
-invasionsex: 'female' # male or female (or, perhaps, both?)
-invasiontraitvalue: [0.25, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
+invasionsex: 'both' # male or female (or, perhaps, both?)
+invasiontraitvalue: [0.85, 0.1] # If false, it will "reverse" the subpopulation's current curiosity level (1 - [current curiosity]).
                           # If it's not FALSE, then it's a string of two values (target value, size of range)
 
 
                           # Indrunredo: TRUE # for redoing individual runs - need to make both simnumberstart and curinh_pattern into arrays for every re-run listed in curstarts.
 indrunredo: FALSE
-# indrunredo: TRUE
-# redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childFemHihInv")' # 'file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv")' ### this will replace the tenK_dir args within fpmr
-# redodir: 'file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code", "results", "tenKfiveByFive_childNoInvF10")'
-redodir: FALSE
-# redodir: 'file.path("results", "tenKfiveByFive_childNoInvF10")'
+redodir: FALSE # if not false, needs to be an absolute path to the working directory that contains the original files ### list.files(file.path("/", "mnt", "f", "results", "tenKfiveByFive_parentNoInv"), pattern = "_4098")
+
 
 # This is for starting a run again, using pre-specified endrep and endcur from a past run. If they're not supposed to be used, they both need to be false!
 lastruninit: TRUE
@@ -131,12 +128,12 @@ lastruninit: TRUE
 
 # If this is being used, use an unique pattern from the run whose last timestep you would like to use.
 # lastrunid: '190820_3481'
-lastrunid: ['8107', '8110', '8122', '8125', '8132', '8135', '8147', '8150',
-            '8157', '8160', '8172', '8175', '8182', '8185', '8197', '8200',
-            '8207', '8210', '8222', '8225', '8232', '8235', '8247', '8250',
-            '8257', '8260', '8272', '8275', '8282', '8285', '8297', '8300']
+lastrunid: ['3907', '3910', '3922', '3925', '3932', '3935', '3947', '3950',
+            '3957', '3960', '3972', '3975', '3982', '3985', '3997', '4000',
+            '4007', '4010', '4022', '4025', '4032', '4035', '4047', '4050',
+            '4057', '4060', '4072', '4075', '4082', '4085', '4097', '4100']
+inputdir: "tenKfiveByFive_parentNoInv"
 # lastrunid: FALSE
-inputdir: "tenKfiveByFive_childNoInvF10"
 # want to be able to put a string of different patterns, for a number of different runs. say, for example, there's more than one set of initial population conditions to consider, in the context of an invasion happening several thousand timesteps into it.
 # BUT: that would mean separate uses of multi_runs, in a parallelized way... so, while there may be several different lastrunid's, that won't propagate down to restart_from_save! Awesome!
 
