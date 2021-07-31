@@ -1459,3 +1459,117 @@ for (stuf in 1:length(thing)) {
 }
 
 min(sapply(thing, min))
+
+tenk_list_Xi <- c (
+    "childNoInvF11", 
+    "childLargeBothHih", "childLargeBothLow", 
+    "childLateLargeInvBothHih", "childLateLargeInvBothLow", 
+    "childLateSmolInvBothHih", "childLateSmolInvBothLow", 
+    "childShortInvBothHih", "childShortInvBothLow", "childShortInvFemHih", "childShortInvFemLow", "childShortInvMalHih", "childShortInvMalLow", "childShortLargeInvBothHih", "childShortLargeInvBothLow", 
+    "childShortSmolInvBothHih", "childShortSmolInvBothLow", "childShortSmolInvFemHih", "childShortSmolInvFemLow", "childShortSmolInvMalHih", "childShortSmolInvMalLow" ,
+    "childSmolBothHih", "childSmolBothLow", 
+    "shortParentNoInv", "shortChildNoInvF1"
+)
+whatIsUp <- strsplit(date(), " ")[[1]][5]
+whatIsUp <- paste0(strsplit(whatIsUp, "")[[1]][c(3,4)], collapse = "")
+month <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+which_month <- as.numeric(which(month == strsplit(date(), " ")[[1]][2]))
+if (length(which_month) < 2) {
+    which_month <- paste0(0,which_month)
+}
+which_day <- strsplit(strsplit(date(), " ")[[1]][3], "")[[1]]
+if (length(which_day) < 2) {
+    which_day <- paste0(0,which_day)
+}
+which_day <- paste0(which_day, collapse = "")
+tenk_pattern <- paste0(whatIsUp,which_month, which_day, "_")
+tenk_list_Xii <- c (
+    rep(tenk_pattern, length(tenk_list_Xi)) ### "210730_1*"
+)
+
+tenk_list_Xiii <- c (
+    #"shortNoInvChildF1" ### "shortNoInvChildF1.tar.gz"
+    "noInvF11",
+    "largeBothHih", "largeBothLow",
+    "lateLargeBothHih", "lateLargeBothLow",
+    "lateSmolBothHih", "lateSmolBothLow", ### "Source_Parallelizing_MultirunsSmolBothLow_core.R"
+    "shortBothHih", "shortBothLow", "shortFemHih", "shortFemLow", "shortMalHih", "shortMalLow", "shortLargeBothHih", "shortLargeBothLow", 
+    "shortSmolBothHih", "shortSmolBothLow", "shortSmolFemHih", "shortSmolFemLow", "shortSmolMalHih", "shortSmolMalLow", 
+    "smolBothHih", "smolBothLow",
+    "shortParentNoInv", "shortChildNoInvF1"
+)
+
+tenk_list_Xiv <- c (
+    "NoInvF11",
+    "LargeBothHighInvHRtenK", "LargeBothLowInvHRtenK",
+    "LateLargeBothHighInvHRtenK", "LateLargeBothLowInvHRtenK",
+    "LateSmolBothHighInvHRtenK", "LateSmolBothLowInvHRtenK", ### "Source_Parallelizing_MultirunsSmolBothLowInvHRtenK_core.R"
+    "ShortBothHighInvHRtenK", "ShortBothLowInvHRtenK", "ShortFemHighInvHRtenK", "ShortFemLowInvHRtenK", "ShortMalHighInvHRtenK", "ShortMalLowInvHRtenK", "ShortLargeBothHighInvHRtenK", "ShortLargeBothLowInvHRtenK", 
+    "ShortSmolBothHighInvHRtenK", "ShortSmolBothLowInvHRtenK", "ShortSmolFemHighInvHRtenK", "ShortSmolFemLowInvHRtenK", "ShortSmolMalHighInvHRtenK", "ShortSmolMalLowInvHRtenK", 
+    "SmolBothHighInvHRtenK", "SmolBothLowInvHRtenK", 
+    "ShortParentNoInv", "ShortChildNoInvF1"
+)
+simpleList <- array (
+    c (
+        paste0(tenk_list_Xi[1:length(tenk_list)]),
+        paste0(tenk_list_Xii[1:length(tenk_list)]),
+        paste0(tenk_list_Xiii[1:length(tenk_list)]),
+        paste0(tenk_list_Xiv[1:length(tenk_list)])
+    ), c (
+        length(tenk_list), 4
+
+    )
+)
+
+# tenk_list_Xi <- c (
+#     "childNoInvF11", 
+#     "childLargeBothHih", "childLargeBothLow", 
+#     "childLateLargeInvBothHih", "childLateLargeInvBothLow", 
+#     "childLateSmolInvBothHih", "childLateSmolInvBothLow", 
+#     "childShortInvBothHih", "childShortInvBothLow", "childShortInvFemHih", "childShortInvFemLow", "childShortInvMalHih", "childShortInvMalLow", "childShortLargeInvBothHih", "childShortLargeInvBothLow", 
+#     "childShortSmolInvBothHih", "childShortSmolInvBothLow", "childShortSmolInvFemHih", "childShortSmolInvFemLow", "childShortSmolInvMalHih", "childShortSmolInvMalLow" ,
+#     "childSmolBothHih", "childSmolBothLow", 
+#     "shortParentNoInv", "shortChildNoInvF1"
+# )
+
+target <- which(tenk_list_Xi == "childSmolBothLow")
+next_one <- which(tenk_list_Xi == "childSmolBothHih")
+
+print (
+    paste0(
+        "mkdir results/tenKfiveByFive_", tenk_list_Xi[target],
+        " && cp -r results/210", tenk_list_Xii[target],
+        "* results/tenKfiveByFive_", tenk_list_Xi[target],
+        " && tar -czf results/", tenk_list_Xiii[target],
+        ".tar.gz results/", tenk_list_Xii[target],
+        "* && rm -r results/", tenk_list_Xii[target],
+        "* && nohup Rscript scripts/Source_Parallelizing_Multiruns", tenk_list_Xiv[next_one],
+        "InvHRtenK_core.R &>", tenk_list_Xiii[next_one],
+        "_core.out&"
+    )
+)
+
+# c (
+#         paste0("tenKfiveByFive_", tenk_list_Xi[1:length(tenk_list)]),
+#         paste0(tenk_list_Xii[1:length(tenk_list)], "_1*"),
+#         paste0(tenk_list_Xiii[1:length(tenk_list)], ".tar.gz"),
+#         paste0("tenKfiveByFive_", tenk_list_Xiv[1:length(tenk_list)])
+#     )
+
+# mkdir results/tenKfiveByFive_
+#   Xi - - - shortChildF1NoInv
+#  && cp -r results/210
+#   Xii- - - 730_1
+# * results/tenKfiveByFive_
+#   Xi - - - shortChildF1NoInv
+#  && tar -czf results/
+#   Xiii - - shortNoInvChildF1
+# .tar.gz results/210
+#   Xii- - - 730_1
+# * && rm -r results/210
+#   Xii- - - 730_1
+# * && nohup Rscript scripts/Source_Parallelizing_Multiruns
+#   Xiv- - - SmolBothLow
+# InvHRtenK_core.R &>210
+#   Xii-2- - 730_shortChildNoInvF1 ### Xiii, it's just easier that way...
+# _core.out&
