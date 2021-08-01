@@ -1532,6 +1532,12 @@ simpleList <- array (
 #     "shortParentNoInv", "shortChildNoInvF1"
 # )
 
+# THE LIST:
+#   # childNoInvF11 shortParentNoInv childSmolBothLow childSmolBothHih 
+#   # childLargeBothHih childLargeBothLow shortChildNoInvF1 childShortSmolInvFemLow childLateSmolInvBothLow childLateLargeInvBothLow 
+#   # childLateLargeInvBothHih childLateSmolInvBothHih childShortInvBothHih childShortInvBothLow childShortInvFemHih childShortInvFemLow childShortInvMalHih childShortInvMalLow childShortLargeInvBothHih
+#   # childShortLargeInvBothLow childShortSmolInvBothHih childShortSmolInvBothLow childShortSmolInvFemHih childShortSmolInvMalHih childShortSmolInvMalLow
+
 target <- which(tenk_list_Xi == "childSmolBothLow")
 next_one <- which(tenk_list_Xi == "childSmolBothHih")
 
