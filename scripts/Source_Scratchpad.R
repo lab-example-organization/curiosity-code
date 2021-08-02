@@ -1470,18 +1470,31 @@ tenk_list_Xi <- c (
     "childSmolBothHih", "childSmolBothLow", 
     "shortParentNoInv", "shortChildNoInvF1"
 )
-whatIsUp <- strsplit(date(), " ")[[1]][5]
-whatIsUp <- paste0(strsplit(whatIsUp, "")[[1]][c(3,4)], collapse = "")
 month <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 which_month <- as.numeric(which(month == strsplit(date(), " ")[[1]][2]))
 if (length(which_month) < 2) {
     which_month <- paste0(0,which_month)
 }
-which_day <- strsplit(strsplit(date(), " ")[[1]][3], "")[[1]]
-if (length(which_day) < 2) {
+if (length(strsplit(date(), " ")[[1]]) == 6) {
+    whatIsUp <- strsplit(date(), " ")[[1]][6]
+    whatIsUp <- paste0(strsplit(whatIsUp, "")[[1]][c(3,4)], collapse = "")
+    which_day <- strsplit(strsplit(date(), " ")[[1]][4], "")[[1]]
     which_day <- paste0(0,which_day)
+} else if (length(strsplit(date(), " ")[[1]]) == 5) {
+    whatIsUp <- strsplit(date(), " ")[[1]][5]
+    whatIsUp <- paste0(strsplit(whatIsUp, "")[[1]][c(3,4)], collapse = "")
+    # which_day <- strsplit(strsplit(date(), " ")[[1]][3], "")[[1]]
+    which_day <- strsplit(date(), " ")[[1]][3]
+    # if (length(which_day) < 2) {
+    #     which_day <- paste0(0,which_day)
+    # }
+    # which_day <- paste0(which_day, collapse = "")
 }
-which_day <- paste0(which_day, collapse = "")
+# which_day <- strsplit(strsplit(date(), " ")[[1]][3], "")[[1]]
+# if (length(which_day) < 2) {
+#     which_day <- paste0(0,which_day)
+# }
+# which_day <- paste0(which_day, collapse = "")
 tenk_pattern <- paste0(whatIsUp,which_month, which_day, "_")
 tenk_list_Xii <- c (
     rep(tenk_pattern, length(tenk_list_Xi)) ### "210730_1*"
