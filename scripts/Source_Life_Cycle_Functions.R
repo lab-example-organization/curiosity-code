@@ -278,7 +278,7 @@ sing.selection <- function (p_SS,
 
   if (select_type == "mate") {select_type <- 2} else if (select_type == "tutor") {select_type <- 1}
 
-  if (select_type == 2) {
+  # if (select_type == 2) {
     if (p_SS$mate_selection_type == "curiosity") {
       selection_path <- 1
     } else if (p_SS$mate_selection_type == "repertoire_size") {
@@ -286,15 +286,15 @@ sing.selection <- function (p_SS,
     } else if (p_SS$mate_selection_type == "SRS_then_curiosity") {
       selection_path <- 3
     }
-  } else if (select_type == 1) {
-    if (p_SS$tutor_selection_type == "curiosity") {
-      selection_path <- 1
-    } else if (p_SS$tutor_selection_type == "repertoire_size") {
-      selection_path <- 2
-    } else if (p_SS$tutor_selection_type == "SRS_then_curiosity") {
-      selection_path <- 3
-    }#selection_path <- 1
-  }
+  # } else if (select_type == 1) {
+  #   if (p_SS$tutor_selection_type == "curiosity") {
+  #     selection_path <- 1
+  #   } else if (p_SS$tutor_selection_type == "repertoire_size") {
+  #     selection_path <- 2
+  #   } else if (p_SS$tutor_selection_type == "SRS_then_curiosity") {
+  #     selection_path <- 3
+  #   }#selection_path <- 1
+  # }
 
   for (divisible in 1 : 2) {
     if (num_select_chances[divisible] %% 4 != 0) {
@@ -386,8 +386,7 @@ sing.selection <- function (p_SS,
             # each population divided by the maximum syllrep of the population.
             vapply (1 : p_SS$num_pop,
               function (x) {
-                temp <- cpp_rowSums (sylrep_object[
-                  ro_SS [1,],,x])
+                temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
                 sample (x = ro_SS [1,],
                         size = p_SS$one_pop_singers [select_type],
                         replace = FALSE,
@@ -407,8 +406,8 @@ sing.selection <- function (p_SS,
             # each population divided by the maximum syllrep of the population.
             vapply (1 : p_SS$num_pop,
               function (x) {
-                temp <- cpp_rowSums (sylrep_object[
-                  ro_SS [1,],,x])
+                # temp <- cpp_rowSums (sylrep_object[
+                #   ro_SS [1,],,x])
                 sample (x = ro_SS [1,],
                         size = p_SS$one_pop_singers [select_type],
                         replace = FALSE)
@@ -621,6 +620,20 @@ sing.selection <- function (p_SS,
     } else if (selection_path == 2) {
       # We need these variables to run update_selexn_data
 
+      if (select_type == 1) {
+        singsuccessfilter <- 1 : (
+          (p_SS$one_pop_singers [select_type]) * (p_SS$num_pop))
+        
+        selector.index <- temp_data_SS [3, p_SS$sylnum + 1, population]
+
+      } else if (select_type == 2) {
+        singsuccessfilter <- (1 + ((population - 1) * (
+          p_SS$one_pop_singers [select_type]))) : (
+            population * p_SS$one_pop_singers [select_type])
+            
+        selector.index <- sample (ro_SS [2, ], 1)
+      }
+
       selector.index <- sample (ro_SS [2, ], 1)
 
       if (round_up == TRUE) {
@@ -640,9 +653,9 @@ sing.selection <- function (p_SS,
         selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
       }
 
-      selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      # selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
       selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,1]) [selection.index]
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,population]) [selection.index]
       # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
       if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
         singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
@@ -685,8 +698,7 @@ sing.selection <- function (p_SS,
           selection.index <- (
             vapply (1 : p_SS$num_pop,
               function (x) {
-                temp <- cpp_rowSums (sylrep_object[
-                  ro_SS [1,],,x])
+                temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
                 sample (x = ro_SS [1,],
                         size = p_SS$one_pop_singers [1],
                         replace = FALSE,
