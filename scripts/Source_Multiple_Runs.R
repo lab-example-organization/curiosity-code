@@ -530,9 +530,10 @@ life_cycle <- function (params, shifting_curstart,
           sylrep_object = sylreps,
           num_select_chances = c (40, 40),
           verbose_output = FALSE,
-          interbreed = FALSE)
+          interbreed = FALSE,
+          round_up = params$selection_round_up)
 
-        # Locate new birb positions in population data, store in TDO
+        # Locate new birb positions in population data, store in timestepData
         timestepData <- make.offspring.calls (
           p_OC = params,
           temp_data_OC = timestepData,
@@ -545,7 +546,7 @@ life_cycle <- function (params, shifting_curstart,
           curinh_pattern = curinh_style,
           curinhproportion = singleormixture)
 
-        #
+        # Develop vertical learning portion of offspring repertoires
         timestepData <- syll_learn (
           p_SL = params,
           temp_data_SL = timestepData,
@@ -554,6 +555,7 @@ life_cycle <- function (params, shifting_curstart,
           randlearn_context = 2,
           verbose = FALSE)
 
+        # male offspring identify which singer to learn from, as an oblique teacher, to develop their mature song
         timestepData <- sing.selection (
           p_SS = params,
           ro_SS = ref_objects,
@@ -563,8 +565,10 @@ life_cycle <- function (params, shifting_curstart,
           sylrep_object = sylreps,
           num_select_chances = c (40, 40),
           verbose_output = FALSE,
-          interbreed = FALSE)
+          interbreed = FALSE,
+          round_up = params$selection_round_up)
 
+        # 
         timestepData <- syll_learn (
           p_SL = params,
           temp_data_SL = timestepData,

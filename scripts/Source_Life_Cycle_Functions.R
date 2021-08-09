@@ -161,40 +161,40 @@ make.offspring.calls <- function (p_OC, temp_data_OC, ro_OC) {
 
 
 update_selexn_data <- function (
-  p_US, temp_data_US, suitor_choices, preferred_bird,
-  selector_bird, curiosity_value, selector_population,
-  selection_context, sylreps_choices, sylrep_selector,
-  selection_count, selection_type = 1) {#}), giving_up = FALSE) {
+  p_US, temp_data_US, selection.index_USD, singer_USD,
+  selector.index_USD, curiosity_level_USD, selector_population,
+  select_type_USD, selection.sylreps_USD, selector.sylrep_USD,
+  chance_for_selection_USD, selection_type = 1) {#}), giving_up = FALSE) {
 
-  selected_pair <- c (suitor_choices [preferred_bird], # Bird being selected
-                       selector_bird)          # Bird doing the selecting
+  selected_pair <- c (selection.index_USD [singer_USD], # Bird being selected
+                       selector.index_USD)          # Bird doing the selecting
 
   #if (! (giving_up)) {
     singer_population <- ceiling (
-    preferred_bird / p_US$one_pop_singers [selection_context])
+    singer_USD / p_US$one_pop_singers [select_type_USD])
     # if (selection_type == 1) {
-      sylrep_pairs <- rbind (sylreps_choices [preferred_bird,], sylrep_selector)
+      sylrep_pairs <- rbind (selection.sylreps_USD [singer_USD,], selector.sylrep_USD)
     # } else if (selection_type == 2) {
-    #   sylrep_pairs <- rbind (sylreps_choices [preferred_bird], sylrep_selector)
+    #   sylrep_pairs <- rbind (selection.sylreps_USD [singer_USD], selector.sylrep_USD)
     # }
 
   #}# else {
   #   singer_population <- selector_population
 
-  #   sylrep_pairs <- rbind (sylreps_choices[preferred_bird,], sylrep_selector)
+  #   sylrep_pairs <- rbind (selection.sylreps_USD[singer_USD,], selector.sylrep_USD)
   # } # This happens if giving_up == TRUE. Not ideal for tutor selection,
     # but I guess that's the point of giving up... also, this should
     # basically NEVER happen for tutor context anyway.
 
-  curiosities <- c (curiosity_value [selected_pair [1],singer_population],
-                     curiosity_value [selected_pair [2],selector_population])
+  curiosities <- c (curiosity_level_USD [selected_pair [1],singer_population],
+                     curiosity_level_USD [selected_pair [2],selector_population])
 
-  if (selection_context == 1) { # tutor select_type
+  if (select_type_USD == 1) { # tutor select_type
     pool.row <- 5
-  } else if (selection_context == 2) { # mate select_type
+  } else if (select_type_USD == 2) { # mate select_type
     pool.row <- 1
   }
-  for (bird in 1 : selection_context) {
+  for (bird in 1 : select_type_USD) {
     pool.row <- pool.row * bird # mating: 1, then 2; tutor: 5, never 10.
 
     temp_data_US [
@@ -213,21 +213,21 @@ update_selexn_data <- function (
   }
 
   temp_data_US [
-    (4 - selection_context), p_US$sylnum + 3, selector_population
-  ] <- selection_count
+    (4 - select_type_USD), p_US$sylnum + 3, selector_population
+  ] <- chance_for_selection_USD
 
   return (temp_data_US)
 }
 
-# should_pick_neighbor <- function (index,total_chances,selection_context,
+# should_pick_neighbor <- function (index,total_chances,select_type_USD,
 #                                  current_chance, sortSimlr,
 #                                  repBarrier,chosenBird,
 #                                  lower = 0,upper = 1) {
 #   stuff = FALSE
-#   lower_bound <- round (total_chances [selection_context] * lower) # 50
+#   lower_bound <- round (total_chances [select_type_USD] * lower) # 50
 #   lower_bound <- round (num_select_chances [select_type] * 0.25) # 50
 
-#   upper_bound <- round (total_chances [selection_context] * upper) # 75
+#   upper_bound <- round (total_chances [select_type_USD] * upper) # 75
 #   print (paste0 ("sortSimlr = ", sortSimlr, collapse = ""))
 #   print (paste0 ("chosenBird = ", chosenBird))
 #   print (paste0 ("index = ", index))
@@ -360,8 +360,8 @@ sing.selection <- function (p_SS,
           # "1-20"
           singsuccessfilter <- 1 : (
             (p_SS$one_pop_singers [select_type]) * (p_SS$num_pop))
-          # male offspring from this timestep, lookin for a tutor
-          selector.index <- temp_data_SS [3, p_SS$sylnum + 1, population]
+            # male offspring from this timestep, lookin for a tutor
+            selector.index <- temp_data_SS [3, p_SS$sylnum + 1, population]
 
         } else if (select_type == 2) {
           singsuccessfilter <- (1 + ((population - 1) * (
@@ -378,46 +378,27 @@ sing.selection <- function (p_SS,
         }
         #print ("vapply")
         if (round_up == TRUE) {
-          selection.index <- (
-            # This creates sample calls for each population;
-            # each population has a sample size of p_SS$one_pop_singers,
-            # which comes from the male half of the population. Probability
-            # defined by the fraction of syllable repertoires of each member of
-            # each population divided by the maximum syllrep of the population.
-            vapply (1 : p_SS$num_pop,
-              function (x) {
-                temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
-                sample (x = ro_SS [1,],
-                        size = p_SS$one_pop_singers [select_type],
-                        replace = FALSE,
-                        prob = temp / max (temp))
-              }, rep (0, p_SS$one_pop_singers [select_type])
-            )
-          ) # probability = the number of times each individual's syllable
-            # repertoire has a 1 in it (sum (sylrep_object[
-            # ro_SS[1,]])),
-            # divided by the biggest repertoire's total.
+          temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
+          temp = temp / max (temp)
         } else {
-          selection.index <- (
-            # This creates sample calls for each population;
-            # each population has a sample size of p_SS$one_pop_singers,
-            # which comes from the male half of the population. Probability
-            # defined by the fraction of syllable repertoires of each member of
-            # each population divided by the maximum syllrep of the population.
-            vapply (1 : p_SS$num_pop,
-              function (x) {
-                # temp <- cpp_rowSums (sylrep_object[
-                #   ro_SS [1,],,x])
-                sample (x = ro_SS [1,],
-                        size = p_SS$one_pop_singers [select_type],
-                        replace = FALSE)
-              }, rep (0, p_SS$one_pop_singers [select_type])
-            )
-          ) # probability = the number of times each individual's syllable
-            # repertoire has a 1 in it (sum (sylrep_object[
-            # ro_SS[1,]])),
-            # divided by the biggest repertoire's total.
+          temp <- NULL
         }
+
+        selection.index <- (
+          # This creates sample calls for each population;
+          # each population has a sample size of p_SS$one_pop_singers,
+          # which comes from the male half of the population. Probability
+          # defined by the fraction of syllable repertoires of each member of
+          # each population divided by the maximum syllrep of the population.
+          vapply (1 : p_SS$num_pop,
+            function (x) {
+              sample (x = ro_SS [1,],
+                      size = p_SS$one_pop_singers [select_type],
+                      replace = FALSE,
+                      prob = temp)
+            }, rep (0, p_SS$one_pop_singers [select_type])
+          )
+        )
 
         # create a matrix of all the sylrep_object of the sample
         # males from selection.index
@@ -472,15 +453,15 @@ sing.selection <- function (p_SS,
             temp_data_SS <- update_selexn_data (
               p_US = p_SS,
               temp_data_US = temp_data_SS,
-              suitor_choices = selection.index,
-              preferred_bird = singer,
-              selector_bird = selector.index,
-              curiosity_value = curiosity_level_SS,
+              selection.index_USD = selection.index,
+              singer_USD = singer,
+              selector.index_USD = selector.index,
+              curiosity_level_USD = curiosity_level_SS,
               selector_population = population,
-              selection_context = select_type,
-              sylreps_choices = selection.sylreps,
-              sylrep_selector = selector.sylrep,
-              selection_count = chance_for_selection
+              select_type_USD = select_type,
+              selection.sylreps_USD = selection.sylreps,
+              selector.sylrep_USD = selector.sylrep,
+              chance_for_selection_USD = chance_for_selection
             )#, FALSE)
 
             should_continue <- FALSE
@@ -498,15 +479,15 @@ sing.selection <- function (p_SS,
                     temp_data_SS <- update_selexn_data (
                       p_US = p_SS,
                       temp_data_US = temp_data_SS,
-                      suitor_choices = selection.index,
-                      preferred_bird = singer,
-                      selector_bird = selector.index,
-                      curiosity_value = curiosity_level_SS,
+                      selection.index_USD = selection.index,
+                      singer_USD = singer,
+                      selector.index_USD = selector.index,
+                      curiosity_level_USD = curiosity_level_SS,
                       selector_population = population,
-                      selection_context = select_type,
-                      sylreps_choices = selection.sylreps,
-                      sylrep_selector = selector.sylrep,
-                      selection_count = chance_for_selection
+                      select_type_USD = select_type,
+                      selection.sylreps_USD = selection.sylreps,
+                      selector.sylrep_USD = selector.sylrep,
+                      chance_for_selection_USD = chance_for_selection
                     )#, FALSE)
 
                     should_continue <- FALSE
@@ -533,15 +514,15 @@ sing.selection <- function (p_SS,
                     temp_data_SS <- update_selexn_data (
                       p_US = p_SS,
                       temp_data_US = temp_data_SS,
-                      suitor_choices = selection.index,
-                      preferred_bird = singer,
-                      selector_bird = selector.index,
-                      curiosity_value = curiosity_level_SS,
+                      selection.index_USD = selection.index,
+                      singer_USD = singer,
+                      selector.index_USD = selector.index,
+                      curiosity_level_USD = curiosity_level_SS,
                       selector_population = population,
-                      selection_context = select_type,
-                      sylreps_choices = selection.sylreps,
-                      sylrep_selector = selector.sylrep,
-                      selection_count = chance_for_selection
+                      select_type_USD = select_type,
+                      selection.sylreps_USD = selection.sylreps,
+                      selector.sylrep_USD = selector.sylrep,
+                      chance_for_selection_USD = chance_for_selection
                     )#, FALSE)
 
                     should_continue <- FALSE
@@ -569,15 +550,15 @@ sing.selection <- function (p_SS,
                     temp_data_SS <- update_selexn_data (
                       p_US = p_SS,
                       temp_data_US = temp_data_SS,
-                      suitor_choices = selection.index,
-                      preferred_bird = singer,
-                      selector_bird = selector.index,
-                      curiosity_value = curiosity_level_SS,
+                      selection.index_USD = selection.index,
+                      singer_USD = singer,
+                      selector.index_USD = selector.index,
+                      curiosity_level_USD = curiosity_level_SS,
                       selector_population = population,
-                      selection_context = select_type,
-                      sylreps_choices = selection.sylreps,
-                      sylrep_selector = selector.sylrep,
-                      selection_count = chance_for_selection
+                      select_type_USD = select_type,
+                      selection.sylreps_USD = selection.sylreps,
+                      selector.sylrep_USD = selector.sylrep,
+                      chance_for_selection_USD = chance_for_selection
                     )#, FALSE)
 
                     should_continue <- FALSE
@@ -601,15 +582,15 @@ sing.selection <- function (p_SS,
             temp_data_SS <- update_selexn_data (
               p_US = p_SS,
               temp_data_US = temp_data_SS,
-              suitor_choices = selection.index,
-              preferred_bird = singer,
-              selector_bird = selector.index,
-              curiosity_value = curiosity_level_SS,
+              selection.index_USD = selection.index,
+              singer_USD = singer,
+              selector.index_USD = selector.index,
+              curiosity_level_USD = curiosity_level_SS,
               selector_population = population,
-              selection_context = select_type,
-              sylreps_choices = selection.sylreps,
-              sylrep_selector = selector.sylrep,
-              selection_count = chance_for_selection
+              select_type_USD = select_type,
+              selection.sylreps_USD = selection.sylreps,
+              selector.sylrep_USD = selector.sylrep,
+              chance_for_selection_USD = chance_for_selection
             )#, FALSE)
 
             break
@@ -617,23 +598,8 @@ sing.selection <- function (p_SS,
         }
         chance_for_selection = chance_for_selection + 1
       }
-    } else if (selection_path == 2) {
-      # We need these variables to run update_selexn_data
-
-      if (select_type == 1) {
-        singsuccessfilter <- 1 : (
-          (p_SS$one_pop_singers [select_type]) * (p_SS$num_pop))
-        
-        selector.index <- temp_data_SS [3, p_SS$sylnum + 1, population]
-
-      } else if (select_type == 2) {
-        singsuccessfilter <- (1 + ((population - 1) * (
-          p_SS$one_pop_singers [select_type]))) : (
-            population * p_SS$one_pop_singers [select_type])
-            
-        selector.index <- sample (ro_SS [2, ], 1)
-      }
-
+    } else if (selection_path == 2) { # syllable repertoire size selection
+      
       selector.index <- sample (ro_SS [2, ], 1)
 
       if (round_up == TRUE) {
@@ -671,15 +637,15 @@ sing.selection <- function (p_SS,
       temp_data_SS <- update_selexn_data (
         p_US = p_SS,
         temp_data_US = temp_data_SS,
-        suitor_choices = selection.index,
-        preferred_bird = singer,
-        selector_bird = selector.index,
-        curiosity_value = curiosity_level_SS,
+        selection.index_USD = selection.index,
+        singer_USD = singer,
+        selector.index_USD = selector.index,
+        curiosity_level_USD = curiosity_level_SS,
         selector_population = population,
-        selection_context = select_type,
-        sylreps_choices = selection.sylreps,
-        sylrep_selector = selector.sylrep,
-        selection_count = chance_for_selection,
+        select_type_USD = select_type,
+        selection.sylreps_USD = selection.sylreps,
+        selector.sylrep_USD = selector.sylrep,
+        chance_for_selection_USD = chance_for_selection,
         selection_type = selection_path
       )
 
@@ -737,15 +703,15 @@ sing.selection <- function (p_SS,
       temp_data_SS <- update_selexn_data (
         p_US = p_SS,
         temp_data_US = temp_data_SS,
-        suitor_choices = selection.index,
-        preferred_bird = singer,
-        selector_bird = selector.index,
-        curiosity_value = curiosity_level_SS,
+        selection.index_USD = selection.index,
+        singer_USD = singer,
+        selector.index_USD = selector.index,
+        curiosity_level_USD = curiosity_level_SS,
         selector_population = population,
-        selection_context = select_type,
-        sylreps_choices = selection.sylreps,
-        sylrep_selector = selector.sylrep,
-        selection_count = chance_for_selection,
+        select_type_USD = select_type,
+        selection.sylreps_USD = selection.sylreps,
+        selector.sylrep_USD = selector.sylrep,
+        chance_for_selection_USD = chance_for_selection,
         selection_type = selection_path
       )
     }
