@@ -283,8 +283,10 @@ sing.selection <- function (p_SS,
       selection_path <- 1
     } else if (p_SS$mate_selection_type == "repertoire_size") {
       selection_path <- 2
-    } else if (p_SS$mate_selection_type == "SRS_then_curiosity") {
+    } else if (p_SS$mate_selection_type == "minimum_repertoire") {
       selection_path <- 3
+    } else if (p_SS$mate_selection_type == "SRS_then_curiosity") {
+      selection_path <- 4
     }
   # } else if (select_type == 1) {
   #   if (p_SS$tutor_selection_type == "curiosity") {
@@ -649,7 +651,58 @@ sing.selection <- function (p_SS,
         selection_type = selection_path
       )
 
-    } else if (selection_path == 3) {
+    } else if (selection_path == 3) { # minimum repertoire size selection
+      
+      selector.index <- sample (ro_SS [2, ], 1)
+
+      if (round_up == TRUE) {
+        selection.index <- (
+          vapply (1 : p_SS$num_pop,
+            function (x) {
+              temp <- cpp_rowSums (sylrep_object[
+                ro_SS [1,],,x])
+              sample (x = ro_SS [1,],
+                      size = p_SS$one_pop_singers [1],
+                      replace = FALSE,
+                      prob = temp / max (temp))
+            }, rep (0, p_SS$one_pop_singers [select_type])
+          )
+        )
+      } else {
+        selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      }
+
+      # selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      selection.sylreps <- sylrep_object [selection.index,,population]
+      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,population]) [selection.index]
+      # bigSylrep <- min (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
+      if (length (which (selection.sylrepSums == min (selection.sylrepSums))) > 1) {
+        singer <- which (selection.sylrepSums == min (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == min (selection.sylrepSums)))), 1)]
+      } else if (length (which (selection.sylrepSums == min (selection.sylrepSums))) == 1) {
+        singer <- which (selection.sylrepSums == min (selection.sylrepSums))
+      } else {stop ("min sylrep selection problem")}
+
+      selector.sylrep <- sylrep_object [selector.index, , population]
+        if (sum (selector.sylrep) == 0) {
+          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
+        }
+
+      temp_data_SS <- update_selexn_data (
+        p_US = p_SS,
+        temp_data_US = temp_data_SS,
+        selection.index_USD = selection.index,
+        singer_USD = singer,
+        selector.index_USD = selector.index,
+        curiosity_level_USD = curiosity_level_SS,
+        selector_population = population,
+        select_type_USD = select_type,
+        selection.sylreps_USD = selection.sylreps,
+        selector.sylrep_USD = selector.sylrep,
+        chance_for_selection_USD = chance_for_selection,
+        selection_type = selection_path
+      )
+
+    } else if (selection_path == 4) {
       selector.index <- sample (ro_SS [2, ], 1)
       selector.sylrep <- sylrep_object [selector.index, , population]
         if (sum (selector.sylrep) == 0) {
