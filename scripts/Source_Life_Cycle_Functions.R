@@ -163,25 +163,29 @@ make.offspring.calls <- function (p_OC, temp_data_OC, ro_OC) {
 update_selexn_data <- function (
   p_US, temp_data_US, selection.index_USD, singer_USD,
   selector.index_USD, curiosity_level_USD, selector_population,
-  select_type_USD, selection.sylreps_USD, selector.sylrep_USD,
+  select_type_USD, selection.sylrep_USD, selector.sylrep_USD,
   chance_for_selection_USD, selection_type = 1) {#}), giving_up = FALSE) {
 
   selected_pair <- c (selection.index_USD [singer_USD], # Bird being selected
                        selector.index_USD)          # Bird doing the selecting
 
   #if (! (giving_up)) {
-    singer_population <- ceiling (
-    singer_USD / p_US$one_pop_singers [select_type_USD])
+    if (length (selection.index_USD) == 2 * p_US$one_pop_singers[select_type_USD]){
+      singer_population <- ceiling (
+      singer_USD / p_US$one_pop_singers [select_type_USD])
+    } else {
+      singer_population <- selector_population
+    }
     # if (selection_type == 1) {
-      sylrep_pairs <- rbind (selection.sylreps_USD [singer_USD,], selector.sylrep_USD)
+      sylrep_pairs <- rbind (selection.sylrep_USD, selector.sylrep_USD)
     # } else if (selection_type == 2) {
-    #   sylrep_pairs <- rbind (selection.sylreps_USD [singer_USD], selector.sylrep_USD)
+    #   sylrep_pairs <- rbind (selection.sylrep_USD [singer_USD], selector.sylrep_USD)
     # }
 
   #}# else {
   #   singer_population <- selector_population
 
-  #   sylrep_pairs <- rbind (selection.sylreps_USD[singer_USD,], selector.sylrep_USD)
+  #   sylrep_pairs <- rbind (selection.sylrep_USD[singer_USD,], selector.sylrep_USD)
   # } # This happens if giving_up == TRUE. Not ideal for tutor selection,
     # but I guess that's the point of giving up... also, this should
     # basically NEVER happen for tutor context anyway.
@@ -201,9 +205,11 @@ update_selexn_data <- function (
       pool.row, p_US$sylnum + 1, selector_population
     ] <- selected_pair [bird]
 
-    tryCatch({temp_data_US [
-      pool.row, 1 : p_US$sylnum, selector_population
-    ] <- sylrep_pairs [bird,]}, error = function (e) {stop(
+    tryCatch({
+      temp_data_US [
+        pool.row, 1 : p_US$sylnum, selector_population
+      ] <- sylrep_pairs [bird,]
+    }, error = function (e) {stop(
       paste0(dim (temp_data_US), paste0(sylrep_pairs [bird,]), collapse = '')
     )})
 
@@ -310,7 +316,7 @@ sing.selection <- function (p_SS,
     #print (paste("this is population",population,sep=" "))
     chance_for_selection = 1
 
-    if (selection_path == 1) {
+    # if (selection_path == 1) {
       while (chance_for_selection <= num_select_chances [select_type]) {
         stop = FALSE
         if (chance_for_selection == num_select_chances [select_type]) {
@@ -337,7 +343,7 @@ sing.selection <- function (p_SS,
               temp_data_SS = update_selexn_data (
                 p_SS, temp_data_SS, auto.teachers [1,], MTsylrep_filter,
                 auto.teachers [2,MTsylrep_filter], curiosity_level_SS, population,
-                select_type, sylrep_object [auto.teachers [1,],,population],
+                select_type, sylrep_object [auto.teachers [1,MTsylrep_filter],,population],
                 sylrep_object [auto.teachers [2,MTsylrep_filter],,population],
                 num_select_chances [select_type])#, TRUE)
 
@@ -380,27 +386,35 @@ sing.selection <- function (p_SS,
         }
         #print ("vapply")
         if (round_up == TRUE) {
-          temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
-          temp = temp / max (temp)
+          selection.index <- (
+            # This creates sample calls for each population;
+            # each population has a sample size of p_SS$one_pop_singers,
+            # which comes from the male half of the population. Probability
+            # defined by the fraction of syllable repertoires of each member of
+            # each population divided by the maximum syllrep of the population.
+            vapply (1 : p_SS$num_pop,
+              function (x) {
+                temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
+                sample (x = ro_SS [1,],
+                        size = p_SS$one_pop_singers [select_type],
+                        replace = FALSE,
+                        prob = temp / max (temp))
+              }, rep (0, p_SS$one_pop_singers [select_type])
+            )
+          )
         } else {
-          temp <- NULL
+          selection.index <- (
+            vapply (1 : p_SS$num_pop,
+              function (x) {
+                sample (x = ro_SS [1,],
+                        size = p_SS$one_pop_singers [select_type],
+                        replace = FALSE)
+              }, rep (0, p_SS$one_pop_singers [select_type])
+            )
+          )
+          # temp <- NULL
         }
 
-        selection.index <- (
-          # This creates sample calls for each population;
-          # each population has a sample size of p_SS$one_pop_singers,
-          # which comes from the male half of the population. Probability
-          # defined by the fraction of syllable repertoires of each member of
-          # each population divided by the maximum syllrep of the population.
-          vapply (1 : p_SS$num_pop,
-            function (x) {
-              sample (x = ro_SS [1,],
-                      size = p_SS$one_pop_singers [select_type],
-                      replace = FALSE,
-                      prob = temp)
-            }, rep (0, p_SS$one_pop_singers [select_type])
-          )
-        )
 
         # create a matrix of all the sylrep_object of the sample
         # males from selection.index
@@ -419,31 +433,41 @@ sing.selection <- function (p_SS,
           )
         )
 
-        # applies the standard deviation scoring to the males in
-        # selection.sylrep_object; larger score means greater
-        # difference between male sylrep and selector's sylrep.
-        # temp <- apply (X = selection.sylreps, MARGIN = 1,
-        #               FUN = score_similarity,
-        #               selector_vector = selector.sylrep)
-        # golf_score <- sort (apply (X = selection.sylreps, MARGIN = 1,
-        #               FUN = score_similarity,
-        #               selector_vector = selector.sylrep))$ix
+        if (selection_path == 1) {
+          golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+                              FUN = score_similarity,
+                              selector_vector = selector.sylrep))
+          # orders the scored list of suitors; subsets one suitor from the rest,
+          # according to the value of the selector's (auditory) curiosity.
+          singer <- golf_score [round (curiosity_level_SS [
+            selector.index, population] *(p_SS$one_pop_singers [
+            select_type] * p_SS$num_pop) + 0.5)]
+          if (sum (selection.sylreps [singer,])==0) {
+            chance_for_selection = chance_for_selection + 1
+            next
+          }
+        } else if (selection_path == 2) {
+          golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+                              FUN = sum))
+          # orders the scored list of suitors; subsets one suitor from the rest,
+          # according to the value of the selector's (auditory) curiosity.
+          singer <- golf_score [length (golf_score)]
+          if (sum (selection.sylreps [singer,])==0) {
+            chance_for_selection = chance_for_selection + 1
+            next
+          }
+        } else if (selection_path == 3) {
+          golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+                              FUN = sum))
+          # orders the scored list of suitors; subsets one suitor from the rest,
+          # according to the value of the selector's (auditory) curiosity.
+          singer <- golf_score [1]
+          if (sum (selection.sylreps [singer,])==0) {
+            chance_for_selection = chance_for_selection + 1
+            next
+          }
+        } else if (selection_path == 4) {
 
-        # Golf Score: orders selection of males according to
-        # the value of their selection.sylreps[row] measured
-        # against the selector.sylrep vector, according to score_similarity,
-        # but spits out a vector of their indices within selection.sylreps and selection.index
-        golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
-                            FUN = score_similarity,
-                            selector_vector = selector.sylrep))
-        # orders the scored list of suitors; subsets one suitor from the rest,
-        # according to the value of the selector's (auditory) curiosity.
-        singer <- golf_score [round (curiosity_level_SS [
-          selector.index, population] *(p_SS$one_pop_singers [
-          select_type] * p_SS$num_pop) + 0.5)]
-        if (sum (selection.sylreps [singer,])==0) {
-          chance_for_selection = chance_for_selection + 1
-          next
         }
 
         #should_pick_neighbor <- function (index,lower,upper=Inf) {
@@ -461,7 +485,7 @@ sing.selection <- function (p_SS,
               curiosity_level_USD = curiosity_level_SS,
               selector_population = population,
               select_type_USD = select_type,
-              selection.sylreps_USD = selection.sylreps,
+              selection.sylrep_USD = selection.sylreps[singer,],
               selector.sylrep_USD = selector.sylrep,
               chance_for_selection_USD = chance_for_selection
             )#, FALSE)
@@ -487,7 +511,7 @@ sing.selection <- function (p_SS,
                       curiosity_level_USD = curiosity_level_SS,
                       selector_population = population,
                       select_type_USD = select_type,
-                      selection.sylreps_USD = selection.sylreps,
+                      selection.sylrep_USD = selection.sylreps[singer,],
                       selector.sylrep_USD = selector.sylrep,
                       chance_for_selection_USD = chance_for_selection
                     )#, FALSE)
@@ -522,7 +546,7 @@ sing.selection <- function (p_SS,
                       curiosity_level_USD = curiosity_level_SS,
                       selector_population = population,
                       select_type_USD = select_type,
-                      selection.sylreps_USD = selection.sylreps,
+                      selection.sylrep_USD = selection.sylreps[singer,],
                       selector.sylrep_USD = selector.sylrep,
                       chance_for_selection_USD = chance_for_selection
                     )#, FALSE)
@@ -558,7 +582,7 @@ sing.selection <- function (p_SS,
                       curiosity_level_USD = curiosity_level_SS,
                       selector_population = population,
                       select_type_USD = select_type,
-                      selection.sylreps_USD = selection.sylreps,
+                      selection.sylrep_USD = selection.sylreps[singer,],
                       selector.sylrep_USD = selector.sylrep,
                       chance_for_selection_USD = chance_for_selection
                     )#, FALSE)
@@ -590,7 +614,7 @@ sing.selection <- function (p_SS,
               curiosity_level_USD = curiosity_level_SS,
               selector_population = population,
               select_type_USD = select_type,
-              selection.sylreps_USD = selection.sylreps,
+              selection.sylrep_USD = selection.sylreps[singer,],
               selector.sylrep_USD = selector.sylrep,
               chance_for_selection_USD = chance_for_selection
             )#, FALSE)
@@ -600,174 +624,174 @@ sing.selection <- function (p_SS,
         }
         chance_for_selection = chance_for_selection + 1
       }
-    } else if (selection_path == 2) { # syllable repertoire size selection
+    # } else if (selection_path == 2) { # syllable repertoire size selection
       
-      selector.index <- sample (ro_SS [2, ], 1)
+      #   selector.index <- sample (ro_SS [2, ], 1)
 
-      if (round_up == TRUE) {
-        selection.index <- (
-          vapply (1 : p_SS$num_pop,
-            function (x) {
-              temp <- cpp_rowSums (sylrep_object[
-                ro_SS [1,],,x])
-              sample (x = ro_SS [1,],
-                      size = p_SS$one_pop_singers [1],
-                      replace = FALSE,
-                      prob = temp / max (temp))
-            }, rep (0, p_SS$one_pop_singers [select_type])
-          )
-        )
-      } else {
-        selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
-      }
+      #   if (round_up == TRUE) {
+      #     selection.index <- (
+      #       vapply (1 : p_SS$num_pop,
+      #         function (x) {
+      #           temp <- cpp_rowSums (sylrep_object[
+      #             ro_SS [1,],,x])
+      #           sample (x = ro_SS [1,],
+      #                   size = p_SS$one_pop_singers [1],
+      #                   replace = FALSE,
+      #                   prob = temp / max (temp))
+      #         }, rep (0, p_SS$one_pop_singers [select_type])
+      #       )
+      #     )
+      #   } else {
+      #     selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   }
 
-      # selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
-      selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,population]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
-      if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
-        singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
-      } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
-        singer <- which (selection.sylrepSums == max (selection.sylrepSums))
-      } else {stop ("max sylrep selection problem")}
+      #   # selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   selection.sylreps <- sylrep_object [selection.index,,population]
+      #   selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,population]) [selection.index]
+      #   # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
+      #   if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
+      #     singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == max (selection.sylrepSums)))), 1)]
+      #   } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
+      #     singer <- which (selection.sylrepSums == max (selection.sylrepSums))
+      #   } else {stop ("max sylrep selection problem")}
 
-      selector.sylrep <- sylrep_object [selector.index, , population]
-        if (sum (selector.sylrep) == 0) {
-          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
-        }
+      #   selector.sylrep <- sylrep_object [selector.index, , population]
+      #     if (sum (selector.sylrep) == 0) {
+      #       stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
+      #     }
 
-      temp_data_SS <- update_selexn_data (
-        p_US = p_SS,
-        temp_data_US = temp_data_SS,
-        selection.index_USD = selection.index,
-        singer_USD = singer,
-        selector.index_USD = selector.index,
-        curiosity_level_USD = curiosity_level_SS,
-        selector_population = population,
-        select_type_USD = select_type,
-        selection.sylreps_USD = selection.sylreps,
-        selector.sylrep_USD = selector.sylrep,
-        chance_for_selection_USD = chance_for_selection,
-        selection_type = selection_path
-      )
+      #   temp_data_SS <- update_selexn_data (
+      #     p_US = p_SS,
+      #     temp_data_US = temp_data_SS,
+      #     selection.index_USD = selection.index,
+      #     singer_USD = singer,
+      #     selector.index_USD = selector.index,
+      #     curiosity_level_USD = curiosity_level_SS,
+      #     selector_population = population,
+      #     select_type_USD = select_type,
+      #     selection.sylrep_USD = selection.sylreps[singer,],
+      #     selector.sylrep_USD = selector.sylrep,
+      #     chance_for_selection_USD = chance_for_selection,
+      #     selection_type = selection_path
+      #   )
 
-    } else if (selection_path == 3) { # minimum repertoire size selection
-      
-      selector.index <- sample (ro_SS [2, ], 1)
+      # } else if (selection_path == 3) { # minimum repertoire size selection
+        
+      #   selector.index <- sample (ro_SS [2, ], 1)
 
-      if (round_up == TRUE) {
-        selection.index <- (
-          vapply (1 : p_SS$num_pop,
-            function (x) {
-              temp <- cpp_rowSums (sylrep_object[
-                ro_SS [1,],,x])
-              sample (x = ro_SS [1,],
-                      size = p_SS$one_pop_singers [1],
-                      replace = FALSE,
-                      prob = temp / max (temp))
-            }, rep (0, p_SS$one_pop_singers [select_type])
-          )
-        )
-      } else {
-        selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
-      }
+      #   if (round_up == TRUE) {
+      #     selection.index <- (
+      #       vapply (1 : p_SS$num_pop,
+      #         function (x) {
+      #           temp <- cpp_rowSums (sylrep_object[
+      #             ro_SS [1,],,x])
+      #           sample (x = ro_SS [1,],
+      #                   size = p_SS$one_pop_singers [1],
+      #                   replace = FALSE,
+      #                   prob = temp / max (temp))
+      #         }, rep (0, p_SS$one_pop_singers [select_type])
+      #       )
+      #     )
+      #   } else {
+      #     selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   }
 
-      # selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
-      selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,population]) [selection.index]
-      # bigSylrep <- min (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
-      if (length (which (selection.sylrepSums == min (selection.sylrepSums))) > 1) {
-        singer <- which (selection.sylrepSums == min (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == min (selection.sylrepSums)))), 1)]
-      } else if (length (which (selection.sylrepSums == min (selection.sylrepSums))) == 1) {
-        singer <- which (selection.sylrepSums == min (selection.sylrepSums))
-      } else {stop ("min sylrep selection problem")}
+      #   # selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   selection.sylreps <- sylrep_object [selection.index,,population]
+      #   selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,population]) [selection.index]
+      #   # bigSylrep <- min (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
+      #   if (length (which (selection.sylrepSums == min (selection.sylrepSums))) > 1) {
+      #     singer <- which (selection.sylrepSums == min (selection.sylrepSums)) [sample (c (1 : length (which (selection.sylrepSums == min (selection.sylrepSums)))), 1)]
+      #   } else if (length (which (selection.sylrepSums == min (selection.sylrepSums))) == 1) {
+      #     singer <- which (selection.sylrepSums == min (selection.sylrepSums))
+      #   } else {stop ("min sylrep selection problem")}
 
-      selector.sylrep <- sylrep_object [selector.index, , population]
-        if (sum (selector.sylrep) == 0) {
-          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
-        }
+      #   selector.sylrep <- sylrep_object [selector.index, , population]
+      #     if (sum (selector.sylrep) == 0) {
+      #       stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
+      #     }
 
-      temp_data_SS <- update_selexn_data (
-        p_US = p_SS,
-        temp_data_US = temp_data_SS,
-        selection.index_USD = selection.index,
-        singer_USD = singer,
-        selector.index_USD = selector.index,
-        curiosity_level_USD = curiosity_level_SS,
-        selector_population = population,
-        select_type_USD = select_type,
-        selection.sylreps_USD = selection.sylreps,
-        selector.sylrep_USD = selector.sylrep,
-        chance_for_selection_USD = chance_for_selection,
-        selection_type = selection_path
-      )
+      #   temp_data_SS <- update_selexn_data (
+      #     p_US = p_SS,
+      #     temp_data_US = temp_data_SS,
+      #     selection.index_USD = selection.index,
+      #     singer_USD = singer,
+      #     selector.index_USD = selector.index,
+      #     curiosity_level_USD = curiosity_level_SS,
+      #     selector_population = population,
+      #     select_type_USD = select_type,
+      #     selection.sylrep_USD = selection.sylreps[singer,],
+      #     selector.sylrep_USD = selector.sylrep,
+      #     chance_for_selection_USD = chance_for_selection,
+      #     selection_type = selection_path
+      #   )
 
-    } else if (selection_path == 4) {
-      selector.index <- sample (ro_SS [2, ], 1)
-      selector.sylrep <- sylrep_object [selector.index, , population]
-        if (sum (selector.sylrep) == 0) {
-          stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
-        }
-      # if (round_up == TRUE) {
-      #   temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
-      #   selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      # } else if (selection_path == 4) {
+      #   selector.index <- sample (ro_SS [2, ], 1)
+      #   selector.sylrep <- sylrep_object [selector.index, , population]
+      #     if (sum (selector.sylrep) == 0) {
+      #       stop (print (paste0 (rowSums(sylrep_object[,,population]), ", ")))
+      #     }
+      #   # if (round_up == TRUE) {
+      #   #   temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
+      #   #   selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   # }
+
+      #   if (round_up == TRUE) {
+      #       selection.index <- (
+      #         vapply (1 : p_SS$num_pop,
+      #           function (x) {
+      #             temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
+      #             sample (x = ro_SS [1,],
+      #                     size = p_SS$one_pop_singers [1],
+      #                     replace = FALSE,
+      #                     prob = temp / max (temp))
+      #           }, rep (0, p_SS$one_pop_singers [select_type])
+      #         )
+      #       )
+      #   } else {
+      #     selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
+      #   }
+
+      #   selection.sylreps <- sylrep_object [selection.index,,population]
+      #   selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,1]) [selection.index]
+      #   # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
+      #   if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
+      #     THING <- which (selection.sylrepSums == max (selection.sylrepSums))
+      #     stuff <- array (as.numeric (paste0 (selection.sylreps[THING[1 : length (THING)],])), c (length (THING),length (selector.sylrep)))
+
+      #     golf_score <- cpp_sort_indices (apply (X = stuff, MARGIN = 1,
+      #                         FUN = score_similarity,
+      #                         selector_vector = selector.sylrep))
+      #     # orders the scored list of suitors; subsets one suitor from the rest,
+      #     # according to the value of the selector's (auditory) curiosity.
+      #     singer <- golf_score [round (curiosity_level_SS [
+      #       selector.index, population] *length (golf_score) + 0.5)]
+      #     if (sum (selection.sylreps [singer,])==0) {
+      #       stop (paste0 ("singer ", singer, " doesn't have syllables"))
+      #     }
+      #     #
+      #     # singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [THING]
+      #   } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
+      #     singer <- which (selection.sylrepSums == max (selection.sylrepSums))
+      #   } else {stop ("max sylrep selection problem")}
+
+
+      #   temp_data_SS <- update_selexn_data (
+      #     p_US = p_SS,
+      #     temp_data_US = temp_data_SS,
+      #     selection.index_USD = selection.index,
+      #     singer_USD = singer,
+      #     selector.index_USD = selector.index,
+      #     curiosity_level_USD = curiosity_level_SS,
+      #     selector_population = population,
+      #     select_type_USD = select_type,
+      #     selection.sylrep_USD = selection.sylreps[singer,],
+      #     selector.sylrep_USD = selector.sylrep,
+      #     chance_for_selection_USD = chance_for_selection,
+      #     selection_type = selection_path
+      #   )
       # }
-
-      if (round_up == TRUE) {
-          selection.index <- (
-            vapply (1 : p_SS$num_pop,
-              function (x) {
-                temp <- cpp_rowSums (sylrep_object[ro_SS [1,],,x])
-                sample (x = ro_SS [1,],
-                        size = p_SS$one_pop_singers [1],
-                        replace = FALSE,
-                        prob = temp / max (temp))
-              }, rep (0, p_SS$one_pop_singers [select_type])
-            )
-          )
-      } else {
-        selection.index <- sample (ro_SS [1,], p_SS$one_pop_singers [1])
-      }
-
-      selection.sylreps <- sylrep_object [selection.index,,population]
-      selection.sylrepSums <- cpp_rowSums (sylrep_object [ro_SS [1,],,1]) [selection.index]
-      # bigSylrep <- max (cpp_rowSums (sylrep_object[ro_SS [1,],,1]) [selection.index])
-      if (length (which (selection.sylrepSums == max (selection.sylrepSums))) > 1) {
-        THING <- which (selection.sylrepSums == max (selection.sylrepSums))
-        stuff <- array (as.numeric (paste0 (selection.sylreps[THING[1 : length (THING)],])), c (length (THING),length (selector.sylrep)))
-
-        golf_score <- cpp_sort_indices (apply (X = stuff, MARGIN = 1,
-                            FUN = score_similarity,
-                            selector_vector = selector.sylrep))
-        # orders the scored list of suitors; subsets one suitor from the rest,
-        # according to the value of the selector's (auditory) curiosity.
-        singer <- golf_score [round (curiosity_level_SS [
-          selector.index, population] *length (golf_score) + 0.5)]
-        if (sum (selection.sylreps [singer,])==0) {
-          stop (paste0 ("singer ", singer, " doesn't have syllables"))
-        }
-        #
-        # singer <- which (selection.sylrepSums == max (selection.sylrepSums)) [THING]
-      } else if (length (which (selection.sylrepSums == max (selection.sylrepSums))) == 1) {
-        singer <- which (selection.sylrepSums == max (selection.sylrepSums))
-      } else {stop ("max sylrep selection problem")}
-
-
-      temp_data_SS <- update_selexn_data (
-        p_US = p_SS,
-        temp_data_US = temp_data_SS,
-        selection.index_USD = selection.index,
-        singer_USD = singer,
-        selector.index_USD = selector.index,
-        curiosity_level_USD = curiosity_level_SS,
-        selector_population = population,
-        select_type_USD = select_type,
-        selection.sylreps_USD = selection.sylreps,
-        selector.sylrep_USD = selector.sylrep,
-        chance_for_selection_USD = chance_for_selection,
-        selection_type = selection_path
-      )
-    }
 
   }
   return (temp_data_SS)
@@ -807,36 +831,33 @@ curiosity_learn <- function (p_CL,
 
         curinh_attempts <- 1
 
-        tryCatch({while (((
-              paternalCurInh * temp_data_CL [1, p_CL$sylnum + 2, population] +
-
-              maternalCurInh * temp_data_CL [2, p_CL$sylnum + 2, population]
-            ) +
-            ((1 - p_CL$curinh_value) * (newcuriosity [2 * (population - 1) + sex
-            ]))) < 0) {
-
+        tryCatch({
+          while (
+            ((paternalCurInh * temp_data_CL [1, p_CL$sylnum + 2, population] +
+              maternalCurInh * temp_data_CL [2, p_CL$sylnum + 2, population]) +
+            ((1 - p_CL$curinh_value) * (newcuriosity [2 * (population - 1) + sex]))
+          ) < 0) {
             newcuriosity [2 * (population - 1) + sex] <- runif (1, 0, 1)
             curinh_attempts <- curinh_attempts + 1
+          }
+        }, error = function(e) {
+            stop(print(c(paternalCurInh, temp_data_CL [1, p_CL$sylnum + 2, population], 
+              maternalCurInh, temp_data_CL [2, p_CL$sylnum + 2, population], p_CL$curinh_value, newcuriosity)))
+        })
 
-          }}, error = function(e) {stop(print(c(paternalCurInh, temp_data_CL [1, p_CL$sylnum + 2, population], maternalCurInh, temp_data_CL [2, p_CL$sylnum + 2, population], p_CL$curinh_value, newcuriosity)))})
-
-        while (((
-            (paternalCurInh) * temp_data_CL [1, p_CL$sylnum + 2, population] +
-
-            (maternalCurInh) * temp_data_CL [2, p_CL$sylnum + 2, population]
-        ) +
-        ((1 - p_CL$curinh_value) * (newcuriosity [2 * (population - 1) + sex
-        ]))) > 1) {
-
+        while (
+          (((paternalCurInh) * temp_data_CL [1, p_CL$sylnum + 2, population] +
+            (maternalCurInh) * temp_data_CL [2, p_CL$sylnum + 2, population]) +
+          ((1 - p_CL$curinh_value) * (newcuriosity [2 * (population - 1) + sex]))
+        ) > 1) {
           newcuriosity [2 * (population - 1) + sex] <- runif (1, -1, 0)
           curinh_attempts <- curinh_attempts + 1
-
         }
 
         new.curiosity <- (
             (paternalCurInh) * temp_data_CL [1, p_CL$sylnum + 2, population] +
 
-            (1-paternalCurInh) * temp_data_CL [2, p_CL$sylnum + 2, population]
+            (maternalCurInh) * temp_data_CL [2, p_CL$sylnum + 2, population]
           ) +
           ((1 - p_CL$curinh_value) * (newcuriosity [2 * (population - 1) + sex
           ])) # Adding small proportion of noise
