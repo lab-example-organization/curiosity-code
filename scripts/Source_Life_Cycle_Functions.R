@@ -259,8 +259,11 @@ score_similarity <- function (suitor_vector, selector_vector) {
   # between the suitor and selector sylreps, then assigns a weighted
   # value based on suitor syllable distance from median of selector's sylrep.
   selector_median <- cpp_med (which (selector_vector == 1))
-  vector_diff <- which (suitor_vector - selector_vector != 0)
   AbsVal_diffs <- abs (vector_diff - selector_median)
+  
+  ### - - - - Vector Diffs - - - -
+  #   
+  vector_diff <- which (suitor_vector - selector_vector != 0)
 
   return (sum (AbsVal_diffs))
   # Output: value of similarity/dissimilarity between
@@ -467,7 +470,24 @@ sing.selection <- function (p_SS,
             next
           }
         } else if (selection_path == 4) {
+          # SRS
+          golf_score_1 <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+                              FUN = sum))
+          # AC
+          golf_score_2 <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+                              FUN = score_similarity,
+                              selector_vector = selector.sylrep))
 
+          # Combine the two different scores. These are indices 
+          golf_score <- c()
+          stop (print("combined selection_path doesn't work yet"))
+          # orders the scored list of suitors; subsets one suitor from the rest,
+          # according to the value of the selector's (auditory) curiosity.
+          singer <- golf_score [1]
+          if (sum (selection.sylreps [singer,])==0) {
+            chance_for_selection = chance_for_selection + 1
+            next
+          }
         }
 
         #should_pick_neighbor <- function (index,lower,upper=Inf) {
