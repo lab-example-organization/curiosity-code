@@ -259,12 +259,14 @@ score_similarity <- function (suitor_vector, selector_vector) {
   # between the suitor and selector sylreps, then assigns a weighted
   # value based on suitor syllable distance from median of selector's sylrep.
   selector_median <- cpp_med (which (selector_vector == 1))
-  AbsVal_diffs <- abs (vector_diff - selector_median)
   
   ### - - - - Vector Diffs - - - -
   #   
   vector_diff <- which (suitor_vector - selector_vector != 0)
 
+
+
+  AbsVal_diffs <- abs (vector_diff - selector_median)
   return (sum (AbsVal_diffs))
   # Output: value of similarity/dissimilarity between
   # sylrep of suitors and selector.
@@ -471,16 +473,48 @@ sing.selection <- function (p_SS,
           }
         } else if (selection_path == 4) {
           # SRS
-          golf_score_1 <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
-                              FUN = sum))
+          golf_score_1 <- #cpp_sort_indices (
+            apply (X = selection.sylreps, MARGIN = 1,
+                              FUN = sum)#)
           # AC
-          golf_score_2 <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
+          golf_score_2 <- #cpp_sort_indices (
+            apply (X = selection.sylreps, MARGIN = 1,
                               FUN = score_similarity,
-                              selector_vector = selector.sylrep))
+                              selector_vector = selector.sylrep)#)
 
           # Combine the two different scores. These are indices 
           golf_score <- c()
           stop (print("combined selection_path doesn't work yet"))
+
+
+
+
+golf_score_1 <- cpp_sort_indices (
+apply (X = thing, MARGIN = 1,
+                              FUN = score_similarity,
+                              selector_vector = selector.sylrep)
+)
+
+golf_score_2 <- apply (X = thing, MARGIN = 1,
+                              FUN = score_similarity,
+                              selector_vector = selector.sylrep)
+
+golf_score_range <- golf_score_2[golf_score_1[length(golf_score_1)]] - golf_score_2[golf_score_1[1]]
+
+
+thing2 <- cpp_sort_indices (apply (X = thing, MARGIN = 1, FUN = sum))
+
+thing2_2 <- apply (X = thing, MARGIN = 1,
+                              FUN = sum)
+
+thing2_range <- thing2_2[thing2[length(thing2)]] - thing2_2[thing2[1]]
+
+
+
+
+
+
+
           # orders the scored list of suitors; subsets one suitor from the rest,
           # according to the value of the selector's (auditory) curiosity.
           singer <- golf_score [1]
