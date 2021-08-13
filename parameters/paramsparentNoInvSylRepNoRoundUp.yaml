@@ -418,7 +418,7 @@ sylnum: 156
 num_sylls_per_prob_lvl: 8
 number_of_reps: 50
 standard_deviation: 2
-mate_selection_type: "repertoire_size" # "curiosity", "repertoire_size", "SRS_then_curiosity"
+mate_selection_type: "repertoire_size" # "curiosity", "repertoire_size", "minimum_repertoire", "SRS_then_curiosity"
 selection_round_up: FALSE # if there's a part of tutor selection involving the sudden production of a sample of
 
 # curinh_pattern - calling either the row number
