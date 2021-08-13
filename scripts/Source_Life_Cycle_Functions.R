@@ -452,8 +452,7 @@ sing.selection <- function (p_SS,
             next
           }
         } else if (selection_path == 2) {
-          golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
-                              FUN = sum))
+          golf_score <- cpp_sort_indices (rowSums(selection.sylreps))
           # orders the scored list of suitors; subsets one suitor from the rest,
           # according to the value of the selector's (auditory) curiosity.
           singer <- golf_score [length (golf_score)]
@@ -462,8 +461,7 @@ sing.selection <- function (p_SS,
             next
           }
         } else if (selection_path == 3) {
-          golf_score <- cpp_sort_indices (apply (X = selection.sylreps, MARGIN = 1,
-                              FUN = sum))
+          golf_score <- cpp_sort_indices (rowSums(selection.sylreps))
           # orders the scored list of suitors; subsets one suitor from the rest,
           # according to the value of the selector's (auditory) curiosity.
           singer <- golf_score [1]
@@ -471,57 +469,123 @@ sing.selection <- function (p_SS,
             chance_for_selection = chance_for_selection + 1
             next
           }
-        } else if (selection_path == 4) {
+        } else if (selection_path == 4) { # SRS (large repertoire) then AC
           # SRS
-          golf_score_1 <- #cpp_sort_indices (
-            apply (X = selection.sylreps, MARGIN = 1,
-                              FUN = sum)#)
-          # AC
-          golf_score_2 <- #cpp_sort_indices (
-            apply (X = selection.sylreps, MARGIN = 1,
-                              FUN = score_similarity,
-                              selector_vector = selector.sylrep)#)
+          golf_score_1 <- cpp_sort_indices (rowSums(selection.sylreps)) # rownumbers for selection.sylreps
 
-          # Combine the two different scores. These are indices 
-          golf_score <- c()
-          stop (print("combined selection_path doesn't work yet"))
+          largeSR <- golf_score_1[(1 + (length (golf_score_1)/2)) : length (golf_score_1)] # the rownumbers for the 10 with the largest sylreps, still shuffled
+          inFilter <- which(largeSR %in% singsuccessfilter) # rownumbers for largeSR, but cut down to the subset that are in singsuccessfilter
+          # largeSR <- selection.sylreps[largeSR,]
 
+          golf_score <- cpp_sort_indices (
+            apply (X = selection.sylreps[largeSR,], MARGIN = 1,
+            FUN = score_similarity,
+            selector_vector = selector.sylrep)
+          ) # indices for largeSR; a list of the 10 largest sylreps, ordered for AC (least to most different)
+          
+          golf_score <- largeSR[golf_score] # indices for selection.sylrep rows now! Now an AC-ordered list, that references the rownumbers of selection.sylreps
 
-
-
-golf_score_1 <- cpp_sort_indices (
-apply (X = thing, MARGIN = 1,
-                              FUN = score_similarity,
-                              selector_vector = selector.sylrep)
-)
-
-golf_score_2 <- apply (X = thing, MARGIN = 1,
-                              FUN = score_similarity,
-                              selector_vector = selector.sylrep)
-
-golf_score_range <- golf_score_2[golf_score_1[length(golf_score_1)]] - golf_score_2[golf_score_1[1]]
-
-
-thing2 <- cpp_sort_indices (apply (X = thing, MARGIN = 1, FUN = sum))
-
-thing2_2 <- apply (X = thing, MARGIN = 1,
-                              FUN = sum)
-
-thing2_range <- thing2_2[thing2[length(thing2)]] - thing2_2[thing2[1]]
-
-
-
-
-
-
-
-          # orders the scored list of suitors; subsets one suitor from the rest,
-          # according to the value of the selector's (auditory) curiosity.
-          singer <- golf_score [1]
-          if (sum (selection.sylreps [singer,])==0) {
-            chance_for_selection = chance_for_selection + 1
-            next
+          if (length (which (golf_score %in% singsuccessfilter)) == 0) { # make a control flow if statement to make sure that there are some members of golf_score that are contained within singsuccessfilter
+            singer <- golf_score_1[length (golf_score_1)/2] # half of all singers are from the same population, so if ALL of the bigger syllable repertoires come from the other population, then this one HAS to be from the same population.
+          } else { # 
+            singer <- golf_score [
+              round (curiosity_level_SS [selector.index, population] 
+              *(length(golf_score)) + 0.5)]
+            tryCatch ({
+              if (sum (selection.sylreps [singer,])==0) {
+                chance_for_selection = chance_for_selection + 1
+                next
+              }
+            }, error = function(e) {stop (print (paste ("two", paste(dim(selection.sylreps), collapse = " "), collapse = "")))})
           }
+          
+
+
+          # if (length(inFilter) > 0) {
+          #   golf_score <- golf_score[which(golf_score %in% inFilter)]
+          # } else {
+            # singer <- golf_score_1[length (golf_score_1)/2] # half of all singers are from the same population, so if ALL of the bigger syllable repertoires come from the other population, then this one HAS to be from the same population.
+            
+            # tryCatch ({
+            #   if (sum (selection.sylreps [singer,])==0) {
+            #     chance_for_selection = chance_for_selection + 1
+            #     next
+            #   }
+            # }, error = function(e) {stop (print (paste (paste (golf_score, collapse = " "), paste(dim(selection.sylreps), collapse = " "), collapse = "")))})
+          # }
+          if (length (golf_score) > 1) {
+            singer <- golf_score_1 [golf_score [
+              round (curiosity_level_SS [selector.index, population] 
+              *(length(golf_score)) + 0.5)
+            ]]
+            tryCatch ({
+              if (sum (selection.sylreps [singer,])==0) {
+                chance_for_selection = chance_for_selection + 1
+                next
+              }
+            }, error = function(e) {stop (print (paste ("two", paste(dim(selection.sylreps), collapse = " "), collapse = "")))})
+          } else {
+            # largeSR <- golf_score[c(((length (selection.sylreps)/2) - 1), length (selection.sylreps)/2)]
+            singer <- golf_score_1 [golf_score]
+            tryCatch ({
+              if (sum (selection.sylreps [singer,])==0) {
+                chance_for_selection = chance_for_selection + 1
+                next
+              }
+            }, error = function(e) {stop (print (paste ("three", paste(dim(selection.sylreps), collapse = " "), collapse = "")))})
+          }
+          # AC
+          # golf_score_2 <- #cpp_sort_indices (
+          #   apply (X = selection.sylreps, MARGIN = 1,
+          #                     FUN = score_similarity,
+          #                     selector_vector = selector.sylrep)#)
+
+          # # Combine the two different scores. These are indices 
+          # golf_score <- c()
+          # stop (print("combined selection_path doesn't work yet"))
+
+
+          # thing <- matrix(sample(c(0,1), 1560, T), 10,156,T)
+          # selector.sylrep <- sample(c(0,1), 156, T)
+          # golf_score <- cpp_sort_indices (
+          #   apply (
+          #     X = thing, 
+          #     MARGIN = 1,
+          #     FUN = score_similarity,
+          #     selector_vector = selector.sylrep
+          #   )
+          # )
+
+          # golf_score_2 <- apply (
+          #   X = thing, 
+          #   MARGIN = 1,
+          #   FUN = score_similarity,
+          #   selector_vector = selector.sylrep
+          # )
+
+          # golf_score_range <- golf_score_2[golf_score[length(golf_score)]] - golf_score_2[golf_score[1]]
+
+
+          # thing2 <- cpp_sort_indices (apply (X = thing, MARGIN = 1, FUN = sum))
+
+          # thing2_2 <- apply (X = thing, MARGIN = 1,
+          #                               FUN = sum)
+
+          # thing2_range <- thing2_2[thing2[length(thing2)]] - thing2_2[thing2[1]]
+
+
+
+
+
+
+
+          # # orders the scored list of suitors; subsets one suitor from the rest,
+          # # according to the value of the selector's (auditory) curiosity.
+          # singer <- golf_score [1]
+          # if (sum (selection.sylreps [singer,])==0) {
+          #   chance_for_selection = chance_for_selection + 1
+          #   next
+          # }
         }
 
         #should_pick_neighbor <- function (index,lower,upper=Inf) {
