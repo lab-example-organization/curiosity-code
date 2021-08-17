@@ -1,4 +1,19 @@
-source (file.path ("scripts", "Source_Reference_Section.R"))
+
+# adaptation <- TRUE
+adaptation <- commandArgs (trailingOnly = TRUE)
+
+# Source the Functions
+# adaptation to WSL:
+if (adaptation != FALSE) {
+  win_home <- file.path("/", "mnt", "c", "Users", "Parker", "Documents", "Lab_Notebook", "projects", "Code", "curiosity-code")
+  adaptation <- win_home
+} else {
+  adaptation <- ""
+}
+
+
+
+source (file.path (adaptation, "scripts", "Source_Reference_Section.R"))
 referencesection ("heatmaps")
 
 # You Should be Here To: Run some Heatmaps to compar a wide range of inherited traits!
@@ -15,44 +30,66 @@ referencesection ("heatmaps")
 
 
 
-# Source the Functions
-
-source (file.path ("scripts", "Source_Heatmap_Functions.R"))
-source (file.path ("scripts", "Source_Difference_Heatmaps.R"))
-source (file.path ("scripts", "Source_Variance_Heatmaps.R"))
+source (file.path (adaptation, "scripts", "Source_Heatmap_Functions.R"))
+source (file.path (adaptation, "scripts", "Source_Difference_Heatmaps.R"))
+source (file.path (adaptation, "scripts", "Source_Variance_Heatmaps.R"))
 
 ############## # # ARRANGEMENT OF FUNCTIONS  # # ##############
 
-whatevers <- list.files (file.path ("results"), pattern = "tenK")
+whatevers <- list.files (file.path (adaptation, "results"), pattern = "tenK")
 
-heatmapland <- file.path ("results")
+heatmapland <- file.path (adaptation, "results")
 
-# heatmapland <- file.path ("results", "Heatmaps")
+# heatmapland <- file.path (adaptation, "results", "Heatmaps")
 
-# all_the_runs <- list.files (heatmapland,
+  # all_the_runs <- list.files (heatmapland,
 
-# somethingSomething <- list (
-#   run_names = c ("ParentNoInv", "childF1NoInv", "childMalHighCurInv", "childMalLowCurInv", "childFemLowCurInv", "childBothLowCurInv", "childFemHighCurInv", "childBothHighCurInv", "childSmolMalHighCurInv", "childSmolMalLowCurInv", "childSmolFemHighCurInv", "childSmolFemLowCurInv", "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", "childF10NoInv"),
-#   run_numbers = c ("3901-4100", "4101-4300", "4301-4500", "4501-4700", "4701-4900", "5101-5300", "5301-5500", "5501-5700", "5701-5900", "5901-6100", "6101-6300", "6301-6500", "6501-6700", "6701-6900", "6901-7100", "7101-7300", "7301-7500", "7501-7700", "7701-7900", "7901-8100", "8101-8300")
-# )
+  # somethingSomething <- list (
+  #   run_names = c ("ParentNoInv", "childF1NoInv", "childMalHighCurInv", "childMalLowCurInv", "childFemLowCurInv", "childBothLowCurInv", "childFemHighCurInv", "childBothHighCurInv", "childSmolMalHighCurInv", "childSmolMalLowCurInv", "childSmolFemHighCurInv", "childSmolFemLowCurInv", "childF2NoInv", "childF3NoInv", "childF4NoInv", "childF5NoInv", "childF6NoInv", "childF7NoInv", "childF8NoInv", "childF9NoInv", "childF10NoInv"),
+  #   run_numbers = c ("3901-4100", "4101-4300", "4301-4500", "4501-4700", "4701-4900", "5101-5300", "5301-5500", "5501-5700", "5701-5900", "5901-6100", "6101-6300", "6301-6500", "6501-6700", "6701-6900", "6901-7100", "7101-7300", "7301-7500", "7501-7700", "7701-7900", "7901-8100", "8101-8300")
+  # )
 
-# THIS ARRAY IS THE FEEDER FOR THE FOR LOOP. EVERYTHING FOR ROWS 7 AND UNDER IS DONE; 8 IS READY TO FINISH
-somethingSomething <- array (c (
-  "parentNoInv",        "childF1NoInv",       "childMalHihInv",  "childMalLowInv",     "childFemLowInv",
-  "childBothLowInv",    "childFemHihInv",     "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
-  "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2",    "childNoInvF3",       "childNoInvF4",
-  "childNoInvF5",       "childNoInvF6",       "childNoInvF7",    "childNoInvF8",       "childNoInvF9",
-  "childNoInvF10", "childLateInvMalHih", "childLateInvMalLow", "childLateInvFemHih", "childLateInvFemLow",
-  "childLateInvBothHih", "childLateInvBothLow", "childLateSmolInvMalHih", "childLateSmolInvMalLow",  "childLateSmolInvFemHih",
-   "childLateSmolInvFemLow",
-  3901, 4101, 4301, 4501, 4701,
-  5101, 5301, 5501, 5701, 5901,
-  6101, 6301, 6501, 6701, 6901,
-  7101, 7301, 7501, 7701, 7901,
-  8101, 8301, 8501, 8701, 8901,
-  9101, 9301, 9501, 9701, 9901,
-  10101), c (31,2)
+  # THIS ARRAY IS THE FEEDER FOR THE FOR LOOP. EVERYTHING FOR ROWS 7 AND UNDER IS DONE; 8 IS READY TO FINISH
+  # somethingSomething <- array (c (
+  #   "parentNoInv",        "childF1NoInv",       "childMalHihInv",  "childMalLowInv",     "childFemLowInv",
+  #   "childBothLowInv",    "childFemHihInv",     "childBothHihInv", "childSmolMalHihInv", "childSmolMalLowInv",
+  #   "childSmolFemHihInv", "childSmolFemLowInv", "childNoInvF2",    "childNoInvF3",       "childNoInvF4",
+  #   "childNoInvF5",       "childNoInvF6",       "childNoInvF7",    "childNoInvF8",       "childNoInvF9",
+  #   "childNoInvF10", "childLateInvMalHih", "childLateInvMalLow", "childLateInvFemHih", "childLateInvFemLow",
+  #   "childLateInvBothHih", "childLateInvBothLow", "childLateSmolInvMalHih", "childLateSmolInvMalLow",  "childLateSmolInvFemHih",
+  #    "childLateSmolInvFemLow",
+  #   3901, 4101, 4301, 4501, 4701,
+  #   5101, 5301, 5501, 5701, 5901,
+  #   6101, 6301, 6501, 6701, 6901,
+  #   7101, 7301, 7501, 7701, 7901,
+  #   8101, 8301, 8501, 8701, 8901,
+  #   9101, 9301, 9501, 9701, 9901,
+  #   10101), c (31,2)
+  # )
+#
+lengthResultsBatches <- length(unlist(strsplit(whatevers, "tenKfiveByFive_")))/2
+subsetResultsBatches <- (1:lengthResultsBatches)*(1:lengthResultsBatches)-((1:lengthResultsBatches)-1)*((1:lengthResultsBatches)-1) + 1
+
+
+somethingSomething <- array (
+  c(
+    unlist(strsplit(whatevers, "tenKfiveByFive_"))[subsetResultsBatches],
+    vapply(1:length(whatevers), function (x) {strsplit(list.files(file.path(adaptation, "results", whatevers[x]))[1], "_")[[1]][2]}, c(""))
+  ),
+  c(
+    lengthResultsBatches,2
+  )
 )
+
+controls <- array (c (
+  somethingSomething [which (somethingSomething [, 1] == "childF1NoInv"), 1],
+  somethingSomething [which (somethingSomething [, 1] == "parentNoInv"), 1],
+  somethingSomething [which (somethingSomething [, 1] == "shortChildNoInvF1"), 1],
+  
+  which (somethingSomething [, 1] == "childF1NoInv"),
+  which (somethingSomething [, 1] == "parentNoInv"),
+  which (somethingSomething [, 1] == "shortChildNoInvF1")
+), c (3,2)) # controls[which(controls[,1]=="childF1NoInv"),2]
 
 # subsetsSomethingSomething <- somethingSomething$run_numbers[Nth]
 

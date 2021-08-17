@@ -28,10 +28,10 @@ plot_that_spectrum <- function (file_name, colorPalette, midpoint_size, legend_s
 
   if (theme == "difference") {
     title_and_stuff <- c ("Legend
-(heatmap 1 minus heatmap 2)")
+      (heatmap 1 minus heatmap 2)")
   } else if (theme == "variance") {
     title_and_stuff <- c ("Legend
-(variance scale)")
+      (variance scale)")
   }
 
   plot (rep (x[,1],10), x[,2:11], col = colorseqmultpalette[[colorPalette]](100), pch = 15, cex = 1, axes = FALSE, xlab = "", ylab = "", ylim = c (5,16), main = title_and_stuff)
@@ -100,10 +100,10 @@ htmpdir <- function (extradir = "extraDirectory") {
 # heatmapLand <- htmpdir ("extraDirectory")
 
 print_regex_num_range <- function (
-    num_range = "0000-0001",
-    debug = FALSE,
-    ons_n_offs = "_"
-) {
+      num_range = "0000-0001",
+      debug = FALSE,
+      ons_n_offs = "_"
+  ) {
 
     # num_range = "10151-20001"
     # ons_n_offs = "_"
@@ -527,17 +527,17 @@ extractmeans <- function (allrundirs,
 }
 
 makeheatmapfile <- function (
-  output_foldername = FALSE,
-  inheritance,# = 3,
-  diffcurstartbias,# = 1,
-  biassize,# = 3,
-  othersize,# = 2,
-  reversedruns = FALSE,
-  redo = FALSE,
-  runstyle = 1,
-  highres = FALSE,
-  extractedmeans = extractedmeans
-) {
+    output_foldername = FALSE,
+    inheritance,# = 3,
+    diffcurstartbias,# = 1,
+    biassize,# = 3,
+    othersize,# = 2,
+    reversedruns = FALSE,
+    redo = FALSE,
+    runstyle = 1,
+    highres = FALSE,
+    extractedmeans = extractedmeans
+  ) {
 
   zero_to_one_template <- c ( 0.00,0.01,0.05,0.09, 0.1,0.15,0.18, 0.2,0.25,0.27,
   #                             #1,  #2,  #3,  #4,  #5,  #6,  #7,  #8,  #9, #10,
@@ -853,13 +853,13 @@ makeheatmapfile <- function (
   # for (subset in 1 : 5) {
   #   dir.create (file.path ("results", foldername, paste0 ("slice_", subset)))
   # }
-#   print ("and a seven")
-# print ("and an eight")
-# print ("and a nine")
-# print ("and a ten")
-# print ("and an eleven")
-# print ("and a twelve")
-# print ("and a thirteen")
+  #   print ("and a seven")
+  # print ("and an eight")
+  # print ("and a nine")
+  # print ("and a ten")
+  # print ("and an eleven")
+  # print ("and a twelve")
+  # print ("and a thirteen")
   outputBall <- list (
     foldername = foldername,
     inheritance = inheritance,
@@ -871,13 +871,13 @@ makeheatmapfile <- function (
 }
 
 individualfigures <- function (
-  output_foldername = FALSE,
-  colorrange = 2, # c ("relative", "absolute", "differences") ### absolute has been deprecated
-  colorpalette = "five_by_five", # Numbers correspond to specific color palettes
-  input_list = heatmapoutput,
-  midpoint_size = 1, # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
-  variance_treatment = FALSE
-) {
+    output_foldername = FALSE,
+    colorrange = 2, # c ("relative", "absolute", "differences") ### absolute has been deprecated
+    colorpalette = "five_by_five", # Numbers correspond to specific color palettes
+    input_list = heatmapoutput,
+    midpoint_size = 1, # ranges from 1-7; smallest size midpoint color range (# 1's size: 2) to largest (# 7's size: 86)
+    variance_treatment = FALSE
+  ) {
 
   # reds, rdpu, oranges, orrd, ylorrd, ylorbr, ylgn, ylgnbu, greens, gnbu, blues, bugn, bupu, purples, purd, pubu, pubugn, greys, midpoint, midpoint_but_smooth, midpoint_but_smooshed
   #    1,    2,       3,    4,      5,      6,    7,      8,      9,   10,    11,   12,   13,      14,   15,   16,     17,    18,       19,                  20,                    21
@@ -1061,7 +1061,7 @@ individualfigures <- function (
     )
   }
 
-# png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
+  # png (filename = "something.png", width = 554, height = 554, units = "px", pointsize = 12, bg = "white")
 
 
 
@@ -1307,14 +1307,14 @@ individualfigures <- function (
 }
 
 combineeditsingles <- function (
-  # inheritancestyle = 1,
-  # bias = 1,
-  metricssexpop = 1, # only allowed 1-4 (p1m, p2m, p1f, p2f)
-  otherpopstyle = 3, # 1 = low, 2 = high (for lmh & nw stuff round May 2019) # 3 = third group has same number of tested conditions (slices) as the first two groups.
-  edit = FALSE,
-  lmhvnw = FALSE,
-  heatmapfile = heatmapoutput
-) {
+    # inheritancestyle = 1,
+    # bias = 1,
+    metricssexpop = 1, # only allowed 1-4 (p1m, p2m, p1f, p2f)
+    otherpopstyle = 3, # 1 = low, 2 = high (for lmh & nw stuff round May 2019) # 3 = third group has same number of tested conditions (slices) as the first two groups.
+    edit = FALSE,
+    lmhvnw = FALSE,
+    heatmapfile = heatmapoutput
+  ) {
 
   inheritancestyle <- paste0 (heatmapfile$inheritance, "inh")
   bias <- paste0 (heatmapfile$diffcurstartbias, "Bias")
@@ -1667,35 +1667,35 @@ combineeditsingles <- function (
 
   return (print ("done"))
 }
+#
+  # compare_lineplots <- function (
+  #   category = "difference" # "variance", "difference", "five-by-five"
 
-# compare_lineplots <- function (
-#   category = "difference" # "variance", "difference", "five-by-five"
+  # ) {
 
-# ) {
+  # }
 
-# }
-
-# combine_images <- function (
-#   big_sims = c ("parentNoInv", "childF1NoInv"),
-#   number_of_comparisons = 2,
-#   comp_categories = c ("variance", "difference", "lineplots", "five-by-five"),
-#   source_paths = c (file.path ("results", ""), file.path ("results", "")) #
-# ) {
-#   if (length (comp_categories) != number_of_comparisons) {stop ("seems to be more or less comp_categories than number_of_comparisons")}
-#   # "variance" and "lineplots" for example
-#   # anything with lineplots:
-#   if ("variance" %in% comp_categories) {
-#     file_path <- file.path ("results", "VarianceHeatmaps")
-#   }
-#   if ("difference" %in% comp_categories) {
-#     if (length () != )
-#   }
-# }
+  # combine_images <- function (
+  #   big_sims = c ("parentNoInv", "childF1NoInv"),
+  #   number_of_comparisons = 2,
+  #   comp_categories = c ("variance", "difference", "lineplots", "five-by-five"),
+  #   source_paths = c (file.path ("results", ""), file.path ("results", "")) #
+  # ) {
+  #   if (length (comp_categories) != number_of_comparisons) {stop ("seems to be more or less comp_categories than number_of_comparisons")}
+  #   # "variance" and "lineplots" for example
+  #   # anything with lineplots:
+  #   if ("variance" %in% comp_categories) {
+  #     file_path <- file.path ("results", "VarianceHeatmaps")
+  #   }
+  #   if ("difference" %in% comp_categories) {
+  #     if (length () != )
+  #   }
+  # }
 
 stackmultiples <- function (
-  inheritance = 1, # c ("sameinh", "oppsinh", "maleinh", "mothinh")
-  pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
-) {
+    inheritance = 1, # c ("sameinh", "oppsinh", "maleinh", "mothinh")
+    pattern = 1 # 1 = narrowWide, 2 = lowMedHigh
+  ) {
 
 
   # maleInhMaleVFemaleBias
