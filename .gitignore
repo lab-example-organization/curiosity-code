@@ -1,6 +1,6 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .Ruserdata
 curiosity-code.Rproj
 *_number_of_runs.txt
