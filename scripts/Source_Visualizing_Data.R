@@ -253,124 +253,124 @@ curiosity_figures <- function (parameters, number_of_runs, population, cursityli
   }
 }
 
-recolorized_simple_plots <- function (
-  recolorize_lineplots = "variance", # "clustering"
-  parameters = params, plot_info = plot_info,
-  number_of_runs = number_of_repeats, cursitylist = cursitylist,
-  sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-  mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = FALSE,
-  curMeans_only = FALSE, absolute_y = TRUE, compare_subsets = FALSE, subset_output = subset_output) {
+# recolorized_simple_plots <- function (
+#   recolorize_lineplots = "variance", # "clustering"
+#   parameters = params, plot_info = plot_info,
+#   number_of_runs = number_of_repeats, cursitylist = cursitylist,
+#   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+#   mins_n_maxes = mins_n_maxes, saving_dir = multirun_directory, lineplots = FALSE,
+#   curMeans_only = FALSE, absolute_y = TRUE, compare_subsets = FALSE, subset_output = subset_output) {
 
-  # subset_pool <- cursitylist [[]]
-  # if (typeof (cursitylist) == "list") {
-  #   thing <- length (cursitylist)
-  #   for (i in 1 : thing) {
-  #     if (! (typeof (cursitylist [[i]]) == "list")) {
-  #       direct_object <- dim (cursitylist [[i]])
-  #     } else {
-  #       direct_object <- length (cursitylist [[i]])
-  #       recordings <- list ()
-  #       for (j in 1 : whatever) {
-  #         if (! (typeof (cursitylist [[i]][[j]]) == "list")) {
-  #           bemgcasrba <- dim (cursitylist [[i]][[j]])
-  #         }
-  #       }
-  #     }
-  #   }
-  #   output_from_this_monstrosity <- c (thing,direct_object,)
-  # }
+#   # subset_pool <- cursitylist [[]]
+#   # if (typeof (cursitylist) == "list") {
+#   #   thing <- length (cursitylist)
+#   #   for (i in 1 : thing) {
+#   #     if (! (typeof (cursitylist [[i]]) == "list")) {
+#   #       direct_object <- dim (cursitylist [[i]])
+#   #     } else {
+#   #       direct_object <- length (cursitylist [[i]])
+#   #       recordings <- list ()
+#   #       for (j in 1 : whatever) {
+#   #         if (! (typeof (cursitylist [[i]][[j]]) == "list")) {
+#   #           bemgcasrba <- dim (cursitylist [[i]][[j]])
+#   #         }
+#   #       }
+#   #     }
+#   #   }
+#   #   output_from_this_monstrosity <- c (thing,direct_object,)
+#   # }
 
-  # subset_pool <- array (0, c (4,2,length (cursitylist)))
-  # # subset_pool <-
-  # for (lengthCursityList in 1 : length (cursitylist)) {
-  #   subset_pool[,,lengthCursityList] <- cursitylist [[lengthCursityList]][c (1,2,3,4),,(parameters$runlength/parameters$recordsimplifyfactor)]
-  # }
+#   # subset_pool <- array (0, c (4,2,length (cursitylist)))
+#   # # subset_pool <-
+#   # for (lengthCursityList in 1 : length (cursitylist)) {
+#   #   subset_pool[,,lengthCursityList] <- cursitylist [[lengthCursityList]][c (1,2,3,4),,(parameters$runlength/parameters$recordsimplifyfactor)]
+#   # }
 
-  # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
-  # if (compare_subsets == TRUE) {subset_output_pool <- vector("list", 4)} # change size of list as number of recolorize options changes
-  # if (recolorize_lineplots == "variance" || compare_subsets == TRUE) {
-  #   #
-  #   #     highest_variance = [which (max (variance_among_subpopulations))],
-  #   #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
-  #   for (pop in 1 : parameters$num_pop) {
-  #     for (sex in 1 : 2) {
-  #       subpop_measures[sex,pop] <- var (subset_pool[sex,pop,1 : parameters$number_of_reps])
-  #     }
-  #   }
+#   # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
+#   # if (compare_subsets == TRUE) {subset_output_pool <- vector("list", 4)} # change size of list as number of recolorize options changes
+#   # if (recolorize_lineplots == "variance" || compare_subsets == TRUE) {
+#   #   #
+#   #   #     highest_variance = [which (max (variance_among_subpopulations))],
+#   #   #     # whichever subpopulation has the highest variance, the groups that cluster together are colored similarly
+#   #   for (pop in 1 : parameters$num_pop) {
+#   #     for (sex in 1 : 2) {
+#   #       subpop_measures[sex,pop] <- var (subset_pool[sex,pop,1 : parameters$number_of_reps])
+#   #     }
+#   #   }
 
-  #   thing <- which (subpop_measures == max (subpop_measures))
-  #   if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
-  #   subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
-  #   if (compare_subsets == TRUE) {subset_output_pool[1] <- subset_output}
-  # } 
+#   #   thing <- which (subpop_measures == max (subpop_measures))
+#   #   if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
+#   #   subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
+#   #   if (compare_subsets == TRUE) {subset_output_pool[1] <- subset_output}
+#   # } 
   
-  # if (recolorize_lineplots == "variance-median" || compare_subsets == TRUE) {
+#   # if (recolorize_lineplots == "variance-median" || compare_subsets == TRUE) {
 
-  #   # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
-  #   for (pop in 1 : parameters$num_pop) {
-  #     for (sex in 1 : 2) {
-  #       subpop_measures[sex,pop] <- var (subset_pool[sex,pop,1 : parameters$number_of_reps])
-  #     }
-  #   }
+#   #   # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
+#   #   for (pop in 1 : parameters$num_pop) {
+#   #     for (sex in 1 : 2) {
+#   #       subpop_measures[sex,pop] <- var (subset_pool[sex,pop,1 : parameters$number_of_reps])
+#   #     }
+#   #   }
 
-  #   thing <- which (subpop_measures == max (subpop_measures))
-  #   if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
-  #   whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
-  #   subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
-  #   if (compare_subsets == TRUE) {subset_output_pool[2] <- subset_output}
-  # }
+#   #   thing <- which (subpop_measures == max (subpop_measures))
+#   #   if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
+#   #   whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
+#   #   subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
+#   #   if (compare_subsets == TRUE) {subset_output_pool[2] <- subset_output}
+#   # }
   
-  # if (recolorize_lineplots == "range-median" || compare_subsets == TRUE) {
+#   # if (recolorize_lineplots == "range-median" || compare_subsets == TRUE) {
 
-  #   # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
-  #   for (pop in 1 : parameters$num_pop) {
-  #     for (sex in 1 : 2) {
-  #       subpop_measures[sex,pop] <- max (subset_pool[sex,pop,1 : parameters$number_of_reps]) - min (subset_pool[sex,pop,1 : parameters$number_of_reps])
-  #     }
-  #   }
+#   #   # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
+#   #   for (pop in 1 : parameters$num_pop) {
+#   #     for (sex in 1 : 2) {
+#   #       subpop_measures[sex,pop] <- max (subset_pool[sex,pop,1 : parameters$number_of_reps]) - min (subset_pool[sex,pop,1 : parameters$number_of_reps])
+#   #     }
+#   #   }
 
-  #   thing <- which (subpop_measures == max (subpop_measures))
-  #   # thing <- 1
+#   #   thing <- which (subpop_measures == max (subpop_measures))
+#   #   # thing <- 1
 
-  #   if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
-  #   whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
-  #   subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
-  #   if (compare_subsets == TRUE) {subset_output_pool[3] <- subset_output}
-  #   # just var, but with a subcluster far below "varX#" so we see how the very edge cases line up with other subpopulations
-  #   # subset_output <- 1 : 50 # whatever... fix it only if it breaks
-  # }
+#   #   if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
+#   #   whatever <- median (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps])
+#   #   subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > whatever)
+#   #   if (compare_subsets == TRUE) {subset_output_pool[3] <- subset_output}
+#   #   # just var, but with a subcluster far below "varX#" so we see how the very edge cases line up with other subpopulations
+#   #   # subset_output <- 1 : 50 # whatever... fix it only if it breaks
+#   # }
   
-  # if (recolorize_lineplots == "clustering" || compare_subsets == TRUE) {
-  #   # #
-  #   # #     highest_clustering_score
-  #   # #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
-  #   # clustering_measures <- matrix (nrow = 4, ncol = 2, byrow = TRUE)
-  #   # for (pop in 1 : parameters$num_pop) {
-  #   #   for (sex in 1 : 2) {
-  #   #     clustering_measures[sex,pop] <- max (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = FALSE)$counts)
-  #   #     second_measure <- sort (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = FALSE)$counts, index.return = TRUE)$ix
-  #   #     clustering_measures[sex + 2, pop] <-
-  #   #   }
-  #   # }
+#   # if (recolorize_lineplots == "clustering" || compare_subsets == TRUE) {
+#   #   # #
+#   #   # #     highest_clustering_score
+#   #   # #     # two metrics - first metric is: best_clusternumber that is highest when "many" reps are clustered, "very close" to each other; the other metric is: having at least one value that is distinct (having a certain minimal distance (fraction of the total possible space/spectrum, say, 10%) ->) from the cluster
+#   #   # clustering_measures <- matrix (nrow = 4, ncol = 2, byrow = TRUE)
+#   #   # for (pop in 1 : parameters$num_pop) {
+#   #   #   for (sex in 1 : 2) {
+#   #   #     clustering_measures[sex,pop] <- max (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = FALSE)$counts)
+#   #   #     second_measure <- sort (hist (subset_pool[sex,pop,1 : parameters$number_of_reps], breaks = seq (0, 1, 0.1), plot = FALSE)$counts, index.return = TRUE)$ix
+#   #   #     clustering_measures[sex + 2, pop] <-
+#   #   #   }
+#   #   # }
 
-  #   # thing <- which (clustering_measures == max (clustering_measures))
-  #   # if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
-  #   # subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
-  #   subset_output <- 1 : 50 # whatever... fix it only if it breaks
-  #   if (compare_subsets == TRUE) {subset_output_pool[4] <- subset_output}
-  # } 
+#   #   # thing <- which (clustering_measures == max (clustering_measures))
+#   #   # if (thing == 1) {thing <- c (1,1)} else if (thing == 2) {thing <- c (1,2)} else if (thing == 3) {thing <- c (2,1)} else if (thing == 4) {thing <- c (2,2)} else {stop ("whoops")}
+#   #   # subset_output <- which (subset_pool[thing[1], thing[2], 1 : parameters$number_of_reps] > subset_pool[thing[1], thing[2], parameters$number_of_reps + 1])
+#   #   subset_output <- 1 : 50 # whatever... fix it only if it breaks
+#   #   if (compare_subsets == TRUE) {subset_output_pool[4] <- subset_output}
+#   # } 
   
-  if (compare_subsets == TRUE) {
-    saveRDS (subset_output_pool, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
-  }
+#   if (compare_subsets == TRUE) {
+#     saveRDS (subset_output_pool, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
+#   }
 
-  simple_plots (parameters = parameters, plot_info = plot_info,
-               number_of_runs = number_of_runs, cursitylist = cursitylist,
-               sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
-               mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = subset_output,
-               lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y,
-               compare_subsets = compare_subsets)
-}
+#   simple_plots (parameters = parameters, plot_info = plot_info,
+#                number_of_runs = number_of_runs, cursitylist = cursitylist,
+#                sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
+#                mins_n_maxes = mins_n_maxes, saving_dir = saving_dir, recolorize = subset_output,
+#                lineplots = lineplots, curMeans_only = curMeans_only, absolute_y = absolute_y,
+#                compare_subsets = compare_subsets)
+# }
 
 simple_plots <- function (parameters, plot_info = plot_info,
                          number_of_runs = number_of_runs, cursitylist = cursitylist,
@@ -381,7 +381,8 @@ simple_plots <- function (parameters, plot_info = plot_info,
                          absolute_y = TRUE, compare_subsets = FALSE) {
   # params = yaml.load_file (file.path ("parameters", parameters))
   num_timesteps = parameters$runlength
-  
+  singleSims = parameters$singleSims
+
   if (recolorize != FALSE) {
     saving_dir <- file.path (saving_dir, "recolorizedLineplots")
     if (! (dir.exists (saving_dir))) {dir.create (saving_dir)}
@@ -396,6 +397,51 @@ simple_plots <- function (parameters, plot_info = plot_info,
     }
 
     for (sex in 1 : 2) {
+
+      if (singleSims != FALSE) {
+        
+        if (length(singleSims) > 2) {
+          DO_singleSim <- # which (cursitylist)
+          IO_singleSim <- 
+        } else {
+          if (length(singleSims) == 1) {stop(print(paste(
+            "this (singleSims is of length", length(singleSims), ") is supposed to never happen"
+          )))}
+          which (cursitylist[[1:number_of_runs]][sex, population,])
+          thing_that_chooses_the_group_that_gets_measured <- c()
+
+          DO_singleSim <- 
+          IO_singleSim <- 
+
+          # if (cursitylist) {
+          #   DO_singleSim <- 
+          #   IO_singleSim <- 
+          # }
+        }
+
+        DO_singleSim <- sdstbxnlist [[singleSims[1]]][(sex + ((population - 1) * 2)), ,]
+        file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_singleSim_higher_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
+        png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+        image(t (DO_singleSim), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s DO Sylnum"), axes=FALSE)
+        axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
+        axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
+        minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
+        dev.off ()
+
+        IO_singleSim <- sdstbxnlist [[singleSims[2]]][(sex + ((population - 1) * 2)), ,]
+        file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, "_singleSim_lower_pop_", population, "_", plot_info$sexes_lc[sex], "s.png")
+        png (filename = paste0 (saving_dir, "/", file_name), width = 554, height = 467, units = "px", pointsize = 12, bg = "white")
+        image(t (IO_singleSim), col = plot_info$sylnum_palette(100), xlab = "Timestep", ylab = paste0 ("Pop ", population, " ", plot_info$sexes_uc[sex], "s IO Sylnum"), axes=FALSE)
+        axis (1, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*num_timesteps), col.axis="black", las=2)
+        axis (2, tck=-0.05, at=c (seq.int (0,1,(1/12))),labels=c (seq.int (0,1,(1/12))*156), col.axis="black", las=2)
+        minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
+        dev.off ()
+
+        if (ssOnly == TRUE) {
+          next
+        }
+      }
+
       if (curMeans_only == FALSE) {
         meanz <- sylrepzlist [[number_of_runs + 1]][sex,population,]
         if (recolorize != FALSE) {
@@ -503,7 +549,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
         if (compare_subsets == TRUE) {
 
-# print("compare_subsets stuff")
+    # print("compare_subsets stuff")
           for (i in 1 : length (sdstbxnlist [[1]])) {
             # sdstbxnlist [[i]] <- readRDS (paste0 (saving_dir, sdstlist [i]))
             
@@ -563,7 +609,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
           minor.tick (nx=4, ny=4.8, tick.ratio=1, x.args = list (), y.args = list ())
           dev.off ()
 
-# print("fill IO chunks")
+  # print("fill IO chunks")
           if (number_of_runs - length(recolorize) > 0) {
             for (IO_chunks in 1: (number_of_runs - length(recolorize))) {
               IOsdstbxnlist [[IO_chunks]] <- array(sdstbxnlist[[which (! (1:number_of_runs %in% recolorize))[IO_chunks]]], dim(sdstbxnlist[[1]]))
@@ -603,7 +649,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
         
           #     print (paste0 ("dimensions of sdstbxnlist [[1]] - ", dim (sdstbxnlist [[1]])))
-# print("is this where the problem is? 555")
+  # print("is this where the problem is? 555")
           #______________________________________________________
           #__________________________________________________
           # code for: DO and IO both populations on one plot 
@@ -687,7 +733,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
               color_5 <- ind_rcc[which(ccv > col_cat[3])[which(which(ccv > col_cat[3]) %in% which(ccv < col_cat[4]))]]
               color_6 <- ind_rcc[which(ccv > col_cat[4])]
               color_7 <- pop_2_only
-# print("is this where the problem is? 634")
+  # print("is this where the problem is? 634")
               category_container <- ((DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i])/max(DO_and_IO[[doORio]][1,,i]+DO_and_IO[[doORio]][3,,i]))
 
               category_1 <- category_container[color_1]*(1/7)
@@ -712,7 +758,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
             # sort((sdstbxnlist[[7]][2,,1]+0.1)+(sdstbxnlist[[7]][1,,1]+0.1), index.return = TRUE)[[1]]/max((sdstbxnlist[[7]][2,,1]+0.1)+(sdstbxnlist[[7]][1,,1]+0.1))
 
-# print("is this where the problem is? 654")
+  # print("is this where the problem is? 654")
 
             meanz <- one_more_bxnlist
             file_name <- paste0 (plot_info$datez, "_", plot_info$run_name, doANDio_names[doORio], "_sylnum_both_pops.png")
@@ -773,7 +819,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
         ))
 
         one_more_bxnlist <- array(0, c(156,length(sdstbxnlist[[1]][1,1,])))
-# print("is this where the problem is? 715")
+  # print("is this where the problem is? 715")
         for (i in 1:length(sdstbxnlist[[1]][1,1,])) {
             
           color_chunk <- (sdstbxnlist[[number_of_runs + 1]][3,,i])/(sdstbxnlist[[number_of_runs + 1]][1,,i])
@@ -830,7 +876,7 @@ simple_plots <- function (parameters, plot_info = plot_info,
 
 
         # sort((sdstbxnlist[[7]][2,,1]+0.1)+(sdstbxnlist[[7]][1,,1]+0.1), index.return = TRUE)[[1]]/max((sdstbxnlist[[7]][2,,1]+0.1)+(sdstbxnlist[[7]][1,,1]+0.1))
-# print("is this where the problem is? 770")
+  # print("is this where the problem is? 770")
 
 
         meanz <- one_more_bxnlist
@@ -859,8 +905,8 @@ simple_plots <- function (parameters, plot_info = plot_info,
         axis (2, tck=-0.05, at=c (seq.int (0,1,0.1)),labels=c (seq.int (0,1,0.1)*20), col.axis="black", las=2)
         minor.tick (nx=4, ny=4, tick.ratio=1, x.args = list (), y.args = list ())
         dev.off ()
-# print("is this where the problem is? 799")
-        sink (file = paste0 (saving_dir, plot_info$datez, plot_info$run_name, "_Summary_Statistics"), append = TRUE)
+  # print("is this where the problem is? 799")
+        sink (file = paste0 (saving_dir, "/", plot_info$datez, plot_info$run_name, "_Summary_Statistics"), append = TRUE)
         print (paste0 ("pop ", population, " ", plot_info$sexes_uc[sex], " rep size - avg over last 1% of timesteps"))
         print (mean (sylrepzlist [[number_of_runs + 1]][sex, population,
           ((num_timesteps / parameters$recordsimplifyfactor-1):(num_timesteps / parameters$recordsimplifyfactor))]))

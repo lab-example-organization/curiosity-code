@@ -709,7 +709,7 @@ multi_runs <- function (shifting_curstart, paramssource,
 
   if (params$indrunredo != FALSE) {
     subsetorsequence <- params$simnumberstart [shifting_curstart]
-    singleormixture <- params$curinhdistribution [shifting_curstart]
+    # singleormixture <- params$curinhdistribution [shifting_curstart]
   } else {
     if (length (params$simnumberstart) > 1) {
       subsetorsequence <- params$simnumberstart [shifting_curstart]

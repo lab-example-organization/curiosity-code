@@ -295,7 +295,7 @@ figprodmultrun <- function (
   # print (paste0 ("length of cursitylist: ", dim (cursitylist [[number_of_repeats + 1]])))
   recolorize <- params$recolorize
   compare_subsets <- params$compare_subsets
-  if (recolorize == FALSE) {
+  if (recolorize == FALSE || params$ssOnly == TRUE) {
     simple_plots (parameters = params, plot_info = plot_info,
                   number_of_runs = number_of_repeats, cursitylist = cursitylist,
                   sdstbxnlist = sdstbxnlist, curhistlist = curhistlist, sylrepzlist = sylrepzlist,
@@ -308,7 +308,7 @@ figprodmultrun <- function (
     for (lengthCursityList_minusMean in 1 : number_of_repeats) {
       subset_pool[,,lengthCursityList_minusMean] <- cursitylist [[lengthCursityList_minusMean]][c (1,2,3,4),,(params$runlength/params$recordsimplifyfactor)]
     }
-# print ("subpop_measures")
+  # print ("subpop_measures")
     subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
     if (compare_subsets == TRUE) {subset_output_pool <- vector("list", 4)} # change size of list as number of recolorize options changes
     if (recolorize == "variance" || compare_subsets == TRUE) {
@@ -344,7 +344,7 @@ figprodmultrun <- function (
     }
     
     if (recolorize == "range-median" || compare_subsets == TRUE) {
-# print ("range-median")
+  # print ("range-median")
       # subpop_measures <- matrix (nrow = 2, ncol = 2, byrow = TRUE)
       for (pop in 1 : params$num_pop) {
         for (sex in 1 : 2) {
@@ -389,6 +389,12 @@ figprodmultrun <- function (
         subset_output_pool[[4]] <- subset_output
       }
     } 
+
+    # if (singleSims != FALSE) {
+    #   # ordered pair, high and low for the focal population in question.
+    #   # pop in question is determined by...
+    #   subset_output <- 
+    # }
     
     # if (compare_subsets == TRUE) {
     #   saveRDS (subset_output_pool, file.path(saving_dir, "list_-_subset_comparison_output.RData"))
@@ -415,7 +421,7 @@ figprodmultrun <- function (
     if (compare_subsets == TRUE) {
       saveRDS (subset_output_pool, file.path(multirun_directory, "list_-_subset_comparison_output.RData"))
     }
-# print ("simple_plots start")
+  # print ("simple_plots start")
 
     simple_plots (parameters = params, plot_info = plot_info,
                 number_of_runs = number_of_repeats, cursitylist = cursitylist,
